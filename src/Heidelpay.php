@@ -13,11 +13,10 @@
  */
 namespace heidelpay\PhpSdk;
 
+use heidelpay\PhpSdk\Constants\Mode;
+
 class Heidelpay
 {
-    const MODE_TEST = 'sandbox';
-    const MODE_LIVE = 'live';
-
     private $key;
 
     private $returnUrl;
@@ -25,24 +24,19 @@ class Heidelpay
     /** @var bool */
     private $sandboxMode = true;
 
-    private $type;
-    private $paymentType;
-
     /**
      * Heidelpay constructor.
      *
      * @param string $key
      * @param $returnUrl
-     * @param $paymentType
      * @param string $mode
      */
-    public function __construct($key, $returnUrl, $paymentType, $mode = self::MODE_TEST)
+    public function __construct($key, $returnUrl, $mode = Mode::TEST)
     {
         $this->key = $key;
         $this->returnUrl = $returnUrl;
-        $this->paymentType = $paymentType;
 
-        if ($mode !== self::MODE_TEST) {
+        if ($mode !== Mode::TEST) {
             $this->sandboxMode = false;
         }
     }
@@ -99,42 +93,6 @@ class Heidelpay
     public function setReturnUrl($returnUrl)
     {
         $this->returnUrl = $returnUrl;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param mixed $type
-     * @return Heidelpay
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPaymentType()
-    {
-        return $this->paymentType;
-    }
-
-    /**
-     * @param mixed $paymentType
-     * @return Heidelpay
-     */
-    public function setPaymentType($paymentType)
-    {
-        $this->paymentType = $paymentType;
         return $this;
     }
     //</editor-fold>

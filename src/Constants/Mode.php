@@ -16,6 +16,6 @@ namespace heidelpay\PhpSdk\Constants;
 
 class Mode
 {
-    const MODE_TEST = 'sandbox';
-    const MODE_LIVE = 'live';
+    const TEST = 'sandbox';
+    const LIVE = 'live';
 }
