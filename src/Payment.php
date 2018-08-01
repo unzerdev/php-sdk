@@ -11,7 +11,7 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\PhpSdk;
+namespace heidelpay\NmgPhpSdk;
 
 class Payment
 {

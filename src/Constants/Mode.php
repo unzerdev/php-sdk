@@ -12,7 +12,7 @@
  * @package  heidelpay/${Package}
  */
 
-namespace heidelpay\PhpSdk\Constants;
+namespace heidelpay\NmgPhpSdk\Constants;
 
 class Mode
 {
