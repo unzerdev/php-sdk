@@ -26,34 +26,25 @@ class Heidelpay
     private $sandboxMode = true;
 
     private $type;
+    private $paymentType;
 
     /**
      * Heidelpay constructor.
      *
      * @param string $key
      * @param $returnUrl
+     * @param $paymentType
      * @param string $mode
      */
-    public function __construct($key, $returnUrl, $type, $mode = self::MODE_TEST)
+    public function __construct($key, $returnUrl, $paymentType, $mode = self::MODE_TEST)
     {
         $this->key = $key;
         $this->returnUrl = $returnUrl;
+        $this->paymentType = $paymentType;
 
         if ($mode !== self::MODE_TEST) {
             $this->sandboxMode = false;
         }
-    }
-
-    /**
-     * Creates the card object, updates the given local card and returns it.
-     *
-     * @param Card $card
-     * @return Card
-     */
-    public function createCard(Card $card)
-    {
-        // create card in heidelpay api and return it including the id
-        return $card; // temporary
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -129,5 +120,22 @@ class Heidelpay
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * @param mixed $paymentType
+     * @return Heidelpay
+     */
+    public function setPaymentType($paymentType)
+    {
+        $this->paymentType = $paymentType;
+        return $this;
+    }
     //</editor-fold>
 }
