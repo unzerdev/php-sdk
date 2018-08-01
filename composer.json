@@ -1,0 +1,15 @@
+{
+  "name": "heidelpay/NmgPhpSdk",
+  "description": "Entwicklung einer möglichen Fassade für den Nutzer",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Simon Gabriel",
+      "email": "development@heidelpay.com"
+    }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "6.5.9"
+  }
+}
