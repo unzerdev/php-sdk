@@ -13,7 +13,6 @@
  */
 namespace heidelpay\NmgPhpSdk\test;
 
-use heidelpay\NmgPhpSdk\Constants\PaymentType;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
@@ -52,7 +51,6 @@ class Test extends TestCase
         $this->assertSame($key, $this->heidelpay->getKey());
         $this->assertEquals($sandboxMode, $this->heidelpay->isSandboxMode());
         $this->assertSame($returnUrl, $this->heidelpay->getReturnUrl());
-
     }
 
     /**
@@ -60,12 +58,13 @@ class Test extends TestCase
      */
     public function heidelpayObjectShouldCreatePaymentObject()
     {
-        $card = new Card();
+        $card = new Card('123456789', '09', '2019', '123');
+        $card->setHolder('Max Mustermann');
 
         /** @var Payment $payment */
-        $payment = $this->heidelpay->createPayment();
+        $payment = $this->heidelpay->createPayment($card);
 
         $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertEquals(PaymentType::CARD, $payment->getPaymentType());
+        $this->assertSame($card, $payment->getPaymentType());
     }
 }
