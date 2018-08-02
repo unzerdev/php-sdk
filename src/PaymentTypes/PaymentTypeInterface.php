@@ -15,5 +15,17 @@ namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 interface PaymentTypeInterface
 {
+    /**
+     * @param float $amount
+     * @param string $currency
+     * @return $this
+     */
+    public function charge($amount, $currency);
 
+    /**
+     * @param float $amount
+     * @param string $currency
+     * @return $this
+     */
+    public function authorize($amount, $currency);
 }

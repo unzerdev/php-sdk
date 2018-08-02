@@ -45,6 +45,26 @@ class Card implements PaymentTypeInterface
         $this->cvc = $cvc;
     }
 
+    /**
+     * @param float $amount
+     * @param string $currency
+     * @return $this
+     */
+    public function charge($amount, $currency)
+    {
+        return $this;
+    }
+
+    /**
+     * @param float $amount
+     * @param string $currency
+     * @return $this
+     */
+    public function authorize($amount, $currency)
+    {
+        return $this;
+    }
+
     //<editor-fold desc="Getters/Setters">
     /**
      * @return string
