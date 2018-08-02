@@ -11,13 +11,9 @@
  *
  * @package  heidelpay/${Package}
  */
+namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
-namespace heidelpay\NmgPhpSdk\Constants;
-
-class PaymentType
+interface PaymentTypeInterface
 {
-    const CARD = 'Card';
-    const PAYPAL = 'PayPal';
-    const DIRECT_DEBIT = 'DirectDebit';
-    const SOFORT = 'Sofort';
+
 }
