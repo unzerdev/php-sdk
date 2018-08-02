@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="true"
+         bootstrap="test\bootstrap.php"
+         colors="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
+         processIsolation="false"
+         stopOnFailure="false"
+         strict="true"
+         syntaxCheck="false"
+         verbose="true">
+    <groups>
+        <exclude>
+            <group>disabled</group>
+            <group>skip</group>
+        </exclude>
+    </groups>
+</phpunit>
