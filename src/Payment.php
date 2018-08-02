@@ -13,22 +13,25 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
+
 class Payment
 {
+    /** @var PaymentTypeInterface */
     private $paymentType;
 
     /**
      * Payment constructor.
-     * @param $paymentType
+     * @param PaymentTypeInterface $paymentType
      */
-    public function __construct($paymentType)
+    public function __construct(PaymentTypeInterface $paymentType)
     {
         $this->paymentType = $paymentType;
     }
 
     //<editor-fold desc="Getters/Setters">
     /**
-     * @return mixed
+     * @return PaymentTypeInterface
      */
     public function getPaymentType()
     {
@@ -36,10 +39,10 @@ class Payment
     }
 
     /**
-     * @param mixed $paymentType
+     * @param PaymentTypeInterface $paymentType
      * @return Payment
      */
-    public function setPaymentType($paymentType)
+    public function setPaymentType(PaymentTypeInterface $paymentType)
     {
         $this->paymentType = $paymentType;
         return $this;

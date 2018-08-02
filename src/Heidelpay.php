@@ -13,13 +13,16 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
-use heidelpay\PhpSdk\Constants\Mode;
+use heidelpay\NmgPhpSdk\Constants\Mode;
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Heidelpay
 {
     private $key;
-
     private $returnUrl;
+
+    /** @var Payment $payment */
+    private $payment;
 
     /** @var bool */
     private $sandboxMode = true;
@@ -36,9 +39,17 @@ class Heidelpay
         $this->key = $key;
         $this->returnUrl = $returnUrl;
 
-        if ($mode !== Mode::TEST) {
-            $this->sandboxMode = false;
-        }
+        $this->setMode($mode);
+    }
+
+    /**
+     * @param PaymentTypeInterface $paymentType
+     * @return Payment
+     */
+    public function createPayment(PaymentTypeInterface $paymentType)
+    {
+        $this->payment = new Payment($paymentType);
+        return $this->payment;
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -94,6 +105,24 @@ class Heidelpay
     {
         $this->returnUrl = $returnUrl;
         return $this;
+    }
+
+    /**
+     * @param $mode
+     */
+    private function setMode($mode)
+    {
+        if ($mode !== Mode::TEST) {
+            $this->setSandboxMode(false);
+        }
+    }
+
+    /**
+     * @return Payment
+     */
+    public function getPayment()
+    {
+        return $this->payment;
     }
     //</editor-fold>
 }
