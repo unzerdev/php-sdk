@@ -20,6 +20,9 @@ class Payment
     /** @var PaymentTypeInterface */
     private $paymentType;
 
+    /** @var Customer $customer */
+    private $customer;
+
     /**
      * Payment constructor.
      * @param PaymentTypeInterface $paymentType
@@ -45,6 +48,24 @@ class Payment
     public function setPaymentType(PaymentTypeInterface $paymentType)
     {
         $this->paymentType = $paymentType;
+        return $this;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer $customer
+     * @return Payment
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
         return $this;
     }
     //</editor-fold>
