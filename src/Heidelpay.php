@@ -14,12 +14,14 @@
 namespace heidelpay\NmgPhpSdk;
 
 use heidelpay\NmgPhpSdk\Constants\Mode;
+use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Heidelpay
 {
     private $key;
     private $returnUrl;
+    private $locale;
 
     /** @var Payment $payment */
     private $payment;
@@ -32,12 +34,14 @@ class Heidelpay
      *
      * @param string $key
      * @param $returnUrl
+     * @param string $locale
      * @param string $mode
      */
-    public function __construct($key, $returnUrl, $mode = Mode::TEST)
+    public function __construct($key, $returnUrl, $locale = SupportedLocale::GERMAN_GERMAN, $mode = Mode::TEST)
     {
         $this->key = $key;
         $this->returnUrl = $returnUrl;
+        $this->locale = $locale;
 
         $this->setMode($mode);
     }
@@ -123,6 +127,24 @@ class Heidelpay
     public function getPayment()
     {
         return $this->payment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     * @return Heidelpay
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+        return $this;
     }
     //</editor-fold>
 }
