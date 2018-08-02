@@ -13,9 +13,11 @@
  */
 namespace heidelpay\NmgPhpSdk\test;
 
+use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use PHPUnit\Framework\TestCase;
 
 class Test extends TestCase
@@ -66,5 +68,20 @@ class Test extends TestCase
 
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertSame($card, $payment->getPaymentType());
+
+        return $card;
     }
+
+    /**
+     * @test
+     * @param PaymentTypeInterface $card
+     * @depends heidelpayObjectShouldCreatePaymentObject
+     */
+    public function paymentObjectChargeShouldReturnTheUpdatedObject(PaymentTypeInterface $card)
+    {
+        $this->assertSame($card, $card->charge(12.0, Currency::EUROPEAN_EURO));
+        $this->assertSame($card, $card->authorize(12.0, Currency::EUROPEAN_EURO));
+    }
+
+
 }
