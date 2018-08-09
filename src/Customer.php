@@ -13,7 +13,7 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
-class Customer extends HeidelpayObject
+class Customer extends HeidelpayResource
 {
     /** @var string */
     private $firstname;
