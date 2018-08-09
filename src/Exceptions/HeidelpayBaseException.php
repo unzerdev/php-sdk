@@ -11,9 +11,24 @@
  *
  * @package  heidelpay/${Package}
  */
+
 namespace heidelpay\NmgPhpSdk\Exceptions;
 
-class HeidelpayObjectMissingException extends HeidelpayBaseException
+class HeidelpayBaseException extends \RuntimeException
 {
-    const MESSAGE = 'Heidelpay object reference is not set!';
+    const MESSAGE = 'Exception message not set!';
+
+    /**
+     * IdRequiredToFetchResourceException constructor.
+     *
+     * @param string $message
+     */
+    public function __construct($message = '')
+    {
+        if (empty($message)) {
+            $message = static::MESSAGE;
+        }
+
+        parent::__construct($message);
+    }
 }

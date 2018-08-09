@@ -80,7 +80,7 @@ class HeidelpayResource implements HeidelpayResourceInterface
     public function getHeidelpay()
     {
         if (!$this->heidelpay instanceof Heidelpay) {
-            throw new HeidelpayObjectMissingException('The heidelpayObject must be set in resource: ' . static::class);
+            throw new HeidelpayObjectMissingException();
         }
         return $this->heidelpay;
     }

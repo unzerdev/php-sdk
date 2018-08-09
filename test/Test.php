@@ -114,6 +114,7 @@ class Test extends TestCase
         $customer = new Customer();
 
         $this->expectException(HeidelpayObjectMissingException::class);
+        $this->expectExceptionMessage('Heidelpay object reference is not set!');
         $customer->$crudOperation();
     }
 }
