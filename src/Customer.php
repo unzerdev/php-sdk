@@ -16,37 +16,37 @@ namespace heidelpay\NmgPhpSdk;
 class Customer extends HeidelpayResource
 {
     /** @var string */
-    private $firstname;
+    protected $firstname;
 
     /** @var string */
-    private $lastname;
+    protected $lastname;
 
     /** @var string */
-    private $birthday;
+    protected $birthday;
 
     /** @var string */
-    private $company;
+    protected $company;
 
     /** @var string */
-    private $street1;
+    protected $street1;
 
     /** @var string */
-    private $street2;
+    protected $street2;
 
     /** @var string */
-    private $state;
+    protected $state;
 
     /** @var string */
-    private $zip;
+    protected $zip;
 
     /** @var string */
-    private $country;
+    protected $country;
 
     /** @var string */
-    private $city;
+    protected $city;
 
     /** @var string */
-    private $email;
+    protected $email;
 
     //<editor-fold desc="Getters/Setters">
     /**

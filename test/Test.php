@@ -41,6 +41,41 @@ class Test extends TestCase
             'Fetch' => ['fetch']
         ];
     }
+
+    public function customerDataProvider()
+    {
+        return [
+            'customer1' => [[
+                'birthday' => '2018-08-12',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'company' => 'Musterfirma',
+                'state' => 'Bremen',
+                'street1' => 'Märchenstraße 3',
+                'street2' => 'Hinterhaus',
+                'zip' => '12345',
+                'city' => 'Pusemuckel',
+                'country' => 'Schweiz',
+                'email' => 'max@mustermann.de',
+                'id' => 'c-123456'
+            ]],
+            'customer2' => [[
+                'birthday' => '2000-01-11',
+                'firstname' => 'Linda',
+                'lastname' => 'Heideich',
+                'company' => 'heidelpay GmbH',
+                'street1' => 'Vangerowstr. 18',
+                'street2' => 'am Neckar',
+                'state' => 'Baden-Würtemberg',
+                'zip' => '69115',
+                'city' => 'Heidelberg',
+                'country' => 'Deutschland',
+                'email' => 'lh@heidelpay.de',
+                'id' => 'c-654321'
+            ]]
+        ];
+    }
+
     //</editor-fold>
 
     protected function setUp()
@@ -145,6 +180,27 @@ class Test extends TestCase
         $this->expectException(IdRequiredToFetchResourceException::class);
         $this->expectExceptionMessage('The resources id must be set for this call on API!');
         $customer->delete();
+    }
+
+    /**
+     * Customer should expose private and public properties in array;
+     *
+     * @dataProvider customerDataProvider
+     *
+     * @param $expectedData
+     *
+     * @test
+     */
+    public function customerObjectShouldExposeItsPrivateAndPublicPropertiesAsArray($expectedData)
+    {
+        $customer = new Customer();
+
+        foreach ($expectedData as $key=>$item) {
+            $setter = 'set' . ucfirst($key);
+            $customer->$setter($item);
+        }
+
+        $this->assertEquals($expectedData, $customer->expose());
     }
     //</editor-fold>
 }

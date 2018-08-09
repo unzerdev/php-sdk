@@ -19,7 +19,7 @@ use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 class HeidelpayResource implements HeidelpayResourceInterface
 {
     /** @var string $id */
-    private $id = '';
+    protected $id = '';
 
     /** @var Heidelpay $heidelpay */
     private $heidelpay;
@@ -104,4 +104,33 @@ class HeidelpayResource implements HeidelpayResourceInterface
         return $this;
     }
     //</editor-fold>
+
+    /**
+     * Creates an array containing all properties to be exposed to the heidelpay api as resource parameters.
+     *
+     * @return array
+     */
+    public function expose()
+    {
+        $properties = get_object_vars($this);
+
+        foreach ($properties as $property => $value) {
+            try {
+                $reflection = new \ReflectionProperty(static::class, $property);
+                if (!$reflection->isProtected()) {
+                    unset($properties[$property]);
+                    continue;
+                }
+
+                if ($value === null) {
+                    $properties[$property] = '';
+                }
+            } catch (\ReflectionException $e) {
+                unset($properties[$property]);
+            }
+        }
+
+        ksort($properties);
+        return $properties;
+    }
 }
