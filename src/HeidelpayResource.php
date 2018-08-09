@@ -48,6 +48,10 @@ class HeidelpayResource implements HeidelpayResourceInterface
     public function delete()
     {
         $heidelpay = $this->getHeidelpay();
+
+        if (empty($this->id)) {
+            throw new IdRequiredToFetchResourceException();
+        }
     }
 
     public function fetch()

@@ -129,8 +129,22 @@ class Test extends TestCase
         $customer = new Customer($this->heidelpay);
 
         $this->expectException(IdRequiredToFetchResourceException::class);
-        $this->expectExceptionMessage('ResourceId must be set to call fetch on API!');
+        $this->expectExceptionMessage('The resources id must be set for this call on API!');
         $customer->fetch();
+    }
+
+    /**
+     * HeidelpayResource should throw ResourceIdRequiredToFetchResourceException if delete is called without id.
+     *
+     * @test
+     */
+    public function heidelpayResourceObjectShouldThrowIdRequiredToDeleteResourceException()
+    {
+        $customer = new Customer($this->heidelpay);
+
+        $this->expectException(IdRequiredToFetchResourceException::class);
+        $this->expectExceptionMessage('The resources id must be set for this call on API!');
+        $customer->delete();
     }
     //</editor-fold>
 }

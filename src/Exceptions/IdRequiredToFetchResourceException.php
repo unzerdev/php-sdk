@@ -15,5 +15,5 @@ namespace heidelpay\NmgPhpSdk\Exceptions;
 
 class IdRequiredToFetchResourceException extends HeidelpayBaseException
 {
-    const MESSAGE = 'ResourceId must be set to call fetch on API!';
+    const MESSAGE = 'The resources id must be set for this call on API!';
 }
