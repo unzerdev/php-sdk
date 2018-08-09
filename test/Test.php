@@ -14,6 +14,8 @@
 namespace heidelpay\NmgPhpSdk\test;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
+use heidelpay\NmgPhpSdk\Customer;
+use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
@@ -27,6 +29,18 @@ class Test extends TestCase
 
     /** @var Heidelpay $heidelpay */
     private $heidelpay;
+
+    //<editor-fold desc="DataProviders">
+    public function crudOperationProvider()
+    {
+        return [
+            'Create' => ['create'],
+            'Update' => ['update'],
+            'Delete' => ['delete'],
+            'Fetch' => ['fetch']
+        ];
+    }
+    //</editor-fold>
 
     protected function setUp()
     {
@@ -84,4 +98,22 @@ class Test extends TestCase
     }
 
 
+    /**
+     * HeidelpayResource should throw HeidelpayObjectMissingException if request attempt when the reference is not set.
+     *
+     * @dataProvider crudOperationProvider
+     *
+     * @param $crudOperation
+     *
+     * @test
+     */
+    public function heidelpayResourceShouldThrowHeidelpayObjectMissingExceptionWhenHeidelpayObjectIsMissingOnCrud(
+        $crudOperation
+    )
+    {
+        $customer = new Customer();
+
+        $this->expectException(HeidelpayObjectMissingException::class);
+        $customer->$crudOperation();
+    }
 }
