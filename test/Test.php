@@ -202,5 +202,28 @@ class Test extends TestCase
 
         $this->assertEquals($expectedData, $customer->expose());
     }
+
+    /**
+     * Customer should be serializable
+     *
+     * @dataProvider customerDataProvider
+     *
+     * @param $expectedData
+     *
+     * @test
+     */
+    public function customerObjectShouldBeSerializedOnCallingJsonSerialize($expectedData)
+    {
+        $customer = new Customer();
+
+        foreach ($expectedData as $key=>$item) {
+            $setter = 'set' . ucfirst($key);
+            $customer->$setter($item);
+        }
+
+        ksort($expectedData);
+
+        $this->assertEquals(json_encode($expectedData), $customer->jsonSerialize());
+    }
     //</editor-fold>
 }

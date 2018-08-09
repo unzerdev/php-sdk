@@ -13,7 +13,9 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
-interface HeidelpayResourceInterface
+use JsonSerializable;
+
+interface HeidelpayResourceInterface extends JsonSerializable
 {
     /**
      * Create the resource on the api.

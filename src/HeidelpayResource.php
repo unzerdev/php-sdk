@@ -106,6 +106,18 @@ class HeidelpayResource implements HeidelpayResourceInterface
     //</editor-fold>
 
     /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return json_encode($this->expose());
+    }
+
+    /**
      * Creates an array containing all properties to be exposed to the heidelpay api as resource parameters.
      *
      * @return array
