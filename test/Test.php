@@ -16,6 +16,7 @@ namespace heidelpay\NmgPhpSdk\test;
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Customer;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
+use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
@@ -117,4 +118,19 @@ class Test extends TestCase
         $this->expectExceptionMessage('Heidelpay object reference is not set!');
         $customer->$crudOperation();
     }
+
+    /**
+     * HeidelpayResource should throw ResourceIdRequiredToFetchResourceException if fetch is called without id.
+     *
+     * @test
+     */
+    public function heidelpayResourceObjectShouldThrowIdRequiredToFetchResourceException()
+    {
+        $customer = new Customer($this->heidelpay);
+
+        $this->expectException(IdRequiredToFetchResourceException::class);
+        $this->expectExceptionMessage('ResourceId must be set to call fetch on API!');
+        $customer->fetch();
+    }
+    //</editor-fold>
 }

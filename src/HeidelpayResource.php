@@ -14,6 +14,7 @@
 namespace heidelpay\NmgPhpSdk;
 
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
+use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 
 class HeidelpayResource implements HeidelpayResourceInterface
 {
@@ -52,6 +53,10 @@ class HeidelpayResource implements HeidelpayResourceInterface
     public function fetch()
     {
         $heidelpay = $this->getHeidelpay();
+
+        if (empty($this->id)) {
+            throw new IdRequiredToFetchResourceException();
+        }
     }
     //</editor-fold>
 
