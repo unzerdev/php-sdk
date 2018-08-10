@@ -27,6 +27,9 @@ class Heidelpay implements HeidelpayParentInterface
     /** @var Payment $payment */
     private $payment;
 
+    /** @var Customer $customer */
+    private $customer;
+
     /** @var bool */
     private $sandboxMode = true;
 
@@ -159,5 +162,25 @@ class Heidelpay implements HeidelpayParentInterface
     {
         return '';
     }
+    //</editor-fold>
+
+    //<editor-fold desc="Resources">
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function createCustomer()
+    {
+        $this->customer = new Customer($this);
+        return $this->customer;
+    }
+
     //</editor-fold>
 }
