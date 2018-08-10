@@ -80,7 +80,7 @@ class Test extends TestCase
 
     protected function setUp()
     {
-        $this->heidelpay = new Heidelpay(self::KEY, self::RETURN_URL);
+        $this->heidelpay = new Heidelpay(self::KEY);
     }
 
     /**

@@ -20,7 +20,6 @@ use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 class Heidelpay
 {
     private $key;
-    private $returnUrl;
     private $locale;
 
     /** @var Payment $payment */
@@ -33,14 +32,12 @@ class Heidelpay
      * Heidelpay constructor.
      *
      * @param string $key
-     * @param $returnUrl
      * @param string $locale
      * @param string $mode
      */
-    public function __construct($key, $returnUrl, $locale = SupportedLocale::GERMAN_GERMAN, $mode = Mode::TEST)
+    public function __construct($key, $locale = SupportedLocale::GERMAN_GERMAN, $mode = Mode::TEST)
     {
         $this->key = $key;
-        $this->returnUrl = $returnUrl;
         $this->locale = $locale;
 
         $this->setMode($mode);
@@ -90,24 +87,6 @@ class Heidelpay
     public function setSandboxMode($sandboxMode)
     {
         $this->sandboxMode = $sandboxMode;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getReturnUrl()
-    {
-        return $this->returnUrl;
-    }
-
-    /**
-     * @param mixed $returnUrl
-     * @return Heidelpay
-     */
-    public function setReturnUrl($returnUrl)
-    {
-        $this->returnUrl = $returnUrl;
         return $this;
     }
 
