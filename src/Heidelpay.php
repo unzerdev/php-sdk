@@ -19,7 +19,7 @@ use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
-class Heidelpay
+class Heidelpay implements HeidelpayParentInterface
 {
     private $key;
     private $locale;
@@ -136,6 +136,8 @@ class Heidelpay
             throw new MissingResourceException('Payment object does not exist.');
         }
 
+
+
         // todo: fetch payment from api and return it
 
         return $this->payment;
@@ -157,6 +159,28 @@ class Heidelpay
     {
         $this->locale = $locale;
         return $this;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="ParentIF">
+    /**
+     * Returns the heidelpay root object.
+     *
+     * @return Heidelpay
+     */
+    public function getHeidelpayObject()
+    {
+        return $this;
+    }
+
+    /**
+     * Returns the url string for this resource.
+     *
+     * @return string
+     */
+    public function getUri()
+    {
+        return '';
     }
     //</editor-fold>
 }

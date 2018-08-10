@@ -15,7 +15,7 @@ namespace heidelpay\NmgPhpSdk;
 
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
-class Payment
+class Payment extends AbstractHeidelpayResource
 {
     /** @var PaymentTypeInterface */
     private $paymentType;

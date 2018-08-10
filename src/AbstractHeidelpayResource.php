@@ -13,54 +13,55 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
+use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
 use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 
-class HeidelpayResource implements HeidelpayResourceInterface
+abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, HeidelpayParentInterface
 {
     /** @var string $id */
     protected $id = '';
 
-    /** @var Heidelpay $heidelpay */
-    private $heidelpay;
+    /** @var HeidelpayParentInterface */
+    private $parentResource;
 
     /**
      * HeidelpayResource constructor.
-     * @param Heidelpay|null $heidelpay
+     * @param HeidelpayParentInterface $parent
      */
-    public function __construct(Heidelpay $heidelpay = null)
+    public function __construct(HeidelpayParentInterface $parent)
     {
-        $this->heidelpay = $heidelpay;
+        $this->parentResource = $parent;
     }
-
 
     //<editor-fold desc="CRUD">
     public function create()
     {
-        $heidelpay = $this->getHeidelpay();
+        $this->send(HttpAdapterInterface::REQUEST_POST);
+        return $this;
     }
 
     public function update()
     {
-        $heidelpay = $this->getHeidelpay();
+        $this->send(HttpAdapterInterface::REQUEST_PUT);
     }
 
     public function delete()
     {
-        $heidelpay = $this->getHeidelpay();
-
         if (empty($this->id)) {
             throw new IdRequiredToFetchResourceException();
         }
+
+        $this->send(HttpAdapterInterface::REQUEST_DELETE);
     }
 
     public function fetch()
     {
-        $heidelpay = $this->getHeidelpay();
-
         if (empty($this->id)) {
             throw new IdRequiredToFetchResourceException();
         }
+
+        $this->send(HttpAdapterInterface::REQUEST_GET);
     }
     //</editor-fold>
 
@@ -75,36 +76,16 @@ class HeidelpayResource implements HeidelpayResourceInterface
 
     /**
      * @param int $id
-     * @return HeidelpayResource
+     * @return AbstractHeidelpayResource
      */
     public function setId($id)
     {
         $this->id = $id;
         return $this;
     }
-
-    /**
-     * @return Heidelpay
-     */
-    public function getHeidelpay()
-    {
-        if (!$this->heidelpay instanceof Heidelpay) {
-            throw new HeidelpayObjectMissingException();
-        }
-        return $this->heidelpay;
-    }
-
-    /**
-     * @param Heidelpay $heidelpay
-     * @return HeidelpayResource
-     */
-    public function setHeidelpay($heidelpay)
-    {
-        $this->heidelpay = $heidelpay;
-        return $this;
-    }
     //</editor-fold>
 
+    //<editor-fold desc="Serialization">
     /**
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
@@ -144,5 +125,61 @@ class HeidelpayResource implements HeidelpayResourceInterface
 
         ksort($properties);
         return $properties;
+    }
+    //</editor-fold>
+
+    /**
+     * @param string $httpMethod
+     * @throws \RuntimeException
+     */
+    public function send($httpMethod = HttpAdapterInterface::REQUEST_GET)
+    {
+        $responseJson = $this->getHeidelpayObject()->send(
+            $this->getUri(),
+            $this,
+            $httpMethod
+        );
+        $this->fromJson($responseJson);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHeidelpayObject()
+    {
+        $heidelpayObject = $this->parentResource->getHeidelpayObject();
+
+        if (!$heidelpayObject instanceof Heidelpay) {
+            throw new HeidelpayObjectMissingException();
+        }
+
+        return $heidelpayObject;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUri()
+    {
+        // remove trailing slash and explode
+        $uri = [rtrim($this->parentResource->getUri(), '/'), strtolower(self::getClassShortName())];
+        if (!empty($this->getId())) {
+            $uri[] = $this->getId();
+        }
+
+        $uri[] = '';
+
+        return implode('/', $uri);
+    }
+
+    /**
+     * Return class short name.
+     *
+     * @return string
+     */
+    public static function getClassShortName()
+    {
+        $classNameParts = explode('\\', static::class);
+        return end($classNameParts);
     }
 }
