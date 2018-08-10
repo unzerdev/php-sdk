@@ -14,14 +14,16 @@
 namespace heidelpay\NmgPhpSdk\test;
 
 use heidelpay\NmgPhpSdk\Customer;
-use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
 use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
+use heidelpay\NmgPhpSdk\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 class Test extends TestCase
 {
+    use CustomerFixtureTrait;
+
     const KEY = '123456789';
     const RETURN_URL = 'returnURL.php';
 
@@ -32,44 +34,18 @@ class Test extends TestCase
     public function crudOperationProvider()
     {
         return [
-            'Create' => ['create'],
-            'Update' => ['update'],
-            'Delete' => ['delete'],
-            'Fetch' => ['fetch']
+            'Create' => ['create', self::$customerWithoutId],
+            'Update' => ['update', self::$customerWithoutId],
+            'Delete' => ['delete', self::$customerWithoutId],
+            'Fetch' => ['fetch', self::$customerWithoutId]
         ];
     }
 
     public function customerDataProvider()
     {
         return [
-            'customer1' => [[
-                'birthday' => '2018-08-12',
-                'firstname' => 'Max',
-                'lastname' => 'Mustermann',
-                'company' => 'Musterfirma',
-                'state' => 'Bremen',
-                'street1' => 'Märchenstraße 3',
-                'street2' => 'Hinterhaus',
-                'zip' => '12345',
-                'city' => 'Pusemuckel',
-                'country' => 'Schweiz',
-                'email' => 'max@mustermann.de',
-                'id' => 'c-123456'
-            ]],
-            'customer2' => [[
-                'birthday' => '2000-01-11',
-                'firstname' => 'Linda',
-                'lastname' => 'Heideich',
-                'company' => 'heidelpay GmbH',
-                'street1' => 'Vangerowstr. 18',
-                'street2' => 'am Neckar',
-                'state' => 'Baden-Würtemberg',
-                'zip' => '69115',
-                'city' => 'Heidelberg',
-                'country' => 'Deutschland',
-                'email' => 'lh@heidelpay.de',
-                'id' => 'c-654321'
-            ]]
+            'customerA' => [self::$customerW],
+            'customerB' => [self::$customerB]
         ];
     }
 
@@ -99,25 +75,6 @@ class Test extends TestCase
     }
 
     //<editor-fold desc="ResourceObject">
-    /**
-     * HeidelpayResource should throw HeidelpayObjectMissingException if request attempt when the reference is not set.
-     *
-     * @dataProvider crudOperationProvider
-     *
-     * @param $crudOperation
-     *
-     * @test
-     */
-    public function heidelpayResourceShouldThrowHeidelpayObjectMissingExceptionWhenHeidelpayObjectIsMissingOnCrud(
-        $crudOperation
-    )
-    {
-        $customer = new Customer();
-
-        $this->expectException(HeidelpayObjectMissingException::class);
-        $this->expectExceptionMessage('Heidelpay object reference is not set!');
-        $customer->$crudOperation();
-    }
 
     /**
      * HeidelpayResource should throw ResourceIdRequiredToFetchResourceException if fetch is called without id.
@@ -126,10 +83,10 @@ class Test extends TestCase
      */
     public function heidelpayResourceObjectShouldThrowIdRequiredToFetchResourceException()
     {
-        $customer = new Customer($this->heidelpay);
+        /** @var Customer $customer */
+        $customer = $this->heidelpay->createCustomer();
 
         $this->expectException(IdRequiredToFetchResourceException::class);
-        $this->expectExceptionMessage('The resources id must be set for this call on API!');
         $customer->fetch();
     }
 
@@ -140,10 +97,10 @@ class Test extends TestCase
      */
     public function heidelpayResourceObjectShouldThrowIdRequiredToDeleteResourceException()
     {
-        $customer = new Customer($this->heidelpay);
+        /** @var Customer $customer */
+        $customer = $this->heidelpay->createCustomer();
 
         $this->expectException(IdRequiredToFetchResourceException::class);
-        $this->expectExceptionMessage('The resources id must be set for this call on API!');
         $customer->delete();
     }
 
@@ -158,13 +115,9 @@ class Test extends TestCase
      */
     public function customerObjectShouldExposeItsPrivateAndPublicPropertiesAsArray($expectedData)
     {
-        $customer = new Customer();
-
-        foreach ($expectedData as $key=>$item) {
-            $setter = 'set' . ucfirst($key);
-            $customer->$setter($item);
-        }
-
+        /** @var Customer $customer */
+        $customer = $this->heidelpay->createCustomer();
+        $this->setupCustomer($expectedData, $customer);
         $this->assertEquals($expectedData, $customer->expose());
     }
 
@@ -179,15 +132,10 @@ class Test extends TestCase
      */
     public function customerObjectShouldBeSerializedOnCallingJsonSerialize($expectedData)
     {
-        $customer = new Customer();
-
-        foreach ($expectedData as $key=>$item) {
-            $setter = 'set' . ucfirst($key);
-            $customer->$setter($item);
-        }
-
+        /** @var Customer $customer */
+        $customer = $this->heidelpay->createCustomer();
+        $this->setupCustomer($expectedData, $customer);
         ksort($expectedData);
-
         $this->assertEquals(json_encode($expectedData), $customer->jsonSerialize());
     }
     //</editor-fold>
@@ -202,4 +150,21 @@ class Test extends TestCase
         $this->expectException(MissingResourceException::class);
         $this->heidelpay->getPayment();
     }
+
+
+
+
+    //<editor-fold desc="Helper">
+    /**
+     * @param $expectedData
+     * @param $customer
+     */
+    private function setupCustomer($expectedData, $customer)
+    {
+        foreach ($expectedData as $key => $item) {
+            $setter = 'set' . ucfirst($key);
+            $customer->$setter($item);
+        }
+    }
+    //</editor-fold>
 }
