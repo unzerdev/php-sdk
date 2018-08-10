@@ -13,15 +13,11 @@
  */
 namespace heidelpay\NmgPhpSdk\test;
 
-use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Customer;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
 use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\Payment;
-use heidelpay\NmgPhpSdk\PaymentTypes\Card;
-use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use PHPUnit\Framework\TestCase;
 
 class Test extends TestCase
@@ -91,50 +87,18 @@ class Test extends TestCase
     {
         $this->assertSame(self::KEY, $this->heidelpay->getKey());
         $this->assertTrue($this->heidelpay->isSandboxMode());
-        $this->assertSame(self::RETURN_URL, $this->heidelpay->getReturnUrl());
 
-        $returnUrl = 'newReturnURL.php';
         $key = '987654321';
         $sandboxMode = false;
 
         $this->heidelpay->setSandboxMode($sandboxMode);
         $this->heidelpay->setKey($key);
-        $this->heidelpay->setReturnUrl($returnUrl);
 
         $this->assertSame($key, $this->heidelpay->getKey());
         $this->assertEquals($sandboxMode, $this->heidelpay->isSandboxMode());
-        $this->assertSame($returnUrl, $this->heidelpay->getReturnUrl());
     }
 
-    /**
-     * @test
-     */
-    public function heidelpayObjectShouldCreatePaymentObject()
-    {
-        $card = new Card('123456789', '09', '2019', '123');
-        $card->setHolder('Max Mustermann');
-
-        /** @var Payment $payment */
-        $payment = $this->heidelpay->createPayment($card);
-
-        $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertSame($card, $payment->getPaymentType());
-
-        return $card;
-    }
-
-    /**
-     * @test
-     * @param PaymentTypeInterface $card
-     * @depends heidelpayObjectShouldCreatePaymentObject
-     */
-    public function paymentObjectChargeShouldReturnTheUpdatedObject(PaymentTypeInterface $card)
-    {
-        $this->assertSame($card, $card->charge(12.0, Currency::EUROPEAN_EURO));
-        $this->assertSame($card, $card->authorize(12.0, Currency::EUROPEAN_EURO));
-    }
-
-
+    //<editor-fold desc="ResourceObject">
     /**
      * HeidelpayResource should throw HeidelpayObjectMissingException if request attempt when the reference is not set.
      *
