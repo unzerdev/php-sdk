@@ -33,6 +33,9 @@ class Heidelpay implements HeidelpayParentInterface
     /** @var bool */
     private $sandboxMode = true;
 
+    /** @var HttpAdapterInterface $adapter */
+    private $adapter;
+
     /**
      * Heidelpay constructor.
      *
@@ -141,6 +144,11 @@ class Heidelpay implements HeidelpayParentInterface
         return $this;
     }
     //</editor-fold>
+
+    public function send($uri, HeidelpayResourceInterface $resource, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        $this->adapter->send('https://api.heidelpay.com/' . $uri, $resource, $method);
+    }
 
     //<editor-fold desc="ParentIF">
     /**
