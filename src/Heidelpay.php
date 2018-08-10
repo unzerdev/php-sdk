@@ -13,8 +13,10 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
+use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Constants\Mode;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
+use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Heidelpay
@@ -126,6 +128,16 @@ class Heidelpay
      */
     public function getPayment()
     {
+        if ($this->payment instanceof Payment) {
+            return $this->payment;
+        }
+
+        if (empty($this->paymentId)) {
+            throw new MissingResourceException('Payment object does not exist.');
+        }
+
+        // todo: fetch payment from api and return it
+
         return $this->payment;
     }
 

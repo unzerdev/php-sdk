@@ -17,6 +17,7 @@ use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Customer;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
 use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
+use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
@@ -226,4 +227,15 @@ class Test extends TestCase
         $this->assertEquals(json_encode($expectedData), $customer->jsonSerialize());
     }
     //</editor-fold>
+
+    /**
+     * Heidelpay object should throw exception on payment get if the payment object is not set and neither is its id.
+     *
+     * @test
+     */
+    public function heidelpayObjectShouldThrowExceptionOnPaymentGetIfObjectAndIdAreNotSet()
+    {
+        $this->expectException(MissingResourceException::class);
+        $this->heidelpay->getPayment();
+    }
 }
