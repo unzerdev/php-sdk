@@ -24,9 +24,6 @@ class Heidelpay implements HeidelpayParentInterface
     private $key;
     private $locale;
 
-    /** @var int $paymentId */
-    private $paymentId;
-
     /** @var Payment $payment */
     private $payment;
 
@@ -78,24 +75,6 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * @return int
-     */
-    public function getPaymentId()
-    {
-        return $this->paymentId;
-    }
-
-    /**
-     * @param int $paymentId
-     * @return Heidelpay
-     */
-    public function setPaymentId($paymentId)
-    {
-        $this->paymentId = $paymentId;
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isSandboxMode()
@@ -135,8 +114,6 @@ class Heidelpay implements HeidelpayParentInterface
         if (empty($this->paymentId)) {
             throw new MissingResourceException('Payment object does not exist.');
         }
-
-
 
         // todo: fetch payment from api and return it
 

@@ -25,11 +25,12 @@ class Payment extends AbstractHeidelpayResource
 
     /**
      * Payment constructor.
-     * @param PaymentTypeInterface $paymentType
+     * @param HeidelpayParentInterface $parent
+     * @param int $id
      */
-    public function __construct(PaymentTypeInterface $paymentType)
+    public function __construct(HeidelpayParentInterface $parent, $id = 0)
     {
-        $this->paymentType = $paymentType;
+        parent::__construct($parent, $id);
     }
 
     //<editor-fold desc="Getters/Setters">

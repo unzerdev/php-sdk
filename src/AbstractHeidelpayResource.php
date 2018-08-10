@@ -26,12 +26,13 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     private $parentResource;
 
     /**
-     * HeidelpayResource constructor.
      * @param HeidelpayParentInterface $parent
+     * @param $id
      */
-    public function __construct(HeidelpayParentInterface $parent)
+    public function __construct(HeidelpayParentInterface $parent, $id = 0)
     {
         $this->parentResource = $parent;
+        $this->id = $id;
     }
 
     //<editor-fold desc="CRUD">
@@ -139,7 +140,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             $this,
             $httpMethod
         );
-        $this->fromJson($responseJson);
+//        $this->fromJson($responseJson);
     }
 
     /**
