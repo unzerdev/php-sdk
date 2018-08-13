@@ -93,7 +93,7 @@ class Card extends BasePaymentType
      * @param string $pan
      * @return Card
      */
-    public function setPan($pan)
+    public function setPan($pan): Card
     {
         $this->pan = $pan;
         return $this;
@@ -102,7 +102,7 @@ class Card extends BasePaymentType
     /**
      * @return string
      */
-    public function getExpirationDate()
+    public function getExpirationDate(): string
     {
         return $this->expirationDate;
     }
@@ -111,7 +111,7 @@ class Card extends BasePaymentType
      * @param string $expirationDate
      * @return Card
      */
-    public function setExpirationDate($expirationDate)
+    public function setExpirationDate($expirationDate): Card
     {
         $this->expirationDate = $expirationDate;
         return $this;
