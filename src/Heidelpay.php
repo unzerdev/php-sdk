@@ -36,6 +36,9 @@ class Heidelpay implements HeidelpayParentInterface
     /** @var HttpAdapterInterface $adapter */
     private $adapter;
 
+    /** @var PaymentTypeInterface $paymentType */
+    private $paymentType;
+
     /**
      * Heidelpay constructor.
      *
@@ -51,21 +54,11 @@ class Heidelpay implements HeidelpayParentInterface
         $this->setMode($mode);
     }
 
-    /**
-     * @param PaymentTypeInterface $paymentType
-     * @return Payment
-     */
-    public function createPayment(PaymentTypeInterface $paymentType)
-    {
-        $this->payment = new Payment($paymentType);
-        return $this->payment;
-    }
-
     //<editor-fold desc="Getters/Setters">
     /**
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -74,7 +67,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $key
      * @return Heidelpay
      */
-    public function setKey($key)
+    public function setKey($key): Heidelpay
     {
         $this->key = $key;
         return $this;
@@ -83,7 +76,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * @return bool
      */
-    public function isSandboxMode()
+    public function isSandboxMode(): bool
     {
         return $this->sandboxMode;
     }
@@ -92,7 +85,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param bool $sandboxMode
      * @return Heidelpay
      */
-    public function setSandboxMode($sandboxMode)
+    public function setSandboxMode($sandboxMode): Heidelpay
     {
         $this->sandboxMode = $sandboxMode;
         return $this;
@@ -100,18 +93,21 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * @param $mode
+     * @return Heidelpay
      */
-    private function setMode($mode)
+    private function setMode($mode): Heidelpay
     {
         if ($mode !== Mode::TEST) {
             $this->setSandboxMode(false);
         }
+
+        return $this;
     }
 
     /**
      * @return Payment
      */
-    public function getPayment()
+    public function getPayment(): Payment
     {
         if ($this->payment instanceof Payment) {
             return $this->payment;
@@ -129,7 +125,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -138,7 +134,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $locale
      * @return Heidelpay
      */
-    public function setLocale($locale)
+    public function setLocale($locale): Heidelpay
     {
         $this->locale = $locale;
         return $this;
@@ -156,7 +152,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Heidelpay
      */
-    public function getHeidelpayObject()
+    public function getHeidelpayObject(): Heidelpay
     {
         return $this;
     }
@@ -166,7 +162,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return string
      */
-    public function getUri()
+    public function getUri(): string
     {
         return '';
     }
@@ -176,19 +172,48 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * @return Customer
      */
-    public function getCustomer()
+    public function getCustomer(): Customer
     {
+        $this->customer->fetch();
         return $this->customer;
     }
 
     /**
      * @return Customer
      */
-    public function createCustomer()
+    public function createCustomer(): Customer
     {
         $this->customer = new Customer($this);
         return $this->customer;
     }
+    /**
+     * @return PaymentTypeInterface
+     */
+    public function getPaymentType(): PaymentTypeInterface
+    {
+        if (!$this->paymentType instanceof PaymentTypeInterface) {
+            throw new MissingResourceException();
+        }
+
+        return $this->paymentType;
+    }
 
     //</editor-fold>
+
+    /**
+     * Set the given payment type and create it via api.
+     *
+     * @param PaymentTypeInterface $paymentType
+     * @return PaymentTypeInterface
+     */
+    public function createPaymentType(PaymentTypeInterface $paymentType): PaymentTypeInterface
+    {
+        $this->paymentType = $paymentType;
+
+        /** @var HeidelpayResourceInterface $paymentType */
+        $type = $paymentType->create();
+
+        /** @var PaymentTypeInterface $type */
+        return $type;
+    }
 }

@@ -13,16 +13,16 @@
  */
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
-class Card implements PaymentTypeInterface
+use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
+
+class Card extends AbstractHeidelpayResource implements PaymentTypeInterface
 {
     /** @var string $pan */
     private $pan;
 
-    /** @var string $expirationMonth */
-    private $expirationMonth;
-
-    /** @var string $expirationYear */
-    private $expirationYear;
+    /** @var string $expirationDate */
+    private $expirationDate;
 
     /** @var int $cvc */
     private $cvc;
@@ -33,16 +33,30 @@ class Card implements PaymentTypeInterface
     /**
      * Card constructor.
      * @param string $pan
-     * @param string $expirationMonth
-     * @param string $expirationYear
-     * @param int $cvc
+     * @param string $expirationDate
      */
-    public function __construct($pan, $expirationMonth, $expirationYear, $cvc)
+    public function __construct($pan, $expirationDate)
     {
         $this->pan = $pan;
-        $this->expirationMonth = $expirationMonth;
-        $this->expirationYear = $expirationYear;
-        $this->cvc = $cvc;
+        $this->expirationDate = $expirationDate;
+    }
+
+    /**
+     * @param HeidelpayParentInterface $parent
+     * @param string $pan
+     * @param string $expirationDate
+     * @param int $cvc
+     * @return Card
+     */
+    public static function newCard(HeidelpayParentInterface $parent, $pan, $expirationDate, $cvc)
+    {
+        $card = new self($pan, $expirationDate);
+//        $card->pan = $pan;
+//        $card->expirationDate = $expirationDate;
+        $card->cvc = $cvc;
+        $card->setParent($parent);
+
+        return $card;
     }
 
     /**
@@ -87,36 +101,18 @@ class Card implements PaymentTypeInterface
     /**
      * @return string
      */
-    public function getExpirationMonth()
+    public function getExpirationDate()
     {
-        return $this->expirationMonth;
+        return $this->expirationDate;
     }
 
     /**
-     * @param string $expirationMonth
+     * @param string $expirationDate
      * @return Card
      */
-    public function setExpirationMonth($expirationMonth)
+    public function setExpirationDate($expirationDate)
     {
-        $this->expirationMonth = $expirationMonth;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getExpirationYear()
-    {
-        return $this->expirationYear;
-    }
-
-    /**
-     * @param string $expirationYear
-     * @return Card
-     */
-    public function setExpirationYear($expirationYear)
-    {
-        $this->expirationYear = $expirationYear;
+        $this->expirationDate = $expirationDate;
         return $this;
     }
 

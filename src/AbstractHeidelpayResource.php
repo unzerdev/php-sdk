@@ -36,41 +36,69 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     //<editor-fold desc="CRUD">
-    public function create()
+
+    /**
+     * {@inheritDoc}
+     */
+    public function create(): HeidelpayResourceInterface
     {
-        $this->send(HttpAdapterInterface::REQUEST_POST);
+//        $this->send(HttpAdapterInterface::REQUEST_POST);
+
+        // todo: update resource
+
+        $this->setId('dummy_id'); // todo: remove this when sending is implemented
+
         return $this;
     }
 
-    public function update()
+    /**
+     * {@inheritDoc}
+     */
+    public function update(): HeidelpayResourceInterface
     {
-        $this->send(HttpAdapterInterface::REQUEST_PUT);
+//        $this->send(HttpAdapterInterface::REQUEST_PUT);
+
+        // todo: update resource
+
+        return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function delete()
     {
         if (empty($this->id)) {
             throw new IdRequiredToFetchResourceException();
         }
 
-        $this->send(HttpAdapterInterface::REQUEST_DELETE);
+//        $this->send(HttpAdapterInterface::REQUEST_DELETE);
+
+        // todo: What to do here?
     }
 
-    public function fetch()
+    /**
+     * {@inheritDoc}
+     */
+    public function fetch(): HeidelpayResourceInterface
     {
         if (empty($this->id)) {
             throw new IdRequiredToFetchResourceException();
         }
 
-        $this->send(HttpAdapterInterface::REQUEST_GET);
+//        $this->send(HttpAdapterInterface::REQUEST_GET);
+
+        // todo: update resource
+
+        return $this;
     }
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
     /**
-     * @return int
+     * {@inheritDoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -79,9 +107,19 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      * @param int $id
      * @return AbstractHeidelpayResource
      */
-    public function setId($id)
+    public function setId($id): AbstractHeidelpayResource
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param HeidelpayParentInterface $parentResource
+     * @return AbstractHeidelpayResource
+     */
+    public function setParentResource($parentResource)
+    {
+        $this->parentResource = $parentResource;
         return $this;
     }
     //</editor-fold>

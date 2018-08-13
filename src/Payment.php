@@ -24,13 +24,13 @@ class Payment extends AbstractHeidelpayResource
     private $customer;
 
     /**
-     * Payment constructor.
      * @param HeidelpayParentInterface $parent
-     * @param int $id
+     * @param PaymentTypeInterface $paymentType
      */
-    public function __construct(HeidelpayParentInterface $parent, $id = 0)
+    public static function fetchObject(HeidelpayParentInterface $parent, PaymentTypeInterface $paymentType)
     {
-        parent::__construct($parent, $id);
+        $payment = getNewPayment($parent)
+            ->setPaymentType($paymentType);
     }
 
     //<editor-fold desc="Getters/Setters">
