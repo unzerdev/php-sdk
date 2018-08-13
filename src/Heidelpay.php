@@ -13,6 +13,7 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
+use heidelpay\NmgPhpSdk\Adapter\CurlAdapter;
 use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Constants\Mode;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
@@ -143,7 +144,11 @@ class Heidelpay implements HeidelpayParentInterface
 
     public function send($uri, HeidelpayResourceInterface $resource, $method = HttpAdapterInterface::REQUEST_GET)
     {
-        $this->adapter->send('https://api.heidelpay.com/' . $uri, $resource, $method);
+        if (!$this->adapter instanceof HttpAdapterInterface) {
+            $this->adapter = new CurlAdapter();
+        }
+
+        $this->adapter->send('https://api.heidelpay.com/' . 'v1/' . $uri, $resource, $method);
     }
 
     //<editor-fold desc="ParentIF">
@@ -208,6 +213,9 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function createPaymentType(PaymentTypeInterface $paymentType): PaymentTypeInterface
     {
+        /** @var AbstractHeidelpayResource $paymentType */
+        $paymentType->setParentResource($this);
+
         $this->paymentType = $paymentType;
 
         /** @var HeidelpayResourceInterface $paymentType */
