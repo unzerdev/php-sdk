@@ -84,7 +84,7 @@ class Card extends BasePaymentType
     /**
      * @return string
      */
-    public function getPan()
+    public function getPan(): string
     {
         return $this->pan;
     }
@@ -120,7 +120,7 @@ class Card extends BasePaymentType
     /**
      * @return int
      */
-    public function getCvc()
+    public function getCvc(): int
     {
         return $this->cvc;
     }
@@ -129,7 +129,7 @@ class Card extends BasePaymentType
      * @param int $cvc
      * @return Card
      */
-    public function setCvc($cvc)
+    public function setCvc($cvc): Card
     {
         $this->cvc = $cvc;
         return $this;
@@ -138,7 +138,7 @@ class Card extends BasePaymentType
     /**
      * @return string
      */
-    public function getHolder()
+    public function getHolder(): string
     {
         return $this->holder;
     }
@@ -147,7 +147,7 @@ class Card extends BasePaymentType
      * @param string $holder
      * @return Card
      */
-    public function setHolder($holder)
+    public function setHolder($holder): Card
     {
         $this->holder = $holder;
         return $this;
