@@ -13,19 +13,22 @@
  */
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
+use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+
 interface PaymentTypeInterface
 {
     /**
      * @param float $amount
      * @param string $currency
-     * @return $this
+     * @return Charge
      */
-    public function charge($amount, $currency);
+    public function charge($amount, $currency): Charge;
 
     /**
      * @param float $amount
      * @param string $currency
-     * @return $this
+     * @return Authorization
      */
-    public function authorize($amount, $currency);
+    public function authorize($amount, $currency): Authorization;
 }

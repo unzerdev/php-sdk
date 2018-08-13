@@ -15,6 +15,8 @@ namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
+use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class Card extends AbstractHeidelpayResource implements PaymentTypeInterface
 {
@@ -48,13 +50,13 @@ class Card extends AbstractHeidelpayResource implements PaymentTypeInterface
      * @param int $cvc
      * @return Card
      */
-    public static function newCard(HeidelpayParentInterface $parent, $pan, $expirationDate, $cvc)
+    public static function newCard(HeidelpayParentInterface $parent, $pan, $expirationDate, $cvc): Card
     {
         $card = new self($pan, $expirationDate);
 //        $card->pan = $pan;
 //        $card->expirationDate = $expirationDate;
         $card->cvc = $cvc;
-        $card->setParent($parent);
+        $card->setParentResource($parent);
 
         return $card;
     }
@@ -62,21 +64,21 @@ class Card extends AbstractHeidelpayResource implements PaymentTypeInterface
     /**
      * @param float $amount
      * @param string $currency
-     * @return $this
+     * @return Charge
      */
-    public function charge($amount, $currency)
+    public function charge($amount, $currency): Charge
     {
-        return $this;
+        return new Charge($this);
     }
 
     /**
      * @param float $amount
      * @param string $currency
-     * @return $this
+     * @return Authorization
      */
-    public function authorize($amount, $currency)
+    public function authorize($amount, $currency): Authorization
     {
-        return $this;
+        return new Authorization($this);
     }
 
     //<editor-fold desc="Getters/Setters">
