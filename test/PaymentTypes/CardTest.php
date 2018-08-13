@@ -13,9 +13,9 @@
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
-use heidelpay\NmgPhpSdk\Authorization;
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
+use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
@@ -53,8 +53,10 @@ class CardTest extends TestCase
         $card->setCvc('123');
         $card = $this->heidelpay->createPaymentType($card);
         $authorization = $card->authorize(1.0, Currency::EUROPEAN_EURO);
+        $this->assertNotNull($authorization);
+
 //        $payment = $authorization->getPayment();
-		$this->assertNotNull($authorization);
+//        $this->assertInstanceOf(Payment::class, $payment);
     }
 
     /**
@@ -70,4 +72,16 @@ class CardTest extends TestCase
         $this->assertNotNull($charge);
 	}
 
+	/**
+	 * @test
+	 */
+	public function cancelCardTypeNotAllowed()
+	{
+        $card = new Card ('4111111111111111', '03/20');
+        $card->setCvc('123');
+        $card = $this->heidelpay->createPaymentType($card);
+        $this->expectException(IllegalTransactionTypeException::class);
+        $this->expectExceptionMessage('Transaction type cancel is not allowed!');
+        $card->cancel();
+	}
 }

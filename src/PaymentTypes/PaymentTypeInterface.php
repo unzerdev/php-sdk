@@ -31,4 +31,9 @@ interface PaymentTypeInterface
      * @return Authorization
      */
     public function authorize($amount, $currency): Authorization;
+
+    /**
+     * @param float $amount
+     */
+    public function cancel($amount = 0.0);
 }

@@ -13,12 +13,11 @@
  */
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
-use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
-class Card extends AbstractHeidelpayResource implements PaymentTypeInterface
+class Card extends BasePaymentType
 {
     /** @var string $pan */
     private $pan;
