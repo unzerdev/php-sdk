@@ -17,7 +17,7 @@
  */
 namespace heidelpay\NmgPhpSdk\Adapter;
 
-use HeidelpayPHP\lib\TransferableObject;
+use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 
 /**
  * Http adapters to be used by this api should implement this interface.
@@ -45,9 +45,9 @@ interface HttpAdapterInterface
      *
      * @param $uri string url of the target system
      *
-     * @param TransferableObject $transferObject
+     * @param AbstractHeidelpayResource $heidelpayResource
      * @param $httpMethod
      * @return string result json of the transaction
      */
-    public function send($uri = null, TransferableObject $transferObject = null, $httpMethod = self::REQUEST_POST);
+    public function send($uri = null, AbstractHeidelpayResource $heidelpayResource = null, $httpMethod = self::REQUEST_POST): string;
 }

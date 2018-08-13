@@ -20,7 +20,7 @@
  */
 namespace heidelpay\NmgPhpSdk\Adapter;
 
-use HeidelpayPHP\lib\TransferableObject;
+use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 
 class CurlAdapter implements HttpAdapterInterface
 {
@@ -28,26 +28,26 @@ class CurlAdapter implements HttpAdapterInterface
      * send post request to payment server
      *
      * @param $uri string url of the target system
-     * @param TransferableObject $transferObject
+     * @param AbstractHeidelpayResource $heidelpayResource
      * @param string $httpMethod
      * @return string
      * @throws \RuntimeException
      */
     public function send(
         $uri = null,
-        TransferableObject $transferObject = null,
+        AbstractHeidelpayResource $heidelpayResource = null,
         $httpMethod = HttpAdapterInterface::REQUEST_POST
-    ) {
-        if (!extension_loaded('curl')) {
+    ): string {
+        if (!\extension_loaded('curl')) {
             throw new \RuntimeException('Connection error php-curl not installed');
         }
 
-        if (null === $transferObject) {
+        if (null === $heidelpayResource) {
             throw new \RuntimeException('Transfer object is null');
         }
 
         $request = curl_init();
-        $data = $transferObject->toJson();
+        $data = $heidelpayResource->jsonSerialize();
 
         curl_setopt($request, CURLOPT_URL, $uri);
         curl_setopt($request, CURLOPT_HEADER, 0);
@@ -83,7 +83,7 @@ class CurlAdapter implements HttpAdapterInterface
         curl_setopt($request, CURLOPT_HTTPHEADER, array(
             'CUSTOMER-LANGUAGE: en_US', // heidelpay constructor // header object?
             'CHECKOUT-ID: checkout-5aba2fad0ab154.88150279', // heidelpay constructor
-            'HEIDELPAY-API-KEY: p-sec-' . $transferObject->getSecret(),
+            'HEIDELPAY-API-KEY: p-sec-' . $heidelpayResource->getHeidelpayObject()->getKey(),
             'SDK-VERSION: PHP - 1.4.1', // heidelpay constructor
             'SHOP-SYSTEM: Shopware - 5.2.2', // heidelpay constructor
             'EXTENSION: heidelpay/magento-cd-edition - 1.5.3' // heidelpay constructor
