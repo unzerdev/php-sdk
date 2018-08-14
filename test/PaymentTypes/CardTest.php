@@ -92,12 +92,16 @@ class CardTest extends TestCase
     /**
      * @test
      */
-    public function createdCardTypeHasHeidelpayObject()
+    public function createdCardTypeHasHeidelpayObjectAndId()
     {
+        /** @var Card $card */
         $card = new Card ('4111111111111111', '03/20');
         $card->setCvc('123');
+        $this->assertEmpty($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
         /** @var HeidelpayParentInterface $card */
         $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
+        $this->assertSame($card, $this->heidelpay->getPaymentType());
+        $this->assertNotEmpty($card->getId());
     }
 }
