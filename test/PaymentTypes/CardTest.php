@@ -14,27 +14,14 @@
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
-use PHPUnit\Framework\TestCase;
+use heidelpay\NmgPhpSdk\test\AbstractPaymentTest;
 
-class CardTest extends TestCase
+class CardTest extends AbstractPaymentTest
 {
-    /** @var Heidelpay $heidelpay */
-    private $heidelpay;
-
-    const PRIVATE_KEY = 's-priv-6S59Dt6Q9mJYj8X5qpcxSpA3XLXUw4Zf';
-    const PUBLIC_KEY = 's-pub-uM8yNmBNcs1GGdwAL4ytebYA4HErD22H';
-
-    protected function setUp()
-    {
-        $this->heidelpay = new Heidelpay(self::PUBLIC_KEY, SupportedLocale::GERMAN_GERMAN);
-    }
-
     /**
      * @test
      */
@@ -92,7 +79,7 @@ class CardTest extends TestCase
     /**
      * @test
      */
-    public function createdCardTypeHasHeidelpayObjectAndId()
+    public function createdCardTypeHasHeidelpayObject()
     {
         /** @var Card $card */
         $card = new Card ('4111111111111111', '03/20');
