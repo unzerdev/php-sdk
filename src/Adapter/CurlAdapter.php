@@ -57,7 +57,7 @@ class CurlAdapter implements HttpAdapterInterface
 
         switch ($httpMethod) {
             case HttpAdapterInterface::REQUEST_POST:
-                curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'POST');
                 break;
             case HttpAdapterInterface::REQUEST_DELETE:
                 curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'DELETE');
@@ -71,7 +71,6 @@ class CurlAdapter implements HttpAdapterInterface
                 break;
         }
 
-//        curl_setopt($request, CURLOPT_POST, true);
         curl_setopt($request, CURLOPT_POSTFIELDS, $data);
 
         curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
@@ -81,17 +80,18 @@ class CurlAdapter implements HttpAdapterInterface
         curl_setopt($request, CURLOPT_USERAGENT, 'HeidelpayPHP');
 
         curl_setopt($request, CURLOPT_HTTPHEADER, array(
-            'CUSTOMER-LANGUAGE: en_US', // heidelpay constructor // header object?
-            'CHECKOUT-ID: checkout-5aba2fad0ab154.88150279', // heidelpay constructor
-            'HEIDELPAY-API-KEY: p-sec-' . $heidelpayResource->getHeidelpayObject()->getKey(),
-            'SDK-VERSION: PHP - 1.4.1', // heidelpay constructor
-            'SHOP-SYSTEM: Shopware - 5.2.2', // heidelpay constructor
-            'EXTENSION: heidelpay/magento-cd-edition - 1.5.3' // heidelpay constructor
+            'Authorization: ' . $heidelpayResource->getHeidelpayObject()->getKey(),
+            'Content-Type: application/json'
+//            'CUSTOMER-LANGUAGE: en_US', // heidelpay constructor // header object?
+//            'CHECKOUT-ID: checkout-5aba2fad0ab154.88150279', // heidelpay constructor
+//            'SDK-VERSION: PHP - 1.4.1', // heidelpay constructor
+//            'SHOP-SYSTEM: Shopware - 5.2.2', // heidelpay constructor
+//            'EXTENSION: heidelpay/magento-cd-edition - 1.5.3' // heidelpay constructor
         ));
 
         $response = curl_exec($request);
-//        $error = curl_error($request);
-//        $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
+        $error = curl_error($request);
+        $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
 
         curl_close($request);
 

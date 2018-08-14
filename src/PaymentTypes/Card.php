@@ -20,26 +20,26 @@ use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 class Card extends BasePaymentType
 {
     /** @var string $pan */
-    private $pan;
+    protected $pan;
 
-    /** @var string $expirationDate */
-    private $expirationDate;
+    /** @var string $expiryDate */
+    protected $expiryDate;
 
     /** @var int $cvc */
-    private $cvc;
+    protected $cvc;
 
     /** @var string $holder */
-    private $holder = '';
+    protected $holder = '';
 
     /**
      * Card constructor.
      * @param string $pan
-     * @param string $expirationDate
+     * @param string $expiryDate
      */
-    public function __construct($pan, $expirationDate)
+    public function __construct($pan, $expiryDate)
     {
         $this->pan = $pan;
-        $this->expirationDate = $expirationDate;
+        $this->expiryDate = $expiryDate;
     }
 
     /**
@@ -61,6 +61,15 @@ class Card extends BasePaymentType
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getResourcePath()
+    {
+        return '/types/cards';
+    }
+
+    //<editor-fold desc="TransactionTypes">
+    /**
      * @param float $amount
      * @param string $currency
      * @return Charge
@@ -79,6 +88,7 @@ class Card extends BasePaymentType
     {
         return new Authorization($this);
     }
+    //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
     /**
@@ -102,18 +112,18 @@ class Card extends BasePaymentType
     /**
      * @return string
      */
-    public function getExpirationDate(): string
+    public function getExpiryDate(): string
     {
-        return $this->expirationDate;
+        return $this->expiryDate;
     }
 
     /**
-     * @param string $expirationDate
+     * @param string $expiryDate
      * @return Card
      */
-    public function setExpirationDate($expirationDate): Card
+    public function setExpiryDate($expiryDate): Card
     {
-        $this->expirationDate = $expirationDate;
+        $this->expiryDate = $expiryDate;
         return $this;
     }
 

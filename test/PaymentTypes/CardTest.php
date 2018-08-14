@@ -17,6 +17,7 @@ use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Heidelpay;
+use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use PHPUnit\Framework\TestCase;
@@ -26,9 +27,12 @@ class CardTest extends TestCase
     /** @var Heidelpay $heidelpay */
     private $heidelpay;
 
+    const PRIVATE_KEY = 's-priv-6S59Dt6Q9mJYj8X5qpcxSpA3XLXUw4Zf';
+    const PUBLIC_KEY = 's-pub-uM8yNmBNcs1GGdwAL4ytebYA4HErD22H';
+
     protected function setUp()
     {
-        $this->heidelpay = new Heidelpay('thisKey', SupportedLocale::GERMAN_GERMAN);
+        $this->heidelpay = new Heidelpay(self::PUBLIC_KEY, SupportedLocale::GERMAN_GERMAN);
     }
 
     /**
@@ -84,4 +88,16 @@ class CardTest extends TestCase
         $this->expectExceptionMessage('Transaction type cancel is not allowed!');
         $card->cancel();
 	}
+
+    /**
+     * @test
+     */
+    public function createdCardTypeHasHeidelpayObject()
+    {
+        $card = new Card ('4111111111111111', '03/20');
+        $card->setCvc('123');
+        $card = $this->heidelpay->createPaymentType($card);
+        /** @var HeidelpayParentInterface $card */
+        $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
+    }
 }

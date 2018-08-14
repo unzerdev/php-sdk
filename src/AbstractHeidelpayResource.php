@@ -42,7 +42,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     public function create(): HeidelpayResourceInterface
     {
-//        $this->send(HttpAdapterInterface::REQUEST_POST);
+        $this->send(HttpAdapterInterface::REQUEST_POST);
 
         // todo: update resource
 
@@ -170,6 +170,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /**
      * @param string $httpMethod
      * @throws \RuntimeException
+     * @return $this
      */
     public function send($httpMethod = HttpAdapterInterface::REQUEST_GET)
     {
@@ -179,6 +180,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             $httpMethod
         );
 //        $this->fromJson($responseJson);
+        return $this;
     }
 
     /**
@@ -201,7 +203,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     public function getUri()
     {
         // remove trailing slash and explode
-        $uri = [rtrim($this->parentResource->getUri(), '/'), strtolower(self::getClassShortName())];
+        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
         if (!empty($this->getId())) {
             $uri[] = $this->getId();
         }
@@ -216,9 +218,20 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      *
      * @return string
      */
-    public static function getClassShortName()
+    public static function getClassShortName(): string
     {
         $classNameParts = explode('\\', static::class);
         return end($classNameParts);
+    }
+
+    /**
+     * This returns the path of this resource within the parent resource.
+     * Please override this if the path does not match the class name.
+     *
+     * @return null
+     */
+    public function getResourcePath()
+    {
+        return strtolower(self::getClassShortName());
     }
 }

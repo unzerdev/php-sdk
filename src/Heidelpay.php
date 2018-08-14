@@ -22,7 +22,14 @@ use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Heidelpay implements HeidelpayParentInterface
 {
+    const URL_TEST = 'https://dev-api.heidelpay.com/';
+    const URL_LIVE = 'https://api.heidelpay.com/';
+    const API_VERSION = 'v1';
+
+    /** @var string $key */
     private $key;
+
+    /** @var string $locale */
     private $locale;
 
     /** @var Payment $payment */
@@ -41,8 +48,6 @@ class Heidelpay implements HeidelpayParentInterface
     private $paymentType;
 
     /**
-     * Heidelpay constructor.
-     *
      * @param string $key
      * @param string $locale
      * @param string $mode
@@ -147,8 +152,8 @@ class Heidelpay implements HeidelpayParentInterface
         if (!$this->adapter instanceof HttpAdapterInterface) {
             $this->adapter = new CurlAdapter();
         }
-
-        $this->adapter->send('https://api.heidelpay.com/' . 'v1/' . $uri, $resource, $method);
+        $url = $this->isSandboxMode() ? self::URL_TEST : self::URL_LIVE;
+        $this->adapter->send($url . self::API_VERSION . $uri, $resource, $method);
     }
 
     //<editor-fold desc="ParentIF">
