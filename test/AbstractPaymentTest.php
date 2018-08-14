@@ -27,6 +27,6 @@ class AbstractPaymentTest extends TestCase
 
     protected function setUp()
     {
-        $this->heidelpay = new Heidelpay(self::PUBLIC_KEY, SupportedLocale::GERMAN_GERMAN);
+        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocale::GERMAN_GERMAN);
     }
 }

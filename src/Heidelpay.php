@@ -17,6 +17,7 @@ use heidelpay\NmgPhpSdk\Adapter\CurlAdapter;
 use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Constants\Mode;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
+use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
@@ -54,7 +55,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function __construct($key, $locale = SupportedLocale::GERMAN_GERMAN, $mode = Mode::TEST)
     {
-        $this->key = $key;
+        $this->setKey($key);
         $this->locale = $locale;
 
         $this->setMode($mode);
@@ -75,6 +76,11 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function setKey($key): Heidelpay
     {
+        $isPrivateKey = strpos($key, 's-priv-') !== false;
+        if (!$isPrivateKey) {
+            throw new IllegalKeyException();
+        }
+
         $this->key = $key;
         return $this;
     }
