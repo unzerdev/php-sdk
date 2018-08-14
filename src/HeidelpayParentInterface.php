@@ -21,12 +21,12 @@ interface HeidelpayParentInterface
      *
      * @return Heidelpay
      */
-    public function getHeidelpayObject();
+    public function getHeidelpayObject(): Heidelpay;
 
     /**
      * Returns the url string for this resource.
      *
      * @return string
      */
-    public function getUri();
+    public function getUri(): string;
 }

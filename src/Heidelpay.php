@@ -147,13 +147,23 @@ class Heidelpay implements HeidelpayParentInterface
     }
     //</editor-fold>
 
-    public function send($uri, HeidelpayResourceInterface $resource, $method = HttpAdapterInterface::REQUEST_GET)
+    /**
+     * @param $uri
+     * @param HeidelpayResourceInterface $resource
+     * @param string $method
+     * @return string
+     */
+    public function send(
+        $uri,
+        HeidelpayResourceInterface $resource,
+        $method = HttpAdapterInterface::REQUEST_GET
+    ): string
     {
         if (!$this->adapter instanceof HttpAdapterInterface) {
             $this->adapter = new CurlAdapter();
         }
         $url = $this->isSandboxMode() ? self::URL_TEST : self::URL_LIVE;
-        $this->adapter->send($url . self::API_VERSION . $uri, $resource, $method);
+        return $this->adapter->send($url . self::API_VERSION . $uri, $resource, $method);
     }
 
     //<editor-fold desc="ParentIF">

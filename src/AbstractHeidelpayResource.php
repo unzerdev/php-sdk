@@ -42,11 +42,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     public function create(): HeidelpayResourceInterface
     {
-        $this->send(HttpAdapterInterface::REQUEST_POST);
-
-        // todo: update resource
-
-        $this->setId('dummy_id'); // todo: remove this when sending is implemented
+        $response = $this->send(HttpAdapterInterface::REQUEST_POST);
+        $this->setId($response->id);
 
         return $this;
     }
@@ -170,7 +167,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /**
      * @param string $httpMethod
      * @throws \RuntimeException
-     * @return $this
+     * @return array
      */
     public function send($httpMethod = HttpAdapterInterface::REQUEST_GET)
     {
@@ -179,14 +176,13 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             $this,
             $httpMethod
         );
-//        $this->fromJson($responseJson);
-        return $this;
+        return json_decode($responseJson);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getHeidelpayObject()
+    public function getHeidelpayObject(): Heidelpay
     {
         $heidelpayObject = $this->parentResource->getHeidelpayObject();
 
@@ -200,7 +196,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /**
      * {@inheritDoc}
      */
-    public function getUri()
+    public function getUri(): string
     {
         // remove trailing slash and explode
         $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
