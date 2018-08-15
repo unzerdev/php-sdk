@@ -253,7 +253,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      *
      * @return string
      */
-    public static function getClassShortName(): string
+    protected static function getClassShortName(): string
     {
         $classNameParts = explode('\\', static::class);
         return end($classNameParts);
@@ -262,7 +262,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     //<editor-fold desc="Optional Methods">
     /**
      * Return the resources which should be referenced by Id within the resource section of the resource data.
-     * Please override this to define the linked resources.
+     * Override this to define the linked resources.
      * @return array
      */
     public function getLinkedResources(): array
@@ -272,11 +272,11 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * This returns the path of this resource within the parent resource.
-     * Please override this if the path does not match the class name.
+     * Override this if the path does not match the class name.
      *
      * @return null
      */
-    public function getResourcePath()
+    protected function getResourcePath()
     {
         return strtolower(self::getClassShortName());
     }
