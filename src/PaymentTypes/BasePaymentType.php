@@ -11,22 +11,52 @@
  *
  * @package  heidelpay/${Package}
  */
-
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
-use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
-class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
+abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface, PaymentInterface
 {
+    protected $chargeable = false;
+    protected $authorizable = false;
+    protected $cancelable = false;
+
+    //<editor-fold desc="Getters">
+    /**
+     * @return bool
+     */
+    public function isChargeable(): bool
+    {
+        return $this->chargeable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthorizable(): bool
+    {
+        return $this->authorizable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCancelable(): bool
+    {
+        return $this->cancelable;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Transactions">
     /**
      * {@inheritDoc}
      */
     public function charge($amount = null, $currency = ''): Charge
     {
-        throw new IllegalTransactionTypeException('charge');
+        $payment = $this->getHeidelpayObject()->getOrCreatePayment();
+        return $payment->charge($amount, $currency);
     }
 
     /**
@@ -34,14 +64,17 @@ class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeIn
      */
     public function authorize($amount, $currency, $returnUrl): Authorization
     {
-        throw new IllegalTransactionTypeException('authorize');
+        $payment = $this->getHeidelpayObject()->getOrCreatePayment();
+        return $payment->authorize($amount, $currency, $returnUrl);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function cancel($amount = 0.0)
+    public function cancel($amount = null)
     {
-        throw new IllegalTransactionTypeException('cancel');
+        $payment = $this->getHeidelpayObject()->getOrCreatePayment();
+        return $payment->cancel($amount);
     }
+    //</editor-fold>
 }

@@ -17,7 +17,7 @@ namespace heidelpay\NmgPhpSdk\TransactionTypes;
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentInterface;
 
 class Authorization extends AbstractHeidelpayResource
 {
@@ -136,7 +136,7 @@ class Authorization extends AbstractHeidelpayResource
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
         $paymentType = $heidelpay->getPaymentType();
-        if (!$paymentType instanceof PaymentTypeInterface) {
+        if (!$paymentType instanceof PaymentInterface) {
             throw new MissingResourceException();
         }
 

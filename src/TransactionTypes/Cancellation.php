@@ -11,23 +11,10 @@
  *
  * @package  heidelpay/${Package}
  */
+namespace heidelpay\NmgPhpSdk\TransactionTypes;
 
-namespace heidelpay\NmgPhpSdk\PaymentTypes;
+use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 
-interface PaymentTypeInterface
+class Cancellation extends AbstractHeidelpayResource
 {
-    /**
-     * @return bool
-     */
-    public function isChargeable(): bool;
-
-    /**
-     * @return bool
-     */
-    public function isAuthorizable(): bool;
-
-    /**
-     * @return bool
-     */
-    public function isCancelable(): bool;
 }

@@ -19,6 +19,7 @@ use heidelpay\NmgPhpSdk\Constants\Mode;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Heidelpay implements HeidelpayParentInterface
@@ -216,7 +217,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function getPaymentType(): PaymentTypeInterface
     {
-        if (!$this->paymentType instanceof PaymentTypeInterface) {
+        if (!$this->paymentType instanceof PaymentInterface) {
             throw new MissingResourceException();
         }
 

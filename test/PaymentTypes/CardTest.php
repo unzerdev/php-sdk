@@ -14,7 +14,6 @@
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;

@@ -14,8 +14,6 @@
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class Card extends BasePaymentType
 {
@@ -38,6 +36,10 @@ class Card extends BasePaymentType
      */
     public function __construct($pan, $expiryDate)
     {
+        $this->authorizable = true;
+        $this->cancelable = true;
+        $this->chargeable = true;
+
         $this->pan = $pan;
         $this->expiryDate = $expiryDate;
     }
@@ -67,31 +69,6 @@ class Card extends BasePaymentType
     {
         return 'types/cards';
     }
-
-    //<editor-fold desc="TransactionTypes">
-    /**
-     * @param float $amount
-     * @param string $currency
-     * @return Charge
-     */
-    public function charge($amount = null, $currency = null): Charge
-    {
-        return new Charge($this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize($amount, $currency, $returnUrl): Authorization
-    {
-        $paymentObject = $this->getHeidelpayObject()->getOrCreatePayment();
-        $authorization = new Authorization($amount, $currency, $returnUrl);
-        $paymentObject->setAuthorization($authorization);
-        $authorization->setParentResource($paymentObject);
-        $authorization->create();
-        return $authorization;
-    }
-    //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
     /**

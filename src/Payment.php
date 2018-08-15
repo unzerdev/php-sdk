@@ -13,10 +13,13 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
+use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
-class Payment extends AbstractHeidelpayResource
+class Payment extends AbstractHeidelpayResource implements PaymentInterface
 {
     /** @var string $redirectUrl */
     private $redirectUrl = '';
@@ -101,4 +104,58 @@ class Payment extends AbstractHeidelpayResource
         $this->charges[] = $charge;
     }
     //</editor-fold>
+
+    //<editor-fold desc="TransactionTypes">
+    /**
+     * @param float $amount
+     * @param string $currency
+     * @return Charge
+     */
+    public function charge($amount = null, $currency = null): Charge
+    {
+        if (!$this->getPaymentType()->isChargeable()) {
+            throw new IllegalTransactionTypeException(__METHOD__);
+        }
+
+        return new Charge($this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function authorize($amount, $currency, $returnUrl): Authorization
+    {
+        if (!$this->getPaymentType()->isAuthorizable()) {
+            throw new IllegalTransactionTypeException(__METHOD__);
+        }
+
+        $paymentObject = $this->getHeidelpayObject()->getOrCreatePayment();
+        $authorization = new Authorization($amount, $currency, $returnUrl);
+        $paymentObject->setAuthorization($authorization);
+        $authorization->setParentResource($paymentObject);
+        $authorization->create();
+        return $authorization;
+    }
+
+    /**
+     * @param float $amount
+     * @return Cancellation
+     */
+    public function cancel($amount = null): Cancellation
+    {
+        if (!$this->getPaymentType()->isCancelable()) {
+            throw new IllegalTransactionTypeException(__METHOD__);
+        }
+
+        return new Cancellation($this);
+    }
+    //</editor-fold>
+
+    /**
+     * @return PaymentTypes\PaymentTypeInterface
+     */
+    private function getPaymentType(): PaymentTypes\PaymentTypeInterface
+    {
+        return $this->getHeidelpayObject()->getPaymentType();
+    }
 }
