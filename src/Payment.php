@@ -193,7 +193,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      *
      * @return float|bool
      */
-    private function getRemainingAmount()
+    public function getRemainingAmount()
     {
         $authorization = $this->getAuthorization();
         if ($authorization === null) {

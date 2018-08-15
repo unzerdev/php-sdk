@@ -77,7 +77,7 @@ class Charge extends AbstractHeidelpayResource
      * @param string $currency
      * @return HeidelpayResourceInterface
      */
-    public function setCurrency(string $currency): HeidelpayResourceInterface
+    public function setCurrency($currency): HeidelpayResourceInterface
     {
         $this->currency = $currency;
         return $this;
@@ -95,7 +95,7 @@ class Charge extends AbstractHeidelpayResource
      * @param string $returnUrl
      * @return HeidelpayResourceInterface
      */
-    public function setReturnUrl(string $returnUrl): HeidelpayResourceInterface
+    public function setReturnUrl($returnUrl): HeidelpayResourceInterface
     {
         $this->returnUrl = $returnUrl;
         return $this;

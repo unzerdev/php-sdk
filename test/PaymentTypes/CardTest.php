@@ -58,7 +58,6 @@ class CardTest extends AbstractPaymentTest
         $this->assertNotEmpty($authorization->getId());
         $this->assertInstanceOf(Payment::class, $authorization->getPayment());
         $this->assertNotEmpty($authorization->getPayment()->getId());
-        $this->assertNotEmpty($authorization->getPayment()->getRedirectUrl());
         $this->assertSame($authorization, $card->getPayment()->getAuthorization());
 
         echo "\nAuthorizationId: " . $authorization->getId();
@@ -97,6 +96,18 @@ class CardTest extends AbstractPaymentTest
 	    $this->expectException(MissingResourceException::class);
 	    $card->charge();
 	}
+
+    /**
+     * @test
+     * @depends authorizeCardType
+     * @param Authorization $authorization
+     */
+	public function fullChargeAfterAuthorize(Authorization $authorization)
+	{
+	    $this->assertGreaterThan(0.0, $authorization->getPayment()->getRemainingAmount());
+        $authorization->getPayment()->fullCharge();
+        $this->assertEquals(0.0, $authorization->getPayment()->getRemainingAmount());
+    }
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
@@ -106,7 +117,7 @@ class CardTest extends AbstractPaymentTest
     private function createCard(): Card
     {
         /** @var Card $card */
-        $card = new Card ('4111111111111111', '03/20');
+        $card = new Card ('4012888888881881', '03/20');
         $card->setCvc('123');
         return $card;
     }
