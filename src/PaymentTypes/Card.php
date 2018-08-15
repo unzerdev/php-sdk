@@ -86,6 +86,7 @@ class Card extends BasePaymentType
     {
         $paymentObject = $this->getHeidelpayObject()->getOrCreatePayment();
         $authorization = new Authorization($amount, $currency, $returnUrl);
+        $paymentObject->setAuthorization($authorization);
         $authorization->setParentResource($paymentObject);
         $authorization->create();
         return $authorization;

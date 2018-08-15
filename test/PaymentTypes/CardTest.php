@@ -20,6 +20,7 @@ use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use heidelpay\NmgPhpSdk\test\AbstractPaymentTest;
+use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 
 class CardTest extends AbstractPaymentTest
 {
@@ -45,8 +46,9 @@ class CardTest extends AbstractPaymentTest
      * @param Card $card
      * @depends createCardType
      * @test
+     * @return Authorization
      */
-    public function authorizeCardType(Card $card)
+    public function authorizeCardType(Card $card): Authorization
     {
         $this->assertNull($card->getPayment());
         $authorization = $card->authorize(1.0, Currency::EUROPEAN_EURO, 'http://vnexpress.vn');
@@ -55,6 +57,11 @@ class CardTest extends AbstractPaymentTest
         $this->assertInstanceOf(Payment::class, $authorization->getPayment());
         $this->assertNotEmpty($authorization->getPayment()->getId());
         $this->assertNotEmpty($authorization->getPayment()->getRedirectUrl());
+        $this->assertSame($authorization, $card->getPayment()->getAuthorization());
+
+        echo "\nAuthorizationId: " . $authorization->getId();
+        echo "\nPaymentId: " . $authorization->getPayment()->getId();
+        return $authorization;
     }
 
     /**
