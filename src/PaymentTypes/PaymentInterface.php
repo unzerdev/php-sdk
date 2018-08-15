@@ -21,14 +21,15 @@ interface PaymentInterface
     /**
      * @param float $amount
      * @param string $currency
+     * @param string $returnUrl
      * @return Charge
      */
-    public function charge($amount = null, $currency = ''): Charge;
+    public function charge($amount, $currency, $returnUrl): Charge;
 
     /**
      * @param float $amount
      * @param string $currency
-     * @param $returnUrl
+     * @param string $returnUrl
      * @return Authorization
      */
     public function authorize($amount, $currency, $returnUrl): Authorization;

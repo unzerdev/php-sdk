@@ -70,8 +70,10 @@ class CardTest extends AbstractPaymentTest
      */
     public function chargeCardType(Card $card)
     {
-        $charge = $card->charge(1.0, Currency::EUROPEAN_EURO);
-//        $payment = $charge->getPayment();
+        $charge = $card->charge(1.0, Currency::EUROPEAN_EURO, 'http://vnexpress.vn');
+
+
+
         $this->assertNotNull($charge);
 	}
 

@@ -109,15 +109,20 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * @param float $amount
      * @param string $currency
+     * @param string $returnUrl
      * @return Charge
      */
-    public function charge($amount = null, $currency = null): Charge
+    public function charge($amount = null, $currency = null, $returnUrl = ''): Charge
     {
         if (!$this->getPaymentType()->isChargeable()) {
             throw new IllegalTransactionTypeException(__METHOD__);
         }
 
-        return new Charge($this);
+        $charge = new Charge($amount, $currency, $returnUrl);
+        $this->addCharge($charge);
+        $charge->setParentResource($this);
+        $charge->create();
+        return $charge;
     }
 
     /**
@@ -129,10 +134,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             throw new IllegalTransactionTypeException(__METHOD__);
         }
 
-        $paymentObject = $this->getHeidelpayObject()->getOrCreatePayment();
         $authorization = new Authorization($amount, $currency, $returnUrl);
-        $paymentObject->setAuthorization($authorization);
-        $authorization->setParentResource($paymentObject);
+        $this->setAuthorization($authorization);
+        $authorization->setParentResource($this);
         $authorization->create();
         return $authorization;
     }

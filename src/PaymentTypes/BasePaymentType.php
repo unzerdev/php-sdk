@@ -53,7 +53,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     /**
      * {@inheritDoc}
      */
-    public function charge($amount = null, $currency = ''): Charge
+    public function charge($amount, $currency, $returnUrl): Charge
     {
         $payment = $this->getHeidelpayObject()->getOrCreatePayment();
         return $payment->charge($amount, $currency);

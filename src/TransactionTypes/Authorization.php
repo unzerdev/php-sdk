@@ -11,13 +11,13 @@
  *
  * @package  heidelpay/${Package}
  */
-
 namespace heidelpay\NmgPhpSdk\TransactionTypes;
 
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\PaymentTypes\PaymentInterface;
+use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Authorization extends AbstractHeidelpayResource
 {
@@ -57,9 +57,9 @@ class Authorization extends AbstractHeidelpayResource
 
     /**
      * @param float $amount
-     * @return Authorization
+     * @return HeidelpayResourceInterface
      */
-    public function setAmount(float $amount): Authorization
+    public function setAmount(float $amount): HeidelpayResourceInterface
     {
         $this->amount = $amount;
         return $this;
@@ -75,9 +75,9 @@ class Authorization extends AbstractHeidelpayResource
 
     /**
      * @param string $currency
-     * @return Authorization
+     * @return HeidelpayResourceInterface
      */
-    public function setCurrency(string $currency): Authorization
+    public function setCurrency(string $currency): HeidelpayResourceInterface
     {
         $this->currency = $currency;
         return $this;
@@ -93,9 +93,9 @@ class Authorization extends AbstractHeidelpayResource
 
     /**
      * @param string $returnUrl
-     * @return Authorization
+     * @return HeidelpayResourceInterface
      */
-    public function setReturnUrl(string $returnUrl): Authorization
+    public function setReturnUrl(string $returnUrl): HeidelpayResourceInterface
     {
         $this->returnUrl = $returnUrl;
         return $this;
@@ -111,9 +111,9 @@ class Authorization extends AbstractHeidelpayResource
 
     /**
      * @param string $uniqueId
-     * @return Authorization
+     * @return HeidelpayResourceInterface
      */
-    public function setUniqueId(string $uniqueId): Authorization
+    public function setUniqueId(string $uniqueId): HeidelpayResourceInterface
     {
         $this->uniqueId = $uniqueId;
         return $this;
@@ -136,7 +136,7 @@ class Authorization extends AbstractHeidelpayResource
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
         $paymentType = $heidelpay->getPaymentType();
-        if (!$paymentType instanceof PaymentInterface) {
+        if (!$paymentType instanceof PaymentTypeInterface) {
             throw new MissingResourceException();
         }
 
