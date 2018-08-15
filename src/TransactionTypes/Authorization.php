@@ -151,11 +151,20 @@ class Authorization extends AbstractHeidelpayResource
      */
     protected function handleResponse(\stdClass $response)
     {
-        if (!isset($response->resources->paymentId)) {
+        $isSuccess = isset($response->isSuccess) && $response->isSuccess;
+        $isPending = isset($response->isPending) && $response->isPending;
+        if (!$isSuccess && !$isPending) {
             return;
         }
 
         $payment = $this->getHeidelpayObject()->getOrCreatePayment();
-        $payment->setId($response->resources->paymentId);
+
+        if (isset($response->resources->paymentId)) {
+            $payment->setId($response->resources->paymentId);
+        }
+
+        if (isset($response->redirectUrl)) {
+            $payment->setRedirectUrl($response->redirectUrl);
+        }
     }
 }

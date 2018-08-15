@@ -54,6 +54,7 @@ class CardTest extends AbstractPaymentTest
         $this->assertNotEmpty($authorization->getId());
         $this->assertInstanceOf(Payment::class, $authorization->getPayment());
         $this->assertNotEmpty($authorization->getPayment()->getId());
+        $this->assertNotEmpty($authorization->getPayment()->getRedirectUrl());
     }
 
     /**
