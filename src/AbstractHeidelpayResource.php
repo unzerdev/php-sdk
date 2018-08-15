@@ -45,6 +45,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $response = $this->send(HttpAdapterInterface::REQUEST_POST);
         $this->setId($response->id);
 
+        $this->handleResponse($response);
+
         return $this;
     }
 
@@ -114,10 +116,18 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      * @param HeidelpayParentInterface $parentResource
      * @return AbstractHeidelpayResource
      */
-    public function setParentResource($parentResource)
+    public function setParentResource($parentResource): AbstractHeidelpayResource
     {
         $this->parentResource = $parentResource;
         return $this;
+    }
+
+    /**
+     * @return HeidelpayParentInterface
+     */
+    public function getParentResource(): HeidelpayParentInterface
+    {
+        return $this->parentResource;
     }
     //</editor-fold>
 
@@ -139,26 +149,40 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      *
      * @return array
      */
-    public function expose()
+    public function expose(): array
     {
+        // Add resource properties
         $properties = get_object_vars($this);
-
         foreach ($properties as $property => $value) {
             try {
                 $reflection = new \ReflectionProperty(static::class, $property);
-                if (!$reflection->isProtected()) {
+                if (($property === 'id' && empty($value)) || !$reflection->isProtected()) {
                     unset($properties[$property]);
                     continue;
                 }
 
                 if ($value === null) {
                     $properties[$property] = '';
+                } else {
+                    $properties[$property] = (string)$value;
                 }
             } catch (\ReflectionException $e) {
                 unset($properties[$property]);
             }
         }
 
+        // Add linked resources
+        $resources = [];
+        /**
+         * @var string $key
+         * @var HeidelpayResourceInterface $linkedResource
+         */
+        foreach ($this->getLinkedResources() as $key=>$linkedResource) {
+            $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
+        }
+
+        ksort($resources);
+        $properties['resources'] = $resources;
         ksort($properties);
         return $properties;
     }
@@ -167,9 +191,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /**
      * @param string $httpMethod
      * @throws \RuntimeException
-     * @return array
+     * @return \stdClass
      */
-    public function send($httpMethod = HttpAdapterInterface::REQUEST_GET)
+    public function send($httpMethod = HttpAdapterInterface::REQUEST_GET): \stdClass
     {
         $responseJson = $this->getHeidelpayObject()->send(
             $this->getUri(),
@@ -221,6 +245,16 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     /**
+     * Return the resources which should be referenced by Id within the resource section of the resource data.
+     * Please override this to define the linked resources.
+     * @return array
+     */
+    public function getLinkedResources(): array
+    {
+       return [];
+    }
+
+    /**
      * This returns the path of this resource within the parent resource.
      * Please override this if the path does not match the class name.
      *
@@ -229,5 +263,26 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     public function getResourcePath()
     {
         return strtolower(self::getClassShortName());
+    }
+
+    /**
+     * Return the payment object stored in heidelpay object.
+     *
+     * @return Payment|null
+     */
+    public function getPayment()
+    {
+        return $this->getHeidelpayObject()->getPayment();
+    }
+
+    /**
+     * This method is called to handle the response from a called crud message.
+     * Override it to handle the data correctly.
+     *
+     * @param \stdClass $response
+     */
+    private function handleResponse(\stdClass $response)
+    {
+        // I do nothing with the data
     }
 }

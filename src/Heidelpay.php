@@ -116,23 +116,23 @@ class Heidelpay implements HeidelpayParentInterface
         return $this;
     }
 
-    /**
-     * @return Payment
-     */
-    public function getPayment(): Payment
-    {
-        if ($this->payment instanceof Payment) {
-            return $this->payment;
-        }
-
-        if (empty($this->paymentId)) {
-            throw new MissingResourceException('Payment object does not exist.');
-        }
-
-        // todo: fetch payment from api and return it
-
-        return $this->payment;
-    }
+//    /**
+//     * @return Payment
+//     */
+//    public function getPayment(): Payment
+//    {
+//        if ($this->payment instanceof Payment) {
+//            return $this->payment;
+//        }
+//
+//        if (empty($this->paymentId)) {
+//            throw new MissingResourceException('Payment object does not exist.');
+//        }
+//
+//        // todo: fetch payment from api and return it
+//
+//        return $this->payment;
+//    }
 
     /**
      * @return string
@@ -196,11 +196,10 @@ class Heidelpay implements HeidelpayParentInterface
 
     //<editor-fold desc="Resources">
     /**
-     * @return Customer
+     * @return Customer|null
      */
-    public function getCustomer(): Customer
+    public function getCustomer()
     {
-        $this->customer->fetch();
         return $this->customer;
     }
 
@@ -224,6 +223,39 @@ class Heidelpay implements HeidelpayParentInterface
         return $this->paymentType;
     }
 
+    /**
+     * Returns the existing payment object if it exists.
+     *
+     * @return Payment|null
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * Returns the existing payment object or creates it if it does not exist.
+     *
+     * @return Payment
+     */
+    public function getOrCreatePayment(): Payment
+    {
+        if (!$this->payment instanceof Payment) {
+            $this->payment = new Payment($this);
+        }
+
+        return $this->payment;
+    }
+
+    /**
+     * @param Payment $payment
+     * @return self
+     */
+    public function setPayment(Payment $payment): self
+    {
+        $this->payment = $payment;
+        return $this;
+    }
     //</editor-fold>
 
     /**

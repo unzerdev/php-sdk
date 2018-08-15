@@ -65,7 +65,7 @@ class Card extends BasePaymentType
      */
     public function getResourcePath()
     {
-        return '/types/cards';
+        return 'types/cards';
     }
 
     //<editor-fold desc="TransactionTypes">
@@ -80,13 +80,15 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @param float $amount
-     * @param string $currency
-     * @return Authorization
+     * {@inheritDoc}
      */
-    public function authorize($amount, $currency): Authorization
+    public function authorize($amount, $currency, $returnUrl): Authorization
     {
-        return new Authorization($this);
+        $paymentObject = $this->getHeidelpayObject()->getOrCreatePayment();
+        $authorization = new Authorization($amount, $currency, $returnUrl);
+        $authorization->setParentResource($paymentObject);
+        $authorization->create();
+        return $authorization;
     }
     //</editor-fold>
 

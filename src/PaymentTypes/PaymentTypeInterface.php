@@ -28,9 +28,10 @@ interface PaymentTypeInterface
     /**
      * @param float $amount
      * @param string $currency
+     * @param $returnUrl
      * @return Authorization
      */
-    public function authorize($amount, $currency): Authorization;
+    public function authorize($amount, $currency, $returnUrl): Authorization;
 
     /**
      * @param float $amount
