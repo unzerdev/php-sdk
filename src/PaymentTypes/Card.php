@@ -74,7 +74,7 @@ class Card extends BasePaymentType
      * @param string $currency
      * @return Charge
      */
-    public function charge($amount, $currency): Charge
+    public function charge($amount = null, $currency = null): Charge
     {
         return new Charge($this);
     }

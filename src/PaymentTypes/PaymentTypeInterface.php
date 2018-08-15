@@ -23,7 +23,7 @@ interface PaymentTypeInterface
      * @param string $currency
      * @return Charge
      */
-    public function charge($amount, $currency): Charge;
+    public function charge($amount = null, $currency = ''): Charge;
 
     /**
      * @param float $amount

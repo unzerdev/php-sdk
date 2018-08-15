@@ -24,7 +24,7 @@ class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeIn
     /**
      * {@inheritDoc}
      */
-    public function charge($amount, $currency): Charge
+    public function charge($amount = null, $currency = ''): Charge
     {
         throw new IllegalTransactionTypeException('charge');
     }
