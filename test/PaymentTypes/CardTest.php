@@ -14,6 +14,7 @@
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
+use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
@@ -24,6 +25,7 @@ use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class CardTest extends AbstractPaymentTest
 {
+    //<editor-fold desc="Tests">
     /**
      * @test
      */
@@ -86,6 +88,19 @@ class CardTest extends AbstractPaymentTest
 	}
 
     /**
+     * @test
+     * @depends createCardType
+     * @param Card $card
+     */
+	public function fullChargeWithoutAuthorizeShouldThrowException(Card $card)
+	{
+	    $this->expectException(MissingResourceException::class);
+	    $card->charge();
+	}
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+    /**
      * @return Card
      */
     private function createCard(): Card
@@ -95,4 +110,5 @@ class CardTest extends AbstractPaymentTest
         $card->setCvc('123');
         return $card;
     }
+    //</editor-fold>
 }

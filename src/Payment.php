@@ -14,6 +14,7 @@
 namespace heidelpay\NmgPhpSdk;
 
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
@@ -35,6 +36,8 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * {@inheritDoc}
      */
+    const EPSILON = 0.000001;
+
     public function getResourcePath()
     {
         return 'payments';
@@ -61,18 +64,18 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * @return Authorization
+     * @return Authorization|null
      */
-    public function getAuthorization(): Authorization
+    public function getAuthorization()
     {
         return $this->authorize;
     }
 
     /**
      * @param Authorization $authorize
-     * @return Payment
+     * @return PaymentInterface
      */
-    public function setAuthorization(Authorization $authorize): Payment
+    public function setAuthorization(Authorization $authorize): PaymentInterface
     {
         $this->authorize = $authorize;
         return $this;
@@ -106,16 +109,37 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     //</editor-fold>
 
     //<editor-fold desc="TransactionTypes">
+
+    public function fullCharge()
+    {
+        // get remaining amount
+        $remainingAmount = $this->getRemainingAmount();
+        if ($remainingAmount === false) {
+            throw new MissingResourceException('Cannot perform full charge without authorization.');
+        }
+
+        // charge amount
+        return $this->charge($remainingAmount);
+    }
+
     /**
      * @param float $amount
      * @param string $currency
      * @param string $returnUrl
      * @return Charge
      */
-    public function charge($amount = null, $currency = null, $returnUrl = ''): Charge
+    public function charge($amount = null, $currency = null, $returnUrl = null): Charge
     {
         if (!$this->getPaymentType()->isChargeable()) {
             throw new IllegalTransactionTypeException(__METHOD__);
+        }
+
+        if ($amount === null) {
+            return $this->fullCharge();
+        }
+
+        if ($this->getRemainingAmount() === 0.0) {
+            throw new AlreadyFullyChargedException();
         }
 
         $charge = new Charge($amount, $currency, $returnUrl);
@@ -161,5 +185,30 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     private function getPaymentType(): PaymentTypes\PaymentTypeInterface
     {
         return $this->getHeidelpayObject()->getPaymentType();
+    }
+
+    /**
+     * Calculate and return uncharged amount.
+     * Returns false if authorization does not exist.
+     *
+     * @return float|bool
+     */
+    private function getRemainingAmount()
+    {
+        $authorization = $this->getAuthorization();
+        if ($authorization === null) {
+            return false;
+        }
+
+        $remainingAmount = $authorization->getAmount();
+
+        /** @var Charge $charge */
+        foreach ($this->getCharges() as $charge) {
+            $remainingAmount -= $charge->getAmount();
+        }
+        if (abs($remainingAmount) < self::EPSILON) {
+            $remainingAmount = 0.0;
+        }
+        return $remainingAmount;
     }
 }
