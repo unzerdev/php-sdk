@@ -120,11 +120,17 @@ class Authorization extends AbstractHeidelpayResource
     }
     //</editor-fold>
 
+    /**
+     * {@inheritDoc}
+     */
     public function getResourcePath()
     {
         return 'authorize';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getLinkedResources(): array
     {
         /** @var Heidelpay $heidelpay */
@@ -138,5 +144,18 @@ class Authorization extends AbstractHeidelpayResource
             'customer'=> $heidelpay->getCustomer(),
             'type' => $heidelpay->getPaymentType()
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function handleResponse(\stdClass $response)
+    {
+        if (!isset($response->resources->paymentId)) {
+            return;
+        }
+
+        $payment = $this->getHeidelpayObject()->getOrCreatePayment();
+        $payment->setId($response->resources->paymentId);
     }
 }

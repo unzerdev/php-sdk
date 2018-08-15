@@ -234,6 +234,16 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     /**
+     * Return the payment object stored in heidelpay object.
+     *
+     * @return Payment|null
+     */
+    public function getPayment()
+    {
+        return $this->getHeidelpayObject()->getPayment();
+    }
+
+    /**
      * Return class short name.
      *
      * @return string
@@ -244,6 +254,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         return end($classNameParts);
     }
 
+    //<editor-fold desc="Optional Methods">
     /**
      * Return the resources which should be referenced by Id within the resource section of the resource data.
      * Please override this to define the linked resources.
@@ -266,23 +277,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     /**
-     * Return the payment object stored in heidelpay object.
-     *
-     * @return Payment|null
-     */
-    public function getPayment()
-    {
-        return $this->getHeidelpayObject()->getPayment();
-    }
-
-    /**
      * This method is called to handle the response from a called crud message.
      * Override it to handle the data correctly.
      *
      * @param \stdClass $response
      */
-    private function handleResponse(\stdClass $response)
+    protected function handleResponse(\stdClass $response)
     {
         // I do nothing with the data
     }
+    //</editor-fold>
 }
