@@ -151,7 +151,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     public function expose(): array
     {
-        // Add resource properties
+        // Add resources properties
         $properties = get_object_vars($this);
         foreach ($properties as $property => $value) {
             try {
@@ -170,8 +170,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
                 unset($properties[$property]);
             }
         }
+        //---------------------
 
-        // Add linked resources
+        // Add linked resources if any
         $resources = [];
         /**
          * @var string $key
@@ -181,8 +182,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
         }
 
-        ksort($resources);
-        $properties['resources'] = $resources;
+        if (\count($resources) > 0) {
+            ksort($resources);
+            $properties['resources'] = $resources;
+        }
+        //---------------------
+
         ksort($properties);
         return $properties;
     }
