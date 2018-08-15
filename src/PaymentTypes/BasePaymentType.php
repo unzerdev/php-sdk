@@ -21,16 +21,25 @@ use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function charge($amount, $currency): Charge
     {
         throw new IllegalTransactionTypeException('charge');
     }
 
-    public function authorize($amount, $currency): Authorization
+    /**
+     * {@inheritDoc}
+     */
+    public function authorize($amount, $currency, $returnUrl): Authorization
     {
         throw new IllegalTransactionTypeException('authorize');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function cancel($amount = 0.0)
     {
         throw new IllegalTransactionTypeException('cancel');
