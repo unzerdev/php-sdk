@@ -75,18 +75,6 @@ class CardTest extends AbstractPaymentTest
         $this->assertNotNull($charge);
 	}
 
-	/**
-     * @param Card $card
-     * @depends createCardType
-	 * @test
-	 */
-	public function cancelCardTypeNotAllowed(Card $card)
-	{
-        $this->expectException(IllegalTransactionTypeException::class);
-        $this->expectExceptionMessage('Transaction type cancel is not allowed!');
-        $card->cancel();
-	}
-
     /**
      * @return Card
      */
