@@ -31,7 +31,7 @@ class Authorization extends AbstractHeidelpayResource
     protected $returnUrl = '';
 
     /** @var string $uniqueId */
-    protected $uniqueId = '';
+    private $uniqueId = '';
 
     /**
      * Authorization constructor.
