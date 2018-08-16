@@ -18,6 +18,13 @@ use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 interface PaymentInterface
 {
+    const STATE_PENDING = '0';
+    const STATE_COMPLETED = '1';
+    const STATE_CANCELED = '2';
+    const STATE_PARTLY = '3';
+    const STATE_PAYMENT_REVIEW = '4';
+    const STATE_CHARGEBACK = '5';
+
     /**
      * @param float $amount
      * @param string $currency

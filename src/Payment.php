@@ -15,7 +15,6 @@ namespace heidelpay\NmgPhpSdk;
 
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
-use heidelpay\NmgPhpSdk\PaymentTypes\PaymentInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
@@ -30,6 +29,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /** @var array $charges */
     private $charges = [];
+
+    /** @var int */
+    private $state;
 
     //<editor-fold desc="Overridable Methods">
     /**
@@ -104,6 +106,24 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     public function addCharge(Charge $charge)
     {
         $this->charges[] = $charge;
+    }
+
+    /**
+     * @return int
+     */
+    public function getState(): int
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param int $state
+     * @return Payment
+     */
+    public function setState(int $state): Payment
+    {
+        $this->state = $state;
+        return $this;
     }
     //</editor-fold>
 

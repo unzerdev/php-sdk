@@ -174,8 +174,8 @@ class CardTest extends AbstractPaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $cancellation = $authorization->cancel();
-        $payment = $authorization->getPayment();
-
+        $payment = $cancellation->getPayment();
+//        $this->assertEquals(PaymentInterface::STATE_CANCELED, $payment->getState());
     }
 
 
