@@ -150,6 +150,21 @@ class CardTest extends AbstractPaymentTest
         $this->assertEquals(0.0, $payment->getRemainingAmount());
     }
 
+    /**
+     * @test
+     */
+    public function fullCancelAfterCharge()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $charge = $card->charge(100.00, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $charge->getPayment();
+        $this->assertEquals(0.0, $payment->getRemainingAmount());
+        $this->assertEquals(100.00, $payment->getChargedAmount());
+//        $payment->cancel();
+    }
+
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">

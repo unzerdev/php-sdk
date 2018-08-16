@@ -31,6 +31,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /** @var array $charges */
     private $charges = [];
 
+    /** @var array $cancels */
+    private $cancels = [];
+
 
     //<editor-fold desc="Overridable Methods">
     /**
@@ -106,11 +109,40 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     {
         $this->charges[] = $charge;
     }
+
+    /**
+     * @return array
+     */
+    public function getCancels(): array
+    {
+        return $this->cancels;
+    }
+
+    /**
+     * @param array $cancels
+     * @return Payment
+     */
+    public function setCancels(array $cancels): Payment
+    {
+        $this->cancels = $cancels;
+        return $this;
+    }
+
+    /**
+     * @param Cancellation $cancel
+     */
+    public function addCancel(Cancellation $cancel)
+    {
+        $this->cancels[] = $cancel;
+    }
     //</editor-fold>
 
     //<editor-fold desc="TransactionTypes">
 
-    public function fullCharge()
+    /**
+     * @return Charge
+     */
+    public function fullCharge(): Charge
     {
         // get remaining amount
         $remainingAmount = $this->getRemainingAmount();
@@ -161,6 +193,18 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         return $authorization;
     }
 
+//    public function fullCancel(): Cancellation
+//    {
+//        // get remaining amount
+//        $remainingAmount = $this->getRemainingAmount();
+//        if ($remainingAmount === false) {
+//            throw new MissingResourceException('Cannot perform full charge without authorization.');
+//        }
+//
+//        // charge amount
+//        return $this->charge($remainingAmount);
+//    }
+
     /**
      * @param float $amount
      * @return Cancellation
@@ -196,15 +240,28 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             return false;
         }
 
-        $remainingAmount = $authorization->getAmount();
+        $remainingAmount = $authorization->getAmount() - $this->getChargedAmount();
 
-        /** @var Charge $charge */
-        foreach ($this->getCharges() as $charge) {
-            $remainingAmount -= $charge->getAmount();
-        }
         if (abs($remainingAmount) < self::EPSILON) {
             $remainingAmount = 0.0;
         }
         return $remainingAmount;
+    }
+
+    /**
+     * Return the amount already charged in this payment.
+     *
+     * @return float
+     */
+    public function getChargedAmount(): float
+    {
+        $chargedAmount = 0.0;
+
+        /** @var Charge $charge */
+        foreach ($this->getCharges() as $charge) {
+            $chargedAmount += $charge->getAmount();
+        }
+
+        return $chargedAmount;
     }
 }
