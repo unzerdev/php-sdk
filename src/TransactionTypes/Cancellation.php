@@ -17,4 +17,8 @@ use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 
 class Cancellation extends AbstractHeidelpayResource
 {
+    protected function getResourcePath()
+    {
+        return 'cancels';
+    }
 }

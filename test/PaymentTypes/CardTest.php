@@ -146,7 +146,7 @@ class CardTest extends AbstractPaymentTest
         $this->assertEquals(100.0, $payment->getRemainingAmount());
         $payment->charge(20);
         $this->assertEquals(80.0, $payment->getRemainingAmount());
-        $payment->charge();
+        $payment->charge(); // todo: das macht die api selber, ich muss den remainder nicht ermitteln
         $this->assertEquals(0.0, $payment->getRemainingAmount());
     }
 
@@ -161,7 +161,21 @@ class CardTest extends AbstractPaymentTest
         $payment = $charge->getPayment();
         $this->assertEquals(0.0, $payment->getRemainingAmount());
         $this->assertEquals(100.00, $payment->getChargedAmount());
-//        $payment->cancel();
+        $payment->cancel();
+        $this->assertEquals(0.00, $payment->getChargedAmount());
+    }
+
+    /**
+     * @test
+     */
+    public function fullCancelOnAuthorization()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $cancellation = $authorization->cancel();
+        $payment = $authorization->getPayment();
+
     }
 
 

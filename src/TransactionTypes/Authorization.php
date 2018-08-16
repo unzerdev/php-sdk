@@ -21,6 +21,8 @@ use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Authorization extends AbstractHeidelpayResource
 {
+    use hasCancellationsTrait;
+
     /** @var float $amount */
     protected $amount = 0.0;
 
@@ -166,5 +168,19 @@ class Authorization extends AbstractHeidelpayResource
         if (isset($response->redirectUrl)) {
             $payment->setRedirectUrl($response->redirectUrl);
         }
+    }
+
+    /**
+     * Full cancel of this authorization.
+     *
+     * @return Cancellation
+     */
+    public function cancel(): Cancellation
+    {
+        $cancellation = new Cancellation($this);
+        $this->addCancellation($cancellation);
+        $cancellation->create();
+
+        return $cancellation;
     }
 }
