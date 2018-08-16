@@ -138,10 +138,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             return $this->fullCharge();
         }
 
-        if ($this->getRemainingAmount() === 0.0) {
-            throw new AlreadyFullyChargedException();
-        }
-
         $charge = new Charge($amount, $currency, $returnUrl);
         $this->addCharge($charge);
         $charge->setParentResource($this);

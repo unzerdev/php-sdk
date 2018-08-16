@@ -18,17 +18,20 @@ class HeidelpayBaseException extends \RuntimeException
 {
     const MESSAGE = 'Exception message not set!';
 
+    /** @var string $clientMessage */
+    protected $clientMessage;
+
     /**
      * IdRequiredToFetchResourceException constructor.
      *
-     * @param string $message
+     * @param string $customerMessage
+     * @param string $merchantMessage
      */
-    public function __construct($message = '')
+    public function __construct($merchantMessage = '', $customerMessage = '')
     {
-        if (empty($message)) {
-            $message = static::MESSAGE;
-        }
+        $merchantMessage = empty($merchantMessage) ? static::MESSAGE : $merchantMessage;
+        $this->clientMessage = empty($customerMessage) ? $merchantMessage : $customerMessage;
 
-        parent::__construct($message);
+        parent::__construct($merchantMessage);
     }
 }

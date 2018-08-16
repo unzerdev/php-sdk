@@ -21,6 +21,7 @@
 namespace heidelpay\NmgPhpSdk\Adapter;
 
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
 
 class CurlAdapter implements HttpAdapterInterface
 {
@@ -46,39 +47,61 @@ class CurlAdapter implements HttpAdapterInterface
             throw new \RuntimeException('Transfer object is null');
         }
 
-        $request = curl_init();
-        $data = $heidelpayResource->jsonSerialize();
+        $request = $this->initCurlRequest($uri, $heidelpayResource, $httpMethod);
 
-        curl_setopt($request, CURLOPT_URL, $uri);
+        $response = curl_exec($request);
+        $error = curl_error($request);
+        $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
+        curl_close($request);
+
+        $this->handleErrors($info, $response);
+
+        return $response;
+    }
+
+    /**
+     * @param $info
+     * @param $response
+     */
+    private function handleErrors($info, $response)
+    {
+        if ($info >= 400) {
+            $responseArray = json_decode($response);
+            $merchantMessage = $customerMessage = $code = '';
+
+            if (isset($responseArray->errors[0])) {
+                $errors = $responseArray->errors[0];
+                $merchantMessage = $errors->merchantMessage ?? '';
+                $customerMessage = $errors->customerMessage ?? '';
+                $code = $errors->code ?? '';
+            }
+
+            throw new HeidelpayApiException($merchantMessage, $customerMessage, $code);
+        }
+    }
+
+    /**
+     * @param $uri
+     * @param AbstractHeidelpayResource $heidelpayResource
+     * @param $httpMethod
+     *
+     * @return mixed
+     */
+    private function initCurlRequest($uri, AbstractHeidelpayResource $heidelpayResource, $httpMethod)
+    {
+        $request = curl_init($uri);
         curl_setopt($request, CURLOPT_HEADER, 0);
-        curl_setopt($request, CURLOPT_FAILONERROR, true);
+        curl_setopt($request, CURLOPT_FAILONERROR, false);
         curl_setopt($request, CURLOPT_TIMEOUT, 60);
         curl_setopt($request, CURLOPT_CONNECTTIMEOUT, 60);
-
-        switch ($httpMethod) {
-            case HttpAdapterInterface::REQUEST_POST:
-                curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'POST');
-                break;
-            case HttpAdapterInterface::REQUEST_DELETE:
-                curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'DELETE');
-                break;
-            case HttpAdapterInterface::REQUEST_PUT:
-                curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'UPDATE');
-                break;
-            case HttpAdapterInterface::REQUEST_GET: // intended fall through
-            default:
-                curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'GET');
-                break;
-        }
-
-        curl_setopt($request, CURLOPT_POSTFIELDS, $data);
-
+        curl_setopt($request, CURLOPT_HTTP200ALIASES, (array)400);
+        curl_setopt($request, CURLOPT_CUSTOMREQUEST, $httpMethod);
+        curl_setopt($request, CURLOPT_POSTFIELDS, $heidelpayResource->jsonSerialize());
         curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($request, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($request, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($request, CURLOPT_SSLVERSION, 6);       // CURL_SSLVERSION_TLSv1_2
         curl_setopt($request, CURLOPT_USERAGENT, 'HeidelpayPHP');
-
         curl_setopt($request, CURLOPT_HTTPHEADER, array(
             'Authorization: ' . $heidelpayResource->getHeidelpayObject()->getKey(),
             'Content-Type: application/json'
@@ -88,30 +111,7 @@ class CurlAdapter implements HttpAdapterInterface
 //            'SHOP-SYSTEM: Shopware - 5.2.2', // heidelpay constructor
 //            'EXTENSION: heidelpay/magento-cd-edition - 1.5.3' // heidelpay constructor
         ));
-
-        $response = curl_exec($request);
-        $error = curl_error($request);
-        $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
-
-        curl_close($request);
-
-//        if ($error !== null && !empty($error)) {
-//            $errorCode =
-//                (is_array($info) && array_key_exists('CURLINFO_HTTP_CODE', $info))
-//                    ? $info['CURLINFO_HTTP_CODE']
-//                    : 'DEF';
-//
-//            $result = array(
-//                'PROCESSING_RESULT' => 'NOK',
-//                'PROCESSING_RETURN' => 'Connection error http status ' . $error,
-//                'PROCESSING_RETURN_CODE' => 'CON.ERR.' . $errorCode
-//            );
-//        }
-//
-//        if (empty($error) && is_string($response)) {
-//            parse_str($response, $result);
-//        }
-
-        return $response;
+        return $request;
     }
+
 }
