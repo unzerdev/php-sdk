@@ -133,6 +133,23 @@ class CardTest extends AbstractPaymentTest
         $payment->charge(60);
         $this->assertEquals(0.0, $payment->getRemainingAmount());
     }
+
+    /**
+     * @test
+     */
+    public function partialAndFullChargeAfterAuthorization()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
+        $this->assertEquals(100.0, $payment->getRemainingAmount());
+        $payment->charge(20);
+        $this->assertEquals(80.0, $payment->getRemainingAmount());
+        $payment->charge();
+        $this->assertEquals(0.0, $payment->getRemainingAmount());
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
