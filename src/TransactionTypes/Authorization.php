@@ -122,6 +122,7 @@ class Authorization extends AbstractHeidelpayResource
     }
     //</editor-fold>
 
+    //<editor-fold desc="Overridable Methods">
     /**
      * {@inheritDoc}
      */
@@ -169,18 +170,5 @@ class Authorization extends AbstractHeidelpayResource
             $payment->setRedirectUrl($response->redirectUrl);
         }
     }
-
-    /**
-     * Full cancel of this authorization.
-     *
-     * @return Cancellation
-     */
-    public function cancel(): Cancellation
-    {
-        $cancellation = new Cancellation($this);
-        $this->addCancellation($cancellation);
-        $cancellation->create();
-
-        return $cancellation;
-    }
+    //</editor-fold>
 }

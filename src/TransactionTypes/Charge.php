@@ -21,6 +21,8 @@ use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Charge extends AbstractHeidelpayResource
 {
+    use hasCancellationsTrait;
+
     /** @var float $amount */
     protected $amount = 0.0;
 
@@ -120,6 +122,7 @@ class Charge extends AbstractHeidelpayResource
     }
     //</editor-fold>
 
+    //<editor-fold desc="Overridable Methods">
     /**
      * {@inheritDoc}
      */
@@ -167,4 +170,5 @@ class Charge extends AbstractHeidelpayResource
             $payment->setRedirectUrl($response->redirectUrl);
         }
     }
+    //</editor-fold>
 }
