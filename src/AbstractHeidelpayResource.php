@@ -141,7 +141,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     public function jsonSerialize()
     {
-        return json_encode($this->expose());
+        return json_encode($this->expose(), JSON_FORCE_OBJECT);
     }
 
     /**
