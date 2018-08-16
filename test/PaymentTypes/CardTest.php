@@ -66,19 +66,20 @@ class CardTest extends AbstractPaymentTest
     }
 
     /**
-     * @param Card $card
-     * @depends createCardType
      * @test
      * @return Charge
      */
-    public function chargeCardType(Card $card): Charge
+    public function chargeCardType(): Charge
     {
+        /** @var Card $card */
+        $card = $this->createCard();
+        $card = $this->heidelpay->createPaymentType($card);
+
         $this->assertNull($card->getPayment());
         $charge = $card->charge(1.0, Currency::EUROPEAN_EURO, 'http://vnexpress.vn');
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
-        $this->assertNotEmpty($charge->getPayment()->getRedirectUrl());
         $this->assertArraySubset([$charge], $card->getPayment()->getCharges());
 
         echo "\nChargeId: " . $charge->getId();
@@ -88,11 +89,12 @@ class CardTest extends AbstractPaymentTest
 
     /**
      * @test
-     * @depends createCardType
-     * @param Card $card
      */
-	public function fullChargeWithoutAuthorizeShouldThrowException(Card $card)
+	public function fullChargeWithoutAuthorizeShouldThrowException()
 	{
+        /** @var Card $card */
+        $card = $this->createCard();
+        $card = $this->heidelpay->createPaymentType($card);
 	    $this->expectException(MissingResourceException::class);
 	    $card->charge();
 	}
