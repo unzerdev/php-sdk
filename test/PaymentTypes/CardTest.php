@@ -193,6 +193,41 @@ class CardTest extends AbstractPaymentTest
 
     }
 
+    // fullCancel on Auth w/o charges and cancels
+    // PaymentState = cancelled --> https://heidelpay.atlassian.net/wiki/spaces/ID/pages/118030386/payments
+    // cancel authorization
+
+    // fullCancel on fully charged Auth
+    // canceln der einzelnen charges
+
+    // fullCancel on partly Charged Auth
+    // canceln der einzelnen charges
+
+    // fullCancel on partly Charged and partly canceled Auth
+    // alle charges, die nicht gecancelled sind canceln
+
+    // PartCancel on fully charged Auth
+    // cancel auf den charge mit dem betrag
+    // $payment->charge['key']->cancel(30) //todo bei arrays id als key
+
+    // PartCancel on Auth w/o charges and cancels
+    // $payment->auth->cancel(amount)
+
+    // PartCancel on Auth w charges w/o cancels
+    // fall-1: auth = 100, charge 60 , cancel = 40, state completed
+    // fall-2: auth = 100, charged 60, cancel = 60, exception von der api
+
+    // PartCancel on Auth o charges w cancels
+    // s.o.
+
+    // Auth = 100, cha: 60, auth.can = 40 = remaining=0; charge.cancel(60) -> auth.state = canceled
+
+    // Speichere ich die cancels immer direkt in den charges?
+    // muss immer genau ein charge gecancelled werden?
+
+    // Berechnung in der api amounts nicht selber berechnen, sondern aus der api holen
+    // nur payment updaten, wenn es benutzt wird
+
 
     //</editor-fold>
 

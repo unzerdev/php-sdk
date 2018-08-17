@@ -16,7 +16,6 @@ namespace heidelpay\NmgPhpSdk;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class Payment extends AbstractHeidelpayResource implements PaymentInterface
@@ -184,61 +183,37 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * @return Cancellation
+     * Perform a full cancel on the payment.
+     * Returns the payment object itself.
+     * Cancellation-Object is not returned since on cancelling might affect several charges thus creates several
+     * Cancellation-Objects in one go.
+     *
+     * @return PaymentInterface
      */
-    public function fullCancel(): Cancellation
+    public function fullCancel(): PaymentInterface
     {
+        // cancel authorization if exists
         if ($this->authorize instanceof Authorization) {
             $this->authorize->cancel();
+            return $this;
         }
 
+        // cancel all charges
+        /** @var Charge $charge */
+        foreach ($this->getCharges() as $charge) {
+            $charge->cancel();
+        }
 
-        // fullCancel on Auth w/o charges and cancels
-        // PaymentState = cancelled --> https://heidelpay.atlassian.net/wiki/spaces/ID/pages/118030386/payments
-        // cancel authorization
+        $this->fetch();
 
-        // fullCancel on fully charged Auth
-        // canceln der einzelnen charges
-
-        // fullCancel on partly Charged Auth
-        // canceln der einzelnen charges
-
-        // fullCancel on partly Charged and partly canceled Auth
-        // alle charges, die nicht gecancelled sind canceln
-
-        // PartCancel on fully charged Auth
-        // cancel auf den charge mit dem betrag
-        // $payment->charge['key']->cancel(30) //todo bei arrays id als key
-
-        // PartCancel on Auth w/o charges and cancels
-        // $payment->auth->cancel(amount)
-
-        // PartCancel on Auth w charges w/o cancels
-        // fall-1: auth = 100, charge 60 , cancel = 40, state completed
-        // fall-2: auth = 100, charged 60, cancel = 60, exception von der api
-
-        // PartCancel on Auth o charges w cancels
-        // s.o.
-
-        // Auth = 100, cha: 60, auth.can = 40 = remaining=0; charge.cancel(60) -> auth.state = canceled
-
-        // Speichere ich die cancels immer direkt in den charges?
-        // muss immer genau ein charge gecancelled werden?
-
-        // Berechnung in der api amounts nicht selber berechnen, sondern aus der api holen
-        // nur payment updaten, wenn es benutzt wird
-
-
-
-        // charge amount
-//        return $this->cancel($remainingAmount);
+        return $this;
     }
 
     /**
      * @param float $amount
-     * @return Cancellation
+     * @return PaymentInterface
      */
-    public function cancel($amount = null): Cancellation
+    public function cancel($amount = null): PaymentInterface
     {
         if (!$this->getPaymentType()->isCancelable()) {
             throw new IllegalTransactionTypeException(__METHOD__);
@@ -248,7 +223,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             return $this->fullCancel();
         }
 
-        return new Cancellation($this);
+        $this->fetch();
+
+        return $this;
     }
     //</editor-fold>
 
