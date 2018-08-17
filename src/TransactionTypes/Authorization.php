@@ -171,4 +171,18 @@ class Authorization extends AbstractHeidelpayResource
         }
     }
     //</editor-fold>
+
+    /**
+     * Full cancel of this authorization.
+     *
+     * @return Cancellation
+     */
+    public function cancel(): Cancellation
+    {
+        $cancellation = new Cancellation($this);
+        $this->addCancellation($cancellation);
+        $cancellation->create();
+
+        return $cancellation;
+    }
 }
