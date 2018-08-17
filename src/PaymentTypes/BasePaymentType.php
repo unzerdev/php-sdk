@@ -14,22 +14,33 @@
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\PaymentInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface, PaymentInterface
 {
-    protected $chargeable = false;
-    protected $authorizable = false;
-    protected $cancelable = false;
+    private $chargeable = false;
+    private $authorizable = false;
+    private $cancelable = false;
 
-    //<editor-fold desc="Getters">
+    //<editor-fold desc="Getters/Setters">
     /**
      * @return bool
      */
     public function isChargeable(): bool
     {
         return $this->chargeable;
+    }
+
+    /**
+     * @param bool $chargeable
+     * @return BasePaymentType
+     */
+    public function setChargeable(bool $chargeable): BasePaymentType
+    {
+        $this->chargeable = $chargeable;
+        return $this;
     }
 
     /**
@@ -41,11 +52,31 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     }
 
     /**
+     * @param bool $authorizable
+     * @return BasePaymentType
+     */
+    public function setAuthorizable(bool $authorizable): BasePaymentType
+    {
+        $this->authorizable = $authorizable;
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isCancelable(): bool
     {
         return $this->cancelable;
+    }
+
+    /**
+     * @param bool $cancelable
+     * @return BasePaymentType
+     */
+    public function setCancelable(bool $cancelable): BasePaymentType
+    {
+        $this->cancelable = $cancelable;
+        return $this;
     }
     //</editor-fold>
 
