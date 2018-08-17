@@ -18,6 +18,7 @@ use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
+use heidelpay\NmgPhpSdk\Traits\hasCancellationsTrait;
 
 class Authorization extends AbstractHeidelpayResource
 {

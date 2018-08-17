@@ -12,7 +12,9 @@
  * @package  heidelpay/${Package}
  */
 
-namespace heidelpay\NmgPhpSdk\TransactionTypes;
+namespace heidelpay\NmgPhpSdk\Traits;
+
+use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
 
 trait hasCancellationsTrait
 {
