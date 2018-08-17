@@ -87,7 +87,7 @@ class CardTest extends BasePaymentTest
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
-        $this->assertArraySubset([$charge], $card->getPayment()->getCharges());
+        $this->assertArraySubset([$charge->getId() => $charge], $card->getPayment()->getCharges());
 
         $payment = $charge->getPayment();
         $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);

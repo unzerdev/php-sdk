@@ -185,7 +185,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function addCharge(Charge $charge)
     {
-        $this->charges[] = $charge;
+        $this->charges[$charge->getId()] = $charge;
     }
     //</editor-fold>
 
@@ -222,9 +222,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         }
 
         $charge = new Charge($amount, $currency, $returnUrl);
-        $this->addCharge($charge);
         $charge->setParentResource($this);
         $charge->create();
+        $this->addCharge($charge);
 
         return $charge;
     }
@@ -282,15 +282,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
         return $this;
     }
-    //</editor-fold>
-
-    /**
-     * @return PaymentTypes\PaymentTypeInterface
-     */
-    private function getPaymentType(): PaymentTypes\PaymentTypeInterface
-    {
-        return $this->getHeidelpayObject()->getPaymentType();
-    }
 
     /**
      * Cancel all charges in the payment.
@@ -301,5 +292,14 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         foreach ($this->getCharges() as $charge) {
             $charge->cancel();
         }
+    }
+    //</editor-fold>
+
+    /**
+     * @return PaymentTypes\PaymentTypeInterface
+     */
+    private function getPaymentType(): PaymentTypes\PaymentTypeInterface
+    {
+        return $this->getHeidelpayObject()->getPaymentType();
     }
 }
