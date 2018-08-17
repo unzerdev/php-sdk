@@ -64,9 +64,13 @@ class CardTest extends AbstractPaymentTest
         $this->assertNotEmpty($authorization->getPayment()->getId());
         $this->assertSame($authorization, $card->getPayment()->getAuthorization());
 
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
         echo "\nAuthorizationId: " . $authorization->getId();
-        echo "\nPaymentId: " . $authorization->getPayment()->getId();
-        // todo: check payment has been updated
+        echo "\nPaymentId: " . $payment->getId();
+
         return $authorization;
     }
 
@@ -86,9 +90,12 @@ class CardTest extends AbstractPaymentTest
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
         $this->assertArraySubset([$charge], $card->getPayment()->getCharges());
 
+        $payment = $charge->getPayment();
+        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
+
         echo "\nChargeId: " . $charge->getId();
         echo "\nPaymentId: " . $charge->getPayment()->getId();
-        // todo: check payment has been updated
         return $charge;
 	}
 
@@ -100,8 +107,7 @@ class CardTest extends AbstractPaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
 	    $this->expectException(MissingResourceException::class);
-	    $card->charge();
-        // todo: check payment has not been updated
+        $card->charge();
 	}
 
     /**
@@ -111,10 +117,13 @@ class CardTest extends AbstractPaymentTest
      */
 	public function fullChargeAfterAuthorize(Authorization $authorization)
 	{
-	    $this->assertGreaterThan(0.0, $authorization->getPayment()->getRemaining());
-        $authorization->getPayment()->fullCharge();
-        $this->assertEquals(0.0, $authorization->getPayment()->getRemaining());
-        // todo: check payment has been updated
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
+        $payment->fullCharge();
+        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
     }
 
     /**
@@ -126,17 +135,27 @@ class CardTest extends AbstractPaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $payment = $authorization->getPayment();
-        $this->assertEquals(100.0, $payment->getRemaining());
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
         $payment->charge(20);
-        $this->assertEquals(80.0, $payment->getRemaining());
+        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
         $payment->charge(20);
-        $this->assertEquals(60.0, $payment->getRemaining());
+        $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionMessage('The amount of 70.0000 to be charged exceeds the authorized amount of 60.0000');
         $this->expectExceptionCode('API.330.100.007');
         $payment->charge(70);
+        $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
         $payment->charge(60);
-        $this->assertEquals(0.0, $payment->getRemaining());
+        $this->assertAmounts($payment, 00.0, 100.0, 100.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
     }
 
     /**
@@ -148,12 +167,16 @@ class CardTest extends AbstractPaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $payment = $authorization->getPayment();
-        $this->assertEquals(100.0, $payment->getRemaining());
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
         $payment->charge(20);
-        $this->assertEquals(80.0, $payment->getRemaining());
-        $payment->charge(); // todo: das macht die api selber, ich muss den remainder nicht ermitteln
-        $this->assertEquals(0.0, $payment->getRemaining());
-        // todo: check payment has been updated
+        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $payment->charge();
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
     }
 
     /**
@@ -163,14 +186,14 @@ class CardTest extends AbstractPaymentTest
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $charge = $card->charge(100.00, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $charge = $card->charge(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
 
         $payment = $charge->getPayment();
-        $this->assertAmounts($payment, 0.0, 100.0, 100.00, 0.00);
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment->isCompleted());
 
         $payment->cancel();
-        $this->assertAmounts($payment, 0.0, 100.0, 100.00, 100.00);
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 100.0);
         $this->assertTrue($payment->isCanceled());
     }
 
@@ -181,11 +204,15 @@ class CardTest extends AbstractPaymentTest
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $authorization = $card->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
         $cancellation = $authorization->cancel();
         $this->assertNotEmpty($cancellation);
-        // todo: check payment has been updated
-
+        $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
+        $this->assertTrue($payment->isCanceled());
     }
 
     /**

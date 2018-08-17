@@ -225,7 +225,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $charge->setParentResource($this);
         $charge->create();
 
-        $this->fetch();
         return $charge;
     }
 
@@ -242,7 +241,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $this->setAuthorization($authorization);
         $authorization->setParentResource($this);
         $authorization->create();
-        $this->fetch();
+
         return $authorization;
     }
 
@@ -268,8 +267,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             $charge->cancel();
         }
 
-        $this->fetch();
-
         return $this;
     }
 
@@ -286,8 +283,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         if (null === $amount) {
             return $this->fullCancel();
         }
-
-        $this->fetch();
 
         return $this;
     }

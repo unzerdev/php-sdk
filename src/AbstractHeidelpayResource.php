@@ -47,6 +47,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
         $this->handleCreateResponse($response);
 
+        $this->updatePayment();
+
         return $this;
     }
 
@@ -87,6 +89,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
         $response = $this->send(HttpAdapterInterface::REQUEST_GET);
         $this->handleFetchResponse($response);
+
+        $this->updatePayment();
         return $this;
     }
     //</editor-fold>
@@ -246,17 +250,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         return $this->getHeidelpayObject()->getPayment();
     }
 
-    /**
-     * Return class short name.
-     *
-     * @return string
-     */
-    protected static function getClassShortName(): string
-    {
-        $classNameParts = explode('\\', static::class);
-        return end($classNameParts);
-    }
-
     //<editor-fold desc="Optional Methods">
     /**
      * Return the resources which should be referenced by Id within the resource section of the resource data.
@@ -300,6 +293,32 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     {
         // Default: Do nothing with the data.
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Private helper">
+    /**
+     * Updates the payment object if it exists and if this is not the payment object.
+     * This is called from the crud methods to update the payments state whenever anything happens.
+     */
+    private function updatePayment()
+    {
+        if (!$this instanceof Payment) {
+            $payment = $this->getPayment();
+            if ($payment instanceof PaymentInterface) {
+                $payment->fetch();
+            }
+        }
+    }
+
+    /**
+     * Return class short name.
+     *
+     * @return string
+     */
+    private static function getClassShortName(): string
+    {
+        $classNameParts = explode('\\', static::class);
+        return end($classNameParts);
+    }
     //</editor-fold>
 }
