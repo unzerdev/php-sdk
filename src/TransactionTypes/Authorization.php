@@ -17,6 +17,7 @@ use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
+use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\hasCancellationsTrait;
 
@@ -183,6 +184,11 @@ class Authorization extends AbstractHeidelpayResource
         $cancellation = new Cancellation($this);
         $this->addCancellation($cancellation);
         $cancellation->create();
+
+        $payment = $this->getPayment();
+        if ($payment instanceof Payment) {
+            $payment->cancelAllCharges();
+        }
 
         return $cancellation;
     }

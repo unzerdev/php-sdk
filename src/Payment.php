@@ -196,6 +196,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function fullCharge(): Charge
     {
+        // todo: authorization muss erst gefetched werden
         if (!$this->getAuthorization() instanceof Authorization) {
             throw new MissingResourceException('Cannot perform full charge without authorization.');
         }
@@ -255,17 +256,12 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function fullCancel(): PaymentInterface
     {
-        // cancel authorization if exists
         if ($this->authorize instanceof Authorization) {
             $this->authorize->cancel();
             return $this;
         }
 
-        // cancel all charges
-        /** @var Charge $charge */
-        foreach ($this->getCharges() as $charge) {
-            $charge->cancel();
-        }
+        $this->cancelAllCharges();
 
         return $this;
     }
@@ -294,5 +290,16 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     private function getPaymentType(): PaymentTypes\PaymentTypeInterface
     {
         return $this->getHeidelpayObject()->getPaymentType();
+    }
+
+    /**
+     * Cancel all charges in the payment.
+     */
+    public function cancelAllCharges()
+    {
+        /** @var Charge $charge */
+        foreach ($this->getCharges() as $charge) {
+            $charge->cancel();
+        }
     }
 }
