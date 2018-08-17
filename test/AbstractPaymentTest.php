@@ -15,6 +15,8 @@ namespace heidelpay\NmgPhpSdk\test;
 
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Heidelpay;
+use heidelpay\NmgPhpSdk\PaymentInterface;
+use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use PHPUnit\Framework\TestCase;
 
 class AbstractPaymentTest extends TestCase
@@ -29,4 +31,38 @@ class AbstractPaymentTest extends TestCase
     {
         $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocale::GERMAN_GERMAN);
     }
+
+    //<editor-fold desc="Helpers">
+    /**
+     * @return Card
+     */
+    protected function createCard(): Card
+    {
+        /** @var Card $card */
+        $card = new Card ('4012888888881881', '03/20');
+        $card->setCvc('123');
+        return $card;
+    }
+
+    /**
+     * @param PaymentInterface $payment
+     * @param float $expectedRemaining
+     * @param float $expectedCharged
+     * @param float $expectedTotal
+     * @param float $expectedCanceled
+     */
+    protected function assertAmounts(
+        $payment,
+        $expectedRemaining,
+        $expectedCharged,
+        $expectedTotal,
+        $expectedCanceled
+    ) {
+        $this->assertEquals($expectedRemaining, $payment->getRemaining());
+        $this->assertEquals($expectedCharged, $payment->getCharged());
+        $this->assertEquals($expectedTotal, $payment->getTotal());
+        $this->assertEquals($expectedCanceled, $payment->getCanceled());
+    }
+    //</editor-fold>
+
 }

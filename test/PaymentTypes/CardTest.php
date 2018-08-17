@@ -19,7 +19,6 @@ use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
-use heidelpay\NmgPhpSdk\PaymentInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use heidelpay\NmgPhpSdk\test\AbstractPaymentTest;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
@@ -259,38 +258,5 @@ class CardTest extends AbstractPaymentTest
     // nur payment updaten, wenn es benutzt wird
 
 
-    //</editor-fold>
-
-    //<editor-fold desc="Helpers">
-    /**
-     * @return Card
-     */
-    private function createCard(): Card
-    {
-        /** @var Card $card */
-        $card = new Card ('4012888888881881', '03/20');
-        $card->setCvc('123');
-        return $card;
-    }
-
-    /**
-     * @param PaymentInterface $payment
-     * @param float $expectedRemaining
-     * @param float $expectedCharged
-     * @param float $expectedTotal
-     * @param float $expectedCanceled
-     */
-    private function assertAmounts(
-        $payment,
-        $expectedRemaining,
-        $expectedCharged,
-        $expectedTotal,
-        $expectedCanceled
-    ) {
-        $this->assertEquals($expectedRemaining, $payment->getRemaining());
-        $this->assertEquals($expectedCharged, $payment->getCharged());
-        $this->assertEquals($expectedTotal, $payment->getTotal());
-        $this->assertEquals($expectedCanceled, $payment->getCanceled());
-    }
     //</editor-fold>
 }
