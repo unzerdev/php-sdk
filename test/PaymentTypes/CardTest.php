@@ -65,6 +65,7 @@ class CardTest extends AbstractPaymentTest
 
         echo "\nAuthorizationId: " . $authorization->getId();
         echo "\nPaymentId: " . $authorization->getPayment()->getId();
+        // todo: check payment has been updated
         return $authorization;
     }
 
@@ -86,6 +87,7 @@ class CardTest extends AbstractPaymentTest
 
         echo "\nChargeId: " . $charge->getId();
         echo "\nPaymentId: " . $charge->getPayment()->getId();
+        // todo: check payment has been updated
         return $charge;
 	}
 
@@ -98,6 +100,7 @@ class CardTest extends AbstractPaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCard());
 	    $this->expectException(MissingResourceException::class);
 	    $card->charge();
+        // todo: check payment has not been updated
 	}
 
     /**
@@ -110,6 +113,7 @@ class CardTest extends AbstractPaymentTest
 	    $this->assertGreaterThan(0.0, $authorization->getPayment()->getRemainingAmount());
         $authorization->getPayment()->fullCharge();
         $this->assertEquals(0.0, $authorization->getPayment()->getRemainingAmount());
+        // todo: check payment has been updated
     }
 
     /**
@@ -148,6 +152,7 @@ class CardTest extends AbstractPaymentTest
         $this->assertEquals(80.0, $payment->getRemainingAmount());
         $payment->charge(); // todo: das macht die api selber, ich muss den remainder nicht ermitteln
         $this->assertEquals(0.0, $payment->getRemainingAmount());
+        // todo: check payment has been updated
     }
 
     /**
@@ -163,6 +168,7 @@ class CardTest extends AbstractPaymentTest
         $this->assertEquals(100.00, $payment->getChargedAmount());
         $payment->cancel();
         $this->assertEquals(0.00, $payment->getChargedAmount());
+        // todo: check payment has been updated
     }
 
     /**
@@ -174,8 +180,17 @@ class CardTest extends AbstractPaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $cancellation = $authorization->cancel();
-        $payment = $cancellation->getPayment();
-//        $this->assertEquals(PaymentInterface::STATE_CANCELED, $payment->getState());
+        $this->assertNotEmpty($cancellation);
+        // todo: check payment has been updated
+
+    }
+
+    /**
+     * @test
+     */
+    public function fullCancelOnPartlyChargedAuthorization()
+    {
+
     }
 
 
