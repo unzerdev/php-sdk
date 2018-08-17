@@ -153,7 +153,7 @@ class Authorization extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    protected function handleResponse(\stdClass $response)
+    protected function handleCreateResponse(\stdClass $response)
     {
         $isSuccess = isset($response->isSuccess) && $response->isSuccess;
         $isPending = isset($response->isPending) && $response->isPending;

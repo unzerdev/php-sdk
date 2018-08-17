@@ -16,15 +16,9 @@ namespace heidelpay\NmgPhpSdk;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
-interface PaymentInterface
+interface PaymentInterface extends AmountsInterface
 {
-    const STATE_PENDING = '0';
-    const STATE_COMPLETED = '1';
-    const STATE_CANCELED = '2';
-    const STATE_PARTLY = '3';
-    const STATE_PAYMENT_REVIEW = '4';
-    const STATE_CHARGEBACK = '5';
-
+    //<editor-fold desc="Transactions">
     /**
      * @param float $amount
      * @param string $currency
@@ -45,4 +39,5 @@ interface PaymentInterface
      * @param float $amount
      */
     public function cancel($amount = null);
+    //</editor-fold>
 }

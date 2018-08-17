@@ -15,11 +15,21 @@ namespace heidelpay\NmgPhpSdk;
 
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\NmgPhpSdk\Traits\hasAmountsTrait;
+use heidelpay\NmgPhpSdk\Traits\hasStateTrait;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class Payment extends AbstractHeidelpayResource implements PaymentInterface
 {
+    use hasAmountsTrait;
+    use hasStateTrait;
+
+    /**
+     * {@inheritDoc}
+     */
+    const EPSILON = 0.000001;
+
     /** @var string $redirectUrl */
     private $redirectUrl = '';
 
@@ -29,18 +39,89 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /** @var array $charges */
     private $charges = [];
 
-    /** @var int */
-    private $state;
-
     //<editor-fold desc="Overridable Methods">
     /**
      * {@inheritDoc}
      */
-    const EPSILON = 0.000001;
-
     public function getResourcePath()
     {
         return 'payments';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function handleFetchResponse(\stdClass $response)
+    {
+        if ($this->id !== ($response->id ?? '')) {
+            throw new ReferenceException();
+        }
+
+        if (isset($response->state->id)) {
+            $this->setState($response->state->id);
+        }
+
+        if (isset($response->amount)) {
+            $amount = $response->amount;
+
+            if (isset($amount->total, $amount->charged, $amount->canceled, $amount->remaining)) {
+                $this->setTotal($amount->total)
+                    ->setCharged($amount->charged)
+                    ->setCanceled($amount->canceled)
+                    ->setRemaining($amount->remaining);
+            }
+        }
+
+        if (isset($response->currency)) {
+            $this->currency = $response->currency;
+        }
+
+        if (isset($response->resources)) {
+            $resources = $response->resources;
+
+            if (isset($resources->paymentId)) {
+                $this->setId($resources->paymentId);
+            }
+
+//            if (isset($resources->customerId)) {
+//                $this->customer->setId($resources->customerId);
+//            }
+//
+//            if (isset($resources->basketId)) {
+//                $this->basket->setId($resources->basketId);
+//            }
+//
+//            if (isset($resources->basketId)) {
+//                $this->basket->setId($resources->basketId);
+//            }
+//
+//            if (isset($resources->riskId)) {
+//                $this->risk->setId($resources->riskId);
+//            }
+//
+//            if (isset($resources->metaDataId)) {
+//                $this->metaData->setId($resources->metaDataId);
+//            }
+//
+//            if (isset($resources->typeId)) {
+//                $this->getPaymentType()->setId($resources->typeId);
+//            }
+        }
+
+
+//  "transactions" : [ {
+//            "date" : "2018-08-17 08:42:31",
+//    "type" : "charge",
+//    "url" : "https://dev-api.heidelpay.com/v1/payments/s-pay-1932/charges/s-chg-1",
+//    "amount" : "100.0000"
+//  }, {
+//            "date" : "2018-08-17 08:42:36",
+//    "type" : "cancel-charge",
+//    "url" : "https://dev-api.heidelpay.com/v1/payments/s-pay-1932/charges/s-chg-1/cancels/s-cnl-1",
+//    "amount" : "100.0000"
+//  } ]
+//}
+
     }
     //</editor-fold>
 
@@ -106,24 +187,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     {
         $this->charges[] = $charge;
     }
-
-    /**
-     * @return int
-     */
-    public function getState(): int
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param int $state
-     * @return Payment
-     */
-    public function setState(int $state): Payment
-    {
-        $this->state = $state;
-        return $this;
-    }
     //</editor-fold>
 
     //<editor-fold desc="TransactionTypes">
@@ -133,14 +196,12 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function fullCharge(): Charge
     {
-        // get remaining amount
-        $remainingAmount = $this->getRemainingAmount();
-        if ($remainingAmount === false) {
+        if (!$this->getAuthorization() instanceof Authorization) {
             throw new MissingResourceException('Cannot perform full charge without authorization.');
         }
 
         // charge amount
-        return $this->charge($remainingAmount);
+        return $this->charge($this->getRemaining());
     }
 
     /**
@@ -163,6 +224,8 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $this->addCharge($charge);
         $charge->setParentResource($this);
         $charge->create();
+
+        $this->fetch();
         return $charge;
     }
 
@@ -179,6 +242,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $this->setAuthorization($authorization);
         $authorization->setParentResource($this);
         $authorization->create();
+        $this->fetch();
         return $authorization;
     }
 
@@ -235,43 +299,5 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     private function getPaymentType(): PaymentTypes\PaymentTypeInterface
     {
         return $this->getHeidelpayObject()->getPaymentType();
-    }
-
-    /**
-     * Calculate and return uncharged amount.
-     * Returns false if authorization does not exist.
-     *
-     * @return float|bool
-     */
-    public function getRemainingAmount()
-    {
-        $authorization = $this->getAuthorization();
-        if ($authorization === null) {
-            return false;
-        }
-
-        $remainingAmount = $authorization->getAmount() - $this->getChargedAmount();
-
-        if (abs($remainingAmount) < self::EPSILON) {
-            $remainingAmount = 0.0;
-        }
-        return $remainingAmount;
-    }
-
-    /**
-     * Return the amount already charged in this payment.
-     *
-     * @return float
-     */
-    public function getChargedAmount(): float
-    {
-        $chargedAmount = 0.0;
-
-        /** @var Charge $charge */
-        foreach ($this->getCharges() as $charge) {
-            $chargedAmount += $charge->getAmount();
-        }
-
-        return $chargedAmount;
     }
 }

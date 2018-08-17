@@ -45,7 +45,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $response = $this->send(HttpAdapterInterface::REQUEST_POST);
         $this->setId($response->id);
 
-        $this->handleResponse($response);
+        $this->handleCreateResponse($response);
 
         return $this;
     }
@@ -85,10 +85,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             throw new IdRequiredToFetchResourceException();
         }
 
-//        $this->send(HttpAdapterInterface::REQUEST_GET);
-
-        // todo: update resource
-
+        $response = $this->send(HttpAdapterInterface::REQUEST_GET);
+        $this->handleFetchResponse($response);
         return $this;
     }
     //</editor-fold>
@@ -282,14 +280,26 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     /**
-     * This method is called to handle the response from a called crud message.
+     * This method is called to handle the response from a create command.
      * Override it to handle the data correctly.
      *
      * @param \stdClass $response
      */
-    protected function handleResponse(\stdClass $response)
+    protected function handleCreateResponse(\stdClass $response)
     {
-        // I do nothing with the data
+        // Default: Do nothing with the data.
     }
+
+    /**
+     * This method is called to handle the response from a fetch command.
+     * Override it to handle the data correctly.
+     *
+     * @param \stdClass $response
+     */
+    protected function handleFetchResponse(\stdClass $response)
+    {
+        // Default: Do nothing with the data.
+    }
+
     //</editor-fold>
 }

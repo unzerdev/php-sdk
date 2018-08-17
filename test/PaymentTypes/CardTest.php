@@ -19,6 +19,7 @@ use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
+use heidelpay\NmgPhpSdk\PaymentInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use heidelpay\NmgPhpSdk\test\AbstractPaymentTest;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
@@ -110,9 +111,9 @@ class CardTest extends AbstractPaymentTest
      */
 	public function fullChargeAfterAuthorize(Authorization $authorization)
 	{
-	    $this->assertGreaterThan(0.0, $authorization->getPayment()->getRemainingAmount());
+	    $this->assertGreaterThan(0.0, $authorization->getPayment()->getRemaining());
         $authorization->getPayment()->fullCharge();
-        $this->assertEquals(0.0, $authorization->getPayment()->getRemainingAmount());
+        $this->assertEquals(0.0, $authorization->getPayment()->getRemaining());
         // todo: check payment has been updated
     }
 
@@ -125,17 +126,17 @@ class CardTest extends AbstractPaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $payment = $authorization->getPayment();
-        $this->assertEquals(100.0, $payment->getRemainingAmount());
+        $this->assertEquals(100.0, $payment->getRemaining());
         $payment->charge(20);
-        $this->assertEquals(80.0, $payment->getRemainingAmount());
+        $this->assertEquals(80.0, $payment->getRemaining());
         $payment->charge(20);
-        $this->assertEquals(60.0, $payment->getRemainingAmount());
+        $this->assertEquals(60.0, $payment->getRemaining());
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionMessage('The amount of 70.0000 to be charged exceeds the authorized amount of 60.0000');
         $this->expectExceptionCode('API.330.100.007');
         $payment->charge(70);
         $payment->charge(60);
-        $this->assertEquals(0.0, $payment->getRemainingAmount());
+        $this->assertEquals(0.0, $payment->getRemaining());
     }
 
     /**
@@ -147,11 +148,11 @@ class CardTest extends AbstractPaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $payment = $authorization->getPayment();
-        $this->assertEquals(100.0, $payment->getRemainingAmount());
+        $this->assertEquals(100.0, $payment->getRemaining());
         $payment->charge(20);
-        $this->assertEquals(80.0, $payment->getRemainingAmount());
+        $this->assertEquals(80.0, $payment->getRemaining());
         $payment->charge(); // todo: das macht die api selber, ich muss den remainder nicht ermitteln
-        $this->assertEquals(0.0, $payment->getRemainingAmount());
+        $this->assertEquals(0.0, $payment->getRemaining());
         // todo: check payment has been updated
     }
 
@@ -163,12 +164,14 @@ class CardTest extends AbstractPaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $charge = $card->charge(100.00, Currency::EUROPEAN_EURO, self::RETURN_URL);
+
         $payment = $charge->getPayment();
-        $this->assertEquals(0.0, $payment->getRemainingAmount());
-        $this->assertEquals(100.00, $payment->getChargedAmount());
+        $this->assertAmounts($payment, 0.0, 100.0, 100.00, 0.00);
+        $this->assertTrue($payment->isCompleted());
+
         $payment->cancel();
-        $this->assertEquals(0.00, $payment->getChargedAmount());
-        // todo: check payment has been updated
+        $this->assertAmounts($payment, 0.0, 100.0, 100.00, 100.00);
+        $this->assertTrue($payment->isCanceled());
     }
 
     /**
@@ -241,6 +244,26 @@ class CardTest extends AbstractPaymentTest
         $card = new Card ('4012888888881881', '03/20');
         $card->setCvc('123');
         return $card;
+    }
+
+    /**
+     * @param PaymentInterface $payment
+     * @param float $expectedRemaining
+     * @param float $expectedCharged
+     * @param float $expectedTotal
+     * @param float $expectedCanceled
+     */
+    private function assertAmounts(
+        $payment,
+        $expectedRemaining,
+        $expectedCharged,
+        $expectedTotal,
+        $expectedCanceled
+    ) {
+        $this->assertEquals($expectedRemaining, $payment->getRemaining());
+        $this->assertEquals($expectedCharged, $payment->getCharged());
+        $this->assertEquals($expectedTotal, $payment->getTotal());
+        $this->assertEquals($expectedCanceled, $payment->getCanceled());
     }
     //</editor-fold>
 }

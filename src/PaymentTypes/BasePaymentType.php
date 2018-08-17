@@ -108,4 +108,30 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
         return $payment->cancel($amount);
     }
     //</editor-fold>
+
+    //<editor-fold desc="Amount">
+    public function getTotal(): float
+    {
+        $payment = $this->getPayment();
+        return $payment ? $payment->getTotal() : 0.0;
+    }
+
+    public function getRemaining(): float
+    {
+        $payment = $this->getPayment();
+        return $payment ? $payment->getRemaining() : 0.0;
+    }
+
+    public function getCharged(): float
+    {
+        $payment = $this->getPayment();
+        return $payment ? $payment->getCharged() : 0.0;
+    }
+
+    public function getCanceled(): float
+    {
+        $payment = $this->getPayment();
+        return $payment ? $payment->getCanceled() : 0.0;
+    }
+    //</editor-fold>
 }
