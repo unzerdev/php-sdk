@@ -16,7 +16,7 @@ namespace heidelpay\NmgPhpSdk\test;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 
-class GeneralTests extends AbstractPaymentTest
+class GeneralTests extends BasePaymentTest
 {
 
     /**
@@ -25,7 +25,7 @@ class GeneralTests extends AbstractPaymentTest
     public function heidelpayObjectShouldThrowExceptionWhenKeyIsPublic()
     {
         $this->expectException(IllegalKeyException::class);
-        $this->heidelpay = new Heidelpay(AbstractPaymentTest::PUBLIC_KEY);
+        $this->heidelpay = new Heidelpay(BasePaymentTest::PUBLIC_KEY);
     }
 
 }

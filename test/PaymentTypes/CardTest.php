@@ -20,11 +20,11 @@ use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
-use heidelpay\NmgPhpSdk\test\AbstractPaymentTest;
+use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
-class CardTest extends AbstractPaymentTest
+class CardTest extends BasePaymentTest
 {
     const RETURN_URL = 'http://vnexpress.vn';
 

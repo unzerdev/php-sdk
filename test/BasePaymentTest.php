@@ -19,7 +19,7 @@ use heidelpay\NmgPhpSdk\PaymentInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use PHPUnit\Framework\TestCase;
 
-class AbstractPaymentTest extends TestCase
+class BasePaymentTest extends TestCase
 {
     /** @var Heidelpay $heidelpay */
     protected $heidelpay;
