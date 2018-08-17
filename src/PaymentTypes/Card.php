@@ -62,6 +62,7 @@ class Card extends BasePaymentType
         return $card;
     }
 
+    //<editor-fold desc="Overridable Methods">
     /**
      * {@inheritDoc}
      */
@@ -69,6 +70,7 @@ class Card extends BasePaymentType
     {
         return 'types/cards';
     }
+    //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
     /**
