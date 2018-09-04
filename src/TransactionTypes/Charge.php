@@ -196,6 +196,7 @@ class Charge extends AbstractHeidelpayResource
 
     /**
      * Returns true if the charge is fully canceled.
+     * todo: canceled as state?
      *
      * @return bool
      */
@@ -210,6 +211,4 @@ class Charge extends AbstractHeidelpayResource
 
         return $this->amountIsGreaterThanOrEqual($canceledAmount, $this->amount);
     }
-
-
 }
