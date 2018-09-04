@@ -18,7 +18,17 @@ use heidelpay\NmgPhpSdk\ReferenceException;
 
 class Cancellation extends AbstractHeidelpayResource
 {
-    private $amount = 0.0;
+    /** @var float $amount */
+    private $amount;
+
+    /**
+     * Authorization constructor.
+     * @param float $amount
+     */
+    public function __construct($amount = null)
+    {
+        $this->setAmount($amount);
+    }
 
     /**
      * {@inheritDoc}
@@ -44,9 +54,9 @@ class Cancellation extends AbstractHeidelpayResource
 
     //<editor-fold desc="Getters/Setters">
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmount(): float
+    public function getAmount()
     {
         return $this->amount;
     }
@@ -55,7 +65,7 @@ class Cancellation extends AbstractHeidelpayResource
      * @param float $amount
      * @return Cancellation
      */
-    public function setAmount(float $amount): Cancellation
+    public function setAmount($amount): Cancellation
     {
         $this->amount = $amount;
         return $this;

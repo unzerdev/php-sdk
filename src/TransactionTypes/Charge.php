@@ -198,14 +198,16 @@ class Charge extends AbstractHeidelpayResource
      * Returns the last cancellation object if charge is already canceled.
      * Creates and returns new cancellation object otherwise.
      *
+     * @param float $amount
      * @return Cancellation
      */
-    public function cancel(): Cancellation
+    public function cancel($amount = null): Cancellation
     {
         if ($this->isCanceled()) {
             return end($this->cancellations);
         }
-        $cancellation = new Cancellation($this);
+
+        $cancellation = new Cancellation($amount);
         $cancellation->create();
         $this->addCancellation($cancellation);
 
