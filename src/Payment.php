@@ -25,11 +25,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     use hasAmountsTrait;
     use hasStateTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    const EPSILON = 0.000001;
-
     /** @var string $redirectUrl */
     private $redirectUrl = '';
 
