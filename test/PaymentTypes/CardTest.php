@@ -179,6 +179,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     *
+     *
      * @test
      */
     public function fullCancelAfterCharge()
@@ -197,6 +199,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * Full cancel on authorization without charges or cancels.
+     *
      * @test
      */
     public function fullCancelOnAuthorization()
@@ -236,10 +240,65 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
     }
 
+//    /**
+//     * Full cancel on fully charged authorization.
+//     *
+//     * @test
+//     */
+//    public function fullCancelOnFullyChargedAuthorization()
+//    {
+//        /** @var Card $card */
+//        $card = $this->heidelpay->createPaymentType($this->createCard());
+//        $authorization = $card->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+//        $payment = $authorization->getPayment();
+//        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+//        $this->assertTrue($payment->isPending());
+//
+//        $payment->charge(10.0);
+//        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
+//        $this->assertTrue($payment->isPartlyPaid());
+//
+//        $payment->charge(90.0);
+//        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
+//        $this->assertTrue($payment->isCompleted());
+//
+//        $cancellation = $authorization->cancel();
+//        $this->assertNotEmpty($cancellation);
+//        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 10.0);
+//        $this->assertTrue($payment->isCanceled());
+//    }
 
-    // fullCancel on Auth w/o charges and cancels
+    /**
+     * Full cancel on fully charged payment.
+     *
+     * @test
+     */
+    public function fullCancelOnFullyChargedPayment()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $card->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
+        $payment->charge(10.0);
+        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $payment->charge(90.0);
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
+
+        $cancellation = $payment->cancel();
+        $this->assertNotEmpty($cancellation);
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 100.0);
+        $this->assertTrue($payment->isCanceled());
+    }
+
+
+
     // PaymentState = cancelled --> https://heidelpay.atlassian.net/wiki/spaces/ID/pages/118030386/payments
-    // cancel authorization
 
     // fullCancel on fully charged Auth
     // canceln der einzelnen charges

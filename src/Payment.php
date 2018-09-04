@@ -256,7 +256,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function fullCancel(): PaymentInterface
     {
-        if ($this->authorize instanceof Authorization) {
+        if ($this->authorize instanceof Authorization && !$this->isCompleted()) {
             $this->authorize->cancel();
             return $this;
         }
