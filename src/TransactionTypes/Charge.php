@@ -208,8 +208,8 @@ class Charge extends AbstractHeidelpayResource
         }
 
         $cancellation = new Cancellation($amount);
-        $cancellation->create();
         $this->addCancellation($cancellation);
+        $cancellation->create();
 
         return $cancellation;
     }

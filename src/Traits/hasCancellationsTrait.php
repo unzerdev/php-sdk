@@ -43,14 +43,15 @@ trait hasCancellationsTrait
     }
 
     /**
-     * @param Cancellation $cancel
+     * @param Cancellation $cancellation
      */
-    public function addCancellation(Cancellation $cancel)
+    public function addCancellation(Cancellation $cancellation)
     {
         if ($this instanceof HeidelpayParentInterface) {
-            $this->setParentResource($this);
+            $cancellation->setParentResource($this);
         }
-        $this->cancellations[] = $cancel;
+
+        $this->cancellations[] = $cancellation;
     }
     //</editor-fold>
 }
