@@ -181,7 +181,7 @@ class Authorization extends AbstractHeidelpayResource
      */
     public function cancel(): Cancellation
     {
-        $cancellation = new Cancellation($this);
+        $cancellation = new Cancellation();
         $this->addCancellation($cancellation);
         $cancellation->create();
 

@@ -14,6 +14,7 @@
 
 namespace heidelpay\NmgPhpSdk\Traits;
 
+use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
 
 trait hasCancellationsTrait
@@ -46,6 +47,9 @@ trait hasCancellationsTrait
      */
     public function addCancellation(Cancellation $cancel)
     {
+        if ($this instanceof HeidelpayParentInterface) {
+            $this->setParentResource($this);
+        }
         $this->cancellations[] = $cancel;
     }
     //</editor-fold>
