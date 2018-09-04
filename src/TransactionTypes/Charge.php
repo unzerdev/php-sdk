@@ -19,10 +19,12 @@ use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\hasCancellationsTrait;
+use heidelpay\NmgPhpSdk\Traits\hasValueHelper;
 
 class Charge extends AbstractHeidelpayResource
 {
     use hasCancellationsTrait;
+    use hasValueHelper;
 
     /** @var float $amount */
     protected $amount = 0.0;
@@ -175,15 +177,39 @@ class Charge extends AbstractHeidelpayResource
 
     /**
      * Full cancel of this authorization.
+     * Returns the last cancellation object if charge is already canceled.
+     * Creates and returns new cancellation object otherwise.
      *
      * @return Cancellation
      */
     public function cancel(): Cancellation
     {
+        if ($this->isCanceled()) {
+            return end($this->cancellations);
+        }
         $cancellation = new Cancellation($this);
-        $this->addCancellation($cancellation);
         $cancellation->create();
+        $this->addCancellation($cancellation);
 
         return $cancellation;
     }
+
+    /**
+     * Returns true if the charge is fully canceled.
+     *
+     * @return bool
+     */
+    public function isCanceled(): bool
+    {
+        $canceledAmount = 0.0;
+
+        /** @var Cancellation $cancellation */
+        foreach ($this->cancellations as $cancellation) {
+            $canceledAmount += $cancellation->getAmount();
+        }
+
+        return $this->amountIsGreaterThanOrEqual($canceledAmount, $this->amount);
+    }
+
+
 }

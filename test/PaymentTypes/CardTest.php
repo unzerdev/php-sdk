@@ -219,6 +219,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * Full cancel on partly charged authorization.
+     *
      * @test
      */
     public function fullCancelOnPartlyChargedAuthorization()
@@ -296,18 +298,34 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
     }
 
+    /**
+     * Full cancel on partly charged auth canceled charges.
+     *
+     * @test
+     */
+    public function fullCancelOnPartlyPaidAuthWithCanceledCharges()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $card->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
+        $payment->charge(10.0);
+        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
+        $charge = $payment->charge(10.0);
+        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $charge->cancel();
+        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 10.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $authorization->cancel();
+        $this->assertTrue($payment->isCanceled());
+    }
+
 
 
     // PaymentState = cancelled --> https://heidelpay.atlassian.net/wiki/spaces/ID/pages/118030386/payments
-
-    // fullCancel on fully charged Auth
-    // canceln der einzelnen charges
-
-    // fullCancel on partly Charged Auth
-    // canceln der einzelnen charges
-
-    // fullCancel on partly Charged and partly canceled Auth
-    // alle charges, die nicht gecancelled sind canceln
 
     // PartCancel on fully charged Auth
     // cancel auf den charge mit dem betrag
