@@ -123,6 +123,24 @@ class Charge extends AbstractHeidelpayResource
         $this->uniqueId = $uniqueId;
         return $this;
     }
+
+    /**
+     * Returns true if the charge is fully canceled.
+     * todo: canceled as state?
+     *
+     * @return bool
+     */
+    public function isCanceled(): bool
+    {
+        $canceledAmount = 0.0;
+
+        /** @var Cancellation $cancellation */
+        foreach ($this->cancellations as $cancellation) {
+            $canceledAmount += $cancellation->getAmount();
+        }
+
+        return $this->amountIsGreaterThanOrEqual($canceledAmount, $this->amount);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
@@ -192,23 +210,5 @@ class Charge extends AbstractHeidelpayResource
         $this->addCancellation($cancellation);
 
         return $cancellation;
-    }
-
-    /**
-     * Returns true if the charge is fully canceled.
-     * todo: canceled as state?
-     *
-     * @return bool
-     */
-    public function isCanceled(): bool
-    {
-        $canceledAmount = 0.0;
-
-        /** @var Cancellation $cancellation */
-        foreach ($this->cancellations as $cancellation) {
-            $canceledAmount += $cancellation->getAmount();
-        }
-
-        return $this->amountIsGreaterThanOrEqual($canceledAmount, $this->amount);
     }
 }
