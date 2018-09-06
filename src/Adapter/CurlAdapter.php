@@ -103,7 +103,7 @@ class CurlAdapter implements HttpAdapterInterface
         curl_setopt($request, CURLOPT_SSLVERSION, 6);       // CURL_SSLVERSION_TLSv1_2
         curl_setopt($request, CURLOPT_USERAGENT, 'HeidelpayPHP');
         curl_setopt($request, CURLOPT_HTTPHEADER, array(
-            'Authorization: ' . $heidelpayResource->getHeidelpayObject()->getKey(),
+            'Authorization: ' . 'Basic ' . base64_encode($heidelpayResource->getHeidelpayObject()->getKey() . ':'), // basic auth with key as user and empty password
             'Content-Type: application/json'
 //            'CUSTOMER-LANGUAGE: en_US', // heidelpay constructor // header object?
 //            'CHECKOUT-ID: checkout-5aba2fad0ab154.88150279', // heidelpay constructor
