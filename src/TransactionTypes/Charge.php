@@ -212,6 +212,8 @@ class Charge extends AbstractTransactionType
 
         $cancellation = new Cancellation($amount);
         $this->addCancellation($cancellation);
+        $cancellation->setParentResource($this);
+        $cancellation->setPayment($this->getPayment());
         $cancellation->create();
 
         return $cancellation;
