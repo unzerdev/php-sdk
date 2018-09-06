@@ -167,10 +167,11 @@ class CardTest extends BasePaymentTest
      */
 	public function fullChargeWithoutAuthorizeShouldThrowException()
 	{
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCard());
-	    $this->expectException(MissingResourceException::class);
-        $card->charge();
+        $this->heidelpay->createPaymentType($this->createCard());
+        $payment = $this->createPayment();
+
+        $this->expectException(MissingResourceException::class);
+	    $payment->charge();
 	}
 
     /**
