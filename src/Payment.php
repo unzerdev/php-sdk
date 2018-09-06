@@ -234,7 +234,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     //<editor-fold desc="TransactionTypes">
 
     /**
-     * @return Charge
+     * {@inheritDoc}
+     *
+     * todo: this should be handled by the api.
      */
     public function fullCharge(): Charge
     {
