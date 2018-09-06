@@ -28,6 +28,14 @@ interface PaymentInterface extends AmountsInterface
     public function charge($amount, $currency, $returnUrl): Charge;
 
     /**
+     * Performs a full charge on the payment.
+     * Works only if an authorization has been performed prior to this call.
+     *
+     * @return Charge
+     */
+    public function fullCharge(): Charge;
+
+    /**
      * @param float $amount
      * @param string $currency
      * @param string $returnUrl
@@ -44,5 +52,56 @@ interface PaymentInterface extends AmountsInterface
      * Cancel all charges in the payment.
      */
     public function cancelAllCharges();
+    //</editor-fold>
+
+    //<editor-fold desc="Payment state">
+    /**
+     * Return true if the state is pending.
+     *
+     * @return bool
+     */
+    public function isPending(): bool;
+
+    /**
+     * Return true if the state is completed.
+     *
+     * @return bool
+     */
+    public function isCompleted(): bool;
+
+    /**
+     * Return true if the state is canceled.
+     *
+     * @return bool
+     */
+    public function isCanceled(): bool;
+
+    /**
+     * Return true if the state is partly paid.
+     *
+     * @return bool
+     */
+    public function isPartlyPaid(): bool;
+
+    /**
+     * Return true if the state is payment review.
+     *
+     * @return bool
+     */
+    public function isPaymentReview(): bool;
+
+    /**
+     * Return true if the state is chargeback.
+     *
+     * @return bool
+     */
+    public function isChargeBack(): bool;
+
+    /**
+     * Returns the current state code (ref. Constants/PaymentState).
+     *
+     * @return int
+     */
+    public function getState(): int;
     //</editor-fold>
 }
