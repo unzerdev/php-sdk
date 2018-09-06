@@ -186,6 +186,7 @@ class Authorization extends AbstractTransactionType
     {
         $cancellation = new Cancellation();
         $this->addCancellation($cancellation);
+        $cancellation->setPayment($this->getPayment());
         $cancellation->create();
 
         $payment = $this->getPayment();
