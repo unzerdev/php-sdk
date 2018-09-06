@@ -208,7 +208,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * @return PaymentTypeInterface
+     * {@inheritDoc}
      */
     public function getPaymentType(): PaymentTypeInterface
     {

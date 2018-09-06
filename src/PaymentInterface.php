@@ -13,6 +13,8 @@
  */
 namespace heidelpay\NmgPhpSdk;
 
+use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
@@ -104,4 +106,12 @@ interface PaymentInterface extends AmountsInterface
      */
     public function getState(): int;
     //</editor-fold>
+
+    /**
+     * Returns the paymentType and throws a MissingResourceException if it is not set.
+     *
+     * @return PaymentTypeInterface
+     * @throws MissingResourceException
+     */
+    public function getPaymentType(): PaymentTypeInterface;
 }
