@@ -29,7 +29,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      * @param HeidelpayParentInterface $parent
      * @param string $id
      */
-    public function __construct(HeidelpayParentInterface $parent, $id = '')
+    public function __construct($parent = null, $id = '')
     {
         $this->parentResource = $parent;
         $this->id = $id;
