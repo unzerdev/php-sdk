@@ -13,7 +13,6 @@
  */
 namespace heidelpay\NmgPhpSdk\TransactionTypes;
 
-use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
@@ -21,7 +20,7 @@ use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\hasCancellationsTrait;
 use heidelpay\NmgPhpSdk\Traits\hasValueHelper;
 
-class Charge extends AbstractHeidelpayResource
+class Charge extends AbstractTransactionType
 {
     use hasCancellationsTrait;
     use hasValueHelper;
@@ -173,7 +172,7 @@ class Charge extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    protected function handleCreateResponse(\stdClass $response)
+    protected function handleResponse(\stdClass $response)
     {
         $isSuccess = isset($response->isSuccess) && $response->isSuccess;
         $isPending = isset($response->isPending) && $response->isPending;

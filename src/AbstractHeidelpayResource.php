@@ -25,9 +25,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /** @var HeidelpayParentInterface */
     private $parentResource;
 
-    /** @var Payment $payment */
-    private $payment;
-
     /**
      * @param HeidelpayParentInterface $parent
      * @param string $id
@@ -48,10 +45,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $response = $this->send(HttpAdapterInterface::REQUEST_POST);
         $this->setId($response->id);
 
-        $this->handleCreateResponse($response);
-
-        $this->updatePayment();
-
+        $this->handleResponse($response);
         return $this;
     }
 
@@ -91,9 +85,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         }
 
         $response = $this->send(HttpAdapterInterface::REQUEST_GET);
-        $this->handleFetchResponse($response);
-
-        $this->updatePayment();
+        $this->handleResponse($response);
         return $this;
     }
     //</editor-fold>
@@ -133,24 +125,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     public function getParentResource(): HeidelpayParentInterface
     {
         return $this->parentResource;
-    }
-
-    /**
-     * @return Payment|null
-     */
-    public function getPayment()
-    {
-        return $this->payment;
-    }
-
-    /**
-     * @param Payment $payment
-     * @return self
-     */
-    public function setPayment(Payment $payment): self
-    {
-        $this->payment = $payment;
-        return $this;
     }
     //</editor-fold>
 
@@ -284,43 +258,19 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     /**
-     * This method is called to handle the response from a create command.
+     * This method is called to handle the response from a crud command.
      * Override it to handle the data correctly.
      *
      * @param \stdClass $response
      */
-    protected function handleCreateResponse(\stdClass $response)
+    protected function handleResponse(\stdClass $response)
     {
         // Default: Do nothing with the data.
     }
 
-    /**
-     * This method is called to handle the response from a fetch command.
-     * Override it to handle the data correctly.
-     *
-     * @param \stdClass $response
-     */
-    protected function handleFetchResponse(\stdClass $response)
-    {
-        // Default: Do nothing with the data.
-    }
     //</editor-fold>
 
     //<editor-fold desc="Private helper">
-    /**
-     * Updates the payment object if it exists and if this is not the payment object.
-     * This is called from the crud methods to update the payments state whenever anything happens.
-     */
-    private function updatePayment()
-    {
-        if (!$this instanceof Payment) {
-            $payment = $this->getPayment();
-            if ($payment instanceof PaymentInterface) {
-                $payment->fetch();
-            }
-        }
-    }
-
     /**
      * Return class short name.
      *

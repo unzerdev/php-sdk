@@ -13,13 +13,13 @@
  */
 namespace heidelpay\NmgPhpSdk\TransactionTypes;
 
-use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
+use heidelpay\NmgPhpSdk\PaymentInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\hasCancellationsTrait;
 
-class Authorization extends AbstractHeidelpayResource
+class Authorization extends AbstractTransactionType
 {
     use hasCancellationsTrait;
 
@@ -151,14 +151,13 @@ class Authorization extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    protected function handleCreateResponse(\stdClass $response)
+    protected function handleResponse(\stdClass $response)
     {
         $isSuccess = isset($response->isSuccess) && $response->isSuccess;
         $isPending = isset($response->isPending) && $response->isPending;
         if (!$isSuccess && !$isPending) {
             return;
         }
-
 
         $payment = $this->getPayment();
         if (isset($response->resources->paymentId)) {
@@ -183,7 +182,7 @@ class Authorization extends AbstractHeidelpayResource
         $cancellation->create();
 
         $payment = $this->getPayment();
-        if ($payment instanceof Payment) {
+        if ($payment instanceof PaymentInterface) {
             $payment->cancelAllCharges();
         }
 

@@ -25,13 +25,6 @@ interface HeidelpayResourceInterface extends JsonSerializable
     public function getId(): string;
 
     /**
-     * Return the payment object stored in heidelpay object.
-     *
-     * @return Payment|null
-     */
-    public function getPayment();
-
-    /**
      * Create the resource on the api.
      *
      * @return $this

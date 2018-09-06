@@ -13,10 +13,9 @@
  */
 namespace heidelpay\NmgPhpSdk\TransactionTypes;
 
-use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\ReferenceException;
 
-class Cancellation extends AbstractHeidelpayResource
+class Cancellation extends AbstractTransactionType
 {
     /** @var float $amount */
     private $amount;
@@ -41,7 +40,7 @@ class Cancellation extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    protected function handleCreateResponse(\stdClass $response)
+    protected function handleResponse(\stdClass $response)
     {
         if ($this->id !== ($response->id ?? '')) {
             throw new ReferenceException();

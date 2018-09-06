@@ -53,7 +53,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * {@inheritDoc}
      */
-    protected function handleFetchResponse(\stdClass $response)
+    protected function handleResponse(\stdClass $response)
     {
         if ($this->id !== ($response->id ?? '')) {
             throw new ReferenceException();
