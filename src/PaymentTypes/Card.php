@@ -54,8 +54,6 @@ class Card extends BasePaymentType
     public static function newCard(HeidelpayParentInterface $parent, $pan, $expirationDate, $cvc): Card
     {
         $card = new self($pan, $expirationDate);
-//        $card->pan = $pan;
-//        $card->expirationDate = $expirationDate;
         $card->cvc = $cvc;
         $card->setParentResource($parent);
 
