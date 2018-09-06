@@ -16,7 +16,6 @@ namespace heidelpay\NmgPhpSdk\TransactionTypes;
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
-use heidelpay\NmgPhpSdk\PaymentInterface;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {
@@ -25,7 +24,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     //<editor-fold desc="Getters/Setters">
     /**
-     * @return PaymentInterface|null
+     * @return Payment|null
      */
     public function getPayment()
     {
@@ -36,7 +35,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * @param Payment $payment
      * @return self
      */
-    public function setPayment(Payment $payment): self
+    public function setPayment($payment): self
     {
         $this->payment = $payment;
         return $this;
