@@ -77,6 +77,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     }
     //</editor-fold>
 
+//      todo: remove dead code
 //    //<editor-fold desc="Amount">
 //    public function getTotal(): float
 //    {
