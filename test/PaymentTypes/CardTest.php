@@ -197,8 +197,10 @@ class CardTest extends BasePaymentTest
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
-        $payment = $authorization->getPayment();
+        $payment = $this->createPayment();
+        $payment->setPaymentType($card);
+
+        $payment->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
