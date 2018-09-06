@@ -14,11 +14,8 @@
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
-use heidelpay\NmgPhpSdk\PaymentInterface;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
-abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface, PaymentInterface
+abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
 {
     private $chargeable = false;
     private $authorizable = false;
@@ -80,58 +77,29 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     }
     //</editor-fold>
 
-    //<editor-fold desc="Transactions">
-    /**
-     * {@inheritDoc}
-     */
-    public function charge($amount = null, $currency = null, $returnUrl = null): Charge
-    {
-        $payment = $this->getHeidelpayObject()->getOrCreatePayment();
-        return $payment->charge($amount, $currency, $returnUrl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize($amount, $currency, $returnUrl): Authorization
-    {
-        $payment = $this->getHeidelpayObject()->getOrCreatePayment();
-        return $payment->authorize($amount, $currency, $returnUrl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function cancel($amount = null)
-    {
-        $payment = $this->getHeidelpayObject()->getOrCreatePayment();
-        return $payment->cancel($amount);
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Amount">
-    public function getTotal(): float
-    {
-        $payment = $this->getPayment();
-        return $payment ? $payment->getTotal() : 0.0;
-    }
-
-    public function getRemaining(): float
-    {
-        $payment = $this->getPayment();
-        return $payment ? $payment->getRemaining() : 0.0;
-    }
-
-    public function getCharged(): float
-    {
-        $payment = $this->getPayment();
-        return $payment ? $payment->getCharged() : 0.0;
-    }
-
-    public function getCanceled(): float
-    {
-        $payment = $this->getPayment();
-        return $payment ? $payment->getCanceled() : 0.0;
-    }
-    //</editor-fold>
+//    //<editor-fold desc="Amount">
+//    public function getTotal(): float
+//    {
+//        $payment = $this->getPayment();
+//        return $payment ? $payment->getTotal() : 0.0;
+//    }
+//
+//    public function getRemaining(): float
+//    {
+//        $payment = $this->getPayment();
+//        return $payment ? $payment->getRemaining() : 0.0;
+//    }
+//
+//    public function getCharged(): float
+//    {
+//        $payment = $this->getPayment();
+//        return $payment ? $payment->getCharged() : 0.0;
+//    }
+//
+//    public function getCanceled(): float
+//    {
+//        $payment = $this->getPayment();
+//        return $payment ? $payment->getCanceled() : 0.0;
+//    }
+//    //</editor-fold>
 }

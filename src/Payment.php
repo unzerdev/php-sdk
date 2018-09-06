@@ -213,8 +213,8 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     public function getPaymentType(): PaymentTypeInterface
     {
         $paymentType = $this->paymentType;
-        if (!$paymentType instanceof PaymentInterface) {
-            throw new MissingResourceException();
+        if (!$paymentType instanceof PaymentTypeInterface) {
+            throw new MissingResourceException('The paymentType is not set.');
         }
 
         return $paymentType;
