@@ -25,6 +25,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /** @var HeidelpayParentInterface */
     private $parentResource;
 
+    /** @var Payment $payment */
+    private $payment;
+
     /**
      * @param HeidelpayParentInterface $parent
      * @param string $id
@@ -130,6 +133,24 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     public function getParentResource(): HeidelpayParentInterface
     {
         return $this->parentResource;
+    }
+
+    /**
+     * @return Payment|null
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param Payment $payment
+     * @return self
+     */
+    public function setPayment(Payment $payment): self
+    {
+        $this->payment = $payment;
+        return $this;
     }
     //</editor-fold>
 
@@ -238,16 +259,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $uri[] = '';
 
         return implode('/', $uri);
-    }
-
-    /**
-     * Return the payment object stored in heidelpay object.
-     *
-     * @return Payment|null
-     */
-    public function getPayment()
-    {
-        return $this->getHeidelpayObject()->getPayment();
     }
 
     //<editor-fold desc="Optional Methods">

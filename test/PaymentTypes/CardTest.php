@@ -37,14 +37,49 @@ class CardTest extends BasePaymentTest
         $card = $this->createCard();
         $this->assertEmpty($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
+
         /** @var HeidelpayResourceInterface $card */
         $this->assertNotEmpty($card->getId());
 
         /** @var HeidelpayParentInterface $card */
         $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
-        $this->assertSame($card, $this->heidelpay->getPaymentType());
 
         return $card;
+    }
+
+    /**
+     * The payment type can be set in the payment object directly.
+     *
+     * @test
+     */
+    public function authorizeWithoutPaymentType()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+
+        $payment = new Payment($this->heidelpay);
+        $payment->setPaymentType($card);
+        $authorization = $payment->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+
+        $actualPayment = $authorization->getPayment();
+        $this->assertSame($payment, $actualPayment);
+        $this->assertSame($card, $actualPayment->getPaymentType());
+    }
+
+    /**
+     * The payment type can be set in the payment object directly.
+     *
+     * @test
+     */
+    public function authorizeWithPaymentType()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+
+        $payment = new Payment($this->heidelpay);
+        $authorization = $payment->authorizeWithPaymentType(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $card);
+
+        $actualPayment = $authorization->getPayment();
+        $this->assertSame($payment, $actualPayment);
+        $this->assertSame($card, $actualPayment->getPaymentType());
     }
 
     /**

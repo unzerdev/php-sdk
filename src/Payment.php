@@ -15,6 +15,7 @@ namespace heidelpay\NmgPhpSdk;
 
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\hasAmountsTrait;
 use heidelpay\NmgPhpSdk\Traits\hasStateTrait;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
@@ -33,6 +34,12 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /** @var array $charges */
     private $charges = [];
+
+    /** @var Customer $customer */
+    private $customer;
+
+    /** @var PaymentTypeInterface $paymentType */
+    private $paymentType;
 
     //<editor-fold desc="Overridable Methods">
     /**
@@ -182,6 +189,46 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     {
         $this->charges[$charge->getId()] = $charge;
     }
+
+    /**
+     * @return Customer|null
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function createCustomer(): Customer
+    {
+        $this->customer = new Customer($this);
+        return $this->customer;
+    }
+
+    /**
+     * @return PaymentTypeInterface
+     */
+    public function getPaymentType(): PaymentTypeInterface
+    {
+        $paymentType = $this->paymentType;
+        if (!$paymentType instanceof PaymentInterface) {
+            throw new MissingResourceException();
+        }
+
+        return $paymentType;
+    }
+
+    /**
+     * @param PaymentTypeInterface $paymentType
+     * @return Payment
+     */
+    public function setPaymentType(PaymentTypeInterface $paymentType): Payment
+    {
+        $this->paymentType = $paymentType;
+        return $this;
+    }
     //</editor-fold>
 
     //<editor-fold desc="TransactionTypes">
@@ -236,9 +283,24 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $authorization = new Authorization($amount, $currency, $returnUrl);
         $this->setAuthorization($authorization);
         $authorization->setParentResource($this);
+        $authorization->setPayment($this);
         $authorization->create();
 
         return $authorization;
+    }
+
+    /**
+     * Sets the given paymentType and performs an authorization.
+     *
+     * @param $amount
+     * @param $currency
+     * @param $returnUrl
+     * @param PaymentTypeInterface $paymentType
+     * @return Authorization
+     */
+    public function authorizeWithPaymentType($amount, $currency, $returnUrl, PaymentTypeInterface $paymentType): Authorization
+    {
+        return $this->setPaymentType($paymentType)->authorize($amount, $currency, $returnUrl);
     }
 
     /**
@@ -289,12 +351,4 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         }
     }
     //</editor-fold>
-
-    /**
-     * @return PaymentTypes\PaymentTypeInterface
-     */
-    private function getPaymentType(): PaymentTypes\PaymentTypeInterface
-    {
-        return $this->getHeidelpayObject()->getPaymentType();
-    }
 }

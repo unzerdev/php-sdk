@@ -18,7 +18,6 @@ use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Constants\Mode;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
-use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 
 class Heidelpay implements HeidelpayParentInterface
@@ -33,20 +32,11 @@ class Heidelpay implements HeidelpayParentInterface
     /** @var string $locale */
     private $locale;
 
-    /** @var Payment $payment */
-    private $payment;
-
-    /** @var Customer $customer */
-    private $customer;
-
     /** @var bool */
     private $sandboxMode = true;
 
     /** @var HttpAdapterInterface $adapter */
     private $adapter;
-
-    /** @var PaymentTypeInterface $paymentType */
-    private $paymentType;
 
     /**
      * @param string $key
@@ -116,24 +106,6 @@ class Heidelpay implements HeidelpayParentInterface
         return $this;
     }
 
-//    /**
-//     * @return Payment
-//     */
-//    public function getPayment(): Payment
-//    {
-//        if ($this->payment instanceof Payment) {
-//            return $this->payment;
-//        }
-//
-//        if (empty($this->paymentId)) {
-//            throw new MissingResourceException('Payment object does not exist.');
-//        }
-//
-//        // todo: fetch payment from api and return it
-//
-//        return $this->payment;
-//    }
-
     /**
      * @return string
      */
@@ -194,70 +166,6 @@ class Heidelpay implements HeidelpayParentInterface
     }
     //</editor-fold>
 
-    //<editor-fold desc="Resources">
-    /**
-     * @return Customer|null
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
-    }
-
-    /**
-     * @return Customer
-     */
-    public function createCustomer(): Customer
-    {
-        $this->customer = new Customer($this);
-        return $this->customer;
-    }
-    /**
-     * @return PaymentTypeInterface
-     */
-    public function getPaymentType(): PaymentTypeInterface
-    {
-        if (!$this->paymentType instanceof PaymentInterface) {
-            throw new MissingResourceException();
-        }
-
-        return $this->paymentType;
-    }
-
-    /**
-     * Returns the existing payment object if it exists.
-     *
-     * @return Payment|null
-     */
-    public function getPayment()
-    {
-        return $this->payment;
-    }
-
-    /**
-     * Returns the existing payment object or creates it if it does not exist.
-     *
-     * @return Payment
-     */
-    public function getOrCreatePayment(): Payment
-    {
-        if (!$this->payment instanceof Payment) {
-            $this->payment = new Payment($this);
-        }
-
-        return $this->payment;
-    }
-
-    /**
-     * @param Payment $payment
-     * @return self
-     */
-    public function setPayment(Payment $payment): self
-    {
-        $this->payment = $payment;
-        return $this;
-    }
-    //</editor-fold>
-
     /**
      * Set the given payment type and create it via api.
      *
@@ -269,12 +177,7 @@ class Heidelpay implements HeidelpayParentInterface
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this);
 
-        $this->paymentType = $paymentType;
-
-        /** @var HeidelpayResourceInterface $paymentType */
-        $type = $paymentType->create();
-
         /** @var PaymentTypeInterface $type */
-        return $type;
+        return $paymentType->create();
     }
 }
