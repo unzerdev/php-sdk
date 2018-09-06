@@ -14,8 +14,8 @@
 namespace heidelpay\NmgPhpSdk\TransactionTypes;
 
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
-use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
+use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\hasCancellationsTrait;
 use heidelpay\NmgPhpSdk\Traits\hasValueHelper;
@@ -158,16 +158,16 @@ class Charge extends AbstractTransactionType
      */
     public function getLinkedResources(): array
     {
-        /** @var Heidelpay $heidelpay */
-        $heidelpay = $this->getHeidelpayObject();
-        $paymentType = $heidelpay->getPaymentType();
+        /** @var Payment $payment */
+        $payment = $this->getPayment();
+        $paymentType = $payment ? $payment->getPaymentType() : null;
         if (!$paymentType instanceof PaymentTypeInterface) {
             throw new MissingResourceException();
         }
 
         return [
-            'customer'=> $heidelpay->getCustomer(),
-            'type' => $heidelpay->getPaymentType()
+            'customer'=> $payment->getCustomer(),
+            'type' => $paymentType
         ];
     }
 
@@ -182,8 +182,8 @@ class Charge extends AbstractTransactionType
             return;
         }
 
-        $payment = $this->getHeidelpayObject()->getOrCreatePayment();
-
+        /** @var Payment $payment */
+        $payment = $this->getPayment();
         if (isset($response->resources->paymentId)) {
             $payment->setId($response->resources->paymentId);
         }
