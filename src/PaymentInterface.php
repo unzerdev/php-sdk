@@ -39,5 +39,10 @@ interface PaymentInterface extends AmountsInterface
      * @param float $amount
      */
     public function cancel($amount = null);
+
+    /**
+     * Cancel all charges in the payment.
+     */
+    public function cancelAllCharges();
     //</editor-fold>
 }

@@ -341,7 +341,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * Cancel all charges in the payment.
+     * {@inheritDoc}
      */
     public function cancelAllCharges()
     {
