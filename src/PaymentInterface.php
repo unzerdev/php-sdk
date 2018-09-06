@@ -27,7 +27,7 @@ interface PaymentInterface extends AmountsInterface
      * @param string $returnUrl
      * @return Charge
      */
-    public function charge($amount, $currency, $returnUrl): Charge;
+    public function charge($amount = null, $currency = null, $returnUrl = null): Charge;
 
     /**
      * Performs a full charge on the payment.
