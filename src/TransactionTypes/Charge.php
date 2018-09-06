@@ -191,6 +191,8 @@ class Charge extends AbstractTransactionType
         if (isset($response->redirectUrl)) {
             $payment->setRedirectUrl($response->redirectUrl);
         }
+
+        parent::handleResponse($response);
     }
     //</editor-fold>
 

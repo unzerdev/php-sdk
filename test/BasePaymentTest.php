@@ -15,6 +15,7 @@ namespace heidelpay\NmgPhpSdk\test;
 
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Heidelpay;
+use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use PHPUnit\Framework\TestCase;
@@ -42,6 +43,15 @@ class BasePaymentTest extends TestCase
         $card = new Card ('4012888888881881', '03/20');
         $card->setCvc('123');
         return $card;
+    }
+
+    /**
+     * @return Payment
+     */
+    protected function createPayment(): Payment
+    {
+        // todo: alternative -> add create payment method to heidelpay
+        return new Payment($this->heidelpay);
     }
 
     /**
