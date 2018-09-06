@@ -85,6 +85,8 @@ trait hasStateTrait
 
     //<editor-fold desc="Getters/Setters">
     /**
+     * Returns the current state code (ref. Constants/PaymentState).
+     *
      * @return int
      */
     public function getState(): int
@@ -93,6 +95,8 @@ trait hasStateTrait
     }
 
     /**
+     * Sets the current state.
+     *
      * @param int $state
      * @return self
      */
