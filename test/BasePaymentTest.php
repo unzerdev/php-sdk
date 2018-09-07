@@ -25,7 +25,7 @@ class BasePaymentTest extends TestCase
     /** @var Heidelpay $heidelpay */
     protected $heidelpay;
 
-    const PRIVATE_KEY = 's-priv-6S59Dt6Q9mJYj8X5qpcxSpA3XLXUw4Zf';
+    const PRIVATE_KEY = 's-priv-2a108n6lxMV581sTKL87VxiAmuzz6VMH';
     const PUBLIC_KEY = 's-pub-uM8yNmBNcs1GGdwAL4ytebYA4HErD22H';
 
     protected function setUp()
