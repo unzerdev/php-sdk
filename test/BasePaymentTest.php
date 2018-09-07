@@ -25,6 +25,7 @@ class BasePaymentTest extends TestCase
     /** @var Heidelpay $heidelpay */
     protected $heidelpay;
 
+    const RETURN_URL = 'http://vnexpress.vn';
     const PRIVATE_KEY = 's-priv-2a108n6lxMV581sTKL87VxiAmuzz6VMH';
     const PUBLIC_KEY = 's-pub-uM8yNmBNcs1GGdwAL4ytebYA4HErD22H';
 

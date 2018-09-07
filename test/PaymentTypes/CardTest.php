@@ -26,8 +26,6 @@ use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class CardTest extends BasePaymentTest
 {
-    const RETURN_URL = 'http://vnexpress.vn';
-
     /**
      * @test
      */
