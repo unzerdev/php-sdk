@@ -19,7 +19,7 @@ use heidelpay\NmgPhpSdk\Constants\PaymentState;
 trait hasStateTrait
 {
     /** @var int */
-    private $state;
+    private $state = 0;
 
     //<editor-fold desc="Check for States">
     /**
