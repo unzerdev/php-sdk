@@ -50,7 +50,6 @@ class CurlAdapter implements HttpAdapterInterface
         $request = $this->initCurlRequest($uri, $heidelpayResource, $httpMethod);
 
         $response = curl_exec($request);
-        $error = curl_error($request);
         $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
         curl_close($request);
 
