@@ -180,4 +180,17 @@ class Heidelpay implements HeidelpayParentInterface
         /** @var PaymentTypeInterface $type */
         return $paymentType->create();
     }
+
+    /**
+     * Create the given customer via api.
+     *
+     * @param Customer $customer
+     * @return Customer
+     */
+    public function createCustomer(Customer $customer): Customer
+    {
+        /** @var AbstractHeidelpayResource $customer */
+        $customer->setParentResource($this);
+        return $customer->create();
+    }
 }

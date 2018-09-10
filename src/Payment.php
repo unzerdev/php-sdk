@@ -193,6 +193,17 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
+     * @param Customer $customer
+     * @return Payment
+     */
+    public function setCustomer(Customer $customer): Payment
+    {
+        $customer->setParentResource($this);
+        $this->customer = $customer;
+        return $this;
+    }
+
+    /**
      * @return Customer|null
      */
     public function getCustomer()
