@@ -22,6 +22,7 @@ class ApiResponseCodes
 
     const API_ERROR_CHARGE_ALREADY_CANCELED                 = 'API.340.100.014';
     const API_ERROR_WRONG_AUTHENTICATION_METHOD             = 'API.710.000.007';
+    const API_ERROR_RESOURCE_DOES_NOT_BELONG_TO_MERCHANT    = 'API.320.200.145';
 
     const CORE_ERROR_INVALID_OR_MISSING_LOGIN               = 'COR.100.300.600';
 }
