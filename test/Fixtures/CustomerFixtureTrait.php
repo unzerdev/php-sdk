@@ -14,49 +14,27 @@
 
 namespace heidelpay\NmgPhpSdk\test\Fixtures;
 
+use heidelpay\NmgPhpSdk\Customer;
+
 trait CustomerFixtureTrait
 {
-    protected static $customerW = [
-        'birthday' => '2018-08-12',
-        'firstname' => 'Max',
-        'lastname' => 'Mustermann',
-        'company' => 'Musterfirma',
-        'state' => 'Bremen',
-        'street1' => 'Märchenstraße 3',
-        'street2' => 'Hinterhaus',
-        'zip' => '12345',
-        'city' => 'Pusemuckel',
-        'country' => 'Schweiz',
-        'email' => 'max@mustermann.de',
-        'id' => 'c-123456'
-    ];
-
-    protected static $customerB = [
-        'birthday' => '2000-01-11',
-        'firstname' => 'Linda',
-        'lastname' => 'Heideich',
-        'company' => 'heidelpay GmbH',
-        'street1' => 'Vangerowstr. 18',
-        'street2' => 'am Neckar',
-        'state' => 'Baden-Würtemberg',
-        'zip' => '69115',
-        'city' => 'Heidelberg',
-        'country' => 'Deutschland',
-        'email' => 'lh@heidelpay.de',
-        'id' => 'c-654321'
-    ];
-
-    protected static $customerWithoutId = [
-        'birthday' => '2000-01-11',
-        'firstname' => 'Linda',
-        'lastname' => 'Heideich',
-        'company' => 'heidelpay GmbH',
-        'street1' => 'Vangerowstr. 18',
-        'street2' => 'am Neckar',
-        'state' => 'Baden-Würtemberg',
-        'zip' => '69115',
-        'city' => 'Heidelberg',
-        'country' => 'Deutschland',
-        'email' => 'lh@heidelpay.de'
-    ];
+    /**
+     * Creates a customer object
+     *
+     * @return Customer
+     */
+    public function getCustomer(): Customer
+    {
+        return (new Customer())
+            ->setFirstname('Max')
+            ->setLastname('Mustermann')
+            ->setCompany('Musterfirma')
+            ->setStreet1('Märchenstraße 3')
+            ->setStreet1('Hinterhaus')
+            ->setCity('Pusemuckel')
+            ->setCountry('Deutschland')
+            ->setZip('12345')
+            ->setBirthday('2018-08-12')
+            ->setEmail('max@mustermann.de');
+    }
 }
