@@ -183,12 +183,25 @@ class Heidelpay implements HeidelpayParentInterface
      * Create the given customer via api.
      *
      * @param Customer $customer
-     * @return Customer
+     * @return mixed
      */
     public function createCustomer(Customer $customer): Customer
     {
         /** @var AbstractHeidelpayResource $customer */
         $customer->setParentResource($this);
         return $customer->create();
+    }
+
+    /**
+     * Fetch and return payment by fiven payment id.
+     *
+     * @param $paymentId
+     * @return HeidelpayResourceInterface
+     */
+    public function fetchPaymentById($paymentId): HeidelpayResourceInterface
+    {
+        $payment = new Payment($this);
+        $payment->setId($paymentId);
+        return $payment->fetch();
     }
 }
