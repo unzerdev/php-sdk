@@ -48,6 +48,11 @@ class Customer extends AbstractHeidelpayResource
     /** @var string */
     protected $email;
 
+    public function getUri(): string
+    {
+        return '/customers';
+    }
+
     //<editor-fold desc="Getters/Setters">
     /**
      * @return string
