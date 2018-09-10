@@ -167,7 +167,7 @@ class Heidelpay implements HeidelpayParentInterface
     //</editor-fold>
 
     /**
-     * Set the given payment type and create it via api.
+     * Create the given payment type via api.
      *
      * @param PaymentTypeInterface $paymentType
      * @return PaymentTypeInterface
@@ -176,8 +176,6 @@ class Heidelpay implements HeidelpayParentInterface
     {
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this);
-
-        /** @var PaymentTypeInterface $type */
         return $paymentType->create();
     }
 
