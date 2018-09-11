@@ -109,7 +109,7 @@ interface PaymentInterface extends AmountsInterface
     /**
      * Returns the paymentType and throws a MissingResourceException if it is not set.
      *
-     * @return PaymentTypeInterface|null
+     * @return PaymentTypeInterface
      */
-    public function getPaymentType();
+    public function getPaymentType(): PaymentTypeInterface;
 }

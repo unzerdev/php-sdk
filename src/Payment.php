@@ -253,7 +253,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function fullCharge(): Charge
     {
-        // todo: authorization muss erst gefetched werden
+        // todo: authorization muss erst geholt werden
         if (!$this->getAuthorization() instanceof Authorization) {
             throw new MissingResourceException('Cannot perform full charge without authorization.');
         }
