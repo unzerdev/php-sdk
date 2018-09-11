@@ -19,7 +19,6 @@ use heidelpay\NmgPhpSdk\Heidelpay;
 
 class GeneralTests extends BasePaymentTest
 {
-
     /**
      * @test
      */
@@ -51,4 +50,18 @@ class GeneralTests extends BasePaymentTest
         $this->assertTrue($secondPayment->isPartlyPaid());
     }
 
+    /**
+     * @test
+     */
+    public function paymentCanBeFetchedById()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $payment = $this->createPayment();
+        $payment->setPaymentType($card);
+        $authorization = $payment->authorize(12.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $this->assertEquals(12.0, $authorization->getAmount());
+
+        $secPayment = $this->heidelpay->fetchPaymentById($payment->getId());
+        $this->assertSame($payment->getId(), $secPayment->getId());
+    }
 }
