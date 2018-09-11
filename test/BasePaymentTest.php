@@ -18,10 +18,13 @@ use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 class BasePaymentTest extends TestCase
 {
+    use CustomerFixtureTrait;
+
     /** @var Heidelpay $heidelpay */
     protected $heidelpay;
 
