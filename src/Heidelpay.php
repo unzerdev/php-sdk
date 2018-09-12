@@ -193,7 +193,7 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch and return payment by fiven payment id.
+     * Fetch and return payment by given payment id.
      *
      * @param $paymentId
      * @return HeidelpayResourceInterface
