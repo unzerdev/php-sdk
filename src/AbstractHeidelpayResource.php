@@ -28,6 +28,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /**
      * @param HeidelpayParentInterface $parent
      * @param string $id
+     *
+     * todo: wird das noch gebraucht?
      */
     public function __construct($parent = null, $id = null)
     {
