@@ -39,11 +39,9 @@ class CardTest extends BasePaymentTest
         /** @var Heidelpay $heidelpay */
         $heidelpay = new Heidelpay(self::PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT);
 
-        /** @var Card $card */
-        $card = new Card('4444333322221111', '03/20');
-        $card->setCvc('123');
+        $card = $this->createCard();
         $this->assertNull($card->getId());
-        $card = $heidelpay->createPaymentType($card);
+        $heidelpay->createPaymentType($card);
         $this->assertNotNull($card->getId());
     }
 

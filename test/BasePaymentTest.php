@@ -46,7 +46,7 @@ class BasePaymentTest extends TestCase
     protected function createCard(): Card
     {
         /** @var Card $card */
-        $card = new Card ('4012888888881881', '03/20');
+        $card = new Card ('4444333322221111', '03/20');
         $card->setCvc('123');
         return $card;
     }
