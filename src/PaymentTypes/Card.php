@@ -42,6 +42,8 @@ class Card extends BasePaymentType
 
         $this->pan = $pan;
         $this->expiryDate = $expiryDate;
+
+        parent::__construct();
     }
 
     /**
@@ -143,4 +145,5 @@ class Card extends BasePaymentType
         return $this;
     }
     //</editor-fold>
+
 }
