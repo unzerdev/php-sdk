@@ -14,8 +14,34 @@
 
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
+use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
+use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+
 interface PaymentTypeInterface
 {
+    /**
+     * @param null $amount
+     * @param null $currency
+     * @return Charge
+     */
+    public function charge($amount = null, $currency = null): Charge;
+
+    /**
+     * @param float $amount
+     * @param string $currency
+     * @param string $returnUrl
+     * @return Authorization
+     */
+    public function authorize($amount, $currency, $returnUrl): Authorization;
+
+    /**
+     * @return Cancellation
+     * @throws IllegalTransactionTypeException
+     */
+    public function cancel(): Cancellation;
+
     /**
      * @return bool
      */

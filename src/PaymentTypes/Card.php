@@ -13,8 +13,6 @@
  */
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
-use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
-
 class Card extends BasePaymentType
 {
     /** @var string $pan */
@@ -36,30 +34,14 @@ class Card extends BasePaymentType
      */
     public function __construct($pan, $expiryDate)
     {
-        $this->setAuthorizable(true);
-        $this->setCancelable(true);
-        $this->setChargeable(true);
+        $this->setAuthorizable(true)
+             ->setChargeable(true)
+             ->setCancelable(true);
 
         $this->pan = $pan;
         $this->expiryDate = $expiryDate;
 
         parent::__construct();
-    }
-
-    /**
-     * @param HeidelpayParentInterface $parent
-     * @param string $pan
-     * @param string $expirationDate
-     * @param int $cvc
-     * @return Card
-     */
-    public static function newCard(HeidelpayParentInterface $parent, $pan, $expirationDate, $cvc): Card
-    {
-        $card = new self($pan, $expirationDate);
-        $card->cvc = $cvc;
-        $card->setParentResource($parent);
-
-        return $card;
     }
 
     //<editor-fold desc="Overridable Methods">
@@ -145,5 +127,4 @@ class Card extends BasePaymentType
         return $this;
     }
     //</editor-fold>
-
 }

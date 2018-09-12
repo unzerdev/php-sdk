@@ -28,6 +28,7 @@ use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class CardTest extends BasePaymentTest
 {
+    //<editor-fold desc="Required Tests">
     /**
      * @test
      */
@@ -48,21 +49,40 @@ class CardTest extends BasePaymentTest
     /**
      * @test
      */
-    //<editor-fold desc="Tests">
     public function createCardType()
     {
         $card = $this->createCard();
-        $this->assertEmpty($card->getId());
+        $this->assertNull($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var HeidelpayResourceInterface $card */
-        $this->assertNotEmpty($card->getId());
+        $this->assertNotNull($card->getId());
 
         /** @var HeidelpayParentInterface $card */
         $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
 
         return $card;
     }
+
+    /**
+     * The payment type can be set in the payment object directly.
+     *
+     * @test
+     */
+    public function authorizeCardType()
+    {
+        /** @var Card $card */
+        $card = $this->createCard();
+        $card = $this->heidelpay->createPaymentType($card);
+
+        /** @var Authorization $authorization */
+        $authorization = $card->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+
+        $this->assertNotNull($authorization->getId());
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Tests">
 
     /**
      * The payment type can be set in the payment object directly.
@@ -83,56 +103,39 @@ class CardTest extends BasePaymentTest
         $this->assertSame($card, $actualPayment->getPaymentType());
     }
 
-    /**
-     * The payment type can be set in the payment object directly.
-     *
-     * @test
-     */
-    public function authorizeWithPaymentType()
-    {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
-
-        $payment = $this->createPayment();
-        $authorization = $payment->authorizeWithPaymentType(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $card);
-
-        $actualPayment = $authorization->getPayment();
-        $this->assertSame($payment, $actualPayment);
-        $this->assertSame($card, $actualPayment->getPaymentType());
-    }
-
-    /**
-     * @param Card $card
-     * @depends createCardType
-     * @test
-     * @return Authorization
-     */
-    public function authorizeCardType(Card $card): Authorization
-    {
-        $payment = $this->createPayment();
-        $this->assertEmpty($payment->getId());
-
-        $payment->setPaymentType($card);
-        $this->assertSame($card, $payment->getPaymentType());
-
-        $authorization = $payment->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-        $this->assertNotNull($authorization);
-
-        // verify the objects have been updated
-        $this->assertNotEmpty($authorization->getId());
-        $this->assertNotEmpty($payment->getId());
-
-        // verify payment and paymentType are linked properly
-        $this->assertSame($payment, $authorization->getPayment());
-        $this->assertSame($authorization, $payment->getAuthorization());
-
-        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
-        $this->assertTrue($payment->isPending());
-
-        echo "\nAuthorizationId: " . $authorization->getId();
-        echo "\nPaymentId: " . $payment->getId();
-
-        return $authorization;
-    }
+//    /**
+//     * @param Card $card
+//     * @depends createCardType
+//     * @test
+//     * @return Authorization
+//     */
+//    public function authorizeCardType(Card $card): Authorization
+//    {
+//        $payment = $this->createPayment();
+//        $this->assertEmpty($payment->getId());
+//
+//        $payment->setPaymentType($card);
+//        $this->assertSame($card, $payment->getPaymentType());
+//
+//        $authorization = $payment->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+//        $this->assertNotNull($authorization);
+//
+//        // verify the objects have been updated
+//        $this->assertNotEmpty($authorization->getId());
+//        $this->assertNotEmpty($payment->getId());
+//
+//        // verify payment and paymentType are linked properly
+//        $this->assertSame($payment, $authorization->getPayment());
+//        $this->assertSame($authorization, $payment->getAuthorization());
+//
+//        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
+//        $this->assertTrue($payment->isPending());
+//
+//        echo "\nAuthorizationId: " . $authorization->getId();
+//        echo "\nPaymentId: " . $payment->getId();
+//
+//        return $authorization;
+//    }
 
     /**
      * Should throw MissingResourceException if the paymentType has not been set prior to payment transaction.

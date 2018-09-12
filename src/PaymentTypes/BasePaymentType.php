@@ -14,32 +14,49 @@
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
+use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
 {
-    private $chargeable = false;
     private $authorizable = false;
     private $cancelable = false;
+    private $chargeable = false;
+
+    //<editor-fold desc="Transaction methods">
+    /**
+     * {@inheritDoc}
+     */
+    public function charge($amount = null, $currency = null): Charge
+    {
+        return $this->getHeidelpayObject()->charge($amount, $currency);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function authorize($amount, $currency, $returnUrl): Authorization
+    {
+        if ($this->isAuthorizable()) {
+            return $this->getHeidelpayObject()->authorize($this, $amount, $currency, $returnUrl);
+        }
+
+        throw new IllegalTransactionTypeException('authorize');
+    }
+
+    /**
+     * @param null $amount
+     * @return Cancellation
+     */
+    public function cancel($amount = null): Cancellation
+    {
+        return $this->getHeidelpayObject()->cancel($amount);
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
-    /**
-     * @return bool
-     */
-    public function isChargeable(): bool
-    {
-        return $this->chargeable;
-    }
-
-    /**
-     * @param bool $chargeable
-     * @return BasePaymentType
-     */
-    public function setChargeable(bool $chargeable): BasePaymentType
-    {
-        $this->chargeable = $chargeable;
-        return $this;
-    }
-
     /**
      * @return bool
      */
@@ -75,32 +92,23 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
         $this->cancelable = $cancelable;
         return $this;
     }
-    //</editor-fold>
 
-//      todo: remove dead code
-//    //<editor-fold desc="Amount">
-//    public function getTotal(): float
-//    {
-//        $payment = $this->getPayment();
-//        return $payment ? $payment->getTotal() : 0.0;
-//    }
-//
-//    public function getRemaining(): float
-//    {
-//        $payment = $this->getPayment();
-//        return $payment ? $payment->getRemaining() : 0.0;
-//    }
-//
-//    public function getCharged(): float
-//    {
-//        $payment = $this->getPayment();
-//        return $payment ? $payment->getCharged() : 0.0;
-//    }
-//
-//    public function getCanceled(): float
-//    {
-//        $payment = $this->getPayment();
-//        return $payment ? $payment->getCanceled() : 0.0;
-//    }
-//    //</editor-fold>
+    /**
+     * @return bool
+     */
+    public function isChargeable(): bool
+    {
+        return $this->chargeable;
+    }
+
+    /**
+     * @param bool $chargeable
+     * @return BasePaymentType
+     */
+    public function setChargeable(bool $chargeable): BasePaymentType
+    {
+        $this->chargeable = $chargeable;
+        return $this;
+    }
+    //</editor-fold>
 }
