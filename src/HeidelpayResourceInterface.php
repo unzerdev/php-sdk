@@ -20,9 +20,9 @@ interface HeidelpayResourceInterface extends JsonSerializable
     /**
      * Return the id of the resource.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId(): string;
+    public function getId();
 
     /**
      * Create the resource on the api.

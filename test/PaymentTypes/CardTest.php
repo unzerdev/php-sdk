@@ -13,9 +13,11 @@
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
+use heidelpay\NmgPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
@@ -26,6 +28,25 @@ use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class CardTest extends BasePaymentTest
 {
+    /**
+     * @test
+     */
+    public function createCardWithMerchantNotPCIDSSCompliant()
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INSUFFICIENT_PERMISSIONS);
+
+        /** @var Heidelpay $heidelpay */
+        $heidelpay = new Heidelpay(self::PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT);
+
+        /** @var Card $card */
+        $card = new Card('4444333322221111', '03/20');
+        $card->setCvc('123');
+        $this->assertNull($card->getId());
+        $card = $heidelpay->createPaymentType($card);
+        $this->assertNotNull($card->getId());
+    }
+
     /**
      * @test
      */

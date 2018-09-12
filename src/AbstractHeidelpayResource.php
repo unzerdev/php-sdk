@@ -20,7 +20,7 @@ use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, HeidelpayParentInterface
 {
     /** @var string $id */
-    protected $id = '';
+    protected $id;
 
     /** @var HeidelpayParentInterface */
     private $parentResource;
@@ -29,7 +29,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      * @param HeidelpayParentInterface $parent
      * @param string $id
      */
-    public function __construct($parent = null, $id = '')
+    public function __construct($parent = null, $id = null)
     {
         $this->parentResource = $parent;
         $this->id = $id;
@@ -66,7 +66,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     public function delete()
     {
-        if (empty($this->id)) {
+        if ($this->id === null) {
             throw new IdRequiredToFetchResourceException();
         }
 
@@ -80,7 +80,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     public function fetch(): HeidelpayResourceInterface
     {
-        if (empty($this->id)) {
+        if ($this->id === null) {
             throw new IdRequiredToFetchResourceException();
         }
 
@@ -94,7 +94,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /**
      * {@inheritDoc}
      */
-    public function getId(): string
+    public function getId()
     {
         return $this->id;
     }
