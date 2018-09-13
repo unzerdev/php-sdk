@@ -15,6 +15,7 @@ namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 class Card extends BasePaymentType
 {
+    // todo rename pan to number
     /** @var string $pan */
     protected $pan;
 
@@ -29,15 +30,15 @@ class Card extends BasePaymentType
 
     /**
      * Card constructor.
-     * @param string $pan
+     * @param string $number
      * @param string $expiryDate
      */
-    public function __construct($pan, $expiryDate)
+    public function __construct($number, $expiryDate)
     {
         $this->setAuthorizable(true)
              ->setChargeable(true);
 
-        $this->pan = $pan;
+        $this->setNumber($number);
         $this->expiryDate = $expiryDate;
 
         parent::__construct();
@@ -57,7 +58,7 @@ class Card extends BasePaymentType
     /**
      * @return string
      */
-    public function getPan(): string
+    public function getNumber(): string
     {
         return $this->pan;
     }
@@ -66,7 +67,7 @@ class Card extends BasePaymentType
      * @param string $pan
      * @return Card
      */
-    public function setPan($pan): Card
+    public function setNumber($pan): Card
     {
         $this->pan = $pan;
         return $this;
