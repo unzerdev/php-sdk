@@ -305,8 +305,8 @@ class CardTest extends BasePaymentTest
 
         $cancellation = $authorization->cancel();
         $this->assertNotEmpty($cancellation);
-        $this->assertAmounts($payment, 0.0, 10.0, 10.0, 10.0);
-        $this->assertTrue($payment->isCanceled());
+        $this->assertAmounts($payment, 0.0, 10.0, 10.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
     }
 
     /**
@@ -314,7 +314,7 @@ class CardTest extends BasePaymentTest
      *
      * @test
      */
-    public function fullCancelOnFullyChargedAuthorization()
+    public function fullCancelOnFullyChargedAuthorizationThrowsException()
     {
         /** @var Card $card */
         $card = $this->createCard();
@@ -324,18 +324,13 @@ class CardTest extends BasePaymentTest
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $payment->charge(10.0);
-        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
-
-        $payment->charge(90.0);
+        $payment->charge(100.0);
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment->isCompleted());
 
-        $cancellation = $authorization->cancel();
-        $this->assertNotEmpty($cancellation);
-        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 10.0);
-        $this->assertTrue($payment->isCanceled());
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ALREADY_CHARGED);
+        $authorization->cancel();
     }
 
     /**
