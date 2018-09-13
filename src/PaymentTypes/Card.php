@@ -42,7 +42,7 @@ class Card extends BasePaymentType
              ->setChargeable(true);
 
         $this->setNumber($number);
-        $this->expiryDate = $expiryDate;
+        $this->setExpiryDate($expiryDate);
 
         parent::__construct();
     }
@@ -90,7 +90,10 @@ class Card extends BasePaymentType
      */
     public function setExpiryDate($expiryDate): Card
     {
-        $this->expiryDate = $expiryDate;
+        $expiryDateParts = explode('/', $expiryDate);
+        if (\count($expiryDateParts) > 1) {
+            $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
+        }
         return $this;
     }
 
