@@ -21,7 +21,7 @@ class Card extends BasePaymentType
     /** @var string $expiryDate */
     protected $expiryDate;
 
-    /** @var int $cvc */
+    /** @var string $cvc */
     protected $cvc;
 
     /** @var string $holder */
@@ -91,15 +91,15 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getCvc(): int
+    public function getCvc(): string
     {
         return $this->cvc;
     }
 
     /**
-     * @param int $cvc
+     * @param string $cvc
      * @return Card
      */
     public function setCvc($cvc): Card
