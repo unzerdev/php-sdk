@@ -32,7 +32,7 @@ class CardTest extends BasePaymentTest
     /**
      * @test
      */
-    public function createCardWithMerchantNotPCIDSSCompliant()
+    public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INSUFFICIENT_PERMISSIONS);
@@ -49,7 +49,7 @@ class CardTest extends BasePaymentTest
     /**
      * @test
      */
-    public function createCardType()
+    public function cardShouldBeCreatable()
     {
         $card = $this->createCard();
         $this->assertNull($card->getId());
@@ -65,11 +65,11 @@ class CardTest extends BasePaymentTest
     }
 
     /**
-     * The payment type can be set in the payment object directly.
+     * The card can perform an authorization.
      *
      * @test
      */
-    public function authorizeCardType()
+    public function cardCanPerformAuthorizationAndCreatesPayment()
     {
         /** @var Card $card */
         $card = $this->createCard();
@@ -79,6 +79,9 @@ class CardTest extends BasePaymentTest
         $authorization = $card->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
 
         $this->assertNotNull($authorization->getId());
+        $payment = $authorization->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertNotNull($payment->getId());
     }
     //</editor-fold>
 
