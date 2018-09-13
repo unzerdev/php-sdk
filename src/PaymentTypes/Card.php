@@ -55,6 +55,34 @@ class Card extends BasePaymentType
     {
         return 'types/cards';
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function handleResponse(\stdClass $response)
+    {
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
+            return;
+        }
+
+        // todo change cvv to cvc
+        if (isset($response->cvv)) {
+            $this->setCvc($response->cvv);
+        }
+        if (isset($response->number)) {
+            $this->setNumber($response->number);
+        }
+        if (isset($response->expiry)) {
+            $this->setExpiryDate($response->expiry);
+        }
+        if (isset($response->brand)) {
+            $this->setBrand($response->brand);
+        }
+
+        parent::handleResponse($response);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
