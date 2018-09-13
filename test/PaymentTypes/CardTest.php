@@ -127,7 +127,7 @@ class CardTest extends BasePaymentTest
     /**
      * @test
      */
-    public function cardShouldBeFetchable()
+    public function cardCanBeFetched()
     {
         /** @var Card $card */
         $card = $this->createCard();
@@ -171,21 +171,29 @@ class CardTest extends BasePaymentTest
 	    $payment->charge();
 	}
 
-//    /**
-//     * @test
-//     * @depends authorizeCardType
-//     * @param Authorization $authorization
-//     */
-//	public function fullChargeAfterAuthorize(Authorization $authorization)
-//	{
-//        $payment = $authorization->getPayment();
-//        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
-//        $this->assertTrue($payment->isPending());
-//
-//        $payment->fullCharge();
-//        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
-//        $this->assertTrue($payment->isCompleted());
-//    }
+    /**
+     * @test
+     */
+	public function fullChargeAfterAuthorize()
+	{
+        /** @var Card $card */
+        $card = $this->createCard();
+        $card = $this->heidelpay->createPaymentType($card);
+
+        /** @var Authorization $authorization */
+        $authorization = $card->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
+
+        // pre-check to verify changes due to fullCharge call
+        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
+        $payment->fullCharge();
+
+        // verify payment has been updated properly
+        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
+    }
 
     /**
      * @test
@@ -210,8 +218,7 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isPartlyPaid());
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionMessage('The amount of 70.0000 to be charged exceeds the authorized amount of 60.0000');
-        $this->expectExceptionCode('API.330.100.007');
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
         $payment->charge(70);
         $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
         $this->assertTrue($payment->isPartlyPaid());
