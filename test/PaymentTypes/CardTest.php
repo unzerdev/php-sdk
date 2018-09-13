@@ -202,10 +202,9 @@ class CardTest extends BasePaymentTest
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $payment = $this->createPayment();
-        $payment->setPaymentType($card);
+        $authorization = $this->heidelpay->authorize($card, 100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
 
-        $payment->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
@@ -217,12 +216,6 @@ class CardTest extends BasePaymentTest
         $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
         $this->assertTrue($payment->isPartlyPaid());
 
-        $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
-        $payment->charge(70);
-        $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
-
         $payment->charge(60);
         $this->assertAmounts($payment, 00.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment->isCompleted());
@@ -230,8 +223,30 @@ class CardTest extends BasePaymentTest
 
     /**
      * @test
+     */
+    public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $this->heidelpay->authorize($card, 100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
+
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
+        $payment->charge(50);
+        $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
+        $payment->charge(70);
+    }
+
+    /**
+     * @test
      *
-     * todo: add test do verify charge without authorization and currency failes. Currency can only be omitted if an authorization has been done before.
+     * todo: add test do verify charge without authorization and currency fails. Currency can only be omitted if an authorization has been done before.
      */
     public function partialAndFullChargeAfterAuthorization()
     {
@@ -320,33 +335,33 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
     }
 
-//    /**
-//     * Full cancel on fully charged authorization.
-//     *
-//     * @test
-//     */
-//    public function fullCancelOnFullyChargedAuthorization()
-//    {
-//        /** @var Card $card */
-//        $card = $this->heidelpay->createPaymentType($this->createCard());
-//        $authorization = $card->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-//        $payment = $authorization->getPayment();
-//        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
-//        $this->assertTrue($payment->isPending());
-//
-//        $payment->charge(10.0);
-//        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
-//        $this->assertTrue($payment->isPartlyPaid());
-//
-//        $payment->charge(90.0);
-//        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
-//        $this->assertTrue($payment->isCompleted());
-//
-//        $cancellation = $authorization->cancel();
-//        $this->assertNotEmpty($cancellation);
-//        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 10.0);
-//        $this->assertTrue($payment->isCanceled());
-//    }
+    /**
+     * Full cancel on fully charged authorization.
+     *
+     * @test
+     */
+    public function fullCancelOnFullyChargedAuthorization()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $card->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
+        $payment->charge(10.0);
+        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $payment->charge(90.0);
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
+
+        $cancellation = $authorization->cancel();
+        $this->assertNotEmpty($cancellation);
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 10.0);
+        $this->assertTrue($payment->isCanceled());
+    }
 
     /**
      * Full cancel on fully charged payment.
