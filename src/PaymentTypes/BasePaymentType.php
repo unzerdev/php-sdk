@@ -16,13 +16,11 @@ namespace heidelpay\NmgPhpSdk\PaymentTypes;
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
 {
     private $authorizable = false;
-    private $cancelable = false;
     private $chargeable = false;
 
     //<editor-fold desc="Transaction methods">
@@ -46,14 +44,6 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
         throw new IllegalTransactionTypeException('authorize');
     }
 
-    /**
-     * @param null $amount
-     * @return Cancellation
-     */
-    public function cancel($amount = null): Cancellation
-    {
-        return $this->getHeidelpayObject()->cancel($amount);
-    }
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
@@ -72,24 +62,6 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     public function setAuthorizable(bool $authorizable): BasePaymentType
     {
         $this->authorizable = $authorizable;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCancelable(): bool
-    {
-        return $this->cancelable;
-    }
-
-    /**
-     * @param bool $cancelable
-     * @return BasePaymentType
-     */
-    public function setCancelable(bool $cancelable): BasePaymentType
-    {
-        $this->cancelable = $cancelable;
         return $this;
     }
 
