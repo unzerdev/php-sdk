@@ -344,10 +344,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function cancel($amount = null): PaymentInterface
     {
-        if (!$this->getPaymentType()->isCancelable()) {
-            throw new IllegalTransactionTypeException(__METHOD__);
-        }
-
         if (null === $amount) {
             return $this->fullCancel();
         }
