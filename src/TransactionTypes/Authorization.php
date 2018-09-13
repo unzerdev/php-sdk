@@ -157,9 +157,8 @@ class Authorization extends AbstractTransactionType
      */
     protected function handleResponse(\stdClass $response)
     {
-        $isSuccess = isset($response->isSuccess) && $response->isSuccess;
-        $isPending = isset($response->isPending) && $response->isPending;
-        if (!$isSuccess && !$isPending) {
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
             return;
         }
 
