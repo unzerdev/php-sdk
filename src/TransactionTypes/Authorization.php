@@ -187,11 +187,6 @@ class Authorization extends AbstractTransactionType
         $cancellation->setPayment($this->getPayment());
         $cancellation->create();
 
-        $payment = $this->getPayment();
-        if ($payment instanceof PaymentInterface) {
-            $payment->cancelAllCharges();
-        }
-
         return $cancellation;
     }
 }
