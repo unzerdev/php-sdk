@@ -26,6 +26,7 @@ class ApiResponseCodes
     const API_ERROR_INSUFFICIENT_PERMISSIONS                = 'API.710.000.005';
     const API_ERROR_WRONG_AUTHENTICATION_METHOD             = 'API.710.000.007';
     const API_ERROR_FIELD_IS_MISSING                        = 'API.710.200.100';
+    const API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED     = 'API.330.100.007';
 
     const CORE_ERROR_INVALID_OR_MISSING_LOGIN               = 'COR.100.300.600';
 }
