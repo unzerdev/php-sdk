@@ -219,6 +219,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Performs an authorization and returns the corresponding Authorization object.
+     *
      * @param PaymentTypeInterface $paymentType
      * @param float $amount
      * @param string $currency
