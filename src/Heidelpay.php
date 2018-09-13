@@ -18,6 +18,8 @@ use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Constants\Mode;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
+use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
@@ -216,6 +218,30 @@ class Heidelpay implements HeidelpayParentInterface
         $payment = new Payment($this);
         $payment->setId($paymentId);
         return $payment->fetch();
+    }
+
+    /**
+     * @param $typeId
+     * @return mixed
+     */
+    public function fetchPaymentType($typeId)
+    {
+        $paymentType = null;
+
+        $typeIdParts = [];
+        preg_match('/^[sp]{1}-([a-z]{3})/', $typeId,$typeIdParts);
+
+        // todo maybe move this into a builder service
+        switch ($typeIdParts[1]) {
+            case 'crd':
+                $paymentType = (new Card('', ''))->setParentResource($this)->setId($typeId)->fetch();
+                break;
+            default:
+                throw new IllegalTransactionTypeException($typeId);
+                break;
+        }
+
+        return $paymentType;
     }
 
     /**
