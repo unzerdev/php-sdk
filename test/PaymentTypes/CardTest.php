@@ -101,6 +101,26 @@ class CardTest extends BasePaymentTest
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
     }
+
+    /**
+     * @test
+     */
+    public function cardShouldBeFetchable()
+    {
+        /** @var Card $card */
+        $card = $this->createCard();
+        $card = $this->heidelpay->createPaymentType($card);
+        $this->assertNotNull($card->getId());
+
+        /** @var Card $fetchedCard */
+        $fetchedCard = $this->heidelpay->fetchPaymentType($card->getId());
+        $this->assertNotNull($fetchedCard->getId());
+//        $this->assertEquals($card->getNumber(), $fetchedCard->getNumber()); // todo
+        $this->assertEquals($card->getExpiryDate(), $fetchedCard->getExpiryDate());
+        // todo: depending on fix https://heidelpay.atlassian.net/browse/AHC-296
+//        $this->assertEquals($card->getCvc(), $fetchedCard->getCvc());
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Tests">
