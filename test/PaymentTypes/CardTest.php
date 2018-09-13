@@ -78,10 +78,21 @@ class CardTest extends BasePaymentTest
         /** @var Authorization $authorization */
         $authorization = $card->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
 
+        // verify authorization has been created
         $this->assertNotNull($authorization->getId());
+
+        // verify payment object has been created
         $payment = $authorization->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
+
+        // verify resources are linked properly
+        $this->assertSame($authorization, $payment->getAuthorization());
+        $this->assertSame($card, $payment->getPaymentType());
+
+        // verify the payment object has been updated properly
+        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
+        $this->assertTrue($payment->isPending());
     }
 
     /**
@@ -96,10 +107,21 @@ class CardTest extends BasePaymentTest
         /** @var Charge $charge */
         $charge = $card->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
 
+        // verify charge has been created
         $this->assertNotNull($charge->getId());
+
+        // verify payment object has been created
         $payment = $charge->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
+
+        // verify resources are linked properly
+        $this->assertArraySubset([$charge->getId() => $charge], $payment->getCharges());
+        $this->assertSame($card, $payment->getPaymentType());
+
+        // verify the payment object has been updated properly
+        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
     }
 
     /**
@@ -120,63 +142,9 @@ class CardTest extends BasePaymentTest
         // todo: depending on fix https://heidelpay.atlassian.net/browse/AHC-296
 //        $this->assertEquals($card->getCvc(), $fetchedCard->getCvc());
     }
-
     //</editor-fold>
 
     //<editor-fold desc="Tests">
-
-    /**
-     * The payment type can be set in the payment object directly.
-     *
-     * @test
-     */
-    public function authorizeWithoutPaymentType()
-    {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
-
-        $payment = $this->createPayment();
-        $payment->setPaymentType($card);
-        $authorization = $payment->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-
-        /** @var Payment $actualPayment */
-        $actualPayment = $authorization->getPayment();
-        $this->assertSame($payment, $actualPayment);
-        $this->assertSame($card, $actualPayment->getPaymentType());
-    }
-
-//    /**
-//     * @param Card $card
-//     * @depends createCardType
-//     * @test
-//     * @return Authorization
-//     */
-//    public function authorizeCardType(Card $card): Authorization
-//    {
-//        $payment = $this->createPayment();
-//        $this->assertEmpty($payment->getId());
-//
-//        $payment->setPaymentType($card);
-//        $this->assertSame($card, $payment->getPaymentType());
-//
-//        $authorization = $payment->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-//        $this->assertNotNull($authorization);
-//
-//        // verify the objects have been updated
-//        $this->assertNotEmpty($authorization->getId());
-//        $this->assertNotEmpty($payment->getId());
-//
-//        // verify payment and paymentType are linked properly
-//        $this->assertSame($payment, $authorization->getPayment());
-//        $this->assertSame($authorization, $payment->getAuthorization());
-//
-//        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
-//        $this->assertTrue($payment->isPending());
-//
-//        echo "\nAuthorizationId: " . $authorization->getId();
-//        echo "\nPaymentId: " . $payment->getId();
-//
-//        return $authorization;
-//    }
 
     /**
      * Should throw MissingResourceException if the paymentType has not been set prior to payment transaction.
@@ -190,38 +158,6 @@ class CardTest extends BasePaymentTest
         $payment = $this->createPayment();
         $payment->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
     }
-
-    /**
-     * @test
-     * @return Charge
-     */
-    public function chargeCardType(): Charge
-    {
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCard());
-
-        $payment = $this->createPayment();
-        $payment->setPaymentType($card);
-        $this->assertEmpty($payment->getId());
-
-        $charge = $payment->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-        $this->assertNotNull($charge);
-
-        // verify the objects have been updated
-        $this->assertNotEmpty($charge->getId());
-        $this->assertNotEmpty($payment->getId());
-
-        // verify payment and paymentType are linked properly
-        $this->assertSame($payment, $charge->getPayment());
-        $this->assertArraySubset([$charge->getId() => $charge], $payment->getCharges());
-
-        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
-        $this->assertTrue($payment->isCompleted());
-
-        echo "\nChargeId: " . $charge->getId();
-        echo "\nPaymentId: " . $payment->getId();
-        return $charge;
-	}
 
     /**
      * @test
