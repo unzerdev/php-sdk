@@ -27,9 +27,13 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     /**
      * {@inheritDoc}
      */
-    public function charge($amount = null, $currency = null): Charge
+    public function charge($amount, $currency, $returnUrl): Charge
     {
-        return $this->getHeidelpayObject()->charge($amount, $currency);
+        if ($this->isChargeable()) {
+            return $this->getHeidelpayObject()->charge($this, $amount, $currency, $returnUrl);
+        }
+
+        throw new IllegalTransactionTypeException('charge');
     }
 
     /**

@@ -83,6 +83,24 @@ class CardTest extends BasePaymentTest
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
     }
+
+    /**
+     * @test
+     */
+    public function cardCanPerformChargeAndCreatesPaymentObject()
+    {
+        /** @var Card $card */
+        $card = $this->createCard();
+        $card = $this->heidelpay->createPaymentType($card);
+
+        /** @var Charge $charge */
+        $charge = $card->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+
+        $this->assertNotNull($charge->getId());
+        $payment = $charge->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertNotNull($payment->getId());
+    }
     //</editor-fold>
 
     //<editor-fold desc="Tests">
@@ -197,21 +215,21 @@ class CardTest extends BasePaymentTest
 	    $payment->charge();
 	}
 
-    /**
-     * @test
-     * @depends authorizeCardType
-     * @param Authorization $authorization
-     */
-	public function fullChargeAfterAuthorize(Authorization $authorization)
-	{
-        $payment = $authorization->getPayment();
-        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
-        $this->assertTrue($payment->isPending());
-
-        $payment->fullCharge();
-        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
-        $this->assertTrue($payment->isCompleted());
-    }
+//    /**
+//     * @test
+//     * @depends authorizeCardType
+//     * @param Authorization $authorization
+//     */
+//	public function fullChargeAfterAuthorize(Authorization $authorization)
+//	{
+//        $payment = $authorization->getPayment();
+//        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
+//        $this->assertTrue($payment->isPending());
+//
+//        $payment->fullCharge();
+//        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
+//        $this->assertTrue($payment->isCompleted());
+//    }
 
     /**
      * @test

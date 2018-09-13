@@ -20,6 +20,7 @@ use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class Heidelpay implements HeidelpayParentInterface
 {
@@ -228,5 +229,20 @@ class Heidelpay implements HeidelpayParentInterface
     {
         $payment = $this->createPayment($paymentType);
         return $payment->authorize($amount, $currency, $returnUrl);
+    }
+
+    /**
+     * Performs a charge and returns the corresponding Charge object.
+     *
+     * @param PaymentTypeInterface $paymentType
+     * @param float $amount
+     * @param string $currency
+     * @param string $returnUrl
+     * @return Charge
+     */
+    public function charge(PaymentTypeInterface $paymentType, $amount, $currency, $returnUrl): Charge
+    {
+        $payment = $this->createPayment($paymentType);
+        return $payment->charge($amount, $currency, $returnUrl);
     }
 }

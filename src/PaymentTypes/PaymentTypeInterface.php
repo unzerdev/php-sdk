@@ -23,9 +23,11 @@ interface PaymentTypeInterface
     /**
      * @param null $amount
      * @param null $currency
+     * @param string $returnUrl
      * @return Charge
+     * @throws IllegalTransactionTypeException
      */
-    public function charge($amount = null, $currency = null): Charge;
+    public function charge($amount, $currency, $returnUrl): Charge;
 
     /**
      * @param float $amount
