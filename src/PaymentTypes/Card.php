@@ -28,6 +28,9 @@ class Card extends BasePaymentType
     /** @var string $holder */
     protected $holder = '';
 
+    /** @var string $brand */
+    private $brand = '';
+
     /**
      * Card constructor.
      * @param string $number
@@ -124,6 +127,27 @@ class Card extends BasePaymentType
     public function setHolder($holder): Card
     {
         $this->holder = $holder;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrand(): string
+    {
+        return $this->brand;
+    }
+
+    /**
+     * Setter for brand property.
+     * Will be set internally on create or fetch card.
+     *
+     * @param string $brand
+     * @return Card
+     */
+    private function setBrand(string $brand): Card
+    {
+        $this->brand = $brand;
         return $this;
     }
     //</editor-fold>
