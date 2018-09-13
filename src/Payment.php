@@ -16,15 +16,15 @@ namespace heidelpay\NmgPhpSdk;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\Traits\hasAmountsTrait;
-use heidelpay\NmgPhpSdk\Traits\hasStateTrait;
+use heidelpay\NmgPhpSdk\Traits\HasAmountsTrait;
+use heidelpay\NmgPhpSdk\Traits\HasStateTrait;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class Payment extends AbstractHeidelpayResource implements PaymentInterface
 {
-    use hasAmountsTrait;
-    use hasStateTrait;
+    use HasAmountsTrait;
+    use HasStateTrait;
 
     /** @var string $redirectUrl */
     private $redirectUrl = '';

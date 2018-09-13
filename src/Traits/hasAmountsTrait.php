@@ -14,7 +14,7 @@
 
 namespace heidelpay\NmgPhpSdk\Traits;
 
-trait hasAmountsTrait
+trait HasAmountsTrait
 {
     private $total = 0.0;
     private $charged = 0.0;

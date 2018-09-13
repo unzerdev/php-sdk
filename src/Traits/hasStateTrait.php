@@ -16,7 +16,7 @@ namespace heidelpay\NmgPhpSdk\Traits;
 
 use heidelpay\NmgPhpSdk\Constants\PaymentState;
 
-trait hasStateTrait
+trait HasStateTrait
 {
     /** @var int */
     private $state = 0;

@@ -17,13 +17,13 @@ use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\Traits\hasCancellationsTrait;
-use heidelpay\NmgPhpSdk\Traits\hasValueHelper;
+use heidelpay\NmgPhpSdk\Traits\HasCancellationsTrait;
+use heidelpay\NmgPhpSdk\Traits\HasValueHelper;
 
 class Charge extends AbstractTransactionType
 {
-    use hasCancellationsTrait;
-    use hasValueHelper;
+    use HasCancellationsTrait;
+    use HasValueHelper;
 
     /** @var float $amount */
     protected $amount = 0.0;

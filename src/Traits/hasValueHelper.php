@@ -16,7 +16,7 @@ namespace heidelpay\NmgPhpSdk\Traits;
 
 use heidelpay\NmgPhpSdk\Constants\Calculation;
 
-trait hasValueHelper
+trait HasValueHelper
 {
     /**
      * Returns true if amount1 is greater than or equal to amount2.

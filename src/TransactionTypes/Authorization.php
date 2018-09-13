@@ -16,13 +16,12 @@ namespace heidelpay\NmgPhpSdk\TransactionTypes;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Payment;
-use heidelpay\NmgPhpSdk\PaymentInterface;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\Traits\hasCancellationsTrait;
+use heidelpay\NmgPhpSdk\Traits\HasCancellationsTrait;
 
 class Authorization extends AbstractTransactionType
 {
-    use hasCancellationsTrait;
+    use HasCancellationsTrait;
 
     /** @var float $amount */
     protected $amount = 0.0;
