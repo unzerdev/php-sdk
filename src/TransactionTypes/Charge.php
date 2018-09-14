@@ -26,16 +26,19 @@ class Charge extends AbstractTransactionType
     use HasValueHelper;
 
     /** @var float $amount */
-    protected $amount = 0.0;
+    protected $amount;
 
     /** @var string $currency */
-    protected $currency = '';
+    protected $currency;
 
     /** @var string $returnUrl */
-    protected $returnUrl = '';
+    protected $returnUrl;
 
     /** @var string $uniqueId */
-    private $uniqueId = '';
+    private $uniqueId;
+
+    /** @var string $redirectUrl */
+    private $redirectUrl;
 
     /**
      * Authorization constructor.
@@ -142,6 +145,24 @@ class Charge extends AbstractTransactionType
 
         return $this->amountIsGreaterThanOrEqual($canceledAmount, $this->amount);
     }
+
+    /**
+     * @return string|null
+     */
+    public function getRedirectUrl()
+    {
+        return $this->redirectUrl;
+    }
+
+    /**
+     * @param string|null $redirectUrl
+     * @return Charge
+     */
+    public function setRedirectUrl($redirectUrl): Charge
+    {
+        $this->redirectUrl = $redirectUrl;
+        return $this;
+    }
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
@@ -188,6 +209,8 @@ class Charge extends AbstractTransactionType
         }
 
         if (isset($response->redirectUrl)) {
+            // todo: maybe just one of these applies depending on answer #10 https://heidelpay.atlassian.net/wiki/spaces/ID/pages/359727164/Q+and+A+Suggestions
+            $this->setRedirectUrl($response->redirectUrl);
             $payment->setRedirectUrl($response->redirectUrl);
         }
 

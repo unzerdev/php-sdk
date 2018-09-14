@@ -17,6 +17,7 @@ use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\PaymentTypes\GiroPay;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
+use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class GiropayTest extends BasePaymentTest
 {
@@ -46,5 +47,24 @@ class GiropayTest extends BasePaymentTest
         $giropay = new GiroPay();
         $giropay = $this->heidelpay->createPaymentType($giropay);
         $giropay->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+    }
+
+    /**
+     * Verify that GiroPay is chargeable.
+     *
+     * @test
+     */
+    public function giroPayShouldBeChargeable()
+    {
+        /** @var GiroPay $giropay */
+        $giropay = new GiroPay();
+        $giropay = $this->heidelpay->createPaymentType($giropay);
+
+        /** @var Charge $charge */
+        $charge = $giropay->charge(1.0, currency::EUROPEAN_EURO, self::RETURN_URL);
+
+        $this->assertNotNull($charge);
+        $this->assertNotNull($charge->getId());
+        $this->assertNotNull($charge->getRedirectUrl());
     }
 }
