@@ -1,6 +1,7 @@
 <?php
 /**
- * Description
+ * These are integration tests to verify interface and functionality of the card payment methods
+ * e.g. Credit Card and Debit Card.
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
@@ -9,7 +10,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.de>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/NmgPhpSdk/test/integration
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
@@ -26,8 +27,11 @@ use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
 
 class CardTest extends BasePaymentTest
 {
-    //<editor-fold desc="Required Tests">
+    //<editor-fold desc="Tests">
     /**
+     * Verify that direct card creation is not possible if the merchant is not PCI DSS compliant.
+     * In this case he needs to use the iFrame or needs to be marked PCI DSS compliant in the payment backend.
+     *
      * @test
      */
     public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
@@ -45,6 +49,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * Verify that card payment type resource can be created.
+     *
      * @test
      */
     public function cardShouldBeCreatable()
@@ -63,7 +69,7 @@ class CardTest extends BasePaymentTest
     }
 
     /**
-     * The card can perform an authorization.
+     * Verify that the card can perform an authorization with a card.
      *
      * @test
      */
@@ -94,6 +100,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * Verify the card can perform charges and creates a payment object doing so.
+     *
      * @test
      */
     public function cardCanPerformChargeAndCreatesPaymentObject()
@@ -123,6 +131,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * Verify that a card object can be fetched from the api using its id.
+     *
      * @test
      *
      * todo update number and cvc
@@ -141,10 +151,10 @@ class CardTest extends BasePaymentTest
         $this->assertEquals($card->getExpiryDate(), $fetchedCard->getExpiryDate());
 //        $this->assertEquals($card->getCvc(), $fetchedCard->getCvc());
     }
-    //</editor-fold>
 
-    //<editor-fold desc="Tests">
     /**
+     * Verify the card can charge the full amount of the authorization and the payment state is updated accordingly.
+     *
      * @test
      */
 	public function fullChargeAfterAuthorize()
@@ -169,6 +179,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * Verify the card can charge part of the authorized amount and the payment state is updated accordingly.
+     *
      * @test
      */
     public function partialChargeAfterAuthorization()
@@ -196,6 +208,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * Verify that an exception is thrown when trying to charge more than authorized.
+     *
      * @test
      */
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized()
@@ -219,6 +233,8 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * Verify the card payment can be charged until it is fully charged and the payment is updated accordingly.
+     *
      * @test
      */
     public function partialAndFullChargeAfterAuthorization()
@@ -261,7 +277,7 @@ class CardTest extends BasePaymentTest
     }
 
     /**
-     * Full cancel on authorization without charges or cancels.
+     * Verify that a full cancel on an authorization results in a cancelled payment.
      *
      * @test
      */
@@ -283,7 +299,7 @@ class CardTest extends BasePaymentTest
     }
 
     /**
-     * Full cancel on partly charged authorization.
+     * Verify a full cancel can be performed on a partly charged card authorization.
      *
      * @test
      */
@@ -310,7 +326,7 @@ class CardTest extends BasePaymentTest
     }
 
     /**
-     * Full cancel on fully charged authorization.
+     * Verify an exception is thrown when trying to charge an already fully charged authorization.
      *
      * @test
      */
@@ -334,7 +350,7 @@ class CardTest extends BasePaymentTest
     }
 
     /**
-     * Full cancel on fully charged payment.
+     * Verify a card payment can be cancelled after being fully charged.
      *
      * @test
      */
