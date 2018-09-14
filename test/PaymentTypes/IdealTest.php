@@ -49,5 +49,19 @@ class IdealTest extends BasePaymentTest
         $ideal->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
     }
 
+    /**
+     * @test
+     */
+    public function idealShouldBeChargeable()
+    {
+        /** @var Ideal $ideal */
+        $ideal = new Ideal();
+        $ideal->setBankName('RABONL2U');
+        $this->heidelpay->createPaymentType($ideal);
+		$charge = $ideal->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+		$this->assertNotNull($charge);
+		$this->assertNotNull($charge->getId());
+        $this->assertNotNull($charge->getRedirectUrl());
+    }
 
 }
