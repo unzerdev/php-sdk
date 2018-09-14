@@ -20,6 +20,7 @@ use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\PaymentTypes\GiroPay;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
@@ -235,6 +236,9 @@ class Heidelpay implements HeidelpayParentInterface
         switch ($typeIdParts[1]) {
             case 'crd':
                 $paymentType = (new Card('', ''))->setParentResource($this)->setId($typeId)->fetch();
+                break;
+            case 'gro':
+                $paymentType = (new GiroPay())->setParentResource($this)->setId($typeId)->fetch();
                 break;
             default:
                 throw new IllegalTransactionTypeException($typeId);
