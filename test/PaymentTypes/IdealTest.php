@@ -18,6 +18,8 @@ use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
 class IdealTest extends BasePaymentTest
 {
+    // todo: Fetch list of banks first. then set the bank name and update ideal type.
+
     /**
      * Verify Ideal payment type is creatable.
      *
@@ -32,4 +34,6 @@ class IdealTest extends BasePaymentTest
         $this->assertInstanceOf(Ideal::class, $ideal);
         $this->assertNotNull($ideal->getId());
     }
+
+
 }
