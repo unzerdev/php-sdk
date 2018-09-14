@@ -364,33 +364,33 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
     }
 
-    /**
-     * Full cancel on partly charged auth canceled charges.
-     *
-     * @test
-     */
-    public function fullCancelOnPartlyPaidAuthWithCanceledCharges()
-    {
-        /** @var Card $card */
-        $card = $this->createCard();
-        $card = $this->heidelpay->createPaymentType($card);
-
-        $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
-        $payment = $authorization->getPayment();
-
-        $payment->charge(10.0);
-        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
-
-        $charge = $payment->charge(10.0);
-        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
-
-        $charge->cancel();
-        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 10.0);
-        $this->assertTrue($payment->isPartlyPaid());
-
-        $authorization->cancel();
-        $this->assertTrue($payment->isCanceled());
-    }
+//    /**
+//     * Full cancel on partly charged auth canceled charges.
+//     *
+//     * @test
+//     */
+//    public function fullCancelOnPartlyPaidAuthWithCanceledCharges()
+//    {
+//        /** @var Card $card */
+//        $card = $this->createCard();
+//        $card = $this->heidelpay->createPaymentType($card);
+//
+//        $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
+//        $payment = $authorization->getPayment();
+//
+//        $payment->charge(10.0);
+//        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
+//
+//        $charge = $payment->charge(10.0);
+//        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
+//        $this->assertTrue($payment->isPartlyPaid());
+//
+//        $charge->cancel();
+//        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 10.0);
+//        $this->assertTrue($payment->isPartlyPaid());
+//
+//        $payment->cancel();
+//        $this->assertTrue($payment->isCanceled());
+//    }
     //</editor-fold>
 }
