@@ -21,6 +21,7 @@ use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\PaymentTypes\Card;
 use heidelpay\NmgPhpSdk\PaymentTypes\GiroPay;
+use heidelpay\NmgPhpSdk\PaymentTypes\Ideal;
 use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
@@ -239,6 +240,9 @@ class Heidelpay implements HeidelpayParentInterface
                 break;
             case 'gro':
                 $paymentType = (new GiroPay())->setParentResource($this)->setId($typeId)->fetch();
+                break;
+            case 'idl':
+                $paymentType = (new Ideal())->setParentResource($this)->setId($typeId)->fetch();
                 break;
             default:
                 throw new IllegalTransactionTypeException($typeId);

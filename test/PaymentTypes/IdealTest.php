@@ -37,10 +37,12 @@ class IdealTest extends BasePaymentTest
     }
     
     /**
+     * Verify that ideal is not authorizable
+     *
      * @test
      * // todo fix when ideal operation is correctly defined.
      */
-    public function authorizeType()
+    public function idealShouldThrowExceptionOnAuthorize()
     {
         /** @var Ideal $ideal */
         $ideal = new Ideal();
@@ -50,6 +52,8 @@ class IdealTest extends BasePaymentTest
     }
 
     /**
+     * Verify that ideal payment type is chargeable.
+     *
      * @test
      */
     public function idealShouldBeChargeable()
@@ -64,4 +68,18 @@ class IdealTest extends BasePaymentTest
         $this->assertNotNull($charge->getRedirectUrl());
     }
 
+    /**
+     * @test
+     */
+    public function idealTypeCanBeFetched()
+    {
+        /** @var Ideal $ideal */
+        $ideal = new Ideal();
+        $ideal->setBankName('RABONL2U');
+        $this->heidelpay->createPaymentType($ideal);
+		$this->assertNotNull($ideal->getId());
+		$fetchedIdeal = $this->heidelpay->fetchPaymentType($ideal->getId());
+        $this->assertInstanceOf(Ideal::class, $fetchedIdeal);
+        $this->assertEquals($ideal->getId(), $fetchedIdeal->getId());
+    }
 }
