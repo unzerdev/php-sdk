@@ -13,6 +13,7 @@
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
+use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\PaymentTypes\Ideal;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
@@ -33,6 +34,19 @@ class IdealTest extends BasePaymentTest
         $this->heidelpay->createPaymentType($ideal);
         $this->assertInstanceOf(Ideal::class, $ideal);
         $this->assertNotNull($ideal->getId());
+    }
+    
+    /**
+     * @test
+     * // todo fix when ideal operation is correctly defined.
+     */
+    public function authorizeType()
+    {
+        /** @var Ideal $ideal */
+        $ideal = new Ideal();
+        $ideal->setBankName('RABONL2U');
+        $this->heidelpay->createPaymentType($ideal);
+        $ideal->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
     }
 
 
