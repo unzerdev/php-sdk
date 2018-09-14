@@ -13,6 +13,7 @@
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
+use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\PaymentTypes\Invoice;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
@@ -33,5 +34,47 @@ class InvoiceTest extends BasePaymentTest
         $this->assertNotNull($invoice->getId());
 
         return $invoice;
+    }
+
+    /**
+     * @test
+     * @param Invoice $invoice
+     * todo: no asserts what should this verify
+     */
+    public function testAuthorizeType(Invoice $invoice)
+    {
+        $invoice->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+    }
+
+    /**
+     * Verify invoice is chargeable.
+     *
+     * @test
+     * @param Invoice $invoice
+     * @depends invoiceTypeShouldBeCreatable
+     *
+     * todo: charge != shipment
+     * todo: shipment works only with prior authorization
+     */
+    public function verifyInvoiceShipment(Invoice $invoice)
+    {
+		$charge = $invoice->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+		$this->assertNotNull($charge);
+		$this->assertNotNull($charge->getId());
+        $this->assertNotNull($charge->getRedirectUrl());
+    }
+
+    /**
+     * Verify that an invoice object can be fetched from the api.
+     *
+     * @test
+     * @param Invoice $invoice
+     * @depends invoiceTypeShouldBeCreatable
+     */
+    public function invoiceTypeCanBeFetched(Invoice $invoice)
+    {
+		$fetchedInvoice = $this->heidelpay->fetchPaymentType($invoice->getId());
+		$this->assertInstanceOf(Invoice::class, $fetchedInvoice);
+		$this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
     }
 }
