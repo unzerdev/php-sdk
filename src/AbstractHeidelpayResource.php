@@ -278,10 +278,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      *
      * @return string
      */
-    private static function getClassShortName(): string
+    protected static function getClassShortName(): string
     {
         $classNameParts = explode('\\', static::class);
-        return end($classNameParts);
+        return strtolower(end($classNameParts));
     }
     //</editor-fold>
 }

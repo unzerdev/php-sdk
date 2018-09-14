@@ -23,6 +23,16 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     private $authorizable = false;
     private $chargeable = false;
 
+    //<editor-fold desc="Overridable Methods">
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourcePath()
+    {
+        return 'types/' . $this::getClassShortName();
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Transaction methods">
     /**
      * {@inheritDoc}

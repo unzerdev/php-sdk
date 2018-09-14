@@ -28,16 +28,6 @@ class Ideal extends BasePaymentType
         parent::__construct();
     }
 
-    //<editor-fold desc="Overridable Methods">
-    /**
-     * {@inheritDoc}
-     */
-    public function getResourcePath()
-    {
-        return 'types/ideal';
-    }
-    //</editor-fold>
-
     //<editor-fold desc="Getter/Setter">
     /**
      * @return string

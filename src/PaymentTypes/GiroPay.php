@@ -24,14 +24,4 @@ class GiroPay extends BasePaymentType
 
         parent::__construct();
     }
-
-    //<editor-fold desc="Overridable Methods">
-    /**
-     * {@inheritDoc}
-     */
-    public function getResourcePath()
-    {
-        return 'types/giropay';
-    }
-    //</editor-fold>
 }

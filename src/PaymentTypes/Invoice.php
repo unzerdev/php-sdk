@@ -15,13 +15,4 @@ namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 class Invoice extends BasePaymentType
 {
-    //<editor-fold desc="Overridable Methods">
-    /**
-     * {@inheritDoc}
-     */
-    public function getResourcePath()
-    {
-        return 'types/invoice';
-    }
-    //</editor-fold>
 }
