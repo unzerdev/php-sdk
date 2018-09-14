@@ -59,9 +59,9 @@ class CardTest extends BasePaymentTest
         $this->assertNull($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
 
+        $this->assertInstanceOf(Card::class, $card);
         /** @var HeidelpayResourceInterface $card */
         $this->assertNotNull($card->getId());
-
         /** @var HeidelpayParentInterface $card */
         $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
 

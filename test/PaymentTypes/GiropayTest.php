@@ -31,6 +31,7 @@ class GiropayTest extends BasePaymentTest
         /** @var GiroPay $giropay */
         $giropay = new GiroPay();
         $giropay = $this->heidelpay->createPaymentType($giropay);
+        $this->assertInstanceOf(GiroPay::class, $giropay);
         $this->assertNotNull($giropay->getId());
     }
 
