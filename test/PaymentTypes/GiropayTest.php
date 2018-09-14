@@ -13,6 +13,8 @@
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
+use heidelpay\NmgPhpSdk\Constants\Currency;
+use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\PaymentTypes\GiroPay;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
@@ -29,5 +31,20 @@ class GiropayTest extends BasePaymentTest
         $giropay = new GiroPay();
         $giropay = $this->heidelpay->createPaymentType($giropay);
         $this->assertNotNull($giropay->getId());
+    }
+
+    /**
+     * Verify that an exception is thrown when giropay authorize is called.
+     *
+     * @test
+     */
+    public function giroPayShouldThrowExceptionOnAuthorize()
+    {
+        $this->expectException(IllegalTransactionTypeException::class);
+
+        /** @var GiroPay $giropay */
+        $giropay = new GiroPay();
+        $giropay = $this->heidelpay->createPaymentType($giropay);
+        $giropay->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
     }
 }

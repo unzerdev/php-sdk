@@ -20,8 +20,7 @@ class GiroPay extends BasePaymentType
      */
     public function __construct()
     {
-        $this->setAuthorizable(true)
-             ->setChargeable(true);
+        $this->setChargeable(true);
 
         parent::__construct();
     }
