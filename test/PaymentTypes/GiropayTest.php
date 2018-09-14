@@ -9,7 +9,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.de>
  *
- * @package  heidelpay/NmgPhpSdk/test/integration
+ * @package  heidelpay/test/integration
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 

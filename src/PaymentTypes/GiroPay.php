@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This represents the GiroPay payment type.
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
@@ -9,7 +9,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.de>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/PaymentTypes
  */
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
