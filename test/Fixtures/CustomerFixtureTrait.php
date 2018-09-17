@@ -14,6 +14,8 @@
 
 namespace heidelpay\NmgPhpSdk\test\Fixtures;
 
+use heidelpay\NmgPhpSdk\Address;
+use heidelpay\NmgPhpSdk\Constants\Salutation;
 use heidelpay\NmgPhpSdk\Customer;
 
 trait CustomerFixtureTrait
@@ -28,13 +30,26 @@ trait CustomerFixtureTrait
         return (new Customer())
             ->setFirstname('Max')
             ->setLastname('Mustermann')
+            ->setSalutation(Salutation::MR)
             ->setCompany('Musterfirma')
-            ->setStreet1('Märchenstraße 3')
-            ->setStreet1('Hinterhaus')
-            ->setCity('Pusemuckel')
-            ->setCountry('Deutschland')
-            ->setZip('12345')
-            ->setBirthday('2018-08-12')
-            ->setEmail('max@mustermann.de');
+            ->setBirthday('1982-08-12')
+            ->setEmail('max@mustermann.de')
+            ->setBillingAddress($this->getAddress());
+    }
+
+    /**
+     * Create a test Address
+     *
+     * @return Address
+     */
+    public function getAddress(): Address
+    {
+        return (new Address())
+            ->setName('Max Mustermann')
+            ->setStreet('Vangerowstr. 18')
+            ->setZip('69115')
+            ->setCity('Heidelberg')
+            ->setCountry('DE')
+            ->setState('DE-1');
     }
 }

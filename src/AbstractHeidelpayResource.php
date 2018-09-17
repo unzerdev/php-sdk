@@ -161,9 +161,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
                 }
 
                 if ($value === null) {
-                    unset($properties[$property]);//$properties[$property] = '';
+                    unset($properties[$property]);
                 } else {
-                    $properties[$property] = (string)$value;
+                    if ($value instanceof self) {
+                        $newValue = $value->expose();
+                    } else {
+                        $newValue = (string)$value;
+                    }
+                    $properties[$property] = $newValue;
                 }
             } catch (\ReflectionException $e) {
                 unset($properties[$property]);
