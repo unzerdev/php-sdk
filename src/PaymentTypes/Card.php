@@ -15,9 +15,8 @@ namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
 class Card extends BasePaymentType
 {
-    // todo rename pan to number
-    /** @var string $pan */
-    protected $pan;
+    /** @var string $number */
+    protected $number;
 
     /** @var string $expiryDate */
     protected $expiryDate;
@@ -58,15 +57,14 @@ class Card extends BasePaymentType
             return;
         }
 
-        // todo change cvv to cvc
-        if (isset($response->cvv)) {
-            $this->setCvc($response->cvv);
+        if (isset($response->cvc)) {
+            $this->setCvc($response->cvc);
         }
         if (isset($response->number)) {
             $this->setNumber($response->number);
         }
-        if (isset($response->expiry)) {
-            $this->setExpiryDate($response->expiry);
+        if (isset($response->expiryDate)) {
+            $this->setExpiryDate($response->expiryDate);
         }
         if (isset($response->brand)) {
             $this->setBrand($response->brand);
@@ -83,7 +81,7 @@ class Card extends BasePaymentType
      */
     public function getNumber(): string
     {
-        return $this->pan;
+        return $this->number;
     }
 
     /**
@@ -92,7 +90,7 @@ class Card extends BasePaymentType
      */
     public function setNumber($pan): Card
     {
-        $this->pan = $pan;
+        $this->number = $pan;
         return $this;
     }
 
