@@ -51,14 +51,6 @@ class Card extends BasePaymentType
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath()
-    {
-        return 'types/cards';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function handleResponse(\stdClass $response)
     {
         $isError = isset($response->isError) && $response->isError;
