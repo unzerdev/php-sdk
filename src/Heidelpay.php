@@ -194,7 +194,6 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function createCustomer(Customer $customer): Customer
     {
-        /** @var AbstractHeidelpayResource $customer */
         $customer->setParentResource($this);
         return $customer->create();
     }

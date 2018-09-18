@@ -279,9 +279,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         }
 
         $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setParentResource($this);
-        $charge->setPayment($this);
-        $charge->create();
+        $charge->setParentResource($this)
+            ->setPayment($this)
+            ->create();
         // needs to be set after creation to use id as key in charge array
         $this->addCharge($charge);
 

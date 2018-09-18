@@ -113,9 +113,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * @param HeidelpayParentInterface $parentResource
-     * @return AbstractHeidelpayResource
+     * @return $this
      */
-    public function setParentResource($parentResource): AbstractHeidelpayResource
+    public function setParentResource($parentResource): self
     {
         $this->parentResource = $parentResource;
         return $this;

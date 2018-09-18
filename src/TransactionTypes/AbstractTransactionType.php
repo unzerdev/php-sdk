@@ -33,7 +33,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     /**
      * @param Payment $payment
-     * @return self
+     * @return $this
      */
     public function setPayment($payment): self
     {
