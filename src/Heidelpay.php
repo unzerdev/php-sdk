@@ -277,11 +277,12 @@ class Heidelpay implements HeidelpayParentInterface
      * @param float $amount
      * @param string $currency
      * @param string $returnUrl
+     * @param Customer|null $customer
      * @return Charge
      */
-    public function charge(PaymentTypeInterface $paymentType, $amount, $currency, $returnUrl): Charge
+    public function charge(PaymentTypeInterface $paymentType, $amount, $currency, $returnUrl, $customer = null): Charge
     {
         $payment = $this->createPayment($paymentType);
-        return $payment->charge($amount, $currency, $returnUrl);
+        return $payment->charge($amount, $currency, $returnUrl, $customer);
     }
 }

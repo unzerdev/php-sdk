@@ -266,9 +266,10 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      * @param float $amount
      * @param string $currency
      * @param string $returnUrl
+     * @param Customer|null $customer
      * @return Charge
      */
-    public function charge($amount = null, $currency = null, $returnUrl = null): Charge
+    public function charge($amount = null, $currency = null, $returnUrl = null, $customer = null): Charge
     {
         if (!$this->getPaymentType()->isChargeable()) {
             throw new IllegalTransactionTypeException(__METHOD__);
@@ -278,6 +279,11 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             return $this->fullCharge();
         }
 
+        if ($customer instanceof Customer) {
+            $this->setCustomer($customer);
+        }
+
+        /** @var Charge $charge */
         $charge = new Charge($amount, $currency, $returnUrl);
         $charge->setParentResource($this)
             ->setPayment($this)

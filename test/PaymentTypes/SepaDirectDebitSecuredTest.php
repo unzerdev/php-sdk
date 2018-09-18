@@ -15,6 +15,7 @@ namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\NmgPhpSdk\Customer;
 use heidelpay\NmgPhpSdk\PaymentTypes\SepaDirectDebitSecured;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
@@ -48,5 +49,23 @@ class SepaDirectDebitSecuredTest extends BasePaymentTest
     {
         $this->expectException(IllegalTransactionTypeException::class);
         $directDebitSec->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+    }
+
+    /**
+     * @test
+     * @param SepaDirectDebitSecured $directDebitSec
+     * @depends sepaDirectDebitSecuredShouldBeCreatable
+     */
+    public function directDebitShouldBeChargeable(SepaDirectDebitSecured $directDebitSec)
+    {
+        /** @var Customer $customer */
+        $customer = $this->getCustomer();
+        $this->heidelpay->createCustomer($customer);
+
+        $this->assertNotNull($customer->getId());
+
+		$charge = $directDebitSec->charge(200.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $customer);
+		$this->assertNotNull($charge);
+        $this->assertNotNull($charge->getId());
     }
 }
