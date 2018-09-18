@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the SEPA direct debit secured payment type.
+ * This represents the SEPA direct debit guaranteed payment type.
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
@@ -13,7 +13,7 @@
  */
 namespace heidelpay\NmgPhpSdk\PaymentTypes;
 
-class SepaDirectDebitSecured extends BasePaymentType
+class SepaDirectDebitGuaranteed extends BasePaymentType
 {
     /** @var string $iban */
     protected $iban;
@@ -25,7 +25,6 @@ class SepaDirectDebitSecured extends BasePaymentType
     protected $holder;
 
     /**
-     * SepaDirectDebitSecured constructor.
      * @param string $iban
      */
     public function __construct(string $iban)
@@ -48,9 +47,9 @@ class SepaDirectDebitSecured extends BasePaymentType
 
     /**
      * @param string $iban
-     * @return SepaDirectDebitSecured
+     * @return SepaDirectDebitGuaranteed
      */
-    public function setIban(string $iban): SepaDirectDebitSecured
+    public function setIban(string $iban): SepaDirectDebitGuaranteed
     {
         $this->iban = $iban;
         return $this;
@@ -66,9 +65,9 @@ class SepaDirectDebitSecured extends BasePaymentType
 
     /**
      * @param string $bic
-     * @return SepaDirectDebitSecured
+     * @return SepaDirectDebitGuaranteed
      */
-    public function setBic(string $bic): SepaDirectDebitSecured
+    public function setBic(string $bic): SepaDirectDebitGuaranteed
     {
         $this->bic = $bic;
         return $this;
@@ -84,9 +83,9 @@ class SepaDirectDebitSecured extends BasePaymentType
 
     /**
      * @param string $holder
-     * @return SepaDirectDebitSecured
+     * @return SepaDirectDebitGuaranteed
      */
-    public function setHolder(string $holder): SepaDirectDebitSecured
+    public function setHolder(string $holder): SepaDirectDebitGuaranteed
     {
         $this->holder = $holder;
         return $this;
