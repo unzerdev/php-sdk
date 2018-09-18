@@ -18,6 +18,12 @@ class SepaDirectDebitSecured extends BasePaymentType
     /** @var string $iban */
     protected $iban;
 
+    /** @var string $bic */
+    protected $bic;
+
+    /** @var string $holder */
+    protected $holder;
+
     /**
      * SepaDirectDebitSecured constructor.
      * @param string $iban
@@ -45,6 +51,42 @@ class SepaDirectDebitSecured extends BasePaymentType
     public function setIban(string $iban): SepaDirectDebitSecured
     {
         $this->iban = $iban;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBic(): string
+    {
+        return $this->bic;
+    }
+
+    /**
+     * @param string $bic
+     * @return SepaDirectDebitSecured
+     */
+    public function setBic(string $bic): SepaDirectDebitSecured
+    {
+        $this->bic = $bic;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHolder(): string
+    {
+        return $this->holder;
+    }
+
+    /**
+     * @param string $holder
+     * @return SepaDirectDebitSecured
+     */
+    public function setHolder(string $holder): SepaDirectDebitSecured
+    {
+        $this->holder = $holder;
         return $this;
     }
     //</editor-fold>
