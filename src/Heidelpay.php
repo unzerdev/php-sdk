@@ -255,8 +255,26 @@ class Heidelpay implements HeidelpayParentInterface
         return $paymentType;
     }
 
+    //<editor-fold desc="Authorize methods">
+
     /**
-     * Performs an authorization and returns the corresponding Authorization object.
+     * Perform an authorization with the paymentTypeId and return an Authorization object.
+     *
+     * @param $paymentTypeId
+     * @param $amount
+     * @param $currency
+     * @param $returnUrl
+     * @return Authorization
+     */
+    public function authorizeWithPaymentTypeId($paymentTypeId, $amount, $currency, $returnUrl): Authorization
+    {
+        /** @var PaymentTypeInterface $paymentType */
+        $paymentType = $this->fetchPaymentType($paymentTypeId);
+        return $this->authorize($paymentType, $amount, $currency, $returnUrl);
+    }
+
+    /**
+     * Perform an authorization and return the corresponding Authorization object.
      *
      * @param PaymentTypeInterface $paymentType
      * @param float $amount
@@ -269,6 +287,7 @@ class Heidelpay implements HeidelpayParentInterface
         $payment = $this->createPayment($paymentType);
         return $payment->authorize($amount, $currency, $returnUrl);
     }
+    //</editor-fold>
 
     /**
      * Performs a charge and returns the corresponding Charge object.
