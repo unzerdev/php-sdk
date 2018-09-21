@@ -39,9 +39,8 @@ class Customer extends AbstractHeidelpayResource
     /** @var string */
     protected $mobile;
 
-    // todo: rename to billing address
-    /** @var Address $address */
-    protected $address;
+    /** @var Address $billingAddress */
+    protected $billingAddress;
 
     /**
      * Customer constructor.
@@ -211,7 +210,7 @@ class Customer extends AbstractHeidelpayResource
      */
     public function getBillingAddress(): Address
     {
-        return $this->address;
+        return $this->billingAddress;
     }
 
     /**
@@ -220,7 +219,7 @@ class Customer extends AbstractHeidelpayResource
      */
     public function setBillingAddress(Address $address): Customer
     {
-        $this->address = $address;
+        $this->billingAddress = $address;
         return $this;
     }
     //</editor-fold>
