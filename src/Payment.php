@@ -85,7 +85,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
                 $this->setId($resources->paymentId);
             }
 
-            if (isset($resources->customerId)) {
+            if (isset($resources->customerId) && !empty($resources->customerId)) {
                 if (!$this->customer instanceof Customer) {
                     $this->customer = $this->getHeidelpayObject()->fetchCustomerById($resources->customerId);
                 } else {
