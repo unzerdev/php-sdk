@@ -85,44 +85,14 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
                 $this->setId($resources->paymentId);
             }
 
-//            if (isset($resources->customerId)) {
-//                $this->customer->setId($resources->customerId);
-//            }
-//
-//            if (isset($resources->basketId)) {
-//                $this->basket->setId($resources->basketId);
-//            }
-//
-//            if (isset($resources->basketId)) {
-//                $this->basket->setId($resources->basketId);
-//            }
-//
-//            if (isset($resources->riskId)) {
-//                $this->risk->setId($resources->riskId);
-//            }
-//
-//            if (isset($resources->metaDataId)) {
-//                $this->metaData->setId($resources->metaDataId);
-//            }
-//
-//            if (isset($resources->typeId)) {
-//                $this->getPaymentType()->setId($resources->typeId);
-//            }
+            if (isset($resources->customerId)) {
+                if (!$this->customer instanceof Customer) {
+                    $this->customer = $this->getHeidelpayObject()->fetchCustomerById($resources->customerId);
+                } else {
+                    $this->customer->fetch();
+                }
+            }
         }
-
-
-//  "transactions" : [ {
-//            "date" : "2018-08-17 08:42:31",
-//    "type" : "charge",
-//    "url" : "https://dev-api.heidelpay.com/v1/payments/s-pay-1932/charges/s-chg-1",
-//    "amount" : "100.0000"
-//  }, {
-//            "date" : "2018-08-17 08:42:36",
-//    "type" : "cancel-charge",
-//    "url" : "https://dev-api.heidelpay.com/v1/payments/s-pay-1932/charges/s-chg-1/cancels/s-cnl-1",
-//    "amount" : "100.0000"
-//  } ]
-//}
 
     }
     //</editor-fold>
@@ -198,7 +168,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function setCustomer(Customer $customer): Payment
     {
-        $customer->setParentResource($this);
+        $customer->setParentResource($this->getHeidelpayObject());
         $this->customer = $customer;
         return $this;
     }
