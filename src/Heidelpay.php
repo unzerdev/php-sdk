@@ -223,6 +223,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Fetch and return customer by given customer id.
+     *
+     * @param $customerId
+     * @return HeidelpayResourceInterface
+     */
+    public function fetchCustomerById($customerId): HeidelpayResourceInterface
+    {
+        return (new Customer())->setParentResource($this)->setId($customerId)->fetch();
+    }
+
+    /**
      * @param $typeId
      * @return mixed
      */

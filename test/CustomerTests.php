@@ -36,7 +36,17 @@ class CustomerTests extends BasePaymentTest
         return $customer;
     }
 
-// todo fetch customer when updating payment
+    /**
+     * @param Customer $customer
+     * @depends customerCreation
+     * @test
+     */
+    public function customerCanBeFetched(Customer $customer)
+    {
+        $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
+        $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
+    }
+
 //    /**
 //     * Customer can be referenced by payment.
 //     *

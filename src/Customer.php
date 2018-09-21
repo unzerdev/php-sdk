@@ -37,7 +37,20 @@ class Customer extends AbstractHeidelpayResource
     /** @var Address $address */
     protected $address;
 
-    public function getUri(): string
+    /**
+     * Customer constructor.
+     * @param string|null $firstname
+     * @param string|null $lastname
+     */
+    public function __construct(string $firstname = null, string $lastname = null)
+    {
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+
+        parent::__construct();
+    }
+
+    public function getResourcePath(): string
     {
         return '/customers';
     }
