@@ -55,6 +55,7 @@ class CardTest extends BasePaymentTest
      */
     public function cardShouldBeCreatable()
     {
+        /** @var Card $card */
         $card = $this->createCard();
         $this->assertNull($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
@@ -134,8 +135,6 @@ class CardTest extends BasePaymentTest
      * Verify that a card object can be fetched from the api using its id.
      *
      * @test
-     *
-     * todo update number and cvc
      */
     public function cardCanBeFetched()
     {
@@ -147,9 +146,9 @@ class CardTest extends BasePaymentTest
         /** @var Card $fetchedCard */
         $fetchedCard = $this->heidelpay->fetchPaymentType($card->getId());
         $this->assertNotNull($fetchedCard->getId());
-//        $this->assertEquals($card->getNumber(), $fetchedCard->getNumber());
+        $this->assertEquals($this->maskCreditCardNumber($card->getNumber()), $fetchedCard->getNumber());
         $this->assertEquals($card->getExpiryDate(), $fetchedCard->getExpiryDate());
-//        $this->assertEquals($card->getCvc(), $fetchedCard->getCvc());
+        $this->assertEquals('***', $fetchedCard->getCvc());
     }
 
     /**

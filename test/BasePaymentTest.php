@@ -79,6 +79,18 @@ class BasePaymentTest extends TestCase
         $this->assertEquals($expectedTotal, $payment->getTotal());
         $this->assertEquals($expectedCanceled, $payment->getCanceled());
     }
+
+    /**
+     * Mask a credit card number.
+     *
+     * @param $number
+     * @param string $maskSymbol
+     * @return string
+     */
+    protected function maskCreditCardNumber($number, $maskSymbol = '*'): string
+    {
+        return substr($number, 0, 6) . str_repeat($maskSymbol, \strlen($number) - 10) . substr($number, -4);
+    }
     //</editor-fold>
 
 }
