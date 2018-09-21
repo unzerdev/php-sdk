@@ -57,7 +57,7 @@ class Customer extends AbstractHeidelpayResource
 
     public function getResourcePath(): string
     {
-        return '/customers';
+        return 'customers';
     }
 
     //<editor-fold desc="Getters/Setters">
