@@ -33,6 +33,12 @@ class Customer extends AbstractHeidelpayResource
     /** @var string */
     protected $email;
 
+    /** @var string */
+    protected $phone;
+
+    /** @var string */
+    protected $mobile;
+
     // todo: rename to billing address
     /** @var Address $address */
     protected $address;
@@ -165,6 +171,42 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     * @return Customer
+     */
+    public function setPhone(string $phone): Customer
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobile(): string
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * @param string $mobile
+     * @return Customer
+     */
+    public function setMobile(string $mobile): Customer
+    {
+        $this->mobile = $mobile;
+        return $this;
+    }
+
+    /**
      * @return Address
      */
     public function getBillingAddress(): Address
@@ -182,5 +224,4 @@ class Customer extends AbstractHeidelpayResource
         return $this;
     }
     //</editor-fold>
-
 }
