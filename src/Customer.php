@@ -127,7 +127,7 @@ class Customer extends AbstractHeidelpayResource
      * @param string $birthday
      * @return Customer
      */
-    public function setBirthday($birthday): Customer
+    public function setBirthDate($birthday): Customer
     {
         $this->birthDate = $birthday;
         return $this;
