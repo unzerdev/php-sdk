@@ -60,6 +60,24 @@ class Customer extends AbstractHeidelpayResource
         return 'customers';
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function handleResponse(\stdClass $response)
+    {
+        if ($this->id !== ($response->id ?? '')) {
+            throw new ReferenceException();
+        }
+
+        if (isset($response->firstname) && !empty($response->firstname)) {
+            $this->setFirstname($response->firstname);
+        }
+
+        if (isset($response->lastname) && !empty($response->lastname)) {
+            $this->setLastname($response->lastname);
+        }
+    }
+
     //<editor-fold desc="Getters/Setters">
     /**
      * @return string

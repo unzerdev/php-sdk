@@ -17,28 +17,49 @@ use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Customer;
 use heidelpay\NmgPhpSdk\Payment;
 
-class CustomerTests extends BasePaymentTest
+class CustomerTest extends BasePaymentTest
 {
     /**
-     * Customer should be creatable via the sdk.
+     * Min customer should be creatable via the sdk.
      *
      * @test
      */
-    public function customerCreation(): Customer
+    public function minCustomerCanBeCreatedAndFetched(): Customer
     {
-        $customer = $this->getCustomer();
+        /** @var Customer $customer */
+        $customer = $this->getMinimalCustomer();
         $this->assertEmpty($customer->getId());
         $this->heidelpay->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        echo 'CustomerId: ' .$customer->getId();
+        /** @var Customer $fetchedCustomer */
+        $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
+        $this->assertEquals($customer->jsonSerialize(), $fetchedCustomer->jsonSerialize());
+
+        return $customer;
+    }
+
+    /**
+     * Max customer should be creatable via the sdk.
+     *
+     * @test
+     */
+    public function maxCustomerCanBeCreatedAndFetched(): Customer
+    {
+        $customer = $this->getMaximumCustomer();
+        $this->assertEmpty($customer->getId());
+        $this->heidelpay->createCustomer($customer);
+        $this->assertNotEmpty($customer->getId());
+
+        /** @var Customer $fetchedCustomer */
+        $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
 
         return $customer;
     }
 
     /**
      * @param Customer $customer
-     * @depends customerCreation
+     * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
     public function customerCanBeFetched(Customer $customer)
@@ -50,7 +71,7 @@ class CustomerTests extends BasePaymentTest
     /**
      * Customer can be referenced by payment.
      *
-     * @depends customerCreation
+     * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      * @param Customer $customer
      */

@@ -59,7 +59,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
     public function directDebitShouldBeChargeable(SepaDirectDebitGuaranteed $directDebitGuaranteed)
     {
         /** @var Customer $customer */
-        $customer = $this->getCustomer();
+        $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
 
         $this->assertNotNull($customer->getId());

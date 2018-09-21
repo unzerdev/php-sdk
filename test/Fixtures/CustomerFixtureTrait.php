@@ -21,19 +21,31 @@ use heidelpay\NmgPhpSdk\Customer;
 trait CustomerFixtureTrait
 {
     /**
+     * Create a customer object with just firstname and lastname.
+     *
+     * @return Customer
+     */
+    public function getMinimalCustomer(): Customer
+    {
+        return new Customer('Max', 'Mustermann');
+    }
+
+    /**
      * Creates a customer object
      *
      * @return Customer
      */
-    public function getCustomer(): Customer
+    public function getMaximumCustomer(): Customer
     {
         return (new Customer())
             ->setFirstname('Max')
             ->setLastname('Mustermann')
             ->setSalutation(Salutation::MR)
             ->setCompany('Musterfirma')
-            ->setBirthday('1982-08-12')
+            ->setBirthDate('1982-08-12')
             ->setEmail('max@mustermann.de')
+            ->setMobile('01731234567')
+            ->setPhone('062216471400')
             ->setBillingAddress($this->getAddress());
     }
 
