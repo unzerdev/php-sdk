@@ -107,9 +107,9 @@ trait HasAmountsTrait
 
     /**
      * @param string $currency
-     * @return hasAmountsTrait
+     * @return self
      */
-    public function setCurrency(string $currency): hasAmountsTrait
+    public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
         return $this;
