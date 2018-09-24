@@ -291,7 +291,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             $setter = 'set' . ucfirst($key);
             $getter = 'get' . ucfirst($key);
             if (\is_object($value)) {
-                if (\is_callable($object, $getter)) {
+                if (\is_callable([$object, $getter])) {
                     $this->updateValues($object->$getter(), $value);
                 }
             } else if (\is_callable([$object, $setter])) {
