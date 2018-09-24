@@ -156,11 +156,6 @@ class Authorization extends AbstractTransactionType
      */
     protected function handleResponse(\stdClass $response)
     {
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return;
-        }
-
         /** @var Payment $payment */
         $payment = $this->getPayment();
         if (isset($response->resources->paymentId)) {

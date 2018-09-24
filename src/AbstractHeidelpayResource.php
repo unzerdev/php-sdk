@@ -45,6 +45,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     public function create(): HeidelpayResourceInterface
     {
         $response = $this->send(HttpAdapterInterface::REQUEST_POST);
+
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
+            return $this;
+        }
+
         $this->setId($response->id);
 
         $this->handleResponse($response);
@@ -272,10 +278,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     protected function handleResponse(\stdClass $response)
     {
-        if ($this->id !== ($response->id ?? '')) {
-            throw new ReferenceException();
-        }
-
         $this->updateValues($this, $response);
     }
 

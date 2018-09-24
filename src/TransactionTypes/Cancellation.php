@@ -39,22 +39,6 @@ class Cancellation extends AbstractTransactionType
         return 'cancels';
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function handleResponse(\stdClass $response)
-    {
-        if ($this->id !== ($response->id ?? '')) {
-            throw new ReferenceException();
-        }
-
-        if (isset($response->amount)) {
-            $this->setAmount($response->amount);
-        }
-
-        parent::handleResponse($response);
-    }
-
     //<editor-fold desc="Getters/Setters">
     /**
      * @return float|null

@@ -44,6 +44,8 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     protected function handleResponse(\stdClass $response)
     {
+        parent::handleResponse($response);
+
         $this->updatePayment();
     }
 
