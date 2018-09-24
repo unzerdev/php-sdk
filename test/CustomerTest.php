@@ -92,4 +92,24 @@ class CustomerTest extends BasePaymentTest
         $this->assertNotNull($secCustomer);
         $this->assertEquals($customer->getId(), $secCustomer->getId());
     }
+
+    /**
+     * Customer can be updated.
+     *
+     * @depends maxCustomerCanBeCreatedAndFetched
+     * @test
+     * @param Customer $customer
+     */
+    public function customerShouldBeUpdatable(Customer $customer)
+    {
+		$this->assertEquals($customer->getFirstname(), 'Max');
+        $customer->setFirstname('Not Max');
+        $customer->update();
+        $this->assertEquals($customer->getFirstname(), 'Not Max');
+
+        /** @var Customer $fetchedCustomer */
+        $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
+		$this->assertEquals($customer->getId(), $fetchedCustomer->getId());
+		$this->assertEquals('Not Max', $fetchedCustomer->getFirstname());
+    }
 }

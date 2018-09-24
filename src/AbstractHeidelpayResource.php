@@ -62,10 +62,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     public function update(): HeidelpayResourceInterface
     {
-//        $this->send(HttpAdapterInterface::REQUEST_PUT);
+        $response = $this->send(HttpAdapterInterface::REQUEST_PUT);
 
-        // todo: update resource
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
+            return $this;
+        }
 
+        $this->handleResponse($response);
         return $this;
     }
 
