@@ -20,14 +20,12 @@ use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
 class IdealTest extends BasePaymentTest
 {
-    // todo: Fetch list of banks first. then set the bank name and update ideal type.
-    // todo: Add test verifying error on illegal bankname.
-
     /**
      * Verify Ideal payment type is creatable.
      *
      * @test
      * @return Ideal
+     * todo: change bankname to bic
      */
     public function idealShouldBeCreatable(): Ideal
     {
