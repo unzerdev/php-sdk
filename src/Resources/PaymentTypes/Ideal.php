@@ -11,7 +11,7 @@
  *
  * @package  heidelpay/PaymentTypes
  */
-namespace heidelpay\NmgPhpSdk\PaymentTypes;
+namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
 
 class Ideal extends BasePaymentType
 {

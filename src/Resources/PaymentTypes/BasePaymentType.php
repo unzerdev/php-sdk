@@ -11,12 +11,13 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk\PaymentTypes;
+namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
 
-use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
 
 abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
 {

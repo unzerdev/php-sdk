@@ -15,7 +15,7 @@ namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\PaymentTypes\Ideal;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
 class IdealTest extends BasePaymentTest

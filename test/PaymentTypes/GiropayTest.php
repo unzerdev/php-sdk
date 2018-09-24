@@ -15,9 +15,9 @@ namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\PaymentTypes\GiroPay;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\GiroPay;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 
 class GiropayTest extends BasePaymentTest
 {

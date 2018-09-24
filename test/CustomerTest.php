@@ -14,8 +14,7 @@
 namespace heidelpay\NmgPhpSdk\test;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Customer;
-use heidelpay\NmgPhpSdk\Payment;
+use heidelpay\NmgPhpSdk\Resources\Customer;
 
 class CustomerTest extends BasePaymentTest
 {

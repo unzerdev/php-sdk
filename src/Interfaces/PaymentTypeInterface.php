@@ -11,13 +11,12 @@
  *
  * @package  heidelpay/${Package}
  */
+namespace heidelpay\NmgPhpSdk\Interfaces;
 
-namespace heidelpay\NmgPhpSdk\PaymentTypes;
-
-use heidelpay\NmgPhpSdk\Customer;
+use heidelpay\NmgPhpSdk\Resources\Customer;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 
 interface PaymentTypeInterface
 {

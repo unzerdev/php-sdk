@@ -16,7 +16,7 @@ namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Customer;
-use heidelpay\NmgPhpSdk\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
 class SepaDirectDebitGuaranteedTest extends BasePaymentTest

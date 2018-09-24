@@ -11,7 +11,9 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk;
+namespace heidelpay\NmgPhpSdk\Resources;
+
+use heidelpay\NmgPhpSdk\Address;
 
 class Customer extends AbstractHeidelpayResource
 {

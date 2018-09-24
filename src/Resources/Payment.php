@@ -11,15 +11,16 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk;
+namespace heidelpay\NmgPhpSdk\Resources;
 
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
-use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
+use heidelpay\NmgPhpSdk\Interfaces\PaymentInterface;
+use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\HasAmountsTrait;
 use heidelpay\NmgPhpSdk\Traits\HasStateTrait;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 
 class Payment extends AbstractHeidelpayResource implements PaymentInterface
 {

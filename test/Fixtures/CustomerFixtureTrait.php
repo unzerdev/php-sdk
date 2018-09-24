@@ -16,7 +16,7 @@ namespace heidelpay\NmgPhpSdk\test\Fixtures;
 
 use heidelpay\NmgPhpSdk\Address;
 use heidelpay\NmgPhpSdk\Constants\Salutation;
-use heidelpay\NmgPhpSdk\Customer;
+use heidelpay\NmgPhpSdk\Resources\Customer;
 
 trait CustomerFixtureTrait
 {

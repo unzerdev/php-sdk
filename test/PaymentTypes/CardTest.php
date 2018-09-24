@@ -18,12 +18,12 @@ use heidelpay\NmgPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
-use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
-use heidelpay\NmgPhpSdk\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 
 class CardTest extends BasePaymentTest
 {

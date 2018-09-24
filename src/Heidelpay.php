@@ -17,15 +17,20 @@ use heidelpay\NmgPhpSdk\Adapter\CurlAdapter;
 use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Constants\Mode;
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
+use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\Resources\Customer;
+use heidelpay\NmgPhpSdk\Resources\Payment;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\PaymentTypes\Card;
-use heidelpay\NmgPhpSdk\PaymentTypes\GiroPay;
-use heidelpay\NmgPhpSdk\PaymentTypes\Ideal;
-use heidelpay\NmgPhpSdk\PaymentTypes\Invoice;
-use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\GiroPay;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Ideal;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Invoice;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
 
 class Heidelpay implements HeidelpayParentInterface
 {

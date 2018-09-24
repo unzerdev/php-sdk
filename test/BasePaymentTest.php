@@ -14,10 +14,10 @@
 namespace heidelpay\NmgPhpSdk\test;
 
 use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
+use heidelpay\NmgPhpSdk\Resources\Payment;
 use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\Payment;
-use heidelpay\NmgPhpSdk\PaymentInterface;
-use heidelpay\NmgPhpSdk\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\Interfaces\PaymentInterface;
 use heidelpay\NmgPhpSdk\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
 

@@ -11,8 +11,9 @@
  *
  * @package  heidelpay/${Package}
  */
-
 namespace heidelpay\NmgPhpSdk;
+
+use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
 
 class Address extends AbstractHeidelpayResource
 {

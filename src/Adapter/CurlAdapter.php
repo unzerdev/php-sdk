@@ -20,7 +20,7 @@
  */
 namespace heidelpay\NmgPhpSdk\Adapter;
 
-use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\NmgPhpSdk\Parameters;
 

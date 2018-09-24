@@ -11,11 +11,10 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk;
+namespace heidelpay\NmgPhpSdk\Interfaces;
 
-use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\TransactionTypes\Charge;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 
 interface PaymentInterface extends AmountsInterface
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the invoice payment type.
+ * This represents the GiroPay payment type.
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
@@ -11,8 +11,17 @@
  *
  * @package  heidelpay/PaymentTypes
  */
-namespace heidelpay\NmgPhpSdk\PaymentTypes;
+namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
 
-class Invoice extends BasePaymentType
+class GiroPay extends BasePaymentType
 {
+    /**
+     * GiroPay constructor.
+     */
+    public function __construct()
+    {
+        $this->setChargeable(true);
+
+        parent::__construct();
+    }
 }

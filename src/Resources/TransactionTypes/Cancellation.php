@@ -11,9 +11,7 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk\TransactionTypes;
-
-use heidelpay\NmgPhpSdk\ReferenceException;
+namespace heidelpay\NmgPhpSdk\Resources\TransactionTypes;
 
 class Cancellation extends AbstractTransactionType
 {

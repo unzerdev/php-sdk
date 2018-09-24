@@ -14,8 +14,8 @@
 
 namespace heidelpay\NmgPhpSdk\Traits;
 
-use heidelpay\NmgPhpSdk\HeidelpayParentInterface;
-use heidelpay\NmgPhpSdk\TransactionTypes\Cancellation;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
 
 trait HasCancellationsTrait
 {

@@ -15,8 +15,8 @@
 namespace heidelpay\NmgPhpSdk\test;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\PaymentTypes\Card;
-use heidelpay\NmgPhpSdk\TransactionTypes\Authorization;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
 
 class AuthorizationTest extends BasePaymentTest
 {

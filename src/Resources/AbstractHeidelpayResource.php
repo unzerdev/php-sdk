@@ -11,11 +11,14 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk;
+namespace heidelpay\NmgPhpSdk\Resources;
 
 use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
 use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
+use heidelpay\NmgPhpSdk\Heidelpay;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
 
 abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, HeidelpayParentInterface
 {
@@ -82,9 +85,15 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             throw new IdRequiredToFetchResourceException();
         }
 
-//        $this->send(HttpAdapterInterface::REQUEST_DELETE);
+        $response = $this->send(HttpAdapterInterface::REQUEST_DELETE);
 
-        // todo: What to do here?
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
+            return $this;
+        }
+
+        $this->handleResponse($response);
+        return $this;
     }
 
     /**

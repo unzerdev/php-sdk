@@ -14,7 +14,7 @@
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\PaymentTypes\Invoice;
+use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 
 class InvoiceTest extends BasePaymentTest

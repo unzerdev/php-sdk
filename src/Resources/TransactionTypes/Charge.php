@@ -11,12 +11,12 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk\TransactionTypes;
+namespace heidelpay\NmgPhpSdk\Resources\TransactionTypes;
 
+use heidelpay\NmgPhpSdk\Resources\Payment;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
-use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
-use heidelpay\NmgPhpSdk\Payment;
-use heidelpay\NmgPhpSdk\PaymentTypes\PaymentTypeInterface;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\HasCancellationsTrait;
 use heidelpay\NmgPhpSdk\Traits\HasValueHelper;
 

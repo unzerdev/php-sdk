@@ -11,11 +11,11 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk\TransactionTypes;
+namespace heidelpay\NmgPhpSdk\Resources\TransactionTypes;
 
-use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
-use heidelpay\NmgPhpSdk\HeidelpayResourceInterface;
-use heidelpay\NmgPhpSdk\Payment;
+use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\Resources\Payment;
+use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {

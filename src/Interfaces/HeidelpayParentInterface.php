@@ -12,7 +12,9 @@
  * @package  heidelpay/${Package}
  */
 
-namespace heidelpay\NmgPhpSdk;
+namespace heidelpay\NmgPhpSdk\Interfaces;
+
+use heidelpay\NmgPhpSdk\Heidelpay;
 
 interface HeidelpayParentInterface
 {

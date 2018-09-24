@@ -17,7 +17,7 @@
  */
 namespace heidelpay\NmgPhpSdk\Adapter;
 
-use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
+use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
 
 /**
  * Http adapters to be used by this api should implement this interface.

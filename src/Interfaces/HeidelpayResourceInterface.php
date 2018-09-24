@@ -11,7 +11,7 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpay\NmgPhpSdk;
+namespace heidelpay\NmgPhpSdk\Interfaces;
 
 use JsonSerializable;
 
