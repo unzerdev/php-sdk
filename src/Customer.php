@@ -51,6 +51,7 @@ class Customer extends AbstractHeidelpayResource
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
+        $this->billingAddress = new Address();
 
         parent::__construct();
     }
@@ -214,12 +215,12 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @param Address $address
+     * @param Address $billingAddress
      * @return Customer
      */
-    public function setBillingAddress(Address $address): Customer
+    public function setBillingAddress(Address $billingAddress): Customer
     {
-        $this->billingAddress = $address;
+        $this->billingAddress = $billingAddress;
         return $this;
     }
     //</editor-fold>
