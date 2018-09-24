@@ -42,6 +42,9 @@ class Customer extends AbstractHeidelpayResource
     /** @var Address $billingAddress */
     protected $billingAddress;
 
+    /** @var string $customerId */
+    protected $customerId;
+
     /**
      * Customer constructor.
      * @param string|null $firstname
@@ -221,6 +224,24 @@ class Customer extends AbstractHeidelpayResource
     public function setBillingAddress(Address $billingAddress): Customer
     {
         $this->billingAddress = $billingAddress;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerId(): string
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * @param string $customerId
+     * @return Customer
+     */
+    public function setCustomerId(string $customerId): Customer
+    {
+        $this->customerId = $customerId;
         return $this;
     }
     //</editor-fold>
