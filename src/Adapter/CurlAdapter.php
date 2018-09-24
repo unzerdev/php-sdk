@@ -22,6 +22,7 @@ namespace heidelpay\NmgPhpSdk\Adapter;
 
 use heidelpay\NmgPhpSdk\AbstractHeidelpayResource;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\NmgPhpSdk\Parameters;
 
 class CurlAdapter implements HttpAdapterInterface
 {
@@ -48,6 +49,10 @@ class CurlAdapter implements HttpAdapterInterface
         }
 
         $request = $this->initCurlRequest($uri, $heidelpayResource, $httpMethod);
+
+        if (Parameters::DEBUG) {
+            echo 'Curl ' . $httpMethod . '-Request: ' . $uri . "\n";
+        }
 
         $response = curl_exec($request);
         $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
@@ -103,10 +108,10 @@ class CurlAdapter implements HttpAdapterInterface
         curl_setopt($request, CURLOPT_USERAGENT, 'HeidelpayPHP');
         curl_setopt($request, CURLOPT_HTTPHEADER, array(
             'Authorization: ' . 'Basic ' . base64_encode($heidelpayResource->getHeidelpayObject()->getKey() . ':'), // basic auth with key as user and empty password
-            'Content-Type: application/json'
+            'Content-Type: application/json',
+            'SDK-VERSION: ' . Parameters::VERSION
 //            'CUSTOMER-LANGUAGE: en_US', // heidelpay constructor // header object?
 //            'CHECKOUT-ID: checkout-5aba2fad0ab154.88150279', // heidelpay constructor
-//            'SDK-VERSION: PHP - 1.4.1', // heidelpay constructor
 //            'SHOP-SYSTEM: Shopware - 5.2.2', // heidelpay constructor
 //            'EXTENSION: heidelpay/magento-cd-edition - 1.5.3' // heidelpay constructor
         ));
