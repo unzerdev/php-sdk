@@ -34,7 +34,7 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
-        $this->assertEquals($customer->jsonSerialize(), $fetchedCustomer->jsonSerialize());
+        $this->assertArraySubset($customer->expose(), $fetchedCustomer->expose());
 
         return $customer;
     }
@@ -53,6 +53,7 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
+        $this->assertArraySubset($customer->expose(), $fetchedCustomer->expose());
 
         return $customer;
     }
