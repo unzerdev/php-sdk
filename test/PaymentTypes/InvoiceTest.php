@@ -37,16 +37,6 @@ class InvoiceTest extends BasePaymentTest
     }
 
     /**
-     * @test
-     * @param Invoice $invoice
-     * todo: no asserts what should this verify
-     */
-    public function testAuthorizeType(Invoice $invoice)
-    {
-        $invoice->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-    }
-
-    /**
      * Verify invoice is chargeable.
      *
      * @test
