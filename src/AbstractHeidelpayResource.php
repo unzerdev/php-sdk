@@ -233,7 +233,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     {
         // remove trailing slash and explode
         $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
-        if (!empty($this->getId())) {
+        if ($this->getId() !== null) {
             $uri[] = $this->getId();
         }
 
@@ -272,7 +272,30 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     protected function handleResponse(\stdClass $response)
     {
-        // Default: Do nothing with the data.
+        if ($this->id !== ($response->id ?? '')) {
+            throw new ReferenceException();
+        }
+
+        $this->updateValues($this, $response);
+    }
+
+    /**
+     * @param $object
+     * @param \stdClass $response
+     */
+    private function updateValues($object, \stdClass $response)
+    {
+        foreach ($response as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            $getter = 'get' . ucfirst($key);
+            if (\is_object($value)) {
+                if (\is_callable($object, $getter)) {
+                    $this->updateValues($object->$getter(), $value);
+                }
+            } else if (\is_callable([$object, $setter])) {
+                $object->$setter($value);
+            }
+        }
     }
 
     //</editor-fold>

@@ -55,9 +55,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     protected function handleResponse(\stdClass $response)
     {
-        if ($this->id !== ($response->id ?? '')) {
-            throw new ReferenceException();
-        }
+        parent::handleResponse($response);
 
         if (isset($response->state->id)) {
             $this->setState($response->state->id);
@@ -74,10 +72,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             }
         }
 
-        if (isset($response->currency)) {
-            $this->currency = $response->currency;
-        }
-
         if (isset($response->resources)) {
             $resources = $response->resources;
 
@@ -90,6 +84,12 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
                     $this->customer = $this->getHeidelpayObject()->fetchCustomerById($resources->customerId);
                 } else {
                     $this->customer->fetch();
+                }
+            }
+
+            if (isset($resources->typeId) && !empty($resources->typeId)) {
+                if (!$this->paymentType instanceof PaymentTypeInterface) {
+                    $this->paymentType = $this->getHeidelpayObject()->fetchPaymentById($resources->typeId);
                 }
             }
         }
