@@ -49,9 +49,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * @param int $id
-     * @return AbstractHeidelpayResource
+     * @return $this
      */
-    public function setId($id): AbstractHeidelpayResource
+    public function setId($id): self
     {
         $this->id = $id;
         return $this;

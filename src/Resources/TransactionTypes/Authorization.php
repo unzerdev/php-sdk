@@ -41,7 +41,7 @@ class Authorization extends AbstractTransactionType
      * @param string $currency
      * @param string $returnUrl
      */
-    public function __construct($amount, $currency, $returnUrl)
+    public function __construct($amount = null, $currency = null, $returnUrl = null)
     {
         $this->setAmount($amount);
         $this->setCurrency($currency);
@@ -61,9 +61,9 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param float $amount
-     * @return HeidelpayResourceInterface
+     * @return self
      */
-    public function setAmount(float $amount): HeidelpayResourceInterface
+    public function setAmount($amount): self
     {
         $this->amount = $amount;
         return $this;
@@ -81,7 +81,7 @@ class Authorization extends AbstractTransactionType
      * @param string $currency
      * @return HeidelpayResourceInterface
      */
-    public function setCurrency(string $currency): HeidelpayResourceInterface
+    public function setCurrency($currency): HeidelpayResourceInterface
     {
         $this->currency = $currency;
         return $this;
@@ -99,7 +99,7 @@ class Authorization extends AbstractTransactionType
      * @param string $returnUrl
      * @return HeidelpayResourceInterface
      */
-    public function setReturnUrl(string $returnUrl): HeidelpayResourceInterface
+    public function setReturnUrl($returnUrl): HeidelpayResourceInterface
     {
         $this->returnUrl = $returnUrl;
         return $this;

@@ -13,6 +13,7 @@
  */
 namespace heidelpay\NmgPhpSdk\Resources;
 
+use heidelpay\NmgPhpSdk\Constants\TransactionTypes;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Interfaces\PaymentInterface;
 use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
@@ -90,6 +91,34 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             if (isset($resources->typeId) && !empty($resources->typeId)) {
                 if (!$this->paymentType instanceof PaymentTypeInterface) {
                     $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
+                }
+            }
+        }
+        if (isset($response->transactions) && !empty($response->transactions)) {
+            foreach ($response->transactions as $transaction) {
+                switch ($transaction->type) {
+                    case TransactionTypes::AUTHORIZATION:
+                        $transactionId = $this->getTransactionId($transaction, 'aut');
+                        // todo: refactor
+                        $authorization = $this->getAuthorization();
+                        if (!$authorization instanceof Authorization) {
+                            $authorization = (new Authorization())
+                                ->setPayment($this)
+                                ->setParentResource($this)
+                                ->setId($transactionId);
+                            $this->setAuthorization($authorization);
+                        }
+                        $authorization->setAmount($transaction->amount);
+                        break;
+                    case TransactionTypes::CHARGE:
+                        // todo: like auth
+                        break;
+                    case TransactionTypes::CANCEL:
+                        // todo: like auth
+                        break;
+                    default:
+                        // skip
+                        break;
                 }
             }
         }
@@ -288,6 +317,23 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         foreach ($this->getCharges() as $charge) {
             $charge->cancel();
         }
+    }
+
+    /**
+     * @param $transaction
+     * @param $pattern
+     * @return mixed
+     */
+    protected function getTransactionId($transaction, $pattern)
+    {
+        $matches = [];
+        preg_match('~\/([s|p]{1}-' . $pattern . '-[\d]+)~', $transaction->url, $matches);
+
+        if (count($matches) < 2) {
+            throw new \RuntimeException('Id not found!');
+        }
+
+        return $matches[1];
     }
     //</editor-fold>
 }

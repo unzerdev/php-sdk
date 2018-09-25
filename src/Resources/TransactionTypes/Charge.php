@@ -46,7 +46,7 @@ class Charge extends AbstractTransactionType
      * @param string $currency
      * @param string $returnUrl
      */
-    public function __construct($amount, $currency, $returnUrl)
+    public function __construct($amount = null, $currency = null, $returnUrl = null)
     {
         $this->setAmount($amount);
         $this->setCurrency($currency);
@@ -68,7 +68,7 @@ class Charge extends AbstractTransactionType
      * @param float $amount
      * @return HeidelpayResourceInterface
      */
-    public function setAmount(float $amount): HeidelpayResourceInterface
+    public function setAmount($amount): HeidelpayResourceInterface
     {
         $this->amount = $amount;
         return $this;

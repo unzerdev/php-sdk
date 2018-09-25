@@ -360,6 +360,24 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * @param $paymentId
+     * @param null $amount
+     * @return Charge
+     */
+    public function chargeAuthorization($paymentId, $amount = null): Charge
+    {
+        /** @var Payment $payment */
+        $payment = $this->fetchPaymentById($paymentId);
+        $charge = new Charge($amount);
+        $charge->setParentResource($payment)->setPayment($payment);
+        $this->resourceService->create($charge);
+        // needs to be set after creation to use id as key in charge array
+        $payment->addCharge($charge);
+
+        return $charge;
+    }
+
+    /**
      * @param PaymentTypeInterface $paymentType
      * @param $amount
      * @param $currency

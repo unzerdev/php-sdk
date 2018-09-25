@@ -170,11 +170,13 @@ class CardTest extends BasePaymentTest
         $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $payment->fullCharge();
+        /** @var Charge $charge */
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId());
+        $paymentNew = $charge->getPayment();
 
         // verify payment has been updated properly
-        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
-        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($paymentNew, 0.0, 1.0, 1.0, 0.0);
+        $this->assertTrue($paymentNew->isCompleted());
     }
 
     /**
@@ -193,17 +195,20 @@ class CardTest extends BasePaymentTest
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $payment->charge(20);
-        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
+        $payment1 = $charge->getPayment();
+        $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
+        $this->assertTrue($payment1->isPartlyPaid());
 
-        $payment->charge(20);
-        $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
+        $payment2 = $charge->getPayment();
+        $this->assertAmounts($payment2, 60.0, 40.0, 100.0, 0.0);
+        $this->assertTrue($payment2->isPartlyPaid());
 
-        $payment->charge(60);
-        $this->assertAmounts($payment, 00.0, 100.0, 100.0, 0.0);
-        $this->assertTrue($payment->isCompleted());
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 60);
+        $payment3 = $charge->getPayment();
+        $this->assertAmounts($payment3, 00.0, 100.0, 100.0, 0.0);
+        $this->assertTrue($payment3->isCompleted());
     }
 
     /**
@@ -216,19 +221,19 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCard();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $this->heidelpay->authorize($card, 100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
-
+        $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $payment->charge(50);
-        $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 50);
+        $payment1 = $charge->getPayment();
+        $this->assertAmounts($payment1, 50.0, 50.0, 100.0, 0.0);
+        $this->assertTrue($payment1->isPartlyPaid());
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
-        $payment->charge(70);
+        $this->heidelpay->chargeAuthorization($payment->getId(), 70);
     }
 
     /**
@@ -247,14 +252,34 @@ class CardTest extends BasePaymentTest
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $payment->charge(20);
-        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
+        $payment1 = $charge->getPayment();
+        $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
+        $this->assertTrue($payment1->isPartlyPaid());
 
-        $payment->charge();
-        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
-        $this->assertTrue($payment->isCompleted());
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId());
+        $payment2 = $charge->getPayment();
+        $this->assertAmounts($payment2, 0.0, 100.0, 100.0, 0.0);
+        $this->assertTrue($payment2->isCompleted());
     }
+
+    /**
+     * Authorization can be fetched.
+     *
+     * @test
+     */
+    public function authorizationShouldBeFetchable()
+    {
+        /** @var Card $card */
+        $card = $this->createCard();
+        $card = $this->heidelpay->createPaymentType($card);
+        $authorization = $card->authorize(100.0000, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
+
+        $fetchedAuthorization = $this->heidelpay->fetchAuthorization($payment->getId());
+        $this->assertEquals($fetchedAuthorization->getId(), $authorization->getId());
+    }
+
 
     /**
      * @test
