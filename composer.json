@@ -1,6 +1,6 @@
 {
   "name": "heidelpay/NmgPhpSdk",
-  "description": "Entwicklung einer möglichen Fassade für den Nutzer",
+  "description": "This is the php sdk to connect to the heidelpay rest api.",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [

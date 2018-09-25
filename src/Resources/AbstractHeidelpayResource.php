@@ -13,9 +13,7 @@
  */
 namespace heidelpay\NmgPhpSdk\Resources;
 
-use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
-use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 use heidelpay\NmgPhpSdk\Heidelpay;
 use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -39,77 +37,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $this->parentResource = $parent;
         $this->id = $id;
     }
-
-    //<editor-fold desc="CRUD">
-
-    /**
-     * {@inheritDoc}
-     */
-    public function create(): HeidelpayResourceInterface
-    {
-        $response = $this->send(HttpAdapterInterface::REQUEST_POST);
-
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return $this;
-        }
-
-        $this->setId($response->id);
-
-        $this->handleResponse($response);
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function update(): HeidelpayResourceInterface
-    {
-        $response = $this->send(HttpAdapterInterface::REQUEST_PUT);
-
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return $this;
-        }
-
-        $this->handleResponse($response);
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function delete()
-    {
-        if ($this->id === null) {
-            throw new IdRequiredToFetchResourceException();
-        }
-
-        $response = $this->send(HttpAdapterInterface::REQUEST_DELETE);
-
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return $this;
-        }
-
-        $this->handleResponse($response);
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetch(): HeidelpayResourceInterface
-    {
-        if ($this->id === null) {
-            throw new IdRequiredToFetchResourceException();
-        }
-
-        $response = $this->send(HttpAdapterInterface::REQUEST_GET);
-        $this->handleResponse($response);
-        return $this;
-    }
-    //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
     /**
@@ -217,21 +144,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     //</editor-fold>
 
     /**
-     * @param string $httpMethod
-     * @throws \RuntimeException
-     * @return \stdClass
-     */
-    public function send($httpMethod = HttpAdapterInterface::REQUEST_GET): \stdClass
-    {
-        $responseJson = $this->getHeidelpayObject()->send(
-            $this->getUri(),
-            $this,
-            $httpMethod
-        );
-        return json_decode($responseJson);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getHeidelpayObject(): Heidelpay
@@ -289,7 +201,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      *
      * @param \stdClass $response
      */
-    protected function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response)
     {
         $this->updateValues($this, $response);
     }
@@ -312,7 +224,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             }
         }
     }
-
     //</editor-fold>
 
     //<editor-fold desc="Private helper">

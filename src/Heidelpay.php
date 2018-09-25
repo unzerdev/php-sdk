@@ -31,6 +31,7 @@ use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\NmgPhpSdk\Service\ResourceService;
 
 class Heidelpay implements HeidelpayParentInterface
 {
@@ -50,6 +51,9 @@ class Heidelpay implements HeidelpayParentInterface
     /** @var HttpAdapterInterface $adapter */
     private $adapter;
 
+    /** @var ResourceService $resourceService */
+    private $resourceService;
+
     /**
      * @param string $key
      * @param string $locale
@@ -58,9 +62,10 @@ class Heidelpay implements HeidelpayParentInterface
     public function __construct($key, $locale = SupportedLocale::GERMAN_GERMAN, $mode = Mode::TEST)
     {
         $this->setKey($key);
+        $this->setMode($mode);
         $this->locale = $locale;
 
-        $this->setMode($mode);
+        $this->resourceService = new ResourceService();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -135,6 +140,24 @@ class Heidelpay implements HeidelpayParentInterface
         $this->locale = $locale;
         return $this;
     }
+
+    /**
+     * @return ResourceService
+     */
+    public function getResourceService(): ResourceService
+    {
+        return $this->resourceService;
+    }
+
+    /**
+     * @param ResourceService $resourceService
+     * @return Heidelpay
+     */
+    public function setResourceService(ResourceService $resourceService): Heidelpay
+    {
+        $this->resourceService = $resourceService;
+        return $this;
+    }
     //</editor-fold>
 
     /**
@@ -182,13 +205,13 @@ class Heidelpay implements HeidelpayParentInterface
      * Create the given payment type via api.
      *
      * @param PaymentTypeInterface $paymentType
-     * @return PaymentTypeInterface
+     * @return PaymentTypeInterface|AbstractHeidelpayResource
      */
-    public function createPaymentType(PaymentTypeInterface $paymentType): PaymentTypeInterface
+    public function createPaymentType(PaymentTypeInterface $paymentType)
     {
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this);
-        return $paymentType->create();
+        return $this->resourceService->create($paymentType);
     }
 
     /**
@@ -200,14 +223,14 @@ class Heidelpay implements HeidelpayParentInterface
     public function createCustomer(Customer $customer): Customer
     {
         $customer->setParentResource($this);
-        return $customer->create();
+        return $this->resourceService->create($customer);
     }
 
     /**
      * @param PaymentTypeInterface $paymentType
      * @return Payment
      */
-    public function createPayment(PaymentTypeInterface $paymentType): Payment
+    private function createPayment(PaymentTypeInterface $paymentType): Payment
     {
         $payment = new Payment($this);
         $payment->setPaymentType($paymentType);
@@ -224,7 +247,7 @@ class Heidelpay implements HeidelpayParentInterface
     {
         $payment = new Payment($this);
         $payment->setId($paymentId);
-        return $payment->fetch();
+        return $this->resourceService->fetch($payment);
     }
 
     /**
@@ -235,11 +258,12 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function fetchCustomerById($customerId): HeidelpayResourceInterface
     {
-        return (new Customer())->setParentResource($this)->setId($customerId)->fetch();
+        $customer = (new Customer())->setParentResource($this)->setId($customerId);
+        return $this->resourceService->create($customer);
     }
 
     /**
-     * @param $typeId
+     * @param string $typeId
      * @return mixed
      */
     public function fetchPaymentType($typeId)
@@ -247,77 +271,122 @@ class Heidelpay implements HeidelpayParentInterface
         $paymentType = null;
 
         $typeIdParts = [];
-        preg_match('/^[sp]{1}-([a-z]{3})/', $typeId,$typeIdParts);
+        preg_match('/^[sp]{1}-([a-z]{3})/', $typeId, $typeIdParts);
 
         // todo maybe move this into a builder service
         switch ($typeIdParts[1]) {
             case 'crd':
-                $paymentType = (new Card('', ''))->setParentResource($this)->setId($typeId)->fetch();
+                $paymentType = new Card(null, null);
                 break;
             case 'gro':
-                $paymentType = (new GiroPay())->setParentResource($this)->setId($typeId)->fetch();
+                $paymentType = new GiroPay();
                 break;
             case 'idl':
-                $paymentType = (new Ideal())->setParentResource($this)->setId($typeId)->fetch();
+                $paymentType = new Ideal();
                 break;
             case 'ivc':
-                $paymentType = (new Invoice())->setParentResource($this)->setId($typeId)->fetch();
+                $paymentType = new Invoice();
                 break;
             default:
                 throw new IllegalTransactionTypeException($typeId);
                 break;
         }
 
-        return $paymentType;
+        return $this->resourceService->fetch($paymentType->setParentResource($this)->setId($typeId));
     }
 
+    /**
+     * @param $paymentId
+     * @return Authorization|null
+     */
+    public function fetchAuthorization($paymentId)
+    {
+        /** @var Payment $payment */
+        $payment = $this->fetchPaymentById($paymentId);
+        return $payment->getAuthorization();
+    }
+    
     //<editor-fold desc="Authorize methods">
 
     /**
-     * Perform an authorization with the paymentTypeId and return an Authorization object.
+     * Perform an authorization and return the corresponding Authorization object.
      *
+     * @param float $amount
+     * @param string $currency
      * @param $paymentTypeId
-     * @param $amount
-     * @param $currency
-     * @param $returnUrl
+     * @param string $returnUrl
      * @return Authorization
      */
-    public function authorizeWithPaymentTypeId($paymentTypeId, $amount, $currency, $returnUrl): Authorization
+    public function authorize($amount, $currency, $paymentTypeId, $returnUrl): Authorization
     {
-        /** @var PaymentTypeInterface $paymentType */
         $paymentType = $this->fetchPaymentType($paymentTypeId);
-        return $this->authorize($paymentType, $amount, $currency, $returnUrl);
+        return $this->authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl);
     }
 
     /**
      * Perform an authorization and return the corresponding Authorization object.
      *
-     * @param PaymentTypeInterface $paymentType
      * @param float $amount
      * @param string $currency
+     * @param $paymentType
      * @param string $returnUrl
      * @return Authorization
      */
-    public function authorize(PaymentTypeInterface $paymentType, $amount, $currency, $returnUrl): Authorization
+    public function authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl): Authorization
     {
         $payment = $this->createPayment($paymentType);
-        return $payment->authorize($amount, $currency, $returnUrl);
+        $authorization = new Authorization($amount, $currency, $returnUrl);
+        $payment->setAuthorization($authorization);
+        $this->resourceService->create($authorization);
+        return $authorization;
     }
+
     //</editor-fold>
 
     /**
      * Performs a charge and returns the corresponding Charge object.
      *
-     * @param PaymentTypeInterface $paymentType
      * @param float $amount
      * @param string $currency
      * @param string $returnUrl
+     * @param string $paymentTypeId
      * @param Customer|null $customer
      * @return Charge
      */
-    public function charge(PaymentTypeInterface $paymentType, $amount, $currency, $returnUrl, $customer = null): Charge
+    public function charge($amount, $currency, $paymentTypeId, $returnUrl, $customer = null): Charge
+    {
+        $paymentType = $this->fetchPaymentType($paymentTypeId);
+        return $this->chargeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer);
+    }
+
+    /**
+     * @param PaymentTypeInterface $paymentType
+     * @param $amount
+     * @param $currency
+     * @param $returnUrl
+     * @param null $customer
+     * @return Charge
+     */
+    public function chargeWithPaymentType(
+        $amount,
+        $currency,
+        PaymentTypeInterface $paymentType,
+        $returnUrl,
+        $customer = null): Charge
     {
         $payment = $this->createPayment($paymentType);
-        return $payment->charge($amount, $currency, $returnUrl, $customer);
+
+        if ($customer instanceof Customer) {
+            $payment->setCustomer($customer);
+        }
+
+        /** @var Charge $charge */
+        $charge = new Charge($amount, $currency, $returnUrl);
+        $charge->setParentResource($payment)->setPayment($payment);
+        $this->resourceService->create($charge);
+        // needs to be set after creation to use id as key in charge array
+        $payment->addCharge($charge);
+
+        return $charge;
     }
 }

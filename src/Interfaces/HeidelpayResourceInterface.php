@@ -23,30 +23,4 @@ interface HeidelpayResourceInterface extends JsonSerializable
      * @return string|null
      */
     public function getId();
-
-    /**
-     * Create the resource on the api.
-     *
-     * @return $this
-     */
-    public function create(): HeidelpayResourceInterface;
-
-    /**
-     * Update the resource on the api.
-     *
-     * @return $this
-     */
-    public function update(): HeidelpayResourceInterface;
-
-    /**
-     * Delete the resource on the api.
-     */
-    public function delete();
-
-    /**
-     * Fetch the resource from the api (id must be set).
-     *
-     * @return $this
-     */
-    public function fetch(): HeidelpayResourceInterface;
 }

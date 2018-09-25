@@ -42,10 +42,9 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     }
     //</editor-fold>
 
-    protected function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response)
     {
         parent::handleResponse($response);
-
         $this->updatePayment();
     }
 
@@ -58,7 +57,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         if (!$this instanceof Payment) {
             $payment = $this->getPayment();
             if ($payment instanceof HeidelpayResourceInterface) {
-                $payment->fetch();
+                $this->getHeidelpayObject()->getResourceService()->fetch($payment);
             }
         }
     }

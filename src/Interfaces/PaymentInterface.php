@@ -18,42 +18,6 @@ use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 
 interface PaymentInterface extends AmountsInterface
 {
-    //<editor-fold desc="Transactions">
-    /**
-     * @param float $amount
-     * @param string $currency
-     * @param string $returnUrl
-     * @return Charge
-     */
-    public function charge($amount = null, $currency = null, $returnUrl = null): Charge;
-
-    /**
-     * Performs a full charge on the payment.
-     * Works only if an authorization has been performed prior to this call.
-     *
-     * @return Charge
-     */
-    public function fullCharge(): Charge;
-
-    /**
-     * @param float $amount
-     * @param string $currency
-     * @param string $returnUrl
-     * @return Authorization
-     */
-    public function authorize($amount, $currency, $returnUrl): Authorization;
-
-    /**
-     * @param float $amount
-     */
-    public function cancel($amount = null);
-
-    /**
-     * Cancel all charges in the payment.
-     */
-    public function cancelAllCharges();
-    //</editor-fold>
-
     //<editor-fold desc="Payment state">
     /**
      * Return true if the state is pending.

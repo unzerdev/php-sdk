@@ -50,7 +50,7 @@ class Card extends BasePaymentType
     /**
      * {@inheritDoc}
      */
-    protected function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response)
     {
         $isError = isset($response->isError) && $response->isError;
         if ($isError) {

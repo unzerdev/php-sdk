@@ -111,4 +111,19 @@ class CustomerTest extends BasePaymentTest
 		$this->assertEquals($customer->getId(), $fetchedCustomer->getId());
 		$this->assertEquals('Not Max', $fetchedCustomer->getFirstname());
     }
+
+    /**
+     * Customer can be deleted.
+     *
+     * @depends maxCustomerCanBeCreatedAndFetched
+     * @test
+     * @param Customer $customer
+     */
+    public function customerShouldBeDeletable(Customer $customer)
+    {
+        $this->assertNotNull($customer);
+        $this->assertNotNull($customer->getId());
+        $customer->delete();
+        $customer->fetch();
+    }
 }

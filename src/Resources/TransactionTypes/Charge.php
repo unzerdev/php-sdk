@@ -195,7 +195,7 @@ class Charge extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response)
     {
         /** @var Payment $payment */
         $payment = $this->getPayment();

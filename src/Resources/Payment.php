@@ -13,7 +13,6 @@
  */
 namespace heidelpay\NmgPhpSdk\Resources;
 
-use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\NmgPhpSdk\Interfaces\PaymentInterface;
 use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
@@ -54,7 +53,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * {@inheritDoc}
      */
-    protected function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response)
     {
         parent::handleResponse($response);
 
@@ -231,54 +230,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
         // charge amount
         return $this->charge($this->getRemaining());
-    }
-
-    /**
-     * @param float $amount
-     * @param string $currency
-     * @param string $returnUrl
-     * @param Customer|null $customer
-     * @return Charge
-     */
-    public function charge($amount = null, $currency = null, $returnUrl = null, $customer = null): Charge
-    {
-        if (!$this->getPaymentType()->isChargeable()) {
-            throw new IllegalTransactionTypeException(__METHOD__);
-        }
-
-        if ($amount === null) {
-            return $this->fullCharge();
-        }
-
-        if ($customer instanceof Customer) {
-            $this->setCustomer($customer);
-        }
-
-        /** @var Charge $charge */
-        $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setParentResource($this)
-            ->setPayment($this)
-            ->create();
-        // needs to be set after creation to use id as key in charge array
-        $this->addCharge($charge);
-
-        return $charge;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize($amount, $currency, $returnUrl): Authorization
-    {
-        if (!$this->getPaymentType()->isAuthorizable()) {
-            throw new IllegalTransactionTypeException(__METHOD__);
-        }
-
-        $authorization = new Authorization($amount, $currency, $returnUrl);
-        $this->setAuthorization($authorization);
-        $authorization->create();
-
-        return $authorization;
     }
 
     /**

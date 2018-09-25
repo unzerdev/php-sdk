@@ -18,7 +18,7 @@ use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 
-interface PaymentTypeInterface
+interface PaymentTypeInterface extends HeidelpayResourceInterface
 {
     /**
      * @param null $amount
