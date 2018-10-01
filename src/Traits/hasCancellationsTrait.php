@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This trait adds the cancellation property to a class.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,9 +27,8 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/ngw_sdk/traits
  */
-
 namespace heidelpay\NmgPhpSdk\Traits;
 
 use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Cancellation;
@@ -39,7 +38,6 @@ trait HasCancellationsTrait
 {
     /** @var array $cancellations */
     private $cancellations = [];
-
 
     //<editor-fold desc="Getters/Setters">
     /**
@@ -62,6 +60,7 @@ trait HasCancellationsTrait
 
     /**
      * @param Cancellation $cancellation
+     * todo: return self
      */
     public function addCancellation(Cancellation $cancellation)
     {

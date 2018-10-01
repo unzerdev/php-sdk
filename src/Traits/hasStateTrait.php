@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This trait adds the state property to a class.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,9 +27,8 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/ngw_sdk/traits
  */
-
 namespace heidelpay\NmgPhpSdk\Traits;
 
 use heidelpay\NmgPhpSdk\Constants\PaymentState;
