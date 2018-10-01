@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This interface defines the methods for the Payment class.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,12 +27,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/ngw_sdk/interfaces
  */
 namespace heidelpay\NmgPhpSdk\Interfaces;
-
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 
 interface PaymentInterface extends AmountsInterface
 {

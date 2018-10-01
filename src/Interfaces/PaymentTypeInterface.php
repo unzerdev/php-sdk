@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This interface defines the methods for payment types.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +27,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/ngw_sdk/interfaces
  */
 namespace heidelpay\NmgPhpSdk\Interfaces;
 
