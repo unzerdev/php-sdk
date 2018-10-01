@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This service provides for all methods to manage resources with the api.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +27,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/ngw_sdk/services
  */
 namespace heidelpay\NmgPhpSdk\Service;
 
