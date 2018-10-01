@@ -1,7 +1,7 @@
 <?php
 /**
- * These are integration tests to verify interface and functionality of the card payment methods
- * e.g. Credit Card and Debit Card.
+ * This class defines integration tests to verify interface and functionality
+ * of the card payment methods e.g. Credit Card and Debit Card.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,7 +28,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/test/integration
+ * @package  heidelpay/ngw_sdk/tests/integration/payment_types
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 

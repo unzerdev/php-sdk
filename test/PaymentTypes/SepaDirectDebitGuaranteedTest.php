@@ -1,6 +1,7 @@
 <?php
 /**
- * These are integration tests to verify interface and functionality of the payment method sepa direct debit guaranteed.
+ * This class defines integration tests to verify interface and
+ * functionality of the payment method sepa direct debit guaranteed.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +28,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/test/integration
+ * @package  heidelpay/ngw_sdk/tests/integration/payment_types
  */
 namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
