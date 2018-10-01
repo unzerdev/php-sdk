@@ -26,8 +26,7 @@
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
- *
- * @package  heidelpay/PaymentTypes
+ * @package  heidelpay/ngw_sdk/payment_types
  */
 namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
 
