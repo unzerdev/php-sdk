@@ -49,7 +49,7 @@ use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\Service\ResourceService;
+use heidelpay\NmgPhpSdk\Services\ResourceService;
 
 class Heidelpay implements HeidelpayParentInterface
 {

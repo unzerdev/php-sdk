@@ -29,7 +29,7 @@
  *
  * @package  heidelpay/ngw_sdk/services
  */
-namespace heidelpay\NmgPhpSdk\Service;
+namespace heidelpay\NmgPhpSdk\Services;
 
 use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
