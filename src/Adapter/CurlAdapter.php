@@ -69,8 +69,8 @@ class CurlAdapter implements HttpAdapterInterface
      */
     private function handleErrors($info, $response)
     {
-        if ($info >= 400) {
-            $responseArray = json_decode($response);
+        $responseArray = json_decode($response);
+        if ($info >= 400 || isset($responseArray->errors)) {
             $merchantMessage = $customerMessage = $code = '';
 
             if (isset($responseArray->errors[0])) {
