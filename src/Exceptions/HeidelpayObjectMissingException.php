@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This exception is thrown whenever a resource should be referenced but is not set.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +27,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/ngw_sdk/exceptions
  */
 namespace heidelpay\NmgPhpSdk\Exceptions;
 

@@ -27,7 +27,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/nmp_sdk/constants
+ * @package  heidelpay/ngw_sdk/constants
  */
 namespace heidelpay\NmgPhpSdk\Constants;
 

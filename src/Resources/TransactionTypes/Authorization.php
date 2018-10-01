@@ -32,7 +32,7 @@
 namespace heidelpay\NmgPhpSdk\Resources\TransactionTypes;
 
 use heidelpay\NmgPhpSdk\Resources\Payment;
-use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\NmgPhpSdk\Exceptions\MissingResourceExceptionMissingResourceException;
 use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\NmgPhpSdk\Traits\HasCancellationsTrait;

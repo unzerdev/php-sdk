@@ -27,7 +27,7 @@
  *
  * @author  Simon Gabriel <simon.gabriel@heidelpay.com>
  *
- * @package  heidelpay/nmp_sdk
+ * @package  heidelpay/ngw_sdk/adapter
  */
 namespace heidelpay\NmgPhpSdk\Adapter;
 

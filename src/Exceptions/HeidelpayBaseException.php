@@ -1,6 +1,7 @@
 <?php
 /**
- * Description
+ * This is the base exception extended by all exceptions in this sdk.
+ * It adds an additional message field to allow for a client and a merchant message.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,9 +28,8 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/ngw_sdk/exceptions
  */
-
 namespace heidelpay\NmgPhpSdk\Exceptions;
 
 class HeidelpayBaseException extends \RuntimeException
