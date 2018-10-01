@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This file contains definitions of the possible operational modes of this SDK.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,15 +25,23 @@
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/nmp_sdk/constants
  */
-
 namespace heidelpay\NmgPhpSdk\Constants;
 
 class Mode
 {
+    /**
+     * Test mode: All communication will take place with the heidelpay test servers.
+     * @const TEST sandbox mode
+     */
     const TEST = 'sandbox';
+
+    /**
+     * Live mode: All communication will take place with the heidelpay live servers.
+     * @const Live production mode
+     */
     const LIVE = 'live';
 }

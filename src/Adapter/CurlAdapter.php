@@ -1,10 +1,7 @@
 <?php
 /**
- * Standard curl adapter
- *
- * You can use this adapter for your project or you can
- * create one based on a standard library like zend-http
- * or guzzlehttp.
+ * By default this adapter will be used for communication however a custom adapter implementing the
+ * HttpAdapterInterface can be used.
  *
  * @license
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,11 +25,9 @@
  *
  * @link  http://dev.heidelpay.com/heidelpay-php-payment-api/
  *
- * @author  Jens Richter
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  Heidelpay
- * @subpackage PhpPaymentApi
- * @category PhpPaymentApi
+ * @package  heidelpay/nmp_sdk
  */
 namespace heidelpay\NmgPhpSdk\Adapter;
 

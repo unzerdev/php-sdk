@@ -25,7 +25,7 @@
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
  * @package  heidelpay/test/integration
  */
@@ -33,7 +33,7 @@ namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
 
 use heidelpay\NmgPhpSdk\Constants\Currency;
 use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\Customer;
+use heidelpay\NmgPhpSdk\Resources\Customer;
 use heidelpay\NmgPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\NmgPhpSdk\test\BasePaymentTest;
 

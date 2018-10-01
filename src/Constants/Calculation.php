@@ -1,6 +1,6 @@
 <?php
 /**
- * Description
+ * This file contains definitions of calculation constants.
  *
  * LICENSE
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,11 +25,10 @@
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/nmp_sdk/constants
  */
-
 namespace heidelpay\NmgPhpSdk\Constants;
 
 class Calculation

@@ -26,7 +26,7 @@
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
  * @package  heidelpay/test/integration
  */
