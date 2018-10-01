@@ -32,6 +32,23 @@ namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
 
 class Card extends BasePaymentType
 {
+    /**
+     * Card constructor.
+     * @param string $number
+     * @param string $expiryDate
+     */
+    public function __construct($number, $expiryDate)
+    {
+        $this->setAuthorizable(true)
+            ->setChargeable(true);
+
+        $this->setNumber($number);
+        $this->setExpiryDate($expiryDate);
+
+        parent::__construct();
+    }
+
+    //<editor-fold desc="Properties">
     /** @var string $number */
     protected $number;
 
@@ -46,51 +63,6 @@ class Card extends BasePaymentType
 
     /** @var string $brand */
     private $brand = '';
-
-    /**
-     * Card constructor.
-     * @param string $number
-     * @param string $expiryDate
-     */
-    public function __construct($number, $expiryDate)
-    {
-        $this->setAuthorizable(true)
-             ->setChargeable(true);
-
-        $this->setNumber($number);
-        $this->setExpiryDate($expiryDate);
-
-        parent::__construct();
-    }
-
-    //<editor-fold desc="Overridable Methods">
-    /**
-     * {@inheritDoc}
-     */
-    public function handleResponse(\stdClass $response)
-    {
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return;
-        }
-
-        if (isset($response->cvc)) {
-            $this->setCvc($response->cvc);
-        }
-        if (isset($response->number)) {
-            $this->setNumber($response->number);
-        }
-        if (isset($response->expiryDate)) {
-            $this->setExpiryDate($response->expiryDate);
-        }
-        if (isset($response->brand)) {
-            $this->setBrand($response->brand);
-        }
-
-        parent::handleResponse($response);
-    }
-
-    //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
     /**
@@ -187,6 +159,35 @@ class Card extends BasePaymentType
     {
         $this->brand = $brand;
         return $this;
+    }
+    //</editor-fold>
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable Methods">
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(\stdClass $response)
+    {
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
+            return;
+        }
+
+        if (isset($response->cvc)) {
+            $this->setCvc($response->cvc);
+        }
+        if (isset($response->number)) {
+            $this->setNumber($response->number);
+        }
+        if (isset($response->expiryDate)) {
+            $this->setExpiryDate($response->expiryDate);
+        }
+        if (isset($response->brand)) {
+            $this->setBrand($response->brand);
+        }
+
+        parent::handleResponse($response);
     }
     //</editor-fold>
 }
