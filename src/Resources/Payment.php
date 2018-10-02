@@ -347,7 +347,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $matches = [];
         preg_match('~\/([s|p]{1}-' . $pattern . '-[\d]+)~', $transaction->url, $matches);
 
-        if (count($matches) < 2) {
+        if (\count($matches) < 2) {
             throw new \RuntimeException('Id not found!');
         }
 
