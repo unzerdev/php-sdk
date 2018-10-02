@@ -66,7 +66,7 @@ class Address extends AbstractHeidelpayResource
      * @param string $name
      * @return Address
      */
-    public function setName(string $name): Address
+    public function setName($name): Address
     {
         $this->name = $name;
         return $this;
@@ -84,7 +84,7 @@ class Address extends AbstractHeidelpayResource
      * @param string $street
      * @return Address
      */
-    public function setStreet(string $street): Address
+    public function setStreet($street): Address
     {
         $this->street = $street;
         return $this;
@@ -102,7 +102,7 @@ class Address extends AbstractHeidelpayResource
      * @param string $state
      * @return Address
      */
-    public function setState(string $state): Address
+    public function setState($state): Address
     {
         $this->state = $state;
         return $this;
@@ -120,7 +120,7 @@ class Address extends AbstractHeidelpayResource
      * @param string $zip
      * @return Address
      */
-    public function setZip(string $zip): Address
+    public function setZip($zip): Address
     {
         $this->zip = $zip;
         return $this;
@@ -138,7 +138,7 @@ class Address extends AbstractHeidelpayResource
      * @param string $city
      * @return Address
      */
-    public function setCity(string $city): Address
+    public function setCity($city): Address
     {
         $this->city = $city;
         return $this;
@@ -156,7 +156,7 @@ class Address extends AbstractHeidelpayResource
      * @param string $country
      * @return Address
      */
-    public function setCountry(string $country): Address
+    public function setCountry($country): Address
     {
         $this->country = $country;
         return $this;

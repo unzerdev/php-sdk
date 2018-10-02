@@ -32,6 +32,7 @@
 namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Address;
+use heidelpay\MgwPhpSdk\Constants\Salutation;
 
 class Customer extends AbstractHeidelpayResource
 {
@@ -42,7 +43,7 @@ class Customer extends AbstractHeidelpayResource
     protected $lastname;
 
     /** @var string $salutation */
-    protected $salutation;
+    protected $salutation = Salutation::UNKNOWN;
 
     /** @var string $birthDate */
     protected $birthDate;
@@ -77,11 +78,6 @@ class Customer extends AbstractHeidelpayResource
         $this->billingAddress = new Address();
 
         parent::__construct();
-    }
-
-    public function getResourcePath(): string
-    {
-        return 'customers';
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -133,9 +129,9 @@ class Customer extends AbstractHeidelpayResource
      * @param string $salutation
      * @return Customer
      */
-    public function setSalutation(string $salutation): Customer
+    public function setSalutation($salutation): Customer
     {
-        $this->salutation = $salutation;
+        $this->salutation = $salutation ?: Salutation::UNKNOWN;
         return $this;
     }
 
@@ -205,7 +201,7 @@ class Customer extends AbstractHeidelpayResource
      * @param string $phone
      * @return Customer
      */
-    public function setPhone(string $phone): Customer
+    public function setPhone($phone): Customer
     {
         $this->phone = $phone;
         return $this;
@@ -223,7 +219,7 @@ class Customer extends AbstractHeidelpayResource
      * @param string $mobile
      * @return Customer
      */
-    public function setMobile(string $mobile): Customer
+    public function setMobile($mobile): Customer
     {
         $this->mobile = $mobile;
         return $this;
@@ -259,10 +255,18 @@ class Customer extends AbstractHeidelpayResource
      * @param string $customerId
      * @return Customer
      */
-    public function setCustomerId(string $customerId): Customer
+    public function setCustomerId($customerId): Customer
     {
         $this->customerId = $customerId;
         return $this;
     }
+
+    //<editor-fold desc="Resource IF">
+    public function getResourcePath(): string
+    {
+        return 'customers';
+    }
+    //</editor-fold>
+
     //</editor-fold>
 }

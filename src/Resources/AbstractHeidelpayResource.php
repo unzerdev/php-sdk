@@ -225,20 +225,23 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     /**
+     * This method updates the properties of the resource.
+     *
      * @param $object
      * @param \stdClass $response
      */
     private function updateValues($object, \stdClass $response)
     {
         foreach ($response as $key => $value) {
+            $newValue = $value ?: null;
             $setter = 'set' . ucfirst($key);
             $getter = 'get' . ucfirst($key);
             if (\is_object($value)) {
                 if (\is_callable([$object, $getter])) {
-                    $this->updateValues($object->$getter(), $value);
+                    $this->updateValues($object->$getter(), $newValue);
                 }
             } else if (\is_callable([$object, $setter])) {
-                $object->$setter($value);
+                $object->$setter($newValue);
             }
         }
     }
