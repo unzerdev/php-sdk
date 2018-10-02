@@ -92,10 +92,10 @@ class BasePaymentTest extends TestCase
         $expectedTotal,
         $expectedCanceled
     ) {
-        $this->assertEquals($expectedRemaining, $payment->getRemaining());
-        $this->assertEquals($expectedCharged, $payment->getCharged());
-        $this->assertEquals($expectedTotal, $payment->getTotal());
-        $this->assertEquals($expectedCanceled, $payment->getCanceled());
+        $this->assertEquals($expectedRemaining, $payment->getRemaining(), 'The remaining amount does not match.');
+        $this->assertEquals($expectedCharged, $payment->getCharged(), 'The charged amount does not match.');
+        $this->assertEquals($expectedTotal, $payment->getTotal(), 'The total amount does not match.');
+        $this->assertEquals($expectedCanceled, $payment->getCanceled(), 'The canceled amount does not match.');
     }
 
     /**
