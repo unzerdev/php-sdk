@@ -155,39 +155,11 @@ class Card extends BasePaymentType
      * @param string $brand
      * @return Card
      */
-    private function setBrand(string $brand): Card
+    protected function setBrand(string $brand): Card
     {
         $this->brand = $brand;
         return $this;
     }
     //</editor-fold>
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-    /**
-     * {@inheritDoc}
-     */
-    public function handleResponse(\stdClass $response)
-    {
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return;
-        }
-
-        if (isset($response->cvc)) {
-            $this->setCvc($response->cvc);
-        }
-        if (isset($response->number)) {
-            $this->setNumber($response->number);
-        }
-        if (isset($response->expiryDate)) {
-            $this->setExpiryDate($response->expiryDate);
-        }
-        if (isset($response->brand)) {
-            $this->setBrand($response->brand);
-        }
-
-        parent::handleResponse($response);
-    }
     //</editor-fold>
 }
