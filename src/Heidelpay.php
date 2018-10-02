@@ -232,13 +232,12 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Payment resource">
     /**
      * @param PaymentTypeInterface $paymentType
+     * @param Customer|string|null $customer
      * @return Payment
      */
-    private function createPayment(PaymentTypeInterface $paymentType): Payment
+    private function createPayment(PaymentTypeInterface $paymentType, $customer = null): Payment
     {
-        $payment = new Payment($this);
-        $payment->setPaymentType($paymentType);
-        return $payment;
+        return (new Payment($this))->setPaymentType($paymentType)->setCustomer($customer);
     }
 
     /**
@@ -400,20 +399,12 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $currency
      * @param $paymentType
      * @param string $returnUrl
-     * @param Customer|null $customer
+     * @param Customer|string|null $customer
      * @return Authorization
      */
     public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null): Authorization
     {
-        $payment = $this->createPayment($paymentType);
-
-        if ($customer instanceof Customer) {
-            if ($customer->getId() === null) {
-                $this->createCustomer($customer);
-            }
-            $payment->setCustomer($customer);
-        }
-
+        $payment = $this->createPayment($paymentType, $customer);
         $authorization = new Authorization($amount, $currency, $returnUrl);
         $payment->setAuthorization($authorization);
         $this->resourceService->create($authorization);
@@ -443,7 +434,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param $amount
      * @param $currency
      * @param $returnUrl
-     * @param null $customer
+     * @param Customer|string|null $customer
      * @return Charge
      */
     public function charge(
@@ -453,13 +444,7 @@ class Heidelpay implements HeidelpayParentInterface
         $returnUrl,
         $customer = null): Charge
     {
-        $payment = $this->createPayment($paymentType);
-
-        if ($customer instanceof Customer) {
-            $payment->setCustomer($customer);
-        }
-
-        /** @var Charge $charge */
+        $payment = $this->createPayment($paymentType, $customer);
         $charge = new Charge($amount, $currency, $returnUrl);
         $charge->setParentResource($payment)->setPayment($payment);
         $this->resourceService->create($charge);

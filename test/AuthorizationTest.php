@@ -34,10 +34,6 @@
 namespace heidelpay\MgwPhpSdk\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 
 class AuthorizationTest extends BasePaymentTest
 {
@@ -48,17 +44,13 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizeWithTypeId()
     {
-        /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
-
-        /** @var Authorization $authorize */
         $authorize = $this->heidelpay->authorizeWithPaymentTypeId(
             100.0,
             Currency::EUROPEAN_EURO,
             $card->getId(),
             self::RETURN_URL
         );
-
         $this->assertNotNull($authorize);
         $this->assertNotNull($authorize->getId());
     }
@@ -71,12 +63,8 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizeWithType()
     {
-        /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
-
-        /** @var Authorization $authorize */
         $authorize = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
-
         $this->assertNotNull($authorize);
         $this->assertNotNull($authorize->getId());
     }
@@ -88,26 +76,36 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizationProducesPaymentAndCustomer()
     {
-        /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCard());
-
-        /** @var Customer $customer */
         $customer = $this->getMinimalCustomer();
         $this->assertNull($customer->getId());
 
-        /** @var Authorization $authorize */
         $authorize = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL, $customer);
-
-        /** @var Payment $payment */
         $payment = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
 
-        /** @var Customer $newCustomer */
         $newCustomer = $payment->getCustomer();
         $this->assertNotNull($newCustomer);
         $this->assertNotNull($newCustomer->getId());
     }
 
+    /**
+     * Verify authorization with customer Id.
+     *
+     * @test
+     */
+    public function authorizationWithCustomerId()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $customerId = $this->heidelpay->createCustomer($this->getMinimalCustomer())->getId();
+        $authorize = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL, $customerId);
+        $payment = $authorize->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertNotNull($payment->getId());
 
+        $newCustomer = $payment->getCustomer();
+        $this->assertNotNull($newCustomer);
+        $this->assertNotNull($newCustomer->getId());
+    }
 }

@@ -33,6 +33,7 @@ namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Traits\HasAmountsTrait;
@@ -210,13 +211,31 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * @param Customer $customer
+     * @param Customer|string $customer
      * @return Payment
      */
-    public function setCustomer(Customer $customer): Payment
+    public function setCustomer($customer): Payment
     {
-        $customer->setParentResource($this->getHeidelpayObject());
-        $this->customer = $customer;
+        if (empty($customer)) {
+            return $this;
+        }
+
+        /** @var Heidelpay $heidelpay */
+        $heidelpay = $this->getHeidelpayObject();
+
+        /** @var Customer $customerObject */
+        $customerObject = $customer;
+
+        if (\is_string($customer)) {
+            $customerObject = $heidelpay->fetchCustomerById($customer);
+        } elseif ($customerObject instanceof Customer) {
+            if ($customerObject->getId() === null) {
+                $heidelpay->createCustomer($customerObject);
+            }
+        }
+
+        $customerObject->setParentResource($heidelpay);
+        $this->customer = $customerObject;
         return $this;
     }
 
