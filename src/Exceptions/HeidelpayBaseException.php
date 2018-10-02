@@ -28,9 +28,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/exceptions
+ * @package  heidelpay/mgw_sdk/exceptions
  */
-namespace heidelpay\NmgPhpSdk\Exceptions;
+namespace heidelpay\MgwPhpSdk\Exceptions;
 
 class HeidelpayBaseException extends \RuntimeException
 {

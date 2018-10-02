@@ -27,16 +27,16 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/transaction_types
+ * @package  heidelpay/mgw_sdk/transaction_types
  */
-namespace heidelpay\NmgPhpSdk\Resources\TransactionTypes;
+namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
-use heidelpay\NmgPhpSdk\Resources\Payment;
-use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
-use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\Traits\HasCancellationsTrait;
-use heidelpay\NmgPhpSdk\Traits\HasValueHelper;
+use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Traits\HasCancellationsTrait;
+use heidelpay\MgwPhpSdk\Traits\HasValueHelper;
 
 class Charge extends AbstractTransactionType
 {

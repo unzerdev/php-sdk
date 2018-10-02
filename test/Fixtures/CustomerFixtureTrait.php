@@ -27,14 +27,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests/fixtures
+ * @package  heidelpay/mgw_sdk/tests/fixtures
  */
 
-namespace heidelpay\NmgPhpSdk\test\Fixtures;
+namespace heidelpay\MgwPhpSdk\test\Fixtures;
 
-use heidelpay\NmgPhpSdk\Address;
-use heidelpay\NmgPhpSdk\Constants\Salutation;
-use heidelpay\NmgPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Address;
+use heidelpay\MgwPhpSdk\Constants\Salutation;
+use heidelpay\MgwPhpSdk\Resources\Customer;
 
 trait CustomerFixtureTrait
 {

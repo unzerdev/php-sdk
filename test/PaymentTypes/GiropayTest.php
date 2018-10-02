@@ -27,15 +27,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests/integration/payment_types
+ * @package  heidelpay/mgw_sdk/tests/integration/payment_types
  */
-namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\test\PaymentTypes;
 
-use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\GiroPay;
-use heidelpay\NmgPhpSdk\test\BasePaymentTest;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\GiroPay;
+use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
 class GiropayTest extends BasePaymentTest
 {

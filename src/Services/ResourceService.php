@@ -27,15 +27,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/services
+ * @package  heidelpay/mgw_sdk/services
  */
-namespace heidelpay\NmgPhpSdk\Services;
+namespace heidelpay\MgwPhpSdk\Services;
 
-use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
-use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\IdRequiredToFetchResourceException;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 class ResourceService
 {

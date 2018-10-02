@@ -27,9 +27,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/traits
+ * @package  heidelpay/mgw_sdk/traits
  */
-namespace heidelpay\NmgPhpSdk\Traits;
+namespace heidelpay\MgwPhpSdk\Traits;
 
 trait HasAmountsTrait
 {

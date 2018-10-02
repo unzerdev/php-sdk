@@ -28,20 +28,20 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests/integration/payment_types
+ * @package  heidelpay/mgw_sdk/tests/integration/payment_types
  */
-namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\test\PaymentTypes;
 
-use heidelpay\NmgPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
-use heidelpay\NmgPhpSdk\test\BasePaymentTest;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
+use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
 class CardTest extends BasePaymentTest
 {

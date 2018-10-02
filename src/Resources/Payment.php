@@ -27,18 +27,18 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/resources
+ * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\NmgPhpSdk\Resources;
+namespace heidelpay\MgwPhpSdk\Resources;
 
-use heidelpay\NmgPhpSdk\Constants\TransactionTypes;
-use heidelpay\NmgPhpSdk\Exceptions\MissingResourceException;
-use heidelpay\NmgPhpSdk\Interfaces\PaymentInterface;
-use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\Traits\HasAmountsTrait;
-use heidelpay\NmgPhpSdk\Traits\HasStateTrait;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
+use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
+use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Traits\HasAmountsTrait;
+use heidelpay\MgwPhpSdk\Traits\HasStateTrait;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
 class Payment extends AbstractHeidelpayResource implements PaymentInterface
 {

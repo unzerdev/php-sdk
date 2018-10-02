@@ -27,16 +27,16 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests/integration
+ * @package  heidelpay/mgw_sdk/tests/integration
  */
-namespace heidelpay\NmgPhpSdk\test;
+namespace heidelpay\MgwPhpSdk\test;
 
-use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
-use heidelpay\NmgPhpSdk\Resources\Payment;
-use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\NmgPhpSdk\Interfaces\PaymentInterface;
-use heidelpay\NmgPhpSdk\test\Fixtures\CustomerFixtureTrait;
+use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
+use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
+use heidelpay\MgwPhpSdk\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 class BasePaymentTest extends TestCase

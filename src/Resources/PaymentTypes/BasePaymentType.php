@@ -27,15 +27,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/payment_types
+ * @package  heidelpay/mgw_sdk/payment_types
  */
-namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
-use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 
 abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
 {

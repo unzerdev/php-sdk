@@ -27,13 +27,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/adapter
+ * @package  heidelpay/mgw_sdk/adapter
  */
-namespace heidelpay\NmgPhpSdk\Adapter;
+namespace heidelpay\MgwPhpSdk\Adapter;
 
-use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 
 class CurlAdapter implements HttpAdapterInterface
 {

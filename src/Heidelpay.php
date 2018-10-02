@@ -28,29 +28,29 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk
+ * @package  heidelpay/mgw_sdk
  */
-namespace heidelpay\NmgPhpSdk;
+namespace heidelpay\MgwPhpSdk;
 
-use heidelpay\NmgPhpSdk\Adapter\CurlAdapter;
-use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\NmgPhpSdk\Constants\Mode;
-use heidelpay\NmgPhpSdk\Constants\SupportedLocale;
-use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\NmgPhpSdk\Resources\Customer;
-use heidelpay\NmgPhpSdk\Resources\Payment;
-use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
-use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\GiroPay;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Ideal;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Invoice;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
-use heidelpay\NmgPhpSdk\Interfaces\PaymentTypeInterface;
-use heidelpay\NmgPhpSdk\Services\ResourceService;
+use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Constants\Mode;
+use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Exceptions\IllegalKeyException;
+use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\GiroPay;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 class Heidelpay implements HeidelpayParentInterface
 {

@@ -28,12 +28,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests/integration
+ * @package  heidelpay/mgw_sdk/tests/integration
  */
-namespace heidelpay\NmgPhpSdk\test;
+namespace heidelpay\MgwPhpSdk\test;
 
-use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\Customer;
 
 class CustomerTest extends BasePaymentTest
 {

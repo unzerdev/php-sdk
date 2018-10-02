@@ -27,12 +27,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/traits
+ * @package  heidelpay/mgw_sdk/traits
  */
-namespace heidelpay\NmgPhpSdk\Traits;
+namespace heidelpay\MgwPhpSdk\Traits;
 
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 
 trait HasCancellationsTrait
 {

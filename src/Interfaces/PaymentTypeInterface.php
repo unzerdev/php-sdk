@@ -27,14 +27,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/interfaces
+ * @package  heidelpay/mgw_sdk/interfaces
  */
-namespace heidelpay\NmgPhpSdk\Interfaces;
+namespace heidelpay\MgwPhpSdk\Interfaces;
 
-use heidelpay\NmgPhpSdk\Resources\Customer;
-use heidelpay\NmgPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
 interface PaymentTypeInterface extends HeidelpayResourceInterface
 {

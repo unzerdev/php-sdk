@@ -27,11 +27,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/resources
+ * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\NmgPhpSdk\Resources;
+namespace heidelpay\MgwPhpSdk\Resources;
 
-use heidelpay\NmgPhpSdk\Address;
+use heidelpay\MgwPhpSdk\Address;
 
 class Customer extends AbstractHeidelpayResource
 {

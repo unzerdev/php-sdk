@@ -28,13 +28,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests/integration/payment_types
+ * @package  heidelpay/mgw_sdk/tests/integration/payment_types
  */
-namespace heidelpay\NmgPhpSdk\test\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\test\PaymentTypes;
 
-use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Invoice;
-use heidelpay\NmgPhpSdk\test\BasePaymentTest;
+use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
+use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class InvoiceTest extends BasePaymentTest
 {

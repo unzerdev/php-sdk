@@ -27,13 +27,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/transaction_types
+ * @package  heidelpay/mgw_sdk/transaction_types
  */
-namespace heidelpay\NmgPhpSdk\Resources\TransactionTypes;
+namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
-use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\NmgPhpSdk\Resources\Payment;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {

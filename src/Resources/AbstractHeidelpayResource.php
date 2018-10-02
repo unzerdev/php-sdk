@@ -27,14 +27,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/resources
+ * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\NmgPhpSdk\Resources;
+namespace heidelpay\MgwPhpSdk\Resources;
 
-use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
-use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayObjectMissingException;
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 
 abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, HeidelpayParentInterface
 {

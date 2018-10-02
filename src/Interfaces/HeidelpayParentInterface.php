@@ -27,11 +27,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/interfaces
+ * @package  heidelpay/mgw_sdk/interfaces
  */
-namespace heidelpay\NmgPhpSdk\Interfaces;
+namespace heidelpay\MgwPhpSdk\Interfaces;
 
-use heidelpay\NmgPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Heidelpay;
 
 interface HeidelpayParentInterface
 {

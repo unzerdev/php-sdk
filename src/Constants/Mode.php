@@ -27,9 +27,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/constants
+ * @package  heidelpay/mgw_sdk/constants
  */
-namespace heidelpay\NmgPhpSdk\Constants;
+namespace heidelpay\MgwPhpSdk\Constants;
 
 class Mode
 {

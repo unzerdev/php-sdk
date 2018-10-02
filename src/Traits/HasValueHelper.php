@@ -27,11 +27,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/traits
+ * @package  heidelpay/mgw_sdk/traits
  */
-namespace heidelpay\NmgPhpSdk\Traits;
+namespace heidelpay\MgwPhpSdk\Traits;
 
-use heidelpay\NmgPhpSdk\Constants\Calculation;
+use heidelpay\MgwPhpSdk\Constants\Calculation;
 
 trait HasValueHelper
 {

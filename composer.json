@@ -1,5 +1,5 @@
 {
-  "name": "heidelpay/NmgPhpSdk",
+  "name": "heidelpay/MgwPhpSdk",
   "description": "This is the php sdk to connect to the heidelpay rest api.",
   "minimum-stability": "stable",
   "license": "proprietary",
@@ -18,8 +18,8 @@
   },
   "autoload": {
     "psr-4": {
-      "heidelpay\\NmgPhpSdk\\": "src",
-      "heidelpay\\NmgPhpSdk\\test\\": "test"
+      "heidelpay\\MgwPhpSdk\\": "src",
+      "heidelpay\\MgwPhpSdk\\test\\": "test"
     }
   }
 }

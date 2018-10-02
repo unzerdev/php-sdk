@@ -27,7 +27,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests
+ * @package  heidelpay/mgw_sdk/tests
  */
 
 require_once __DIR__ . '\..\vendor\autoload.php';

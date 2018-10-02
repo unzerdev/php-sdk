@@ -28,14 +28,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests/integration
+ * @package  heidelpay/mgw_sdk/tests/integration
  */
 
-namespace heidelpay\NmgPhpSdk\test;
+namespace heidelpay\MgwPhpSdk\test;
 
-use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\NmgPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 
 class AuthorizationTest extends BasePaymentTest
 {

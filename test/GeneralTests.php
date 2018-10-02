@@ -27,13 +27,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/tests/integration
+ * @package  heidelpay/mgw_sdk/tests/integration
  */
-namespace heidelpay\NmgPhpSdk\test;
+namespace heidelpay\MgwPhpSdk\test;
 
-use heidelpay\NmgPhpSdk\Constants\Currency;
-use heidelpay\NmgPhpSdk\Exceptions\IllegalKeyException;
-use heidelpay\NmgPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\IllegalKeyException;
+use heidelpay\MgwPhpSdk\Heidelpay;
 
 class GeneralTests extends BasePaymentTest
 {

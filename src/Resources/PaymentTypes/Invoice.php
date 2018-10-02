@@ -27,9 +27,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/payment_types
+ * @package  heidelpay/mgw_sdk/payment_types
  */
-namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
 class Invoice extends BasePaymentType
 {

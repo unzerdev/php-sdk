@@ -27,11 +27,11 @@
  *
  * @author  Simon Gabriel <simon.gabriel@heidelpay.com>
  *
- * @package  heidelpay/ngw_sdk/adapter
+ * @package  heidelpay/mgw_sdk/adapter
  */
-namespace heidelpay\NmgPhpSdk\Adapter;
+namespace heidelpay\MgwPhpSdk\Adapter;
 
-use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 interface HttpAdapterInterface
 {
