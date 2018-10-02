@@ -34,6 +34,7 @@
 namespace heidelpay\MgwPhpSdk\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 
 class AuthorizationTest extends BasePaymentTest
 {
@@ -94,8 +95,9 @@ class AuthorizationTest extends BasePaymentTest
      * Verify authorization with customer Id.
      *
      * @test
+     * @return Authorization
      */
-    public function authorizationWithCustomerId()
+    public function authorizationWithCustomerId(): Authorization
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $customerId = $this->heidelpay->createCustomer($this->getMinimalCustomer())->getId();
@@ -107,5 +109,20 @@ class AuthorizationTest extends BasePaymentTest
         $newCustomer = $payment->getCustomer();
         $this->assertNotNull($newCustomer);
         $this->assertNotNull($newCustomer->getId());
+
+        return $authorize;
+    }
+
+    /**
+     * Verify authorization can be fetched.
+     *
+     * @depends authorizationWithCustomerId
+     * @test
+     * @param Authorization $authorization
+     */
+    public function authorizationCanBeFetched(Authorization $authorization)
+    {
+        $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
+        $this->assertEquals($authorization->expose(), $fetchedAuthorization->expose());
     }
 }

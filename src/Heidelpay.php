@@ -363,13 +363,14 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Authorization resource">
     /**
      * @param $paymentId
-     * @return Authorization|null
+     * @return HeidelpayResourceInterface|AbstractHeidelpayResource
      */
     public function fetchAuthorization($paymentId)
     {
         /** @var Payment $payment */
         $payment = $this->fetchPaymentById($paymentId);
-        return $payment->getAuthorization();
+        $authorization = $this->getResourceService()->fetch($payment->getAuthorization());
+        return $authorization;
     }
     //</editor-fold>
     //</editor-fold>
