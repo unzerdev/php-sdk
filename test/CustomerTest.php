@@ -140,7 +140,7 @@ class CustomerTest extends BasePaymentTest
     {
 		$this->assertEquals($customer->getFirstname(), 'Max');
         $customer->setFirstname('Not Max');
-        $customer->update();
+        $this->heidelpay->updateCustomer($customer);
         $this->assertEquals($customer->getFirstname(), 'Not Max');
 
         /** @var Customer $fetchedCustomer */
