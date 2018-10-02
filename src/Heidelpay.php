@@ -36,6 +36,7 @@ use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\Mode;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
+use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
@@ -390,6 +391,33 @@ class Heidelpay implements HeidelpayParentInterface
     {
         $paymentType = $this->fetchPaymentType($paymentTypeId);
         return $this->authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer);
+    }
+
+    /**
+     * Perform authorization with the given payment type id.
+     *
+     * @param $amount
+     * @param $currency
+     * @param $paymentTypeId
+     * @param $returnUrl
+     * @param null $customer
+     * @return mixed
+     */
+    public function authorizeWithPaymentTypeId(
+        $amount,
+        $currency,
+        $paymentTypeId,
+        $returnUrl,
+        $customer = null
+    ): Authorization
+    {
+        $method = TransactionTypes::AUTHORIZATION;
+        $paymentType = $this->fetchPaymentType($paymentTypeId);
+        if (\is_callable([$paymentType, $method])) {
+            return $paymentType->$method($amount, $currency, $returnUrl, $customer);
+        }
+
+        throw new IllegalTransactionTypeException(TransactionTypes::AUTHORIZATION);
     }
 
     /**

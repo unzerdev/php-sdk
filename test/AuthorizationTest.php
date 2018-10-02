@@ -39,6 +39,7 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 
 class AuthorizationTest extends BasePaymentTest
 {
+
     /**
      * Verify heidelpay object can perform an authorization based on the paymentTypeId.
      *
@@ -51,9 +52,9 @@ class AuthorizationTest extends BasePaymentTest
 
         /** @var Authorization $authorize */
         $authorize = $this->heidelpay->authorizeWithPaymentTypeId(
-            $card->getId(),
             100.0,
             Currency::EUROPEAN_EURO,
+            $card->getId(),
             self::RETURN_URL
         );
 
