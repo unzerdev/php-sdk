@@ -51,10 +51,11 @@ interface PaymentTypeInterface extends HeidelpayResourceInterface
      * @param float $amount
      * @param string $currency
      * @param string $returnUrl
+     * @param null $customer
      * @return Authorization
      * @throws IllegalTransactionTypeException
      */
-    public function authorize($amount, $currency, $returnUrl): Authorization;
+    public function authorize($amount, $currency, $returnUrl, $customer = null): Authorization;
 
     /**
      * @return bool

@@ -32,6 +32,7 @@
 namespace heidelpay\NmgPhpSdk\Services;
 
 use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\NmgPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
 use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\NmgPhpSdk\Resources\AbstractHeidelpayResource;
@@ -81,7 +82,8 @@ class ResourceService
 
     /**
      * @param AbstractHeidelpayResource $resource
-     * @return AbstractHeidelpayResource|null
+     * @return null
+     * @throws HeidelpayApiException
      */
     public function delete(AbstractHeidelpayResource $resource)
     {
@@ -91,6 +93,7 @@ class ResourceService
 
         $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
 
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $resource = null;
 
         return $resource;

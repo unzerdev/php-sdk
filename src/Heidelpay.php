@@ -336,12 +336,13 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $currency
      * @param $paymentTypeId
      * @param string $returnUrl
+     * @param Customer|null $customer
      * @return Authorization
      */
-    public function authorize($amount, $currency, $paymentTypeId, $returnUrl): Authorization
+    public function authorize($amount, $currency, $paymentTypeId, $returnUrl, $customer = null): Authorization
     {
         $paymentType = $this->fetchPaymentType($paymentTypeId);
-        return $this->authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl);
+        return $this->authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer);
     }
 
     /**
@@ -351,11 +352,17 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $currency
      * @param $paymentType
      * @param string $returnUrl
+     * @param Customer|null $customer
      * @return Authorization
      */
-    public function authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl): Authorization
+    public function authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer = null): Authorization
     {
         $payment = $this->createPayment($paymentType);
+
+        if ($customer instanceof Customer) {
+            $payment->setCustomer($customer);
+        }
+
         $authorization = new Authorization($amount, $currency, $returnUrl);
         $payment->setAuthorization($authorization);
         $this->resourceService->create($authorization);
