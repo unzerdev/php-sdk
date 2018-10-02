@@ -36,7 +36,6 @@ use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\Mode;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
-use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
@@ -48,6 +47,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\GiroPay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -473,5 +473,21 @@ class Heidelpay implements HeidelpayParentInterface
         return $charge;
     }
     //</editor-fold>
+
+    /**
+     * Creates a cancellation for the given Authorization object.
+     *
+     * @param Authorization $authorization
+     * @return Cancellation
+     */
+    public function cancelAuthorization(Authorization $authorization): Cancellation
+    {
+        $cancellation = new Cancellation();
+        $authorization->addCancellation($cancellation);
+        $cancellation->setPayment($authorization->getPayment());
+        $this->resourceService->create($cancellation);
+
+        return $cancellation;
+    }
     //</editor-fold>
 }
