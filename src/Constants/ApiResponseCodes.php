@@ -40,12 +40,13 @@ class ApiResponseCodes
 
     const API_ERROR_GENERAL                                 = 'API.000.000.999';
     const API_ERROR_RESOURCE_DOES_NOT_BELONG_TO_MERCHANT    = 'API.320.200.145';
+    const API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED     = 'API.330.100.007';
     const API_ERROR_CHARGE_ALREADY_CANCELED                 = 'API.340.100.014';
     const API_ERROR_ALREADY_CHARGED                         = 'API.340.100.018';
+    const API_ERROR_CUSTOMER_DOES_NOT_EXIST                 = 'API.410.100.100';
     const API_ERROR_INSUFFICIENT_PERMISSIONS                = 'API.710.000.005';
     const API_ERROR_WRONG_AUTHENTICATION_METHOD             = 'API.710.000.007';
     const API_ERROR_FIELD_IS_MISSING                        = 'API.710.200.100';
-    const API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED     = 'API.330.100.007';
 
     const CORE_ERROR_INVALID_OR_MISSING_LOGIN               = 'COR.100.300.600';
 }

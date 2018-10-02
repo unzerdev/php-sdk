@@ -32,7 +32,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 
@@ -160,7 +162,11 @@ class CustomerTest extends BasePaymentTest
     {
         $this->assertNotNull($customer);
         $this->assertNotNull($customer->getId());
-        $customer->delete();
-        $customer->fetch();
+
+        $this->heidelpay->deleteCustomerById($customer->getId());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
+        $this->heidelpay->fetchCustomerById($customer->getId());
     }
 }

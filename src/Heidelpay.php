@@ -36,6 +36,7 @@ use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\Mode;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
@@ -335,6 +336,27 @@ class Heidelpay implements HeidelpayParentInterface
     public function updateCustomer(Customer $customer): HeidelpayResourceInterface
     {
         return $this->resourceService->update($customer);
+    }
+
+    /**
+     * Delete a Customer object via API.
+     * @param $customerId
+     * @throws HeidelpayApiException
+     */
+    public function deleteCustomerById($customerId)
+    {
+        /** @var Customer $customer */
+        $customer = $this->fetchCustomerById($customerId);
+        $this->deleteCustomer($customer);
+    }
+
+    /**
+     * @param Customer $customer
+     * @throws HeidelpayApiException
+     */
+    public function deleteCustomer(Customer $customer)
+    {
+        $this->getResourceService()->delete($customer);
     }
     //</editor-fold>
 
