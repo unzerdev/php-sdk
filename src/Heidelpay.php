@@ -387,37 +387,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|null $customer
      * @return Authorization
      */
-    public function authorize($amount, $currency, $paymentTypeId, $returnUrl, $customer = null): Authorization
+    public function authorizeWithPaymentTypeId($amount, $currency, $paymentTypeId, $returnUrl, $customer = null): Authorization
     {
         $paymentType = $this->fetchPaymentType($paymentTypeId);
-        return $this->authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer);
-    }
-
-    /**
-     * Perform authorization with the given payment type id.
-     *
-     * @param $amount
-     * @param $currency
-     * @param $paymentTypeId
-     * @param $returnUrl
-     * @param null $customer
-     * @return mixed
-     */
-    public function authorizeWithPaymentTypeId(
-        $amount,
-        $currency,
-        $paymentTypeId,
-        $returnUrl,
-        $customer = null
-    ): Authorization
-    {
-        $method = TransactionTypes::AUTHORIZATION;
-        $paymentType = $this->fetchPaymentType($paymentTypeId);
-        if (\is_callable([$paymentType, $method])) {
-            return $paymentType->$method($amount, $currency, $returnUrl, $customer);
-        }
-
-        throw new IllegalTransactionTypeException(TransactionTypes::AUTHORIZATION);
+        return $this->authorize($amount, $currency, $paymentType, $returnUrl, $customer);
     }
 
     /**
@@ -430,7 +403,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|null $customer
      * @return Authorization
      */
-    public function authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer = null): Authorization
+    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null): Authorization
     {
         $payment = $this->createPayment($paymentType);
 
@@ -459,28 +432,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|null $customer
      * @return Charge
      */
-    public function charge($amount, $currency, $paymentTypeId, $returnUrl, $customer = null): Charge
+    public function chargeWithPaymentTypeId($amount, $currency, $paymentTypeId, $returnUrl, $customer = null): Charge
     {
         $paymentType = $this->fetchPaymentType($paymentTypeId);
-        return $this->chargeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer);
-    }
-
-    /**
-     * @param $paymentId
-     * @param null $amount
-     * @return Charge
-     */
-    public function chargeAuthorization($paymentId, $amount = null): Charge
-    {
-        /** @var Payment $payment */
-        $payment = $this->fetchPaymentById($paymentId);
-        $charge = new Charge($amount);
-        $charge->setParentResource($payment)->setPayment($payment);
-        $this->resourceService->create($charge);
-        // needs to be set after creation to use id as key in charge array
-        $payment->addCharge($charge);
-
-        return $charge;
+        return $this->charge($amount, $currency, $paymentType, $returnUrl, $customer);
     }
 
     /**
@@ -491,7 +446,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param null $customer
      * @return Charge
      */
-    public function chargeWithPaymentType(
+    public function charge(
         $amount,
         $currency,
         PaymentTypeInterface $paymentType,
@@ -506,6 +461,24 @@ class Heidelpay implements HeidelpayParentInterface
 
         /** @var Charge $charge */
         $charge = new Charge($amount, $currency, $returnUrl);
+        $charge->setParentResource($payment)->setPayment($payment);
+        $this->resourceService->create($charge);
+        // needs to be set after creation to use id as key in charge array
+        $payment->addCharge($charge);
+
+        return $charge;
+    }
+
+    /**
+     * @param $paymentId
+     * @param null $amount
+     * @return Charge
+     */
+    public function chargeAuthorization($paymentId, $amount = null): Charge
+    {
+        /** @var Payment $payment */
+        $payment = $this->fetchPaymentById($paymentId);
+        $charge = new Charge($amount);
         $charge->setParentResource($payment)->setPayment($payment);
         $this->resourceService->create($charge);
         // needs to be set after creation to use id as key in charge array

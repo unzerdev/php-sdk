@@ -34,12 +34,13 @@
 namespace heidelpay\MgwPhpSdk\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 
 class AuthorizationTest extends BasePaymentTest
 {
-
     /**
      * Verify heidelpay object can perform an authorization based on the paymentTypeId.
      *
@@ -61,4 +62,52 @@ class AuthorizationTest extends BasePaymentTest
         $this->assertNotNull($authorize);
         $this->assertNotNull($authorize->getId());
     }
+
+
+    /**
+     * Verify heidelpay object can perform an authorization based on the paymentType object.
+     *
+     * @test
+     */
+    public function authorizeWithType()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+
+        /** @var Authorization $authorize */
+        $authorize = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+
+        $this->assertNotNull($authorize);
+        $this->assertNotNull($authorize->getId());
+    }
+
+    /**
+     * Verify authorization produces Payment and Customer.
+     *
+     * @test
+     */
+    public function authorizationProducesPaymentAndCustomer()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+
+        /** @var Customer $customer */
+        $customer = $this->getMinimalCustomer();
+        $this->assertNull($customer->getId());
+
+        /** @var Authorization $authorize */
+        $authorize = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL, $customer);
+
+        /** @var Payment $payment */
+        $payment = $authorize->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertNotNull($payment->getId());
+
+        /** @var Customer $newCustomer */
+        $newCustomer = $payment->getCustomer();
+        $this->assertNotNull($newCustomer);
+        $this->assertNotNull($newCustomer->getId());
+    }
+
+
 }

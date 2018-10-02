@@ -207,7 +207,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCard();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card->getId(), self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
 
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);

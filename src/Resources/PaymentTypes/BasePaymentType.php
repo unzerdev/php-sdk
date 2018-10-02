@@ -62,7 +62,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
             throw new IllegalTransactionTypeException('charge');
         }
 
-        return $this->getHeidelpayObject()->chargeWithPaymentType($amount, $currency, $this, $returnUrl, $customer);
+        return $this->getHeidelpayObject()->charge($amount, $currency, $this, $returnUrl, $customer);
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
             throw new IllegalTransactionTypeException('authorize');
         }
 
-        return $this->getHeidelpayObject()->authorizeWithPaymentType($amount, $currency, $this, $returnUrl, $customer);
+        return $this->getHeidelpayObject()->authorize($amount, $currency, $this, $returnUrl, $customer);
     }
 
     //</editor-fold>
