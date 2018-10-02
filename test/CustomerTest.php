@@ -34,6 +34,7 @@ namespace heidelpay\MgwPhpSdk\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Payment;
 
 class CustomerTest extends BasePaymentTest
 {
@@ -90,25 +91,42 @@ class CustomerTest extends BasePaymentTest
     /**
      * Customer can be referenced by payment.
      *
-     * @depends maxCustomerCanBeCreatedAndFetched
      * @test
-     * @param Customer $customer
      */
-    public function transactionShouldCreateAndReferenceCustomer(Customer $customer)
+    public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
     {
+        $customer = $this->getMaximumCustomer();
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $payment = $this->createPayment()->setPaymentType($card);
-        $payment->setCustomer($customer);
-
-        $payment->authorize(12.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $authorization = $card->authorize(12.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
-        $secPayment = $this->heidelpay->fetchPaymentById($payment->getId());
+        $secPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
         $this->assertNotNull($secCustomer);
-        $this->assertEquals($customer->getId(), $secCustomer->getId());
+        $this->assertEquals($customer, $secCustomer);
+    }
+
+    /**
+     * Customer can be referenced by payment.
+     *
+     * @test
+     */
+    public function transactionShouldReferenceCustomerIfItExist()
+    {
+        $customer = $this->getMaximumCustomer();
+        $this->heidelpay->createCustomer($customer);
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $card->authorize(12.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $customer);
+
+        /** @var Payment $secPayment */
+        $secPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+
+        /** @var Customer $secCustomer */
+        $secCustomer = $secPayment->getCustomer();
+        $this->assertNotNull($secCustomer);
+        $this->assertEquals($customer, $secCustomer);
     }
 
     /**

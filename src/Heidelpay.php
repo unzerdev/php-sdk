@@ -280,7 +280,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function fetchCustomerById($customerId): HeidelpayResourceInterface
     {
         $customer = (new Customer())->setParentResource($this)->setId($customerId);
-        return $this->resourceService->create($customer);
+        return $this->resourceService->fetch($customer);
     }
 
     /**
@@ -360,6 +360,9 @@ class Heidelpay implements HeidelpayParentInterface
         $payment = $this->createPayment($paymentType);
 
         if ($customer instanceof Customer) {
+            if ($customer->getId() === null) {
+                $this->createCustomer($customer);
+            }
             $payment->setCustomer($customer);
         }
 
