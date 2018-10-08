@@ -27,7 +27,7 @@ namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 class Cancellation extends AbstractTransactionType
 {
     /** @var float $amount */
-    private $amount;
+    protected $amount;
 
     /**
      * Authorization constructor.

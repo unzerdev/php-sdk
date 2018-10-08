@@ -476,11 +476,12 @@ class Heidelpay implements HeidelpayParentInterface
      * Creates a cancellation for the given Authorization object.
      *
      * @param Authorization $authorization
+     * @param null $amount
      * @return Cancellation
      */
-    public function cancelAuthorization(Authorization $authorization): Cancellation
+    public function cancelAuthorization($authorization, $amount = null): Cancellation
     {
-        $cancellation = new Cancellation();
+        $cancellation = new Cancellation($amount);
         $authorization->addCancellation($cancellation);
         $cancellation->setPayment($authorization->getPayment());
         $this->resourceService->create($cancellation);

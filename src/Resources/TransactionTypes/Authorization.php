@@ -184,10 +184,11 @@ class Authorization extends AbstractTransactionType
     /**
      * Full cancel of this authorization.
      *
+     * @param null $amount
      * @return Cancellation
      */
-    public function cancel(): Cancellation
+    public function cancel($amount = null): Cancellation
     {
-        return $this->getHeidelpayObject()->cancelAuthorization($this);
+        return $this->getHeidelpayObject()->cancelAuthorization($this, $amount);
     }
 }

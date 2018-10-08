@@ -15,6 +15,7 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class CancelAfterAuthorizationTest extends BasePaymentTest
@@ -41,20 +42,47 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
     }
 
-//    /**
-//     * Verify partly cancel on an authorization.
-//     *
-//     * @test
-//     */
-//    public function partCancelOnAuthorize()
-//    {
-//        $card = $this->heidelpay->createPaymentType($this->createCard());
-//        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
-//        $payment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
-//
-//
-//    }
+    /**
+     * Verify part cancel on an authorization.
+     *
+     * @test
+     * todo payment cancel sollte nicht auth cancel aufrufen
+     */
+    public function partCancelOnPayment()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $payment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
 
+        /** @var Cancellation $cancel */
+        $cancel = $payment->cancel(10.0);
+        $this->assertNotNull($cancel);
+        $this->assertNotEmpty($cancel->getId());
+        $this->assertEquals(10.0, $cancel->getAmount());
+    }
+
+    /**
+     * Verify part cancel after authorization.
+     *
+     * @test
+     */
+    public function partCancelOnAuthorize()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+
+        /** @var Authorization $fetchedAuthorization */
+        $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
+
+        $cancel = $fetchedAuthorization->cancel(10.0);
+        $this->assertNotNull($cancel);
+        $this->assertNotEmpty($cancel->getId());
+        $this->assertEquals(10.0, $cancel->getAmount());
+
+        $payment = $fetchedAuthorization->getPayment();
+        $this->assertAmounts($payment, 90.0, 0.0, 90.0, 0.0);
+        $this->assertTrue($payment->isPending());
+    }
 
 //    /**
 //     * Verify a full cancel can be performed on a partly charged card authorization.
