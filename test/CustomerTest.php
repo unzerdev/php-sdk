@@ -47,7 +47,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertNotEmpty($customer->getId());
 
         /** @var Customer $fetchedCustomer */
-        $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer, $fetchedCustomer);
 
         return $customer;
@@ -66,7 +66,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertNotEmpty($customer->getId());
 
         /** @var Customer $fetchedCustomer */
-        $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer, $fetchedCustomer);
 
         return $customer;
@@ -79,7 +79,7 @@ class CustomerTest extends BasePaymentTest
      */
     public function customerCanBeFetched(Customer $customer)
     {
-        $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
     }
 
@@ -139,7 +139,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertEquals($customer->getFirstname(), 'Not Max');
 
         /** @var Customer $fetchedCustomer */
-        $fetchedCustomer = $this->heidelpay->fetchCustomerById($customer->getId());
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
 		$this->assertEquals($customer->getId(), $fetchedCustomer->getId());
 		$this->assertEquals('Not Max', $fetchedCustomer->getFirstname());
     }
@@ -160,6 +160,6 @@ class CustomerTest extends BasePaymentTest
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
-        $this->heidelpay->fetchCustomerById($customer->getId());
+        $this->heidelpay->fetchCustomer($customer->getId());
     }
 }

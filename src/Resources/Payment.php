@@ -220,7 +220,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $customerObject = $customer;
 
         if (\is_string($customer)) {
-            $customerObject = $heidelpay->fetchCustomerById($customer);
+            $customerObject = $heidelpay->fetchCustomer($customer);
         } elseif ($customerObject instanceof Customer) {
             if ($customerObject->getId() === null) {
                 $heidelpay->createCustomer($customerObject);

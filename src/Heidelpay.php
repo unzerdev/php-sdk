@@ -311,13 +311,18 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Fetch and return Customer object from API by the given id.
      *
-     * @param $customerId
+     * @param Customer|string $customer
      * @return HeidelpayResourceInterface
      */
-    public function fetchCustomerById($customerId): HeidelpayResourceInterface
+    public function fetchCustomer($customer): HeidelpayResourceInterface
     {
-        $customer = (new Customer())->setParentResource($this)->setId($customerId);
-        return $this->resourceService->fetch($customer);
+        $customerObject = $customer;
+
+        if (\is_string($customer)) {
+            $customerObject = (new Customer())->setParentResource($this)->setId($customer);
+        }
+
+        return $this->resourceService->fetch($customerObject);
     }
 
     /**
@@ -339,7 +344,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function deleteCustomerById($customerId)
     {
         /** @var Customer $customer */
-        $customer = $this->fetchCustomerById($customerId);
+        $customer = $this->fetchCustomer($customerId);
         $this->deleteCustomer($customer);
     }
 
