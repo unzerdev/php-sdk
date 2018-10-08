@@ -39,6 +39,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     use HasAmountsTrait;
     use HasStateTrait;
 
+    //<editor-fold desc="Properties">
     /** @var string $redirectUrl */
     private $redirectUrl = '';
 
@@ -53,90 +54,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /** @var PaymentTypeInterface $paymentType */
     private $paymentType;
-
-    //<editor-fold desc="Overridable Methods">
-    /**
-     * {@inheritDoc}
-     */
-    public function getResourcePath()
-    {
-        return 'payments';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function handleResponse(\stdClass $response)
-    {
-        parent::handleResponse($response);
-
-        if (isset($response->state->id)) {
-            $this->setState($response->state->id);
-        }
-
-        if (isset($response->amount)) {
-            $amount = $response->amount;
-
-            if (isset($amount->total, $amount->charged, $amount->canceled, $amount->remaining)) {
-                $this->setTotal($amount->total)
-                    ->setCharged($amount->charged)
-                    ->setCanceled($amount->canceled)
-                    ->setRemaining($amount->remaining);
-            }
-        }
-
-        if (isset($response->resources)) {
-            $resources = $response->resources;
-
-            if (isset($resources->paymentId)) {
-                $this->setId($resources->paymentId);
-            }
-
-            if (isset($resources->customerId) && !empty($resources->customerId)) {
-                if (!$this->customer instanceof Customer) {
-                    $this->customer = $this->getHeidelpayObject()->fetchCustomerById($resources->customerId);
-                } else {
-                    $this->getHeidelpayObject()->getResourceService()->fetch($this->customer);
-                }
-            }
-
-            if (isset($resources->typeId) && !empty($resources->typeId)) {
-                if (!$this->paymentType instanceof PaymentTypeInterface) {
-                    $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
-                }
-            }
-        }
-        if (isset($response->transactions) && !empty($response->transactions)) {
-            foreach ($response->transactions as $transaction) {
-                switch ($transaction->type) {
-                    case TransactionTypes::AUTHORIZATION:
-                        $transactionId = $this->getTransactionId($transaction, 'aut');
-                        // todo: refactor
-                        $authorization = $this->getAuthorization();
-                        if (!$authorization instanceof Authorization) {
-                            $authorization = (new Authorization())
-                                ->setPayment($this)
-                                ->setParentResource($this)
-                                ->setId($transactionId);
-                            $this->setAuthorization($authorization);
-                        }
-                        $authorization->setAmount($transaction->amount);
-                        break;
-                    case TransactionTypes::CHARGE:
-                        // todo: like auth
-                        break;
-                    case TransactionTypes::CANCEL:
-                        // todo: like auth
-                        break;
-                    default:
-                        // skip
-                        break;
-                }
-            }
-        }
-
-    }
-    //</editor-fold>
 
     //<editor-fold desc="Setters/Getters">
     /**
@@ -241,15 +158,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * @return Customer
-     */
-    public function createCustomer(): Customer
-    {
-        $this->customer = new Customer($this);
-        return $this->customer;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getPaymentType(): PaymentTypeInterface
@@ -272,9 +180,96 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         return $this;
     }
     //</editor-fold>
+    //</editor-fold>
 
-    //<editor-fold desc="TransactionTypes">
+    //<editor-fold desc="Overridable Methods">
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourcePath()
+    {
+        return 'payments';
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(\stdClass $response)
+    {
+        parent::handleResponse($response);
+
+        // todo ggf. als object wie Address im customer
+        if (isset($response->state->id)) {
+            $this->setState($response->state->id);
+        }
+
+        // todo ggf. als object wie Address im customer
+        if (isset($response->amount)) {
+            $amount = $response->amount;
+
+            if (isset($amount->total, $amount->charged, $amount->canceled, $amount->remaining)) {
+                $this->setTotal($amount->total)
+                    ->setCharged($amount->charged)
+                    ->setCanceled($amount->canceled)
+                    ->setRemaining($amount->remaining);
+            }
+        }
+
+        if (isset($response->resources)) {
+            $resources = $response->resources;
+
+            // todo payment id ist wahrscheinlich die custom payment id die der händler vergibt und deshalb eigentlich keine resource.
+            if (isset($resources->paymentId)) {
+                $this->setId($resources->paymentId);
+            }
+
+            if (isset($resources->customerId) && !empty($resources->customerId)) {
+                if (!$this->customer instanceof Customer) {
+                    $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
+                } else {
+                    $this->getHeidelpayObject()->fetchCustomer($this->customer);
+                }
+            }
+
+            if (isset($resources->typeId) && !empty($resources->typeId)) {
+                if (!$this->paymentType instanceof PaymentTypeInterface) {
+                    $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
+                }
+            }
+        }
+        if (isset($response->transactions) && !empty($response->transactions)) {
+            foreach ($response->transactions as $transaction) {
+                switch ($transaction->type) {
+                    case TransactionTypes::AUTHORIZATION:
+                        $transactionId = $this->getTransactionId($transaction, 'aut');
+                        // todo: refactor
+                        $authorization = $this->getAuthorization();
+                        if (!$authorization instanceof Authorization) {
+                            $authorization = (new Authorization())
+                                ->setPayment($this)
+                                ->setParentResource($this)
+                                ->setId($transactionId);
+                            $this->setAuthorization($authorization);
+                        }
+                        $authorization->setAmount($transaction->amount);
+                        break;
+                    case TransactionTypes::CHARGE:
+                        // todo: like auth
+                        break;
+                    case TransactionTypes::CANCEL:
+                        // todo: like auth
+                        break;
+                    default:
+                        // skip
+                        break;
+                }
+            }
+        }
+
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Transactions">
     /**
      * {@inheritDoc}
      *
