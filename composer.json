@@ -1,8 +1,8 @@
 {
-  "name": "heidelpay/MgwPhpSdk",
+  "name": "heidelpay/heidelpay-php",
   "description": "This is the php sdk to connect to the heidelpay rest api.",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "Apache-2.0",
   "authors": [
     {
       "name": "Simon Gabriel",
