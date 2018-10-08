@@ -22,11 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/tests/integration
  */
-namespace heidelpay\MgwPhpSdk\test;
+namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class GeneralTests extends BasePaymentTest
 {

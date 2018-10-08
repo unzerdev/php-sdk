@@ -24,10 +24,11 @@
  * @package  heidelpay/mgw_sdk/tests/integration
  */
 
-namespace heidelpay\MgwPhpSdk\test;
+namespace heidelpay\MgwPhpSdk\integration\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class AuthorizationTest extends BasePaymentTest
 {

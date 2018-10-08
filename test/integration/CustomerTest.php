@@ -23,13 +23,14 @@
  *
  * @package  heidelpay/mgw_sdk/tests/integration
  */
-namespace heidelpay\MgwPhpSdk\test;
+namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class CustomerTest extends BasePaymentTest
 {

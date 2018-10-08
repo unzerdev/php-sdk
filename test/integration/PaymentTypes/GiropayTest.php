@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/tests/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;

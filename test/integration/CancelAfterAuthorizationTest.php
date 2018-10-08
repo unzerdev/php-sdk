@@ -11,7 +11,7 @@
  *
  * @package  heidelpay/mgw_sdk/tests/integration
  */
-namespace heidelpay\MgwPhpSdk\test\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
