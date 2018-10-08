@@ -118,7 +118,25 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function addCharge(Charge $charge)
     {
-        $this->charges[$charge->getId()] = $charge;
+        $this->charges[] = $charge;
+    }
+
+    /**
+     * Get and return a Charge object by id.
+     *
+     * @param $chargeId
+     * @return Charge
+     * @throws MissingResourceException
+     */
+    public function getCharge($chargeId): Charge
+    {
+        /** @var Charge $charge */
+        foreach ($this->charges as $charge) {
+            if ($charge->getId() === $chargeId) {
+                return $charge;
+            }
+        }
+        throw new MissingResourceException();
     }
 
     /**
@@ -379,11 +397,20 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param $transaction
-     * todo: implement
      */
     private function updateChargeTransaction($transaction)
     {
-        echo 'WARNING: Method ' . __METHOD__ . ' is not implemented yet.';
+        $transactionId = $this->getTransactionId($transaction, 'chg');
+        try {
+            $charge = $this->getCharge($transactionId);
+        } catch (MissingResourceException $e) {
+            $charge = (new Charge())
+                ->setPayment($this)
+                ->setParentResource($this)
+                ->setId($transactionId);
+            $this->addCharge($charge);
+        }
+        $charge->setAmount($transaction->amount);
     }
 
     /**
