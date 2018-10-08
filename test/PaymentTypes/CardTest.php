@@ -28,7 +28,6 @@ namespace heidelpay\MgwPhpSdk\test\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -47,15 +46,13 @@ class CardTest extends BasePaymentTest
      */
     public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
     {
+        $this->heidelpay->setKey(self::PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT);
+
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INSUFFICIENT_PERMISSIONS);
-
-        /** @var Heidelpay $heidelpay */
-        $heidelpay = new Heidelpay(self::PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT);
-
         $card = $this->createCard();
         $this->assertNull($card->getId());
-        $heidelpay->createPaymentType($card);
+        $this->heidelpay->createPaymentType($card);
         $this->assertNotNull($card->getId());
     }
 
