@@ -84,6 +84,31 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
     }
 
+    /**
+     * Verify a cancel can be fetched.
+     *
+     * @test
+     */
+    public function anAuthorizationsReversalShallBeFetchable()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $cancel = $this->heidelpay->cancelAuthorization($authorization);
+		$this->assertNotNull($cancel);
+		$this->assertNotNull($cancel->getId());
+		$this->assertEquals(100.0, $cancel->getAmount());
+
+		$fetchedCancel = $this->heidelpay->fetchReversalByAuthorization($authorization, $cancel->getId());
+		$this->assertNotNull($fetchedCancel);
+		$this->assertNotEmpty($fetchedCancel->getId());
+
+		$fetchedCancelSecond = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
+		$this->assertNotNull($fetchedCancelSecond);
+		$this->assertNotEmpty($fetchedCancelSecond->getId());
+
+		$this->assertEquals($fetchedCancel->expose(), $fetchedCancelSecond->expose());
+    }
+
 //    /**
 //     * Verify a full cancel can be performed on a partly charged card authorization.
 //     *

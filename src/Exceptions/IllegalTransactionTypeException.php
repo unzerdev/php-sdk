@@ -30,10 +30,10 @@ class IllegalTransactionTypeException extends HeidelpayBaseException
 
     /**
      * IllegalTransactionTypeException constructor.
-     * @param string $type
+     * @param string $expectedType
      */
-    public function __construct(string $type)
+    public function __construct(string $expectedType)
     {
-        parent::__construct(sprintf(self::MESSAGE, $type));
+        parent::__construct(sprintf(self::MESSAGE, $expectedType));
     }
 }

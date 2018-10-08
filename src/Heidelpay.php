@@ -30,6 +30,7 @@ use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\Mode;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\IllegalResourceTypeException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
@@ -236,14 +237,19 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Fetch and return payment by given payment id.
      *
-     * @param $paymentId
-     * @return HeidelpayResourceInterface
+     * @param string $paymentId
+     * @return Payment
      */
-    public function fetchPaymentById($paymentId): HeidelpayResourceInterface
+    public function fetchPaymentById($paymentId): Payment
     {
         $payment = new Payment($this);
         $payment->setId($paymentId);
-        return $this->resourceService->fetch($payment);
+        $payment = $this->resourceService->fetch($payment);
+
+        if (!$payment instanceof Payment) {
+            throw new IllegalResourceTypeException(Payment::class, \get_class($payment));
+        }
+        return $payment;
     }
     //</editor-fold>
 
@@ -360,6 +366,10 @@ class Heidelpay implements HeidelpayParentInterface
 
     //<editor-fold desc="Authorization resource">
     /**
+     * Fetch an Authorization object by its paymentId.
+     * Authorization Ids are not global but specific to the payment.
+     * A Payment object can have zero to one authorizations.
+     *
      * @param $paymentId
      * @return HeidelpayResourceInterface|AbstractHeidelpayResource
      */
@@ -369,6 +379,33 @@ class Heidelpay implements HeidelpayParentInterface
         $payment = $this->fetchPaymentById($paymentId);
         $authorization = $this->getResourceService()->fetch($payment->getAuthorization());
         return $authorization;
+    }
+
+    /**
+     * Fetch a cancel on an authorization (aka reversal).
+     *
+     * @param Authorization|string $authorization
+     * @param string $cancellationId
+     * @return Cancellation
+     */
+    public function fetchReversalByAuthorization($authorization, $cancellationId): Cancellation
+    {
+        $this->getResourceService()->fetch($authorization);
+        return $authorization->getCancellation($cancellationId);
+    }
+
+    /**
+     * Fetch a cancel on an authorization (aka reversal).
+     *
+     * @param string $paymentId
+     * @param string $cancellationId
+     * @return Cancellation
+     */
+    public function fetchReversal($paymentId, $cancellationId): Cancellation
+    {
+        /** @var Authorization $authorization */
+        $authorization = $this->fetchPaymentById($paymentId)->getAuthorization();
+        return $authorization->getCancellation($cancellationId);
     }
     //</editor-fold>
     //</editor-fold>

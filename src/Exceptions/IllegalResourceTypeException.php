@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains definitions of the available transaction types.
+ * This exception is thrown whenever a transaction is called that is not allowed with the payment type.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,21 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/constants
+ * @package  heidelpay/mgw_sdk/exceptions
  */
+namespace heidelpay\MgwPhpSdk\Exceptions;
 
-namespace heidelpay\MgwPhpSdk\Constants;
-
-class TransactionTypes
+class IllegalResourceTypeException extends HeidelpayBaseException
 {
-    const AUTHORIZATION = 'authorize';
-    const CHARGE = 'charge';
-    const REVERSAL = 'cancel-authorize';
-    const REFUND = 'cancel-charge';
+    const MESSAGE = 'Resource type %s is not allowed, type %s expected!';
+
+    /**
+     * IllegalTransactionTypeException constructor.
+     * @param string $expectedType
+     * @param string $actualType
+     */
+    public function __construct(string $expectedType, string $actualType)
+    {
+        parent::__construct(sprintf(self::MESSAGE, $expectedType, $actualType));
+    }
 }

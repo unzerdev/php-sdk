@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Traits\HasAmountsTrait;
 use heidelpay\MgwPhpSdk\Traits\HasStateTrait;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -241,23 +242,16 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             foreach ($response->transactions as $transaction) {
                 switch ($transaction->type) {
                     case TransactionTypes::AUTHORIZATION:
-                        $transactionId = $this->getTransactionId($transaction, 'aut');
-                        // todo: refactor
-                        $authorization = $this->getAuthorization();
-                        if (!$authorization instanceof Authorization) {
-                            $authorization = (new Authorization())
-                                ->setPayment($this)
-                                ->setParentResource($this)
-                                ->setId($transactionId);
-                            $this->setAuthorization($authorization);
-                        }
-                        $authorization->setAmount($transaction->amount);
+                        $this->updateAuthorizationTransaction($transaction);
                         break;
                     case TransactionTypes::CHARGE:
-                        // todo: like auth
+                        $this->updateChargeTransaction($transaction);
                         break;
-                    case TransactionTypes::CANCEL:
-                        // todo: like auth
+                    case TransactionTypes::REVERSAL:
+                        $this->updateReversalTransaction($transaction);
+                        break;
+                    case TransactionTypes::REFUND:
+                        $this->updateRefundTransaction($transaction);
                         break;
                     default:
                         // skip
@@ -270,21 +264,21 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     //</editor-fold>
 
     //<editor-fold desc="Transactions">
-    /**
-     * {@inheritDoc}
-     *
-     * todo: this should be handled by the api.
-     */
-    public function fullCharge(): Charge
-    {
-        // todo: authorization muss erst geholt werden
-        if (!$this->getAuthorization() instanceof Authorization) {
-            throw new MissingResourceException('Cannot perform full charge without authorization.');
-        }
-
-        // charge amount
-        return $this->charge($this->getRemaining());
-    }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * todo: this should be handled by the api.
+//     */
+//    public function fullCharge(): Charge
+//    {
+//        // todo: authorization muss erst geholt werden
+//        if (!$this->getAuthorization() instanceof Authorization) {
+//            throw new MissingResourceException('Cannot perform full charge without authorization.');
+//        }
+//
+//        // charge amount
+//        return $this->charge($this->getRemaining());
+//    }
 
     /**
      * Sets the given paymentType and performs an authorization.
@@ -294,6 +288,8 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      * @param $returnUrl
      * @param PaymentTypeInterface $paymentType
      * @return Authorization
+     *
+     * todo
      */
     public function authorizeWithPaymentType($amount, $currency, $returnUrl, PaymentTypeInterface $paymentType): Authorization
     {
@@ -359,6 +355,68 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         }
 
         return $matches[1];
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Transaction Update">
+    /**
+     * @param $transaction
+     */
+    private function updateAuthorizationTransaction($transaction)
+    {
+        $transactionId = $this->getTransactionId($transaction, 'aut');
+        // todo: refactor
+        $authorization = $this->getAuthorization();
+        if (!$authorization instanceof Authorization) {
+            $authorization = (new Authorization())
+                ->setPayment($this)
+                ->setParentResource($this)
+                ->setId($transactionId);
+            $this->setAuthorization($authorization);
+        }
+        $authorization->setAmount($transaction->amount);
+    }
+
+    /**
+     * @param $transaction
+     * todo: implement
+     */
+    private function updateChargeTransaction($transaction)
+    {
+        echo 'WARNING: Method ' . __METHOD__ . ' is not implemented yet.';
+    }
+
+    /**
+     * @param $transaction
+     */
+    private function updateReversalTransaction($transaction)
+    {
+        $transactionId = $this->getTransactionId($transaction, 'cnl');
+        // todo: refactor
+        $authorization = $this->getAuthorization();
+        if (!$authorization instanceof Authorization) {
+            throw new MissingResourceException();
+        }
+
+        try {
+            $cancellation = $authorization->getCancellation($transactionId);
+        } catch (MissingResourceException $e) {
+            $cancellation =  (new Cancellation())
+                ->setPayment($this)
+                ->setParentResource($this)
+                ->setId($transactionId);
+            $authorization->addCancellation($cancellation);
+        }
+        $cancellation->setAmount($transaction->amount);
+    }
+
+    /**
+     * @param $transaction
+     * todo: implement
+     */
+    private function updateRefundTransaction($transaction)
+    {
+        echo 'WARNING: Method ' . __METHOD__ . ' is not implemented yet.';
     }
     //</editor-fold>
 }
