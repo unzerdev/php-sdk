@@ -24,7 +24,6 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources;
 
-use heidelpay\MgwPhpSdk\Address;
 use heidelpay\MgwPhpSdk\Constants\Salutation;
 
 class Customer extends AbstractHeidelpayResource

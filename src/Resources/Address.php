@@ -22,9 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\MgwPhpSdk;
-
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+namespace heidelpay\MgwPhpSdk\Resources;
 
 class Address extends AbstractHeidelpayResource
 {
