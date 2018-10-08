@@ -10,10 +10,10 @@ trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit
 mv ~/.phpenv/versions/$(phpenv version-name)/xdebug.ini.bak ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
 
 ## run the tests (todo: enable)
-#./vendor/bin/phpunit run unit --coverage --coverage-xml
+#./vendor/bin/phpunit test/unit --coverage-xml log/xml/
 
 ## perform this task only for php 7 with deps=no
 if [[ ($(phpenv version-name) == "7.0") && ("$deps" == "no") ]]; then
     echo "Perform integration tests as well";
-    ./vendor/bin/codecept run integration
+    ./vendor/bin/phpunit test/integration
 fi
