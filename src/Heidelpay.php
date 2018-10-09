@@ -492,6 +492,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param Charge $charge
      * @param string $cancellationId
+     *
      * @return Cancellation
      */
     public function fetchRefund(Charge $charge, $cancellationId): HeidelpayResourceInterface
@@ -524,8 +525,7 @@ class Heidelpay implements HeidelpayParentInterface
         $paymentTypeId,
         $returnUrl,
         $customer = null
-    ): AbstractTransactionType
-    {
+    ): AbstractTransactionType {
         $paymentType = $this->fetchPaymentType($paymentTypeId);
         return $this->authorize($amount, $currency, $paymentType, $returnUrl, $customer);
     }
@@ -571,8 +571,7 @@ class Heidelpay implements HeidelpayParentInterface
         $paymentTypeId,
         $returnUrl,
         $customer = null
-    ): AbstractTransactionType
-    {
+    ): AbstractTransactionType {
         $paymentType = $this->fetchPaymentType($paymentTypeId);
         return $this->charge($amount, $currency, $paymentType, $returnUrl, $customer);
     }

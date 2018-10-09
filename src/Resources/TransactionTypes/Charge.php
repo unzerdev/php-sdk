@@ -244,6 +244,6 @@ class Charge extends AbstractTransactionType
      */
     public function cancel($amount = null): Cancellation
     {
-        return $this->getHeidelpayObject()->cancelCharge($this,  $amount);
+        return $this->getHeidelpayObject()->cancelCharge($this, $amount);
     }
 }

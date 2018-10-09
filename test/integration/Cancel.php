@@ -37,9 +37,9 @@ class Cancel extends BasePaymentTest
         $authorization = $this->createAuthorization();
         $cancel = $authorization->cancel();
         $fetchedCancel = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
-		$this->assertNotNull($fetchedCancel);
-		$this->assertNotNull($fetchedCancel->getId());
-		$this->assertEquals($cancel->expose(), $fetchedCancel->expose());
+        $this->assertNotNull($fetchedCancel);
+        $this->assertNotNull($fetchedCancel->getId());
+        $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
 
     /**
@@ -52,9 +52,9 @@ class Cancel extends BasePaymentTest
         $authorization = $this->createAuthorization();
         $cancel = $authorization->cancel();
         $fetchedCancel = $cancel->getPayment()->getAuthorization()->getCancellation($cancel->getId());
-		$this->assertNotNull($fetchedCancel);
-		$this->assertNotNull($fetchedCancel->getId());
-		$this->assertEquals($cancel->expose(), $fetchedCancel->expose());
+        $this->assertNotNull($fetchedCancel);
+        $this->assertNotNull($fetchedCancel->getId());
+        $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
 
     /**
@@ -68,9 +68,9 @@ class Cancel extends BasePaymentTest
         $cancel = $charge->cancel();
         $fetchedCancel = $this->heidelpay
             ->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
-		$this->assertNotNull($fetchedCancel);
-		$this->assertNotNull($fetchedCancel->getId());
-		$this->assertEquals($cancel->expose(), $fetchedCancel->expose());
+        $this->assertNotNull($fetchedCancel);
+        $this->assertNotNull($fetchedCancel->getId());
+        $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
 
     /**
@@ -83,9 +83,9 @@ class Cancel extends BasePaymentTest
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
         $fetchedCancel = $cancel->getPayment()->getCharge($charge->getId())->getCancellation($cancel->getId());
-		$this->assertNotNull($fetchedCancel);
-		$this->assertNotNull($fetchedCancel->getId());
-		$this->assertEquals($cancel->expose(), $fetchedCancel->expose());
+        $this->assertNotNull($fetchedCancel);
+        $this->assertNotNull($fetchedCancel->getId());
+        $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
 
     /**
