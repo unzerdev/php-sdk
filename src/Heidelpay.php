@@ -193,12 +193,12 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Payment resource">
 
     /**
-     * @param PaymentTypeInterface $paymentType
+     * @param PaymentTypeInterface|string $paymentType
      * @param Customer|string|null $customer
      *
      * @return Payment
      */
-    private function createPayment(PaymentTypeInterface $paymentType, $customer = null): HeidelpayResourceInterface
+    private function createPayment($paymentType, $customer = null): HeidelpayResourceInterface
     {
         return (new Payment($this))->setPaymentType($paymentType)->setCustomer($customer);
     }
@@ -536,7 +536,7 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * @param PaymentTypeInterface $paymentType
+     * @param PaymentTypeInterface|string $paymentType
      * @param $amount
      * @param $currency
      * @param $returnUrl
@@ -547,7 +547,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function charge(
         $amount,
         $currency,
-        PaymentTypeInterface $paymentType,
+        $paymentType,
         $returnUrl,
         $customer = null): AbstractTransactionType
     {

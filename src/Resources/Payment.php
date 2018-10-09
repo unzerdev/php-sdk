@@ -196,13 +196,30 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * @param PaymentTypeInterface $paymentType
+     * @param PaymentTypeInterface|string $paymentType
      *
      * @return Payment
      */
-    public function setPaymentType(PaymentTypeInterface $paymentType): Payment
+    public function setPaymentType($paymentType): Payment
     {
-        $this->paymentType = $paymentType;
+        if (empty($paymentType)) {
+            throw new MissingResourceException();
+        }
+
+        /** @var Heidelpay $heidelpay */
+        $heidelpay = $this->getHeidelpayObject();
+
+        /** @var PaymentTypeInterface $paymentTypeObject */
+        $paymentTypeObject = $paymentType;
+        if (\is_string($paymentType)) {
+            $paymentTypeObject = $heidelpay->fetchPaymentById($paymentType);
+        } elseif ($paymentTypeObject instanceof PaymentTypeInterface) {
+            if ($paymentTypeObject->getId() === null) {
+                $heidelpay->createPaymentType($paymentType);
+            }
+        }
+
+        $this->paymentType = $paymentTypeObject;
         return $this;
     }
 
