@@ -348,7 +348,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      *
      * @return mixed
      */
-    protected function getTransactionId($transaction, $pattern)
+    protected function getResourceId($transaction, $pattern)
     {
         $matches = [];
         preg_match('~\/([s|p]{1}-' . $pattern . '-[\d]+)~', $transaction->url, $matches);
@@ -369,7 +369,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     private function updateAuthorizationTransaction($transaction)
     {
-        $transactionId = $this->getTransactionId($transaction, 'aut');
+        $transactionId = $this->getResourceId($transaction, 'aut');
         // todo: refactor
         $authorization = $this->getAuthorization();
         if (!$authorization instanceof Authorization) {
@@ -387,7 +387,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     private function updateChargeTransaction($transaction)
     {
-        $transactionId = $this->getTransactionId($transaction, 'chg');
+        $transactionId = $this->getResourceId($transaction, 'chg');
         try {
             $charge = $this->getCharge($transactionId);
         } catch (MissingResourceException $e) {
@@ -405,7 +405,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     private function updateReversalTransaction($transaction)
     {
-        $transactionId = $this->getTransactionId($transaction, 'cnl');
+        $transactionId = $this->getResourceId($transaction, 'cnl');
         // todo: refactor
         $authorization = $this->getAuthorization();
         if (!$authorization instanceof Authorization) {
