@@ -54,11 +54,28 @@ class CancelAfterCharge extends BasePaymentTest
      *
      * @param Charge $charge
      */
-    public function chargeShouldBeRefundable(Charge $charge)
+    public function chargeShouldBeFullyRefundable(Charge $charge)
     {
+        /** @var Cancellation $refund */
+        $refund = $this->heidelpay->cancelCharge($charge);
+        $this->assertNotNull($refund);
+        $this->assertNotEmpty($refund->getId());
+    }
+
+    /**
+     * Verify full refund of a charge.
+     *
+     * @test
+     */
+    public function chargeShouldBeFullyRefundableWithId()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $charge = $this->heidelpay->charge(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+
         /** @var Cancellation $refund */
         $refund = $this->heidelpay->cancelChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertNotNull($refund);
         $this->assertNotEmpty($refund->getId());
     }
+
 }
