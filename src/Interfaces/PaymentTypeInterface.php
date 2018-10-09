@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -32,20 +31,23 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 interface PaymentTypeInterface extends HeidelpayResourceInterface
 {
     /**
-     * @param null $amount
-     * @param null $currency
-     * @param string $returnUrl
+     * @param null          $amount
+     * @param null          $currency
+     * @param string        $returnUrl
      * @param Customer|null $customer
+     *
      * @return Charge
      */
     public function charge($amount, $currency, $returnUrl, $customer = null): Charge;
 
     /**
-     * @param float $amount
+     * @param float  $amount
      * @param string $currency
      * @param string $returnUrl
-     * @param null $customer
+     * @param null   $customer
+     *
      * @return Authorization
+     *
      * @throws IllegalTransactionTypeException
      */
     public function authorize($amount, $currency, $returnUrl, $customer = null): Authorization;

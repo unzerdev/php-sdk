@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -32,6 +31,7 @@ trait HasStateTrait
     private $state = 0;
 
     //<editor-fold desc="Check for States">
+
     /**
      * Return true if the state is pending.
      *
@@ -91,9 +91,11 @@ trait HasStateTrait
     {
         return $this->getState() === PaymentState::STATE_CHARGEBACK;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * Returns the current state code (ref. Constants/PaymentState).
      *
@@ -108,6 +110,7 @@ trait HasStateTrait
      * Sets the current state.
      *
      * @param int $state
+     *
      * @return self
      */
     public function setState(int $state): self
@@ -115,5 +118,6 @@ trait HasStateTrait
         $this->state = $state;
         return $this;
     }
+
     //</editor-fold>
 }

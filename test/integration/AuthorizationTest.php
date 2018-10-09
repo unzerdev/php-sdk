@@ -14,7 +14,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -23,7 +22,6 @@
  *
  * @package  heidelpay/mgw_sdk/tests/integration
  */
-
 namespace heidelpay\MgwPhpSdk\integration\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
@@ -49,7 +47,6 @@ class AuthorizationTest extends BasePaymentTest
         $this->assertNotNull($authorize);
         $this->assertNotNull($authorize->getId());
     }
-
 
     /**
      * Verify heidelpay object can perform an authorization based on the paymentType object.
@@ -89,6 +86,7 @@ class AuthorizationTest extends BasePaymentTest
      * Verify authorization with customer Id.
      *
      * @test
+     *
      * @return Authorization
      */
     public function authorizationWithCustomerId(): Authorization
@@ -112,6 +110,7 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @depends authorizationWithCustomerId
      * @test
+     *
      * @param Authorization $authorization
      */
     public function authorizationCanBeFetched(Authorization $authorization)

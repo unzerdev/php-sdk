@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -34,6 +33,7 @@ trait HasCancellationsTrait
     private $cancellations = [];
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return array
      */
@@ -44,6 +44,7 @@ trait HasCancellationsTrait
 
     /**
      * @param array $cancellations
+     *
      * @return self
      */
     public function setCancellations(array $cancellations): self
@@ -54,7 +55,7 @@ trait HasCancellationsTrait
 
     /**
      * @param Cancellation $cancellation
-     * todo: return self
+     *                                   todo: return self
      */
     public function addCancellation(Cancellation $cancellation)
     {
@@ -68,7 +69,9 @@ trait HasCancellationsTrait
      * Return specific cancellation.
      *
      * @param $cancellationId
+     *
      * @throws MissingResourceException
+     *
      * @return mixed
      */
     public function getCancellation($cancellationId)
@@ -80,7 +83,8 @@ trait HasCancellationsTrait
             }
         }
 
-       throw new MissingResourceException('Cancellation with id ' . $cancellationId . ' does not exist. Please fetch parent resource first.');
+        throw new MissingResourceException('Cancellation with id ' . $cancellationId . ' does not exist. Please fetch parent resource first.');
     }
+
     //</editor-fold>
 }

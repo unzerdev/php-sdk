@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -35,6 +34,7 @@ trait HasAmountsTrait
     private $currency = '';
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return float
      */
@@ -45,6 +45,7 @@ trait HasAmountsTrait
 
     /**
      * @param float $total
+     *
      * @return self
      */
     public function setTotal(float $total): self
@@ -63,6 +64,7 @@ trait HasAmountsTrait
 
     /**
      * @param float $charged
+     *
      * @return self
      */
     public function setCharged(float $charged): self
@@ -81,6 +83,7 @@ trait HasAmountsTrait
 
     /**
      * @param float $canceled
+     *
      * @return self
      */
     public function setCanceled(float $canceled): self
@@ -99,6 +102,7 @@ trait HasAmountsTrait
 
     /**
      * @param float $remaining
+     *
      * @return self
      */
     public function setRemaining(float $remaining): self
@@ -117,6 +121,7 @@ trait HasAmountsTrait
 
     /**
      * @param string $currency
+     *
      * @return self
      */
     public function setCurrency(string $currency): self
@@ -124,5 +129,6 @@ trait HasAmountsTrait
         $this->currency = $currency;
         return $this;
     }
+
     //</editor-fold>
 }

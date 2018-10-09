@@ -42,8 +42,10 @@ class CurlAdapter implements HttpAdapterInterface
      *
      * @param $uri string url of the target system
      * @param AbstractHeidelpayResource $heidelpayResource
-     * @param string $httpMethod
+     * @param string                    $httpMethod
+     *
      * @return string
+     *
      * @throws \RuntimeException
      */
     public function send(
@@ -128,5 +130,4 @@ class CurlAdapter implements HttpAdapterInterface
         ));
         return $request;
     }
-
 }

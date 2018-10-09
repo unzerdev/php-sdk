@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -60,6 +59,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * Customer constructor.
+     *
      * @param string|null $firstname
      * @param string|null $lastname
      */
@@ -73,6 +73,7 @@ class Customer extends AbstractHeidelpayResource
     }
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -83,6 +84,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $firstname
+     *
      * @return Customer
      */
     public function setFirstname($firstname): Customer
@@ -101,6 +103,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $lastname
+     *
      * @return Customer
      */
     public function setLastname($lastname): Customer
@@ -119,6 +122,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $salutation
+     *
      * @return Customer
      */
     public function setSalutation($salutation): Customer
@@ -137,6 +141,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $birthday
+     *
      * @return Customer
      */
     public function setBirthDate($birthday): Customer
@@ -155,6 +160,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $company
+     *
      * @return Customer
      */
     public function setCompany($company): Customer
@@ -173,6 +179,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $email
+     *
      * @return Customer
      */
     public function setEmail($email): Customer
@@ -191,6 +198,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $phone
+     *
      * @return Customer
      */
     public function setPhone($phone): Customer
@@ -209,6 +217,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $mobile
+     *
      * @return Customer
      */
     public function setMobile($mobile): Customer
@@ -227,6 +236,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param Address $billingAddress
+     *
      * @return Customer
      */
     public function setBillingAddress(Address $billingAddress): Customer
@@ -245,6 +255,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $customerId
+     *
      * @return Customer
      */
     public function setCustomerId($customerId): Customer
@@ -258,6 +269,7 @@ class Customer extends AbstractHeidelpayResource
     {
         return 'customers';
     }
+
     //</editor-fold>
 
     //</editor-fold>

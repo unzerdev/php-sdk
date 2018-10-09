@@ -13,12 +13,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
+ *
  * @package  heidelpay/mgw_sdk/payment_types
  */
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
@@ -27,6 +27,7 @@ class Card extends BasePaymentType
 {
     /**
      * Card constructor.
+     *
      * @param string $number
      * @param string $expiryDate
      */
@@ -58,6 +59,7 @@ class Card extends BasePaymentType
     private $brand = '';
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -68,6 +70,7 @@ class Card extends BasePaymentType
 
     /**
      * @param string $pan
+     *
      * @return Card
      */
     public function setNumber($pan): Card
@@ -86,6 +89,7 @@ class Card extends BasePaymentType
 
     /**
      * @param string $expiryDate
+     *
      * @return Card
      */
     public function setExpiryDate($expiryDate): Card
@@ -107,6 +111,7 @@ class Card extends BasePaymentType
 
     /**
      * @param string $cvc
+     *
      * @return Card
      */
     public function setCvc($cvc): Card
@@ -125,6 +130,7 @@ class Card extends BasePaymentType
 
     /**
      * @param string $holder
+     *
      * @return Card
      */
     public function setHolder($holder): Card
@@ -146,6 +152,7 @@ class Card extends BasePaymentType
      * Will be set internally on create or fetch card.
      *
      * @param string $brand
+     *
      * @return Card
      */
     protected function setBrand(string $brand): Card
@@ -153,6 +160,7 @@ class Card extends BasePaymentType
         $this->brand = $brand;
         return $this;
     }
+
     //</editor-fold>
     //</editor-fold>
 }

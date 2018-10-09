@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -48,6 +47,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     }
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -58,6 +58,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
 
     /**
      * @param string $iban
+     *
      * @return SepaDirectDebitGuaranteed
      */
     public function setIban(string $iban): SepaDirectDebitGuaranteed
@@ -76,6 +77,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
 
     /**
      * @param string $bic
+     *
      * @return SepaDirectDebitGuaranteed
      */
     public function setBic(string $bic): SepaDirectDebitGuaranteed
@@ -94,6 +96,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
 
     /**
      * @param string $holder
+     *
      * @return SepaDirectDebitGuaranteed
      */
     public function setHolder(string $holder): SepaDirectDebitGuaranteed
@@ -101,9 +104,11 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
         $this->holder = $holder;
         return $this;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
+
     /**
      * {@inheritDoc}
      */
@@ -111,5 +116,6 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     {
         return 'types/sepa-direct-debit-guaranteed';
     }
+
     //</editor-fold>
 }

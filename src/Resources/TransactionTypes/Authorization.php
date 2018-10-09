@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -48,7 +47,8 @@ class Authorization extends AbstractTransactionType
 
     /**
      * Authorization constructor.
-     * @param float $amount
+     *
+     * @param float  $amount
      * @param string $currency
      * @param string $returnUrl
      */
@@ -62,6 +62,7 @@ class Authorization extends AbstractTransactionType
     }
 
     //<editor-fold desc="Setters/Getters">
+
     /**
      * @return float
      */
@@ -72,6 +73,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param float $amount
+     *
      * @return self
      */
     public function setAmount($amount): self
@@ -90,6 +92,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $currency
+     *
      * @return HeidelpayResourceInterface
      */
     public function setCurrency($currency): HeidelpayResourceInterface
@@ -108,6 +111,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $returnUrl
+     *
      * @return HeidelpayResourceInterface
      */
     public function setReturnUrl($returnUrl): HeidelpayResourceInterface
@@ -126,6 +130,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $uniqueId
+     *
      * @return HeidelpayResourceInterface
      */
     public function setUniqueId(string $uniqueId): HeidelpayResourceInterface
@@ -133,9 +138,11 @@ class Authorization extends AbstractTransactionType
         $this->uniqueId = $uniqueId;
         return $this;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
+
     /**
      * {@inheritDoc}
      */
@@ -179,12 +186,14 @@ class Authorization extends AbstractTransactionType
 
         parent::handleResponse($response);
     }
+
     //</editor-fold>
 
     /**
      * Full cancel of this authorization.
      *
      * @param null $amount
+     *
      * @return Cancellation
      */
     public function cancel($amount = null): Cancellation

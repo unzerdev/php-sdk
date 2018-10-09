@@ -14,7 +14,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -37,6 +36,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * Verify sepa direct debit guaranteed can be created.
      *
      * @test
+     *
      * @return SepaDirectDebitGuaranteed
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
@@ -54,6 +54,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * Verify authorization is not allowed for sepa direct debit guaranteed.
      *
      * @test
+     *
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
@@ -65,6 +66,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
 
     /**
      * @test
+     *
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
@@ -76,8 +78,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
 
         $this->assertNotNull($customer->getId());
 
-		$charge = $directDebitGuaranteed->charge(200.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $customer);
-		$this->assertNotNull($charge);
+        $charge = $directDebitGuaranteed->charge(200.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $customer);
+        $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
     }
 }

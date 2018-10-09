@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -33,6 +32,7 @@ trait HasValueHelper
      *
      * @param float $amount1
      * @param float $amount2
+     *
      * @return bool
      */
     private function amountIsGreaterThanOrEqual($amount1, $amount2): bool
@@ -45,6 +45,7 @@ trait HasValueHelper
      * Returns true if the given amount is smaller than EPSILON.
      *
      * @param float $amount
+     *
      * @return bool
      */
     private function equalsZero(float $amount): bool

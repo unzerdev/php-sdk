@@ -14,7 +14,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -35,6 +34,7 @@ class InvoiceTest extends BasePaymentTest
      * Verifies invoice payment type can be created.
      *
      * @test
+     *
      * @return Invoice
      */
     public function invoiceTypeShouldBeCreatable(): Invoice
@@ -52,6 +52,7 @@ class InvoiceTest extends BasePaymentTest
      * Verify invoice is chargeable.
      *
      * @test
+     *
      * @param Invoice $invoice
      * @depends invoiceTypeShouldBeCreatable
      *
@@ -60,9 +61,9 @@ class InvoiceTest extends BasePaymentTest
      */
     public function verifyInvoiceShipment(Invoice $invoice)
     {
-		$charge = $invoice->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-		$this->assertNotNull($charge);
-		$this->assertNotNull($charge->getId());
+        $charge = $invoice->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $this->assertNotNull($charge);
+        $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge->getRedirectUrl());
     }
 
@@ -70,13 +71,14 @@ class InvoiceTest extends BasePaymentTest
      * Verify that an invoice object can be fetched from the api.
      *
      * @test
+     *
      * @param Invoice $invoice
      * @depends invoiceTypeShouldBeCreatable
      */
     public function invoiceTypeCanBeFetched(Invoice $invoice)
     {
-		$fetchedInvoice = $this->heidelpay->fetchPaymentType($invoice->getId());
-		$this->assertInstanceOf(Invoice::class, $fetchedInvoice);
-		$this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
+        $fetchedInvoice = $this->heidelpay->fetchPaymentType($invoice->getId());
+        $this->assertInstanceOf(Invoice::class, $fetchedInvoice);
+        $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
     }
 }

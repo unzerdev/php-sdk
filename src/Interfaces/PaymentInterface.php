@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -27,6 +26,7 @@ namespace heidelpay\MgwPhpSdk\Interfaces;
 interface PaymentInterface extends AmountsInterface
 {
     //<editor-fold desc="Payment state">
+
     /**
      * Return true if the state is pending.
      *
@@ -75,6 +75,7 @@ interface PaymentInterface extends AmountsInterface
      * @return int
      */
     public function getState(): int;
+
     //</editor-fold>
 
     /**

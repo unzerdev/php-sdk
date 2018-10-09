@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -34,6 +33,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     private $payment;
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return Payment|null
      */
@@ -44,6 +44,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     /**
      * @param Payment $payment
+     *
      * @return $this
      */
     public function setPayment($payment): self
@@ -51,6 +52,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         $this->payment = $payment;
         return $this;
     }
+
     //</editor-fold>
 
     public function handleResponse(\stdClass $response)

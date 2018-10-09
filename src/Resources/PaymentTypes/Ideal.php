@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -40,6 +39,7 @@ class Ideal extends BasePaymentType
     }
 
     //<editor-fold desc="Getter/Setter">
+
     /**
      * @return string
      */
@@ -50,6 +50,7 @@ class Ideal extends BasePaymentType
 
     /**
      * @param string $bankName
+     *
      * @return Ideal
      */
     public function setBankName(string $bankName): Ideal
@@ -57,5 +58,6 @@ class Ideal extends BasePaymentType
         $this->bankName = $bankName;
         return $this;
     }
+
     //</editor-fold>
 }

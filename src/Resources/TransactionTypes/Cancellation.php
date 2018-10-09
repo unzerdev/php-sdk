@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -31,6 +30,7 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Authorization constructor.
+     *
      * @param float $amount
      */
     public function __construct($amount = null)
@@ -49,6 +49,7 @@ class Cancellation extends AbstractTransactionType
     }
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return float|null
      */
@@ -59,6 +60,7 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * @param float $amount
+     *
      * @return Cancellation
      */
     public function setAmount($amount): Cancellation
@@ -66,5 +68,6 @@ class Cancellation extends AbstractTransactionType
         $this->amount = $amount;
         return $this;
     }
+
     //</editor-fold>
 }

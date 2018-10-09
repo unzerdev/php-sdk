@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -28,12 +27,14 @@ class Mode
 {
     /**
      * Test mode: All communication will take place with the heidelpay test servers.
+     *
      * @const TEST sandbox mode
      */
     const TEST = 'sandbox';
 
     /**
      * Live mode: All communication will take place with the heidelpay live servers.
+     *
      * @const Live production mode
      */
     const LIVE = 'live';

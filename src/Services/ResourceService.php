@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -33,10 +32,12 @@ use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 class ResourceService
 {
     //<editor-fold desc="CRUD operations">
+
     /**
      * Create the resource on the api.
      *
      * @param AbstractHeidelpayResource $resource
+     *
      * @return AbstractHeidelpayResource
      */
     public function create(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
@@ -58,6 +59,7 @@ class ResourceService
      * Update the resource on the api.
      *
      * @param AbstractHeidelpayResource $resource
+     *
      * @return AbstractHeidelpayResource
      */
     public function update(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
@@ -75,7 +77,9 @@ class ResourceService
 
     /**
      * @param AbstractHeidelpayResource $resource
+     *
      * @return null
+     *
      * @throws HeidelpayApiException
      */
     public function delete(AbstractHeidelpayResource $resource)
@@ -96,6 +100,7 @@ class ResourceService
      * Fetch the resource from the api (id must be set).
      *
      * @param AbstractHeidelpayResource $resource
+     *
      * @return AbstractHeidelpayResource
      */
     public function fetch(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
@@ -108,11 +113,13 @@ class ResourceService
         $resource->handleResponse($response);
         return $resource;
     }
+
     //</editor-fold>
 
     /**
      * @param AbstractHeidelpayResource $resource
-     * @param string $httpMethod
+     * @param string                    $httpMethod
+     *
      * @return \stdClass
      */
     public function send(AbstractHeidelpayResource $resource, $httpMethod = HttpAdapterInterface::REQUEST_GET): \stdClass

@@ -14,7 +14,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -36,8 +35,9 @@ class IdealTest extends BasePaymentTest
      * Verify Ideal payment type is creatable.
      *
      * @test
+     *
      * @return Ideal
-     * todo: change bankname to bic
+     *               todo: change bankname to bic
      */
     public function idealShouldBeCreatable(): Ideal
     {
@@ -56,6 +56,7 @@ class IdealTest extends BasePaymentTest
      *
      * @test
      * // todo fix when ideal operation is correctly defined.
+     *
      * @param Ideal $ideal
      * @depends idealShouldBeCreatable
      */
@@ -70,13 +71,14 @@ class IdealTest extends BasePaymentTest
      *
      * @test
      * @depends idealShouldBeCreatable
+     *
      * @param Ideal $ideal
      */
     public function idealShouldBeChargeable(Ideal $ideal)
     {
-		$charge = $ideal->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-		$this->assertNotNull($charge);
-		$this->assertNotNull($charge->getId());
+        $charge = $ideal->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $this->assertNotNull($charge);
+        $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge->getRedirectUrl());
     }
 
@@ -85,11 +87,12 @@ class IdealTest extends BasePaymentTest
      *
      * @test
      * @depends idealShouldBeCreatable
+     *
      * @param Ideal $ideal
      */
     public function idealTypeCanBeFetched(Ideal $ideal)
     {
-		$fetchedIdeal = $this->heidelpay->fetchPaymentType($ideal->getId());
+        $fetchedIdeal = $this->heidelpay->fetchPaymentType($ideal->getId());
         $this->assertInstanceOf(Ideal::class, $fetchedIdeal);
         $this->assertEquals($ideal->getId(), $fetchedIdeal->getId());
     }

@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -114,7 +113,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertNotNull($cancel->getId());
         $this->assertEquals(100.0, $cancel->getAmount());
         $secondPayment = $cancel->getPayment();
-        $this->assertAmounts($secondPayment, 0,0,0,0);
+        $this->assertAmounts($secondPayment, 0, 0, 0, 0);
         $this->assertTrue($secondPayment->isCanceled());
 
 
@@ -122,15 +121,15 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertNotNull($fetchedCancel);
         $this->assertNotEmpty($fetchedCancel->getId());
         $thirdPayment = $authorization->getPayment();
-        $this->assertAmounts($thirdPayment, 0,0,0,0);
+        $this->assertAmounts($thirdPayment, 0, 0, 0, 0);
         $this->assertTrue($thirdPayment->isCanceled());
 
-		$fetchedCancelSecond = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
-		$this->assertNotNull($fetchedCancelSecond);
-		$this->assertNotEmpty($fetchedCancelSecond->getId());
-		$this->assertEquals($fetchedCancel->expose(), $fetchedCancelSecond->expose());
+        $fetchedCancelSecond = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
+        $this->assertNotNull($fetchedCancelSecond);
+        $this->assertNotEmpty($fetchedCancelSecond->getId());
+        $this->assertEquals($fetchedCancel->expose(), $fetchedCancelSecond->expose());
         $fourthPayment = $fetchedCancelSecond->getPayment();
-        $this->assertAmounts($fourthPayment, 0,0,0,0);
+        $this->assertAmounts($fourthPayment, 0, 0, 0, 0);
         $this->assertTrue($fourthPayment->isCanceled());
     }
 
@@ -152,7 +151,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertNotNull($firstCancel->getId());
         $this->assertEquals(50.0, $firstCancel->getAmount());
         $secondPayment = $firstCancel->getPayment();
-        $this->assertAmounts($secondPayment, 50.0,0,50.0,0);
+        $this->assertAmounts($secondPayment, 50.0, 0, 50.0, 0);
         $this->assertTrue($secondPayment->isPending());
         $this->assertCount(1, $authorization->getCancellations());
 
@@ -161,7 +160,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertNotNull($secondCancel->getId());
         $this->assertEquals(20.0, $secondCancel->getAmount());
         $thirdPayment = $secondCancel->getPayment();
-        $this->assertAmounts($thirdPayment, 30.0,0,30.0,0);
+        $this->assertAmounts($thirdPayment, 30.0, 0, 30.0, 0);
         $this->assertTrue($thirdPayment->isPending());
         $this->assertCount(2, $authorization->getCancellations());
 

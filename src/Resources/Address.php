@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -45,6 +44,7 @@ class Address extends AbstractHeidelpayResource
     protected $country;
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -55,6 +55,7 @@ class Address extends AbstractHeidelpayResource
 
     /**
      * @param string $name
+     *
      * @return Address
      */
     public function setName($name): Address
@@ -73,6 +74,7 @@ class Address extends AbstractHeidelpayResource
 
     /**
      * @param string $street
+     *
      * @return Address
      */
     public function setStreet($street): Address
@@ -91,6 +93,7 @@ class Address extends AbstractHeidelpayResource
 
     /**
      * @param string $state
+     *
      * @return Address
      */
     public function setState($state): Address
@@ -109,6 +112,7 @@ class Address extends AbstractHeidelpayResource
 
     /**
      * @param string $zip
+     *
      * @return Address
      */
     public function setZip($zip): Address
@@ -127,6 +131,7 @@ class Address extends AbstractHeidelpayResource
 
     /**
      * @param string $city
+     *
      * @return Address
      */
     public function setCity($city): Address
@@ -145,6 +150,7 @@ class Address extends AbstractHeidelpayResource
 
     /**
      * @param string $country
+     *
      * @return Address
      */
     public function setCountry($country): Address
@@ -152,5 +158,6 @@ class Address extends AbstractHeidelpayResource
         $this->country = $country;
         return $this;
     }
+
     //</editor-fold>
 }

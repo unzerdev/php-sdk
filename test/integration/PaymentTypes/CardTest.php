@@ -14,7 +14,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -38,6 +37,7 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 class CardTest extends BasePaymentTest
 {
     //<editor-fold desc="Tests">
+
     /**
      * Verify that direct card creation is not possible if the merchant is not PCI DSS compliant.
      * In this case he needs to use the iFrame or needs to be marked PCI DSS compliant in the payment backend.
@@ -164,8 +164,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      */
-	public function fullChargeAfterAuthorize()
-	{
+    public function fullChargeAfterAuthorize()
+    {
         /** @var Card $card */
         $card = $this->createCard();
         $card = $this->heidelpay->createPaymentType($card);
@@ -287,7 +287,6 @@ class CardTest extends BasePaymentTest
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($payment->getId());
         $this->assertEquals($fetchedAuthorization->getId(), $authorization->getId());
     }
-
 
     /**
      * @test

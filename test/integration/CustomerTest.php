@@ -14,7 +14,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -130,19 +129,20 @@ class CustomerTest extends BasePaymentTest
      *
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
+     *
      * @param Customer $customer
      */
     public function customerShouldBeUpdatable(Customer $customer)
     {
-		$this->assertEquals($customer->getFirstname(), 'Max');
+        $this->assertEquals($customer->getFirstname(), 'Max');
         $customer->setFirstname('Not Max');
         $this->heidelpay->updateCustomer($customer);
         $this->assertEquals($customer->getFirstname(), 'Not Max');
 
         /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
-		$this->assertEquals($customer->getId(), $fetchedCustomer->getId());
-		$this->assertEquals('Not Max', $fetchedCustomer->getFirstname());
+        $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
+        $this->assertEquals('Not Max', $fetchedCustomer->getFirstname());
     }
 
     /**
@@ -150,6 +150,7 @@ class CustomerTest extends BasePaymentTest
      *
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
+     *
      * @param Customer $customer
      */
     public function customerShouldBeDeletable(Customer $customer)

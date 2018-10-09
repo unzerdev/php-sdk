@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -51,13 +50,14 @@ class BasePaymentTest extends TestCase
     }
 
     //<editor-fold desc="Helpers">
+
     /**
      * @return Card
      */
     protected function createCard(): Card
     {
         /** @var Card $card */
-        $card = new Card ('4444333322221111', '03/20');
+        $card = new Card('4444333322221111', '03/20');
         $card->setCvc('123');
         return $card;
     }
@@ -73,10 +73,10 @@ class BasePaymentTest extends TestCase
 
     /**
      * @param PaymentInterface $payment
-     * @param float $expectedRemaining
-     * @param float $expectedCharged
-     * @param float $expectedTotal
-     * @param float $expectedCanceled
+     * @param float            $expectedRemaining
+     * @param float            $expectedCharged
+     * @param float            $expectedTotal
+     * @param float            $expectedCanceled
      */
     protected function assertAmounts(
         $payment,
@@ -96,12 +96,13 @@ class BasePaymentTest extends TestCase
      *
      * @param $number
      * @param string $maskSymbol
+     *
      * @return string
      */
     protected function maskCreditCardNumber($number, $maskSymbol = '*'): string
     {
         return substr($number, 0, 6) . str_repeat($maskSymbol, \strlen($number) - 10) . substr($number, -4);
     }
-    //</editor-fold>
 
+    //</editor-fold>
 }

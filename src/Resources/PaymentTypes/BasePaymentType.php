@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -36,6 +35,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     private $chargeable = false;
 
     //<editor-fold desc="Overridable Methods">
+
     /**
      * {@inheritDoc}
      */
@@ -43,9 +43,11 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     {
         return 'types/' . $this::getClassShortName();
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Transaction methods">
+
     /**
      * {@inheritDoc}
      */
@@ -73,6 +75,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return bool
      */
@@ -83,6 +86,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
 
     /**
      * @param bool $authorizable
+     *
      * @return BasePaymentType
      */
     public function setAuthorizable(bool $authorizable): BasePaymentType
@@ -101,6 +105,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
 
     /**
      * @param bool $chargeable
+     *
      * @return BasePaymentType
      */
     public function setChargeable(bool $chargeable): BasePaymentType
@@ -108,5 +113,6 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
         $this->chargeable = $chargeable;
         return $this;
     }
+
     //</editor-fold>
 }

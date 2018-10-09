@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -57,6 +56,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     private $paymentType;
 
     //<editor-fold desc="Setters/Getters">
+
     /**
      * @return string
      */
@@ -67,6 +67,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param string $redirectUrl
+     *
      * @return Payment
      */
     public function setRedirectUrl(string $redirectUrl): Payment
@@ -85,6 +86,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param Authorization $authorize
+     *
      * @return PaymentInterface
      */
     public function setAuthorization(Authorization $authorize): PaymentInterface
@@ -105,6 +107,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param array $charges
+     *
      * @return Payment
      */
     public function setCharges(array $charges): Payment
@@ -125,7 +128,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      * Get and return a Charge object by id.
      *
      * @param $chargeId
+     *
      * @return Charge
+     *
      * @throws MissingResourceException
      */
     public function getCharge($chargeId): Charge
@@ -141,6 +146,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param Customer|string $customer
+     *
      * @return Payment
      */
     public function setCustomer($customer): Payment
@@ -191,6 +197,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param PaymentTypeInterface $paymentType
+     *
      * @return Payment
      */
     public function setPaymentType(PaymentTypeInterface $paymentType): Payment
@@ -198,10 +205,12 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $this->paymentType = $paymentType;
         return $this;
     }
+
     //</editor-fold>
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
+
     /**
      * {@inheritDoc}
      */
@@ -277,8 +286,8 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
                 }
             }
         }
-
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Transactions">
@@ -305,6 +314,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      * @param $currency
      * @param $returnUrl
      * @param PaymentTypeInterface $paymentType
+     *
      * @return Authorization
      *
      * todo
@@ -318,13 +328,14 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      * Cancel payment/authorization object.
      *
      * @param float|null $amount
+     *
      * @return Cancellation
      *
      * todo: nicht jedes payment hat einen authorisierung
      */
     public function cancel($amount = null): Cancellation
     {
-        if ($this->getAuthorization() instanceof Authorization){
+        if ($this->getAuthorization() instanceof Authorization) {
             return $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
         }
 
@@ -334,6 +345,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * @param $transaction
      * @param $pattern
+     *
      * @return mixed
      */
     protected function getTransactionId($transaction, $pattern)
@@ -347,9 +359,11 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
         return $matches[1];
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Transaction Update">
+
     /**
      * @param $transaction
      */
@@ -418,5 +432,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     {
         echo 'WARNING: Method ' . __METHOD__ . ' is not implemented yet.';
     }
+
     //</editor-fold>
 }

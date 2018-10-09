@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/heidelpay-php-payment-api/
@@ -37,9 +36,9 @@ interface HttpAdapterInterface
      * send post request to payment server
      *
      * @param $uri string url of the target system
-     *
      * @param AbstractHeidelpayResource $heidelpayResource
      * @param $httpMethod
+     *
      * @return string result json of the transaction
      */
     public function send($uri = null, AbstractHeidelpayResource $heidelpayResource = null, $httpMethod = self::REQUEST_POST): string;

@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -53,7 +52,8 @@ class Charge extends AbstractTransactionType
 
     /**
      * Authorization constructor.
-     * @param float $amount
+     *
+     * @param float  $amount
      * @param string $currency
      * @param string $returnUrl
      */
@@ -67,6 +67,7 @@ class Charge extends AbstractTransactionType
     }
 
     //<editor-fold desc="Setters/Getters">
+
     /**
      * @return float
      */
@@ -77,6 +78,7 @@ class Charge extends AbstractTransactionType
 
     /**
      * @param float $amount
+     *
      * @return HeidelpayResourceInterface
      */
     public function setAmount($amount): HeidelpayResourceInterface
@@ -95,6 +97,7 @@ class Charge extends AbstractTransactionType
 
     /**
      * @param string $currency
+     *
      * @return HeidelpayResourceInterface
      */
     public function setCurrency($currency): HeidelpayResourceInterface
@@ -113,6 +116,7 @@ class Charge extends AbstractTransactionType
 
     /**
      * @param string $returnUrl
+     *
      * @return HeidelpayResourceInterface
      */
     public function setReturnUrl($returnUrl): HeidelpayResourceInterface
@@ -131,6 +135,7 @@ class Charge extends AbstractTransactionType
 
     /**
      * @param string $uniqueId
+     *
      * @return HeidelpayResourceInterface
      */
     public function setUniqueId(string $uniqueId): HeidelpayResourceInterface
@@ -167,6 +172,7 @@ class Charge extends AbstractTransactionType
 
     /**
      * @param string|null $redirectUrl
+     *
      * @return Charge
      */
     public function setRedirectUrl($redirectUrl): Charge
@@ -174,9 +180,11 @@ class Charge extends AbstractTransactionType
         $this->redirectUrl = $redirectUrl;
         return $this;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
+
     /**
      * {@inheritDoc}
      */
@@ -222,6 +230,7 @@ class Charge extends AbstractTransactionType
 
         parent::handleResponse($response);
     }
+
     //</editor-fold>
 
     /**
@@ -230,6 +239,7 @@ class Charge extends AbstractTransactionType
      * Creates and returns new cancellation object otherwise.
      *
      * @param float $amount
+     *
      * @return Cancellation
      */
     public function cancel($amount = null): Cancellation

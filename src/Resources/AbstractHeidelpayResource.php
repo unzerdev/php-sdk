@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
@@ -39,7 +38,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * @param HeidelpayParentInterface $parent
-     * @param string $id
+     * @param string                   $id
      *
      * todo: wird das noch gebraucht?
      */
@@ -50,6 +49,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * {@inheritDoc}
      */
@@ -60,6 +60,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id): self
@@ -70,6 +71,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * @param HeidelpayParentInterface $parentResource
+     *
      * @return $this
      */
     public function setParentResource($parentResource): self
@@ -85,15 +87,18 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     {
         return $this->parentResource;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Serialization">
+
     /**
      * Specify data which should be serialized to JSON
+     *
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     *
      * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     *               which is a value of any type other than a resource.
      */
     public function jsonSerialize()
     {
@@ -136,7 +141,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         // Add linked resources if any
         $resources = [];
         /**
-         * @var string $key
+         * @var string                     $key
          * @var HeidelpayResourceInterface $linkedResource
          */
         foreach ($this->getLinkedResources() as $key=>$linkedResource) {
@@ -152,6 +157,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         ksort($properties);
         return $properties;
     }
+
     //</editor-fold>
 
     /**
@@ -185,14 +191,16 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     }
 
     //<editor-fold desc="Optional Methods">
+
     /**
      * Return the resources which should be referenced by Id within the resource section of the resource data.
      * Override this to define the linked resources.
+     *
      * @return array
      */
     public function getLinkedResources(): array
     {
-       return [];
+        return [];
     }
 
     /**
@@ -233,14 +241,16 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
                 if (\is_callable([$object, $getter])) {
                     $this->updateValues($object->$getter(), $newValue);
                 }
-            } else if (\is_callable([$object, $setter])) {
+            } elseif (\is_callable([$object, $setter])) {
                 $object->$setter($newValue);
             }
         }
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Private helper">
+
     /**
      * Return class short name.
      *
@@ -251,5 +261,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $classNameParts = explode('\\', static::class);
         return strtolower(end($classNameParts));
     }
+
     //</editor-fold>
 }
