@@ -78,4 +78,29 @@ class CancelAfterCharge extends BasePaymentTest
         $this->assertNotEmpty($refund->getId());
     }
 
+    /**
+     * Verify partial refund of a charge.
+     *
+     * @test
+     */
+    public function chargeShouldBePartlyRefundableWithId()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $charge = $this->heidelpay->charge(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+
+        $firstPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+        $this->assertAmounts($firstPayment, 0,100,100,0);
+        $this->assertTrue($firstPayment->isCompleted());
+
+        /** @var Cancellation $refund */
+        $refund = $this->heidelpay->cancelChargeById($charge->getPayment()->getId(), $charge->getId(), 10.0);
+        $this->assertNotNull($refund);
+        $this->assertNotEmpty($refund->getId());
+
+        $secondPayment = $this->heidelpay->fetchPaymentById($refund->getPayment()->getId());
+        $this->assertNotNull($secondPayment);
+        $this->assertAmounts($secondPayment, 0,100,100,10);
+        $this->assertTrue($secondPayment->isCompleted());
+    }
+
 }
