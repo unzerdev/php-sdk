@@ -206,6 +206,48 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         return $this;
     }
 
+    /**
+     * Return cancellation object in all cancellations of this payment object
+     * i. e. refunds (charge cancellations) and reversals (authorize cancellations).
+     *
+     * @param $cancellationId
+     *
+     * @throws MissingResourceException
+     *
+     * @return Cancellation
+     */
+    public function getCancellation($cancellationId): Cancellation
+    {
+        /** @var Cancellation $cancellation */
+        foreach ($this->getCancellations() as $cancellation) {
+            if ($cancellation->getId() === $cancellationId) {
+                return $cancellation;
+            }
+        }
+
+        throw new MissingResourceException();
+    }
+
+    /**
+     * Return an array containing all cancellations of this payment object
+     * i. e. refunds (charge cancellations) and reversals (authorize cancellations).
+     *
+     * @return array
+     */
+    public function getCancellations(): array
+    {
+        $refunds = [];
+
+        /** @var Charge $charge */
+        foreach ($this->getCharges() as $charge) {
+            $refunds[] = $charge->getCancellations();
+        }
+
+        $authorization = $this->getAuthorization();
+        $cancellations = array_merge($authorization ? $authorization->getCancellations() : [], ...$refunds);
+        return $cancellations;
+    }
+
     //</editor-fold>
     //</editor-fold>
 
@@ -291,21 +333,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     //</editor-fold>
 
     //<editor-fold desc="Transactions">
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * todo: this should be handled by the api.
-//     */
-//    public function fullCharge(): Charge
-//    {
-//        // todo: authorization muss erst geholt werden
-//        if (!$this->getAuthorization() instanceof Authorization) {
-//            throw new MissingResourceException('Cannot perform full charge without authorization.');
-//        }
-//
-//        // charge amount
-//        return $this->charge($this->getRemaining());
-//    }
 
     /**
      * Sets the given paymentType and performs an authorization.

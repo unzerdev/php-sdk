@@ -33,12 +33,26 @@ class Cancel extends BasePaymentTest
      *
      * @test
      */
-    public function reversalShouldBeFetchableById()
+    public function reversalShouldBeFetchableViaHeidelpayObject()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $authorization = $this->createAuthorization();
         $cancel = $authorization->cancel();
         $fetchedCancel = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
+		$this->assertNotNull($fetchedCancel);
+		$this->assertNotNull($fetchedCancel->getId());
+		$this->assertEquals($cancel->expose(), $fetchedCancel->expose());
+    }
+
+    /**
+     * Verify reversal is fetchable.
+     *
+     * @test
+     */
+    public function reversalShouldBeFetchableViaPaymentObject()
+    {
+        $authorization = $this->createAuthorization();
+        $cancel = $authorization->cancel();
+        $fetchedCancel = $cancel->getPayment()->getAuthorization()->getCancellation($cancel->getId());
 		$this->assertNotNull($fetchedCancel);
 		$this->assertNotNull($fetchedCancel->getId());
 		$this->assertEquals($cancel->expose(), $fetchedCancel->expose());
@@ -49,15 +63,81 @@ class Cancel extends BasePaymentTest
      *
      * @test
      */
-    public function refundShouldBeFetchableById()
+    public function refundShouldBeFetchableViaHeidelpayObject()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
-        $charge = $this->heidelpay->charge(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $charge = $this->createCharge();
         $cancel = $charge->cancel();
         $fetchedCancel = $this->heidelpay
             ->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
 		$this->assertNotNull($fetchedCancel);
 		$this->assertNotNull($fetchedCancel->getId());
 		$this->assertEquals($cancel->expose(), $fetchedCancel->expose());
+    }
+
+    /**
+     * Verify refund is fetchable.
+     *
+     * @test
+     */
+    public function refundShouldBeFetchableViaPaymentObject()
+    {
+        $charge = $this->createCharge();
+        $cancel = $charge->cancel();
+        $fetchedCancel = $cancel->getPayment()->getCharge($charge->getId())->getCancellation($cancel->getId());
+		$this->assertNotNull($fetchedCancel);
+		$this->assertNotNull($fetchedCancel->getId());
+		$this->assertEquals($cancel->expose(), $fetchedCancel->expose());
+    }
+
+    /**
+     * Verify reversal is fetchable via payment object.
+     *
+     * @test
+     */
+    public function authorizationCancellationsShouldBeFetchableViaPaymentObject()
+    {
+        $authorization = $this->createAuthorization();
+        $reversal = $authorization->cancel();
+        $fetchedPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+
+        $cancellation = $fetchedPayment->getCancellation($reversal->getId());
+        $this->assertNotNull($cancellation);
+        $this->assertEquals($cancellation->expose(), $reversal->expose());
+    }
+
+    /**
+     * Verify refund is fetchable via payment object.
+     *
+     * @test
+     */
+    public function chargeCancellationsShouldBeFetchableViaPaymentObject()
+    {
+        $charge = $this->createCharge();
+        $reversal = $charge->cancel();
+        $fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+
+        $cancellation = $fetchedPayment->getCancellation($reversal->getId());
+        $this->assertNotNull($cancellation);
+        $this->assertEquals($cancellation->expose(), $reversal->expose());
+    }
+
+    /**
+     * @return \heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType|\heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization
+     */
+    public function createAuthorization()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        return $authorization;
+    }
+
+    /**
+     * @return \heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType|\heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge
+     */
+    public function createCharge()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $charge = $this->heidelpay->charge(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        return $charge;
     }
 }
