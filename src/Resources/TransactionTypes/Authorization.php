@@ -200,4 +200,16 @@ class Authorization extends AbstractTransactionType
     {
         return $this->getHeidelpayObject()->cancelAuthorization($this, $amount);
     }
+
+    /**
+     * Charge authorization.
+     *
+     * @param null $amount
+     *
+     * @return Charge
+     */
+    public function charge($amount = null): Charge
+    {
+        return $this->getHeidelpayObject()->chargeAuthorization($this->getPayment()->getId(), $amount);
+    }
 }

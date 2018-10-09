@@ -255,8 +255,19 @@ class Heidelpay implements HeidelpayParentInterface
     {
         $payment = new Payment($this);
         $payment->setId($paymentId);
-        $payment = $this->resourceService->fetch($payment);
+        return $this->fetchPayment($payment);
+    }
 
+    /**
+     * Fetch and return payment by given payment id.
+     *
+     * @param Payment $payment
+     *
+     * @return Payment
+     */
+    public function fetchPayment(Payment $payment): HeidelpayResourceInterface
+    {
+        $this->resourceService->fetch($payment);
         if (!$payment instanceof Payment) {
             throw new IllegalResourceTypeException(Payment::class, \get_class($payment));
         }
