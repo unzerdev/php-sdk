@@ -23,11 +23,15 @@
  */
 namespace heidelpay\MgwPhpSdk\test;
 
+use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -67,7 +71,6 @@ class BasePaymentTest extends TestCase
      */
     protected function createPayment(): Payment
     {
-        // todo: alternative -> add create payment method to heidelpay
         return new Payment($this->heidelpay);
     }
 
@@ -102,6 +105,26 @@ class BasePaymentTest extends TestCase
     protected function maskCreditCardNumber($number, $maskSymbol = '*'): string
     {
         return substr($number, 0, 6) . str_repeat($maskSymbol, \strlen($number) - 10) . substr($number, -4);
+    }
+
+    /**
+     * @return AbstractTransactionType|Authorization
+     */
+    public function createAuthorization()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        return $authorization;
+    }
+
+    /**
+     * @return AbstractTransactionType|Charge
+     */
+    public function createCharge()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $charge = $this->heidelpay->charge(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        return $charge;
     }
 
     //</editor-fold>

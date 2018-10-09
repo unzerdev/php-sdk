@@ -23,7 +23,6 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
-use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class Cancel extends BasePaymentTest
@@ -119,25 +118,5 @@ class Cancel extends BasePaymentTest
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
         $this->assertNotNull($cancellation);
         $this->assertEquals($cancellation->expose(), $reversal->expose());
-    }
-
-    /**
-     * @return \heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType|\heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization
-     */
-    public function createAuthorization()
-    {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
-        return $authorization;
-    }
-
-    /**
-     * @return \heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType|\heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge
-     */
-    public function createCharge()
-    {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
-        $charge = $this->heidelpay->charge(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
-        return $charge;
     }
 }
