@@ -39,6 +39,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\GiroPay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
@@ -238,7 +239,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Payment
      */
-    private function createPayment(PaymentTypeInterface $paymentType, $customer = null): Payment
+    private function createPayment(PaymentTypeInterface $paymentType, $customer = null): HeidelpayResourceInterface
     {
         return (new Payment($this))->setPaymentType($paymentType)->setCustomer($customer);
     }
@@ -250,7 +251,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Payment
      */
-    public function fetchPaymentById($paymentId): Payment
+    public function fetchPaymentById($paymentId): HeidelpayResourceInterface
     {
         $payment = new Payment($this);
         $payment->setId($paymentId);
@@ -271,9 +272,9 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param PaymentTypeInterface $paymentType
      *
-     * @return PaymentTypeInterface|AbstractHeidelpayResource
+     * @return PaymentTypeInterface
      */
-    public function createPaymentType(PaymentTypeInterface $paymentType)
+    public function createPaymentType(PaymentTypeInterface $paymentType): HeidelpayResourceInterface
     {
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this);
@@ -283,9 +284,9 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * @param string $typeId
      *
-     * @return mixed
+     * @return PaymentTypeInterface
      */
-    public function fetchPaymentType($typeId)
+    public function fetchPaymentType($typeId): HeidelpayResourceInterface
     {
         $paymentType = null;
 
@@ -323,9 +324,9 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param Customer $customer
      *
-     * @return mixed
+     * @return Customer
      */
-    public function createCustomer(Customer $customer): Customer
+    public function createCustomer(Customer $customer): HeidelpayResourceInterface
     {
         $customer->setParentResource($this);
         return $this->resourceService->create($customer);
@@ -336,7 +337,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param Customer|string $customer
      *
-     * @return HeidelpayResourceInterface
+     * @return Customer
      */
     public function fetchCustomer($customer): HeidelpayResourceInterface
     {
@@ -354,7 +355,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param Customer $customer
      *
-     * @return HeidelpayResourceInterface
+     * @return Customer
      */
     public function updateCustomer(Customer $customer): HeidelpayResourceInterface
     {
@@ -364,7 +365,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Delete a Customer object via API.
      *
-     * @param $customerId
+     * @param string $customerId
      *
      * @throws HeidelpayApiException
      */
@@ -438,7 +439,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Cancellation
      */
-    public function fetchReversalByAuthorization($authorization, $cancellationId): Cancellation
+    public function fetchReversalByAuthorization($authorization, $cancellationId): HeidelpayResourceInterface
     {
         $this->getResourceService()->fetch($authorization);
         return $authorization->getCancellation($cancellationId);
@@ -452,7 +453,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Cancellation
      */
-    public function fetchReversal($paymentId, $cancellationId): Cancellation
+    public function fetchReversal($paymentId, $cancellationId): HeidelpayResourceInterface
     {
         /** @var Authorization $authorization */
         $authorization = $this->fetchPaymentById($paymentId)->getAuthorization();
@@ -477,7 +478,13 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Authorization
      */
-    public function authorizeWithPaymentTypeId($amount, $currency, $paymentTypeId, $returnUrl, $customer = null): Authorization
+    public function authorizeWithPaymentTypeId(
+        $amount,
+        $currency,
+        $paymentTypeId,
+        $returnUrl,
+        $customer = null
+    ): AbstractTransactionType
     {
         $paymentType = $this->fetchPaymentType($paymentTypeId);
         return $this->authorize($amount, $currency, $paymentType, $returnUrl, $customer);
@@ -494,7 +501,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Authorization
      */
-    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null): Authorization
+    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null): AbstractTransactionType
     {
         $payment = $this->createPayment($paymentType, $customer);
         $authorization = new Authorization($amount, $currency, $returnUrl);
@@ -518,7 +525,13 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Charge
      */
-    public function chargeWithPaymentTypeId($amount, $currency, $paymentTypeId, $returnUrl, $customer = null): Charge
+    public function chargeWithPaymentTypeId(
+        $amount,
+        $currency,
+        $paymentTypeId,
+        $returnUrl,
+        $customer = null
+    ): AbstractTransactionType
     {
         $paymentType = $this->fetchPaymentType($paymentTypeId);
         return $this->charge($amount, $currency, $paymentType, $returnUrl, $customer);
@@ -538,7 +551,7 @@ class Heidelpay implements HeidelpayParentInterface
         $currency,
         PaymentTypeInterface $paymentType,
         $returnUrl,
-        $customer = null): Charge
+        $customer = null): AbstractTransactionType
     {
         $payment = $this->createPayment($paymentType, $customer);
         $charge = new Charge($amount, $currency, $returnUrl);
@@ -556,7 +569,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Charge
      */
-    public function chargeAuthorization($paymentId, $amount = null): Charge
+    public function chargeAuthorization($paymentId, $amount = null): AbstractTransactionType
     {
         /** @var Payment $payment */
         $payment = $this->fetchPaymentById($paymentId);
@@ -581,7 +594,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Cancellation
      */
-    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation
+    public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
     {
         $cancellation = new Cancellation($amount);
         $authorization->addCancellation($cancellation);
@@ -599,7 +612,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Cancellation
      */
-    public function cancelAuthorizationByPaymentId($paymentId, $amount = null): Cancellation
+    public function cancelAuthorizationByPaymentId($paymentId, $amount = null): AbstractTransactionType
     {
         $authorization = $this->fetchAuthorization($paymentId);
         return $this->cancelAuthorization($authorization, $amount);
@@ -618,7 +631,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Cancellation
      */
-    public function cancelChargeById($paymentId, $chargeId, $amount = null): Cancellation
+    public function cancelChargeById($paymentId, $chargeId, $amount = null): AbstractTransactionType
     {
         $charge = $this->fetchCharge($paymentId, $chargeId);
         return $this->cancelCharge($charge, $amount);
@@ -632,7 +645,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Cancellation
      */
-    public function cancelCharge(Charge $charge, $amount = null): Cancellation
+    public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
     {
         $cancellation = new Cancellation($amount);
         $charge->addCancellation($cancellation);
