@@ -66,4 +66,24 @@ class ChargeAfterAuthorization extends BasePaymentTest
         $this->assertAmounts($payment, 0, 100, 100, 0);
         $this->assertTrue($payment->isCompleted());
     }
+
+    /**
+     * Verify authorization is partly chargeable.
+     *
+     * @test
+     */
+    public function authorizationShouldBePartlyChargeable()
+    {
+        $authorization = $this->createAuthorization();
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 100, 0, 100, 0);
+        $this->assertTrue($payment->isPending());
+
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 10);
+        $this->heidelpay->fetchPayment($payment);
+        $this->assertNotNull($charge);
+        $this->assertNotNull($charge->getId());
+        $this->assertAmounts($payment, 90, 10, 100, 0);
+        $this->assertTrue($payment->isPartlyPaid());
+    }
 }
