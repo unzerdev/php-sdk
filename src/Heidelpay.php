@@ -460,6 +460,35 @@ class Heidelpay implements HeidelpayParentInterface
         return $authorization->getCancellation($cancellationId);
     }
 
+    /**
+     * Fetch a cancel on an authorization (aka reversal).
+     *
+     * @param string $paymentId
+     * @param string $chargeId
+     * @param string $cancellationId
+     *
+     * @return Cancellation
+     */
+    public function fetchRefundById($paymentId, $chargeId, $cancellationId): HeidelpayResourceInterface
+    {
+        /** @var Charge $charge */
+        $charge = $this->fetchCharge($paymentId, $chargeId);
+        return $charge->getCancellation($cancellationId);
+    }
+
+    /**
+     * Fetch a cancel on an authorization (aka reversal).
+     *
+     * @param Charge $charge
+     * @param string $cancellationId
+     * @return Cancellation
+     */
+    public function fetchRefund(Charge $charge, $cancellationId): HeidelpayResourceInterface
+    {
+        $cancellation = $charge->getCancellation($cancellationId);
+        return $this->getResourceService()->fetch($cancellation);
+    }
+
     //</editor-fold>
 
     //</editor-fold>

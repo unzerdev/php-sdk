@@ -426,11 +426,23 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param $transaction
-     * todo: implement
      */
     private function updateRefundTransaction($transaction)
     {
-        echo 'WARNING: Method ' . __METHOD__ . ' is not implemented yet.';
+        $refundId = $this->getResourceId($transaction, 'cnl');
+        $chargeId = $this->getResourceId($transaction, 'chg');
+
+        $charge = $this->getCharge($chargeId);
+        try {
+            $cancellation = $charge->getCancellation($refundId);
+        } catch (MissingResourceException $e) {
+            $cancellation =  (new Cancellation())
+                ->setPayment($this)
+                ->setParentResource($this)
+                ->setId($refundId);
+            $charge->addCancellation($cancellation);
+        }
+        $cancellation->setAmount($transaction->amount);
     }
 
     //</editor-fold>
