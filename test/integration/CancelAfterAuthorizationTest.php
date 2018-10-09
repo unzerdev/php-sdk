@@ -48,9 +48,10 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
 
         $cancellation = $fetchedAuthorization->cancel();
+        $secPayment = $this->heidelpay->fetchPaymentById($payment->getId());
         $this->assertNotEmpty($cancellation);
-        $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
-        $this->assertTrue($payment->isCanceled());
+        $this->assertAmounts($secPayment, 0.0, 0.0, 0.0, 0.0);
+        $this->assertTrue($secPayment->isCanceled());
     }
 
     /**
@@ -90,7 +91,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertNotEmpty($cancel->getId());
         $this->assertEquals(10.0, $cancel->getAmount());
 
-        $payment = $fetchedAuthorization->getPayment();
+        $payment = $this->heidelpay->fetchPaymentById($fetchedAuthorization->getPayment()->getId());
         $this->assertAmounts($payment, 90.0, 0.0, 90.0, 0.0);
         $this->assertTrue($payment->isPending());
     }

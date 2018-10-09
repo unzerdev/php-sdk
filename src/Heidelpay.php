@@ -371,9 +371,9 @@ class Heidelpay implements HeidelpayParentInterface
      * A Payment object can have zero to one authorizations.
      *
      * @param $paymentId
-     * @return HeidelpayResourceInterface|AbstractHeidelpayResource
+     * @return Authorization
      */
-    public function fetchAuthorization($paymentId)
+    public function fetchAuthorization($paymentId): HeidelpayResourceInterface
     {
         /** @var Payment $payment */
         $payment = $this->fetchPaymentById($paymentId);
@@ -529,14 +529,15 @@ class Heidelpay implements HeidelpayParentInterface
     }
     //</editor-fold>
 
+    //<editor-fold desc="Cancellation/Reversal">
     /**
-     * Creates a cancellation for the given Authorization object.
+     * Creates a cancellation for the authorization of the given payment.
      *
      * @param Authorization $authorization
      * @param null $amount
      * @return Cancellation
      */
-    public function cancelAuthorization($authorization, $amount = null): Cancellation
+    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation
     {
         $cancellation = new Cancellation($amount);
         $authorization->addCancellation($cancellation);
@@ -545,5 +546,19 @@ class Heidelpay implements HeidelpayParentInterface
 
         return $cancellation;
     }
+
+    /**
+     * Creates a cancellation for the given Authorization object.
+     *
+     * @param string $paymentId
+     * @param null $amount
+     * @return Cancellation
+     */
+    public function cancelAuthorizationByPaymentId($paymentId, $amount = null): Cancellation
+    {
+        $authorization = $this->fetchAuthorization($paymentId);
+        return $this->cancelAuthorization($authorization, $amount);
+    }
+    //</editor-fold>
     //</editor-fold>
 }

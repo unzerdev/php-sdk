@@ -315,47 +315,20 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * Perform a full cancel on the payment.
-     * Returns the payment object itself.
-     * Cancellation-Object is not returned since on cancelling might affect several charges thus creates several
-     * Cancellation-Objects in one go.
+     * Cancel payment/authorization object.
      *
-     * @return PaymentInterface
+     * @param float|null $amount
+     * @return Cancellation
+     *
+     * todo: nicht jedes payment hat einen authorisierung
      */
-    public function fullCancel(): PaymentInterface
+    public function cancel($amount = null): Cancellation
     {
-        if ($this->authorize instanceof Authorization && !$this->isCompleted()) {
-            $this->authorize->cancel();
-            return $this;
+        if ($this->getAuthorization() instanceof Authorization){
+            return $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
         }
 
-        $this->cancelAllCharges();
-
-        return $this;
-    }
-
-    /**
-     * @param float $amount
-     * @return PaymentInterface
-     */
-    public function cancel($amount = null): PaymentInterface
-    {
-        if (null === $amount) {
-            return $this->fullCancel();
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function cancelAllCharges()
-    {
-        /** @var Charge $charge */
-        foreach ($this->getCharges() as $charge) {
-            $charge->cancel();
-        }
+        throw new MissingResourceException('This Payment has no Authorization. Please fetch the Payment first.');
     }
 
     /**
