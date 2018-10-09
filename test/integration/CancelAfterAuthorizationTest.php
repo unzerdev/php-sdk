@@ -138,7 +138,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      *
      * @test
      */
-    public function anAuthorizationsReversalsShallBeFetchable()
+    public function anAuthorizationsReversalsShouldBeFetchable()
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
