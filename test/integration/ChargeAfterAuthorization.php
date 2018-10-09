@@ -46,4 +46,24 @@ class ChargeAfterAuthorization extends BasePaymentTest
         $this->assertAmounts($payment, 0, 100, 100, 0);
         $this->assertTrue($payment->isCompleted());
     }
+
+    /**
+     * Validate full charge after authorization.
+     *
+     * @test
+     */
+    public function authorizationShouldBeFullyChargeableViaHeidelpayObject()
+    {
+        $authorization = $this->createAuthorization();
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 100, 0, 100, 0);
+        $this->assertTrue($payment->isPending());
+
+        $charge = $this->heidelpay->chargeAuthorization($payment->getId());
+        $this->heidelpay->fetchPayment($payment);
+        $this->assertNotNull($charge);
+        $this->assertNotNull($charge->getId());
+        $this->assertAmounts($payment, 0, 100, 100, 0);
+        $this->assertTrue($payment->isCompleted());
+    }
 }
