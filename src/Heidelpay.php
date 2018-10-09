@@ -563,16 +563,27 @@ class Heidelpay implements HeidelpayParentInterface
 
     //<editor-fold desc="Cancellation/Refund">
     /**
-     * Creates a cancellation for the charge with the given id belonging to the given Payment object.
+     * Create a cancellation for the charge with the given id belonging to the given Payment object.
      *
      * @param string $paymentId
      * @param string $chargeId
      * @param null $amount
      * @return Cancellation
      */
-    public function cancelCharge($paymentId, $chargeId, $amount = null): Cancellation
+    public function cancelChargeById($paymentId, $chargeId, $amount = null): Cancellation
     {
         $charge = $this->fetchCharge($paymentId, $chargeId);
+        return $this->cancelCharge($charge, $amount);
+    }
+
+    /**
+     * Create a cancellation for the given charge.
+     * @param $amount
+     * @param Charge $charge
+     * @return Cancellation
+     */
+    public function cancelCharge(Charge $charge, $amount = null): Cancellation
+    {
         $cancellation = new Cancellation($amount);
         $charge->addCancellation($cancellation);
         $cancellation->setPayment($charge->getPayment());
