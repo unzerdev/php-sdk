@@ -25,6 +25,8 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class CancelAfterCharge extends BasePaymentTest
@@ -34,12 +36,29 @@ class CancelAfterCharge extends BasePaymentTest
      *
      * @test
      */
-    public function chargeShouldBeFetchable()
+    public function chargeShouldBeFetchable(): Charge
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $charge = $this->heidelpay->charge(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
         $fetchedCharge = $this->heidelpay->fetchCharge($charge->getPayment()->getId(), $charge->getId());
 
         $this->assertEquals($charge->expose(), $fetchedCharge->expose());
+
+        return $charge;
+    }
+
+    /**
+     * Verify full refund of a charge.
+     *
+     * @test
+     * @depends chargeShouldBeFetchable
+     * @param Charge $charge
+     */
+    public function chargeShouldBeRefundable(Charge $charge)
+    {
+        /** @var Cancellation $refund */
+        $refund = $this->heidelpay->cancelCharge($charge->getPayment()->getId(), $charge->getId());
+        $this->assertNotNull($refund);
+        $this->assertNotEmpty($refund->getId());
     }
 }
