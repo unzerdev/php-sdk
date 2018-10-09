@@ -131,7 +131,7 @@ class CardTest extends BasePaymentTest
         $this->assertNotNull($payment->getId());
 
         // verify resources are linked properly
-        $this->assertArraySubset([$charge->getId() => $charge], $payment->getCharges());
+        $this->assertEquals($charge->expose(), $payment->getCharge($charge->getId())->expose());
         $this->assertSame($card, $payment->getPaymentType());
 
         // verify the payment object has been updated properly

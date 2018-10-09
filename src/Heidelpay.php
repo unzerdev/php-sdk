@@ -554,9 +554,8 @@ class Heidelpay implements HeidelpayParentInterface
         $payment = $this->createPayment($paymentType, $customer);
         $charge = new Charge($amount, $currency, $returnUrl);
         $charge->setParentResource($payment)->setPayment($payment);
-        $this->resourceService->create($charge);
-        // needs to be set after creation to use id as key in charge array
         $payment->addCharge($charge);
+        $this->resourceService->create($charge);
 
         return $charge;
     }
