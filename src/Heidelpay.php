@@ -26,7 +26,6 @@ namespace heidelpay\MgwPhpSdk;
 
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Constants\Mode;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\IllegalResourceTypeException;
@@ -50,8 +49,7 @@ use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 class Heidelpay implements HeidelpayParentInterface
 {
-    const URL_TEST = 'https://dev-api.heidelpay.com/';
-    const URL_LIVE = 'https://api.heidelpay.com/';
+    const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_VERSION = 'HeidelpayPHP 1.0.0-beta';
     const DEBUG_MODE = true;
@@ -59,12 +57,10 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * @param string $key
      * @param string $locale
-     * @param string $mode
      */
-    public function __construct($key, $locale = SupportedLocale::GERMAN_GERMAN, $mode = Mode::TEST)
+    public function __construct($key, $locale = SupportedLocale::GERMAN_GERMAN)
     {
         $this->setKey($key);
-        $this->setMode($mode);
         $this->locale = $locale;
 
         $this->resourceService = new ResourceService();
@@ -85,8 +81,7 @@ class Heidelpay implements HeidelpayParentInterface
         if (!$this->adapter instanceof HttpAdapterInterface) {
             $this->adapter = new CurlAdapter();
         }
-        $url = $this->isSandboxMode() ? self::URL_TEST : self::URL_LIVE;
-        return $this->adapter->send($url . self::API_VERSION . $uri, $resource, $method);
+        return $this->adapter->send(self::BASE_URL . self::API_VERSION . $uri, $resource, $method);
     }
 
     //<editor-fold desc="Properties">
@@ -95,9 +90,6 @@ class Heidelpay implements HeidelpayParentInterface
 
     /** @var string $locale */
     private $locale;
-
-    /** @var bool */
-    private $sandboxMode = true;
 
     /** @var HttpAdapterInterface $adapter */
     private $adapter;
@@ -128,39 +120,6 @@ class Heidelpay implements HeidelpayParentInterface
         }
 
         $this->key = $key;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSandboxMode(): bool
-    {
-        return $this->sandboxMode;
-    }
-
-    /**
-     * @param bool $sandboxMode
-     *
-     * @return Heidelpay
-     */
-    public function setSandboxMode($sandboxMode): Heidelpay
-    {
-        $this->sandboxMode = $sandboxMode;
-        return $this;
-    }
-
-    /**
-     * @param $mode
-     *
-     * @return Heidelpay
-     */
-    private function setMode($mode): Heidelpay
-    {
-        if ($mode !== Mode::TEST) {
-            $this->setSandboxMode(false);
-        }
-
         return $this;
     }
 

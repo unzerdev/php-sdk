@@ -43,14 +43,13 @@ class BasePaymentTest extends TestCase
     protected $heidelpay;
 
     const RETURN_URL = 'http://vnexpress.vn';
-    const PRIVATE_KEY_1 = 's-priv-6S59Dt6Q9mJYj8X5qpcxSpA3XLXUw4Zf';
-    const PRIVATE_KEY_2 = 's-priv-2a108n6lxMV581sTKL87VxiAmuzz6VMH';
-    const PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT = 's-priv-2a107CYZMp3UbyVPAuqWoxQHi9nFyeiW';
+    const PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
+    const PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT = 's-priv-2a107CYZMp3UbyVPAuqWoxQHi9nFyeiW'; // todo replace
     const PUBLIC_KEY = 's-pub-uM8yNmBNcs1GGdwAL4ytebYA4HErD22H';
 
     protected function setUp()
     {
-        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY_1, SupportedLocale::GERMAN_GERMAN);
+        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocale::GERMAN_GERMAN);
     }
 
     //<editor-fold desc="Helpers">
