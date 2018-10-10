@@ -212,7 +212,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         /** @var PaymentTypeInterface $paymentTypeObject */
         $paymentTypeObject = $paymentType;
         if (\is_string($paymentType)) {
-            $paymentTypeObject = $heidelpay->fetchPaymentById($paymentType);
+            $paymentTypeObject = $heidelpay->fetchPaymentType($paymentType);
         } elseif ($paymentTypeObject instanceof PaymentTypeInterface) {
             if ($paymentTypeObject->getId() === null) {
                 $heidelpay->createPaymentType($paymentType);

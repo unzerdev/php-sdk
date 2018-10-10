@@ -24,6 +24,7 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class ChargeTest extends BasePaymentTest
@@ -35,10 +36,13 @@ class ChargeTest extends BasePaymentTest
      */
     public function chargeShouldWorkWithTypeId()
     {
+        $card = $this->heidelpay->createPaymentType($this->createCard());
         $charge = $this->heidelpay->charge(
             100.0,
             Currency::EUROPEAN_EURO,
-            $this->createCard()->getId(),
+            $card->getId(),
             self::RETURN_URL);
+        $this->assertInstanceOf(Charge::class, $charge);
+        $this->assertNotEmpty($charge->getId());
     }
 }
