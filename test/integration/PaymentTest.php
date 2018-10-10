@@ -92,6 +92,31 @@ class PaymentTest extends BasePaymentTest
         $this->assertTrue($paymentNew->isCompleted());
     }
 
-    
+    /**
+     * Verify payment can be fetched with charges.
+     *
+     * @test
+     */
+    public function paymentShouldBeFetchableWithCharges()
+    {
+        $authorize = $this->createAuthorization();
+		$payment = $authorize->getPayment();
+		$this->assertNotNull($payment);
+		$this->assertNotNull($payment->getId());
+		$this->assertNotNull($payment->getAuthorization());
+		$this->assertNotNull($payment->getAuthorization()->getId());
+
+		$charge = $payment->charge();
+		$fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+		$this->assertNotNull($fetchedPayment->getCharges());
+		$this->assertCount(1, $fetchedPayment->getCharges());
+
+        $fetchedCharge = $fetchedPayment->getCharge(0);
+        $this->assertEquals($charge->getAmount(), $fetchedCharge->getAmount());
+		$this->assertEquals($charge->getCurrency(), $fetchedCharge->getCurrency());
+		$this->assertEquals($charge->getId(), $fetchedCharge->getId());
+		$this->assertEquals($charge->getReturnUrl(), $fetchedCharge->getReturnUrl());
+		$this->assertEquals($charge->expose(), $fetchedCharge->expose());
+    }
 
 }
