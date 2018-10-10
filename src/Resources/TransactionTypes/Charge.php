@@ -88,9 +88,9 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCurrency(): string
+    public function getCurrency()
     {
         return $this->currency;
     }
@@ -107,9 +107,9 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getReturnUrl(): string
+    public function getReturnUrl()
     {
         return $this->returnUrl;
     }
@@ -126,9 +126,9 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUniqueId(): string
+    public function getUniqueId()
     {
         return $this->uniqueId;
     }

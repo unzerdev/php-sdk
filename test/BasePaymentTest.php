@@ -107,9 +107,9 @@ class BasePaymentTest extends TestCase
     }
 
     /**
-     * @return AbstractTransactionType|Authorization
+     * @return Authorization
      */
-    public function createAuthorization()
+    public function createAuthorization(): Authorization
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $authorization = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
@@ -117,9 +117,9 @@ class BasePaymentTest extends TestCase
     }
 
     /**
-     * @return AbstractTransactionType|Charge
+     * @return Charge
      */
-    public function createCharge()
+    public function createCharge(): Charge
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $charge = $this->heidelpay->charge(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
