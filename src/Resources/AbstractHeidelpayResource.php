@@ -233,7 +233,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     protected function getResourcePath()
     {
-        return strtolower(self::getClassShortName());
+        return self::getClassShortNameKebapCase();
     }
 
     /**
@@ -278,10 +278,26 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      *
      * @return string
      */
-    protected static function getClassShortName(): string
+    protected static function getClassShortNameKebapCase(): string
     {
         $classNameParts = explode('\\', static::class);
-        return strtolower(end($classNameParts));
+        return self::toKebapCase(end($classNameParts));
+    }
+
+    /**
+     * Change camel case string to kebap-case.
+     * @param $str
+     * @return string
+     */
+    private static function toKebapCase($str): string
+    {
+        return preg_replace_callback(
+            '/([A-Z]+)/',
+            function($str) {
+                return '-' . strtolower($str[0]);
+                },
+            lcfirst($str)
+        );
     }
 
     //</editor-fold>

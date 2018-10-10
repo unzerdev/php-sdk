@@ -41,7 +41,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
      */
     public function getResourcePath()
     {
-        return 'types/' . $this::getClassShortName();
+        return 'types/' . $this::getClassShortNameKebapCase();
     }
 
     //</editor-fold>
