@@ -48,7 +48,7 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
-        $this->assertEquals($customer, $fetchedCustomer);
+        $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
 
         return $customer;
     }
@@ -67,7 +67,7 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
-        $this->assertEquals($customer, $fetchedCustomer);
+        $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
 
         return $customer;
     }
@@ -100,7 +100,7 @@ class CustomerTest extends BasePaymentTest
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
         $this->assertNotNull($secCustomer);
-        $this->assertEquals($customer, $secCustomer);
+        $this->assertEquals($customer->expose(), $secCustomer->expose());
     }
 
     /**
@@ -121,7 +121,7 @@ class CustomerTest extends BasePaymentTest
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
         $this->assertNotNull($secCustomer);
-        $this->assertEquals($customer, $secCustomer);
+        $this->assertEquals($customer->expose(), $secCustomer->expose());
     }
 
     /**
@@ -142,7 +142,7 @@ class CustomerTest extends BasePaymentTest
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
         $this->assertNotNull($secCustomer);
-        $this->assertEquals($customer, $secCustomer);
+        $this->assertEquals($customer->expose(), $secCustomer->expose());
     }
 
     /**

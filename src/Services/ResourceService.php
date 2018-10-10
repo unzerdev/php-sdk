@@ -110,6 +110,7 @@ class ResourceService
         }
 
         $response = $this->send($resource, HttpAdapterInterface::REQUEST_GET);
+        $resource->setFetchedAt(new \DateTime('now'));
         $resource->handleResponse($response);
         return $resource;
     }
@@ -117,6 +118,8 @@ class ResourceService
     //</editor-fold>
 
     /**
+     * Send request to API.
+     *
      * @param AbstractHeidelpayResource $resource
      * @param string                    $httpMethod
      *
@@ -126,5 +129,38 @@ class ResourceService
     {
         $responseJson = $resource->getHeidelpayObject()->send($resource->getUri(), $resource, $httpMethod);
         return json_decode($responseJson);
+    }
+
+    /**
+     * @param $transaction
+     * @param $pattern
+     *
+     * @return mixed
+     */
+    public function getResourceId($transaction, $pattern)
+    {
+        $matches = [];
+        preg_match('~\/([s|p]{1}-' . $pattern . '-[\d]+)~', $transaction->url, $matches);
+
+        if (\count($matches) < 2) {
+            throw new \RuntimeException('Id not found!');
+        }
+
+        return $matches[1];
+    }
+
+    /**
+     * Fetches the Resource if necessary.
+     *
+     * @param $resource
+     *
+     * @return AbstractHeidelpayResource
+     */
+    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    {
+        if ($resource->getFetchedAt() === null && $resource->getId() !== null) {
+            $this->fetch($resource);
+        }
+        return $resource;
     }
 }

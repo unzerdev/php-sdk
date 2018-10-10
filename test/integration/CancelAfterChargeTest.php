@@ -39,7 +39,7 @@ class CancelAfterChargeTest extends BasePaymentTest
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $charge = $this->heidelpay->charge(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
-        $fetchedCharge = $this->heidelpay->fetchCharge($charge->getPayment()->getId(), $charge->getId());
+        $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
 
         $this->assertEquals($charge->expose(), $fetchedCharge->expose());
 

@@ -68,17 +68,21 @@ trait HasCancellationsTrait
     /**
      * Return specific cancellation.
      *
-     * @param $cancellationId
+     * @param string $cancellationId
+     * @param boolean $lazy
      *
      * @throws MissingResourceException
      *
      * @return mixed
      */
-    public function getCancellation($cancellationId)
+    public function getCancellation($cancellationId, $lazy = false)
     {
         /** @var Cancellation $cancellation */
         foreach ($this->cancellations as $cancellation) {
             if ($cancellation->getId() === $cancellationId) {
+                if (!$lazy) {
+                    $this->getHeidelpayObject()->getResourceService()->getResource($cancellation);
+                }
                 return $cancellation;
             }
         }

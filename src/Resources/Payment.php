@@ -43,8 +43,8 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /** @var string $redirectUrl */
     private $redirectUrl = '';
 
-    /** @var Authorization $authorize */
-    private $authorize;
+    /** @var Authorization $authorization */
+    private $authorization;
 
     /** @var array $charges */
     private $charges = [];
@@ -77,11 +77,15 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     /**
-     * @return Authorization|null
+     * @param bool $lazy
+     * @return Authorization|AbstractHeidelpayResource|null
      */
-    public function getAuthorization()
+    public function getAuthorization($lazy = false)
     {
-        return $this->authorize;
+        if (!$lazy){
+            return $this->getHeidelpayObject()->getResourceService()->getResource($this->authorization);
+        }
+        return $this->authorization;
     }
 
     /**
@@ -93,7 +97,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     {
         $authorize->setPayment($this);
         $authorize->setParentResource($this);
-        $this->authorize = $authorize;
+        $this->authorization = $authorize;
         return $this;
     }
 
@@ -130,20 +134,48 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * Get and return a Charge object by id.
      *
-     * @param $chargeId
+     * @param string $chargeId
+     * @param boolean $lazy
      *
      * @return Charge
      *
      * @throws MissingResourceException
      */
-    public function getCharge($chargeId): Charge
+    public function getChargeById($chargeId, $lazy = false): Charge
     {
         /** @var Charge $charge */
         foreach ($this->charges as $charge) {
             if ($charge->getId() === $chargeId) {
+                if (!$lazy) {
+                    $this->getHeidelpayObject()->getResourceService()->getResource($charge);
+                }
                 return $charge;
             }
         }
+        throw new MissingResourceException();
+    }
+
+    /**
+     * Get and return a Charge object by array index.
+     *
+     * @param int $index
+     *
+     * @param bool $lazy
+     *
+     * @return Charge
+     *
+     * @throws MissingResourceException
+     */
+    public function getCharge($index, $lazy = false): AbstractHeidelpayResource
+    {
+        if (isset($this->getCharges()[$index])) {
+            $resource = $this->getCharges()[$index];
+            if (!$lazy) {
+                return $this->getHeidelpayObject()->getResourceService()->getResource($resource);
+            }
+            return $resource;
+        }
+
         throw new MissingResourceException();
     }
 
@@ -263,7 +295,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             $refunds[] = $charge->getCancellations();
         }
 
-        $authorization = $this->getAuthorization();
+        $authorization = $this->getAuthorization(true);
         $cancellations = array_merge($authorization ? $authorization->getCancellations() : [], ...$refunds);
         return $cancellations;
     }
@@ -380,7 +412,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function charge($amount = null): Charge
     {
-        if ($this->getAuthorization() !== null) {
+        if ($this->getAuthorization(true) !== null) {
             return $this->getHeidelpayObject()->chargeAuthorization($this->getId(), $amount);
         }
         return $this->getHeidelpayObject()->chargePayment($this, $amount);
@@ -395,9 +427,8 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     private function updateAuthorizationTransaction($transaction)
     {
-        $transactionId = $this->getResourceId($transaction, 'aut');
-        // todo: refactor
-        $authorization = $this->getAuthorization();
+        $transactionId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'aut');
+        $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
             $authorization = (new Authorization())
                 ->setPayment($this)
@@ -413,9 +444,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     private function updateChargeTransaction($transaction)
     {
-        $transactionId = $this->getResourceId($transaction, 'chg');
+        $transactionId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'chg');
         try {
-            $charge = $this->getCharge($transactionId);
+            $charge = $this->getChargeById($transactionId, true);
         } catch (MissingResourceException $e) {
             $charge = (new Charge())
                 ->setPayment($this)
@@ -431,15 +462,14 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     private function updateReversalTransaction($transaction)
     {
-        $transactionId = $this->getResourceId($transaction, 'cnl');
-        // todo: refactor
-        $authorization = $this->getAuthorization();
+        $transactionId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'cnl');
+        $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
             throw new MissingResourceException();
         }
 
         try {
-            $cancellation = $authorization->getCancellation($transactionId);
+            $cancellation = $authorization->getCancellation($transactionId, true);
         } catch (MissingResourceException $e) {
             $cancellation =  (new Cancellation())
                 ->setPayment($this)
@@ -455,10 +485,10 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     private function updateRefundTransaction($transaction)
     {
-        $refundId = $this->getResourceId($transaction, 'cnl');
-        $chargeId = $this->getResourceId($transaction, 'chg');
+        $refundId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'cnl');
+        $chargeId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'chg');
 
-        $charge = $this->getCharge($chargeId);
+        $charge = $this->getChargeById($chargeId);
         try {
             $cancellation = $charge->getCancellation($refundId);
         } catch (MissingResourceException $e) {
@@ -473,26 +503,4 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     //</editor-fold>
 
-    //<editor-fold desc="Helpers">
-
-    /**
-     * @param $transaction
-     * @param $pattern
-     *
-     * @return mixed
-     *               todo: move to service
-     */
-    protected function getResourceId($transaction, $pattern)
-    {
-        $matches = [];
-        preg_match('~\/([s|p]{1}-' . $pattern . '-[\d]+)~', $transaction->url, $matches);
-
-        if (\count($matches) < 2) {
-            throw new \RuntimeException('Id not found!');
-        }
-
-        return $matches[1];
-    }
-
-    //</editor-fold>
 }

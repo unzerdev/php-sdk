@@ -82,7 +82,7 @@ class CancelTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
-        $fetchedCancel = $cancel->getPayment()->getCharge($charge->getId())->getCancellation($cancel->getId());
+        $fetchedCancel = $cancel->getPayment()->getChargeById($charge->getId())->getCancellation($cancel->getId());
         $this->assertNotNull($fetchedCancel);
         $this->assertNotNull($fetchedCancel->getId());
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());

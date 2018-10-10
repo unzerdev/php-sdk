@@ -36,6 +36,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /** @var HeidelpayParentInterface */
     private $parentResource;
 
+    /** @var \DateTime */
+    private $fetchedAt;
+
     /**
      * @param HeidelpayParentInterface $parent
      * @param string                   $id
@@ -86,6 +89,24 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     public function getParentResource(): HeidelpayParentInterface
     {
         return $this->parentResource;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getFetchedAt()
+    {
+        return $this->fetchedAt;
+    }
+
+    /**
+     * @param \DateTime $fetchedAt
+     * @return $this
+     */
+    public function setFetchedAt(\DateTime $fetchedAt): self
+    {
+        $this->fetchedAt = $fetchedAt;
+        return $this;
     }
 
     //</editor-fold>
