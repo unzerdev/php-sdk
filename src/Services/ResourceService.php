@@ -42,7 +42,8 @@ class ResourceService
      */
     public function create(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
     {
-        $response = $this->send($resource, HttpAdapterInterface::REQUEST_POST);
+        $method = HttpAdapterInterface::REQUEST_POST;
+        $response = $this->send($resource, $method);
 
         $isError = isset($response->isError) && $response->isError;
         if ($isError) {
@@ -51,7 +52,7 @@ class ResourceService
 
         $resource->setId($response->id);
 
-        $resource->handleResponse($response);
+        $resource->handleResponse($response, $method);
         return $resource;
     }
 
@@ -64,14 +65,15 @@ class ResourceService
      */
     public function update(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
     {
-        $response = $this->send($resource, HttpAdapterInterface::REQUEST_PUT);
+        $method = HttpAdapterInterface::REQUEST_PUT;
+        $response = $this->send($resource, $method);
 
         $isError = isset($response->isError) && $response->isError;
         if ($isError) {
             return $resource;
         }
 
-        $resource->handleResponse($response);
+        $resource->handleResponse($response, $method);
         return $resource;
     }
 
@@ -105,13 +107,14 @@ class ResourceService
      */
     public function fetch(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
     {
+        $method = HttpAdapterInterface::REQUEST_GET;
         if ($resource->getId() === null) {
             throw new IdRequiredToFetchResourceException();
         }
 
-        $response = $this->send($resource, HttpAdapterInterface::REQUEST_GET);
+        $response = $this->send($resource, $method);
         $resource->setFetchedAt(new \DateTime('now'));
-        $resource->handleResponse($response);
+        $resource->handleResponse($response, $method);
         return $resource;
     }
 

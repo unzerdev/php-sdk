@@ -23,6 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources;
 
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayObjectMissingException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
@@ -241,8 +242,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      * Override it to handle the data correctly.
      *
      * @param \stdClass $response
+     * @param string $method
      */
-    public function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         $this->updateValues($this, $response);
     }

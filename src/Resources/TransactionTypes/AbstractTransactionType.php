@@ -26,6 +26,7 @@ namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {
@@ -55,10 +56,16 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     //</editor-fold>
 
-    public function handleResponse(\stdClass $response)
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
-        parent::handleResponse($response);
-        $this->updatePayment();
+        parent::handleResponse($response, $method);
+
+        if ($method !== HttpAdapterInterface::REQUEST_GET) {
+            $this->updatePayment();
+        }
     }
 
     /**

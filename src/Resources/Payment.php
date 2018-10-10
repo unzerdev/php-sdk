@@ -23,6 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources;
 
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Heidelpay;
@@ -316,9 +317,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
-        parent::handleResponse($response);
+        parent::handleResponse($response, $method);
 
         // todo ggf. als object wie Address im customer
         if (isset($response->state->id)) {

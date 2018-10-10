@@ -23,6 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -214,7 +215,7 @@ class Charge extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         /** @var Payment $payment */
         $payment = $this->getPayment();
@@ -228,7 +229,7 @@ class Charge extends AbstractTransactionType
             $payment->setRedirectUrl($response->redirectUrl);
         }
 
-        parent::handleResponse($response);
+        parent::handleResponse($response, $method);
     }
 
     //</editor-fold>
