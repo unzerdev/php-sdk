@@ -110,7 +110,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      *
      * @return Payment
      */
-    public function setCharges(array $charges): Payment
+    public function setCharges(array $charges): self
     {
         $this->charges = $charges;
         return $this;
@@ -118,10 +118,13 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param Charge $charge
+     *
+     * @return $this
      */
-    public function addCharge(Charge $charge)
+    public function addCharge(Charge $charge): self
     {
         $this->charges[] = $charge;
+        return $this;
     }
 
     /**
@@ -367,6 +370,20 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         }
 
         throw new MissingResourceException('This Payment has no Authorization. Please fetch the Payment first.');
+    }
+
+    /**
+     * Charge a payment.
+     *
+     * @param null $amount
+     * @return Charge
+     */
+    public function charge($amount = null): Charge
+    {
+        if ($this->getAuthorization() !== null) {
+            return $this->getHeidelpayObject()->chargeAuthorization($this->getId(), $amount);
+        }
+        return $this->getHeidelpayObject()->chargePayment($this, $amount);
     }
 
     //</editor-fold>

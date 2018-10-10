@@ -26,6 +26,7 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class PaymentTest extends BasePaymentTest
@@ -45,4 +46,52 @@ class PaymentTest extends BasePaymentTest
         $this->assertNotEmpty($payment->getAuthorization()->getId());
         $this->assertNotNull($payment->getState());
     }
+
+    /**
+     * Verify full charge on payment with authorization.
+     *
+     * @test
+     */
+    public function fullChargeShouldBePossibleOnPaymentObject()
+    {
+        $authorization = $this->createAuthorization();
+        $payment = $authorization->getPayment();
+
+        // pre-check to verify changes due to fullCharge call
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPending());
+
+        /** @var Charge $charge */
+        $charge = $payment->charge();
+        $paymentNew = $charge->getPayment();
+
+        // verify payment has been updated properly
+        $this->assertAmounts($paymentNew, 0.0, 100.0, 100.0, 0.0);
+        $this->assertTrue($paymentNew->isCompleted());
+    }
+
+    /**
+     * Verify full charge on payment with authorization.
+     *
+     * @test
+     */
+    public function moreThanOneChargeShouldBePossibleOnPaymentObject()
+    {
+        $charge = $this->createCharge();
+        $payment = $charge->getPayment();
+
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
+        $this->assertTrue($payment->isCompleted());
+
+        /** @var Charge $charge */
+        $charge = $payment->charge(100.0);
+        $paymentNew = $charge->getPayment();
+
+        // verify payment has been updated properly
+        $this->assertAmounts($paymentNew, 0.0, 200.0, 200.0, 0.0);
+        $this->assertTrue($paymentNew->isCompleted());
+    }
+
+    
+
 }
