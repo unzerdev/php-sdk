@@ -607,8 +607,8 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * @param Payment $payment
-     * @param null $amount
-     * @param null $currency
+     * @param null    $amount
+     * @param null    $currency
      *
      * @return Charge
      */

@@ -78,11 +78,12 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /**
      * @param bool $lazy
+     *
      * @return Authorization|AbstractHeidelpayResource|null
      */
     public function getAuthorization($lazy = false)
     {
-        if (!$lazy){
+        if (!$lazy) {
             return $this->getHeidelpayObject()->getResourceService()->getResource($this->authorization);
         }
         return $this->authorization;
@@ -134,7 +135,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * Get and return a Charge object by id.
      *
-     * @param string $chargeId
+     * @param string  $chargeId
      * @param boolean $lazy
      *
      * @return Charge
@@ -158,8 +159,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * Get and return a Charge object by array index.
      *
-     * @param int $index
-     *
+     * @param int  $index
      * @param bool $lazy
      *
      * @return Charge
@@ -423,7 +423,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * Authorize a payment.
      *
-     * @param float $amount
+     * @param float  $amount
      * @param string $currency
      * @param $paymentType
      * @param null $returnUrl

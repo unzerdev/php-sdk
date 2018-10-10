@@ -68,7 +68,7 @@ trait HasCancellationsTrait
     /**
      * Return specific cancellation.
      *
-     * @param string $cancellationId
+     * @param string  $cancellationId
      * @param boolean $lazy
      *
      * @throws MissingResourceException
