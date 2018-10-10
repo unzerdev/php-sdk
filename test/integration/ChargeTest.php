@@ -24,6 +24,7 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -40,6 +41,9 @@ class ChargeTest extends BasePaymentTest
         $charge = $this->heidelpay->charge(100.0, Currency::EUROPEAN_EURO, $card->getId(), self::RETURN_URL);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertNotEmpty($charge->getId());
+        $this->assertInstanceOf(Payment::class, $charge->getPayment());
+        $this->assertNotEmpty($charge->getPayment()->getId());
+        $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
     }
 
     /**
@@ -53,5 +57,8 @@ class ChargeTest extends BasePaymentTest
         $charge = $this->heidelpay->charge(100.0, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertNotEmpty($charge->getId());
+        $this->assertInstanceOf(Payment::class, $charge->getPayment());
+        $this->assertNotEmpty($charge->getPayment()->getId());
+        $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
     }
 }
