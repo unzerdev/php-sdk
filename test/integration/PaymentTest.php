@@ -173,5 +173,30 @@ class PaymentTest extends BasePaymentTest
         $this->assertAmounts($fetchedPayment, 90.0,0,90.0,0);
     }
 
+    /**
+     * Verify full cancel on charge.
+     *
+     * @test
+     */
+    public function fullCancelOnChargeShouldBePossible()
+    {
+        $charge = $this->createCharge();
+		$fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+        $fetchedCharge = $fetchedPayment->getChargeById('s-chg-1');
+        $cancellation = $fetchedCharge->cancel();
+		$this->assertNotNull($cancellation);
+    }
 
+    /**
+     * Verify partial cancel on charge.
+     *
+     * @test
+     */
+    public function partialCancelShouldBePossible()
+    {
+        $charge = $this->createCharge();
+        $fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+		$cancel = $fetchedPayment->getCharge(0)->cancel(10.0);
+		$this->assertNotNull($cancel);
+    }
 }
