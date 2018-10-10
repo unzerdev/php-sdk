@@ -242,7 +242,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      * Override it to handle the data correctly.
      *
      * @param \stdClass $response
-     * @param string $method
+     * @param string    $method
      */
     public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
@@ -288,16 +288,18 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * Change camel case string to kebap-case.
+     *
      * @param $str
+     *
      * @return string
      */
     private static function toKebapCase($str): string
     {
         return preg_replace_callback(
             '/([A-Z]+)/',
-            function($str) {
+            function ($str) {
                 return '-' . strtolower($str[0]);
-                },
+            },
             lcfirst($str)
         );
     }

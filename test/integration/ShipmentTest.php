@@ -47,10 +47,10 @@ class ShipmentTest extends BasePaymentTest
 
         $fetchedShipment = $this->heidelpay->fetchShipmentByPayment($shipment->getParentResource(), $shipment->getId());
         $this->assertNotEmpty($fetchedShipment);
-		$this->assertEquals($shipment->expose(), $fetchedShipment->expose());
+        $this->assertEquals($shipment->expose(), $fetchedShipment->expose());
 
         $secondFetchedShipment = $this->heidelpay->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
         $this->assertNotEmpty($secondFetchedShipment);
-		$this->assertEquals($shipment->expose(), $secondFetchedShipment->expose());
+        $this->assertEquals($shipment->expose(), $secondFetchedShipment->expose());
     }
 }

@@ -484,7 +484,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Fetch a shipment on a payment.
      *
      * @param Payment|string $payment
-     * @param string               $shipmentId
+     * @param string         $shipmentId
      *
      * @return Shipment
      */
@@ -507,6 +507,7 @@ class Heidelpay implements HeidelpayParentInterface
         $payment = $this->fetchPaymentById($paymentId);
         return $payment->getShipmentById($shipmentId);
     }
+
     //</editor-fold>
 
     //</editor-fold>
@@ -731,6 +732,7 @@ class Heidelpay implements HeidelpayParentInterface
     //</editor-fold>
 
     //<editor-fold desc="Shipment transactions">
+
     /**
      * Creates a shipment transaction for the given payment object.
      *
@@ -744,6 +746,7 @@ class Heidelpay implements HeidelpayParentInterface
         $payment->addShipment($shipment);
         return $this->getResourceService()->create($shipment);
     }
+
     //</editor-fold>
     //</editor-fold>
 }

@@ -319,6 +319,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      * Add shipment to shipment array.
      *
      * @param Shipment $shipment
+     *
      * @return $this
      */
     public function addShipment(Shipment $shipment): self
@@ -332,7 +333,7 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      * Return shipment object with the given id.
      *
      * @param string $shipmentId
-     * @param bool $lazy
+     * @param bool   $lazy
      *
      * @return Shipment
      */
