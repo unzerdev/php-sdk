@@ -503,6 +503,31 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Perform an authorization and return the corresponding Authorization object.
      *
+     * @param $amount
+     * @param $currency
+     * @param Payment $payment
+     * @param $returnUrl
+     * @param null $customer
+     *
+     * @return Authorization
+     */
+    public function authorizeWithPayment(
+        $amount,
+        $currency,
+        Payment $payment,
+        $returnUrl = null,
+        $customer = null
+    ): AbstractTransactionType {
+        $authorization = new Authorization($amount, $currency, $returnUrl);
+        $payment->setAuthorization($authorization);
+        $payment->setCustomer($customer);
+        $this->resourceService->create($authorization);
+        return $authorization;
+    }
+
+    /**
+     * Perform an authorization and return the corresponding Authorization object.
+     *
      * @param float  $amount
      * @param string $currency
      * @param $paymentType
@@ -514,10 +539,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null): AbstractTransactionType
     {
         $payment = $this->createPayment($paymentType, $customer);
-        $authorization = new Authorization($amount, $currency, $returnUrl);
-        $payment->setAuthorization($authorization);
-        $this->resourceService->create($authorization);
-        return $authorization;
+        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer);
     }
 
     //</editor-fold>
@@ -584,14 +606,15 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * @param $payment
+     * @param Payment $payment
      * @param null $amount
+     * @param null $currency
      *
      * @return Charge
      */
-    public function chargePayment(Payment $payment, $amount = null): AbstractTransactionType
+    public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
     {
-        $charge = new Charge($amount);
+        $charge = new Charge($amount, $currency);
         $charge->setParentResource($payment)->setPayment($payment);
         $payment->addCharge($charge);
         $this->resourceService->create($charge);

@@ -408,14 +408,33 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      * Charge a payment.
      *
      * @param null $amount
+     * @param null $currency
+     *
      * @return Charge
      */
-    public function charge($amount = null): Charge
+    public function charge($amount = null, $currency = null): Charge
     {
         if ($this->getAuthorization(true) !== null) {
             return $this->getHeidelpayObject()->chargeAuthorization($this->getId(), $amount);
         }
-        return $this->getHeidelpayObject()->chargePayment($this, $amount);
+        return $this->getHeidelpayObject()->chargePayment($this, $amount, $currency);
+    }
+
+    /**
+     * Authorize a payment.
+     *
+     * @param float $amount
+     * @param string $currency
+     * @param $paymentType
+     * @param null $returnUrl
+     * @param null $customer
+     *
+     * @return Authorization
+     */
+    public function authorize($amount, $currency, $paymentType, $returnUrl = null, $customer = null): Authorization
+    {
+        $this->setPaymentType($paymentType);
+        return $this->getHeidelpayObject()->authorizeWithPayment($amount, $currency, $this, $returnUrl, $customer);
     }
 
     //</editor-fold>
@@ -502,5 +521,4 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     }
 
     //</editor-fold>
-
 }

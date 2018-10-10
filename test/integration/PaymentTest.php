@@ -25,6 +25,7 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
+use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -198,5 +199,38 @@ class PaymentTest extends BasePaymentTest
         $fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
 		$cancel = $fetchedPayment->getCharge(0)->cancel(10.0);
 		$this->assertNotNull($cancel);
+    }
+
+    /**
+     * Verify authorization on payment.
+     *
+     * @test
+     */
+    public function authorizationShouldBePossibleWithPaymentObject()
+    {
+        $card = $this->createCard();
+        $this->heidelpay->createPaymentType($card);
+
+        // Variant 1
+        $payment = new Payment($this->heidelpay);
+        $authorizationUsingPayment = $payment->authorize(
+		    100.0,
+            Currency::EUROPEAN_EURO,
+            $card,
+            self::RETURN_URL
+        );
+        $this->assertNotNull($authorizationUsingPayment);
+        $this->assertNotEmpty($authorizationUsingPayment->getId());
+
+        // Variant 2
+        $authorizationUsingHeidelpay = $this->heidelpay->authorize(
+            100.0,
+            Currency::EUROPEAN_EURO,
+            $card,
+            self::RETURN_URL
+        );
+
+        $this->assertNotNull($authorizationUsingHeidelpay);
+        $this->assertNotEmpty($authorizationUsingHeidelpay->getId());
     }
 }
