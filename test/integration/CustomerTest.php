@@ -125,6 +125,27 @@ class CustomerTest extends BasePaymentTest
     }
 
     /**
+     * Customer can be referenced by payment.
+     *
+     * @test
+     */
+    public function transactionShouldReferenceCustomerIfItExistAndItsIdHasBeenPassed()
+    {
+        $customer = $this->getMaximumCustomer();
+        $this->heidelpay->createCustomer($customer);
+        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $authorization = $card->authorize(12.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $customer->getId());
+
+        /** @var Payment $secPayment */
+        $secPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+
+        /** @var Customer $secCustomer */
+        $secCustomer = $secPayment->getCustomer();
+        $this->assertNotNull($secCustomer);
+        $this->assertEquals($customer, $secCustomer);
+    }
+
+    /**
      * Customer can be updated.
      *
      * @depends maxCustomerCanBeCreatedAndFetched
