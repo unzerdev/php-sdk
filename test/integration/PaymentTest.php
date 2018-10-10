@@ -24,6 +24,8 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
@@ -119,4 +121,37 @@ class PaymentTest extends BasePaymentTest
 		$this->assertEquals($charge->expose(), $fetchedCharge->expose());
     }
 
+    /**
+     * Verify partial charge after authorization.
+     *
+     * @test
+     */
+    public function partialChargeAfterAuthorization()
+    {
+        $authorization = $this->createAuthorization();
+        $fetchedPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $charge = $fetchedPayment->charge(10.0);
+		$this->assertNotNull($charge);
+		$this->assertEquals('s-chg-1', $charge->getId());
+		$this->assertEquals('10.0', $charge->getAmount());
+    }
+
+    /**
+     * Verify full cancel on authorize throws exception if already canceled.
+     *
+     * @test
+     */
+    public function fullCancelOnAuthorizeShouldThrowExceptionIfAlreadyCanceled()
+    {
+        $authorization = $this->createAuthorization();
+        $fetchedPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+		$cancel = $fetchedPayment->getAuthorization()->cancel();
+		$this->assertNotNull($cancel);
+		$this->assertEquals('s-cnl-1', $cancel->getId());
+		$this->assertEquals($authorization->getAmount(), $cancel->getAmount());
+
+		$this->expectException(HeidelpayApiException::class);
+		$this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $fetchedPayment->cancel();
+    }
 }
