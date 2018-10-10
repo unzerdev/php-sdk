@@ -561,9 +561,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         $refundId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'cnl');
         $chargeId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'chg');
 
-        $charge = $this->getChargeById($chargeId);
+        $charge = $this->getChargeById($chargeId, true);
         try {
-            $cancellation = $charge->getCancellation($refundId);
+            $cancellation = $charge->getCancellation($refundId, true);
         } catch (MissingResourceException $e) {
             $cancellation =  (new Cancellation())
                 ->setPayment($this)
