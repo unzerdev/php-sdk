@@ -26,7 +26,7 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
-class Charge extends BasePaymentTest
+class ChargeTest extends BasePaymentTest
 {
     /**
      * Verify charge can be performed using the id of a payment type.

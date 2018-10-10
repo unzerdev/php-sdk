@@ -28,7 +28,7 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
-class CancelAfterCharge extends BasePaymentTest
+class CancelAfterChargeTest extends BasePaymentTest
 {
     /**
      * Verify charge can be fetched by id.

@@ -25,7 +25,7 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
-class Cancel extends BasePaymentTest
+class CancelTest extends BasePaymentTest
 {
     /**
      * Verify reversal is fetchable.

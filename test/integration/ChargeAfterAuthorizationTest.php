@@ -25,7 +25,7 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
-class ChargeAfterAuthorization extends BasePaymentTest
+class ChargeAfterAuthorizationTest extends BasePaymentTest
 {
     /**
      * Validate full charge after authorization.
