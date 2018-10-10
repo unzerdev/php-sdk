@@ -45,6 +45,7 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 class Heidelpay implements HeidelpayParentInterface
@@ -473,6 +474,37 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
+    //<editor-fold desc="Shipment resource">
+
+    /**
+     * Fetch a shipment on a payment.
+     *
+     * @param Payment|string $payment
+     * @param string               $shipmentId
+     *
+     * @return Shipment
+     */
+    public function fetchShipmentByPayment($payment, $shipmentId): HeidelpayResourceInterface
+    {
+        $this->getResourceService()->fetch($payment);
+        return $payment->getShipmentById($shipmentId);
+    }
+
+    /**
+     * Fetch a shipment on an payment.
+     *
+     * @param string $paymentId
+     * @param string $shipmentId
+     *
+     * @return Shipment
+     */
+    public function fetchShipment($paymentId, $shipmentId): HeidelpayResourceInterface
+    {
+        $payment = $this->fetchPaymentById($paymentId);
+        return $payment->getShipmentById($shipmentId);
+    }
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="Transactions">
@@ -692,6 +724,22 @@ class Heidelpay implements HeidelpayParentInterface
         return $cancellation;
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Shipment transactions">
+    /**
+     * Creates a shipment transaction for the given payment object.
+     *
+     * @param Payment|string $payment
+     *
+     * @return Shipment
+     */
+    public function ship($payment): HeidelpayResourceInterface
+    {
+        $shipment = new Shipment();
+        $payment->addShipment($shipment);
+        return $this->getResourceService()->create($shipment);
+    }
     //</editor-fold>
     //</editor-fold>
 }

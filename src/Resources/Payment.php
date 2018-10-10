@@ -30,6 +30,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Traits\HasAmountsTrait;
 use heidelpay\MgwPhpSdk\Traits\HasStateTrait;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -46,6 +47,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
 
     /** @var Authorization $authorization */
     private $authorization;
+
+    /** @var array $shipments */
+    private $shipments = [];
 
     /** @var array $charges */
     private $charges = [];
@@ -301,6 +305,52 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         return $cancellations;
     }
 
+    /**
+     * Return all shipments of the payment as array.
+     *
+     * @return array
+     */
+    public function getShipments(): array
+    {
+        return $this->shipments;
+    }
+
+    /**
+     * Add shipment to shipment array.
+     *
+     * @param Shipment $shipment
+     * @return $this
+     */
+    public function addShipment(Shipment $shipment): self
+    {
+        $shipment->setPayment($this)->setParentResource($this);
+        $this->shipments[] = $shipment;
+        return $this;
+    }
+
+    /**
+     * Return shipment object with the given id.
+     *
+     * @param string $shipmentId
+     * @param bool $lazy
+     *
+     * @return Shipment
+     */
+    public function getShipmentById($shipmentId, $lazy = false): Shipment
+    {
+        /** @var Shipment $shipment */
+        foreach ($this->getShipments() as $shipment) {
+            if ($shipment->getId() === $shipmentId) {
+                if (!$lazy) {
+                    $this->getHeidelpayObject()->getResourceService()->fetch($shipment);
+                }
+                return $shipment;
+            }
+        }
+
+        throw new MissingResourceException();
+    }
+
     //</editor-fold>
     //</editor-fold>
 
@@ -374,6 +424,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
                         break;
                     case TransactionTypes::REFUND:
                         $this->updateRefundTransaction($transaction);
+                        break;
+                    case TransactionTypes::SHIPMENT:
+                        $this->updateShipmentTransaction($transaction);
                         break;
                     default:
                         // skip
@@ -519,6 +572,22 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             $charge->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
+    }
+
+    /**
+     * @param $transaction
+     */
+    private function updateShipmentTransaction($transaction)
+    {
+        $shipmentId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'shp');
+
+        try {
+            $shipment = $this->getShipmentById($shipmentId, true);
+        } catch (MissingResourceException $e) {
+            $shipment = (new Shipment())->setId($shipmentId);
+            $this->addShipment($shipment);
+        }
+        // noting to update
     }
 
     //</editor-fold>

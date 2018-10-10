@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains definitions of the available transaction types.
+ * This represents the shipment transaction.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/constants
+ * @package  heidelpay/mgw_sdk/transaction_types
  */
-namespace heidelpay\MgwPhpSdk\Constants;
+namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
-class TransactionTypes
+class Shipment extends AbstractTransactionType
 {
-    const AUTHORIZATION = 'authorize';
-    const CHARGE = 'charge';
-    const REVERSAL = 'cancel-authorize';
-    const REFUND = 'cancel-charge';
-    const SHIPMENT = 'shipment';
+    protected function getResourcePath()
+    {
+        return 'shipments';
+    }
 }
