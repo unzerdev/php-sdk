@@ -38,6 +38,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\GiroPay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
@@ -277,6 +278,9 @@ class Heidelpay implements HeidelpayParentInterface
                 break;
             case 'ivc':
                 $paymentType = new Invoice();
+                break;
+            case 'ivg':
+                $paymentType = new InvoiceGuaranteed();
                 break;
             default:
                 throw new IllegalTransactionTypeException($typeId);
