@@ -352,23 +352,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     //<editor-fold desc="Transactions">
 
     /**
-     * Sets the given paymentType and performs an authorization.
-     *
-     * @param $amount
-     * @param $currency
-     * @param $returnUrl
-     * @param PaymentTypeInterface $paymentType
-     *
-     * @return Authorization
-     *
-     * todo
-     */
-    public function authorizeWithPaymentType($amount, $currency, $returnUrl, PaymentTypeInterface $paymentType): Authorization
-    {
-        return $this->setPaymentType($paymentType)->authorize($amount, $currency, $returnUrl);
-    }
-
-    /**
      * Cancel payment/authorization object.
      *
      * @param float|null $amount
@@ -384,24 +367,6 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
         }
 
         throw new MissingResourceException('This Payment has no Authorization. Please fetch the Payment first.');
-    }
-
-    /**
-     * @param $transaction
-     * @param $pattern
-     *
-     * @return mixed
-     */
-    protected function getResourceId($transaction, $pattern)
-    {
-        $matches = [];
-        preg_match('~\/([s|p]{1}-' . $pattern . '-[\d]+)~', $transaction->url, $matches);
-
-        if (\count($matches) < 2) {
-            throw new \RuntimeException('Id not found!');
-        }
-
-        return $matches[1];
     }
 
     //</editor-fold>
@@ -487,6 +452,29 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
             $charge->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+
+    /**
+     * @param $transaction
+     * @param $pattern
+     *
+     * @return mixed
+     *               todo: move to service
+     */
+    protected function getResourceId($transaction, $pattern)
+    {
+        $matches = [];
+        preg_match('~\/([s|p]{1}-' . $pattern . '-[\d]+)~', $transaction->url, $matches);
+
+        if (\count($matches) < 2) {
+            throw new \RuntimeException('Id not found!');
+        }
+
+        return $matches[1];
     }
 
     //</editor-fold>

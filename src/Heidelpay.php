@@ -194,7 +194,7 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * @param PaymentTypeInterface|string $paymentType
-     * @param Customer|string|null $customer
+     * @param Customer|string|null        $customer
      *
      * @return Payment
      */
