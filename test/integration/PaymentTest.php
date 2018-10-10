@@ -154,4 +154,24 @@ class PaymentTest extends BasePaymentTest
 		$this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
         $fetchedPayment->cancel();
     }
+
+    /**
+     * Verify partial cancel on authorize.
+     *
+     * @test
+     */
+    public function partialCancelOnAuthorizeShouldBePossible()
+    {
+        $authorization = $this->createAuthorization();
+        $fetchedPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $this->assertAmounts($fetchedPayment, 100.0,0,100.0,0);
+
+        $cancel = $fetchedPayment->cancel(10.0);
+        $this->assertNotNull($cancel);
+        $this->assertEquals('s-cnl-1', $cancel->getId());
+        $this->assertEquals('10.0', $cancel->getAmount());
+        $this->assertAmounts($fetchedPayment, 90.0,0,90.0,0);
+    }
+
+
 }
