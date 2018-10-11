@@ -25,13 +25,4 @@ namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
 class Giropay extends BasePaymentType
 {
-    /**
-     * GiroPay constructor.
-     */
-    public function __construct()
-    {
-        $this->setChargeable(true);
-
-        parent::__construct();
-    }
 }

@@ -28,12 +28,12 @@ use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\IllegalPaymentType;
 use heidelpay\MgwPhpSdk\Exceptions\IllegalResourceTypeException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Exceptions\IllegalKeyException;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
@@ -283,7 +283,7 @@ class Heidelpay implements HeidelpayParentInterface
                 $paymentType = new InvoiceGuaranteed();
                 break;
             default:
-                throw new IllegalTransactionTypeException($typeId);
+                throw new IllegalPaymentType($typeId);
                 break;
         }
 

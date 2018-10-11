@@ -24,7 +24,6 @@
 namespace heidelpay\MgwPhpSdk\Interfaces;
 
 use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
@@ -47,18 +46,6 @@ interface PaymentTypeInterface extends HeidelpayResourceInterface
      * @param null   $customer
      *
      * @return Authorization
-     *
-     * @throws IllegalTransactionTypeException
      */
     public function authorize($amount, $currency, $returnUrl, $customer = null): Authorization;
-
-    /**
-     * @return bool
-     */
-    public function isChargeable(): bool;
-
-    /**
-     * @return bool
-     */
-    public function isAuthorizable(): bool;
 }

@@ -25,7 +25,7 @@
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -37,13 +37,12 @@ class IdealTest extends BasePaymentTest
      * @test
      *
      * @return Ideal
-     *               todo: change bankname to bic
      */
     public function idealShouldBeCreatable(): Ideal
     {
         /** @var Ideal $ideal */
         $ideal = new Ideal();
-        $ideal->setBankName('RABONL2U');
+        $ideal->setBic('RABONL2U');
         $this->heidelpay->createPaymentType($ideal);
         $this->assertInstanceOf(Ideal::class, $ideal);
         $this->assertNotNull($ideal->getId());
@@ -52,17 +51,17 @@ class IdealTest extends BasePaymentTest
     }
 
     /**
-     * Verify that ideal is not authorizable
+     * Verify that ideal is not authorizable.
      *
      * @test
-     * // todo fix when ideal operation is correctly defined.
      *
      * @param Ideal $ideal
+     *
      * @depends idealShouldBeCreatable
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal)
     {
-        $this->expectException(IllegalTransactionTypeException::class);
+        $this->expectException(HeidelpayApiException::class);
         $ideal->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
     }
 

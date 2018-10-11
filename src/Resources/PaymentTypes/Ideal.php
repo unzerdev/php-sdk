@@ -25,37 +25,27 @@ namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
 class Ideal extends BasePaymentType
 {
-    /** @var string $bankName */
-    protected $bankName;
-
-    /**
-     * GiroPay constructor.
-     */
-    public function __construct()
-    {
-        $this->setChargeable(true);
-
-        parent::__construct();
-    }
+    /** @var string $bic */
+    protected $bic;
 
     //<editor-fold desc="Getter/Setter">
 
     /**
      * @return string
      */
-    public function getBankName(): string
+    public function getBic(): string
     {
-        return $this->bankName;
+        return $this->bic;
     }
 
     /**
-     * @param string $bankName
+     * @param string $bic
      *
      * @return Ideal
      */
-    public function setBankName(string $bankName): Ideal
+    public function setBic(string $bic): Ideal
     {
-        $this->bankName = $bankName;
+        $this->bic = $bic;
         return $this;
     }
 

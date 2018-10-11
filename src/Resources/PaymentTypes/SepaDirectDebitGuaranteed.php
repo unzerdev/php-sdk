@@ -39,8 +39,6 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
      */
     public function __construct(string $iban)
     {
-        $this->setChargeable(true);
-
         $this->iban = $iban;
 
         parent::__construct();
