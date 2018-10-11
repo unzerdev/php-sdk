@@ -23,6 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -31,9 +34,11 @@ class PrepaymentTest extends BasePaymentTest
     /**
      * Verify Prepayment can be created and fetched.
      *
+     * @return Prepayment
+     *
      * @test
      */
-    public function prepaymentShouldBeCreatableAndFetchable()
+    public function prepaymentShouldBeCreatableAndFetchable(): AbstractHeidelpayResource
     {
         $prepayment = $this->heidelpay->createPaymentType(new Prepayment());
         $this->assertInstanceOf(Prepayment::class, $prepayment);
@@ -43,5 +48,22 @@ class PrepaymentTest extends BasePaymentTest
         $this->assertInstanceOf(Prepayment::class, $fetchedPrepayment);
         $this->assertEquals($prepayment->expose(), $fetchedPrepayment->expose());
 
+        return $fetchedPrepayment;
+    }
+
+    /**
+     * Verify authorization of prepayment type.
+     *
+     * @test
+     *
+     * @depends prepaymentShouldBeCreatableAndFetchable
+     *
+     * @param BasePaymentType $prepayment
+     */
+    public function prepaymentTypeShouldBeAuthorizable(BasePaymentType $prepayment)
+    {
+		$authorization = $prepayment->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+		$this->assertNotNull($authorization);
+        $this->assertNotNull($authorization->getId());
     }
 }
