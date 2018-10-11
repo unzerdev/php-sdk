@@ -62,6 +62,10 @@ class PaypalTest extends BasePaymentTest
         $authorization = $paypal->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
         $this->assertNotNull($authorization);
         $this->assertNotEmpty($authorization->getId());
+
+        $payment = $authorization->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertTrue($payment->isPending());
     }
 
     /**
