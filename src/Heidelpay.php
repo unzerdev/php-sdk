@@ -40,6 +40,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
@@ -285,6 +286,9 @@ class Heidelpay implements HeidelpayParentInterface
                 break;
             case 'ppl':
                 $paymentType = new Paypal();
+                break;
+            case 'ppy':
+                $paymentType = new Prepayment();
                 break;
             default:
                 throw new IllegalPaymentType($typeId);
