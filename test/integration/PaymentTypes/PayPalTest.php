@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -47,4 +48,34 @@ class PaypalTest extends BasePaymentTest
 
 		return $fetchedPaypal;
     }
+
+    /**
+     * Verify paypal can authorize.
+     *
+     * @test
+     * @depends paypalShouldBeCreatableAndFetchable
+     * @param Paypal $paypal
+     */
+    public function paypalShouldBeAuthorizable(Paypal $paypal)
+    {
+        $authorization = $paypal->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $this->assertNotNull($authorization);
+        $this->assertNotEmpty($authorization->getId());
+    }
+
+    /**
+     * Verify paypal can charge.
+     *
+     * @test
+     * @depends paypalShouldBeCreatableAndFetchable
+     * @param Paypal $paypal
+     */
+    public function paypalShouldBeChargeable(Paypal $paypal)
+    {
+        $charge = $paypal->charge(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $this->assertNotNull($charge);
+        $this->assertNotEmpty($charge->getId());
+    }
+
+
 }
