@@ -73,10 +73,12 @@ class GiropayTest extends BasePaymentTest
 
         /** @var Charge $charge */
         $charge = $giropay->charge(1.0, currency::EUROPEAN_EURO, self::RETURN_URL);
-
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge->getRedirectUrl());
+
+        $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
+        $this->assertEquals($charge->expose(), $fetchCharge->expose());
     }
 
     /**
