@@ -23,10 +23,13 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
 class PrepaymentTest extends BasePaymentTest
@@ -59,11 +62,49 @@ class PrepaymentTest extends BasePaymentTest
      * @depends prepaymentShouldBeCreatableAndFetchable
      *
      * @param BasePaymentType $prepayment
+     *
+     * @return Authorization
      */
-    public function prepaymentTypeShouldBeAuthorizable(BasePaymentType $prepayment)
+    public function prepaymentTypeShouldBeAuthorizable(BasePaymentType $prepayment): Authorization
     {
 		$authorization = $prepayment->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
 		$this->assertNotNull($authorization);
         $this->assertNotNull($authorization->getId());
+
+        return $authorization;
+    }
+
+    /**
+     * Verify charging a prepayment throws an exception.
+     *
+     * @test
+     *
+     * @depends prepaymentShouldBeCreatableAndFetchable
+     *
+     * @param BasePaymentType $prepayment
+     */
+    public function prepaymentTypeShouldNotBeChargeable(BasePaymentType $prepayment)
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
+
+		$prepayment->charge(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+    }
+
+    /**
+     * Verify shipment on a prepayment throws an exception.
+     *
+     * @test
+     *
+     * @depends prepaymentTypeShouldBeAuthorizable
+     *
+     * @param Authorization $authorization
+     */
+    public function prepaymentTypeShouldNotBeShippable(Authorization $authorization)
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
+
+		$this->heidelpay->ship($authorization->getPayment());
     }
 }
