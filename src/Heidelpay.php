@@ -39,6 +39,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
@@ -244,7 +245,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param PaymentTypeInterface $paymentType
      *
-     * @return PaymentTypeInterface
+     * @return PaymentTypeInterface|AbstractHeidelpayResource
      */
     public function createPaymentType(PaymentTypeInterface $paymentType): HeidelpayResourceInterface
     {
@@ -256,7 +257,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * @param string $typeId
      *
-     * @return PaymentTypeInterface
+     * @return PaymentTypeInterface|AbstractHeidelpayResource
      */
     public function fetchPaymentType($typeId): HeidelpayResourceInterface
     {
@@ -281,6 +282,9 @@ class Heidelpay implements HeidelpayParentInterface
                 break;
             case 'ivg':
                 $paymentType = new InvoiceGuaranteed();
+                break;
+            case 'ppl':
+                $paymentType = new Paypal();
                 break;
             default:
                 throw new IllegalPaymentType($typeId);

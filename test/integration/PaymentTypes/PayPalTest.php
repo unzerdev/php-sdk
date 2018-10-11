@@ -39,5 +39,12 @@ class PaypalTest extends BasePaymentTest
 		$paypal = $this->heidelpay->createPaymentType(new Paypal());
 		$this->assertInstanceOf(Paypal::class, $paypal);
 		$this->assertNotEmpty($paypal->getId());
+
+		$fetchedPaypal = $this->heidelpay->fetchPaymentType($paypal->getId());
+        $this->assertInstanceOf(Paypal::class, $fetchedPaypal);
+        $this->assertNotSame($paypal, $fetchedPaypal);
+		$this->assertEquals($paypal->expose(), $fetchedPaypal->expose());
+
+		return $fetchedPaypal;
     }
 }
