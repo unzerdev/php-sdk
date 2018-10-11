@@ -77,6 +77,9 @@ class InvoiceTest extends BasePaymentTest
     public function verifyInvoiceIsNotShippable(Invoice $invoice)
     {
         $authorize = $invoice->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $this->assertNotNull($authorize);
+        $this->assertNotEmpty($authorize->getId());
+
         $payment = $authorize->getPayment();
 
         $this->expectException(HeidelpayApiException::class);
