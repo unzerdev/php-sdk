@@ -24,16 +24,12 @@
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 
 abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
 {
-    private $authorizable = false;
-    private $chargeable = false;
-
     //<editor-fold desc="Overridable Methods">
 
     /**
@@ -53,10 +49,6 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
      */
     public function charge($amount, $currency, $returnUrl, $customer = null): Charge
     {
-        if (!$this->isChargeable()) {
-            throw new IllegalTransactionTypeException('charge');
-        }
-
         return $this->getHeidelpayObject()->charge($amount, $currency, $this, $returnUrl, $customer);
     }
 
@@ -65,53 +57,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
      */
     public function authorize($amount, $currency, $returnUrl, $customer = null): Authorization
     {
-        if (!$this->isAuthorizable()) {
-            throw new IllegalTransactionTypeException('authorize');
-        }
-
         return $this->getHeidelpayObject()->authorize($amount, $currency, $this, $returnUrl, $customer);
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Getters/Setters">
-
-    /**
-     * @return bool
-     */
-    public function isAuthorizable(): bool
-    {
-        return $this->authorizable;
-    }
-
-    /**
-     * @param bool $authorizable
-     *
-     * @return BasePaymentType
-     */
-    public function setAuthorizable(bool $authorizable): BasePaymentType
-    {
-        $this->authorizable = $authorizable;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isChargeable(): bool
-    {
-        return $this->chargeable;
-    }
-
-    /**
-     * @param bool $chargeable
-     *
-     * @return BasePaymentType
-     */
-    public function setChargeable(bool $chargeable): BasePaymentType
-    {
-        $this->chargeable = $chargeable;
-        return $this;
     }
 
     //</editor-fold>

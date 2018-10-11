@@ -23,8 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
@@ -52,7 +53,8 @@ class GiropayTest extends BasePaymentTest
      */
     public function giroPayShouldThrowExceptionOnAuthorize()
     {
-        $this->expectException(IllegalTransactionTypeException::class);
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ILLEGAL_TRANSACTION_FOR_PAYMENT_TYPE);
 
         /** @var Giropay $giropay */
         $giropay = new Giropay();

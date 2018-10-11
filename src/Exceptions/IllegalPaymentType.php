@@ -1,6 +1,6 @@
 <?php
 /**
- * This exception is thrown whenever a transaction is called that is not allowed with the payment type.
+ * This exception is thrown when an unknown payment type is used.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\Exceptions;
 
-class IllegalTransactionTypeException extends HeidelpayBaseException
+class IllegalPaymentType extends HeidelpayBaseException
 {
-    const MESSAGE = 'Transaction type %s is not allowed!';
+    const MESSAGE = 'Payment type %s is not allowed!';
 
     /**
      * IllegalTransactionTypeException constructor.

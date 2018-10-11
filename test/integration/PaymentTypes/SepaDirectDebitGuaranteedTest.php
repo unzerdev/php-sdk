@@ -24,8 +24,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -60,7 +61,9 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      */
     public function authorizeShouldThrowException(SepaDirectDebitGuaranteed $directDebitGuaranteed)
     {
-        $this->expectException(IllegalTransactionTypeException::class);
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ILLEGAL_TRANSACTION_FOR_PAYMENT_TYPE);
+
         $directDebitGuaranteed->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
     }
 

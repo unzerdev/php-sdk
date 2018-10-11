@@ -33,9 +33,6 @@ class Card extends BasePaymentType
      */
     public function __construct($number, $expiryDate)
     {
-        $this->setAuthorizable(true)
-            ->setChargeable(true);
-
         $this->setNumber($number);
         $this->setExpiryDate($expiryDate);
 
