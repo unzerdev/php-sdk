@@ -61,7 +61,7 @@ class IdealTest extends BasePaymentTest
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal)
     {
         $this->expectException(HeidelpayApiException::class);
-        $ideal->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $ideal->authorize(1.0, Currency::EURO, self::RETURN_URL);
     }
 
     /**
@@ -74,7 +74,7 @@ class IdealTest extends BasePaymentTest
      */
     public function idealShouldBeChargeable(Ideal $ideal)
     {
-        $charge = $ideal->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $charge = $ideal->charge(1.0, Currency::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge->getRedirectUrl());

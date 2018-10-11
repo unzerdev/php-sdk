@@ -37,7 +37,7 @@ class ShipmentTest extends BasePaymentTest
     public function shipmentCanBeCalledForInvoiceGuaranteed()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $authorize = $this->heidelpay->authorize(100.0, Currency::EUROPEAN_EURO, $invoiceGuaranteed, self::RETURN_URL, $this->getMaximumCustomer());
+        $authorize = $this->heidelpay->authorize(100.0, Currency::EURO, $invoiceGuaranteed, self::RETURN_URL, $this->getMaximumCustomer());
         $this->assertNotNull($authorize->getId());
         $this->assertNotNull($authorize);
 

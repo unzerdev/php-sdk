@@ -215,7 +215,7 @@ class PaymentTest extends BasePaymentTest
         $payment = new Payment($this->heidelpay);
         $authorizationUsingPayment = $payment->authorize(
             100.0,
-            Currency::EUROPEAN_EURO,
+            Currency::EURO,
             $card,
             self::RETURN_URL
         );
@@ -225,7 +225,7 @@ class PaymentTest extends BasePaymentTest
         // Variant 2
         $authorizationUsingHeidelpay = $this->heidelpay->authorize(
             100.0,
-            Currency::EUROPEAN_EURO,
+            Currency::EURO,
             $card,
             self::RETURN_URL
         );

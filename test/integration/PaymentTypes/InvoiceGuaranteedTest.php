@@ -59,7 +59,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
     {
         $authorization = $invoiceGuaranteed->authorize(
             100.0,
-            Currency::EUROPEAN_EURO,
+            Currency::EURO,
             self::RETURN_URL,
             $this->getMaximumCustomer()
         );

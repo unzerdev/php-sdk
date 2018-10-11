@@ -58,7 +58,7 @@ class PaypalTest extends BasePaymentTest
      */
     public function paypalShouldBeAuthorizable(Paypal $paypal)
     {
-        $authorization = $paypal->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $authorization = $paypal->authorize(100.0, Currency::EURO, self::RETURN_URL);
         $this->assertNotNull($authorization);
         $this->assertNotEmpty($authorization->getId());
 
@@ -77,7 +77,7 @@ class PaypalTest extends BasePaymentTest
      */
     public function paypalShouldBeChargeable(Paypal $paypal)
     {
-        $charge = $paypal->charge(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $charge = $paypal->charge(100.0, Currency::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
     }

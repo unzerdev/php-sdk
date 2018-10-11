@@ -64,7 +64,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $directDebitGuaranteed->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $directDebitGuaranteed->authorize(1.0, Currency::EURO, self::RETURN_URL);
     }
 
     /**
@@ -81,7 +81,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
 
         $this->assertNotNull($customer->getId());
 
-        $charge = $directDebitGuaranteed->charge(200.0, Currency::EUROPEAN_EURO, self::RETURN_URL, $customer);
+        $charge = $directDebitGuaranteed->charge(200.0, Currency::EURO, self::RETURN_URL, $customer);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
     }

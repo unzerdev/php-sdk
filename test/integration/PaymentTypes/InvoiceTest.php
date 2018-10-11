@@ -62,7 +62,7 @@ class InvoiceTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
 
-        $invoice->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $invoice->charge(1.0, Currency::EURO, self::RETURN_URL);
     }
 
     /**
@@ -75,7 +75,7 @@ class InvoiceTest extends BasePaymentTest
      */
     public function verifyInvoiceIsNotShippable(Invoice $invoice)
     {
-        $authorize = $invoice->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $authorize = $invoice->authorize(1.0, Currency::EURO, self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
 

@@ -38,7 +38,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
     public function fullCancelOnAuthorization()
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
 
         /** @var Authorization $fetchedAuthorization */
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
@@ -62,7 +62,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
     public function partCancelOnPayment()
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
         $payment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
 
         /** @var Cancellation $cancel */
@@ -80,7 +80,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
     public function partCancelOnAuthorize()
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
 
         /** @var Authorization $fetchedAuthorization */
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
@@ -103,7 +103,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
     public function anAuthorizationsFullReversalShallBeFetchable()
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
         $this->assertTrue($payment->isPending());
@@ -141,7 +141,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
     public function anAuthorizationsReversalsShouldBeFetchable()
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
-        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
         $this->assertTrue($payment->isPending());
@@ -182,7 +182,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
 //    public function fullCancelOnPartlyChargedAuthorization()
 //    {
 //        $card = $this->heidelpay->createPaymentType($this->createCard());
-//        $authorization = $this->heidelpay->authorize(100.0000, Currency::EUROPEAN_EURO, $card, self::RETURN_URL);
+//        $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
 //        $payment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
 //
 //        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -208,7 +208,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
 //        /** @var Card $card */
 //        $card = $this->createCard();
 //        $card = $this->heidelpay->createPaymentType($card);
-//        $authorization = $card->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+//        $authorization = $card->authorize(100.0, Currency::EURO, self::RETURN_URL);
 //        $payment = $authorization->getPayment();
 //        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 //        $this->assertTrue($payment->isPending());

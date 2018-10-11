@@ -67,8 +67,8 @@ class PrepaymentTest extends BasePaymentTest
      */
     public function prepaymentTypeShouldBeAuthorizable(BasePaymentType $prepayment): Authorization
     {
-		$authorization = $prepayment->authorize(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-		$this->assertNotNull($authorization);
+        $authorization = $prepayment->authorize(100.0, Currency::EURO, self::RETURN_URL);
+        $this->assertNotNull($authorization);
         $this->assertNotNull($authorization->getId());
 
         return $authorization;
@@ -88,7 +88,7 @@ class PrepaymentTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
 
-		$prepayment->charge(100.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $prepayment->charge(100.0, Currency::EURO, self::RETURN_URL);
     }
 
     /**
@@ -105,6 +105,6 @@ class PrepaymentTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
-		$this->heidelpay->ship($authorization->getPayment());
+        $this->heidelpay->ship($authorization->getPayment());
     }
 }

@@ -59,7 +59,7 @@ class GiropayTest extends BasePaymentTest
         /** @var Giropay $giropay */
         $giropay = new Giropay();
         $giropay = $this->heidelpay->createPaymentType($giropay);
-        $giropay->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $giropay->authorize(1.0, Currency::EURO, self::RETURN_URL);
     }
 
     /**
@@ -74,7 +74,7 @@ class GiropayTest extends BasePaymentTest
         $giropay = $this->heidelpay->createPaymentType($giropay);
 
         /** @var Charge $charge */
-        $charge = $giropay->charge(1.0, currency::EUROPEAN_EURO, self::RETURN_URL);
+        $charge = $giropay->charge(1.0, Currency::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge->getRedirectUrl());
