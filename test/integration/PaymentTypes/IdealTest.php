@@ -79,6 +79,9 @@ class IdealTest extends BasePaymentTest
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge->getRedirectUrl());
+
+        $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
+        $this->assertEquals($charge->expose(), $fetchCharge->expose());
     }
 
     /**
