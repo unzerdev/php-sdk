@@ -35,7 +35,7 @@ use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\GiroPay;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
@@ -271,7 +271,7 @@ class Heidelpay implements HeidelpayParentInterface
                 $paymentType = new Card(null, null);
                 break;
             case 'gro':
-                $paymentType = new GiroPay();
+                $paymentType = new Giropay();
                 break;
             case 'idl':
                 $paymentType = new Ideal();

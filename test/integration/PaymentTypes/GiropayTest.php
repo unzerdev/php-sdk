@@ -25,7 +25,7 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\IllegalTransactionTypeException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\GiroPay;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
@@ -38,10 +38,10 @@ class GiropayTest extends BasePaymentTest
      */
     public function giroPayShouldBeCreatable()
     {
-        /** @var GiroPay $giropay */
-        $giropay = new GiroPay();
+        /** @var Giropay $giropay */
+        $giropay = new Giropay();
         $giropay = $this->heidelpay->createPaymentType($giropay);
-        $this->assertInstanceOf(GiroPay::class, $giropay);
+        $this->assertInstanceOf(Giropay::class, $giropay);
         $this->assertNotNull($giropay->getId());
     }
 
@@ -54,8 +54,8 @@ class GiropayTest extends BasePaymentTest
     {
         $this->expectException(IllegalTransactionTypeException::class);
 
-        /** @var GiroPay $giropay */
-        $giropay = new GiroPay();
+        /** @var Giropay $giropay */
+        $giropay = new Giropay();
         $giropay = $this->heidelpay->createPaymentType($giropay);
         $giropay->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
     }
@@ -67,8 +67,8 @@ class GiropayTest extends BasePaymentTest
      */
     public function giroPayShouldBeChargeable()
     {
-        /** @var GiroPay $giropay */
-        $giropay = new GiroPay();
+        /** @var Giropay $giropay */
+        $giropay = new Giropay();
         $giropay = $this->heidelpay->createPaymentType($giropay);
 
         /** @var Charge $charge */
@@ -86,12 +86,12 @@ class GiropayTest extends BasePaymentTest
      */
     public function giroPayCanBeFetched()
     {
-        /** @var GiroPay $giropay */
-        $giropay = new GiroPay();
+        /** @var Giropay $giropay */
+        $giropay = new Giropay();
         $giropay = $this->heidelpay->createPaymentType($giropay);
 
         $fetchedGiropay = $this->heidelpay->fetchPaymentType($giropay->getId());
-        $this->assertInstanceOf(GiroPay::class, $fetchedGiropay);
+        $this->assertInstanceOf(Giropay::class, $fetchedGiropay);
         $this->assertEquals($giropay->getId(), $fetchedGiropay->getId());
     }
 }

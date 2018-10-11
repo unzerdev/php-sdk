@@ -23,7 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
-class GiroPay extends BasePaymentType
+class Giropay extends BasePaymentType
 {
     /**
      * GiroPay constructor.
