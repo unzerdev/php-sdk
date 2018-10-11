@@ -33,6 +33,7 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class BasePaymentTest extends TestCase
 {
@@ -123,6 +124,37 @@ class BasePaymentTest extends TestCase
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $charge = $this->heidelpay->charge(100.0, Currency::EURO, $card, self::RETURN_URL);
         return $charge;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="DataProviders">
+
+    /**
+     * Provides all defined currencies.
+     *
+     * @throws \ReflectionException
+     */
+    public function przelewy24CurrencyCodeProvider(): array
+    {
+        $currencyArray = $this->currencyCodeProvider();
+        unset($currencyArray['POLISH_ZLOTY']);
+        return $currencyArray;
+    }
+
+    /**
+     * @return array
+     *
+     * @throws \ReflectionException
+     */
+    public function currencyCodeProvider(): array
+    {
+        $currencyReflection = new ReflectionClass(Currency::class);
+        $currencies         = $currencyReflection->getConstants();
+
+        $keys          = array_keys($currencies);
+        $values        = array_chunk($currencies, 1);
+        return array_combine($keys, $values);
     }
 
     //</editor-fold>

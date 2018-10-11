@@ -24,8 +24,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -48,5 +49,58 @@ class Przelewy24Test extends BasePaymentTest
         $this->assertEquals($przelewy24->expose(), $fetchedPrzelewy24->expose());
 
         return $fetchedPrzelewy24;
+    }
+
+    /**
+     * Verify przelewy24 can authorize.
+     *
+     * @test
+     * @depends przelewy24ShouldBeCreatableAndFetchable
+     *
+     * @param Przelewy24 $przelewy24
+     */
+    public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24)
+    {
+        $charge = $przelewy24->charge(100.0, Currency::POLISH_ZLOTY, self::RETURN_URL);
+        $this->assertNotNull($charge);
+        $this->assertNotEmpty($charge->getId());
+
+        $payment = $charge->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertTrue($payment->isPending());
+    }
+
+    /**
+     * Verify przelewy24 can not be authorized.
+     *
+     * @test
+     * @depends przelewy24ShouldBeCreatableAndFetchable
+     *
+     * @param Przelewy24 $przelewy24
+     */
+    public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24)
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
+
+        $przelewy24->authorize(100.0, Currency::POLISH_ZLOTY, self::RETURN_URL);
+    }
+
+    /**
+     * Verify przelewy24 can not handle EURO.
+     *
+     * @test
+     *
+     * @dataProvider przelewy24CurrencyCodeProvider
+     *
+     * @param string $currencyCode
+     */
+    public function przelewy24ShouldThrowExceptionOnEuroUsage($currencyCode)
+    {
+        $przelewy24 = $this->heidelpay->createPaymentType(new Przelewy24());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CURRENCY_IS_NOT_SUPPORTED);
+        $przelewy24->charge(100.0, $currencyCode, self::RETURN_URL);
     }
 }
