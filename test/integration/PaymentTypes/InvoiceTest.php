@@ -1,7 +1,6 @@
 <?php
 /**
- * This class defines integration tests to verify interface and functionality
- * of the payment method invoice.
+ * This class defines integration tests to verify interface and functionality of the payment method invoice.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
