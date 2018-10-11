@@ -37,16 +37,16 @@ class PaypalTest extends BasePaymentTest
      */
     public function paypalShouldBeCreatableAndFetchable()
     {
-		$paypal = $this->heidelpay->createPaymentType(new Paypal());
-		$this->assertInstanceOf(Paypal::class, $paypal);
-		$this->assertNotEmpty($paypal->getId());
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $this->assertInstanceOf(Paypal::class, $paypal);
+        $this->assertNotEmpty($paypal->getId());
 
-		$fetchedPaypal = $this->heidelpay->fetchPaymentType($paypal->getId());
+        $fetchedPaypal = $this->heidelpay->fetchPaymentType($paypal->getId());
         $this->assertInstanceOf(Paypal::class, $fetchedPaypal);
         $this->assertNotSame($paypal, $fetchedPaypal);
-		$this->assertEquals($paypal->expose(), $fetchedPaypal->expose());
+        $this->assertEquals($paypal->expose(), $fetchedPaypal->expose());
 
-		return $fetchedPaypal;
+        return $fetchedPaypal;
     }
 
     /**
@@ -54,6 +54,7 @@ class PaypalTest extends BasePaymentTest
      *
      * @test
      * @depends paypalShouldBeCreatableAndFetchable
+     *
      * @param Paypal $paypal
      */
     public function paypalShouldBeAuthorizable(Paypal $paypal)
@@ -68,6 +69,7 @@ class PaypalTest extends BasePaymentTest
      *
      * @test
      * @depends paypalShouldBeCreatableAndFetchable
+     *
      * @param Paypal $paypal
      */
     public function paypalShouldBeChargeable(Paypal $paypal)
@@ -76,6 +78,4 @@ class PaypalTest extends BasePaymentTest
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
     }
-
-
 }
