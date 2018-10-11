@@ -41,6 +41,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
@@ -265,7 +266,7 @@ class Heidelpay implements HeidelpayParentInterface
         $paymentType = null;
 
         $typeIdParts = [];
-        preg_match('/^[sp]{1}-([a-z]{3})/', $typeId, $typeIdParts);
+        preg_match('/^[sp]{1}-([a-z]{3}|p24)-[a-z0-9]*/', $typeId, $typeIdParts);
 
         // todo maybe move this into a builder service
         switch ($typeIdParts[1]) {
@@ -289,6 +290,9 @@ class Heidelpay implements HeidelpayParentInterface
                 break;
             case 'ppy':
                 $paymentType = new Prepayment();
+                break;
+            case 'p24':
+                $paymentType = new Przelewy24();
                 break;
             default:
                 throw new IllegalPaymentType($typeId);
