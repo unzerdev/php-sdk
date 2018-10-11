@@ -62,7 +62,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
     public function authorizeShouldThrowException(SepaDirectDebitGuaranteed $directDebitGuaranteed)
     {
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ILLEGAL_TRANSACTION_FOR_PAYMENT_TYPE);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $directDebitGuaranteed->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
     }

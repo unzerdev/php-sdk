@@ -54,7 +54,7 @@ class GiropayTest extends BasePaymentTest
     public function giroPayShouldThrowExceptionOnAuthorize()
     {
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ILLEGAL_TRANSACTION_FOR_PAYMENT_TYPE);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         /** @var Giropay $giropay */
         $giropay = new Giropay();

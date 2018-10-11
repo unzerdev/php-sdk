@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defiens integration tests to verify interface and functionality
+ * This class defines integration tests to verify interface and functionality
  * of the payment method invoice.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -49,22 +51,38 @@ class InvoiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify invoice is chargeable.
+     * Verify invoice is not chargeable.
      *
      * @test
      *
      * @param Invoice $invoice
      * @depends invoiceTypeShouldBeCreatable
-     *
-     * todo: charge != shipment
-     * todo: shipment works only with prior authorization
      */
-    public function verifyInvoiceShipment(Invoice $invoice)
+    public function verifyInvoiceIsNotChargeable(Invoice $invoice)
     {
-        $charge = $invoice->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
-        $this->assertNotNull($charge);
-        $this->assertNotNull($charge->getId());
-        $this->assertNotNull($charge->getRedirectUrl());
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
+
+        $invoice->charge(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+    }
+
+    /**
+     * Verify invoice is not shippable.
+     *
+     * @test
+     *
+     * @param Invoice $invoice
+     * @depends invoiceTypeShouldBeCreatable
+     */
+    public function verifyInvoiceIsNotShippable(Invoice $invoice)
+    {
+        $authorize = $invoice->authorize(1.0, Currency::EUROPEAN_EURO, self::RETURN_URL);
+        $payment = $authorize->getPayment();
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
+
+        $this->heidelpay->ship($payment);
     }
 
     /**
