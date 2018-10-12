@@ -64,7 +64,7 @@ class SepaDirectDebitTest extends BasePaymentTest
         /** @var SepaDirectDebit $directDebit */
         $directDebit = (new SepaDirectDebit('DE89370400440532013000'))
             ->setHolder('Max Mustermann')
-            ->setBic('TEST1234');
+            ->setBic('COBADEFFXXX');
         $directDebit = $this->heidelpay->createPaymentType($directDebit);
         $this->assertInstanceOf(SepaDirectDebit::class, $directDebit);
         $this->assertNotNull($directDebit->getId());

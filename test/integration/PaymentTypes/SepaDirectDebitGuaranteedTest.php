@@ -64,7 +64,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
         $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))
             ->setHolder('Max Mustermann')
-            ->setBic('TEST1234');
+            ->setBic('COBADEFFXXX');
         $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
         $this->assertNotNull($directDebitGuaranteed->getId());
