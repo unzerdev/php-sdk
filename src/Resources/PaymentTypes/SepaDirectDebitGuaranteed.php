@@ -37,7 +37,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     /**
      * @param string $iban
      */
-    public function __construct(string $iban)
+    public function __construct($iban)
     {
         $this->iban = $iban;
 
@@ -78,7 +78,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
      *
      * @return SepaDirectDebitGuaranteed
      */
-    public function setBic(string $bic): SepaDirectDebitGuaranteed
+    public function setBic($bic): SepaDirectDebitGuaranteed
     {
         $this->bic = $bic;
         return $this;
@@ -97,7 +97,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
      *
      * @return SepaDirectDebitGuaranteed
      */
-    public function setHolder(string $holder): SepaDirectDebitGuaranteed
+    public function setHolder($holder): SepaDirectDebitGuaranteed
     {
         $this->holder = $holder;
         return $this;

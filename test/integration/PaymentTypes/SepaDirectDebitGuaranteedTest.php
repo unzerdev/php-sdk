@@ -27,7 +27,6 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -48,7 +47,15 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
         $this->assertNotNull($directDebitGuaranteed->getId());
 
-        return $directDebitGuaranteed;
+        /** @var SepaDirectDebitGuaranteed $fetchedDirectDebitGuaranteed */
+        $fetchedDirectDebitGuaranteed = $this->heidelpay->fetchPaymentType($directDebitGuaranteed->getId());
+        $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $fetchedDirectDebitGuaranteed);
+        $this->assertEquals($directDebitGuaranteed->getId(), $fetchedDirectDebitGuaranteed->getId());
+        $this->assertEquals(
+            $this->maskCreditCardNumber($directDebitGuaranteed->getIban()), $fetchedDirectDebitGuaranteed->getIban()
+        );
+
+        return $fetchedDirectDebitGuaranteed;
     }
 
     /**
@@ -75,14 +82,12 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      */
     public function directDebitShouldBeChargeable(SepaDirectDebitGuaranteed $directDebitGuaranteed)
     {
-        /** @var Customer $customer */
-        $customer = $this->getMaximumCustomer();
-        $this->heidelpay->createCustomer($customer);
-
-        $this->assertNotNull($customer->getId());
-
-        $charge = $directDebitGuaranteed->charge(200.0, Currency::EURO, self::RETURN_URL, $customer);
+        $charge = $directDebitGuaranteed->charge(100.0, Currency::EURO, self::RETURN_URL, $this->getMaximumCustomer());
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
+
+        $shipment = $this->heidelpay->ship($charge->getPayment());
+        $this->assertNotNull($shipment);
+        $this->assertEmpty($shipment->getId());
     }
 }
