@@ -33,6 +33,26 @@ use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 class SepaDirectDebitGuaranteedTest extends BasePaymentTest
 {
     /**
+     * Verify sepa direct debit guaranteed can be created with mandatory fields only.
+     *
+     * @test
+     */
+    public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly()
+    {
+        /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
+        $directDebitGuaranteed = new SepaDirectDebitGuaranteed('DE89370400440532013000');
+        $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
+        $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
+        $this->assertNotNull($directDebitGuaranteed->getId());
+
+        /** @var SepaDirectDebitGuaranteed $fetchedDirectDebitGuaranteed */
+        $fetchedDirectDebitGuaranteed = $this->heidelpay->fetchPaymentType($directDebitGuaranteed->getId());
+        $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $fetchedDirectDebitGuaranteed);
+        $this->assertEquals($directDebitGuaranteed->getId(), $fetchedDirectDebitGuaranteed->getId());
+        $this->assertEquals($this->maskNumber($directDebitGuaranteed->getIban()), $fetchedDirectDebitGuaranteed->getIban());
+    }
+
+    /**
      * Verify sepa direct debit guaranteed can be created.
      *
      * @test
@@ -42,7 +62,9 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
         /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
-        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setHolder('Max Mustermann');
+        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))
+            ->setHolder('Max Mustermann')
+            ->setBic('TEST1234');
         $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
         $this->assertNotNull($directDebitGuaranteed->getId());
@@ -52,6 +74,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $fetchedDirectDebitGuaranteed);
         $this->assertEquals($directDebitGuaranteed->getId(), $fetchedDirectDebitGuaranteed->getId());
         $this->assertEquals($directDebitGuaranteed->getHolder(), $fetchedDirectDebitGuaranteed->getHolder());
+        $this->assertEquals($directDebitGuaranteed->getBic(), $fetchedDirectDebitGuaranteed->getBic());
         $this->assertEquals(
             $this->maskNumber($directDebitGuaranteed->getIban()), $fetchedDirectDebitGuaranteed->getIban()
         );
