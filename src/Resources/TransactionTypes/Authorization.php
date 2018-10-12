@@ -43,6 +43,9 @@ class Authorization extends AbstractTransactionType
     /** @var string $returnUrl */
     protected $returnUrl = '';
 
+    /** @var string $orderId */
+    protected $orderId = '';
+
     /** @var string $uniqueId */
     private $uniqueId = '';
 
@@ -137,6 +140,25 @@ class Authorization extends AbstractTransactionType
     public function setUniqueId(string $uniqueId): HeidelpayResourceInterface
     {
         $this->uniqueId = $uniqueId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderId(): string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param string $orderId
+     *
+     * @return Authorization
+     */
+    public function setOrderId($orderId): Authorization
+    {
+        $this->orderId = $orderId;
         return $this;
     }
 

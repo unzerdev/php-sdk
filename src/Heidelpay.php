@@ -568,7 +568,8 @@ class Heidelpay implements HeidelpayParentInterface
      * @param $currency
      * @param Payment $payment
      * @param $returnUrl
-     * @param null $customer
+     * @param string|null $customer
+     * @param string|null $orderId
      *
      * @return Authorization
      */
@@ -577,11 +578,11 @@ class Heidelpay implements HeidelpayParentInterface
         $currency,
         Payment $payment,
         $returnUrl = null,
-        $customer = null
+        $customer = null,
+        $orderId = null
     ): AbstractTransactionType {
-        $authorization = new Authorization($amount, $currency, $returnUrl);
-        $payment->setAuthorization($authorization);
-        $payment->setCustomer($customer);
+        $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $payment->setAuthorization($authorization)->setCustomer($customer);
         $this->resourceService->create($authorization);
         return $authorization;
     }
@@ -594,13 +595,14 @@ class Heidelpay implements HeidelpayParentInterface
      * @param $paymentType
      * @param string               $returnUrl
      * @param Customer|string|null $customer
+     * @param string|null          $orderId
      *
      * @return Authorization
      */
-    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null): AbstractTransactionType
+    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null, $orderId = null): AbstractTransactionType
     {
         $payment = $this->createPayment($paymentType, $customer);
-        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer);
+        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
     }
 
     //</editor-fold>

@@ -97,9 +97,9 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
     /**
      * @param Authorization $authorize
      *
-     * @return PaymentInterface
+     * @return Payment
      */
-    public function setAuthorization(Authorization $authorize): PaymentInterface
+    public function setAuthorization(Authorization $authorize): Payment
     {
         $authorize->setPayment($this);
         $authorize->setParentResource($this);

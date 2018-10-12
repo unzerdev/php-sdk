@@ -30,22 +30,23 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 interface PaymentTypeInterface extends HeidelpayResourceInterface
 {
     /**
-     * @param null          $amount
-     * @param null          $currency
-     * @param string        $returnUrl
-     * @param Customer|null $customer
+     * @param null                 $amount
+     * @param null                 $currency
+     * @param string               $returnUrl
+     * @param Customer|string|null $customer
      *
      * @return Charge
      */
     public function charge($amount, $currency, $returnUrl, $customer = null): Charge;
 
     /**
-     * @param float  $amount
-     * @param string $currency
-     * @param string $returnUrl
-     * @param null   $customer
+     * @param float                $amount
+     * @param string               $currency
+     * @param string               $returnUrl
+     * @param Customer|string|null $customer
+     * @param string|null          $orderId
      *
      * @return Authorization
      */
-    public function authorize($amount, $currency, $returnUrl, $customer = null): Authorization;
+    public function authorize($amount, $currency, $returnUrl, $customer = null, $orderId = null): Authorization;
 }

@@ -93,7 +93,7 @@ class AuthorizationTest extends BasePaymentTest
     {
         $card = $this->heidelpay->createPaymentType($this->createCard());
         $customerId = $this->heidelpay->createCustomer($this->getMinimalCustomer())->getId();
-        $authorize = $this->heidelpay->authorize(100.0, Currency::EURO, $card, self::RETURN_URL, $customerId);
+        $authorize = $this->heidelpay->authorize(100.0, Currency::EURO, $card, self::RETURN_URL, $customerId, time());
         $payment = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());

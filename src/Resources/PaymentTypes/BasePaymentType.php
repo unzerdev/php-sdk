@@ -55,9 +55,9 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     /**
      * {@inheritDoc}
      */
-    public function authorize($amount, $currency, $returnUrl, $customer = null): Authorization
+    public function authorize($amount, $currency, $returnUrl, $customer = null, $orderId = null): Authorization
     {
-        return $this->getHeidelpayObject()->authorize($amount, $currency, $this, $returnUrl, $customer);
+        return $this->getHeidelpayObject()->authorize($amount, $currency, $this, $returnUrl, $customer, $orderId);
     }
 
     //</editor-fold>
