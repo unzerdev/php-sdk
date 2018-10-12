@@ -28,12 +28,10 @@ use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Traits\HasCancellationsTrait;
-use heidelpay\MgwPhpSdk\Traits\HasValueHelper;
 
 class Charge extends AbstractTransactionType
 {
     use HasCancellationsTrait;
-    use HasValueHelper;
 
     /** @var float $amount */
     protected $amount;
@@ -145,25 +143,7 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * Returns true if the charge is fully canceled.
-     * todo: canceled as state?
-     *
-     * @return bool
-     */
-    public function isCanceled(): bool
-    {
-        $canceledAmount = 0.0;
-
-        /** @var Cancellation $cancellation */
-        foreach ($this->cancellations as $cancellation) {
-            $canceledAmount += $cancellation->getAmount();
-        }
-
-        return $this->amountIsGreaterThanOrEqual($canceledAmount, $this->amount);
-    }
-
-    /**
-     * @return string|null
+     * @return string
      */
     public function getOrderId(): string
     {
