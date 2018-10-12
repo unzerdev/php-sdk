@@ -23,7 +23,6 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -190,24 +189,6 @@ class Authorization extends AbstractTransactionType
             'customer'=> $payment->getCustomer(),
             'type' => $paymentType
         ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
-    {
-        /** @var Payment $payment */
-        $payment = $this->getPayment();
-        if (isset($response->resources->paymentId)) {
-            $payment->setId($response->resources->paymentId);
-        }
-
-        if (isset($response->redirectUrl)) {
-            $payment->setRedirectUrl($response->redirectUrl);
-        }
-
-        parent::handleResponse($response, $method);
     }
 
     //</editor-fold>

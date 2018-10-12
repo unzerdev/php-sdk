@@ -23,7 +23,6 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -139,7 +138,7 @@ class Charge extends AbstractTransactionType
      *
      * @return HeidelpayResourceInterface
      */
-    public function setUniqueId(string $uniqueId): HeidelpayResourceInterface
+    public function setUniqueId($uniqueId): HeidelpayResourceInterface
     {
         $this->uniqueId = $uniqueId;
         return $this;
@@ -209,26 +208,6 @@ class Charge extends AbstractTransactionType
             'customer'=> $payment->getCustomer(),
             'type' => $paymentType
         ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
-    {
-        /** @var Payment $payment */
-        $payment = $this->getPayment();
-        if (isset($response->resources->paymentId)) {
-            $payment->setId($response->resources->paymentId);
-        }
-
-        if (isset($response->redirectUrl)) {
-            // todo: maybe just one of these applies depending on answer #10 https://heidelpay.atlassian.net/wiki/spaces/ID/pages/359727164/Q+and+A+Suggestions
-            $this->setRedirectUrl($response->redirectUrl);
-            $payment->setRedirectUrl($response->redirectUrl);
-        }
-
-        parent::handleResponse($response, $method);
     }
 
     //</editor-fold>

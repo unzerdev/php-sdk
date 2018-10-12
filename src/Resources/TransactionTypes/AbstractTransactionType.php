@@ -30,12 +30,15 @@ use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {
+    //<editor-fold desc="Properties">
     /** @var Payment $payment */
     private $payment;
 
     //<editor-fold desc="Getters/Setters">
 
     /**
+     * Return the payment property.
+     *
      * @return Payment|null
      */
     public function getPayment()
@@ -44,6 +47,8 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     }
 
     /**
+     * Set the payment object property.
+     *
      * @param Payment $payment
      *
      * @return $this
@@ -54,8 +59,20 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         return $this;
     }
 
+    /**
+     * Return the redirect url stored in the payment object.
+     *
+     * @return string
+     */
+    public function getRedirectUrl(): string
+    {
+        return $this->payment->getRedirectUrl();
+    }
+
+    //</editor-fold>
     //</editor-fold>
 
+    //<editor-fold desc="Overridable methods">
     /**
      * {@inheritDoc}
      */
@@ -63,14 +80,27 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     {
         parent::handleResponse($response, $method);
 
+        /** @var Payment $payment */
+        $payment = $this->getPayment();
+        if (isset($response->resources->paymentId)) {
+            $payment->setId($response->resources->paymentId);
+        }
+
+        if (isset($response->redirectUrl)) {
+            $payment->setRedirectUrl($response->redirectUrl);
+        }
+
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
             $this->updatePayment();
         }
     }
+    //</editor-fold>
 
     /**
      * Updates the payment object if it exists and if this is not the payment object.
      * This is called from the crud methods to update the payments state whenever anything happens.
+     *
+     * todo: service?
      */
     private function updatePayment()
     {
