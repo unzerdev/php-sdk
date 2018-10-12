@@ -42,7 +42,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
         /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
-        $directDebitGuaranteed = new SepaDirectDebitGuaranteed('DE89370400440532013000');
+        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setHolder('Max Mustermann');
         $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
         $this->assertNotNull($directDebitGuaranteed->getId());
@@ -51,6 +51,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $fetchedDirectDebitGuaranteed = $this->heidelpay->fetchPaymentType($directDebitGuaranteed->getId());
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $fetchedDirectDebitGuaranteed);
         $this->assertEquals($directDebitGuaranteed->getId(), $fetchedDirectDebitGuaranteed->getId());
+        $this->assertEquals($directDebitGuaranteed->getHolder(), $fetchedDirectDebitGuaranteed->getHolder());
         $this->assertEquals(
             $this->maskCreditCardNumber($directDebitGuaranteed->getIban()), $fetchedDirectDebitGuaranteed->getIban()
         );
@@ -80,7 +81,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
-    public function directDebitShouldBeChargeable(SepaDirectDebitGuaranteed $directDebitGuaranteed)
+    public function directDebitShouldBeChargeableAndShippable(SepaDirectDebitGuaranteed $directDebitGuaranteed)
     {
         $charge = $directDebitGuaranteed->charge(100.0, Currency::EURO, self::RETURN_URL, $this->getMaximumCustomer());
         $this->assertNotNull($charge);
