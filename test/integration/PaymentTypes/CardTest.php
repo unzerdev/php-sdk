@@ -338,6 +338,7 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
     }
 
+    // todo:
 //    /**
 //     * Full cancel on partly charged auth canceled charges.
 //     *
