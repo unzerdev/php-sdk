@@ -27,7 +27,7 @@ use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
+use heidelpay\MgwPhpSdk\Interfaces\AmountsInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
@@ -36,7 +36,7 @@ use heidelpay\MgwPhpSdk\Traits\HasStateTrait;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
-class Payment extends AbstractHeidelpayResource implements PaymentInterface
+class Payment extends AbstractHeidelpayResource implements AmountsInterface
 {
     use HasAmountsTrait;
     use HasStateTrait;

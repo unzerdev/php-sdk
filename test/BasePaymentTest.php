@@ -26,8 +26,8 @@ namespace heidelpay\MgwPhpSdk\test;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\Fixtures\CustomerFixtureTrait;
@@ -53,7 +53,7 @@ class BasePaymentTest extends TestCase
     //<editor-fold desc="Custom asserts">
 
     /**
-     * @param PaymentInterface $payment
+     * @param Payment $payment
      * @param float            $expectedRemaining
      * @param float            $expectedCharged
      * @param float            $expectedTotal
