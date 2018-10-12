@@ -88,10 +88,11 @@ class Payment extends AbstractHeidelpayResource implements PaymentInterface
      */
     public function getAuthorization($lazy = false)
     {
-        if (!$lazy) {
-            return $this->getHeidelpayObject()->getResourceService()->getResource($this->authorization);
+        $authorization = $this->authorization;
+        if (!$lazy && $authorization !== null) {
+            return $this->getHeidelpayObject()->getResourceService()->getResource($authorization);
         }
-        return $this->authorization;
+        return $authorization;
     }
 
     /**
