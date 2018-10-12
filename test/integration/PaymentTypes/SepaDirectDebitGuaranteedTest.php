@@ -53,7 +53,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->assertEquals($directDebitGuaranteed->getId(), $fetchedDirectDebitGuaranteed->getId());
         $this->assertEquals($directDebitGuaranteed->getHolder(), $fetchedDirectDebitGuaranteed->getHolder());
         $this->assertEquals(
-            $this->maskCreditCardNumber($directDebitGuaranteed->getIban()), $fetchedDirectDebitGuaranteed->getIban()
+            $this->maskNumber($directDebitGuaranteed->getIban()), $fetchedDirectDebitGuaranteed->getIban()
         );
 
         return $fetchedDirectDebitGuaranteed;

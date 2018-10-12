@@ -101,7 +101,7 @@ class BasePaymentTest extends TestCase
      *
      * @return string
      */
-    protected function maskCreditCardNumber($number, $maskSymbol = '*'): string
+    protected function maskNumber($number, $maskSymbol = '*'): string
     {
         return substr($number, 0, 6) . str_repeat($maskSymbol, \strlen($number) - 10) . substr($number, -4);
     }

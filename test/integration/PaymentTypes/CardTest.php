@@ -154,7 +154,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $fetchedCard */
         $fetchedCard = $this->heidelpay->fetchPaymentType($card->getId());
         $this->assertNotNull($fetchedCard->getId());
-        $this->assertEquals($this->maskCreditCardNumber($card->getNumber()), $fetchedCard->getNumber());
+        $this->assertEquals($this->maskNumber($card->getNumber()), $fetchedCard->getNumber());
         $this->assertEquals($card->getExpiryDate(), $fetchedCard->getExpiryDate());
         $this->assertEquals('***', $fetchedCard->getCvc());
     }
