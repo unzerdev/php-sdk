@@ -42,6 +42,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -297,6 +298,9 @@ class Heidelpay implements HeidelpayParentInterface
                 break;
             case 'ddg':
                 $paymentType = new SepaDirectDebitGuaranteed(null);
+                break;
+            case 'sdd':
+                $paymentType = new SepaDirectDebit(null);
                 break;
             default:
                 throw new IllegalPaymentType($typeId);
