@@ -90,7 +90,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
-    public function authorizeShouldThrowException(SepaDirectDebitGuaranteed $directDebitGuaranteed)
+    public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitGuaranteed $directDebitGuaranteed)
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
@@ -99,12 +99,14 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
     }
 
     /**
+     * Verify direct debit guaranteed can be charged and shipped.
+     *
      * @test
      *
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
-    public function directDebitShouldBeChargeableAndShippable(SepaDirectDebitGuaranteed $directDebitGuaranteed)
+    public function directDebitGuaranteedShouldAllowChargeAndShipping(SepaDirectDebitGuaranteed $directDebitGuaranteed)
     {
         $charge = $directDebitGuaranteed->charge(100.0, Currency::EURO, self::RETURN_URL, $this->getMaximumCustomer());
         $this->assertNotNull($charge);
