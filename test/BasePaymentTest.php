@@ -44,7 +44,6 @@ class BasePaymentTest extends TestCase
     const RETURN_URL = 'http://vnexpress.vn';
     const PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
     const PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT = 's-priv-2a107CYZMp3UbyVPAuqWoxQHi9nFyeiW'; // todo replace
-    const PUBLIC_KEY = 's-pub-uM8yNmBNcs1GGdwAL4ytebYA4HErD22H';
 
     protected function setUp()
     {
