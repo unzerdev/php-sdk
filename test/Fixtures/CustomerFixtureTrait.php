@@ -46,30 +46,70 @@ trait CustomerFixtureTrait
      */
     public function getMaximumCustomer(): Customer
     {
+        $firstname = 'Max';
+        $lastname  = 'Mustermann';
         return (new Customer())
-            ->setFirstname('Max')
-            ->setLastname('Mustermann')
+            ->setFirstname($firstname)
+            ->setLastname($lastname)
             ->setSalutation(Salutation::MR)
             ->setCompany('Musterfirma')
             ->setBirthDate('1982-08-12')
             ->setEmail('max@mustermann.de')
             ->setMobile('01731234567')
             ->setPhone('062216471400')
-            ->setBillingAddress($this->getAddress());
+            ->setBillingAddress($this->getAddress($firstname, $lastname));
+    }
+
+    /**
+     * Creates a customer object
+     *
+     * @return Customer
+     */
+    public function getSepaDirectDebitGuaranteedCustomer(): Customer
+    {
+        $firstname = 'Peter';
+        $lastname  = 'Universum';
+        return (new Customer())
+            ->setFirstname($firstname)
+            ->setLastname($lastname)
+            ->setSalutation(Salutation::MR)
+            ->setBirthDate('1989-12-24')
+            ->setEmail('peter.universum@universum-group.de')
+            ->setBillingAddress($this->getSepaDirectDebitGuaranteedAddress($firstname, $lastname));
     }
 
     /**
      * Create a test Address
      *
+     * @param string $firstname
+     * @param string $lastname
      * @return Address
      */
-    public function getAddress(): Address
+    public function getAddress($firstname, $lastname): Address
     {
         return (new Address())
-            ->setName('Max Mustermann')
+            ->setName($firstname . ' ' . $lastname)
             ->setStreet('Vangerowstr. 18')
             ->setZip('69115')
             ->setCity('Heidelberg')
+            ->setCountry('DE')
+            ->setState('DE-1');
+    }
+
+    /**
+     * Create a test address for Universum customer.
+     *
+     * @param string $firstname
+     * @param string $lastname
+     * @return Address
+     */
+    public function getSepaDirectDebitGuaranteedAddress($firstname, $lastname): Address
+    {
+        return (new Address())
+            ->setName($firstname . ' ' . $lastname)
+            ->setStreet('Hugo-Junkers-Str. 5')
+            ->setZip('60386')
+            ->setCity('Frankfurt am Main')
             ->setCountry('DE')
             ->setState('DE-1');
     }

@@ -108,7 +108,12 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      */
     public function directDebitGuaranteedShouldAllowChargeAndShipping(SepaDirectDebitGuaranteed $directDebitGuaranteed)
     {
-        $charge = $directDebitGuaranteed->charge(100.0, Currency::EURO, self::RETURN_URL, $this->getMaximumCustomer());
+        $charge = $directDebitGuaranteed->charge(
+            100.0,
+            Currency::EURO,
+            self::RETURN_URL,
+            $this->getSepaDirectDebitGuaranteedCustomer()
+        );
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
 
