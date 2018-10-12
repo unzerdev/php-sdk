@@ -50,7 +50,7 @@ class CardTest extends BasePaymentTest
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INSUFFICIENT_PERMISSIONS);
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $this->assertNull($card->getId());
         $this->heidelpay->createPaymentType($card);
         $this->assertNotNull($card->getId());
@@ -64,7 +64,7 @@ class CardTest extends BasePaymentTest
     public function cardShouldBeCreatable()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $this->assertNull($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
 
@@ -85,7 +85,7 @@ class CardTest extends BasePaymentTest
     public function cardCanPerformAuthorizationAndCreatesPayment()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var Authorization $authorization */
@@ -116,7 +116,7 @@ class CardTest extends BasePaymentTest
     public function cardCanPerformChargeAndCreatesPaymentObject()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var Charge $charge */
@@ -147,7 +147,7 @@ class CardTest extends BasePaymentTest
     public function cardCanBeFetched()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
         $this->assertNotNull($card->getId());
 
@@ -167,7 +167,7 @@ class CardTest extends BasePaymentTest
     public function fullChargeAfterAuthorize()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var Authorization $authorization */
@@ -195,7 +195,7 @@ class CardTest extends BasePaymentTest
     public function partialChargeAfterAuthorization()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
         $authorization = $this->heidelpay->authorize(100.0, Currency::EURO, $card, self::RETURN_URL);
 
@@ -227,7 +227,7 @@ class CardTest extends BasePaymentTest
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
         $authorization = $card->authorize(100.0000, Currency::EURO, self::RETURN_URL);
         $payment = $authorization->getPayment();
@@ -252,7 +252,7 @@ class CardTest extends BasePaymentTest
     public function partialAndFullChargeAfterAuthorization()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
         $authorization = $card->authorize(100.0000, Currency::EURO, self::RETURN_URL);
         $payment = $authorization->getPayment();
@@ -279,7 +279,7 @@ class CardTest extends BasePaymentTest
     public function authorizationShouldBeFetchable()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
         $authorization = $card->authorize(100.0000, Currency::EURO, self::RETURN_URL);
         $payment = $authorization->getPayment();
@@ -294,7 +294,7 @@ class CardTest extends BasePaymentTest
     public function fullCancelAfterCharge()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
         $charge = $card->charge(100.0, Currency::EURO, self::RETURN_URL);
         $payment = $charge->getPayment();
@@ -315,7 +315,7 @@ class CardTest extends BasePaymentTest
     public function fullCancelOnFullyChargedPayment()
     {
         /** @var Card $card */
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
         $authorization = $card->authorize(100.0000, Currency::EURO, self::RETURN_URL);

@@ -37,7 +37,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function chargeShouldBeFetchable(): Charge
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0000, Currency::EURO, $card, self::RETURN_URL);
         $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
 
@@ -69,7 +69,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function chargeShouldBeFullyRefundableWithId()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0000, Currency::EURO, $card, self::RETURN_URL);
 
         /** @var Cancellation $refund */
@@ -85,7 +85,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function chargeShouldBePartlyRefundableWithId()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0000, Currency::EURO, $card, self::RETURN_URL);
 
         $firstPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
@@ -110,7 +110,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function chargeShouldBePartlyRefundable()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0000, Currency::EURO, $card, self::RETURN_URL);
 
         $firstPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());

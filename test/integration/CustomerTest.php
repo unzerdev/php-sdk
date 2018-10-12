@@ -91,7 +91,7 @@ class CustomerTest extends BasePaymentTest
     public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
     {
         $customer = $this->getMaximumCustomer();
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $card->authorize(12.0, Currency::EURO, self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
@@ -112,7 +112,7 @@ class CustomerTest extends BasePaymentTest
     {
         $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $card->authorize(12.0, Currency::EURO, self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
@@ -133,7 +133,7 @@ class CustomerTest extends BasePaymentTest
     {
         $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $card->authorize(12.0, Currency::EURO, self::RETURN_URL, $customer->getId());
 
         /** @var Payment $secPayment */

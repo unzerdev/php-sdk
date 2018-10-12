@@ -25,7 +25,6 @@ namespace heidelpay\MgwPhpSdk\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
-use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentInterface;
@@ -52,26 +51,7 @@ class BasePaymentTest extends TestCase
         $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocale::GERMAN_GERMAN);
     }
 
-    //<editor-fold desc="Helpers">
-
-    /**
-     * @return Card
-     */
-    protected function createCard(): Card
-    {
-        /** @var Card $card */
-        $card = new Card('4444333322221111', '03/20');
-        $card->setCvc('123');
-        return $card;
-    }
-
-    /**
-     * @return Payment
-     */
-    protected function createPayment(): Payment
-    {
-        return new Payment($this->heidelpay);
-    }
+    //<editor-fold desc="Custom asserts">
 
     /**
      * @param PaymentInterface $payment
@@ -93,6 +73,10 @@ class BasePaymentTest extends TestCase
         $this->assertEquals($expectedCanceled, $payment->getCanceled(), 'The canceled amount does not match.');
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+
     /**
      * Mask a credit card number.
      *
@@ -107,11 +91,24 @@ class BasePaymentTest extends TestCase
     }
 
     /**
+     * Creates a Card object for tests.
+     *
+     * @return Card
+     */
+    protected function createCardObject(): Card
+    {
+        /** @var Card $card */
+        $card = new Card('4444333322221111', '03/20');
+        $card->setCvc('123');
+        return $card;
+    }
+
+    /**
      * @return Authorization
      */
     public function createAuthorization(): Authorization
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0, Currency::EURO, $card, self::RETURN_URL);
         return $authorization;
     }
@@ -121,7 +118,7 @@ class BasePaymentTest extends TestCase
      */
     public function createCharge(): Charge
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0, Currency::EURO, $card, self::RETURN_URL);
         return $charge;
     }

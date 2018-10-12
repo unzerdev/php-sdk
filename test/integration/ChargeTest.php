@@ -37,7 +37,7 @@ class ChargeTest extends BasePaymentTest
      */
     public function chargeShouldWorkWithTypeId()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0, Currency::EURO, $card->getId(), self::RETURN_URL);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertNotEmpty($charge->getId());
@@ -53,7 +53,7 @@ class ChargeTest extends BasePaymentTest
      */
     public function chargeShouldWorkWithTypeObject()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0, Currency::EURO, $card, self::RETURN_URL);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertNotEmpty($charge->getId());

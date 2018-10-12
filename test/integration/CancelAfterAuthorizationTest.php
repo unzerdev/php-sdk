@@ -37,7 +37,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      */
     public function fullCancelOnAuthorization()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
 
         /** @var Authorization $fetchedAuthorization */
@@ -61,7 +61,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      */
     public function partCancelOnPayment()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
         $payment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
 
@@ -79,7 +79,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      */
     public function partCancelOnAuthorize()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
 
         /** @var Authorization $fetchedAuthorization */
@@ -102,7 +102,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      */
     public function anAuthorizationsFullReversalShallBeFetchable()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
@@ -140,7 +140,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      */
     public function anAuthorizationsReversalsShouldBeFetchable()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCard());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);

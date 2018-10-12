@@ -208,7 +208,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function authorizationShouldBePossibleWithPaymentObject()
     {
-        $card = $this->createCard();
+        $card = $this->createCardObject();
         $this->heidelpay->createPaymentType($card);
 
         // Variant 1
