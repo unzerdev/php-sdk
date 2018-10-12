@@ -34,10 +34,11 @@ interface PaymentTypeInterface extends HeidelpayResourceInterface
      * @param null                 $currency
      * @param string               $returnUrl
      * @param Customer|string|null $customer
+     * @param string|null          $orderId
      *
      * @return Charge
      */
-    public function charge($amount, $currency, $returnUrl, $customer = null): Charge;
+    public function charge($amount, $currency, $returnUrl, $customer = null, $orderId = null): Charge;
 
     /**
      * @param float                $amount
