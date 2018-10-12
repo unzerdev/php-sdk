@@ -48,8 +48,8 @@ class Charge extends AbstractTransactionType
     /** @var string $uniqueId */
     private $uniqueId;
 
-    /** @var string $redirectUrl */
-    private $redirectUrl;
+    /** @var string $orderId */
+    protected $orderId;
 
     /**
      * Authorization constructor.
@@ -166,19 +166,18 @@ class Charge extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getRedirectUrl()
+    public function getOrderId(): string
     {
-        return $this->redirectUrl;
+        return $this->orderId;
     }
 
     /**
-     * @param string|null $redirectUrl
-     *
+     * @param string $orderId
      * @return Charge
      */
-    public function setRedirectUrl($redirectUrl): Charge
+    public function setOrderId($orderId): Charge
     {
-        $this->redirectUrl = $redirectUrl;
+        $this->orderId = $orderId;
         return $this;
     }
 
