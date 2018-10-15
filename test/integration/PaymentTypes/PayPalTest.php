@@ -24,8 +24,14 @@
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class PaypalTest extends BasePaymentTest
 {
@@ -33,8 +39,17 @@ class PaypalTest extends BasePaymentTest
      * Verify PayPal payment type can be created and fetched.
      *
      * @test
+     *
+     * @return PaymentTypeInterface
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
-    public function paypalShouldBeCreatableAndFetchable()
+    public function paypalShouldBeCreatableAndFetchable(): PaymentTypeInterface
     {
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
         $this->assertInstanceOf(Paypal::class, $paypal);
@@ -55,6 +70,12 @@ class PaypalTest extends BasePaymentTest
      * @depends paypalShouldBeCreatableAndFetchable
      *
      * @param Paypal $paypal
+     *
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function paypalShouldBeAuthorizable(Paypal $paypal)
     {
@@ -74,6 +95,12 @@ class PaypalTest extends BasePaymentTest
      * @depends paypalShouldBeCreatableAndFetchable
      *
      * @param Paypal $paypal
+     *
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function paypalShouldBeChargeable(Paypal $paypal)
     {
