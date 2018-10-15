@@ -38,6 +38,13 @@ class PaymentTest extends BasePaymentTest
      * Verify fetching payment by authorization.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function PaymentShouldBeFetchableById()
     {
@@ -54,6 +61,13 @@ class PaymentTest extends BasePaymentTest
      * Verify full charge on payment with authorization.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function fullChargeShouldBePossibleOnPaymentObject()
     {
@@ -77,6 +91,13 @@ class PaymentTest extends BasePaymentTest
      * Verify full charge on payment with authorization.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function moreThanOneChargeShouldBePossibleOnPaymentObject()
     {
@@ -99,6 +120,12 @@ class PaymentTest extends BasePaymentTest
      * Verify payment can be fetched with charges.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function paymentShouldBeFetchableWithCharges()
     {
@@ -126,6 +153,12 @@ class PaymentTest extends BasePaymentTest
      * Verify partial charge after authorization.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function partialChargeAfterAuthorization()
     {
@@ -141,6 +174,12 @@ class PaymentTest extends BasePaymentTest
      * Verify full cancel on authorize throws exception if already canceled.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function fullCancelOnAuthorizeShouldThrowExceptionIfAlreadyCanceled()
     {
@@ -160,6 +199,12 @@ class PaymentTest extends BasePaymentTest
      * Verify partial cancel on authorize.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function partialCancelOnAuthorizeShouldBePossible()
     {
@@ -178,6 +223,11 @@ class PaymentTest extends BasePaymentTest
      * Verify full cancel on charge.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function fullCancelOnChargeShouldBePossible()
     {
@@ -192,6 +242,11 @@ class PaymentTest extends BasePaymentTest
      * Verify partial cancel on charge.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function partialCancelShouldBePossible()
     {
@@ -205,6 +260,12 @@ class PaymentTest extends BasePaymentTest
      * Verify authorization on payment.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function authorizationShouldBePossibleWithPaymentObject()
     {

@@ -25,7 +25,8 @@ namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
-use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\AmountsInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
@@ -82,9 +83,16 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
     }
 
     /**
+     * Returns the Authorization object of the payment.
+     * Fetches the object first if it has not entirely been fetched before and the lazy flag is set to false.
+     *
      * @param bool $lazy
      *
      * @return Authorization|AbstractHeidelpayResource|null
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function getAuthorization($lazy = false)
     {
@@ -140,15 +148,18 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
 
     /**
      * Get and return a Charge object by id.
+     * Return null if the Charge object does not exist.
      *
      * @param string  $chargeId
      * @param boolean $lazy
      *
-     * @return Charge
+     * @return Charge|null
      *
-     * @throws MissingResourceException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
-    public function getChargeById($chargeId, $lazy = false): Charge
+    public function getChargeById($chargeId, $lazy = false)
     {
         /** @var Charge $charge */
         foreach ($this->charges as $charge) {
@@ -159,7 +170,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
                 return $charge;
             }
         }
-        throw new MissingResourceException();
+        return null;
     }
 
     /**
@@ -168,11 +179,13 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      * @param int  $index
      * @param bool $lazy
      *
-     * @return Charge
+     * @return AbstractHeidelpayResource|Charge|null
      *
-     * @throws MissingResourceException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
-    public function getCharge($index, $lazy = false): AbstractHeidelpayResource
+    public function getCharge($index, $lazy = false)
     {
         if (isset($this->getCharges()[$index])) {
             $resource = $this->getCharges()[$index];
@@ -181,14 +194,17 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
             }
             return $resource;
         }
-
-        throw new MissingResourceException();
+        return null;
     }
 
     /**
      * @param Customer|string $customer
      *
      * @return Payment
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function setCustomer($customer): Payment
     {
@@ -225,12 +241,14 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws HeidelpaySdkException
      */
     public function getPaymentType(): PaymentTypeInterface
     {
         $paymentType = $this->paymentType;
         if (!$paymentType instanceof PaymentTypeInterface) {
-            throw new MissingResourceException('The paymentType is not set.');
+            throw new HeidelpaySdkException('The paymentType is not set.');
         }
 
         return $paymentType;
@@ -240,11 +258,15 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      * @param PaymentTypeInterface|string $paymentType
      *
      * @return Payment
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function setPaymentType($paymentType): Payment
     {
         if (empty($paymentType)) {
-            throw new MissingResourceException();
+            throw new HeidelpaySdkException();
         }
 
         /** @var Heidelpay $heidelpay */
@@ -270,9 +292,11 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      *
      * @param $cancellationId
      *
-     * @throws MissingResourceException
-     *
      * @return Cancellation
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function getCancellation($cancellationId): Cancellation
     {
@@ -283,7 +307,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
             }
         }
 
-        throw new MissingResourceException();
+        throw new HeidelpaySdkException();
     }
 
     /**
@@ -291,6 +315,10 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      * i. e. refunds (charge cancellations) and reversals (authorize cancellations).
      *
      * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function getCancellations(): array
     {
@@ -336,9 +364,13 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      * @param string $shipmentId
      * @param bool   $lazy
      *
-     * @return Shipment
+     * @return Shipment|null
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
-    public function getShipmentById($shipmentId, $lazy = false): Shipment
+    public function getShipmentById($shipmentId, $lazy = false)
     {
         /** @var Shipment $shipment */
         foreach ($this->getShipments() as $shipment) {
@@ -350,7 +382,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
             }
         }
 
-        throw new MissingResourceException();
+        return null;
     }
 
     //</editor-fold>
@@ -368,6 +400,10 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
@@ -450,6 +486,10 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      * @return Cancellation
      *
      * todo: nicht jedes payment hat einen authorisierung
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function cancel($amount = null): Cancellation
     {
@@ -457,7 +497,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
             return $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
         }
 
-        throw new MissingResourceException('This Payment has no Authorization. Please fetch the Payment first.');
+        throw new HeidelpaySdkException('This Payment has no Authorization. Please fetch the Payment first.');
     }
 
     /**
@@ -467,6 +507,10 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      * @param null $currency
      *
      * @return Charge
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function charge($amount = null, $currency = null): Charge
     {
@@ -486,6 +530,10 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      * @param null $customer
      *
      * @return Authorization
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function authorize($amount, $currency, $paymentType, $returnUrl = null, $customer = null): Authorization
     {
@@ -498,7 +546,13 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
     //<editor-fold desc="Transaction Update">
 
     /**
+     * Create/update the authorization object of the given transaction.
+     *
      * @param $transaction
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     private function updateAuthorizationTransaction($transaction)
     {
@@ -515,14 +569,19 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
     }
 
     /**
+     * Create/update the charge object of the given transaction.
+     *
      * @param $transaction
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     private function updateChargeTransaction($transaction)
     {
         $transactionId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'chg');
-        try {
-            $charge = $this->getChargeById($transactionId, true);
-        } catch (MissingResourceException $e) {
+        $charge = $this->getChargeById($transactionId, true);
+        if (!$charge instanceof Charge) {
             $charge = (new Charge())
                 ->setPayment($this)
                 ->setParentResource($this)
@@ -533,19 +592,24 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
     }
 
     /**
+     * Create/update the cancel object of the given transaction.
+     *
      * @param $transaction
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     private function updateReversalTransaction($transaction)
     {
         $transactionId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'cnl');
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
-            throw new MissingResourceException();
+            throw new HeidelpaySdkException('The Authorization object can not be found.');
         }
 
-        try {
-            $cancellation = $authorization->getCancellation($transactionId, true);
-        } catch (MissingResourceException $e) {
+        $cancellation = $authorization->getCancellation($transactionId, true);
+        if (!$cancellation instanceof Cancellation) {
             $cancellation =  (new Cancellation())
                 ->setPayment($this)
                 ->setParentResource($this)
@@ -556,7 +620,13 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
     }
 
     /**
+     * Create/update the cancel object of the given transaction.
+     *
      * @param $transaction
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     private function updateRefundTransaction($transaction)
     {
@@ -564,9 +634,12 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
         $chargeId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'chg');
 
         $charge = $this->getChargeById($chargeId, true);
-        try {
-            $cancellation = $charge->getCancellation($refundId, true);
-        } catch (MissingResourceException $e) {
+        if (!$charge instanceof Charge) {
+            throw new HeidelpaySdkException('Charge object does not exist.');
+        }
+
+        $cancellation = $charge->getCancellation($refundId, true);
+        if (!$cancellation instanceof Cancellation) {
             $cancellation =  (new Cancellation())
                 ->setPayment($this)
                 ->setParentResource($this)
@@ -577,19 +650,24 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
     }
 
     /**
+     * Create/update the shipment object of the given transaction.
+     *
      * @param $transaction
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     private function updateShipmentTransaction($transaction)
     {
         $shipmentId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'shp');
-
-        try {
-            $shipment = $this->getShipmentById($shipmentId, true);
-        } catch (MissingResourceException $e) {
+        $shipment = $this->getShipmentById($shipmentId, true);
+        if (!$shipment instanceof Shipment) {
             $shipment = (new Shipment())->setId($shipmentId);
             $this->addShipment($shipment);
         }
-        // noting to update
+        // todo:
+//        $shipment->setAmount($transaction->amount);
     }
 
     //</editor-fold>

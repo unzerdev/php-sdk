@@ -27,13 +27,10 @@ namespace heidelpay\MgwPhpSdk;
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalPaymentType;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalResourceTypeException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Exceptions\IllegalKeyException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
@@ -55,6 +52,8 @@ use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+
 class Heidelpay implements HeidelpayParentInterface
 {
     const BASE_URL = 'https://api.heidelpay.com/';
@@ -63,8 +62,12 @@ class Heidelpay implements HeidelpayParentInterface
     const DEBUG_MODE = true;
 
     /**
+     * Construct a new heidelpay object.
+     *
      * @param string $key
      * @param string $locale
+     *
+     * @throws HeidelpaySdkException
      */
     public function __construct($key, $locale = SupportedLocale::GERMAN_GERMAN)
     {
@@ -75,11 +78,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * @param $uri
-     * @param HeidelpayResourceInterface $resource
-     * @param string                     $method
+     * Send the given resource object to the given url using the specified Http method (default = GET).
      *
-     * @return string
+     * @param string                     $uri      The URI to send the request to.
+     * @param HeidelpayResourceInterface $resource The resource to be send.
+     * @param string                     $method   The Http method to be used.
+     *
+     * @return string The response as a JSON string.
+     *
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function send(
         $uri,
@@ -116,15 +125,19 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Set the API key authenticate to the api.
+     *
      * @param string $key
      *
      * @return Heidelpay
+     *
+     * @throws HeidelpaySdkException
      */
     public function setKey($key): Heidelpay
     {
         $isPrivateKey = strpos($key, 's-priv-') !== false;
         if (!$isPrivateKey) {
-            throw new IllegalKeyException();
+            throw new HeidelpaySdkException('Illegal key type: Use the private key with this SDK!');
         }
 
         $this->key = $key;
@@ -132,6 +145,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Return the language locale.
+     *
      * @return string
      */
     public function getLocale(): string
@@ -140,6 +155,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Set the language locale.
+     *
      * @param string $locale
      *
      * @return Heidelpay
@@ -151,6 +168,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Return the ResourceService object.
+     *
      * @return ResourceService
      */
     public function getResourceService(): ResourceService
@@ -159,6 +178,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Set the ResourceService object.
+     *
      * @param ResourceService $resourceService
      *
      * @return Heidelpay
@@ -172,7 +193,7 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="ParentIF">
 
     /**
-     * Returns the heidelpay root object.
+     * Return the heidelpay root object.
      *
      * @return Heidelpay
      */
@@ -182,7 +203,7 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Returns the url string for this resource.
+     * Return the url string for this resource.
      *
      * @return string
      */
@@ -201,10 +222,16 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Payment resource">
 
     /**
+     * Create a Payment object with the given properties.
+     *
      * @param PaymentTypeInterface|string $paymentType
      * @param Customer|string|null        $customer
      *
-     * @return Payment
+     * @return Payment The resulting Payment object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     private function createPayment($paymentType, $customer = null): HeidelpayResourceInterface
     {
@@ -217,6 +244,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $paymentId
      *
      * @return Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function fetchPaymentById($paymentId): HeidelpayResourceInterface
     {
@@ -231,12 +262,19 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Payment $payment
      *
      * @return Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function fetchPayment(Payment $payment): HeidelpayResourceInterface
     {
         $this->resourceService->fetch($payment);
         if (!$payment instanceof Payment) {
-            throw new IllegalResourceTypeException(Payment::class, \get_class($payment));
+            throw new HeidelpaySdkException(
+                sprintf('Resource type %s is not allowed, type %s expected!', Payment::class, \get_class($payment))
+            );
         }
         return $payment;
     }
@@ -251,6 +289,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param PaymentTypeInterface $paymentType
      *
      * @return PaymentTypeInterface|AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function createPaymentType(PaymentTypeInterface $paymentType): HeidelpayResourceInterface
     {
@@ -260,9 +302,15 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Fetch the payment type with the given Id from the API.
+     *
      * @param string $typeId
      *
      * @return PaymentTypeInterface|AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchPaymentType($typeId): HeidelpayResourceInterface
     {
@@ -307,7 +355,7 @@ class Heidelpay implements HeidelpayParentInterface
                 $paymentType = new Sofort();
                 break;
             default:
-                throw new IllegalPaymentType($typeId);
+                throw new HeidelpaySdkException(sprintf('Payment type "%s" is not allowed!', $typeIdParts[1]));
                 break;
         }
 
@@ -324,6 +372,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer $customer
      *
      * @return Customer
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function createCustomer(Customer $customer): HeidelpayResourceInterface
     {
@@ -337,6 +389,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|string $customer
      *
      * @return Customer
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchCustomer($customer): HeidelpayResourceInterface
     {
@@ -355,6 +411,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer $customer
      *
      * @return Customer
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function updateCustomer(Customer $customer): HeidelpayResourceInterface
     {
@@ -367,6 +427,8 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $customerId
      *
      * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function deleteCustomerById($customerId)
     {
@@ -376,9 +438,15 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Delete the given Customer resource.
+     *
      * @param Customer $customer
      *
      * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     *
+     * todo: allows customer id as well
      */
     public function deleteCustomer(Customer $customer)
     {
@@ -397,6 +465,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param $paymentId
      *
      * @return Authorization
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchAuthorization($paymentId): HeidelpayResourceInterface
     {
@@ -418,6 +490,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $chargeId
      *
      * @return Charge
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchChargeById($paymentId, $chargeId): HeidelpayResourceInterface
     {
@@ -427,11 +503,15 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch a Charge object by.
+     * Fetch the given Charge resource from the api.
      *
      * @param Charge $charge
      *
      * @return Charge
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchCharge(Charge $charge): HeidelpayResourceInterface
     {
@@ -449,6 +529,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string               $cancellationId
      *
      * @return Cancellation
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchReversalByAuthorization($authorization, $cancellationId): HeidelpayResourceInterface
     {
@@ -457,12 +541,16 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch a cancel on an authorization (aka reversal).
+     * Fetch a Cancellation resource on an authorization (aka reversal) via id.
      *
      * @param string $paymentId
      * @param string $cancellationId
      *
      * @return Cancellation
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchReversal($paymentId, $cancellationId): HeidelpayResourceInterface
     {
@@ -472,13 +560,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch a cancel on an authorization (aka reversal).
+     * Fetch a Cancellation resource on a charge (aka refund) via id.
      *
      * @param string $paymentId
      * @param string $chargeId
      * @param string $cancellationId
      *
      * @return Cancellation
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchRefundById($paymentId, $chargeId, $cancellationId): HeidelpayResourceInterface
     {
@@ -488,12 +580,16 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch a cancel on an authorization (aka reversal).
+     * Fetch a Cancellation resource on a Charge (aka refund).
      *
      * @param Charge $charge
      * @param string $cancellationId
      *
      * @return Cancellation
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchRefund(Charge $charge, $cancellationId): HeidelpayResourceInterface
     {
@@ -505,12 +601,16 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Shipment resource">
 
     /**
-     * Fetch a shipment on a payment.
+     * Fetch a Shipment resource of the given Payment resource by id.
      *
      * @param Payment|string $payment
      * @param string         $shipmentId
      *
      * @return Shipment
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetchShipmentByPayment($payment, $shipmentId): HeidelpayResourceInterface
     {
@@ -519,12 +619,16 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch a shipment on an payment.
+     * Fetch a Shipment resource of the given Payment resource by id.
      *
      * @param string $paymentId
      * @param string $shipmentId
      *
      * @return Shipment
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function fetchShipment($paymentId, $shipmentId): HeidelpayResourceInterface
     {
@@ -540,16 +644,20 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Authorize transactions">
 
     /**
-     * Perform an authorization and return the corresponding Authorization object.
+     * Perform an Authorization transaction and return the corresponding Authorization object.
      *
      * @param float  $amount
      * @param string $currency
      * @param $paymentTypeId
      * @param string        $returnUrl
      * @param Customer|null $customer
-     * @param string|null $orderId
+     * @param string|null   $orderId
      *
-     * @return Authorization
+     * @return Authorization Resulting Authorization object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function authorizeWithPaymentTypeId(
         $amount,
@@ -573,7 +681,11 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string|null $customer
      * @param string|null $orderId
      *
-     * @return Authorization
+     * @return Authorization Resulting Authorization object.
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function authorizeWithPayment(
         $amount,
@@ -590,7 +702,7 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Perform an authorization and return the corresponding Authorization object.
+     * Perform an Authorization transaction and return the corresponding Authorization object.
      *
      * @param float  $amount
      * @param string $currency
@@ -599,7 +711,11 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|string|null $customer
      * @param string|null          $orderId
      *
-     * @return Authorization
+     * @return Authorization Resulting Authorization object.
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null, $orderId = null): AbstractTransactionType
     {
@@ -612,16 +728,20 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Charge transactions">
 
     /**
-     * Performs a charge and returns the corresponding Charge object.
+     * Perform a Charge transaction and return the corresponding Charge object.
      *
      * @param float         $amount
      * @param string        $currency
-     * @param string        $returnUrl
      * @param string        $paymentTypeId
+     * @param string        $returnUrl
      * @param Customer|null $customer
-     * @param string|null $orderId
+     * @param string|null   $orderId
      *
-     * @return Charge
+     * @return Charge Resulting Charge object.
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function chargeWithPaymentTypeId(
         $amount,
@@ -636,14 +756,20 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * @param PaymentTypeInterface|string $paymentType
-     * @param $amount
-     * @param $currency
-     * @param $returnUrl
-     * @param Customer|string|null $customer
-     * @param string|null $orderId
+     * Charge the given amount and currency on the given PaymentType resource.
      *
-     * @return Charge
+     * @param float                       $amount
+     * @param string                      $currency
+     * @param PaymentTypeInterface|string $paymentType
+     * @param string                      $returnUrl
+     * @param Customer|string|null        $customer
+     * @param string|null                 $orderId
+     *
+     * @return Charge Resulting Charge object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function charge(
         $amount,
@@ -652,8 +778,7 @@ class Heidelpay implements HeidelpayParentInterface
         $returnUrl,
         $customer = null,
         $orderId = null
-    ): AbstractTransactionType
-    {
+    ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType, $customer);
         $charge = new Charge($amount, $currency, $returnUrl);
         $charge->setParentResource($payment)->setPayment($payment);
@@ -665,10 +790,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Charge the given amount on the payment with the given id.
+     * Perform a full charge by leaving the amount null.
+     *
      * @param $paymentId
      * @param null $amount
      *
-     * @return Charge
+     * @return Charge Resulting Charge object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function chargeAuthorization($paymentId, $amount = null): AbstractTransactionType
     {
@@ -677,11 +809,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Charge the given amount on the given payment object with the given currency.
+     *
      * @param Payment $payment
      * @param null    $amount
      * @param null    $currency
      *
-     * @return Charge
+     * @return Charge Resulting Charge object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
     {
@@ -697,12 +835,16 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Cancellation/Reversal">
 
     /**
-     * Creates a cancellation for the authorization of the given payment.
+     * Perform a Cancellation transaction with the given amount for the given Authorization.
      *
      * @param Authorization $authorization
      * @param null          $amount
      *
-     * @return Cancellation
+     * @return Cancellation Resulting Cancellation object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
     {
@@ -715,12 +857,16 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Creates a cancellation for the given Authorization object.
+     * Creates a Cancellation transaction for the given Authorization object.
      *
      * @param string $paymentId
      * @param null   $amount
      *
-     * @return Cancellation
+     * @return Cancellation Resulting Cancellation object.
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function cancelAuthorizationByPaymentId($paymentId, $amount = null): AbstractTransactionType
     {
@@ -732,13 +878,17 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Cancellation/Refund">
 
     /**
-     * Create a cancellation for the charge with the given id belonging to the given Payment object.
+     * Create a Cancellation transaction for the charge with the given id belonging to the given Payment object.
      *
      * @param string $paymentId
      * @param string $chargeId
      * @param null   $amount
      *
-     * @return Cancellation
+     * @return Cancellation Resulting Cancellation object.
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function cancelChargeById($paymentId, $chargeId, $amount = null): AbstractTransactionType
     {
@@ -746,12 +896,16 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Create a cancellation for the given charge.
+     * Create a Cancellation transaction for the given Charge resource.
      *
-     * @param $amount
      * @param Charge $charge
+     * @param $amount
      *
-     * @return Cancellation
+     * @return Cancellation Resulting Cancellation object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
     {
@@ -768,11 +922,15 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Shipment transactions">
 
     /**
-     * Creates a shipment transaction for the given payment object.
+     * Creates a Shipment transaction for the given Payment object.
      *
      * @param Payment|string $payment
      *
-     * @return Shipment
+     * @return Shipment Resulting Shipment object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function ship($payment): HeidelpayResourceInterface
     {

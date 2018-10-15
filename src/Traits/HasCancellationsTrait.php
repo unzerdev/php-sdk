@@ -23,7 +23,6 @@
  */
 namespace heidelpay\MgwPhpSdk\Traits;
 
-use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 
@@ -66,12 +65,10 @@ trait HasCancellationsTrait
     }
 
     /**
-     * Return specific cancellation.
+     * Return specific Cancellation object or null if it does not exist.
      *
      * @param string  $cancellationId
      * @param boolean $lazy
-     *
-     * @throws MissingResourceException
      *
      * @return mixed
      */
@@ -86,8 +83,7 @@ trait HasCancellationsTrait
                 return $cancellation;
             }
         }
-
-        throw new MissingResourceException('Cancellation with id ' . $cancellationId . ' does not exist. Please fetch parent resource first.');
+        return null;
     }
 
     //</editor-fold>

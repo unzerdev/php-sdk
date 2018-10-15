@@ -33,6 +33,13 @@ class ShipmentTest extends BasePaymentTest
      * Verify shipment transaction can be called.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function shipmentCanBeCalledForInvoiceGuaranteed()
     {

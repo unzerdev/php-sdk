@@ -23,6 +23,8 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -73,8 +75,14 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
+
     /**
      * {@inheritDoc}
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     *                               todo interface?
      */
     public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
@@ -94,6 +102,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
             $this->updatePayment();
         }
     }
+
     //</editor-fold>
 
     /**
@@ -101,6 +110,10 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * This is called from the crud methods to update the payments state whenever anything happens.
      *
      * todo: service?
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     private function updatePayment()
     {

@@ -31,6 +31,13 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      * Validate full charge after authorization.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function authorizationShouldBeFullyChargeable()
     {
@@ -51,6 +58,13 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      * Validate full charge after authorization.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function authorizationShouldBeFullyChargeableViaHeidelpayObject()
     {
@@ -71,6 +85,13 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      * Verify authorization is partly chargeable.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function authorizationShouldBePartlyChargeable()
     {

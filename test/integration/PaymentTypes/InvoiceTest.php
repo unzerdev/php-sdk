@@ -37,6 +37,12 @@ class InvoiceTest extends BasePaymentTest
      * @test
      *
      * @return Invoice
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function invoiceTypeShouldBeCreatable(): Invoice
     {
@@ -55,6 +61,11 @@ class InvoiceTest extends BasePaymentTest
      * @test
      *
      * @param Invoice $invoice
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceIsNotChargeable(Invoice $invoice)
@@ -71,6 +82,13 @@ class InvoiceTest extends BasePaymentTest
      * @test
      *
      * @param Invoice $invoice
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceIsNotShippable(Invoice $invoice)
@@ -93,6 +111,12 @@ class InvoiceTest extends BasePaymentTest
      * @test
      *
      * @param Invoice $invoice
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function invoiceTypeCanBeFetched(Invoice $invoice)

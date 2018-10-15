@@ -23,8 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Traits\HasCancellationsTrait;
@@ -175,6 +176,8 @@ class Authorization extends AbstractTransactionType
 
     /**
      * {@inheritDoc}
+     *
+     * @throws HeidelpaySdkException
      */
     public function getLinkedResources(): array
     {
@@ -182,7 +185,7 @@ class Authorization extends AbstractTransactionType
         $payment = $this->getPayment();
         $paymentType = $payment ? $payment->getPaymentType() : null;
         if (!$paymentType instanceof PaymentTypeInterface) {
-            throw new MissingResourceException();
+            throw new HeidelpaySdkException();
         }
 
         return [
@@ -199,6 +202,10 @@ class Authorization extends AbstractTransactionType
      * @param null $amount
      *
      * @return Cancellation
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function cancel($amount = null): Cancellation
     {
@@ -211,9 +218,17 @@ class Authorization extends AbstractTransactionType
      * @param null $amount
      *
      * @return Charge
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function charge($amount = null): Charge
     {
-        return $this->getHeidelpayObject()->chargeAuthorization($this->getPayment()->getId(), $amount);
+        $payment = $this->getPayment();
+        if (null === $payment) {
+            throw new HeidelpaySdkException();
+        }
+        return $this->getHeidelpayObject()->chargeAuthorization($payment->getId(), $amount);
     }
 }

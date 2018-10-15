@@ -36,6 +36,12 @@ class IdealTest extends BasePaymentTest
      * @test
      *
      * @return Ideal
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function idealShouldBeCreatable(): Ideal
     {
@@ -56,6 +62,10 @@ class IdealTest extends BasePaymentTest
      *
      * @param Ideal $ideal
      *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends idealShouldBeCreatable
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal)
@@ -71,6 +81,12 @@ class IdealTest extends BasePaymentTest
      * @depends idealShouldBeCreatable
      *
      * @param Ideal $ideal
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function idealShouldBeChargeable(Ideal $ideal)
     {
@@ -90,6 +106,12 @@ class IdealTest extends BasePaymentTest
      * @depends idealShouldBeCreatable
      *
      * @param Ideal $ideal
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function idealTypeCanBeFetched(Ideal $ideal)
     {

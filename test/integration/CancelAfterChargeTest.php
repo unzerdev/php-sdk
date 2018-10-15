@@ -24,9 +24,13 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class CancelAfterChargeTest extends BasePaymentTest
 {
@@ -34,6 +38,14 @@ class CancelAfterChargeTest extends BasePaymentTest
      * Verify charge can be fetched by id.
      *
      * @test
+     *
+     * @return Charge
+     *
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
      */
     public function chargeShouldBeFetchable(): Charge
     {
@@ -53,6 +65,12 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @depends chargeShouldBeFetchable
      *
      * @param Charge $charge
+     *
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function chargeShouldBeFullyRefundable(Charge $charge)
     {
@@ -66,6 +84,12 @@ class CancelAfterChargeTest extends BasePaymentTest
      * Verify full refund of a charge.
      *
      * @test
+     *
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function chargeShouldBeFullyRefundableWithId()
     {
@@ -82,6 +106,13 @@ class CancelAfterChargeTest extends BasePaymentTest
      * Verify partial refund of a charge.
      *
      * @test
+     *
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
      */
     public function chargeShouldBePartlyRefundableWithId()
     {
@@ -107,6 +138,13 @@ class CancelAfterChargeTest extends BasePaymentTest
      * Verify partial refund of a charge.
      *
      * @test
+     *
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
      */
     public function chargeShouldBePartlyRefundable()
     {

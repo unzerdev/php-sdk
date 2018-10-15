@@ -23,6 +23,8 @@
  */
 namespace heidelpay\MgwPhpSdk\Interfaces;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
@@ -30,6 +32,9 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 interface PaymentTypeInterface extends HeidelpayResourceInterface
 {
     /**
+     * Charge an amount with the given currency.
+     * Throws HeidelpayApiException if the transaction could not be performed (e. g. increased risk etc.).
+     *
      * @param null                 $amount
      * @param null                 $currency
      * @param string               $returnUrl
@@ -37,10 +42,17 @@ interface PaymentTypeInterface extends HeidelpayResourceInterface
      * @param string|null          $orderId
      *
      * @return Charge
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function charge($amount, $currency, $returnUrl, $customer = null, $orderId = null): Charge;
 
     /**
+     * Authorize an amount with the given currency.
+     * Throws HeidelpayApiException if the transaction could not be performed (e. g. increased risk etc.).
+     *
      * @param float                $amount
      * @param string               $currency
      * @param string               $returnUrl
@@ -48,6 +60,10 @@ interface PaymentTypeInterface extends HeidelpayResourceInterface
      * @param string|null          $orderId
      *
      * @return Authorization
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function authorize($amount, $currency, $returnUrl, $customer = null, $orderId = null): Authorization;
 }

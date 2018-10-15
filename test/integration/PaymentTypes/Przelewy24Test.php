@@ -27,8 +27,13 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class Przelewy24Test extends BasePaymentTest
 {
@@ -36,8 +41,17 @@ class Przelewy24Test extends BasePaymentTest
      * Verify Przelewy24 payment type can be created and fetched.
      *
      * @test
+     *
+     * @return PaymentTypeInterface
+     *
+     * @throws HeidelpayApiException
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
-    public function przelewy24ShouldBeCreatableAndFetchable()
+    public function przelewy24ShouldBeCreatableAndFetchable(): PaymentTypeInterface
     {
         $przelewy24 = $this->heidelpay->createPaymentType(new Przelewy24());
         $this->assertInstanceOf(Przelewy24::class, $przelewy24);
@@ -58,6 +72,12 @@ class Przelewy24Test extends BasePaymentTest
      * @depends przelewy24ShouldBeCreatableAndFetchable
      *
      * @param Przelewy24 $przelewy24
+     *
+     * @throws HeidelpayApiException
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24)
     {
@@ -77,6 +97,11 @@ class Przelewy24Test extends BasePaymentTest
      * @depends przelewy24ShouldBeCreatableAndFetchable
      *
      * @param Przelewy24 $przelewy24
+     *
+     * @throws HeidelpayApiException
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
     public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24)
     {
@@ -87,15 +112,20 @@ class Przelewy24Test extends BasePaymentTest
     }
 
     /**
-     * Verify przelewy24 can not handle EURO.
+     * Verify przelewy24 can only handle Currency::POLISH_ZLOTY.
      *
      * @test
      *
      * @dataProvider przelewy24CurrencyCodeProvider
      *
      * @param string $currencyCode
+     *
+     * @throws HeidelpayApiException
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
      */
-    public function przelewy24ShouldThrowExceptionOnEuroUsage($currencyCode)
+    public function przelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode)
     {
         $przelewy24 = $this->heidelpay->createPaymentType(new Przelewy24());
 
@@ -103,4 +133,20 @@ class Przelewy24Test extends BasePaymentTest
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CURRENCY_IS_NOT_SUPPORTED);
         $przelewy24->charge(100.0, $currencyCode, self::RETURN_URL);
     }
+
+    //<editor-fold desc="Data Providers">
+
+    /**
+     * Provides all defined currencies.
+     *
+     * @throws \ReflectionException
+     */
+    public function przelewy24CurrencyCodeProvider(): array
+    {
+        $currencyArray = $this->currencyCodeProvider();
+        unset($currencyArray['POLISH_ZLOTY']);
+        return $currencyArray;
+    }
+
+    //</editor-fold>
 }

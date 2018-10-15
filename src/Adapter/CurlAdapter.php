@@ -31,9 +31,9 @@
  */
 namespace heidelpay\MgwPhpSdk\Adapter;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 
 class CurlAdapter implements HttpAdapterInterface
 {
@@ -47,6 +47,8 @@ class CurlAdapter implements HttpAdapterInterface
      * @return string
      *
      * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function send(
         $uri = null,
@@ -58,7 +60,7 @@ class CurlAdapter implements HttpAdapterInterface
         }
 
         if (null === $heidelpayResource) {
-            throw new \RuntimeException('Transfer object is null');
+            throw new \RuntimeException('Transfer object is empty');
         }
 
         $request = $this->initCurlRequest($uri, $heidelpayResource, $httpMethod);
@@ -77,8 +79,13 @@ class CurlAdapter implements HttpAdapterInterface
     }
 
     /**
+     * Handles error responses by throwing a HeidelpayApiException with the returned messages and error code.
+     * Returns doing nothing if no error occurred.
+     *
      * @param $info
      * @param $response
+     *
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
      */
     private function handleErrors($info, $response)
     {
@@ -98,11 +105,15 @@ class CurlAdapter implements HttpAdapterInterface
     }
 
     /**
+     * Creates and returns the curl request
+     *
      * @param $uri
      * @param AbstractHeidelpayResource $heidelpayResource
      * @param $httpMethod
      *
      * @return mixed
+     *
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     private function initCurlRequest($uri, AbstractHeidelpayResource $heidelpayResource, $httpMethod)
     {
@@ -123,6 +134,7 @@ class CurlAdapter implements HttpAdapterInterface
             'Authorization: ' . 'Basic ' . base64_encode($heidelpayResource->getHeidelpayObject()->getKey() . ':'), // basic auth with key as user and empty password
             'Content-Type: application/json',
             'SDK-VERSION: ' . Heidelpay::SDK_VERSION
+            // todo: remove unused headers?
 //            'CUSTOMER-LANGUAGE: en_US', // heidelpay constructor // header object?
 //            'CHECKOUT-ID: checkout-5aba2fad0ab154.88150279', // heidelpay constructor
 //            'SHOP-SYSTEM: Shopware - 5.2.2', // heidelpay constructor

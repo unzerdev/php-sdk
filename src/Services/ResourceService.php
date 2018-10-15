@@ -25,7 +25,7 @@ namespace heidelpay\MgwPhpSdk\Services;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\IdRequiredToFetchResourceException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
@@ -39,6 +39,10 @@ class ResourceService
      * @param AbstractHeidelpayResource $resource
      *
      * @return AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function create(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
     {
@@ -62,6 +66,10 @@ class ResourceService
      * @param AbstractHeidelpayResource $resource
      *
      * @return AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function update(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
     {
@@ -83,11 +91,13 @@ class ResourceService
      * @return null
      *
      * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function delete(AbstractHeidelpayResource $resource)
     {
         if ($resource->getId() === null) {
-            throw new IdRequiredToFetchResourceException();
+            throw new HeidelpaySdkException('The resources id must be set for this call on API!');
         }
 
         $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
@@ -104,12 +114,16 @@ class ResourceService
      * @param AbstractHeidelpayResource $resource
      *
      * @return AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function fetch(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
     {
         $method = HttpAdapterInterface::REQUEST_GET;
         if ($resource->getId() === null) {
-            throw new IdRequiredToFetchResourceException();
+            throw new HeidelpaySdkException('The resources id must be set for this call on API!');
         }
 
         $response = $this->send($resource, $method);
@@ -127,6 +141,10 @@ class ResourceService
      * @param string                    $httpMethod
      *
      * @return \stdClass
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function send(AbstractHeidelpayResource $resource, $httpMethod = HttpAdapterInterface::REQUEST_GET): \stdClass
     {
@@ -139,6 +157,8 @@ class ResourceService
      * @param $pattern
      *
      * @return mixed
+     *
+     * @throws \RuntimeException
      */
     public function getResourceId($transaction, $pattern)
     {
@@ -155,9 +175,13 @@ class ResourceService
     /**
      * Fetches the Resource if necessary.
      *
-     * @param $resource
+     * @param AbstractHeidelpayResource $resource
      *
      * @return AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {

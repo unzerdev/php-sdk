@@ -23,8 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Exceptions\MissingResourceException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Traits\HasCancellationsTrait;
@@ -152,6 +153,7 @@ class Charge extends AbstractTransactionType
 
     /**
      * @param string $orderId
+     *
      * @return Charge
      */
     public function setOrderId($orderId): Charge
@@ -174,6 +176,8 @@ class Charge extends AbstractTransactionType
 
     /**
      * {@inheritDoc}
+     *
+     * @throws HeidelpaySdkException
      */
     public function getLinkedResources(): array
     {
@@ -181,7 +185,7 @@ class Charge extends AbstractTransactionType
         $payment = $this->getPayment();
         $paymentType = $payment ? $payment->getPaymentType() : null;
         if (!$paymentType instanceof PaymentTypeInterface) {
-            throw new MissingResourceException();
+            throw new HeidelpaySdkException();
         }
 
         return [
@@ -200,6 +204,10 @@ class Charge extends AbstractTransactionType
      * @param float $amount
      *
      * @return Cancellation
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function cancel($amount = null): Cancellation
     {

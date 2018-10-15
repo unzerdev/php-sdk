@@ -83,6 +83,7 @@ trait CustomerFixtureTrait
      *
      * @param string $firstname
      * @param string $lastname
+     *
      * @return Address
      */
     public function getAddress($firstname, $lastname): Address
@@ -101,6 +102,7 @@ trait CustomerFixtureTrait
      *
      * @param string $firstname
      * @param string $lastname
+     *
      * @return Address
      */
     public function getSepaDirectDebitGuaranteedAddress($firstname, $lastname): Address

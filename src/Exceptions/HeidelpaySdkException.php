@@ -1,6 +1,6 @@
 <?php
 /**
- * This exception is thrown whenever a resource should be referenced but is not set.
+ * This exception is thrown whenever the api returns an error.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,20 @@
  */
 namespace heidelpay\MgwPhpSdk\Exceptions;
 
-class HeidelpayObjectMissingException extends HeidelpayBaseException
+class HeidelpaySdkException extends HeidelpayBaseException
 {
-    const MESSAGE = 'Heidelpay object reference is not set!';
+    const MESSAGE = 'There has been an unexpected error please contact as for further information.';
+
+    /**
+     * HeidelpayApiException constructor.
+     *
+     * @param string $merchantMessage
+     * @param string $customerMessage
+     * @param string $code
+     */
+    public function __construct($merchantMessage = '', $customerMessage = '', $code = '')
+    {
+        parent::__construct($merchantMessage, $customerMessage);
+        $this->code = $code;
+    }
 }

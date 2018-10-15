@@ -35,6 +35,12 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @return InvoiceGuaranteed
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function invoiceGuaranteedTypeShouldBeCreatable(): InvoiceGuaranteed
     {
@@ -53,6 +59,12 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
+     *
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
     public function verifyInvoiceGuaranteedShipment(InvoiceGuaranteed $invoiceGuaranteed)
@@ -78,6 +90,11 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
     public function invoiceGuaranteedTypeCanBeFetched(InvoiceGuaranteed $invoiceGuaranteed)

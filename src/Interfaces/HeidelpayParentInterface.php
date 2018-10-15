@@ -23,6 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Interfaces;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
 interface HeidelpayParentInterface
@@ -31,6 +32,8 @@ interface HeidelpayParentInterface
      * Returns the heidelpay root object.
      *
      * @return Heidelpay
+     *
+     * @throws HeidelpaySdkException
      */
     public function getHeidelpayObject(): Heidelpay;
 

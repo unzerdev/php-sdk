@@ -31,6 +31,12 @@ class CancelTest extends BasePaymentTest
      * Verify reversal is fetchable.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function reversalShouldBeFetchableViaHeidelpayObject()
     {
@@ -46,6 +52,12 @@ class CancelTest extends BasePaymentTest
      * Verify reversal is fetchable.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function reversalShouldBeFetchableViaPaymentObject()
     {
@@ -61,6 +73,12 @@ class CancelTest extends BasePaymentTest
      * Verify refund is fetchable.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function refundShouldBeFetchableViaHeidelpayObject()
     {
@@ -77,6 +95,12 @@ class CancelTest extends BasePaymentTest
      * Verify refund is fetchable.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function refundShouldBeFetchableViaPaymentObject()
     {
@@ -92,6 +116,12 @@ class CancelTest extends BasePaymentTest
      * Verify reversal is fetchable via payment object.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function authorizationCancellationsShouldBeFetchableViaPaymentObject()
     {
@@ -108,6 +138,12 @@ class CancelTest extends BasePaymentTest
      * Verify refund is fetchable via payment object.
      *
      * @test
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function chargeCancellationsShouldBeFetchableViaPaymentObject()
     {

@@ -24,7 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Exceptions;
 
-class HeidelpayBaseException extends \RuntimeException
+class HeidelpayBaseException extends \Exception
 {
     const MESSAGE = 'Exception message not set!';
 
@@ -40,7 +40,7 @@ class HeidelpayBaseException extends \RuntimeException
     public function __construct($merchantMessage = '', $customerMessage = '')
     {
         $merchantMessage = empty($merchantMessage) ? static::MESSAGE : $merchantMessage;
-        $this->clientMessage = empty($customerMessage) ? $merchantMessage : $customerMessage;
+        $this->clientMessage = empty($customerMessage) ? static::MESSAGE : $customerMessage;
 
         parent::__construct($merchantMessage);
     }
