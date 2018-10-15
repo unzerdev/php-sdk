@@ -67,7 +67,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $key
      * @param string $locale
      *
-     * @throws HeidelpaySdkException
+     * @throws HeidelpaySdkException Will be thrown if the key is not of type private.
      */
     public function __construct($key, $locale = SupportedLocale::GERMAN_GERMAN)
     {
@@ -76,6 +76,8 @@ class Heidelpay implements HeidelpayParentInterface
 
         $this->resourceService = new ResourceService();
     }
+
+    //<editor-fold desc="Helpers">
 
     /**
      * Send the given resource object to the given url using the specified Http method (default = GET).
@@ -100,6 +102,22 @@ class Heidelpay implements HeidelpayParentInterface
         }
         return $this->adapter->send(self::BASE_URL . self::API_VERSION . $uri, $resource, $method);
     }
+
+    /**
+     * Returns true if the given key has a valid format.
+     *
+     * @param $key
+     *
+     * @return bool
+     */
+    public function isValidKey($key): bool
+    {
+        $match = [];
+        preg_match('/^[sp]{1}-(priv)-[a-zA-Z0-9]+/', $key, $match);
+        return !(\count($match) < 2 || $match[1] !== 'priv');
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc="Properties">
     /** @var string $key */
@@ -135,8 +153,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function setKey($key): Heidelpay
     {
-        $isPrivateKey = strpos($key, 's-priv-') !== false;
-        if (!$isPrivateKey) {
+        if (!$this->isValidKey($key)) {
             throw new HeidelpaySdkException('Illegal key type: Use the private key with this SDK!');
         }
 
