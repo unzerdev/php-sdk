@@ -24,7 +24,7 @@
 namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayObjectMissingException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -191,7 +191,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $heidelpayObject = $this->parentResource->getHeidelpayObject();
 
         if (!$heidelpayObject instanceof Heidelpay) {
-            throw new HeidelpayObjectMissingException();
+            throw new HeidelpaySdkException('Heidelpay object reference is not set!');
         }
 
         return $heidelpayObject;

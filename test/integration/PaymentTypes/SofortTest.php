@@ -36,6 +36,12 @@ class SofortTest extends BasePaymentTest
      * @test
      *
      * @return Sofort
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function sofortShouldBeCreatableAndFetchable(): Sofort
     {
@@ -59,6 +65,12 @@ class SofortTest extends BasePaymentTest
      * @test
      *
      * @param Sofort $sofort
+     *
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends sofortShouldBeCreatableAndFetchable
      */
     public function sofortShouldBeAbleToCharge(Sofort $sofort)

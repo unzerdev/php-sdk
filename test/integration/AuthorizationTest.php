@@ -25,8 +25,11 @@
 namespace heidelpay\MgwPhpSdk\integration\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class AuthorizationTest extends BasePaymentTest
 {
@@ -34,6 +37,11 @@ class AuthorizationTest extends BasePaymentTest
      * Verify heidelpay object can perform an authorization based on the paymentTypeId.
      *
      * @test
+     *
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function authorizeWithTypeId()
     {
@@ -52,6 +60,11 @@ class AuthorizationTest extends BasePaymentTest
      * Verify heidelpay object can perform an authorization based on the paymentType object.
      *
      * @test
+     *
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function authorizeWithType()
     {
@@ -65,6 +78,11 @@ class AuthorizationTest extends BasePaymentTest
      * Verify authorization produces Payment and Customer.
      *
      * @test
+     *
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function authorizationProducesPaymentAndCustomer()
     {
@@ -88,6 +106,11 @@ class AuthorizationTest extends BasePaymentTest
      * @test
      *
      * @return Authorization
+     *
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function authorizationWithCustomerId(): Authorization
     {
@@ -112,6 +135,12 @@ class AuthorizationTest extends BasePaymentTest
      * @test
      *
      * @param Authorization $authorization
+     *
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
      */
     public function authorizationCanBeFetched(Authorization $authorization)
     {

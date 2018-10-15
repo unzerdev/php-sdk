@@ -36,6 +36,12 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * Verify sepa direct debit guaranteed can be created with mandatory fields only.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -58,6 +64,12 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @return SepaDirectDebitGuaranteed
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
@@ -88,6 +100,11 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
     public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitGuaranteed $directDebitGuaranteed)
@@ -104,6 +121,12 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
     public function directDebitGuaranteedShouldAllowChargeAndShipping(SepaDirectDebitGuaranteed $directDebitGuaranteed)

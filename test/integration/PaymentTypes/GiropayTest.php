@@ -36,6 +36,12 @@ class GiropayTest extends BasePaymentTest
      * Verify a GiroPay resource can be created.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function giroPayShouldBeCreatable()
     {
@@ -50,6 +56,11 @@ class GiropayTest extends BasePaymentTest
      * Verify that an exception is thrown when giropay authorize is called.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function giroPayShouldThrowExceptionOnAuthorize()
     {
@@ -66,6 +77,12 @@ class GiropayTest extends BasePaymentTest
      * Verify that GiroPay is chargeable.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function giroPayShouldBeChargeable()
     {
@@ -87,6 +104,12 @@ class GiropayTest extends BasePaymentTest
      * Verify a GiroPay object can be fetched from the api.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function giroPayCanBeFetched()
     {

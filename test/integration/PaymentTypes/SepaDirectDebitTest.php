@@ -36,6 +36,12 @@ class SepaDirectDebitTest extends BasePaymentTest
      * Verify sepa direct debit can be created.
      *
      * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -58,6 +64,12 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @return SepaDirectDebit
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function sepaDirectDebitShouldBeCreatable(): SepaDirectDebit
     {
@@ -86,6 +98,11 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @param SepaDirectDebit $directDebit
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function authorizeShouldThrowException(SepaDirectDebit $directDebit)
@@ -100,6 +117,11 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @param SepaDirectDebit $directDebit
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function directDebitShouldBeChargeable(SepaDirectDebit $directDebit)

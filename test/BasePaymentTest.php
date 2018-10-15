@@ -25,6 +25,7 @@ namespace heidelpay\MgwPhpSdk\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
@@ -45,6 +46,11 @@ class BasePaymentTest extends TestCase
     const PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
     const PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT = 's-priv-2a107CYZMp3UbyVPAuqWoxQHi9nFyeiW'; // todo replace
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws HeidelpaySdkException
+     */
     protected function setUp()
     {
         $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocale::GERMAN_GERMAN);
@@ -54,10 +60,13 @@ class BasePaymentTest extends TestCase
 
     /**
      * @param Payment $payment
-     * @param float            $expectedRemaining
-     * @param float            $expectedCharged
-     * @param float            $expectedTotal
-     * @param float            $expectedCanceled
+     * @param float   $expectedRemaining
+     * @param float   $expectedCharged
+     * @param float   $expectedTotal
+     * @param float   $expectedCanceled
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     protected function assertAmounts(
         $payment,
@@ -103,7 +112,13 @@ class BasePaymentTest extends TestCase
     }
 
     /**
+     * Creates and returns an Authorization object with the API which can be used in test methods.
+     *
      * @return Authorization
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
      */
     public function createAuthorization(): Authorization
     {
@@ -114,7 +129,13 @@ class BasePaymentTest extends TestCase
     }
 
     /**
+     * Creates and returns a Charge object with the API which can be used in test methods.
+     *
      * @return Charge
+     *
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
      */
     public function createCharge(): Charge
     {
@@ -126,18 +147,6 @@ class BasePaymentTest extends TestCase
     //</editor-fold>
 
     //<editor-fold desc="DataProviders">
-
-    /**
-     * Provides all defined currencies.
-     *
-     * @throws \ReflectionException
-     */
-    public function przelewy24CurrencyCodeProvider(): array
-    {
-        $currencyArray = $this->currencyCodeProvider();
-        unset($currencyArray['POLISH_ZLOTY']);
-        return $currencyArray;
-    }
 
     /**
      * @return array

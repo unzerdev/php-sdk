@@ -23,6 +23,85 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
-class SepaDirectDebitGuaranteed extends SepaDirectDebit
+class SepaDirectDebitGuaranteed extends BasePaymentType
 {
+    /** @var string $iban */
+    protected $iban;
+
+    /** @var string $bic */
+    protected $bic;
+
+    /** @var string $holder */
+    protected $holder;
+
+    /**
+     * @param string $iban
+     */
+    public function __construct($iban)
+    {
+        $this->iban = $iban;
+
+        parent::__construct();
+    }
+
+    //<editor-fold desc="Getters/Setters">
+
+    /**
+     * @return string
+     */
+    public function getIban(): string
+    {
+        return $this->iban;
+    }
+
+    /**
+     * @param string $iban
+     *
+     * @return $this
+     */
+    public function setIban($iban): self
+    {
+        $this->iban = $iban;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBic(): string
+    {
+        return $this->bic;
+    }
+
+    /**
+     * @param string $bic
+     *
+     * @return $this
+     */
+    public function setBic($bic): self
+    {
+        $this->bic = $bic;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHolder(): string
+    {
+        return $this->holder;
+    }
+
+    /**
+     * @param string $holder
+     *
+     * @return $this
+     */
+    public function setHolder($holder): self
+    {
+        $this->holder = $holder;
+        return $this;
+    }
+
+    //</editor-fold>
 }
