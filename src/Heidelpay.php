@@ -77,48 +77,6 @@ class Heidelpay implements HeidelpayParentInterface
         $this->resourceService = new ResourceService();
     }
 
-    //<editor-fold desc="Helpers">
-
-    /**
-     * Send the given resource object to the given url using the specified Http method (default = GET).
-     *
-     * @param string                     $uri      The URI to send the request to.
-     * @param HeidelpayResourceInterface $resource The resource to be send.
-     * @param string                     $method   The Http method to be used.
-     *
-     * @return string The response as a JSON string.
-     *
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
-     */
-    public function send(
-        $uri,
-        HeidelpayResourceInterface $resource,
-        $method = HttpAdapterInterface::REQUEST_GET
-    ): string {
-        if (!$this->adapter instanceof HttpAdapterInterface) {
-            $this->adapter = new CurlAdapter();
-        }
-        return $this->adapter->send(self::BASE_URL . self::API_VERSION . $uri, $resource, $method);
-    }
-
-    /**
-     * Returns true if the given key has a valid format.
-     *
-     * @param $key
-     *
-     * @return bool
-     */
-    public function isValidKey($key): bool
-    {
-        $match = [];
-        preg_match('/^[sp]{1}-(priv)-[a-zA-Z0-9]+/', $key, $match);
-        return !(\count($match) < 2 || $match[1] !== 'priv');
-    }
-
-    //</editor-fold>
-
     //<editor-fold desc="Properties">
     /** @var string $key */
     private $key;
@@ -232,6 +190,48 @@ class Heidelpay implements HeidelpayParentInterface
     //</editor-fold>
 
     //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+
+    /**
+     * Send the given resource object to the given url using the specified Http method (default = GET).
+     *
+     * @param string                     $uri      The URI to send the request to.
+     * @param HeidelpayResourceInterface $resource The resource to be send.
+     * @param string                     $method   The Http method to be used.
+     *
+     * @return string The response as a JSON string.
+     *
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
+     */
+    public function send(
+        $uri,
+        HeidelpayResourceInterface $resource,
+        $method = HttpAdapterInterface::REQUEST_GET
+    ): string {
+        if (!$this->adapter instanceof HttpAdapterInterface) {
+            $this->adapter = new CurlAdapter();
+        }
+        return $this->adapter->send(self::BASE_URL . self::API_VERSION . $uri, $resource, $method);
+    }
+
+    /**
+     * Returns true if the given key has a valid format.
+     *
+     * @param $key
+     *
+     * @return bool
+     */
+    public function isValidKey($key): bool
+    {
+        $match = [];
+        preg_match('/^[sp]{1}-(priv)-[a-zA-Z0-9]+/', $key, $match);
+        return !(\count($match) < 2 || $match[1] !== 'priv');
+    }
 
     //</editor-fold>
 
