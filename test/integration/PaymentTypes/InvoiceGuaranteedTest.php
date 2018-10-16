@@ -86,6 +86,25 @@ class InvoiceGuaranteedTest extends BasePaymentTest
     }
 
     /**
+     * Verify invoice guaranteed needs customer reference.
+     *
+     * @test
+     *
+     * @param InvoiceGuaranteed $invoiceGuaranteed
+     *
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @depends invoiceGuaranteedTypeShouldBeCreatable
+     */
+    public function verifyInvoiceGuaranteedAuthorizationRequiresCustomer(InvoiceGuaranteed $invoiceGuaranteed)
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_REQUIRED);
+        $invoiceGuaranteed->authorize(100.0, Currency::EURO, self::RETURN_URL);
+    }
+
+    /**
      * Verify that an invoice guaranteed object can be fetched from the api.
      *
      * @test
