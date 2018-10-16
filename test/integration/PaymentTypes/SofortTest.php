@@ -45,9 +45,7 @@ class SofortTest extends BasePaymentTest
      */
     public function sofortShouldBeCreatableAndFetchable(): Sofort
     {
-        /** @var Sofort $sofort */
-        $sofort = new Sofort();
-        $sofort = $this->heidelpay->createPaymentType($sofort);
+        $sofort = $this->heidelpay->createPaymentType(new Sofort());
         $this->assertInstanceOf(Sofort::class, $sofort);
         $this->assertNotNull($sofort->getId());
 

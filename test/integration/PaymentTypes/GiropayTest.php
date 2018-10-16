@@ -113,10 +113,7 @@ class GiropayTest extends BasePaymentTest
      */
     public function giroPayCanBeFetched()
     {
-        /** @var Giropay $giropay */
-        $giropay = new Giropay();
-        $giropay = $this->heidelpay->createPaymentType($giropay);
-
+        $giropay = $this->heidelpay->createPaymentType(new Giropay());
         $fetchedGiropay = $this->heidelpay->fetchPaymentType($giropay->getId());
         $this->assertInstanceOf(Giropay::class, $fetchedGiropay);
         $this->assertEquals($giropay->getId(), $fetchedGiropay->getId());

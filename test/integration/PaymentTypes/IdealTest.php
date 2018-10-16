@@ -23,6 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
@@ -71,6 +72,7 @@ class IdealTest extends BasePaymentTest
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal)
     {
         $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
         $ideal->authorize(1.0, Currency::EURO, self::RETURN_URL);
     }
 

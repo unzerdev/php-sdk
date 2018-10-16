@@ -45,7 +45,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      */
     public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
-        /** @var SepaDirectDebit $directDebit */
         $directDebit = new SepaDirectDebit('DE89370400440532013000');
         $directDebit = $this->heidelpay->createPaymentType($directDebit);
         $this->assertInstanceOf(SepaDirectDebit::class, $directDebit);

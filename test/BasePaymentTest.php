@@ -105,7 +105,6 @@ class BasePaymentTest extends TestCase
      */
     protected function createCardObject(): Card
     {
-        /** @var Card $card */
         $card = new Card('4444333322221111', '03/20');
         $card->setCvc('123');
         return $card;

@@ -23,7 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
