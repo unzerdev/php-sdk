@@ -70,7 +70,6 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * Verify part cancel on an authorization.
      *
      * @test
-     * todo payment cancel sollte nicht auth cancel aufrufen
      *
      * @throws AssertionFailedError
      * @throws Exception
