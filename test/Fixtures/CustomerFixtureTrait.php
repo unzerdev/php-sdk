@@ -61,24 +61,6 @@ trait CustomerFixtureTrait
     }
 
     /**
-     * Creates a customer object
-     *
-     * @return Customer
-     */
-    public function getSepaDirectDebitGuaranteedCustomer(): Customer
-    {
-        $firstname = 'Peter';
-        $lastname  = 'Universum';
-        return (new Customer())
-            ->setFirstname($firstname)
-            ->setLastname($lastname)
-            ->setSalutation(Salutations::MR)
-            ->setBirthDate('1989-12-24')
-            ->setEmail('peter.universum@universum-group.de')
-            ->setBillingAddress($this->getSepaDirectDebitGuaranteedAddress($firstname, $lastname));
-    }
-
-    /**
      * Create a test Address
      *
      * @param string $firstname
@@ -93,25 +75,6 @@ trait CustomerFixtureTrait
             ->setStreet('Vangerowstr. 18')
             ->setZip('69115')
             ->setCity('Heidelberg')
-            ->setCountry('DE')
-            ->setState('DE-1');
-    }
-
-    /**
-     * Create a test address for Universum customer.
-     *
-     * @param string $firstname
-     * @param string $lastname
-     *
-     * @return Address
-     */
-    public function getSepaDirectDebitGuaranteedAddress($firstname, $lastname): Address
-    {
-        return (new Address())
-            ->setName($firstname . ' ' . $lastname)
-            ->setStreet('Hugo-Junkers-Str. 5')
-            ->setZip('60386')
-            ->setCity('Frankfurt am Main')
             ->setCountry('DE')
             ->setState('DE-1');
     }
