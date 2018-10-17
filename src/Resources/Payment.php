@@ -491,8 +491,6 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Cancellation
      *
-     * todo: nicht jedes payment hat einen authorisierung
-     *
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
