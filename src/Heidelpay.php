@@ -951,8 +951,18 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function ship($payment): HeidelpayResourceInterface
     {
+        $paymentObject = $payment;
+
+        if (\is_string($payment)) {
+            $paymentObject = $this->fetchPaymentById($payment);
+        }
+
+        if (!$payment instanceof Payment) {
+            throw new HeidelpaySdkException('Payment object is not set.');
+        }
+
         $shipment = new Shipment();
-        $payment->addShipment($shipment);
+        $paymentObject->addShipment($shipment);
         return $this->getResourceService()->create($shipment);
     }
 

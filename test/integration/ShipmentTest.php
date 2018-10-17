@@ -62,6 +62,7 @@ class ShipmentTest extends BasePaymentTest
         $this->assertNotEmpty($fetchedShipment);
         $this->assertEquals($shipment->expose(), $fetchedShipment->expose());
     }
+
     /**
      * Verify shipment transaction can be called on the payment object.
      *
@@ -93,5 +94,33 @@ class ShipmentTest extends BasePaymentTest
         $fetchedShipment = $this->heidelpay->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
         $this->assertNotEmpty($fetchedShipment);
         $this->assertEquals($shipment->expose(), $fetchedShipment->expose());
+    }
+
+    /**
+     * Verify shipment can be performed with payment object.
+     *
+     * @test
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     */
+    public function shipmentShouldBePossibleWithPaymentObject()
+    {
+        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $authorize = $this->heidelpay->authorize(
+            100.0,
+            Currency::EURO,
+            $invoiceGuaranteed,
+            self::RETURN_URL,
+            $this->getMaximumCustomer()
+        );
+
+        $payment  = $authorize->getPayment();
+        $shipment = $this->heidelpay->ship($payment);
+        $this->assertNotNull($shipment->getId());
+        $this->assertNotNull($shipment);
     }
 }
