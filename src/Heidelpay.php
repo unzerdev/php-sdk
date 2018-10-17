@@ -53,6 +53,7 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Validators\KeyValidator;
 
 class Heidelpay implements HeidelpayParentInterface
 {
@@ -111,7 +112,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function setKey($key): Heidelpay
     {
-        if (!$this->isValidKey($key)) {
+        if (!KeyValidator::validate($key)) {
             throw new HeidelpaySdkException('Illegal key type: Use the private key with this SDK!');
         }
 
@@ -217,20 +218,6 @@ class Heidelpay implements HeidelpayParentInterface
             $this->adapter = new CurlAdapter();
         }
         return $this->adapter->send(self::BASE_URL . self::API_VERSION . $uri, $resource, $method);
-    }
-
-    /**
-     * Returns true if the given key has a valid format.
-     *
-     * @param $key
-     *
-     * @return bool
-     */
-    public function isValidKey($key): bool
-    {
-        $match = [];
-        preg_match('/^[sp]{1}-(priv)-[a-zA-Z0-9]+/', $key, $match);
-        return !(\count($match) < 2 || $match[1] !== 'priv');
     }
 
     //</editor-fold>
