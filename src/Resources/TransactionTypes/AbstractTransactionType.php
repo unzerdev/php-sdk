@@ -36,6 +36,11 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /** @var Payment $payment */
     private $payment;
 
+    /** @var string $date */
+    private $date;
+
+    //</editor-fold>
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -71,7 +76,25 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         return $this->payment->getRedirectUrl();
     }
 
-    //</editor-fold>
+    /**
+     * @return string
+     */
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param string $date
+     *
+     * @return $this
+     */
+    public function setDate(string $date): self
+    {
+        $this->date = $date;
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
