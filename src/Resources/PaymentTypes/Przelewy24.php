@@ -23,6 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Traits\CanCharge;
+
 class Przelewy24 extends BasePaymentType
 {
+    use CanCharge;
 }

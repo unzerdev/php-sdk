@@ -27,7 +27,6 @@ use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -67,7 +66,7 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @depends prepaymentShouldBeCreatableAndFetchable
      *
-     * @param BasePaymentType $prepayment
+     * @param Prepayment $prepayment
      *
      * @return Authorization
      *
@@ -76,7 +75,7 @@ class PrepaymentTest extends BasePaymentTest
      * @throws \RuntimeException
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
-    public function prepaymentTypeShouldBeAuthorizable(BasePaymentType $prepayment): Authorization
+    public function prepaymentTypeShouldBeAuthorizable(Prepayment $prepayment): Authorization
     {
         $authorization = $prepayment->authorize(100.0, Currency::EURO, self::RETURN_URL);
         $this->assertNotNull($authorization);
@@ -92,14 +91,14 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @depends prepaymentShouldBeCreatableAndFetchable
      *
-     * @param BasePaymentType $prepayment
+     * @param Prepayment $prepayment
      *
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
-    public function prepaymentTypeShouldNotBeChargeable(BasePaymentType $prepayment)
+    public function prepaymentTypeShouldNotBeChargeable(Prepayment $prepayment)
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);

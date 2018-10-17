@@ -23,8 +23,14 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Traits\CanAuthorize;
+use heidelpay\MgwPhpSdk\Traits\CanCharge;
+
 class Card extends BasePaymentType
 {
+    use CanCharge;
+    use CanAuthorize;
+
     /**
      * Card constructor.
      *

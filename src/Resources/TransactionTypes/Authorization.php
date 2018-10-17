@@ -27,7 +27,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
-use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Traits\HasCancellationsTrait;
 
 class Authorization extends AbstractTransactionType
@@ -184,7 +184,7 @@ class Authorization extends AbstractTransactionType
         /** @var Payment $payment */
         $payment = $this->getPayment();
         $paymentType = $payment ? $payment->getPaymentType() : null;
-        if (!$paymentType instanceof PaymentTypeInterface) {
+        if (!$paymentType instanceof BasePaymentType) {
             throw new HeidelpaySdkException();
         }
 

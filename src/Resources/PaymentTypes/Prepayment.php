@@ -23,6 +23,11 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Traits\CanAuthorize;
+use heidelpay\MgwPhpSdk\Traits\CanCharge;
+
 class Prepayment extends BasePaymentType
 {
+    use CanAuthorize;
+    use CanCharge;
 }

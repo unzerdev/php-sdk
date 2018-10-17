@@ -67,10 +67,8 @@ class GiropayTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        /** @var Giropay $giropay */
-        $giropay = new Giropay();
-        $giropay = $this->heidelpay->createPaymentType($giropay);
-        $giropay->authorize(1.0, Currency::EURO, self::RETURN_URL);
+        $giropay = $this->heidelpay->createPaymentType(new Giropay());
+        $this->heidelpay->authorize(1.0, Currency::EURO, $giropay, self::RETURN_URL);
     }
 
     /**

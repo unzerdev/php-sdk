@@ -24,11 +24,8 @@
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 
-abstract class BasePaymentType extends AbstractHeidelpayResource implements PaymentTypeInterface
+abstract class BasePaymentType extends AbstractHeidelpayResource
 {
     //<editor-fold desc="Overridable Methods">
 
@@ -38,26 +35,6 @@ abstract class BasePaymentType extends AbstractHeidelpayResource implements Paym
     public function getResourcePath()
     {
         return 'types/' . $this::getClassShortNameKebapCase();
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Transaction methods">
-
-    /**
-     * {@inheritDoc}
-     */
-    public function charge($amount, $currency, $returnUrl, $customer = null, $orderId = null): Charge
-    {
-        return $this->getHeidelpayObject()->charge($amount, $currency, $this, $returnUrl, $customer, $orderId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize($amount, $currency, $returnUrl, $customer = null, $orderId = null): Authorization
-    {
-        return $this->getHeidelpayObject()->authorize($amount, $currency, $this, $returnUrl, $customer, $orderId);
     }
 
     //</editor-fold>

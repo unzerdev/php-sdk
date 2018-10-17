@@ -73,7 +73,8 @@ class IdealTest extends BasePaymentTest
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
-        $ideal->authorize(1.0, Currency::EURO, self::RETURN_URL);
+
+        $this->heidelpay->authorize(1.0, Currency::EURO, $ideal, self::RETURN_URL);
     }
 
     /**

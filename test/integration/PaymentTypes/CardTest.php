@@ -28,7 +28,7 @@ use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
@@ -72,7 +72,7 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @return PaymentTypeInterface
+     * @return BasePaymentType
      *
      * @throws HeidelpayApiException
      * @throws Exception
@@ -80,7 +80,7 @@ class CardTest extends BasePaymentTest
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function cardShouldBeCreatable(): PaymentTypeInterface
+    public function cardShouldBeCreatable(): BasePaymentType
     {
         /** @var Card $card */
         $card = $this->createCardObject();

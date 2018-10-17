@@ -24,9 +24,14 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class SofortTest extends BasePaymentTest
 {
@@ -38,10 +43,10 @@ class SofortTest extends BasePaymentTest
      * @return Sofort
      *
      * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function sofortShouldBeCreatableAndFetchable(): Sofort
     {
@@ -64,11 +69,11 @@ class SofortTest extends BasePaymentTest
      *
      * @param Sofort $sofort
      *
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      * @depends sofortShouldBeCreatableAndFetchable
      */
     public function sofortShouldBeAbleToCharge(Sofort $sofort)
@@ -76,5 +81,25 @@ class SofortTest extends BasePaymentTest
         $charge = $sofort->charge(100.0, Currency::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
+    }
+
+    /**
+     * Verify sofort is not authorizable.
+     *
+     * @test
+     *
+     * @param Sofort $sofort
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @depends sofortShouldBeCreatableAndFetchable
+     */
+    public function sofortShouldNotBeAuthorizable(Sofort $sofort)
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
+
+        $this->heidelpay->authorize(100.0, Currency::EURO, $sofort, self::RETURN_URL);
     }
 }

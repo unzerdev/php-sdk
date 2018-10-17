@@ -27,8 +27,11 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class SepaDirectDebitTest extends BasePaymentTest
 {
@@ -38,13 +41,14 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      */
     public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
+        /** @var SepaDirectDebit $directDebit */
         $directDebit = new SepaDirectDebit('DE89370400440532013000');
         $directDebit = $this->heidelpay->createPaymentType($directDebit);
         $this->assertInstanceOf(SepaDirectDebit::class, $directDebit);
@@ -65,10 +69,10 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @return SepaDirectDebit
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      */
     public function sepaDirectDebitShouldBeCreatable(): SepaDirectDebit
     {
@@ -99,9 +103,9 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @param SepaDirectDebit $directDebit
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function authorizeShouldThrowException(SepaDirectDebit $directDebit)
@@ -109,7 +113,7 @@ class SepaDirectDebitTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $directDebit->authorize(1.0, Currency::EURO, self::RETURN_URL);
+        $this->heidelpay->authorize(1.0, Currency::EURO, $directDebit, self::RETURN_URL);
     }
 
     /**
@@ -118,14 +122,14 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @param SepaDirectDebit $directDebit
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function directDebitShouldBeChargeable(SepaDirectDebit $directDebit)
     {
-        $charge = $directDebit->charge(100.0, Currency::EURO, self::RETURN_URL, $this->getMaximumCustomer());
+        $charge = $directDebit->charge(100.0, Currency::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
     }

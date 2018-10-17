@@ -45,6 +45,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly()
     {
+        /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
         $directDebitGuaranteed = new SepaDirectDebitGuaranteed('DE89370400440532013000');
         $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
@@ -54,7 +55,10 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $fetchedDirectDebitGuaranteed = $this->heidelpay->fetchPaymentType($directDebitGuaranteed->getId());
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $fetchedDirectDebitGuaranteed);
         $this->assertEquals($directDebitGuaranteed->getId(), $fetchedDirectDebitGuaranteed->getId());
-        $this->assertEquals($this->maskNumber($directDebitGuaranteed->getIban()), $fetchedDirectDebitGuaranteed->getIban());
+        $this->assertEquals(
+            $this->maskNumber($directDebitGuaranteed->getIban()),
+            $fetchedDirectDebitGuaranteed->getIban()
+        );
     }
 
     /**
@@ -111,7 +115,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $directDebitGuaranteed->authorize(1.0, Currency::EURO, self::RETURN_URL);
+        $this->heidelpay->authorize(1.0, Currency::EURO, $directDebitGuaranteed, self::RETURN_URL);
     }
 
     /**

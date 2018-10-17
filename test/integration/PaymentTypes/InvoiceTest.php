@@ -73,7 +73,7 @@ class InvoiceTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
 
-        $invoice->charge(1.0, Currency::EURO, self::RETURN_URL);
+        $this->heidelpay->charge(1.0, Currency::EURO, $invoice, self::RETURN_URL);
     }
 
     /**

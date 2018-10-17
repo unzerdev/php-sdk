@@ -23,8 +23,12 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
+use heidelpay\MgwPhpSdk\Traits\CanCharge;
+
 class SepaDirectDebit extends BasePaymentType
 {
+    use CanCharge;
+
     /** @var string $iban */
     protected $iban;
 

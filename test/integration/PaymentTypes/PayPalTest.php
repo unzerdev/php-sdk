@@ -26,7 +26,7 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
@@ -40,7 +40,7 @@ class PaypalTest extends BasePaymentTest
      *
      * @test
      *
-     * @return PaymentTypeInterface
+     * @return BasePaymentType
      *
      * @throws AssertionFailedError
      * @throws Exception
@@ -49,7 +49,7 @@ class PaypalTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException
      */
-    public function paypalShouldBeCreatableAndFetchable(): PaymentTypeInterface
+    public function paypalShouldBeCreatableAndFetchable(): BasePaymentType
     {
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
         $this->assertInstanceOf(Paypal::class, $paypal);

@@ -23,9 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currency;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -83,25 +81,6 @@ class InvoiceGuaranteedTest extends BasePaymentTest
         $shipment = $this->heidelpay->ship($authorization->getPayment());
         $this->assertNotNull($shipment);
         $this->assertNotEmpty($shipment->getId());
-    }
-
-    /**
-     * Verify invoice guaranteed needs customer reference.
-     *
-     * @test
-     *
-     * @param InvoiceGuaranteed $invoiceGuaranteed
-     *
-     * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
-     * @depends invoiceGuaranteedTypeShouldBeCreatable
-     */
-    public function verifyInvoiceGuaranteedAuthorizationRequiresCustomer(InvoiceGuaranteed $invoiceGuaranteed)
-    {
-        $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_REQUIRED);
-        $invoiceGuaranteed->authorize(100.0, Currency::EURO, self::RETURN_URL);
     }
 
     /**

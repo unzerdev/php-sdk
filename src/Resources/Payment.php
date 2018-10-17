@@ -29,7 +29,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\AmountsInterface;
-use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Traits\HasAmountsTrait;
@@ -58,7 +58,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
     /** @var Customer $customer */
     private $customer;
 
-    /** @var PaymentTypeInterface $paymentType */
+    /** @var BasePaymentType $paymentType */
     private $paymentType;
 
     //<editor-fold desc="Setters/Getters">
@@ -244,10 +244,10 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      *
      * @throws HeidelpaySdkException
      */
-    public function getPaymentType(): PaymentTypeInterface
+    public function getPaymentType(): BasePaymentType
     {
         $paymentType = $this->paymentType;
-        if (!$paymentType instanceof PaymentTypeInterface) {
+        if (!$paymentType instanceof BasePaymentType) {
             throw new HeidelpaySdkException('The paymentType is not set.');
         }
 
@@ -255,7 +255,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
     }
 
     /**
-     * @param PaymentTypeInterface|string $paymentType
+     * @param BasePaymentType|string $paymentType
      *
      * @return Payment
      *
@@ -272,11 +272,11 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
 
-        /** @var PaymentTypeInterface $paymentTypeObject */
+        /** @var BasePaymentType $paymentTypeObject */
         $paymentTypeObject = $paymentType;
         if (\is_string($paymentType)) {
             $paymentTypeObject = $heidelpay->fetchPaymentType($paymentType);
-        } elseif ($paymentTypeObject instanceof PaymentTypeInterface) {
+        } elseif ($paymentTypeObject instanceof BasePaymentType) {
             if ($paymentTypeObject->getId() === null) {
                 $heidelpay->createPaymentType($paymentType);
             }
@@ -443,7 +443,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
             }
 
             if (isset($resources->typeId) && !empty($resources->typeId)) {
-                if (!$this->paymentType instanceof PaymentTypeInterface) {
+                if (!$this->paymentType instanceof BasePaymentType) {
                     $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
                 }
             }

@@ -31,6 +31,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
@@ -48,7 +49,6 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
-use heidelpay\MgwPhpSdk\Interfaces\PaymentTypeInterface;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 
@@ -241,8 +241,8 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Create a Payment object with the given properties.
      *
-     * @param PaymentTypeInterface|string $paymentType
-     * @param Customer|string|null        $customer
+     * @param BasePaymentType|string $paymentType
+     * @param Customer|string|null   $customer
      *
      * @return Payment The resulting Payment object.
      *
@@ -303,15 +303,15 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Create the given payment type via api.
      *
-     * @param PaymentTypeInterface $paymentType
+     * @param BasePaymentType $paymentType
      *
-     * @return PaymentTypeInterface|AbstractHeidelpayResource
+     * @return BasePaymentType|AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function createPaymentType(PaymentTypeInterface $paymentType): HeidelpayResourceInterface
+    public function createPaymentType(BasePaymentType $paymentType): BasePaymentType
     {
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this);
@@ -323,7 +323,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param string $typeId
      *
-     * @return PaymentTypeInterface|AbstractHeidelpayResource
+     * @return BasePaymentType|AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException
@@ -775,12 +775,12 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Charge the given amount and currency on the given PaymentType resource.
      *
-     * @param float                       $amount
-     * @param string                      $currency
-     * @param PaymentTypeInterface|string $paymentType
-     * @param string                      $returnUrl
-     * @param Customer|string|null        $customer
-     * @param string|null                 $orderId
+     * @param float                  $amount
+     * @param string                 $currency
+     * @param BasePaymentType|string $paymentType
+     * @param string                 $returnUrl
+     * @param Customer|string|null   $customer
+     * @param string|null            $orderId
      *
      * @return Charge Resulting Charge object.
      *
