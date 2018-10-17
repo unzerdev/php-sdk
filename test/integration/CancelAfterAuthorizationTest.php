@@ -56,6 +56,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
         $payment = $fetchedAuthorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertEquals(Currencies::EURO, $payment->getCurrency());
         $this->assertTrue($payment->isPending());
 
         $cancellation = $fetchedAuthorization->cancel();
