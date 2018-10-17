@@ -134,11 +134,6 @@ class CurlAdapter implements HttpAdapterInterface
             'Authorization: ' . 'Basic ' . base64_encode($heidelpayResource->getHeidelpayObject()->getKey() . ':'), // basic auth with key as user and empty password
             'Content-Type: application/json',
             'SDK-VERSION: ' . Heidelpay::SDK_VERSION
-            // todo: remove unused headers?
-//            'CUSTOMER-LANGUAGE: en_US', // heidelpay constructor // header object?
-//            'CHECKOUT-ID: checkout-5aba2fad0ab154.88150279', // heidelpay constructor
-//            'SHOP-SYSTEM: Shopware - 5.2.2', // heidelpay constructor
-//            'EXTENSION: heidelpay/magento-cd-edition - 1.5.3' // heidelpay constructor
         ));
         return $request;
     }
