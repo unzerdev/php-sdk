@@ -406,6 +406,25 @@ class Payment extends AbstractHeidelpayResource
         return $this->amount;
     }
 
+    /**
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->amount->getCurrency();
+    }
+
+    /**
+     * @param string $currency
+     *
+     * @return self
+     */
+    public function setCurrency(string $currency): self
+    {
+        $this->amount->setCurrency($currency);
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
