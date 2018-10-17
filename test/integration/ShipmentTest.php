@@ -24,8 +24,13 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class ShipmentTest extends BasePaymentTest
 {
@@ -34,12 +39,12 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function shipmentShouldBeCreatableAndFetchable()
     {
@@ -67,12 +72,12 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function shipmentCanBeCalledOnThePaymentObject()
     {
@@ -102,12 +107,12 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function shipmentShouldBePossibleWithPaymentObject()
     {
