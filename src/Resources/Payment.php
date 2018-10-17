@@ -541,6 +541,19 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
         return $this->getHeidelpayObject()->authorizeWithPayment($amount, $currency, $this, $returnUrl, $customer);
     }
 
+    /**
+     * Perform ship transaction on the current payment.
+     *
+     * @return \heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface|Shipment
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function ship()
+    {
+        return $this->getHeidelpayObject()->ship($this);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Transaction Update">

@@ -41,7 +41,7 @@ class ShipmentTest extends BasePaymentTest
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
-    public function shipmentCanBeCalledForInvoiceGuaranteed()
+    public function shipmentShouldBeCreatableAndFetchable()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
         $authorize = $this->heidelpay->authorize(100.0, Currency::EURO, $invoiceGuaranteed, self::RETURN_URL, $this->getMaximumCustomer());
@@ -52,12 +52,34 @@ class ShipmentTest extends BasePaymentTest
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
 
-        $fetchedShipment = $this->heidelpay->fetchShipmentByPayment($shipment->getParentResource(), $shipment->getId());
+        $fetchedShipment = $this->heidelpay->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
         $this->assertNotEmpty($fetchedShipment);
         $this->assertEquals($shipment->expose(), $fetchedShipment->expose());
+    }
+    /**
+     * Verify shipment transaction can be called on the payment object.
+     *
+     * @test
+     *
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     */
+    public function shipmentCanBeCalledOnThePaymentObject()
+    {
+        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $authorize = $this->heidelpay->authorize(100.0, Currency::EURO, $invoiceGuaranteed, self::RETURN_URL, $this->getMaximumCustomer());
 
-        $secondFetchedShipment = $this->heidelpay->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
-        $this->assertNotEmpty($secondFetchedShipment);
-        $this->assertEquals($shipment->expose(), $secondFetchedShipment->expose());
+        $payment  = $authorize->getPayment();
+        $shipment = $payment->ship();
+        $this->assertNotNull($shipment->getId());
+        $this->assertNotNull($shipment);
+
+        $fetchedShipment = $this->heidelpay->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
+        $this->assertNotEmpty($fetchedShipment);
+        $this->assertEquals($shipment->expose(), $fetchedShipment->expose());
     }
 }
