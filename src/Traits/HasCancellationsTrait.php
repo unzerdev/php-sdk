@@ -56,14 +56,16 @@ trait HasCancellationsTrait
 
     /**
      * @param Cancellation $cancellation
-     *                                   todo: return self
+     *
+     * @return self
      */
-    public function addCancellation(Cancellation $cancellation)
+    public function addCancellation(Cancellation $cancellation): self
     {
         if ($this instanceof HeidelpayParentInterface) {
             $cancellation->setParentResource($this);
         }
         $this->cancellations[] = $cancellation;
+        return $this;
     }
 
     /**
