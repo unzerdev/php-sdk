@@ -32,17 +32,6 @@ use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
@@ -50,6 +39,7 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
+use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
@@ -76,6 +66,7 @@ class Heidelpay implements HeidelpayParentInterface
         $this->locale = $locale;
 
         $this->resourceService = new ResourceService();
+        $this->paymentService = new PaymentService($this);
     }
 
     //<editor-fold desc="Properties">
@@ -90,6 +81,9 @@ class Heidelpay implements HeidelpayParentInterface
 
     /** @var ResourceService $resourceService */
     private $resourceService;
+
+    /** @var PaymentService $paymentService */
+    private $paymentService;
 
     //<editor-fold desc="Getters/Setters">
 
@@ -165,6 +159,25 @@ class Heidelpay implements HeidelpayParentInterface
         $this->resourceService = $resourceService;
         return $this;
     }
+
+    /**
+     * @return PaymentService
+     */
+    public function getPaymentService(): PaymentService
+    {
+        return $this->paymentService;
+    }
+
+    /**
+     * @param PaymentService $paymentService
+     * @return Heidelpay
+     */
+    public function setPaymentService(PaymentService $paymentService): Heidelpay
+    {
+        $this->paymentService = $paymentService;
+        return $this;
+    }
+
 
     //<editor-fold desc="ParentIF">
 
@@ -300,9 +313,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function createPaymentType(BasePaymentType $paymentType): BasePaymentType
     {
-        /** @var AbstractHeidelpayResource $paymentType */
-        $paymentType->setParentResource($this);
-        return $this->resourceService->create($paymentType);
+        return $this->paymentService->createPaymentType($paymentType);
     }
 
     /**
@@ -318,52 +329,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function fetchPaymentType($typeId): HeidelpayResourceInterface
     {
-        $paymentType = null;
-
-        $typeIdParts = [];
-        preg_match('/^[sp]{1}-([a-z]{3}|p24)-[a-z0-9]*/', $typeId, $typeIdParts);
-
-        // todo maybe move this into a builder service
-        switch ($typeIdParts[1]) {
-            case 'crd':
-                $paymentType = new Card(null, null);
-                break;
-            case 'gro':
-                $paymentType = new Giropay();
-                break;
-            case 'idl':
-                $paymentType = new Ideal();
-                break;
-            case 'ivc':
-                $paymentType = new Invoice();
-                break;
-            case 'ivg':
-                $paymentType = new InvoiceGuaranteed();
-                break;
-            case 'ppl':
-                $paymentType = new Paypal();
-                break;
-            case 'ppy':
-                $paymentType = new Prepayment();
-                break;
-            case 'p24':
-                $paymentType = new Przelewy24();
-                break;
-            case 'ddg':
-                $paymentType = new SepaDirectDebitGuaranteed(null);
-                break;
-            case 'sdd':
-                $paymentType = new SepaDirectDebit(null);
-                break;
-            case 'sft':
-                $paymentType = new Sofort();
-                break;
-            default:
-                throw new HeidelpaySdkException(sprintf('Payment type "%s" is not allowed!', $typeIdParts[1]));
-                break;
-        }
-
-        return $this->resourceService->fetch($paymentType->setParentResource($this)->setId($typeId));
+        return $this->paymentService->fetchPaymentType($typeId);
     }
 
     //</editor-fold>
