@@ -70,7 +70,7 @@ class Payment extends AbstractHeidelpayResource
     /** @var BasePaymentType $paymentType */
     private $paymentType;
 
-    /** @var Amount */
+    /** @var Amount $amount */
     protected $amount;
     //</editor-fold>
 
@@ -429,7 +429,6 @@ class Payment extends AbstractHeidelpayResource
     {
         parent::handleResponse($response, $method);
 
-        // todo ggf. als object wie Address im customer
         if (isset($response->state->id)) {
             $this->setState($response->state->id);
         }
@@ -437,7 +436,6 @@ class Payment extends AbstractHeidelpayResource
         if (isset($response->resources)) {
             $resources = $response->resources;
 
-            // todo payment id ist wahrscheinlich die custom payment id die der händler vergibt und deshalb eigentlich keine resource.
             if (isset($resources->paymentId)) {
                 $this->setId($resources->paymentId);
             }
