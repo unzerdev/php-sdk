@@ -39,6 +39,12 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /** @var string $date */
     private $date;
 
+    /** @var string $uniqueId */
+    private $uniqueId;
+
+    /** @var string $shortId */
+    private $shortId;
+
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
@@ -92,6 +98,43 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     public function setDate(string $date): self
     {
         $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniqueId(): string
+    {
+        return $this->uniqueId;
+    }
+
+    /**
+     * @param string $uniqueId
+     *
+     * @return $this
+     */
+    public function setUniqueId(string $uniqueId): self
+    {
+        $this->uniqueId = $uniqueId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortId(): string
+    {
+        return $this->shortId;
+    }
+
+    /**
+     * @param string $shortId
+     * @return AbstractTransactionType
+     */
+    public function setShortId(string $shortId): AbstractTransactionType
+    {
+        $this->shortId = $shortId;
         return $this;
     }
 

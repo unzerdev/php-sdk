@@ -43,12 +43,6 @@ class Charge extends AbstractTransactionType
     /** @var string $returnUrl */
     protected $returnUrl;
 
-    /** @var string $uniqueId */
-    private $uniqueId;
-
-    /** @var string $orderId */
-    protected $orderId;
-
     /**
      * Authorization constructor.
      *
@@ -121,44 +115,6 @@ class Charge extends AbstractTransactionType
     public function setReturnUrl($returnUrl): HeidelpayResourceInterface
     {
         $this->returnUrl = $returnUrl;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUniqueId()
-    {
-        return $this->uniqueId;
-    }
-
-    /**
-     * @param string $uniqueId
-     *
-     * @return HeidelpayResourceInterface
-     */
-    public function setUniqueId($uniqueId): HeidelpayResourceInterface
-    {
-        $this->uniqueId = $uniqueId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOrderId(): string
-    {
-        return $this->orderId;
-    }
-
-    /**
-     * @param string $orderId
-     *
-     * @return Charge
-     */
-    public function setOrderId($orderId): Charge
-    {
-        $this->orderId = $orderId;
         return $this;
     }
 

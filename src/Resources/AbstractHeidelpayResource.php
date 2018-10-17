@@ -262,6 +262,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
             if (\is_object($value)) {
                 if (\is_callable([$object, $getter])) {
                     $this->updateValues($object->$getter(), $newValue);
+                } elseif ('processing' === $key) {
+                    $this->updateValues($object, $newValue);
                 }
             } elseif (\is_callable([$object, $setter])) {
                 $object->$setter($newValue);

@@ -48,6 +48,8 @@ class ChargeTest extends BasePaymentTest
         $charge = $this->heidelpay->charge(100.0, Currencies::EURO, $card->getId(), self::RETURN_URL);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertNotEmpty($charge->getId());
+        $this->assertNotEmpty($charge->getUniqueId());
+        $this->assertNotEmpty($charge->getShortId());
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
         $this->assertNotEmpty($charge->getPayment()->getId());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());

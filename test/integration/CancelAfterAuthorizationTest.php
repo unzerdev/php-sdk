@@ -88,6 +88,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $cancel = $payment->cancel(10.0);
         $this->assertNotNull($cancel);
         $this->assertNotEmpty($cancel->getId());
+        $this->assertNotEmpty($cancel->getUniqueId());
+        $this->assertNotEmpty($cancel->getShortId());
         $this->assertEquals(10.0, $cancel->getAmount());
     }
 

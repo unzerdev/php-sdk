@@ -87,8 +87,10 @@ class ShipmentTest extends BasePaymentTest
 
         $payment  = $authorize->getPayment();
         $shipment = $payment->ship();
-        $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
+        $this->assertNotEmpty($shipment->getId());
+        $this->assertNotEmpty($shipment->getUniqueId());
+        $this->assertNotEmpty($shipment->getShortId());
 
         $fetchedShipment = $this->heidelpay->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
         $this->assertNotEmpty($fetchedShipment);

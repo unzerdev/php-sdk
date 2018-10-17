@@ -53,7 +53,9 @@ class AuthorizationTest extends BasePaymentTest
             self::RETURN_URL
         );
         $this->assertNotNull($authorize);
-        $this->assertNotNull($authorize->getId());
+        $this->assertNotEmpty($authorize->getId());
+        $this->assertNotEmpty($authorize->getUniqueId());
+        $this->assertNotEmpty($authorize->getShortId());
     }
 
     /**
