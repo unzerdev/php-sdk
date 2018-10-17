@@ -31,13 +31,13 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
-use heidelpay\MgwPhpSdk\Traits\HasStateTrait;
+use heidelpay\MgwPhpSdk\Traits\HasPaymentState;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
 class Payment extends AbstractHeidelpayResource
 {
-    use HasStateTrait;
+    use HasPaymentState;
 
     /**
      * Payment constructor.

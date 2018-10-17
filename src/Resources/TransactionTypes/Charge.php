@@ -28,11 +28,11 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Traits\HasCancellationsTrait;
+use heidelpay\MgwPhpSdk\Traits\HasCancellations;
 
 class Charge extends AbstractTransactionType
 {
-    use HasCancellationsTrait;
+    use HasCancellations;
 
     /** @var float $amount */
     protected $amount;

@@ -25,7 +25,7 @@ namespace heidelpay\MgwPhpSdk\Traits;
 
 use heidelpay\MgwPhpSdk\Constants\PaymentState;
 
-trait HasStateTrait
+trait HasPaymentState
 {
     /** @var int */
     private $state = 0;

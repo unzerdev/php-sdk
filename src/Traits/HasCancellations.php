@@ -28,7 +28,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 
-trait HasCancellationsTrait
+trait HasCancellations
 {
     /** @var array $cancellations */
     private $cancellations = [];
