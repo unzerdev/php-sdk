@@ -170,6 +170,7 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * @param PaymentService $paymentService
+     *
      * @return Heidelpay
      */
     public function setPaymentService(PaymentService $paymentService): Heidelpay
@@ -177,7 +178,6 @@ class Heidelpay implements HeidelpayParentInterface
         $this->paymentService = $paymentService;
         return $this;
     }
-
 
     //<editor-fold desc="ParentIF">
 

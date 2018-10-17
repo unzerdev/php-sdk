@@ -52,6 +52,7 @@ class PaymentService
 
     /**
      * PaymentService constructor.
+     *
      * @param Heidelpay $heidelpay
      */
     public function __construct(Heidelpay $heidelpay)
@@ -164,6 +165,4 @@ class PaymentService
         }
         return $paymentObject;
     }
-
-
 }
