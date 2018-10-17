@@ -545,6 +545,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
      * Perform ship transaction on the current payment.
      *
      * @return \heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface|Shipment
+     *
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException
      * @throws \RuntimeException

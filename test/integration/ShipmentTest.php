@@ -49,8 +49,7 @@ class ShipmentTest extends BasePaymentTest
             Currency::EURO,
             $invoiceGuaranteed,
             self::RETURN_URL,
-            $this->getMaximumCustomer())
-        ;
+            $this->getMaximumCustomer());
         $this->assertNotNull($authorize->getId());
         $this->assertNotNull($authorize);
 
@@ -100,6 +99,7 @@ class ShipmentTest extends BasePaymentTest
      * Verify shipment can be performed with payment object.
      *
      * @test
+     *
      * @throws \PHPUnit\Framework\AssertionFailedError
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
