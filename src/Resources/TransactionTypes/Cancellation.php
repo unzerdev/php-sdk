@@ -37,7 +37,7 @@ class Cancellation extends AbstractTransactionType
     {
         $this->setAmount($amount);
 
-        parent::__construct(null);
+        parent::__construct();
     }
 
     /**

@@ -62,7 +62,7 @@ class Charge extends AbstractTransactionType
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
 
-        parent::__construct(null);
+        parent::__construct();
     }
 
     //<editor-fold desc="Setters/Getters">

@@ -82,7 +82,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
-     *                               todo interface?
      */
     public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
@@ -106,10 +105,8 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     //</editor-fold>
 
     /**
-     * Updates the payment object if it exists and if this is not the payment object.
+     * Updates the referenced payment object if it exists and if this is not the payment object itself.
      * This is called from the crud methods to update the payments state whenever anything happens.
-     *
-     * todo: service?
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
