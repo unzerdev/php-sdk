@@ -25,8 +25,37 @@ namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
 class Shipment extends AbstractTransactionType
 {
+    /** @var float $amount */
+    protected $amount;
+
+    //<editor-fold desc="Getters/Setters">
+
+    /**
+     * @return float
+     */
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param float $amount
+     *
+     * @return Shipment
+     */
+    public function setAmount(float $amount): Shipment
+    {
+        $this->amount = $amount;
+        return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
     protected function getResourcePath()
     {
         return 'shipments';
     }
+
+    //</editor-fold>
 }

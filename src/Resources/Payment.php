@@ -686,8 +686,7 @@ class Payment extends AbstractHeidelpayResource
             $shipment = new Shipment(null, $shipmentId);
             $this->addShipment($shipment);
         }
-        // todo:
-//        $shipment->setAmount($transaction->amount);
+        $shipment->setAmount($transaction->amount);
     }
 
     //</editor-fold>
