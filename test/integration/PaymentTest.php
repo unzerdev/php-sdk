@@ -49,7 +49,7 @@ class PaymentTest extends BasePaymentTest
     public function PaymentShouldBeFetchableById()
     {
         $authorize = $this->createAuthorization();
-        $payment = $this->heidelpay->fetchPaymentById($authorize->getPayment()->getId());
+        $payment = $this->heidelpay->fetchPayment($authorize->getPayment()->getId());
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertNotEmpty($payment->getId());
         $this->assertInstanceOf(Authorization::class, $payment->getAuthorization());
@@ -137,7 +137,7 @@ class PaymentTest extends BasePaymentTest
         $this->assertNotNull($payment->getAuthorization()->getId());
 
         $charge = $payment->charge();
-        $fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
         $this->assertNotNull($fetchedPayment->getCharges());
         $this->assertCount(1, $fetchedPayment->getCharges());
 
@@ -163,7 +163,7 @@ class PaymentTest extends BasePaymentTest
     public function partialChargeAfterAuthorization()
     {
         $authorization = $this->createAuthorization();
-        $fetchedPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
         $charge = $fetchedPayment->charge(10.0);
         $this->assertNotNull($charge);
         $this->assertEquals('s-chg-1', $charge->getId());
@@ -184,7 +184,7 @@ class PaymentTest extends BasePaymentTest
     public function fullCancelOnAuthorizeShouldThrowExceptionIfAlreadyCanceled()
     {
         $authorization = $this->createAuthorization();
-        $fetchedPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
         $cancel = $fetchedPayment->getAuthorization()->cancel();
         $this->assertNotNull($cancel);
         $this->assertEquals('s-cnl-1', $cancel->getId());
@@ -209,7 +209,7 @@ class PaymentTest extends BasePaymentTest
     public function partialCancelOnAuthorizeShouldBePossible()
     {
         $authorization = $this->createAuthorization();
-        $fetchedPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
         $this->assertAmounts($fetchedPayment, 100.0, 0, 100.0, 0);
 
         $cancel = $fetchedPayment->cancel(10.0);
@@ -232,7 +232,7 @@ class PaymentTest extends BasePaymentTest
     public function fullCancelOnChargeShouldBePossible()
     {
         $charge = $this->createCharge();
-        $fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
         $fetchedCharge = $fetchedPayment->getChargeById('s-chg-1');
         $cancellation = $fetchedCharge->cancel();
         $this->assertNotNull($cancellation);
@@ -251,7 +251,7 @@ class PaymentTest extends BasePaymentTest
     public function partialCancelShouldBePossible()
     {
         $charge = $this->createCharge();
-        $fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
         $cancel = $fetchedPayment->getCharge(0)->cancel(10.0);
         $this->assertNotNull($cancel);
     }

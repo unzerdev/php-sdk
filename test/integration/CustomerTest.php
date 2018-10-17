@@ -131,7 +131,7 @@ class CustomerTest extends BasePaymentTest
         $authorization = $card->authorize(12.0, Currencies::EURO, self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
-        $secPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
@@ -160,7 +160,7 @@ class CustomerTest extends BasePaymentTest
         $authorization = $card->authorize(12.0, Currencies::EURO, self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
-        $secPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
@@ -189,7 +189,7 @@ class CustomerTest extends BasePaymentTest
         $authorization = $card->authorize(12.0, Currencies::EURO, self::RETURN_URL, $customer->getId());
 
         /** @var Payment $secPayment */
-        $secPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();

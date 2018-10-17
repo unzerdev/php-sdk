@@ -258,25 +258,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Fetch and return payment by given payment id.
      *
-     * @param string $paymentId
-     *
-     * @return Payment
-     *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
-     */
-    public function fetchPaymentById($paymentId): HeidelpayResourceInterface
-    {
-        $payment = new Payment($this);
-        $payment->setId($paymentId);
-        return $this->fetchPayment($payment);
-    }
-
-    /**
-     * Fetch and return payment by given payment id.
-     *
-     * @param Payment $payment
+     * @param Payment|string $payment
      *
      * @return Payment
      *
@@ -285,15 +267,9 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function fetchPayment(Payment $payment): HeidelpayResourceInterface
+    public function fetchPayment($payment): HeidelpayResourceInterface
     {
-        $this->resourceService->fetch($payment);
-        if (!$payment instanceof Payment) {
-            throw new HeidelpaySdkException(
-                sprintf('Resource type %s is not allowed, type %s expected!', Payment::class, \get_class($payment))
-            );
-        }
-        return $payment;
+        return $this->paymentService->fetchPayment($payment);
     }
 
     //</editor-fold>
@@ -443,7 +419,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function fetchAuthorization($paymentId): HeidelpayResourceInterface
     {
         /** @var Payment $payment */
-        $payment = $this->fetchPaymentById($paymentId);
+        $payment = $this->fetchPayment($paymentId);
         $authorization = $this->getResourceService()->fetch($payment->getAuthorization(true));
         return $authorization;
     }
@@ -468,7 +444,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function fetchChargeById($paymentId, $chargeId): HeidelpayResourceInterface
     {
         /** @var Payment $payment */
-        $payment = $this->fetchPaymentById($paymentId);
+        $payment = $this->fetchPayment($paymentId);
         return $this->getResourceService()->fetch($payment->getChargeById($chargeId, true));
     }
 
@@ -525,7 +501,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function fetchReversal($paymentId, $cancellationId): HeidelpayResourceInterface
     {
         /** @var Authorization $authorization */
-        $authorization = $this->fetchPaymentById($paymentId)->getAuthorization();
+        $authorization = $this->fetchPayment($paymentId)->getAuthorization();
         return $authorization->getCancellation($cancellationId);
     }
 
@@ -602,7 +578,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function fetchShipment($paymentId, $shipmentId): HeidelpayResourceInterface
     {
-        $payment = $this->fetchPaymentById($paymentId);
+        $payment = $this->fetchPayment($paymentId);
         return $payment->getShipmentById($shipmentId);
     }
 
@@ -774,7 +750,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function chargeAuthorization($paymentId, $amount = null): AbstractTransactionType
     {
-        $payment = $this->fetchPaymentById($paymentId);
+        $payment = $this->fetchPayment($paymentId);
         return $this->chargePayment($payment, $amount);
     }
 
@@ -907,7 +883,7 @@ class Heidelpay implements HeidelpayParentInterface
         $paymentObject = $payment;
 
         if (\is_string($payment)) {
-            $paymentObject = $this->fetchPaymentById($payment);
+            $paymentObject = $this->fetchPayment($payment);
         }
 
         if (!$payment instanceof Payment) {

@@ -28,6 +28,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
@@ -135,6 +136,33 @@ class PaymentService
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this->heidelpay);
         return $this->resourceService->create($paymentType);
+    }
+
+    /**
+     * Fetch and return payment by given payment id.
+     *
+     * @param Payment|string $payment
+     *
+     * @return Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
+     */
+    public function fetchPayment($payment): HeidelpayResourceInterface
+    {
+        $paymentObject = $payment;
+        if (\is_string($payment)) {
+            $paymentObject = new Payment($this->heidelpay);
+            $paymentObject->setId($payment);
+        }
+
+        $this->resourceService->fetch($paymentObject);
+        if (!$paymentObject instanceof Payment) {
+            throw new HeidelpaySdkException(sprintf('Fetched object is not a payment object!'));
+        }
+        return $paymentObject;
     }
 
 

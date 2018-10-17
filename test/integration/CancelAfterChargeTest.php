@@ -119,7 +119,7 @@ class CancelAfterChargeTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0000, Currencies::EURO, $card, self::RETURN_URL);
 
-        $firstPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+        $firstPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
         $this->assertAmounts($firstPayment, 0, 100, 100, 0);
         $this->assertTrue($firstPayment->isCompleted());
 
@@ -128,7 +128,7 @@ class CancelAfterChargeTest extends BasePaymentTest
         $this->assertNotNull($refund);
         $this->assertNotEmpty($refund->getId());
 
-        $secondPayment = $this->heidelpay->fetchPaymentById($refund->getPayment()->getId());
+        $secondPayment = $this->heidelpay->fetchPayment($refund->getPayment()->getId());
         $this->assertNotNull($secondPayment);
         $this->assertAmounts($secondPayment, 0, 100, 100, 10);
         $this->assertTrue($secondPayment->isCompleted());
@@ -151,7 +151,7 @@ class CancelAfterChargeTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $this->heidelpay->charge(100.0000, Currencies::EURO, $card, self::RETURN_URL);
 
-        $firstPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+        $firstPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
         $this->assertAmounts($firstPayment, 0, 100, 100, 0);
         $this->assertTrue($firstPayment->isCompleted());
 

@@ -127,7 +127,7 @@ class CancelTest extends BasePaymentTest
     {
         $authorization = $this->createAuthorization();
         $reversal = $authorization->cancel();
-        $fetchedPayment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
+        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
         $this->assertNotNull($cancellation);
@@ -149,7 +149,7 @@ class CancelTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $reversal = $charge->cancel();
-        $fetchedPayment = $this->heidelpay->fetchPaymentById($charge->getPayment()->getId());
+        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
 
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
         $this->assertNotNull($cancellation);
