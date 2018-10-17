@@ -368,35 +368,23 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Delete a Customer object via API.
-     *
-     * @param string $customerId
-     *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
-     */
-    public function deleteCustomerById($customerId)
-    {
-        /** @var Customer $customer */
-        $customer = $this->fetchCustomer($customerId);
-        $this->deleteCustomer($customer);
-    }
-
-    /**
      * Delete the given Customer resource.
      *
-     * @param Customer $customer
+     * @param Customer|string $customer
      *
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
-     *
-     * todo: allows customer id as well
      */
-    public function deleteCustomer(Customer $customer)
+    public function deleteCustomer($customer)
     {
-        $this->getResourceService()->delete($customer);
+        $customerObject = $customer;
+
+        if (\is_string($customer)) {
+            $customerObject = $this->fetchCustomer($customer);
+        }
+
+        $this->getResourceService()->delete($customerObject);
     }
 
     //</editor-fold>

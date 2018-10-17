@@ -238,15 +238,41 @@ class CustomerTest extends BasePaymentTest
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function customerShouldBeDeletable(Customer $customer)
+    public function customerShouldBeDeletableById(Customer $customer)
     {
         $this->assertNotNull($customer);
         $this->assertNotNull($customer->getId());
 
-        $this->heidelpay->deleteCustomerById($customer->getId());
+        $this->heidelpay->deleteCustomer($customer->getId());
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
         $this->heidelpay->fetchCustomer($customer->getId());
+    }
+
+    /**
+     * Customer can be deleted.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
+     */
+    public function customerShouldBeDeletableByObject()
+    {
+        $customer = $this->heidelpay->createCustomer($this->getMaximumCustomer());
+
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $this->assertNotNull($customer);
+        $this->assertNotNull($customer->getId());
+
+        $this->heidelpay->deleteCustomer($customer);
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
+        $this->heidelpay->fetchCustomer($fetchedCustomer->getId());
     }
 }
