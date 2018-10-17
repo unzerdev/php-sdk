@@ -28,19 +28,28 @@ use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Interfaces\AmountsInterface;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
-use heidelpay\MgwPhpSdk\Traits\HasAmountsTrait;
 use heidelpay\MgwPhpSdk\Traits\HasStateTrait;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
-class Payment extends AbstractHeidelpayResource implements AmountsInterface
+class Payment extends AbstractHeidelpayResource
 {
-    use HasAmountsTrait;
     use HasStateTrait;
+
+    /**
+     * Payment constructor.
+     *
+     * @param null $parent
+     */
+    public function __construct($parent = null)
+    {
+        $this->amount = new Amount();
+
+        parent::__construct($parent);
+    }
 
     //<editor-fold desc="Properties">
     /** @var string $redirectUrl */
@@ -60,6 +69,10 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
 
     /** @var BasePaymentType $paymentType */
     private $paymentType;
+
+    /** @var Amount */
+    protected $amount;
+    //</editor-fold>
 
     //<editor-fold desc="Setters/Getters">
 
@@ -385,7 +398,14 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
         return null;
     }
 
-    //</editor-fold>
+    /**
+     * @return Amount
+     */
+    public function getAmount(): Amount
+    {
+        return $this->amount;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
@@ -412,18 +432,6 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
         // todo ggf. als object wie Address im customer
         if (isset($response->state->id)) {
             $this->setState($response->state->id);
-        }
-
-        // todo ggf. als object wie Address im customer
-        if (isset($response->amount)) {
-            $amount = $response->amount;
-
-            if (isset($amount->total, $amount->charged, $amount->canceled, $amount->remaining)) {
-                $this->setTotal($amount->total)
-                    ->setCharged($amount->charged)
-                    ->setCanceled($amount->canceled)
-                    ->setRemaining($amount->remaining);
-            }
         }
 
         if (isset($response->resources)) {
@@ -677,7 +685,7 @@ class Payment extends AbstractHeidelpayResource implements AmountsInterface
         $shipmentId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'shp');
         $shipment = $this->getShipmentById($shipmentId, true);
         if (!$shipment instanceof Shipment) {
-            $shipment = (new Shipment())->setId($shipmentId);
+            $shipment = new Shipment(null, $shipmentId);
             $this->addShipment($shipment);
         }
         // todo:

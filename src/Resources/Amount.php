@@ -19,11 +19,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/traits
+ * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\MgwPhpSdk\Traits;
+namespace heidelpay\MgwPhpSdk\Resources;
 
-trait HasAmountsTrait
+class Amount extends AbstractHeidelpayResource
 {
     private $total = 0.0;
     private $charged = 0.0;
@@ -46,7 +46,7 @@ trait HasAmountsTrait
     /**
      * @param float $total
      *
-     * @return self
+     * @return $this
      */
     public function setTotal(float $total): self
     {
@@ -65,7 +65,7 @@ trait HasAmountsTrait
     /**
      * @param float $charged
      *
-     * @return self
+     * @return $this
      */
     public function setCharged(float $charged): self
     {
