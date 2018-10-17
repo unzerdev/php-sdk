@@ -43,9 +43,6 @@ class Authorization extends AbstractTransactionType
     /** @var string $returnUrl */
     protected $returnUrl = '';
 
-    /** @var string $orderId */
-    protected $orderId = '';
-
     /**
      * Authorization constructor.
      *
@@ -118,25 +115,6 @@ class Authorization extends AbstractTransactionType
     public function setReturnUrl($returnUrl): HeidelpayResourceInterface
     {
         $this->returnUrl = $returnUrl;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOrderId(): string
-    {
-        return $this->orderId;
-    }
-
-    /**
-     * @param string $orderId
-     *
-     * @return Authorization
-     */
-    public function setOrderId($orderId): Authorization
-    {
-        $this->orderId = $orderId;
         return $this;
     }
 

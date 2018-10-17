@@ -29,9 +29,12 @@ use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Traits\HasOrderId;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {
+    use HasOrderId;
+
     //<editor-fold desc="Properties">
     /** @var Payment $payment */
     private $payment;
