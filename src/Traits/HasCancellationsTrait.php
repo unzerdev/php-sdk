@@ -23,6 +23,8 @@
  */
 namespace heidelpay\MgwPhpSdk\Traits;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 
@@ -71,13 +73,17 @@ trait HasCancellationsTrait
      * @param boolean $lazy
      *
      * @return mixed
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function getCancellation($cancellationId, $lazy = false)
     {
         /** @var Cancellation $cancellation */
         foreach ($this->cancellations as $cancellation) {
             if ($cancellation->getId() === $cancellationId) {
-                if (!$lazy) {
+                if (!$lazy && $this instanceof HeidelpayParentInterface) {
                     $this->getHeidelpayObject()->getResourceService()->getResource($cancellation);
                 }
                 return $cancellation;
