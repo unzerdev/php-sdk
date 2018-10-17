@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains definitions of the allowed salutations.
+ * This file contains definitions of the supported languages.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\Constants;
 
-class Salutation
+class SupportedLocales
 {
-    const MR = 'mr';
-    const MRS = 'mrs';
-    const UNKNOWN = 'unknown';
+    const GERMAN_GERMAN = 'de_DE';
+    const SWISS_GERMAN = 'de_CH';
+    const USA_ENGLISH = 'en_US';
 }

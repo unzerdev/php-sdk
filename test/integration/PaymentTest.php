@@ -25,7 +25,7 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -276,7 +276,7 @@ class PaymentTest extends BasePaymentTest
         $payment = new Payment($this->heidelpay);
         $authorizationUsingPayment = $payment->authorize(
             100.0,
-            Currency::EURO,
+            Currencies::EURO,
             $card,
             self::RETURN_URL
         );
@@ -286,7 +286,7 @@ class PaymentTest extends BasePaymentTest
         // Variant 2
         $authorizationUsingHeidelpay = $this->heidelpay->authorize(
             100.0,
-            Currency::EURO,
+            Currencies::EURO,
             $card,
             self::RETURN_URL
         );

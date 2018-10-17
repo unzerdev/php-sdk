@@ -24,7 +24,7 @@
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -73,7 +73,7 @@ class InvoiceTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
 
-        $this->heidelpay->charge(1.0, Currency::EURO, $invoice, self::RETURN_URL);
+        $this->heidelpay->charge(1.0, Currencies::EURO, $invoice, self::RETURN_URL);
     }
 
     /**
@@ -93,7 +93,7 @@ class InvoiceTest extends BasePaymentTest
      */
     public function verifyInvoiceIsNotShippable(Invoice $invoice)
     {
-        $authorize = $invoice->authorize(1.0, Currency::EURO, self::RETURN_URL);
+        $authorize = $invoice->authorize(1.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
 

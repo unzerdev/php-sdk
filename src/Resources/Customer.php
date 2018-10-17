@@ -23,7 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources;
 
-use heidelpay\MgwPhpSdk\Constants\Salutation;
+use heidelpay\MgwPhpSdk\Constants\Salutations;
 
 class Customer extends AbstractHeidelpayResource
 {
@@ -34,7 +34,7 @@ class Customer extends AbstractHeidelpayResource
     protected $lastname;
 
     /** @var string $salutation */
-    protected $salutation = Salutation::UNKNOWN;
+    protected $salutation = Salutations::UNKNOWN;
 
     /** @var string $birthDate */
     protected $birthDate;
@@ -127,7 +127,7 @@ class Customer extends AbstractHeidelpayResource
      */
     public function setSalutation($salutation): Customer
     {
-        $this->salutation = $salutation ?: Salutation::UNKNOWN;
+        $this->salutation = $salutation ?: Salutations::UNKNOWN;
         return $this;
     }
 

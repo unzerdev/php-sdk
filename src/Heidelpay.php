@@ -26,7 +26,7 @@ namespace heidelpay\MgwPhpSdk;
 
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
+use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
@@ -69,7 +69,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @throws HeidelpaySdkException Will be thrown if the key is not of type private.
      */
-    public function __construct($key, $locale = SupportedLocale::GERMAN_GERMAN)
+    public function __construct($key, $locale = SupportedLocales::GERMAN_GERMAN)
     {
         $this->setKey($key);
         $this->locale = $locale;

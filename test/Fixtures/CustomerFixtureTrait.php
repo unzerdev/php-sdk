@@ -23,7 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\Fixtures;
 
-use heidelpay\MgwPhpSdk\Constants\Salutation;
+use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Resources\Address;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 
@@ -51,7 +51,7 @@ trait CustomerFixtureTrait
         return (new Customer())
             ->setFirstname($firstname)
             ->setLastname($lastname)
-            ->setSalutation(Salutation::MR)
+            ->setSalutation(Salutations::MR)
             ->setCompany('Musterfirma')
             ->setBirthDate('1982-08-12')
             ->setEmail('max@mustermann.de')
@@ -72,7 +72,7 @@ trait CustomerFixtureTrait
         return (new Customer())
             ->setFirstname($firstname)
             ->setLastname($lastname)
-            ->setSalutation(Salutation::MR)
+            ->setSalutation(Salutations::MR)
             ->setBirthDate('1989-12-24')
             ->setEmail('peter.universum@universum-group.de')
             ->setBillingAddress($this->getSepaDirectDebitGuaranteedAddress($firstname, $lastname));

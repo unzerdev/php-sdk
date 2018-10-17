@@ -23,7 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Constants;
 
-class Currency
+class Currencies
 {
     const UNITED_ARAB_EMIRATES_DIRHAM = 'AED';
     const AFGHAN_AFGHANI = 'AFN';

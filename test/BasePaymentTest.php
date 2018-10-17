@@ -23,8 +23,8 @@
  */
 namespace heidelpay\MgwPhpSdk\test;
 
-use heidelpay\MgwPhpSdk\Constants\Currency;
-use heidelpay\MgwPhpSdk\Constants\SupportedLocale;
+use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Payment;
@@ -53,7 +53,7 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocale::GERMAN_GERMAN);
+        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocales::GERMAN_GERMAN);
     }
 
     //<editor-fold desc="Custom asserts">
@@ -124,7 +124,7 @@ class BasePaymentTest extends TestCase
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = time();
-        $authorization = $this->heidelpay->authorize(100.0, Currency::EURO, $card, self::RETURN_URL, null, $orderId);
+        $authorization = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, null, $orderId);
         return $authorization;
     }
 
@@ -140,7 +140,7 @@ class BasePaymentTest extends TestCase
     public function createCharge(): Charge
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0, Currency::EURO, $card, self::RETURN_URL);
+        $charge = $this->heidelpay->charge(100.0, Currencies::EURO, $card, self::RETURN_URL);
         return $charge;
     }
 
@@ -155,7 +155,7 @@ class BasePaymentTest extends TestCase
      */
     public function currencyCodeProvider(): array
     {
-        $currencyReflection = new ReflectionClass(Currency::class);
+        $currencyReflection = new ReflectionClass(Currencies::class);
         $currencies         = $currencyReflection->getConstants();
 
         $keys          = array_keys($currencies);

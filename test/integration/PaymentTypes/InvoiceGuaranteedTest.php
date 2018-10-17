@@ -23,7 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 
@@ -71,7 +71,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
     {
         $authorization = $invoiceGuaranteed->authorize(
             100.0,
-            Currency::EURO,
+            Currencies::EURO,
             self::RETURN_URL,
             $this->getMaximumCustomer()
         );

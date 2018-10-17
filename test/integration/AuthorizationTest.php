@@ -24,7 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\integration\test;
 
-use heidelpay\MgwPhpSdk\Constants\Currency;
+use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -48,7 +48,7 @@ class AuthorizationTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorize = $this->heidelpay->authorizeWithPaymentTypeId(
             100.0,
-            Currency::EURO,
+            Currencies::EURO,
             $card->getId(),
             self::RETURN_URL
         );
@@ -69,7 +69,7 @@ class AuthorizationTest extends BasePaymentTest
     public function authorizeWithType()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $this->heidelpay->authorize(100.0, Currency::EURO, $card, self::RETURN_URL);
+        $authorize = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotNull($authorize->getId());
     }
@@ -90,7 +90,7 @@ class AuthorizationTest extends BasePaymentTest
         $customer = $this->getMinimalCustomer();
         $this->assertNull($customer->getId());
 
-        $authorize = $this->heidelpay->authorize(100.0, Currency::EURO, $card, self::RETURN_URL, $customer);
+        $authorize = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, $customer);
         $payment = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -116,7 +116,7 @@ class AuthorizationTest extends BasePaymentTest
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $customerId = $this->heidelpay->createCustomer($this->getMinimalCustomer())->getId();
-        $authorize = $this->heidelpay->authorize(100.0, Currency::EURO, $card, self::RETURN_URL, $customerId, time());
+        $authorize = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, $customerId, time());
         $payment = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
