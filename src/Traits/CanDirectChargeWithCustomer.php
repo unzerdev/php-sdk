@@ -18,7 +18,7 @@ use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
-trait CanCharge
+trait CanDirectChargeWithCustomer
 {
     /**
      * Charge an amount with the given currency.
@@ -27,8 +27,8 @@ trait CanCharge
      * @param $amount
      * @param $currency
      * @param $returnUrl
-     * @param Customer|string|null $customer
-     * @param null                 $orderId
+     * @param Customer|string $customer
+     * @param null            $orderId
      *
      * @return Charge
      *
@@ -36,7 +36,7 @@ trait CanCharge
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
-    public function charge($amount, $currency, $returnUrl, $customer = null, $orderId = null): Charge
+    public function charge($amount, $currency, $returnUrl, $customer, $orderId = null): Charge
     {
         if ($this instanceof HeidelpayParentInterface) {
             return $this->getHeidelpayObject()->charge($amount, $currency, $this, $returnUrl, $customer, $orderId);

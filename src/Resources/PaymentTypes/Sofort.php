@@ -23,9 +23,9 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Traits\CanCharge;
+use heidelpay\MgwPhpSdk\Traits\CanDirectCharge;
 
 class Sofort extends BasePaymentType
 {
-    use CanCharge;
+    use CanDirectCharge;
 }
