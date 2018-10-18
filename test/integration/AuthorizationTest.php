@@ -146,7 +146,7 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizationCanBeFetched(Authorization $authorization)
     {
-        $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
+        $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPaymentId());
         $this->assertEquals($authorization->expose(), $fetchedAuthorization->expose());
     }
 }
