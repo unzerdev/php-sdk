@@ -29,6 +29,7 @@ trait HasOrderId
     protected $orderId;
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -47,5 +48,6 @@ trait HasOrderId
         $this->orderId = $orderId;
         return $this;
     }
+
     //</editor-fold>
 }

@@ -307,7 +307,7 @@ class Payment extends AbstractHeidelpayResource
      * i. e. refunds (charge cancellations) and reversals (authorize cancellations).
      *
      * @param string $cancellationId
-     * @param bool $lazy
+     * @param bool   $lazy
      *
      * @return Cancellation
      *

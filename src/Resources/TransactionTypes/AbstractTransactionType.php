@@ -147,6 +147,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     /**
      * @param string $shortId
+     *
      * @return AbstractTransactionType
      */
     public function setShortId(string $shortId): AbstractTransactionType

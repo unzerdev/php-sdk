@@ -728,7 +728,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Perform a full charge by leaving the amount null.
      *
      * @param string|Payment $payment
-     * @param null $amount
+     * @param null           $amount
      *
      * @return Charge Resulting Charge object.
      *

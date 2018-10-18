@@ -140,6 +140,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $iban
+     *
      * @return Authorization
      */
     public function setIban(string $iban): Authorization
@@ -158,6 +159,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $bic
+     *
      * @return Authorization
      */
     public function setBic(string $bic): Authorization
@@ -176,6 +178,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $holder
+     *
      * @return Authorization
      */
     public function setHolder(string $holder): Authorization
@@ -194,6 +197,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $descriptor
+     *
      * @return Authorization
      */
     public function setDescriptor(string $descriptor): Authorization

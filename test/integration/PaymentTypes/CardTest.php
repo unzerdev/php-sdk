@@ -429,6 +429,7 @@ class CardTest extends BasePaymentTest
      * Full cancel on partly charged auth canceled charges.
      *
      * @test
+     *
      * @throws AssertionFailedError
      * @throws Exception
      * @throws ExpectationFailedException
@@ -459,5 +460,6 @@ class CardTest extends BasePaymentTest
         $payment->cancel();
         $this->assertTrue($payment->isCanceled());
     }
+
     //</editor-fold>
 }
