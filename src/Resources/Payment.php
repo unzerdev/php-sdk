@@ -305,7 +305,8 @@ class Payment extends AbstractHeidelpayResource
      * Return cancellation object in all cancellations of this payment object
      * i. e. refunds (charge cancellations) and reversals (authorize cancellations).
      *
-     * @param $cancellationId
+     * @param string $cancellationId
+     * @param bool $lazy
      *
      * @return Cancellation
      *
@@ -313,11 +314,14 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
-    public function getCancellation($cancellationId): Cancellation
+    public function getCancellation($cancellationId, $lazy = false): Cancellation
     {
         /** @var Cancellation $cancellation */
         foreach ($this->getCancellations() as $cancellation) {
             if ($cancellation->getId() === $cancellationId) {
+                if (!$lazy) {
+                    $this->getHeidelpayObject()->getResourceService()->getResource($cancellation);
+                }
                 return $cancellation;
             }
         }
