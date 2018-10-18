@@ -34,9 +34,9 @@ trait CanDirectChargeWithCustomer
      * Charge an amount with the given currency.
      * Throws HeidelpayApiException if the transaction could not be performed (e. g. increased risk etc.).
      *
-     * @param $amount
-     * @param $currency
-     * @param $returnUrl
+     * @param float           $amount
+     * @param string          $currency
+     * @param string          $returnUrl
      * @param Customer|string $customer
      * @param null            $orderId
      *
