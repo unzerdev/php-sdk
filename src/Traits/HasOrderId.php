@@ -26,7 +26,7 @@ namespace heidelpay\MgwPhpSdk\Traits;
 trait HasOrderId
 {
     /** @var string $orderId */
-    protected $orderId = '';
+    protected $orderId;
 
     //<editor-fold desc="Getters/Setters">
     /**
