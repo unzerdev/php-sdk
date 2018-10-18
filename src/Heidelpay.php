@@ -50,7 +50,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_VERSION = 'HeidelpayPHP 1.0.0-beta';
-    const DEBUG_MODE = true;
+    const DEBUG_MODE = false;
 
     /**
      * Construct a new heidelpay object.
@@ -60,7 +60,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @throws HeidelpaySdkException Will be thrown if the key is not of type private.
      */
-    public function __construct($key, $locale = SupportedLocales::GERMAN_GERMAN)
+    public function __construct($key, $locale = SupportedLocales::USA_ENGLISH)
     {
         $this->setKey($key);
         $this->locale = $locale;
