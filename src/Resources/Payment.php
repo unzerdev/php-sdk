@@ -544,7 +544,7 @@ class Payment extends AbstractHeidelpayResource
     public function charge($amount = null, $currency = null): Charge
     {
         if ($this->getAuthorization(true) !== null) {
-            return $this->getHeidelpayObject()->chargeAuthorization($this->getId(), $amount);
+            return $this->getHeidelpayObject()->chargeAuthorization($this, $amount);
         }
         return $this->getHeidelpayObject()->chargePayment($this, $amount, $currency);
     }

@@ -727,7 +727,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Charge the given amount on the payment with the given id.
      * Perform a full charge by leaving the amount null.
      *
-     * @param $paymentId
+     * @param string|Payment $payment
      * @param null $amount
      *
      * @return Charge Resulting Charge object.
@@ -736,10 +736,10 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function chargeAuthorization($paymentId, $amount = null): AbstractTransactionType
+    public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
     {
-        $payment = $this->fetchPayment($paymentId);
-        return $this->chargePayment($payment, $amount);
+        $paymentObject = $this->fetchPayment($payment);
+        return $this->chargePayment($paymentObject, $amount);
     }
 
     /**

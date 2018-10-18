@@ -425,34 +425,39 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
     }
 
-    // todo:
-//    /**
-//     * Full cancel on partly charged auth canceled charges.
-//     *
-//     * @test
-//     */
-//    public function fullCancelOnPartlyPaidAuthWithCanceledCharges()
-//    {
-//        /** @var Card $card */
-//        $card = $this->createCard();
-//        $card = $this->heidelpay->createPaymentType($card);
-//
-//        $authorization = $card->authorize(100.0000, Currency::EURO, self::RETURN_URL);
-//        $payment = $authorization->getPayment();
-//
-//        $payment->charge(10.0);
-//        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
-//
-//        $charge = $payment->charge(10.0);
-//        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
-//        $this->assertTrue($payment->isPartlyPaid());
-//
-//        $charge->cancel();
-//        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 10.0);
-//        $this->assertTrue($payment->isPartlyPaid());
-//
-//        $payment->cancel();
-//        $this->assertTrue($payment->isCanceled());
-//    }
+    /**
+     * Full cancel on partly charged auth canceled charges.
+     *
+     * @test
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function fullCancelOnPartlyPaidAuthWithCanceledCharges()
+    {
+        /** @var Card $card */
+        $card = $this->createCardObject();
+        $card = $this->heidelpay->createPaymentType($card);
+
+        $authorization = $card->authorize(100.0000, Currencies::EURO, self::RETURN_URL);
+        $payment = $authorization->getPayment();
+
+        $payment->charge(10.0);
+        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
+
+        $charge = $payment->charge(10.0);
+        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $charge->cancel();
+        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 10.0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $payment->cancel();
+        $this->assertTrue($payment->isCanceled());
+    }
     //</editor-fold>
 }
