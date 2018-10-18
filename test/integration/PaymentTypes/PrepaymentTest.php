@@ -80,6 +80,10 @@ class PrepaymentTest extends BasePaymentTest
         $authorization = $prepayment->authorize(100.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($authorization);
         $this->assertNotNull($authorization->getId());
+        $this->assertNotEmpty($authorization->getIban());
+        $this->assertNotEmpty($authorization->getBic());
+        $this->assertNotEmpty($authorization->getHolder());
+        $this->assertNotEmpty($authorization->getDescriptor());
 
         return $authorization;
     }

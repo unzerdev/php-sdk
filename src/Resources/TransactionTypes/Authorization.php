@@ -38,10 +38,22 @@ class Authorization extends AbstractTransactionType
     protected $amount = 0.0;
 
     /** @var string $currency */
-    protected $currency = '';
+    protected $currency;
 
     /** @var string $returnUrl */
-    protected $returnUrl = '';
+    protected $returnUrl;
+
+    /** @var string $iban */
+    private $iban;
+
+    /** @var string bic */
+    private $bic;
+
+    /** @var string $holder */
+    private $holder;
+
+    /** @var string $descriptor */
+    private $descriptor;
 
     /**
      * Authorization constructor.
@@ -115,6 +127,78 @@ class Authorization extends AbstractTransactionType
     public function setReturnUrl($returnUrl): HeidelpayResourceInterface
     {
         $this->returnUrl = $returnUrl;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIban(): string
+    {
+        return $this->iban;
+    }
+
+    /**
+     * @param string $iban
+     * @return Authorization
+     */
+    public function setIban(string $iban): Authorization
+    {
+        $this->iban = $iban;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBic(): string
+    {
+        return $this->bic;
+    }
+
+    /**
+     * @param string $bic
+     * @return Authorization
+     */
+    public function setBic(string $bic): Authorization
+    {
+        $this->bic = $bic;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHolder(): string
+    {
+        return $this->holder;
+    }
+
+    /**
+     * @param string $holder
+     * @return Authorization
+     */
+    public function setHolder(string $holder): Authorization
+    {
+        $this->holder = $holder;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescriptor(): string
+    {
+        return $this->descriptor;
+    }
+
+    /**
+     * @param string $descriptor
+     * @return Authorization
+     */
+    public function setDescriptor(string $descriptor): Authorization
+    {
+        $this->descriptor = $descriptor;
         return $this;
     }
 

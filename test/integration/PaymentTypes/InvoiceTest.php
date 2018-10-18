@@ -96,6 +96,10 @@ class InvoiceTest extends BasePaymentTest
         $authorize = $invoice->authorize(1.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
+        $this->assertNotEmpty($authorize->getIban());
+        $this->assertNotEmpty($authorize->getBic());
+        $this->assertNotEmpty($authorize->getHolder());
+        $this->assertNotEmpty($authorize->getDescriptor());
 
         $payment = $authorize->getPayment();
 

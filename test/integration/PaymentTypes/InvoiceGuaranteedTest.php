@@ -77,6 +77,11 @@ class InvoiceGuaranteedTest extends BasePaymentTest
         );
         $this->assertNotNull($authorization);
         $this->assertNotEmpty($authorization->getId());
+        $this->assertNotEmpty($authorization->getIban());
+        $this->assertNotEmpty($authorization->getBic());
+        $this->assertNotEmpty($authorization->getHolder());
+        $this->assertNotEmpty($authorization->getDescriptor());
+
 
         $shipment = $this->heidelpay->ship($authorization->getPayment());
         $this->assertNotNull($shipment);
