@@ -738,7 +738,12 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
     {
-        $paymentObject = $this->fetchPayment($payment);
+        $paymentObject = $payment;
+
+        if (\is_string($payment)) {
+            $paymentObject = $this->fetchPayment($payment);
+        }
+
         return $this->chargePayment($paymentObject, $amount);
     }
 
