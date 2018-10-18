@@ -24,6 +24,7 @@
 namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
@@ -522,11 +523,42 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancel($amount = null): Cancellation
     {
-        if ($this->getAuthorization() instanceof Authorization) {
-            return $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
+        $cancel = null;
+        $alreadyCanceledException = null;
+
+        /** @var Charge $charge */
+        foreach ($this->getCharges() as $charge) {
+            try {
+                $cancel = $charge->cancel();
+            } catch (HeidelpayApiException $e) {
+                $alreadyCanceledException = $e;
+                if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
+                    throw $e;
+                }
+            }
         }
 
-        throw new HeidelpaySdkException('This Payment has no Authorization. Please fetch the Payment first.');
+        try {
+            if ($this->getAuthorization() instanceof Authorization) {
+                $cancel = $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
+            }
+        } catch (HeidelpayApiException $e) {
+            $alreadyCanceledException = $e;
+            if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
+                throw $e;
+            }
+        }
+
+        if ($cancel instanceof Cancellation) {
+            return $cancel;
+        }
+
+        // throw the last exception if no cancellation has been created
+        if ($alreadyCanceledException instanceof HeidelpayApiException) {
+            throw $alreadyCanceledException;
+        }
+
+        throw new HeidelpaySdkException('This Payment could not be cancelled.');
     }
 
     /**
