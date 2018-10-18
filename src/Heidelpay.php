@@ -30,6 +30,7 @@ use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Keypair;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
@@ -270,6 +271,20 @@ class Heidelpay implements HeidelpayParentInterface
     public function fetchPayment($payment): HeidelpayResourceInterface
     {
         return $this->paymentService->fetchPayment($payment);
+    }
+
+    /**
+     * Fetch public key and configured payment types from API.
+     *
+     * @return Keypair
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function fetchKeypair(): HeidelpayResourceInterface
+    {
+        $keypair = new Keypair($this);
+        return $this->resourceService->fetch($keypair);
     }
 
     //</editor-fold>

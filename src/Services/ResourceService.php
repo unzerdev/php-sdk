@@ -28,6 +28,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpay\MgwPhpSdk\Resources\Keypair;
 
 class ResourceService
 {
@@ -122,7 +123,7 @@ class ResourceService
     public function fetch(AbstractHeidelpayResource $resource): HeidelpayResourceInterface
     {
         $method = HttpAdapterInterface::REQUEST_GET;
-        if ($resource->getId() === null) {
+        if (!$resource instanceof Keypair && $resource->getId() === null) {
             throw new HeidelpaySdkException('The resources id must be set for this call on API!');
         }
 
