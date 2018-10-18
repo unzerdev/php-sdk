@@ -47,8 +47,7 @@ class InvoiceTest extends BasePaymentTest
     public function invoiceTypeShouldBeCreatable(): Invoice
     {
         /** @var Invoice $invoice */
-        $invoice = new Invoice();
-        $invoice = $this->heidelpay->createPaymentType($invoice);
+        $invoice = $this->heidelpay->createPaymentType(new Invoice());
         $this->assertInstanceOf(Invoice::class, $invoice);
         $this->assertNotNull($invoice->getId());
 

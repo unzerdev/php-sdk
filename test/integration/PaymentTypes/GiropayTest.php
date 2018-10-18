@@ -85,10 +85,7 @@ class GiropayTest extends BasePaymentTest
     public function giroPayShouldBeChargeable()
     {
         /** @var Giropay $giropay */
-        $giropay = new Giropay();
-        $giropay = $this->heidelpay->createPaymentType($giropay);
-
-        /** @var Charge $charge */
+        $giropay = $this->heidelpay->createPaymentType(new Giropay());
         $charge = $giropay->charge(1.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());

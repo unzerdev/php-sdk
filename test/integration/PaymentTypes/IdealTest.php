@@ -47,9 +47,7 @@ class IdealTest extends BasePaymentTest
     public function idealShouldBeCreatable(): Ideal
     {
         /** @var Ideal $ideal */
-        $ideal = new Ideal();
-        $ideal->setBic('RABONL2U');
-        $this->heidelpay->createPaymentType($ideal);
+        $ideal = $this->heidelpay->createPaymentType((new Ideal())->setBic('RABONL2U'));
         $this->assertInstanceOf(Ideal::class, $ideal);
         $this->assertNotNull($ideal->getId());
 

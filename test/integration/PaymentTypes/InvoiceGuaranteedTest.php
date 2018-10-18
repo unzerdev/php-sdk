@@ -45,8 +45,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
     public function invoiceGuaranteedTypeShouldBeCreatable(): InvoiceGuaranteed
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
-        $invoiceGuaranteed = new InvoiceGuaranteed();
-        $invoiceGuaranteed = $this->heidelpay->createPaymentType($invoiceGuaranteed);
+        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $this->assertInstanceOf(InvoiceGuaranteed::class, $invoiceGuaranteed);
         $this->assertNotNull($invoiceGuaranteed->getId());
 
