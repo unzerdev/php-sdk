@@ -31,6 +31,8 @@ use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class PrepaymentTest extends BasePaymentTest
@@ -41,8 +43,8 @@ class PrepaymentTest extends BasePaymentTest
      * @return Prepayment
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\Exception
+     * @throws AssertionFailedError
+     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
@@ -100,7 +102,7 @@ class PrepaymentTest extends BasePaymentTest
      * @param Prepayment $prepayment
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
@@ -122,7 +124,7 @@ class PrepaymentTest extends BasePaymentTest
      * @param Authorization $authorization
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
@@ -132,5 +134,27 @@ class PrepaymentTest extends BasePaymentTest
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
         $this->heidelpay->ship($authorization->getPayment());
+    }
+
+    /**
+     * Verify authorization of prepayment type.
+     *
+     * @test
+     *
+     * @depends prepaymentShouldBeCreatableAndFetchable
+     *
+     * @param Prepayment $prepayment
+     *
+     * @throws HeidelpayApiException
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
+     */
+    public function prepaymentAuthorizeCanBeCanceled(Prepayment $prepayment)
+    {
+        $authorization = $prepayment->authorize(100.0, Currencies::EURO, self::RETURN_URL);
+        $cancellation = $authorization->cancel();
+        $this->assertNotNull($cancellation);
+        $this->assertNotNull($cancellation->getId());
     }
 }
