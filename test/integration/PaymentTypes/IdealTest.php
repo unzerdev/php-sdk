@@ -26,8 +26,11 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class IdealTest extends BasePaymentTest
 {
@@ -39,10 +42,10 @@ class IdealTest extends BasePaymentTest
      * @return Ideal
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      */
     public function idealShouldBeCreatable(): Ideal
     {
@@ -62,9 +65,9 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      * @depends idealShouldBeCreatable
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal)
@@ -84,10 +87,10 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      */
     public function idealShouldBeChargeable(Ideal $ideal)
     {
@@ -98,6 +101,10 @@ class IdealTest extends BasePaymentTest
 
         $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertEquals($charge->expose(), $fetchCharge->expose());
+
+        $cancel = $charge->cancel();
+        $this->assertNotNull($cancel);
+        $this->assertNotNull($cancel->getId());
     }
 
     /**
@@ -109,10 +116,10 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      */
     public function idealTypeCanBeFetched(Ideal $ideal)
     {
