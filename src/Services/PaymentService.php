@@ -23,6 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Services;
 
+use heidelpay\MgwPhpSdk\Constants\IdStrings;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
@@ -61,6 +62,7 @@ class PaymentService
         $this->resourceService = $heidelpay->getResourceService();
     }
 
+    //<editor-fold desc="Payment Type">
     /**
      * Fetch the payment type with the given Id from the API.
      *
@@ -80,37 +82,37 @@ class PaymentService
         preg_match('/^[sp]{1}-([a-z]{3}|p24)-[a-z0-9]*/', $typeId, $typeIdParts);
 
         switch ($typeIdParts[1]) {
-            case 'crd':
+            case IdStrings::CARD:
                 $paymentType = new Card(null, null);
                 break;
-            case 'gro':
+            case IdStrings::GIROPAY:
                 $paymentType = new Giropay();
                 break;
-            case 'idl':
+            case IdStrings::IDEAL:
                 $paymentType = new Ideal();
                 break;
-            case 'ivc':
+            case IdStrings::INVOICE:
                 $paymentType = new Invoice();
                 break;
-            case 'ivg':
+            case IdStrings::INVOICE_GUARANTEED:
                 $paymentType = new InvoiceGuaranteed();
                 break;
-            case 'ppl':
+            case IdStrings::PAYPAL:
                 $paymentType = new Paypal();
                 break;
-            case 'ppy':
+            case IdStrings::PREPAYMENT:
                 $paymentType = new Prepayment();
                 break;
-            case 'p24':
+            case IdStrings::PRZELEWY24:
                 $paymentType = new Przelewy24();
                 break;
-            case 'ddg':
+            case IdStrings::SEPA_DIRECT_DEBIT_GUARANTEED:
                 $paymentType = new SepaDirectDebitGuaranteed(null);
                 break;
-            case 'sdd':
+            case IdStrings::SEPA_DIRECT_DEBIT:
                 $paymentType = new SepaDirectDebit(null);
                 break;
-            case 'sft':
+            case IdStrings::SOFORT:
                 $paymentType = new Sofort();
                 break;
             default:
@@ -138,6 +140,7 @@ class PaymentService
         $paymentType->setParentResource($this->heidelpay);
         return $this->resourceService->create($paymentType);
     }
+    //</editor-fold>
 
     /**
      * Fetch and return payment by given payment id.

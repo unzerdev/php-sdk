@@ -145,17 +145,17 @@ class ResourceService
     }
 
     /**
-     * @param $transaction
-     * @param $pattern
+     * @param string $url
+     * @param string $typePattern
      *
-     * @return mixed
+     * @return string
      *
      * @throws \RuntimeException
      */
-    public function getResourceId($transaction, $pattern)
+    public function getResourceIdFromUrl($url, $typePattern): string
     {
         $matches = [];
-        preg_match('~\/([s|p]{1}-' . $pattern . '-[\d]+)~', $transaction->url, $matches);
+        preg_match('~\/([s|p]{1}-' . $typePattern . '-[\d]+)~', $url, $matches);
 
         if (\count($matches) < 2) {
             throw new \RuntimeException('Id not found!');

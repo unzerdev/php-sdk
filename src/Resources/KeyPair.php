@@ -32,6 +32,7 @@ class Keypair extends AbstractHeidelpayResource
     private $availablePaymentTypes = [];
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -63,5 +64,6 @@ class Keypair extends AbstractHeidelpayResource
     {
         $this->availablePaymentTypes = $availablePaymentTypes;
     }
+
     //</editor-fold>
 }

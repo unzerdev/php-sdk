@@ -25,6 +25,7 @@ namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
+use heidelpay\MgwPhpSdk\Constants\IdStrings;
 use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
@@ -631,7 +632,9 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateAuthorizationTransaction($transaction)
     {
-        $transactionId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'aut');
+        $transactionId = $this->getHeidelpayObject()
+            ->getResourceService()
+            ->getResourceIdFromUrl($transaction->url, IdStrings::AUTHORIZE);
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
             $authorization = (new Authorization())
@@ -654,7 +657,9 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateChargeTransaction($transaction)
     {
-        $transactionId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'chg');
+        $transactionId = $this->getHeidelpayObject()
+            ->getResourceService()
+            ->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
         $charge = $this->getChargeById($transactionId, true);
         if (!$charge instanceof Charge) {
             $charge = (new Charge())
@@ -677,7 +682,9 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateReversalTransaction($transaction)
     {
-        $transactionId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'cnl');
+        $transactionId = $this->getHeidelpayObject()
+            ->getResourceService()
+            ->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
             throw new HeidelpaySdkException('The Authorization object can not be found.');
@@ -705,8 +712,12 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateRefundTransaction($transaction)
     {
-        $refundId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'cnl');
-        $chargeId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'chg');
+        $refundId = $this->getHeidelpayObject()
+            ->getResourceService()
+            ->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
+        $chargeId = $this->getHeidelpayObject()
+            ->getResourceService()
+            ->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
 
         $charge = $this->getChargeById($chargeId, true);
         if (!$charge instanceof Charge) {
@@ -735,7 +746,9 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateShipmentTransaction($transaction)
     {
-        $shipmentId = $this->getHeidelpayObject()->getResourceService()->getResourceId($transaction, 'shp');
+        $shipmentId = $this->getHeidelpayObject()
+            ->getResourceService()
+            ->getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
         $shipment = $this->getShipmentById($shipmentId, true);
         if (!$shipment instanceof Shipment) {
             $shipment = new Shipment(null, $shipmentId);
