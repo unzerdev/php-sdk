@@ -457,5 +457,49 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
     }
 
+    /**
+     * Verify card charge can be canceled.
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function cardChargeCanBeCanceled()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $charge = $card->charge(100.0, Currencies::EURO, self::RETURN_URL);
+
+        $cancel = $charge->cancel();
+        $this->assertNotNull($cancel);
+        $this->assertNotEmpty($cancel->getId());
+    }
+
+    /**
+     * Verify card authorize can be canceled.
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function cardAuthorizeCanBeCanceled()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorize = $card->authorize(100.0, Currencies::EURO, self::RETURN_URL);
+
+        $cancel = $authorize->cancel();
+        $this->assertNotNull($cancel);
+        $this->assertNotEmpty($cancel->getId());
+    }
+
     //</editor-fold>
 }
