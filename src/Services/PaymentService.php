@@ -63,6 +63,7 @@ class PaymentService
     }
 
     //<editor-fold desc="Payment Type">
+
     /**
      * Fetch the payment type with the given Id from the API.
      *
@@ -140,6 +141,7 @@ class PaymentService
         $paymentType->setParentResource($this->heidelpay);
         return $this->resourceService->create($paymentType);
     }
+
     //</editor-fold>
 
     /**

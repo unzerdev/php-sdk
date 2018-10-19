@@ -11,7 +11,6 @@
  *
  * @package  heidelpay/${Package}
  */
-
 namespace heidelpay\MgwPhpSdk\Constants;
 
 class IdStrings
