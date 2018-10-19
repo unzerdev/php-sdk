@@ -51,7 +51,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_VERSION = 'HeidelpayPHP 1.0.0-beta';
-    const DEBUG_MODE = false;
+    const DEBUG_MODE = true;
 
     /**
      * Construct a new heidelpay object.
@@ -238,23 +238,6 @@ class Heidelpay implements HeidelpayParentInterface
 
     //<editor-fold desc="Resources">
     //<editor-fold desc="Payment resource">
-
-    /**
-     * Create a Payment object with the given properties.
-     *
-     * @param BasePaymentType|string $paymentType
-     * @param Customer|string|null   $customer
-     *
-     * @return Payment The resulting Payment object.
-     *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
-     */
-    private function createPayment($paymentType, $customer = null): HeidelpayResourceInterface
-    {
-        return (new Payment($this))->setPaymentType($paymentType)->setCustomer($customer);
-    }
 
     /**
      * Fetch and return payment by given payment id.
@@ -596,38 +579,38 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Perform an Authorization transaction and return the corresponding Authorization object.
      *
-     * @param float  $amount
+     * @param float $amount
      * @param string $currency
-     * @param $paymentTypeId
-     * @param string        $returnUrl
+     * @param string|BasePaymentType $paymentType
+     * @param string $returnUrl
      * @param Customer|null $customer
-     * @param string|null   $orderId
+     * @param string|null $orderId
      *
      * @return Authorization Resulting Authorization object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
      * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function authorizeWithPaymentTypeId(
         $amount,
         $currency,
-        $paymentTypeId,
+        $paymentType,
         $returnUrl,
         $customer = null,
         $orderId = null
     ): AbstractTransactionType {
-        $paymentType = $this->fetchPaymentType($paymentTypeId);
-        return $this->authorize($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
+        return $this->paymentService
+            ->authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
     }
 
     /**
      * Perform an authorization and return the corresponding Authorization object.
      *
-     * @param $amount
-     * @param $currency
-     * @param Payment $payment
-     * @param $returnUrl
+     * @param float       $amount
+     * @param string      $currency
+     * @param Payment     $payment
+     * @param string      $returnUrl
      * @param string|null $customer
      * @param string|null $orderId
      *
@@ -645,18 +628,16 @@ class Heidelpay implements HeidelpayParentInterface
         $customer = null,
         $orderId = null
     ): AbstractTransactionType {
-        $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
-        $payment->setAuthorization($authorization)->setCustomer($customer);
-        $this->resourceService->create($authorization);
-        return $authorization;
+        return $this->paymentService
+            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
     }
 
     /**
      * Perform an Authorization transaction and return the corresponding Authorization object.
      *
-     * @param float  $amount
-     * @param string $currency
-     * @param $paymentType
+     * @param float                $amount
+     * @param string               $currency
+     * @param BasePaymentType      $paymentType
      * @param string               $returnUrl
      * @param Customer|string|null $customer
      * @param string|null          $orderId
@@ -667,43 +648,20 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
-    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null, $orderId = null): AbstractTransactionType
-    {
-        $payment = $this->createPayment($paymentType, $customer);
-        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
+    public function authorize(
+        $amount,
+        $currency,
+        $paymentType,
+        $returnUrl,
+        $customer = null,
+        $orderId = null
+    ): AbstractTransactionType {
+        return $this->paymentService->authorize($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
     }
 
     //</editor-fold>
 
     //<editor-fold desc="Charge transactions">
-
-    /**
-     * Perform a Charge transaction and return the corresponding Charge object.
-     *
-     * @param float         $amount
-     * @param string        $currency
-     * @param string        $paymentTypeId
-     * @param string        $returnUrl
-     * @param Customer|null $customer
-     * @param string|null   $orderId
-     *
-     * @return Charge Resulting Charge object.
-     *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
-     */
-    public function chargeWithPaymentTypeId(
-        $amount,
-        $currency,
-        $paymentTypeId,
-        $returnUrl,
-        $customer = null,
-        $orderId = null
-    ): AbstractTransactionType {
-        $paymentType = $this->fetchPaymentType($paymentTypeId);
-        return $this->charge($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
-    }
 
     /**
      * Charge the given amount and currency on the given PaymentType resource.
@@ -729,14 +687,7 @@ class Heidelpay implements HeidelpayParentInterface
         $customer = null,
         $orderId = null
     ): AbstractTransactionType {
-        $payment = $this->createPayment($paymentType, $customer);
-        $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setParentResource($payment)->setPayment($payment);
-        $charge->setOrderId($orderId);
-        $payment->addCharge($charge);
-        $this->resourceService->create($charge);
-
-        return $charge;
+        return $this->paymentService->charge($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
     }
 
     /**
@@ -754,13 +705,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
     {
-        $paymentObject = $payment;
-
-        if (\is_string($payment)) {
-            $paymentObject = $this->fetchPayment($payment);
-        }
-
-        return $this->chargePayment($paymentObject, $amount);
+        return $this->paymentService->chargeAuthorization($payment, $amount);
     }
 
     /**
@@ -778,11 +723,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
     {
-        $charge = new Charge($amount, $currency);
-        $charge->setParentResource($payment)->setPayment($payment);
-        $payment->addCharge($charge);
-        $this->resourceService->create($charge);
-        return $charge;
+        return $this->paymentService->chargePayment($payment, $amount, $currency);
     }
 
     //</editor-fold>
@@ -889,19 +830,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function ship($payment): HeidelpayResourceInterface
     {
-        $paymentObject = $payment;
-
-        if (\is_string($payment)) {
-            $paymentObject = $this->fetchPayment($payment);
-        }
-
-        if (!$paymentObject instanceof Payment) {
-            throw new HeidelpaySdkException('Payment object is not set.');
-        }
-
-        $shipment = new Shipment();
-        $paymentObject->addShipment($shipment);
-        return $this->getResourceService()->create($shipment);
+        return $this->getPaymentService()->ship($payment);
     }
 
     //</editor-fold>
