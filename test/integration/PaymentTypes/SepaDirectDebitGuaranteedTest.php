@@ -119,7 +119,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
     }
 
     /**
-     * Verify direct debit guaranteed can be charged and shipped.
+     * Verify direct debit guaranteed can be charged.
      *
      * @test
      *
