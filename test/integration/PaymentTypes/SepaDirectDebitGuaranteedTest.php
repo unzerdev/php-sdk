@@ -78,7 +78,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
     {
         /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
         $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))
-            ->setHolder('Max Mustermann')
+            ->setHolder('John Doe')
             ->setBic('COBADEFFXXX');
         $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
@@ -123,17 +123,17 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      *
      * @test
      *
-     * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
-     *
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\AssertionFailedError
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \RuntimeException
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
-     * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
-    public function directDebitGuaranteedShouldAllowChargeAndShipping(SepaDirectDebitGuaranteed $directDebitGuaranteed)
+    public function directDebitGuaranteedShouldAllowCharge()
     {
+        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
+        $this->heidelpay->createPaymentType($directDebitGuaranteed);
+
         $charge = $directDebitGuaranteed->charge(
             100.0,
             Currencies::EURO,
@@ -142,9 +142,5 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         );
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
-
-        $shipment = $this->heidelpay->ship($charge->getPayment());
-        $this->assertNotNull($shipment);
-        $this->assertEmpty($shipment->getId());
     }
 }

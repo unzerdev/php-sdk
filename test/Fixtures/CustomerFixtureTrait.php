@@ -46,36 +46,31 @@ trait CustomerFixtureTrait
      */
     public function getMaximumCustomer(): Customer
     {
-        $firstname = 'Max';
-        $lastname  = 'Mustermann';
         return (new Customer())
-            ->setFirstname($firstname)
-            ->setLastname($lastname)
+            ->setFirstname('Peter')
+            ->setLastname('Universum')
             ->setSalutation(Salutations::MR)
-            ->setCompany('Musterfirma')
-            ->setBirthDate('1982-08-12')
-            ->setEmail('max@mustermann.de')
-            ->setMobile('01731234567')
-            ->setPhone('062216471400')
-            ->setBillingAddress($this->getAddress($firstname, $lastname));
+            ->setCompany('heidelpay GmbH')
+            ->setBirthDate('1989-12-24')
+            ->setEmail('peter.universum@universum-group.de')
+            ->setMobile('+49172123456')
+            ->setPhone('+4962216471100')
+            ->setBillingAddress($this->getAddress());
     }
 
     /**
      * Create a test Address
      *
-     * @param string $firstname
-     * @param string $lastname
-     *
      * @return Address
      */
-    public function getAddress($firstname, $lastname): Address
+    public function getAddress(): Address
     {
         return (new Address())
-            ->setName($firstname . ' ' . $lastname)
-            ->setStreet('Vangerowstr. 18')
-            ->setZip('69115')
-            ->setCity('Heidelberg')
+            ->setName('Peter Universum')
+            ->setStreet('Hugo-Junkers-Str. 5')
+            ->setZip('60386')
+            ->setCity('Frankfurt am Main')
             ->setCountry('DE')
-            ->setState('DE-1');
+            ->setState('DE-BO');
     }
 }
