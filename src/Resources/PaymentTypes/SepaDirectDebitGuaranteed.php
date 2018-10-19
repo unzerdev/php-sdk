@@ -89,9 +89,9 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getHolder(): string
+    public function getHolder()
     {
         return $this->holder;
     }
