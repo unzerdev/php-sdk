@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines integration tests to verify general functionalities.
+ * This class defines integration tests to verify keypair functionalities.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,14 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
-class GeneralTest extends BasePaymentTest
+class KeyTest extends BasePaymentTest
 {
     /**
      * Validate valid keys are accepted.
@@ -40,8 +41,8 @@ class GeneralTest extends BasePaymentTest
      *
      * @param string $key
      *
-     * @throws HeidelpaySdkException
      * @throws ExpectationFailedException
+     * @throws HeidelpaySdkException
      * @throws Exception
      */
     public function validKeysShouldBeExcepted($key)
@@ -65,5 +66,20 @@ class GeneralTest extends BasePaymentTest
     {
         $this->expectException(HeidelpaySdkException::class);
         new Heidelpay($key, SupportedLocales::GERMAN_GERMAN);
+    }
+    /**
+     * Verify key pair command can be performed.
+     *
+     * @test
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     */
+    public function keypairShouldReturnExpectedValues()
+    {
+        $keypair = $this->heidelpay->fetchKeypair();
+        $this->assertNotNull($keypair);
+        $this->assertNotEmpty($keypair->getPublicKey());
+        $this->assertNotEmpty($keypair->getAvailablePaymentTypes());
     }
 }
