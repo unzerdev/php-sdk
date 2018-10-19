@@ -100,7 +100,6 @@ class SofortTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
-     * @depends sofortShouldBeCreatableAndFetchable
      */
     public function sofortChargeCanBeCanceled(Charge $charge)
     {
