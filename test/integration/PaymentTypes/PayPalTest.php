@@ -86,6 +86,10 @@ class PaypalTest extends BasePaymentTest
         $payment = $authorization->getPayment();
         $this->assertNotNull($payment);
         $this->assertTrue($payment->isPending());
+
+        $cancellation = $authorization->cancel();
+        $this->assertNotNull($cancellation);
+        $this->assertNotEmpty($cancellation->getId());
     }
 
     /**
@@ -107,5 +111,9 @@ class PaypalTest extends BasePaymentTest
         $charge = $paypal->charge(100.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
+
+        $cancellation = $charge->cancel();
+        $this->assertNotNull($cancellation);
+        $this->assertNotEmpty($cancellation->getId());
     }
 }
