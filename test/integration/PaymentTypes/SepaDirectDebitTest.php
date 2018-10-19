@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -121,16 +122,38 @@ class SepaDirectDebitTest extends BasePaymentTest
      *
      * @param SepaDirectDebit $directDebit
      *
+     * @return Charge
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
-    public function directDebitShouldBeChargeable(SepaDirectDebit $directDebit)
+    public function directDebitShouldBeChargeable(SepaDirectDebit $directDebit): Charge
     {
         $charge = $directDebit->charge(100.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
+
+        return $charge;
+    }
+
+    /**
+     * Verify sdd charge is refundable.
+     *
+     * @test
+     *
+     * @param Charge $charge
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @depends directDebitShouldBeChargeable
+     */
+    public function directDebitChargeShouldBeRefundable(Charge $charge)
+    {
+        $cancelation = $charge->cancel();
+        $this->assertNotNull($cancelation);
+        $this->assertNotNull($cancelation->getId());
     }
 }
