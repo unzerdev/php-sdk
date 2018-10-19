@@ -894,7 +894,7 @@ class Heidelpay implements HeidelpayParentInterface
             $paymentObject = $this->fetchPayment($payment);
         }
 
-        if (!$payment instanceof Payment) {
+        if (!$paymentObject instanceof Payment) {
             throw new HeidelpaySdkException('Payment object is not set.');
         }
 
