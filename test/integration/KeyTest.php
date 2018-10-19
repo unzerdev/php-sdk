@@ -67,10 +67,12 @@ class KeyTest extends BasePaymentTest
         $this->expectException(HeidelpaySdkException::class);
         new Heidelpay($key, SupportedLocales::GERMAN_GERMAN);
     }
+
     /**
      * Verify key pair command can be performed.
      *
      * @test
+     *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException

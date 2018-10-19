@@ -123,6 +123,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @param SepaDirectDebit $directDebit
      *
      * @return Charge
+     *
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
@@ -144,6 +145,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @param Charge $charge
+     *
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException

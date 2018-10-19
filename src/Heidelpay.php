@@ -277,6 +277,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Fetch public key and configured payment types from API.
      *
      * @return Keypair
+     *
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException
      * @throws \RuntimeException

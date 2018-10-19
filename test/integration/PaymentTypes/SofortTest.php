@@ -71,6 +71,7 @@ class SofortTest extends BasePaymentTest
      * @param Sofort $sofort
      *
      * @return Charge
+     *
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws \RuntimeException
@@ -95,6 +96,7 @@ class SofortTest extends BasePaymentTest
      * @depends sofortShouldBeAbleToCharge
      *
      * @param Charge $charge
+     *
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
