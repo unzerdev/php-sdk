@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -69,6 +70,7 @@ class SofortTest extends BasePaymentTest
      *
      * @param Sofort $sofort
      *
+     * @return Charge
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws \RuntimeException
@@ -81,6 +83,30 @@ class SofortTest extends BasePaymentTest
         $charge = $sofort->charge(100.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
+
+        return $charge;
+    }
+
+    /**
+     * Verify sofort charge can be canceled.
+     *
+     * @test
+     *
+     * @depends sofortShouldBeAbleToCharge
+     *
+     * @param Charge $charge
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     * @depends sofortShouldBeCreatableAndFetchable
+     */
+    public function sofortChargeCanBeCanceled(Charge $charge)
+    {
+        $cancel = $charge->cancel();
+        $this->assertNotNull($cancel);
+        $this->assertNotEmpty($cancel->getId());
     }
 
     /**
