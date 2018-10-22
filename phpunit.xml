@@ -17,4 +17,9 @@
             <group>skip</group>
         </exclude>
     </groups>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/**</directory>
+        </whitelist>
+    </filter>
 </phpunit>

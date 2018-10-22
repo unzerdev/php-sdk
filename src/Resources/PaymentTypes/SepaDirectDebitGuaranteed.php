@@ -2,19 +2,33 @@
 /**
  * This represents the SEPA direct debit guaranteed payment type.
  *
- * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/PaymentTypes
+ * @package  heidelpay/mgw_sdk/payment_types
  */
-namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
+
+use heidelpay\MgwPhpSdk\Traits\CanDirectChargeWithCustomer;
 
 class SepaDirectDebitGuaranteed extends BasePaymentType
 {
+    use CanDirectChargeWithCustomer;
+
     /** @var string $iban */
     protected $iban;
 
@@ -27,16 +41,15 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     /**
      * @param string $iban
      */
-    public function __construct(string $iban)
+    public function __construct($iban)
     {
-        $this->setChargeable(true);
-
         $this->iban = $iban;
 
         parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -47,9 +60,10 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
 
     /**
      * @param string $iban
-     * @return SepaDirectDebitGuaranteed
+     *
+     * @return $this
      */
-    public function setIban(string $iban): SepaDirectDebitGuaranteed
+    public function setIban($iban): self
     {
         $this->iban = $iban;
         return $this;
@@ -65,40 +79,33 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
 
     /**
      * @param string $bic
-     * @return SepaDirectDebitGuaranteed
+     *
+     * @return $this
      */
-    public function setBic(string $bic): SepaDirectDebitGuaranteed
+    public function setBic($bic): self
     {
         $this->bic = $bic;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getHolder(): string
+    public function getHolder()
     {
         return $this->holder;
     }
 
     /**
      * @param string $holder
-     * @return SepaDirectDebitGuaranteed
+     *
+     * @return $this
      */
-    public function setHolder(string $holder): SepaDirectDebitGuaranteed
+    public function setHolder($holder): self
     {
         $this->holder = $holder;
         return $this;
     }
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable Methods">
-    /**
-     * {@inheritDoc}
-     */
-    public function getResourcePath()
-    {
-        return 'types/sepa-direct-debit-guaranteed';
-    }
     //</editor-fold>
 }

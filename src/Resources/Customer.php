@@ -1,19 +1,29 @@
 <?php
 /**
- * Description
+ * This represents the customer resource.
  *
- * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\NmgPhpSdk\Resources;
+namespace heidelpay\MgwPhpSdk\Resources;
 
-use heidelpay\NmgPhpSdk\Address;
+use heidelpay\MgwPhpSdk\Constants\Salutations;
 
 class Customer extends AbstractHeidelpayResource
 {
@@ -24,7 +34,7 @@ class Customer extends AbstractHeidelpayResource
     protected $lastname;
 
     /** @var string $salutation */
-    protected $salutation;
+    protected $salutation = Salutations::UNKNOWN;
 
     /** @var string $birthDate */
     protected $birthDate;
@@ -49,6 +59,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * Customer constructor.
+     *
      * @param string|null $firstname
      * @param string|null $lastname
      */
@@ -61,12 +72,8 @@ class Customer extends AbstractHeidelpayResource
         parent::__construct();
     }
 
-    public function getResourcePath(): string
-    {
-        return 'customers';
-    }
-
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -77,6 +84,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $firstname
+     *
      * @return Customer
      */
     public function setFirstname($firstname): Customer
@@ -95,6 +103,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $lastname
+     *
      * @return Customer
      */
     public function setLastname($lastname): Customer
@@ -113,11 +122,12 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $salutation
+     *
      * @return Customer
      */
-    public function setSalutation(string $salutation): Customer
+    public function setSalutation($salutation): Customer
     {
-        $this->salutation = $salutation;
+        $this->salutation = $salutation ?: Salutations::UNKNOWN;
         return $this;
     }
 
@@ -131,6 +141,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $birthday
+     *
      * @return Customer
      */
     public function setBirthDate($birthday): Customer
@@ -149,6 +160,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $company
+     *
      * @return Customer
      */
     public function setCompany($company): Customer
@@ -167,6 +179,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $email
+     *
      * @return Customer
      */
     public function setEmail($email): Customer
@@ -185,9 +198,10 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $phone
+     *
      * @return Customer
      */
-    public function setPhone(string $phone): Customer
+    public function setPhone($phone): Customer
     {
         $this->phone = $phone;
         return $this;
@@ -203,9 +217,10 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $mobile
+     *
      * @return Customer
      */
-    public function setMobile(string $mobile): Customer
+    public function setMobile($mobile): Customer
     {
         $this->mobile = $mobile;
         return $this;
@@ -221,6 +236,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param Address $billingAddress
+     *
      * @return Customer
      */
     public function setBillingAddress(Address $billingAddress): Customer
@@ -239,12 +255,22 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param string $customerId
+     *
      * @return Customer
      */
-    public function setCustomerId(string $customerId): Customer
+    public function setCustomerId($customerId): Customer
     {
         $this->customerId = $customerId;
         return $this;
     }
+
+    //<editor-fold desc="Resource IF">
+    public function getResourcePath(): string
+    {
+        return 'customers';
+    }
+
+    //</editor-fold>
+
     //</editor-fold>
 }

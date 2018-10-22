@@ -1,24 +1,34 @@
 <?php
 /**
- * Description
+ * This is the base class for all resource types managed by the api.
  *
- * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/${Package}
+ * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\NmgPhpSdk\Resources;
+namespace heidelpay\MgwPhpSdk\Resources;
 
-use heidelpay\NmgPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\NmgPhpSdk\Exceptions\HeidelpayObjectMissingException;
-use heidelpay\NmgPhpSdk\Exceptions\IdRequiredToFetchResourceException;
-use heidelpay\NmgPhpSdk\Heidelpay;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\NmgPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 
 abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, HeidelpayParentInterface
 {
@@ -28,11 +38,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     /** @var HeidelpayParentInterface */
     private $parentResource;
 
+    /** @var \DateTime */
+    private $fetchedAt;
+
     /**
      * @param HeidelpayParentInterface $parent
-     * @param string $id
-     *
-     * todo: wird das noch gebraucht?
+     * @param string                   $id
      */
     public function __construct($parent = null, $id = null)
     {
@@ -40,78 +51,71 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $this->id = $id;
     }
 
-    //<editor-fold desc="CRUD">
+    //<editor-fold desc="Helpers">
 
     /**
      * {@inheritDoc}
      */
-    public function create(): HeidelpayResourceInterface
+    public function getHeidelpayObject(): Heidelpay
     {
-        $response = $this->send(HttpAdapterInterface::REQUEST_POST);
+        $heidelpayObject = $this->parentResource->getHeidelpayObject();
 
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return $this;
+        if (!$heidelpayObject instanceof Heidelpay) {
+            throw new HeidelpaySdkException('Heidelpay object reference is not set!');
         }
 
-        $this->setId($response->id);
-
-        $this->handleResponse($response);
-        return $this;
+        return $heidelpayObject;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function update(): HeidelpayResourceInterface
+    public function getUri(): string
     {
-        $response = $this->send(HttpAdapterInterface::REQUEST_PUT);
-
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return $this;
+        // remove trailing slash and explode
+        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
+        if ($this->getId() !== null) {
+            $uri[] = $this->getId();
         }
 
-        $this->handleResponse($response);
-        return $this;
+        $uri[] = '';
+
+        return implode('/', $uri);
     }
 
     /**
-     * {@inheritDoc}
+     * Return class short name.
+     *
+     * @return string
      */
-    public function delete()
+    protected static function getClassShortNameKebapCase(): string
     {
-        if ($this->id === null) {
-            throw new IdRequiredToFetchResourceException();
-        }
-
-        $response = $this->send(HttpAdapterInterface::REQUEST_DELETE);
-
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return $this;
-        }
-
-        $this->handleResponse($response);
-        return $this;
+        $classNameParts = explode('\\', static::class);
+        return self::toKebapCase(end($classNameParts));
     }
 
     /**
-     * {@inheritDoc}
+     * Change camel case string to kebap-case.
+     *
+     * @param $str
+     *
+     * @return string
      */
-    public function fetch(): HeidelpayResourceInterface
+    private static function toKebapCase($str): string
     {
-        if ($this->id === null) {
-            throw new IdRequiredToFetchResourceException();
-        }
-
-        $response = $this->send(HttpAdapterInterface::REQUEST_GET);
-        $this->handleResponse($response);
-        return $this;
+        return preg_replace_callback(
+            '/([A-Z]+)/',
+            function ($str) {
+                return '-' . strtolower($str[0]);
+            },
+            lcfirst($str)
+        );
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * {@inheritDoc}
      */
@@ -122,9 +126,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * @param int $id
-     * @return AbstractHeidelpayResource
+     *
+     * @return $this
      */
-    public function setId($id): AbstractHeidelpayResource
+    public function setId($id): self
     {
         $this->id = $id;
         return $this;
@@ -132,6 +137,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * @param HeidelpayParentInterface $parentResource
+     *
      * @return $this
      */
     public function setParentResource($parentResource): self
@@ -147,15 +153,95 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     {
         return $this->parentResource;
     }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getFetchedAt()
+    {
+        return $this->fetchedAt;
+    }
+
+    /**
+     * @param \DateTime $fetchedAt
+     *
+     * @return $this
+     */
+    public function setFetchedAt(\DateTime $fetchedAt): self
+    {
+        $this->fetchedAt = $fetchedAt;
+        return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Resource service facade">
+
+    /**
+     * @return \heidelpay\MgwPhpSdk\Services\ResourceService
+     *
+     * @throws HeidelpaySdkException
+     */
+    private function getResourceService(): \heidelpay\MgwPhpSdk\Services\ResourceService
+    {
+        return $this->getHeidelpayObject()->getResourceService();
+    }
+
+    /**
+     * Fetches the Resource if necessary.
+     *
+     * @param AbstractHeidelpayResource $resource
+     *
+     * @return AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    {
+        return $this->getResourceService()->getResource($resource);
+    }
+
+    /**
+     * Fetch the given resource object.
+     *
+     * @param AbstractHeidelpayResource $resource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function fetchResource(AbstractHeidelpayResource $resource)
+    {
+        $this->getResourceService()->fetch($resource);
+    }
+
+    /**
+     * @param string $url
+     * @param string $typePattern
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
+     */
+    public function getResourceIdFromUrl($url, $typePattern): string
+    {
+        return $this->getResourceService()->getResourceIdFromUrl($url, $typePattern);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Serialization">
+
     /**
      * Specify data which should be serialized to JSON
+     *
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     *
      * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     *               which is a value of any type other than a resource.
      */
     public function jsonSerialize()
     {
@@ -198,7 +284,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         // Add linked resources if any
         $resources = [];
         /**
-         * @var string $key
+         * @var string                     $key
          * @var HeidelpayResourceInterface $linkedResource
          */
         foreach ($this->getLinkedResources() as $key=>$linkedResource) {
@@ -214,62 +300,20 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         ksort($properties);
         return $properties;
     }
+
     //</editor-fold>
 
-    /**
-     * @param string $httpMethod
-     * @throws \RuntimeException
-     * @return \stdClass
-     */
-    public function send($httpMethod = HttpAdapterInterface::REQUEST_GET): \stdClass
-    {
-        $responseJson = $this->getHeidelpayObject()->send(
-            $this->getUri(),
-            $this,
-            $httpMethod
-        );
-        return json_decode($responseJson);
-    }
+    //<editor-fold desc="Overridable Methods">
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getHeidelpayObject(): Heidelpay
-    {
-        $heidelpayObject = $this->parentResource->getHeidelpayObject();
-
-        if (!$heidelpayObject instanceof Heidelpay) {
-            throw new HeidelpayObjectMissingException();
-        }
-
-        return $heidelpayObject;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUri(): string
-    {
-        // remove trailing slash and explode
-        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
-        if ($this->getId() !== null) {
-            $uri[] = $this->getId();
-        }
-
-        $uri[] = '';
-
-        return implode('/', $uri);
-    }
-
-    //<editor-fold desc="Optional Methods">
     /**
      * Return the resources which should be referenced by Id within the resource section of the resource data.
      * Override this to define the linked resources.
+     *
      * @return array
      */
     public function getLinkedResources(): array
     {
-       return [];
+        return [];
     }
 
     /**
@@ -280,7 +324,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      */
     protected function getResourcePath()
     {
-        return strtolower(self::getClassShortName());
+        return self::getClassShortNameKebapCase();
     }
 
     /**
@@ -288,43 +332,36 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      * Override it to handle the data correctly.
      *
      * @param \stdClass $response
+     * @param string    $method
      */
-    protected function handleResponse(\stdClass $response)
+    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         $this->updateValues($this, $response);
     }
 
     /**
+     * This method updates the properties of the resource.
+     *
      * @param $object
      * @param \stdClass $response
      */
     private function updateValues($object, \stdClass $response)
     {
         foreach ($response as $key => $value) {
+            $newValue = $value ?: null;
             $setter = 'set' . ucfirst($key);
             $getter = 'get' . ucfirst($key);
             if (\is_object($value)) {
                 if (\is_callable([$object, $getter])) {
-                    $this->updateValues($object->$getter(), $value);
+                    $this->updateValues($object->$getter(), $newValue);
+                } elseif ('processing' === $key) {
+                    $this->updateValues($object, $newValue);
                 }
-            } else if (\is_callable([$object, $setter])) {
-                $object->$setter($value);
+            } elseif (\is_callable([$object, $setter])) {
+                $object->$setter($newValue);
             }
         }
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Private helper">
-    /**
-     * Return class short name.
-     *
-     * @return string
-     */
-    protected static function getClassShortName(): string
-    {
-        $classNameParts = explode('\\', static::class);
-        return strtolower(end($classNameParts));
-    }
     //</editor-fold>
 }

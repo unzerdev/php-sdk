@@ -2,19 +2,50 @@
 /**
  * This represents the card payment type which supports credit card as well as debit card payments.
  *
- * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/PaymentTypes
+ * @package  heidelpay/mgw_sdk/payment_types
  */
-namespace heidelpay\NmgPhpSdk\Resources\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
+
+use heidelpay\MgwPhpSdk\Traits\CanAuthorize;
+use heidelpay\MgwPhpSdk\Traits\CanDirectCharge;
 
 class Card extends BasePaymentType
 {
+    use CanDirectCharge;
+    use CanAuthorize;
+
+    /**
+     * Card constructor.
+     *
+     * @param string $number
+     * @param string $expiryDate
+     */
+    public function __construct($number, $expiryDate)
+    {
+        $this->setNumber($number);
+        $this->setExpiryDate($expiryDate);
+
+        parent::__construct();
+    }
+
+    //<editor-fold desc="Properties">
     /** @var string $number */
     protected $number;
 
@@ -30,52 +61,8 @@ class Card extends BasePaymentType
     /** @var string $brand */
     private $brand = '';
 
-    /**
-     * Card constructor.
-     * @param string $number
-     * @param string $expiryDate
-     */
-    public function __construct($number, $expiryDate)
-    {
-        $this->setAuthorizable(true)
-             ->setChargeable(true);
-
-        $this->setNumber($number);
-        $this->setExpiryDate($expiryDate);
-
-        parent::__construct();
-    }
-
-    //<editor-fold desc="Overridable Methods">
-    /**
-     * {@inheritDoc}
-     */
-    protected function handleResponse(\stdClass $response)
-    {
-        $isError = isset($response->isError) && $response->isError;
-        if ($isError) {
-            return;
-        }
-
-        if (isset($response->cvc)) {
-            $this->setCvc($response->cvc);
-        }
-        if (isset($response->number)) {
-            $this->setNumber($response->number);
-        }
-        if (isset($response->expiryDate)) {
-            $this->setExpiryDate($response->expiryDate);
-        }
-        if (isset($response->brand)) {
-            $this->setBrand($response->brand);
-        }
-
-        parent::handleResponse($response);
-    }
-
-    //</editor-fold>
-
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -86,6 +73,7 @@ class Card extends BasePaymentType
 
     /**
      * @param string $pan
+     *
      * @return Card
      */
     public function setNumber($pan): Card
@@ -104,6 +92,7 @@ class Card extends BasePaymentType
 
     /**
      * @param string $expiryDate
+     *
      * @return Card
      */
     public function setExpiryDate($expiryDate): Card
@@ -125,6 +114,7 @@ class Card extends BasePaymentType
 
     /**
      * @param string $cvc
+     *
      * @return Card
      */
     public function setCvc($cvc): Card
@@ -143,6 +133,7 @@ class Card extends BasePaymentType
 
     /**
      * @param string $holder
+     *
      * @return Card
      */
     public function setHolder($holder): Card
@@ -164,12 +155,15 @@ class Card extends BasePaymentType
      * Will be set internally on create or fetch card.
      *
      * @param string $brand
+     *
      * @return Card
      */
-    private function setBrand(string $brand): Card
+    protected function setBrand(string $brand): Card
     {
         $this->brand = $brand;
         return $this;
     }
+
+    //</editor-fold>
     //</editor-fold>
 }

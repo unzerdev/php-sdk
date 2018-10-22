@@ -6,4 +6,3 @@
 .idea
 /vendor/
 /composer.lock
-/auth.json
