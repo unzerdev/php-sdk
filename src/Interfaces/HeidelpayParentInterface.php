@@ -23,8 +23,10 @@
  */
 namespace heidelpay\MgwPhpSdk\Interfaces;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 interface HeidelpayParentInterface
 {
@@ -43,4 +45,17 @@ interface HeidelpayParentInterface
      * @return string
      */
     public function getUri(): string;
+
+    /**
+     * Fetches the Resource if necessary.
+     *
+     * @param AbstractHeidelpayResource $resource
+     *
+     * @return AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource;
 }

@@ -115,7 +115,7 @@ class Payment extends AbstractHeidelpayResource
     {
         $authorization = $this->authorization;
         if (!$lazy && $authorization !== null) {
-            return $this->getHeidelpayObject()->getResourceService()->getResource($authorization);
+            return $this->getResource($authorization);
         }
         return $authorization;
     }
@@ -182,7 +182,7 @@ class Payment extends AbstractHeidelpayResource
         foreach ($this->charges as $charge) {
             if ($charge->getId() === $chargeId) {
                 if (!$lazy) {
-                    $this->getHeidelpayObject()->getResourceService()->getResource($charge);
+                    $this->getResource($charge);
                 }
                 return $charge;
             }
@@ -207,7 +207,7 @@ class Payment extends AbstractHeidelpayResource
         if (isset($this->getCharges()[$index])) {
             $resource = $this->getCharges()[$index];
             if (!$lazy) {
-                return $this->getHeidelpayObject()->getResourceService()->getResource($resource);
+                return $this->getResource($resource);
             }
             return $resource;
         }
@@ -322,7 +322,7 @@ class Payment extends AbstractHeidelpayResource
         foreach ($this->getCancellations() as $cancellation) {
             if ($cancellation->getId() === $cancellationId) {
                 if (!$lazy) {
-                    $this->getHeidelpayObject()->getResourceService()->getResource($cancellation);
+                    $this->getResource($cancellation);
                 }
                 return $cancellation;
             }
@@ -397,7 +397,7 @@ class Payment extends AbstractHeidelpayResource
         foreach ($this->getShipments() as $shipment) {
             if ($shipment->getId() === $shipmentId) {
                 if (!$lazy) {
-                    $this->getHeidelpayObject()->getResourceService()->fetch($shipment);
+                    $this->fetchResource($shipment);
                 }
                 return $shipment;
             }
@@ -632,9 +632,7 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateAuthorizationTransaction($transaction)
     {
-        $transactionId = $this->getHeidelpayObject()
-            ->getResourceService()
-            ->getResourceIdFromUrl($transaction->url, IdStrings::AUTHORIZE);
+        $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::AUTHORIZE);
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
             $authorization = (new Authorization())
@@ -657,9 +655,7 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateChargeTransaction($transaction)
     {
-        $transactionId = $this->getHeidelpayObject()
-            ->getResourceService()
-            ->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
+        $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
         $charge = $this->getChargeById($transactionId, true);
         if (!$charge instanceof Charge) {
             $charge = (new Charge())
@@ -682,9 +678,7 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateReversalTransaction($transaction)
     {
-        $transactionId = $this->getHeidelpayObject()
-            ->getResourceService()
-            ->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
+        $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
             throw new HeidelpaySdkException('The Authorization object can not be found.');
@@ -712,12 +706,8 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateRefundTransaction($transaction)
     {
-        $refundId = $this->getHeidelpayObject()
-            ->getResourceService()
-            ->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
-        $chargeId = $this->getHeidelpayObject()
-            ->getResourceService()
-            ->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
+        $refundId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
+        $chargeId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
 
         $charge = $this->getChargeById($chargeId, true);
         if (!$charge instanceof Charge) {
@@ -746,9 +736,7 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateShipmentTransaction($transaction)
     {
-        $shipmentId = $this->getHeidelpayObject()
-            ->getResourceService()
-            ->getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
+        $shipmentId = $this->getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
         $shipment = $this->getShipmentById($shipmentId, true);
         if (!$shipment instanceof Shipment) {
             $shipment = new Shipment(null, $shipmentId);

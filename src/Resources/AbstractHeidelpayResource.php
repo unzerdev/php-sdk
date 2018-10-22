@@ -24,6 +24,7 @@
 namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
@@ -49,6 +50,69 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $this->parentResource = $parent;
         $this->id = $id;
     }
+
+    //<editor-fold desc="Helpers">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHeidelpayObject(): Heidelpay
+    {
+        $heidelpayObject = $this->parentResource->getHeidelpayObject();
+
+        if (!$heidelpayObject instanceof Heidelpay) {
+            throw new HeidelpaySdkException('Heidelpay object reference is not set!');
+        }
+
+        return $heidelpayObject;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUri(): string
+    {
+        // remove trailing slash and explode
+        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
+        if ($this->getId() !== null) {
+            $uri[] = $this->getId();
+        }
+
+        $uri[] = '';
+
+        return implode('/', $uri);
+    }
+
+    /**
+     * Return class short name.
+     *
+     * @return string
+     */
+    protected static function getClassShortNameKebapCase(): string
+    {
+        $classNameParts = explode('\\', static::class);
+        return self::toKebapCase(end($classNameParts));
+    }
+
+    /**
+     * Change camel case string to kebap-case.
+     *
+     * @param $str
+     *
+     * @return string
+     */
+    private static function toKebapCase($str): string
+    {
+        return preg_replace_callback(
+            '/([A-Z]+)/',
+            function ($str) {
+                return '-' . strtolower($str[0]);
+            },
+            lcfirst($str)
+        );
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
 
@@ -109,6 +173,61 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         return $this;
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Resource service facade">
+
+    /**
+     * @return \heidelpay\MgwPhpSdk\Services\ResourceService
+     * @throws HeidelpaySdkException
+     */
+    private function getResourceService(): \heidelpay\MgwPhpSdk\Services\ResourceService
+    {
+        return $this->getHeidelpayObject()->getResourceService();
+    }
+
+    /**
+     * Fetches the Resource if necessary.
+     *
+     * @param AbstractHeidelpayResource $resource
+     *
+     * @return AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    {
+        return $this->getResourceService()->getResource($resource);
+    }
+
+    /**
+     * Fetch the given resource object.
+     *
+     * @param AbstractHeidelpayResource $resource
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
+     */
+    public function fetchResource(AbstractHeidelpayResource $resource)
+    {
+        $this->getResourceService()->fetch($resource);
+    }
+
+    /**
+     * @param string $url
+     * @param string $typePattern
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpaySdkException
+     */
+    public function getResourceIdFromUrl($url, $typePattern): string
+    {
+        return $this->getResourceService()->getResourceIdFromUrl($url, $typePattern);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Serialization">
@@ -181,37 +300,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     //</editor-fold>
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getHeidelpayObject(): Heidelpay
-    {
-        $heidelpayObject = $this->parentResource->getHeidelpayObject();
-
-        if (!$heidelpayObject instanceof Heidelpay) {
-            throw new HeidelpaySdkException('Heidelpay object reference is not set!');
-        }
-
-        return $heidelpayObject;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUri(): string
-    {
-        // remove trailing slash and explode
-        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
-        if ($this->getId() !== null) {
-            $uri[] = $this->getId();
-        }
-
-        $uri[] = '';
-
-        return implode('/', $uri);
-    }
-
-    //<editor-fold desc="Optional Methods">
+    //<editor-fold desc="Overridable Methods">
 
     /**
      * Return the resources which should be referenced by Id within the resource section of the resource data.
@@ -269,39 +358,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
                 $object->$setter($newValue);
             }
         }
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Private helper">
-
-    /**
-     * Return class short name.
-     *
-     * @return string
-     */
-    protected static function getClassShortNameKebapCase(): string
-    {
-        $classNameParts = explode('\\', static::class);
-        return self::toKebapCase(end($classNameParts));
-    }
-
-    /**
-     * Change camel case string to kebap-case.
-     *
-     * @param $str
-     *
-     * @return string
-     */
-    private static function toKebapCase($str): string
-    {
-        return preg_replace_callback(
-            '/([A-Z]+)/',
-            function ($str) {
-                return '-' . strtolower($str[0]);
-            },
-            lcfirst($str)
-        );
     }
 
     //</editor-fold>

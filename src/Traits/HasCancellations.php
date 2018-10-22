@@ -86,7 +86,7 @@ trait HasCancellations
         foreach ($this->cancellations as $cancellation) {
             if ($cancellation->getId() === $cancellationId) {
                 if (!$lazy && $this instanceof HeidelpayParentInterface) {
-                    $this->getHeidelpayObject()->getResourceService()->getResource($cancellation);
+                    $this->getResource($cancellation);
                 }
                 return $cancellation;
             }
