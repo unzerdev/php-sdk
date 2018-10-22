@@ -56,6 +56,7 @@ class PaymentService
     }
 
     //<editor-fold desc="Helpers">
+
     /**
      * Create a Payment object with the given properties.
      *
@@ -72,6 +73,7 @@ class PaymentService
     {
         return (new Payment($this->heidelpay))->setPaymentType($paymentType)->setCustomer($customer);
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Transactions">
@@ -81,12 +83,12 @@ class PaymentService
     /**
      * Perform an Authorization transaction and return the corresponding Authorization object.
      *
-     * @param float $amount
-     * @param string $currency
+     * @param float                  $amount
+     * @param string                 $currency
      * @param string|BasePaymentType $paymentType
-     * @param string $returnUrl
-     * @param Customer|null $customer
-     * @param string|null $orderId
+     * @param string                 $returnUrl
+     * @param Customer|null          $customer
+     * @param string|null            $orderId
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -244,6 +246,7 @@ class PaymentService
     //</editor-fold>
 
     //<editor-fold desc="Authorization Cancel/Reversal transaction">
+
     /**
      * Perform a Cancellation transaction with the given amount for the given Authorization.
      *
@@ -282,6 +285,7 @@ class PaymentService
     {
         return $this->cancelAuthorization($this->resourceService->fetchAuthorization($paymentId), $amount);
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Charge Cancel/Refund transaction">

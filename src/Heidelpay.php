@@ -234,6 +234,7 @@ class Heidelpay implements HeidelpayParentInterface
     //</editor-fold>
 
     //<editor-fold desc="Resources">
+
     /**
      * Fetches the Resource if necessary.
      *
@@ -249,6 +250,7 @@ class Heidelpay implements HeidelpayParentInterface
     {
         return $this->resourceService->getResource($resource);
     }
+
     //<editor-fold desc="Payment resource">
 
     /**
@@ -271,6 +273,7 @@ class Heidelpay implements HeidelpayParentInterface
     //</editor-fold>
 
     //<editor-fold desc="Keypair resource">
+
     /**
      * Fetch public key and configured payment types from API.
      *
@@ -284,6 +287,7 @@ class Heidelpay implements HeidelpayParentInterface
     {
         return $this->resourceService->fetchKeypair();
     }
+
     //</editor-fold>
 
     //<editor-fold desc="PaymentType resource">
@@ -568,12 +572,12 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Perform an Authorization transaction and return the corresponding Authorization object.
      *
-     * @param float $amount
-     * @param string $currency
+     * @param float                  $amount
+     * @param string                 $currency
      * @param string|BasePaymentType $paymentType
-     * @param string $returnUrl
-     * @param Customer|null $customer
-     * @param string|null $orderId
+     * @param string                 $returnUrl
+     * @param Customer|null          $customer
+     * @param string|null            $orderId
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -778,7 +782,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Create a Cancellation transaction for the given Charge resource.
      *
-     * @param Charge $charge
+     * @param Charge     $charge
      * @param float|null $amount
      *
      * @return Cancellation Resulting Cancellation object.

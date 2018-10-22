@@ -179,6 +179,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
 
     /**
      * @return \heidelpay\MgwPhpSdk\Services\ResourceService
+     *
      * @throws HeidelpaySdkException
      */
     private function getResourceService(): \heidelpay\MgwPhpSdk\Services\ResourceService
@@ -206,6 +207,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
      * Fetch the given resource object.
      *
      * @param AbstractHeidelpayResource $resource
+     *
      * @throws HeidelpayApiException
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
@@ -228,6 +230,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     {
         return $this->getResourceService()->getResourceIdFromUrl($url, $typePattern);
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Serialization">

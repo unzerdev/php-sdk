@@ -66,6 +66,7 @@ class ResourceService
     }
 
     //<editor-fold desc="General">
+
     /**
      * Send request to API.
      *
@@ -122,6 +123,7 @@ class ResourceService
         }
         return $resource;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="CRUD operations">
@@ -220,6 +222,7 @@ class ResourceService
     //</editor-fold>
 
     //<editor-fold desc="Payment resource">
+
     /**
      * Fetch and return payment by given payment id.
      *
@@ -246,9 +249,11 @@ class ResourceService
         }
         return $paymentObject;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Keypair resource">
+
     /**
      * Fetch public key and configured payment types from API.
      *
@@ -262,6 +267,7 @@ class ResourceService
     {
         return $this->fetch(new Keypair($this->heidelpay));
     }
+
     //</editor-fold>
 
     //<editor-fold desc="PaymentType resource">
@@ -426,6 +432,7 @@ class ResourceService
     //</editor-fold>
 
     //<editor-fold desc="Authorization resource">
+
     /**
      * Fetch an Authorization object by its paymentId.
      * Authorization Ids are not global but specific to the payment.
@@ -445,9 +452,11 @@ class ResourceService
         $payment = $this->fetchPayment($paymentId);
         return $this->fetch($payment->getAuthorization(true));
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Charge resource">
+
     /**
      * Fetch a Charge object by paymentId and chargeId.
      * Charge Ids are not global but specific to the payment.
@@ -467,9 +476,11 @@ class ResourceService
         $payment = $this->fetchPayment($paymentId);
         return $this->fetch($payment->getChargeById($chargeId, true));
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Cancellation resource">
+
     /**
      * Fetch a cancel on an authorization (aka reversal).
      *
@@ -543,6 +554,7 @@ class ResourceService
     {
         return $this->fetch($charge->getCancellation($cancellationId, true));
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Shipment resource">
@@ -584,5 +596,4 @@ class ResourceService
     }
 
     //</editor-fold>
-
 }
