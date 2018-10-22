@@ -438,7 +438,7 @@ class ResourceService
      * Authorization Ids are not global but specific to the payment.
      * A Payment object can have zero to one authorizations.
      *
-     * @param $paymentId
+     * @param $payment
      *
      * @return Authorization
      *
@@ -446,11 +446,11 @@ class ResourceService
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
-    public function fetchAuthorization($paymentId): HeidelpayResourceInterface
+    public function fetchAuthorization($payment): HeidelpayResourceInterface
     {
-        /** @var Payment $payment */
-        $payment = $this->fetchPayment($paymentId);
-        return $this->fetch($payment->getAuthorization(true));
+        /** @var Payment $paymentObject */
+        $paymentObject = $this->fetchPayment($payment);
+        return $this->fetch($paymentObject->getAuthorization(true));
     }
 
     //</editor-fold>
@@ -461,8 +461,8 @@ class ResourceService
      * Fetch a Charge object by paymentId and chargeId.
      * Charge Ids are not global but specific to the payment.
      *
-     * @param string $paymentId
-     * @param string $chargeId
+     * @param Payment|string $payment
+     * @param string         $chargeId
      *
      * @return Charge
      *
@@ -470,11 +470,11 @@ class ResourceService
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
-    public function fetchChargeById($paymentId, $chargeId): HeidelpayResourceInterface
+    public function fetchChargeById($payment, $chargeId): HeidelpayResourceInterface
     {
-        /** @var Payment $payment */
-        $payment = $this->fetchPayment($paymentId);
-        return $this->fetch($payment->getChargeById($chargeId, true));
+        /** @var Payment $paymentObject */
+        $paymentObject = $this->fetchPayment($payment);
+        return $this->fetch($paymentObject->getChargeById($chargeId, true));
     }
 
     //</editor-fold>
@@ -521,9 +521,9 @@ class ResourceService
     /**
      * Fetch a Cancellation resource on a charge (aka refund) via id.
      *
-     * @param string $paymentId
-     * @param string $chargeId
-     * @param string $cancellationId
+     * @param Payment|string $payment
+     * @param string         $chargeId
+     * @param string         $cancellationId
      *
      * @return Cancellation
      *
@@ -531,10 +531,10 @@ class ResourceService
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
-    public function fetchRefundById($paymentId, $chargeId, $cancellationId): HeidelpayResourceInterface
+    public function fetchRefundById($payment, $chargeId, $cancellationId): HeidelpayResourceInterface
     {
         /** @var Charge $charge */
-        $charge = $this->fetchChargeById($paymentId, $chargeId);
+        $charge = $this->fetchChargeById($payment, $chargeId);
         return $this->fetchRefund($charge, $cancellationId);
     }
 
@@ -568,31 +568,13 @@ class ResourceService
      * @return Shipment
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
-     */
-    public function fetchShipmentByPayment($payment, $shipmentId): HeidelpayResourceInterface
-    {
-        $this->fetch($payment);
-        return $payment->getShipmentById($shipmentId);
-    }
-
-    /**
-     * Fetch a Shipment resource of the given Payment resource by id.
-     *
-     * @param string $paymentId
-     * @param string $shipmentId
-     *
-     * @return Shipment
-     *
-     * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function fetchShipment($paymentId, $shipmentId): HeidelpayResourceInterface
+    public function fetchShipment($payment, $shipmentId): HeidelpayResourceInterface
     {
-        $payment = $this->fetchPayment($paymentId);
-        return $payment->getShipmentById($shipmentId);
+        $paymentObject = $this->fetchPayment($payment);
+        return $paymentObject->getShipmentById($shipmentId);
     }
 
     //</editor-fold>

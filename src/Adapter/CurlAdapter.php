@@ -32,6 +32,7 @@
 namespace heidelpay\MgwPhpSdk\Adapter;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
@@ -47,8 +48,8 @@ class CurlAdapter implements HttpAdapterInterface
      * @return string
      *
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
+     * @throws HeidelpaySdkException
      */
     public function send(
         $uri = null,
@@ -115,7 +116,7 @@ class CurlAdapter implements HttpAdapterInterface
      *
      * @return mixed
      *
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpaySdkException
      */
     private function initCurlRequest($uri, AbstractHeidelpayResource $heidelpayResource, $httpMethod)
     {

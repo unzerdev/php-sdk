@@ -45,6 +45,7 @@ use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Validators\KeyValidator;
+use RuntimeException;
 
 class Heidelpay implements HeidelpayParentInterface
 {
@@ -71,10 +72,10 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Construct a new heidelpay object.
      *
-     * @param string $key
-     * @param string $locale
+     * @param string $key    The private key your received from your heidelpay contact person.
+     * @param string $locale The locale of the customer defining defining the translation.
      *
-     * @throws HeidelpaySdkException Will be thrown if the key is not of type private.
+     * @throws HeidelpaySdkException A HeidelpaySdkException will be thrown if the key is not of type private.
      */
     public function __construct($key, $locale = SupportedLocales::USA_ENGLISH)
     {
@@ -88,7 +89,7 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="General">
 
     /**
-     * Send the given resource object to the given url using the specified Http method (default = GET).
+     * Send the resource object to the url using the specified Http method (default = GET).
      *
      * @param string                     $uri      The URI to send the request to.
      * @param HeidelpayResourceInterface $resource The resource to be send.
@@ -96,9 +97,9 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return string The response as a JSON string.
      *
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function send(
         $uri,
@@ -116,7 +117,9 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * Returns the set private key used to connect to the API.
+     *
+     * @return string The key that is currently set.
      */
     public function getKey(): string
     {
@@ -124,13 +127,13 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Set the API key authenticate to the api.
+     * Sets your private key used to connect to the API.
      *
-     * @param string $key
+     * @param string $key The private key.
      *
-     * @return Heidelpay
+     * @return Heidelpay This heidelpay object.
      *
-     * @throws HeidelpaySdkException
+     * @throws HeidelpaySdkException Throws a HeidelpaySdkException when the key is invalid.
      */
     public function setKey($key): Heidelpay
     {
@@ -143,9 +146,11 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Return the language locale.
+     * Returns the set customer locale.
      *
-     * @return string
+     * @return string The locale of the customer.
+     *                For a list of supported values please refer to the class
+     *                \heidelpay\MgwPhpSdk\Constants\SupportedLocales
      */
     public function getLocale(): string
     {
@@ -153,11 +158,13 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Set the language locale.
+     * Sets the customer locale.
      *
-     * @param string $locale
+     * @param string $locale The customer locale to set.
+     *                       For a list of supported values please refer to the class
+     *                       \heidelpay\MgwPhpSdk\Constants\SupportedLocales
      *
-     * @return Heidelpay
+     * @return Heidelpay This heidelpay object.
      */
     public function setLocale($locale): Heidelpay
     {
@@ -166,53 +173,23 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Return the ResourceService object.
+     * Returns the ResourceService object.
      *
-     * @return ResourceService
+     * @return ResourceService The resource service object of this heidelpay instance.
      */
     public function getResourceService(): ResourceService
     {
         return $this->resourceService;
     }
 
-    /**
-     * Set the ResourceService object.
-     *
-     * @param ResourceService $resourceService
-     *
-     * @return Heidelpay
-     */
-    public function setResourceService(ResourceService $resourceService): Heidelpay
-    {
-        $this->resourceService = $resourceService;
-        return $this;
-    }
-
-    /**
-     * @return PaymentService
-     */
-    public function getPaymentService(): PaymentService
-    {
-        return $this->paymentService;
-    }
-
-    /**
-     * @param PaymentService $paymentService
-     *
-     * @return Heidelpay
-     */
-    public function setPaymentService(PaymentService $paymentService): Heidelpay
-    {
-        $this->paymentService = $paymentService;
-        return $this;
-    }
+    //</editor-fold>
 
     //<editor-fold desc="ParentIF">
 
     /**
-     * Return the heidelpay root object.
+     * Returns this heidelpay instance.
      *
-     * @return Heidelpay
+     * @return Heidelpay This heidelpay object.
      */
     public function getHeidelpayObject(): Heidelpay
     {
@@ -220,9 +197,9 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Return the url string for this resource.
+     * Returns the URL-string of this resource.
      *
-     * @return string
+     * @return string The URL-string of this resource.
      */
     public function getUri(): string
     {
@@ -231,39 +208,53 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
-    //</editor-fold>
-
     //<editor-fold desc="Resources">
 
     /**
-     * Fetches the Resource if necessary.
+     * Updates the given local resource object if it has not been fetched before.
+     * If you are looking to update a local resource even if it has been fetched before please call fetchResource().
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractHeidelpayResource $resource The local resource object to update.
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractHeidelpayResource The updated resource object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         return $this->resourceService->getResource($resource);
     }
 
+    /**
+     * Updates the given local resource object.
+     *
+     * @param AbstractHeidelpayResource $resource The local resource object to update.
+     *
+     * @return AbstractHeidelpayResource The updated resource object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
+     */
+    public function fetchResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    {
+        return $this->resourceService->fetch($resource);
+    }
+
     //<editor-fold desc="Payment resource">
 
     /**
-     * Fetch and return payment by given payment id.
+     * Updates the given payment payment object.
      *
-     * @param Payment|string $payment
+     * @param Payment|string $payment The local payment object to be updated.
      *
-     * @return Payment
+     * @return Payment Returns the updated payment object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchPayment($payment): HeidelpayResourceInterface
     {
@@ -275,13 +266,13 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Keypair resource">
 
     /**
-     * Fetch public key and configured payment types from API.
+     * Read and return the public key and configured payment types from API.
      *
-     * @return Keypair
+     * @return Keypair The Keypair object composed of the data returned by the API.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchKeypair(): HeidelpayResourceInterface
     {
@@ -293,15 +284,17 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="PaymentType resource">
 
     /**
-     * Create the given payment type via api.
+     * Creates a PaymentType resource from the given PaymentType object.
+     * This is used to create the payment object prior to any transaction.
+     * Usually this will be done by the heidelpayUI components (https://docs.heidelpay.com/docs/heidelpay-ui-components)
      *
-     * @param BasePaymentType $paymentType
+     * @param BasePaymentType $paymentType The PaymentType object representing the object to be created.
      *
-     * @return BasePaymentType|AbstractHeidelpayResource
+     * @return BasePaymentType|AbstractHeidelpayResource The created and updated PaymentType object.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function createPaymentType(BasePaymentType $paymentType): BasePaymentType
     {
@@ -309,15 +302,15 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch the payment type with the given Id from the API.
+     * Retrieves a the PaymentType object with the given Id from the API.
      *
-     * @param string $typeId
+     * @param string $typeId The Id of the PaymentType resource to be fetched.
      *
-     * @return BasePaymentType|AbstractHeidelpayResource
+     * @return BasePaymentType|AbstractHeidelpayResource The fetched PaymentType object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchPaymentType($typeId): HeidelpayResourceInterface
     {
@@ -329,15 +322,15 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Customer resource">
 
     /**
-     * Create the given Customer object via API.
+     * Creates a Customer resource via API using the given Customer object.
      *
-     * @param Customer $customer
+     * @param Customer $customer The Customer object to be created using the API.
      *
-     * @return Customer
+     * @return Customer The created and updated Customer object.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function createCustomer(Customer $customer): HeidelpayResourceInterface
     {
@@ -345,15 +338,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch and return Customer object from API by the given id.
+     * Updates the given local Customer object using the API.
+     * Retrieves a Customer resource, if the customer parameter is the customer id.
      *
-     * @param Customer|string $customer
+     * @param Customer|string $customer Either the local Customer object to be updated or the id of a Customer object
+     *                                  to be retrieved from the API.
      *
-     * @return Customer
+     * @return Customer The retrieved/updated Customer object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchCustomer($customer): HeidelpayResourceInterface
     {
@@ -361,15 +356,15 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Update and return a Customer object via API.
+     * Updates the remote Customer resource using the changes of the given local Customer object.
      *
-     * @param Customer $customer
+     * @param Customer $customer The local Customer object used to update the remote resource via API.
      *
-     * @return Customer
+     * @return Customer The updated Customer object.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function updateCustomer(Customer $customer): HeidelpayResourceInterface
     {
@@ -377,13 +372,14 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Delete the given Customer resource.
+     * Deletes the given Customer resource via API.
+     * The $customer parameter can be either a Customer instance or the id of the Customer to be deleted.
      *
-     * @param Customer|string $customer
+     * @param Customer|string $customer Either the Customer object or the id of the Customer resource.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function deleteCustomer($customer)
     {
@@ -395,21 +391,21 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Authorization resource">
 
     /**
-     * Fetch an Authorization object by its paymentId.
-     * Authorization Ids are not global but specific to the payment.
-     * A Payment object can have zero to one authorizations.
+     * Retrieves an Authorization resource via the API using the corresponding Payment.
+     * The Authorization resource can not be fetched using its id since they are unique only within the Payment.
+     * A Payment can have zero or one Authorizations.
      *
-     * @param string $paymentId
+     * @param Payment|string $payment The Payment object or the id of a Payment object whose Authorization to fetch.
      *
-     * @return Authorization
+     * @return Authorization The Authorization object of the given Payment.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchAuthorization($paymentId): HeidelpayResourceInterface
+    public function fetchAuthorization($payment): HeidelpayResourceInterface
     {
-        return $this->resourceService->fetchAuthorization($paymentId);
+        return $this->resourceService->fetchAuthorization($payment);
     }
 
     //</editor-fold>
@@ -417,17 +413,17 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Charge resource">
 
     /**
-     * Fetch a Charge object by paymentId and chargeId.
-     * Charge Ids are not global but specific to the payment.
+     * Retrieve a Charge object by payment id and charge id from the API.
+     * The Charge resource can not be fetched using its id since they are unique only within the Payment.
      *
-     * @param string $paymentId
-     * @param string $chargeId
+     * @param string $paymentId The id of the Payment resource the Charge belongs to.
+     * @param string $chargeId  The id of the Charge resource to be fetched.
      *
-     * @return Charge
+     * @return Charge The retrieved Charge object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchChargeById($paymentId, $chargeId): HeidelpayResourceInterface
     {
@@ -441,9 +437,9 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Charge
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchCharge(Charge $charge): HeidelpayResourceInterface
     {
@@ -455,16 +451,16 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Cancellation resource">
 
     /**
-     * Fetch a cancel on an authorization (aka reversal).
+     * Retrieves a Cancellation resource of the given Authorization (aka reversal) via the API.
      *
-     * @param Authorization|string $authorization
-     * @param string               $cancellationId
+     * @param Authorization $authorization  The Authorization object the Cancellation belongs to.
+     * @param string        $cancellationId The id of the Cancellation object to be retrieved.
      *
-     * @return Cancellation
+     * @return Cancellation The retrieved Cancellation object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchReversalByAuthorization($authorization, $cancellationId): HeidelpayResourceInterface
     {
@@ -472,51 +468,51 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Fetch a Cancellation resource on an authorization (aka reversal) via id.
+     * Retrieves a Cancellation resource of the Authorization (aka reversal) which belongs to the Payment via API.
      *
-     * @param string $paymentId
-     * @param string $cancellationId
+     * @param Payment|string $payment        The Payment object or the id of the Payment the Reversal belongs to.
+     * @param string         $cancellationId The id of the Authorization Cancellation (aka reversal).
      *
-     * @return Cancellation
+     * @return Cancellation The cancellation object retrieved from the API.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchReversal($paymentId, $cancellationId): HeidelpayResourceInterface
+    public function fetchReversal($payment, $cancellationId): HeidelpayResourceInterface
     {
-        return $this->resourceService->fetchReversal($paymentId, $cancellationId);
+        return $this->resourceService->fetchReversal($payment, $cancellationId);
     }
 
     /**
-     * Fetch a Cancellation resource on a charge (aka refund) via id.
+     * Retrieves the Cancellation object of a Charge (aka refund) from the API.
      *
-     * @param string $paymentId
-     * @param string $chargeId
-     * @param string $cancellationId
+     * @param Payment|string $payment        The Payment object or the id of the Payment the Cancellation belongs to.
+     * @param string         $chargeId       The id of the Charge the Cancellation belongs to.
+     * @param string         $cancellationId The id of the Cancellation resource.
      *
-     * @return Cancellation
+     * @return Cancellation The retrieved Cancellation resource.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchRefundById($paymentId, $chargeId, $cancellationId): HeidelpayResourceInterface
+    public function fetchRefundById($payment, $chargeId, $cancellationId): HeidelpayResourceInterface
     {
-        return $this->resourceService->fetchRefundById($paymentId, $chargeId, $cancellationId);
+        return $this->resourceService->fetchRefundById($payment, $chargeId, $cancellationId);
     }
 
     /**
-     * Fetch a Cancellation resource on a Charge (aka refund).
+     * Retrieves and fetches a Cancellation resource of a Charge (aka refund) via API.
      *
-     * @param Charge $charge
-     * @param string $cancellationId
+     * @param Charge $charge         The Charge object the Cancellation belongs to.
+     * @param string $cancellationId The id of the Cancellation object to be retrieved.
      *
-     * @return Cancellation
+     * @return Cancellation The retrieved Cancellation object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchRefund(Charge $charge, $cancellationId): HeidelpayResourceInterface
     {
@@ -528,37 +524,20 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Shipment resource">
 
     /**
-     * Fetch a Shipment resource of the given Payment resource by id.
+     * Retrieves the Shipment resource of the given Payment resource by its id.
      *
-     * @param Payment|string $payment
-     * @param string         $shipmentId
+     * @param Payment|string $payment    The Payment object or the id of the Payment the Shipment resource belongs to.
+     * @param string         $shipmentId The id of the Shipment resource to be retrieved.
      *
-     * @return Shipment
+     * @return Shipment The retrieved Shipment object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function fetchShipmentByPayment($payment, $shipmentId): HeidelpayResourceInterface
     {
-        return $this->resourceService->fetchShipmentByPayment($payment, $shipmentId);
-    }
-
-    /**
-     * Fetch a Shipment resource of the given Payment resource by id.
-     *
-     * @param string $paymentId
-     * @param string $shipmentId
-     *
-     * @return Shipment
-     *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
-     */
-    public function fetchShipment($paymentId, $shipmentId): HeidelpayResourceInterface
-    {
-        return $this->resourceService->fetchShipment($paymentId, $shipmentId);
+        return $this->resourceService->fetchShipment($payment, $shipmentId);
     }
 
     //</editor-fold>
@@ -570,22 +549,22 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Authorize transactions">
 
     /**
-     * Perform an Authorization transaction and return the corresponding Authorization object.
+     * Performs an Authorization transaction and returns the resulting Authorization resource.
      *
-     * @param float                  $amount
-     * @param string                 $currency
-     * @param string|BasePaymentType $paymentType
-     * @param string                 $returnUrl
-     * @param Customer|null          $customer
-     * @param string|null            $orderId
+     * @param float                  $amount      The amount to authorize.
+     * @param string                 $currency    The currency of the amount.
+     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
+     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId     A custom order id which can be set by the merchant.
      *
-     * @return Authorization Resulting Authorization object.
+     * @return Authorization The resulting object of the Authorization resource.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function authorizeWithPaymentTypeId(
+    public function authorize(
         $amount,
         $currency,
         $paymentType,
@@ -593,25 +572,24 @@ class Heidelpay implements HeidelpayParentInterface
         $customer = null,
         $orderId = null
     ): AbstractTransactionType {
-        return $this->paymentService
-            ->authorizeWithPaymentType($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
+        return $this->paymentService->authorize($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
     }
 
     /**
-     * Perform an authorization and return the corresponding Authorization object.
+     * Performs an Authorization transaction using a Payment object and returns the resulting Authorization resource.
      *
-     * @param float       $amount
-     * @param string      $currency
-     * @param Payment     $payment
-     * @param string      $returnUrl
-     * @param string|null $customer
-     * @param string|null $orderId
+     * @param float                $amount    The amount to authorize.
+     * @param string               $currency  The currency of the amount.
+     * @param Payment              $payment   The Payment object to create the Authorization for.
+     * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null $customer  The Customer object or the id of the customer resource to reference.
+     * @param string|null          $orderId   A custom order id which can be set by the merchant.
      *
-     * @return Authorization Resulting Authorization object.
+     * @return Authorization The resulting object of the Authorization resource.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function authorizeWithPayment(
         $amount,
@@ -625,52 +603,25 @@ class Heidelpay implements HeidelpayParentInterface
             ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
     }
 
-    /**
-     * Perform an Authorization transaction and return the corresponding Authorization object.
-     *
-     * @param float                $amount
-     * @param string               $currency
-     * @param BasePaymentType      $paymentType
-     * @param string               $returnUrl
-     * @param Customer|string|null $customer
-     * @param string|null          $orderId
-     *
-     * @return Authorization Resulting Authorization object.
-     *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
-     */
-    public function authorize(
-        $amount,
-        $currency,
-        $paymentType,
-        $returnUrl,
-        $customer = null,
-        $orderId = null
-    ): AbstractTransactionType {
-        return $this->paymentService->authorize($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="Charge transactions">
 
     /**
-     * Charge the given amount and currency on the given PaymentType resource.
+     * Performs a Charge transaction and returns the resulting Charge resource.
      *
-     * @param float                  $amount
-     * @param string                 $currency
-     * @param BasePaymentType|string $paymentType
-     * @param string                 $returnUrl
-     * @param Customer|string|null   $customer
-     * @param string|null            $orderId
+     * @param float                  $amount      The amount to charge.
+     * @param string                 $currency    The currency of the amount.
+     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
+     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId     A custom order id which can be set by the merchant.
      *
-     * @return Charge Resulting Charge object.
+     * @return Charge The resulting object of the Charge resource.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function charge(
         $amount,
@@ -684,17 +635,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Charge the given amount on the payment with the given id.
-     * Perform a full charge by leaving the amount null.
+     * Performs a Charge transaction for the Authorization of the given Payment object.
+     * To perform a full charge of the authorized amount leave the amount null.
      *
-     * @param string|Payment $payment
-     * @param null           $amount
+     * @param string|Payment $payment The Payment object the Authorization to charge belongs to.
+     * @param float|null     $amount  The amount to charge.
      *
-     * @return Charge Resulting Charge object.
+     * @return Charge The resulting object of the Charge resource.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
     {
@@ -702,17 +653,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Charge the given amount on the given payment object with the given currency.
+     * Performs a Charge transaction for a specific Payment and returns the resulting Charge object.
      *
-     * @param Payment $payment
-     * @param null    $amount
-     * @param null    $currency
+     * @param Payment $payment  The Payment object to be charged.
+     * @param null    $amount   The amount to charge.
+     * @param null    $currency The Currency of the charged amount.
      *
-     * @return Charge Resulting Charge object.
+     * @return Charge The resulting Charge object.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
     {
@@ -724,16 +675,17 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Authorization Cancel/Reversal">
 
     /**
-     * Perform a Cancellation transaction with the given amount for the given Authorization.
+     * Performs a Cancellation transaction and returns the resulting Cancellation object.
+     * Performs a full cancel if the parameter amount is null.
      *
-     * @param Authorization $authorization
-     * @param null          $amount
+     * @param Authorization $authorization The Authorization to be canceled.
+     * @param float|null    $amount        The amount to be canceled.
      *
-     * @return Cancellation Resulting Cancellation object.
+     * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
     {
@@ -741,20 +693,21 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Creates a Cancellation transaction for the given Authorization object.
+     * Performs a Cancellation transaction for the Authorization of the given Payment object.
+     * Performs a full cancel if the parameter amount is null.
      *
-     * @param string $paymentId
-     * @param null   $amount
+     * @param Payment|string $payment The Payment object or the id of the Payment the Authorization belongs to.
+     * @param float|null     $amount  The amount to be canceled.
      *
      * @return Cancellation Resulting Cancellation object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function cancelAuthorizationByPaymentId($paymentId, $amount = null): AbstractTransactionType
+    public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType
     {
-        return $this->paymentService->cancelAuthorizationByPaymentId($paymentId, $amount);
+        return $this->paymentService->cancelAuthorizationByPayment($payment, $amount);
     }
 
     //</editor-fold>
@@ -762,17 +715,18 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Charge Cancel/Refund">
 
     /**
-     * Create a Cancellation transaction for the charge with the given id belonging to the given Payment object.
+     * Performs a Cancellation transaction for the given Charge and returns the resulting Cancellation object.
+     * Performs a full cancel if the parameter amount is null.
      *
-     * @param string $paymentId
-     * @param string $chargeId
-     * @param null   $amount
+     * @param Payment|string $paymentId The Payment object or the id of the Payment the charge belongs to.
+     * @param string         $chargeId  The id of the Charge to be canceled.
+     * @param float|null     $amount    The amount to be canceled.
      *
-     * @return Cancellation Resulting Cancellation object.
+     * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function cancelChargeById($paymentId, $chargeId, $amount = null): AbstractTransactionType
     {
@@ -780,16 +734,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Create a Cancellation transaction for the given Charge resource.
+     * Performs a Cancellation transaction and returns the resulting Cancellation object.
+     * Performs a full cancel if the parameter amount is null.
      *
-     * @param Charge     $charge
-     * @param float|null $amount
+     * @param Charge     $charge The Charge object to create the Cancellation for.
+     * @param float|null $amount The amount to be canceled.
      *
-     * @return Cancellation Resulting Cancellation object.
+     * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
     {
@@ -801,15 +756,15 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Shipment transactions">
 
     /**
-     * Creates a Shipment transaction for the given Payment object.
+     * Performs a Shipment transaction and returns the resulting Shipment object.
      *
-     * @param Payment|string $payment
+     * @param Payment|string $payment The Payment object the the id of the Payment to ship.
      *
-     * @return Shipment Resulting Shipment object.
+     * @return Shipment The resulting Shipment object.
      *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws HeidelpaySdkException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
     public function ship($payment): HeidelpayResourceInterface
     {
