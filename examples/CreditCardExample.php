@@ -34,15 +34,14 @@
     <title>
         Heidelpay UI Examples
     </title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-    <link rel="stylesheet" href="https://dev-static.heidelpay.com/v1/heidelpay.css" />
-    <script type="text/javascript" src="https://dev-static.heidelpay.com/v1/heidelpay.js"></script>
+    <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+    <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
 </head>
 
 <body style="padding: 70px 0 0">
-<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
 
 <div class="ui container segment">
     <div id="dimmer-holder" class="ui active dimmer" style="display: none;">
@@ -74,57 +73,57 @@
 </div>
 
 <script>
-    let heidelpay = new heidelpay('s-pub-uM8yNmBNcs1GGdwAL4ytebYA4HErD22H');
+    var heidelpay = new heidelpay('s-pub-2a10fcyD4qVbJGdp76QSoAXoOrO3WrLz');
 
     // Credit Card example
-    let Card = heidelpay.Card();
+    var Card = heidelpay.Card()
     Card.create('number', {
         containerId: 'heidelpay-i-card-number',
-        // iconColor: '#0000FF',
-        // iconPosition: 'right'
     });
     Card.create('expiry', {
         containerId: 'heidelpay-i-card-expiry',
-        // iconColor: '#0000FF',
-        // iconPosition: 'right'
     });
     Card.create('cvc', {
         containerId: 'heidelpay-i-card-cvc',
-        // iconColor: '#0000FF',
-        // iconPosition: 'right'
     });
 
-    Card.listen('change', function (e) {
+    Card.addEventListener('change', function (e) {
+        if (e.cardType) {
+            $('#card-icon').removeClass();
+            $('#card-icon').addClass(`icon h-iconimg-${e.cardType.imgName}`)
+        }
+
         // error handling
+        var $inputElement = $(`#heidelpay-i-card-${e.type}`)
+        var $icon = $inputElement.next()
+        var $errorHolder = $('#error-holder')
         if (e.success === false && e.error) {
-            document.getElementById('error-holder').innerHTML =
-                '<div class="ui negative message"><p>' + e.error + '</p></div>';
+            $inputElement.closest('.heidelpayUI.input').addClass('error')
+            $inputElement.closest('.field').addClass('error')
+            $icon.addClass('h-iconimg-error')
+            $errorHolder.html(e.error)
         } else if (e.success) {
-            document.getElementById('error-holder').innerHTML = '';
+            $inputElement.parent('.heidelpayUI.input').removeClass('error')
+            $inputElement.closest('.field').removeClass('error')
+            $icon.removeClass('h-iconimg-error')
+            $errorHolder.html('')
         }
     });
 
     // // Handle card form submission.
-    let form = document.getElementById('payment-form');
+    var form = document.getElementById('payment-form');
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
         document.getElementById('dimmer-holder').style.display = 'block';
         Card.createResource()
             .then(function (data) {
-                let input = document.createElement('input');
-                input.name = 'token';
-                input.type = 'hidden';
-                input.value = data.id;
-                console.log("Payment Id:" + data.id);
-                form.appendChild(input);
+                document.getElementById('dimmer-holder').innerHTML
+                    = `<div style="color: #eee;top: 43%;position: relative;" class="ui">Resource Id: ${data.id}</div>`
             })
             .catch(function (error) {
-                document.getElementById('error-holder').innerHTML =
-                    '<div class="ui negative message"><p>' + error.error + '</p></div>'
-            })
-            .finally(function () {
                 document.getElementById('dimmer-holder').style.display = 'none';
+                document.getElementById('error-holder').innerHTML = error.customerMessage || error.message || 'Error'
             })
     });
 </script>
