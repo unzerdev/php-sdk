@@ -25,8 +25,8 @@ namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Traits\HasCancellations;
 
@@ -103,9 +103,9 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $currency
      *
-     * @return HeidelpayResourceInterface
+     * @return AbstractHeidelpayResource
      */
-    public function setCurrency($currency): HeidelpayResourceInterface
+    public function setCurrency($currency): AbstractHeidelpayResource
     {
         $this->currency = $currency;
         return $this;
@@ -122,9 +122,9 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $returnUrl
      *
-     * @return HeidelpayResourceInterface
+     * @return AbstractHeidelpayResource
      */
-    public function setReturnUrl($returnUrl): HeidelpayResourceInterface
+    public function setReturnUrl($returnUrl): AbstractHeidelpayResource
     {
         $this->returnUrl = $returnUrl;
         return $this;

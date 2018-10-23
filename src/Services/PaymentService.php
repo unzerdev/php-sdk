@@ -26,7 +26,7 @@ namespace heidelpay\MgwPhpSdk\Services;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
@@ -69,7 +69,7 @@ class PaymentService
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    private function createPayment($paymentType, $customer = null): HeidelpayResourceInterface
+    private function createPayment($paymentType, $customer = null): AbstractHeidelpayResource
     {
         return (new Payment($this->heidelpay))->setPaymentType($paymentType)->setCustomer($customer);
     }
@@ -83,12 +83,12 @@ class PaymentService
     /**
      * Perform an Authorization transaction and return the corresponding Authorization object.
      *
-     * @param float                  $amount
-     * @param string                 $currency
-     * @param string|BasePaymentType $paymentType
-     * @param string                 $returnUrl
-     * @param Customer|null          $customer
-     * @param string|null            $orderId
+     * @param float  $amount
+     * @param string $currency
+     * @param $paymentType
+     * @param string               $returnUrl
+     * @param Customer|string|null $customer
+     * @param string|null          $orderId
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -96,15 +96,10 @@ class PaymentService
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
-    public function authorizeWithPaymentType(
-        $amount,
-        $currency,
-        $paymentType,
-        $returnUrl,
-        $customer = null,
-        $orderId = null
-    ): Authorization {
-        return $this->authorize($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
+    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null, $orderId = null): AbstractTransactionType
+    {
+        $payment = $this->createPayment($paymentType, $customer);
+        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
     }
 
     /**
@@ -135,28 +130,6 @@ class PaymentService
         $payment->setAuthorization($authorization)->setCustomer($customer);
         $this->resourceService->create($authorization);
         return $authorization;
-    }
-
-    /**
-     * Perform an Authorization transaction and return the corresponding Authorization object.
-     *
-     * @param float  $amount
-     * @param string $currency
-     * @param $paymentType
-     * @param string               $returnUrl
-     * @param Customer|string|null $customer
-     * @param string|null          $orderId
-     *
-     * @return Authorization Resulting Authorization object.
-     *
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
-     */
-    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null, $orderId = null): AbstractTransactionType
-    {
-        $payment = $this->createPayment($paymentType, $customer);
-        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
     }
 
     //</editor-fold>
@@ -272,8 +245,8 @@ class PaymentService
     /**
      * Creates a Cancellation transaction for the given Authorization object.
      *
-     * @param string $paymentId
-     * @param null   $amount
+     * @param Payment|string $payment
+     * @param null           $amount
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -281,9 +254,9 @@ class PaymentService
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
-    public function cancelAuthorizationByPaymentId($paymentId, $amount = null): AbstractTransactionType
+    public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType
     {
-        return $this->cancelAuthorization($this->resourceService->fetchAuthorization($paymentId), $amount);
+        return $this->cancelAuthorization($this->resourceService->fetchAuthorization($payment), $amount);
     }
 
     //</editor-fold>
@@ -293,9 +266,9 @@ class PaymentService
     /**
      * Create a Cancellation transaction for the charge with the given id belonging to the given Payment object.
      *
-     * @param string $paymentId
-     * @param string $chargeId
-     * @param null   $amount
+     * @param Payment|string $payment
+     * @param string         $chargeId
+     * @param null           $amount
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -303,9 +276,9 @@ class PaymentService
      * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
-    public function cancelChargeById($paymentId, $chargeId, $amount = null): AbstractTransactionType
+    public function cancelChargeById($payment, $chargeId, $amount = null): AbstractTransactionType
     {
-        return $this->cancelCharge($this->resourceService->fetchChargeById($paymentId, $chargeId), $amount);
+        return $this->cancelCharge($this->resourceService->fetchChargeById($payment, $chargeId), $amount);
     }
 
     /**
@@ -345,7 +318,7 @@ class PaymentService
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function ship($payment): HeidelpayResourceInterface
+    public function ship($payment): AbstractHeidelpayResource
     {
         $paymentObject = $payment;
 
