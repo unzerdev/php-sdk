@@ -46,7 +46,7 @@ class AuthorizationTest extends BasePaymentTest
     public function authorizeWithTypeId()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $this->heidelpay->authorizeWithPaymentTypeId(
+        $authorize = $this->heidelpay->authorize(
             100.0,
             Currencies::EURO,
             $card->getId(),

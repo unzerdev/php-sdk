@@ -27,7 +27,6 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Traits\HasOrderId;
 
@@ -200,7 +199,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     {
         if (!$this instanceof Payment) {
             $payment = $this->getPayment();
-            if ($payment instanceof HeidelpayResourceInterface) {
+            if ($payment instanceof AbstractHeidelpayResource) {
                 $this->fetchResource($payment);
             }
         }
