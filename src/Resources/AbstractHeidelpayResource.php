@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, HeidelpayParentInterface
 {
@@ -178,11 +179,11 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
     //<editor-fold desc="Resource service facade">
 
     /**
-     * @return \heidelpay\MgwPhpSdk\Services\ResourceService
+     * @return ResourceService
      *
      * @throws HeidelpaySdkException
      */
-    private function getResourceService(): \heidelpay\MgwPhpSdk\Services\ResourceService
+    private function getResourceService(): ResourceService
     {
         return $this->getHeidelpayObject()->getResourceService();
     }
