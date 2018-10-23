@@ -88,10 +88,6 @@ class Przelewy24Test extends BasePaymentTest
         $payment = $charge->getPayment();
         $this->assertNotNull($payment);
         $this->assertTrue($payment->isPending());
-
-        $cancel = $charge->cancel();
-        $this->assertNotNull($cancel);
-        $this->assertNotEmpty($cancel->getId());
     }
 
     /**
