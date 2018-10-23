@@ -90,9 +90,9 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Send the resource object to the url using the specified Http method (default = GET).
      *
-     * @param string                     $uri      The URI to send the request to.
+     * @param string                    $uri      The URI to send the request to.
      * @param AbstractHeidelpayResource $resource The resource to be send.
-     * @param string                     $method   The Http method to be used.
+     * @param string                    $method   The Http method to be used.
      *
      * @return string The response as a JSON string.
      *
