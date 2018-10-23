@@ -26,7 +26,7 @@ namespace heidelpay\MgwPhpSdk\Services;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
@@ -69,7 +69,7 @@ class PaymentService
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    private function createPayment($paymentType, $customer = null): HeidelpayResourceInterface
+    private function createPayment($paymentType, $customer = null): AbstractHeidelpayResource
     {
         return (new Payment($this->heidelpay))->setPaymentType($paymentType)->setCustomer($customer);
     }
@@ -318,7 +318,7 @@ class PaymentService
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function ship($payment): HeidelpayResourceInterface
+    public function ship($payment): AbstractHeidelpayResource
     {
         $paymentObject = $payment;
 

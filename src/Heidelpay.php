@@ -38,7 +38,6 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
@@ -92,7 +91,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Send the resource object to the url using the specified Http method (default = GET).
      *
      * @param string                     $uri      The URI to send the request to.
-     * @param HeidelpayResourceInterface $resource The resource to be send.
+     * @param AbstractHeidelpayResource $resource The resource to be send.
      * @param string                     $method   The Http method to be used.
      *
      * @return string The response as a JSON string.
@@ -103,7 +102,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function send(
         $uri,
-        HeidelpayResourceInterface $resource,
+        AbstractHeidelpayResource $resource,
         $method = HttpAdapterInterface::REQUEST_GET
     ): string {
         if (!$this->adapter instanceof HttpAdapterInterface) {
@@ -256,7 +255,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchPayment($payment): HeidelpayResourceInterface
+    public function fetchPayment($payment): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchPayment($payment);
     }
@@ -274,7 +273,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchKeypair(): HeidelpayResourceInterface
+    public function fetchKeypair(): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchKeypair();
     }
@@ -312,7 +311,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchPaymentType($typeId): HeidelpayResourceInterface
+    public function fetchPaymentType($typeId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchPaymentType($typeId);
     }
@@ -332,7 +331,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function createCustomer(Customer $customer): HeidelpayResourceInterface
+    public function createCustomer(Customer $customer): AbstractHeidelpayResource
     {
         return $this->resourceService->createCustomer($customer);
     }
@@ -350,7 +349,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchCustomer($customer): HeidelpayResourceInterface
+    public function fetchCustomer($customer): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchCustomer($customer);
     }
@@ -366,7 +365,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function updateCustomer(Customer $customer): HeidelpayResourceInterface
+    public function updateCustomer(Customer $customer): AbstractHeidelpayResource
     {
         return $this->resourceService->updateCustomer($customer);
     }
@@ -403,7 +402,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchAuthorization($payment): HeidelpayResourceInterface
+    public function fetchAuthorization($payment): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchAuthorization($payment);
     }
@@ -425,7 +424,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchChargeById($paymentId, $chargeId): HeidelpayResourceInterface
+    public function fetchChargeById($paymentId, $chargeId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchChargeById($paymentId, $chargeId);
     }
@@ -441,7 +440,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchCharge(Charge $charge): HeidelpayResourceInterface
+    public function fetchCharge(Charge $charge): AbstractHeidelpayResource
     {
         return $this->resourceService->fetch($charge);
     }
@@ -462,7 +461,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchReversalByAuthorization($authorization, $cancellationId): HeidelpayResourceInterface
+    public function fetchReversalByAuthorization($authorization, $cancellationId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchReversalByAuthorization($authorization, $cancellationId);
     }
@@ -479,7 +478,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchReversal($payment, $cancellationId): HeidelpayResourceInterface
+    public function fetchReversal($payment, $cancellationId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchReversal($payment, $cancellationId);
     }
@@ -497,7 +496,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchRefundById($payment, $chargeId, $cancellationId): HeidelpayResourceInterface
+    public function fetchRefundById($payment, $chargeId, $cancellationId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchRefundById($payment, $chargeId, $cancellationId);
     }
@@ -514,7 +513,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchRefund(Charge $charge, $cancellationId): HeidelpayResourceInterface
+    public function fetchRefund(Charge $charge, $cancellationId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetch($charge->getCancellation($cancellationId, true));
     }
@@ -535,7 +534,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchShipmentByPayment($payment, $shipmentId): HeidelpayResourceInterface
+    public function fetchShipmentByPayment($payment, $shipmentId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchShipment($payment, $shipmentId);
     }
@@ -766,7 +765,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function ship($payment): HeidelpayResourceInterface
+    public function ship($payment): AbstractHeidelpayResource
     {
         return $this->paymentService->ship($payment);
     }

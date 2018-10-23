@@ -28,10 +28,9 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayResourceInterface;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 
-abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, HeidelpayParentInterface
+abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 {
     /** @var string $id */
     protected $id;
@@ -286,7 +285,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayResourceInterface, 
         $resources = [];
         /**
          * @var string                     $key
-         * @var HeidelpayResourceInterface $linkedResource
+         * @var AbstractHeidelpayResource $linkedResource
          */
         foreach ($this->getLinkedResources() as $key=>$linkedResource) {
             $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
