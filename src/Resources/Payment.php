@@ -108,7 +108,7 @@ class Payment extends AbstractHeidelpayResource
      * Returns null if the Authorization does not exist.
      *
      * @param bool $lazy Enables lazy loading if set to true which results in the object not being updated via
-     * API and possibly containing just the meta data known from the Payment object response.
+     *                   API and possibly containing just the meta data known from the Payment object response.
      *
      * @return Authorization|AbstractHeidelpayResource|null The Authorization object if it exists.
      *
@@ -168,9 +168,9 @@ class Payment extends AbstractHeidelpayResource
      * Fetches the Charge if it has not been fetched before and the lazy flag is not set.
      * Returns null if the Charge does not exist.
      *
-     * @param string  $chargeId The id of the Charge to be retrieved.
-     * @param bool $lazy Enables lazy loading if set to true which results in the object not being updated via
-     * API and possibly containing just the meta data known from the Payment object response.
+     * @param string $chargeId The id of the Charge to be retrieved.
+     * @param bool   $lazy     Enables lazy loading if set to true which results in the object not being updated via
+     *                         API and possibly containing just the meta data known from the Payment object response.
      *
      * @return Charge|null The retrieved Charge object or null if it does not exist.
      *
@@ -198,8 +198,8 @@ class Payment extends AbstractHeidelpayResource
      * Returns null if the Charge does not exist.
      *
      * @param int  $index The index of the desired Charge object within the charges array.
-     * @param bool $lazy Enables lazy loading if set to true which results in the object not being updated via
-     * API and possibly containing just the meta data known from the Payment object response.
+     * @param bool $lazy  Enables lazy loading if set to true which results in the object not being updated via
+     *                    API and possibly containing just the meta data known from the Payment object response.
      *
      * @return AbstractHeidelpayResource|Charge|null The retrieved Charge object or null if it could not be found.
      *
@@ -270,7 +270,8 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Returns the Payment Type object referenced by this Payment or throws a HeidelpaySdkException if none exists.
      *
-     * @return BasePaymentType  The PaymentType referenced by this Payment.
+     * @return BasePaymentType The PaymentType referenced by this Payment.
+     *
      * @throws HeidelpaySdkException An exception is thrown when the Payment does not reference a PaymentType.
      */
     public function getPaymentType(): BasePaymentType
@@ -287,7 +288,7 @@ class Payment extends AbstractHeidelpayResource
      * Sets the Payments reference to the given PaymentType resource.
      * The PaymentType can be either a PaymentType object or the id of a PaymentType resource.
      *
-     * @param BasePaymentType|string $paymentType  The PaymentType object or the id of the PaymenType to be referenced.
+     * @param BasePaymentType|string $paymentType The PaymentType object or the id of the PaymenType to be referenced.
      *
      * @return Payment This Payment object.
      *
@@ -325,8 +326,9 @@ class Payment extends AbstractHeidelpayResource
      * Returns null if the Authorization does not exist.
      *
      * @param string $cancellationId The id of the Cancellation object to be retrieved.
-     * @param bool $lazy Enables lazy loading if set to true which results in the object not being updated via
-     * API and possibly containing just the meta data known from the Payment object response.
+     * @param bool   $lazy           Enables lazy loading if set to true which results in the object not being updated
+     *                               via API and possibly containing just the meta data known from the Payment object
+     *                               response.
      *
      * @return Cancellation The retrieved Cancellation object.
      *
@@ -391,8 +393,8 @@ class Payment extends AbstractHeidelpayResource
      * Retrieves a Shipment object of this Payment by its id.
      *
      * @param string $shipmentId The id of the Shipment to be retrieved.
-     * @param bool $lazy Enables lazy loading if set to true which results in the object not being updated via
-     * API and possibly containing just the meta data known from the Payment object response.
+     * @param bool   $lazy       Enables lazy loading if set to true which results in the object not being updated via
+     *                           API and possibly containing just the meta data known from the Payment object response.
      *
      * @return Shipment|null The retrieved Shipment object.
      *
@@ -584,7 +586,7 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Performs a Charge transaction on the payment.
      *
-     * @param null $amount The amount to be charged.
+     * @param null $amount   The amount to be charged.
      * @param null $currency The currency of the charged amount.
      *
      * @return Charge The resulting Charge object.
@@ -604,12 +606,12 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Performs an Authorization on this payment object.
      *
-     * @param float  $amount The amount to be authorized.
-     * @param string $currency The currency of the amount to be authorized.
-     * @param BasePaymentType $paymentType The PaymentType of this Payment.
-     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null $customer The Customer object or the id of the Customer to be referenced.
-     * No Customer will be referenced if set or left null.
+     * @param float                $amount      The amount to be authorized.
+     * @param string               $currency    The currency of the amount to be authorized.
+     * @param BasePaymentType      $paymentType The PaymentType of this Payment.
+     * @param string               $returnUrl   The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null $customer    The Customer object or the id of the Customer to be referenced.
+     *                                          No Customer will be referenced if set or left null.
      *
      * @return Authorization The resulting Authorization object.
      *
