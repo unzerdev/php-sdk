@@ -26,7 +26,7 @@ namespace heidelpay\MgwPhpSdk\Exceptions;
 
 class HeidelpayBaseException extends \Exception
 {
-    const MESSAGE = 'Exception message not set!';
+    const MESSAGE = 'An unexpected error occurred. Please contact us for further information.';
 
     /** @var string $clientMessage */
     protected $clientMessage;
