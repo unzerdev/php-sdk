@@ -44,4 +44,12 @@ class HeidelpayBaseException extends \Exception
 
         parent::__construct($merchantMessage);
     }
+
+    /**
+     * @return string
+     */
+    public function getClientMessage(): string
+    {
+        return $this->clientMessage;
+    }
 }
