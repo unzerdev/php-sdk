@@ -284,7 +284,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         // Add linked resources if any
         $resources = [];
         /**
-         * @var string                     $key
+         * @var string                    $key
          * @var AbstractHeidelpayResource $linkedResource
          */
         foreach ($this->getLinkedResources() as $key=>$linkedResource) {
