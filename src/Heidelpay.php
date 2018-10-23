@@ -534,7 +534,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchShipmentByPayment($payment, $shipmentId): AbstractHeidelpayResource
+    public function fetchShipment($payment, $shipmentId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchShipment($payment, $shipmentId);
     }
