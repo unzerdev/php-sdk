@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the credit card payment method.
+ * This file provides an example implementation of the credit card payment type.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
