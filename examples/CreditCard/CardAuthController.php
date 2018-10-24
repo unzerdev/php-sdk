@@ -12,6 +12,15 @@
  * @package  heidelpay/${Package}
  */
 
+
+//#######   Checks whether examples are enabled. #######################################################################
+require_once __DIR__ . '/CardConstants.php';
+
+/**
+ * Require the composer autoloader file
+ */
+require_once __DIR__ . '/../../../../autoload.php';
+
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Heidelpay;
 

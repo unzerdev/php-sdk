@@ -18,11 +18,7 @@ if (defined('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES') && HEIDELPAY_PHP_PAYMENT_API_E
 }
 
 const EXAMPLE_BASE_FOLDER = HEIDELPAY_PHP_PAYMENT_API_URL . HEIDELPAY_PHP_PAYMENT_API_FOLDER;
-define('CHARGE_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CardChargeController.php');
-define('AUTH_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CardAuthController.php');
-define('RESPONSE_URL', EXAMPLE_BASE_FOLDER . 'CardController.php');
-define('RESPONSE_FILE_NAME', __DIR__ . '/ResponseParams.txt');
-define('HEIDELPAY_SUCCESS_PAGE', EXAMPLE_BASE_FOLDER . 'HeidelpaySuccess.php');
-define('HEIDELPAY_FAILURE_PAGE', EXAMPLE_BASE_FOLDER . 'HeidelpayError.php');
+define('CHARGE_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/CardChargeController.php');
+define('AUTH_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/CardAuthController.php');
 define('PUBLIC_KEY', 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');
 define('PRIVATE_KEY', 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');

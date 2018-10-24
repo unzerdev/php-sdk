@@ -15,6 +15,14 @@
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
+//#######   Checks whether examples are enabled. #######################################################################
+require_once __DIR__ . '/CardConstants.php';
+
+/**
+ * Require the composer autoloader file
+ */
+require_once __DIR__ . '/../../../../autoload.php';
+
 if (!isset($_POST['paymentTypeId'])) {
     returnError('PaymentType id is missing!');
 }
