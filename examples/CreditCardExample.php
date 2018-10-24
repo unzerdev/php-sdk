@@ -22,7 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/examples
  */
- 
+
+//#######   Checks whether examples are enabled. #######################################################################
+require_once __DIR__ . '/CardConstants.php';
+
  ?>
 
 <!DOCTYPE html>
@@ -44,21 +47,16 @@
     <style>
         html, body {
             margin: 0;
-            padding: 0;
-            width: 100%;
+            padding: 70px 0 0;
+            height: 330px;
             min-width: initial;
         }
     </style>
 </head>
 
-<body style="width: 100%; height: 330px">
+<body>
 
-    <style>
-        .heidelpaySandboxNotify {
-            display: none !important;
-        }
-    </style>
-    <div class="ui segment">
+    <div class="ui container segment">
         <div id="dimmer-holder" class="ui active dimmer" style="display: none;">
             <div class="ui loader"></div>
         </div>
@@ -94,8 +92,11 @@
         </form>
     </div>
 
+<!--    <button class="ui primary button" type="submit"></button>-->
+<!--    <button class="ui primary button" type="submit"></button>-->
+
     <script>
-        var heidelpayObj = new heidelpay('s-pub-2a10fcyD4qVbJGdp76QSoAXoOrO3WrLz');
+        var heidelpayObj = new heidelpay(<?php echo '\''.PUBLIC_KEY . '\''?>);
 
         // Credit Card example
         var Card = heidelpayObj.Card();
@@ -143,6 +144,20 @@
                 .then(function (data) {
                     document.getElementById('dimmer-holder').innerHTML
                         = `<div style="color: #eee;top: 43%;position: relative;" class="ui">Resource Id: ${data.id}</div>`
+                    $.ajax(
+                        {
+                            type: "POST",
+                            url: '<?php echo CONTROLLER_URL ?>',
+                            success: function (result) {
+                                alert(result);
+                            },
+                            error: function (result) {
+                                alert(result);
+                            },
+                            data: {'paymentTypeId': data.id},
+                            dataType: "text"
+                        }
+                    );
                 })
                 .catch(function (error) {
                     document.getElementById('dimmer-holder').style.display = 'none';
