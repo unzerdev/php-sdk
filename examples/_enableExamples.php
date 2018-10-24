@@ -17,7 +17,7 @@
  */
 
 /* Set to true if you want to enable the examples */
-define('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES', true);
+define('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES', false);
 
 /* Please set this to your url. It must be reachable over the net*/
 define('HEIDELPAY_PHP_PAYMENT_API_URL', 'http://'.$_SERVER['HTTP_HOST']);
