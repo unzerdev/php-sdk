@@ -93,9 +93,8 @@ require_once __DIR__ . '/CardConstants.php';
         </form>
     </div>
 
-
-
-
+    <div class="ui container messages">
+    </div>
 
     <script>
         var heidelpayObj = new heidelpay(<?php echo '\''.PUBLIC_KEY . '\''?>);
@@ -136,6 +135,29 @@ require_once __DIR__ . '/CardConstants.php';
             }
         });
 
+        function logSuccess(message){
+            logMessage(message, 'Success', 'green');
+        }
+
+        function logError(message){
+            logMessage(message, 'Error', 'red');
+        }
+
+        function logMessage(message, title, color){
+            var count = $('.messages .message').length;
+
+            message =
+                '<div class="ui ' + color + ' info message">' +
+                // '<i class="close icon"></i>'+
+                '<div class="header">' +
+                (count + 1) + '. ' + title +
+                '</div>' +
+                message +
+                '</div>';
+
+            $('.messages').append(message);
+        }
+
         // Handle card form submission.
         $(".transaction").click(
             function (event) {
@@ -145,17 +167,18 @@ require_once __DIR__ . '/CardConstants.php';
                 document.getElementById('dimmer-holder').style.display = 'block';
                 Card.createResource()
                     .then(function (data) {
+                        logSuccess('PaymentType ' + data.id + ' has been successfully created.');
                         document.getElementById('dimmer-holder').innerHTML
-                            = `<div style="color: #eee;top: 43%;position: relative;" class="ui">Resource Id: ${data.id}</div>`
+                            = `<div style="color: #eee;top: 43%;position: relative;" class="ui">Reload Page to perform a new request</div>`;
                         $.ajax(
                             {
                                 type: "POST",
                                 url: '<?php echo CONTROLLER_URL ?>',
                                 success: function (result) {
-                                    alert(result);
+                                    logSuccess(result);
                                 },
                                 error: function (result) {
-                                    alert(result);
+                                    logError(result.responseText);
                                 },
                                 data: {'paymentTypeId': data.id, 'transaction': $button.attr("transaction")},
                                 dataType: "text"
@@ -164,10 +187,13 @@ require_once __DIR__ . '/CardConstants.php';
                     })
                     .catch(function (error) {
                         document.getElementById('dimmer-holder').style.display = 'none';
-                        document.getElementById('error-holder').innerHTML = error.customerMessage || error.message || 'Error'
+                        errorMessage = error.customerMessage;
+                        if (errorMessage === undefined) {
+                            errorMessage = error.message;
+                        }
+                        document.getElementById('error-holder').innerHTML = errorMessage || error.message || 'Error';
                     })
             });
-
     </script>
 </body>
 

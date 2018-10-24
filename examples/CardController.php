@@ -13,8 +13,6 @@
  */
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
 //#######   Checks whether examples are enabled. #######################################################################
@@ -37,62 +35,35 @@ $paymentTypeId   = $_POST['paymentTypeId'];
 $transactionType = $_POST['transaction'];
 $transaction = null;
 
-switch ($transactionType) {
-    case 'authorization':
-        authorize();
-        break;
-    case 'charge':
-        charge();
-        break;
-    default:
-        throw new RuntimeException('Transaction type ' . $transactionType . ' is unknown!');
-        break;
+try {
+    $heidelpay = new Heidelpay(PRIVATE_KEY);
+    switch ($transactionType) {
+        case 'authorization':
+            $transaction = $heidelpay->authorize(100.0, Currencies::EURO, $paymentTypeId, CONTROLLER_URL);
+            break;
+        case 'charge':
+            $transaction = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CONTROLLER_URL);
+            break;
+        default:
+            throw new RuntimeException('Transaction type ' . $transactionType . ' is unknown!');
+            break;
+    }
+
+    returnMessage(ucfirst($transactionType) . ' has been created for payment ' . $transaction->getPaymentId() . '.');
+
+} catch (RuntimeException $e) {
+    returnError($e->getMessage());
+} catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
+    returnError($e->getClientMessage());
+} catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException $e) {
+    returnError($e->getClientMessage());
 }
 
-echo 'Success: ' . $transactionType . ' has been created for Payment #' . $transaction->getPaymentId();
-
-
-function authorize()
-{
-    try {
-        $heidelpay = new Heidelpay( PRIVATE_KEY );
-        $GLOBALS['transaction'] = $heidelpay->authorize(100.0, Currencies::EURO, $GLOBALS['paymentTypeId'], CONTROLLER_URL);
-    } catch (RuntimeException $e) {
-        // log $e->getMessage();
-        echo 'Error: An unexpected error occurred';
-        die;
-    } catch (HeidelpayApiException $e) {
-        // log $e->getMessage();
-        echo 'Error: ' . $e->getMessage();
-        echo 'Error: ' . $e->getClientMessage();
-        die;
-    } catch (HeidelpaySdkException $e) {
-        // log $e->getMessage();
-        echo 'Error: ' . $e->getMessage();
-        echo 'Error: ' . $e->getClientMessage();
-        die;
-    }
+function returnError($message) {
+    header('HTTP/1.1 500 Internal Server Error');
+    echo($message);
 }
 
-
-function charge()
-{
-    try {
-        $heidelpay = new Heidelpay( PRIVATE_KEY );
-        $GLOBALS['transaction'] = $heidelpay->charge(100.0, Currencies::EURO, $GLOBALS['paymentTypeId'], CONTROLLER_URL);
-    } catch (RuntimeException $e) {
-        // log $e->getMessage();
-        echo 'Error: An unexpected error occurred';
-        die;
-    } catch (HeidelpayApiException $e) {
-        // log $e->getMessage();
-        echo 'Error: ' . $e->getMessage();
-        echo 'Error: ' . $e->getClientMessage();
-        die;
-    } catch (HeidelpaySdkException $e) {
-        // log $e->getMessage();
-        echo 'Error: ' . $e->getMessage();
-        echo 'Error: ' . $e->getClientMessage();
-        die;
-    }
+function returnMessage($message) {
+    echo $message;
 }
