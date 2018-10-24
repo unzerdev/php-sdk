@@ -43,7 +43,7 @@ header('Content-Type: application/json');
 
 try {
     $heidelpay     = new Heidelpay(PRIVATE_KEY);
-    $authorization = $heidelpay->authorize(100.0, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL);
+    $authorization = $heidelpay->authorize(100.0, Currencies::EURO, $paymentTypeId, AUTH_REVERSAL_CONTROLLER_URL);
     $response[] = [
         'result' => 'success',
         'message' => $authorization->getAmount() . ' ' . $authorization->getCurrency() .

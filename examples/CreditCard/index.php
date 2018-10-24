@@ -94,6 +94,8 @@ require_once __DIR__ . '/../../../../autoload.php';
             <div class="field">
                 <button class="ui primary button transaction" transaction="authorization">Authorize</button>
                 <button class="ui primary button transaction" transaction="charge">Charge</button>
+                <button class="ui primary button transaction" transaction="authorizeReversal">Authorize with Reversal</button>
+                <button class="ui primary button transaction" transaction="chargeCancel">Charge with Cancel</button>
             </div>
         </form>
     </div>
@@ -167,7 +169,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             $('.messages').append(message);
         }
 
-        function logResponseJson(response) {
+        function handleResponseJson(response) {
             JSON.parse(response).forEach(function(item) {
                 switch(item['result']) {
                     case 'success':
@@ -175,6 +177,9 @@ require_once __DIR__ . '/../../../../autoload.php';
                         break;
                     case 'info':
                         logInfo(item['message']);
+                        break;
+                    case 'redirect':
+                        window.location.href = item['redirectUrl'];
                         break;
                     default:
                         logError(item['message']);
@@ -195,6 +200,12 @@ require_once __DIR__ . '/../../../../autoload.php';
                     case 'charge':
                         url = '<?php echo CHARGE_CONTROLLER_URL; ?>';
                         break;
+                    case 'authorizeReversal':
+                        url = '<?php echo AUTH_REVERSAL_CONTROLLER_URL; ?>';
+                        break;
+                    case 'chargeCancel':
+                        url = '<?php echo CHARGE_CANCEL_CONTROLLER_URL; ?>';
+                        break;
                     default:
                         logError('Unknown paymentType');
                         return;
@@ -211,10 +222,10 @@ require_once __DIR__ . '/../../../../autoload.php';
                                 type: 'POST',
                                 url: url,
                                 success: function (result) {
-                                    logResponseJson(result);
+                                    handleResponseJson(result);
                                 },
                                 error: function (result) {
-                                    logResponseJson(result.responseText);
+                                    handleResponseJson(result.responseText);
                                 },
                                 data: {'paymentTypeId': data.id},
                                 dataType: 'text'
