@@ -12,7 +12,7 @@
  * @package  heidelpay/${Package}
  */
 
-require_once __DIR__ . '/_enableExamples.php';
+require_once __DIR__ . '/../_enableExamples.php';
 if (defined('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES') && HEIDELPAY_PHP_PAYMENT_API_EXAMPLES !== true) {
     exit();
 }
