@@ -31,6 +31,7 @@ require_once __DIR__ . '/Constants.php';
 require_once __DIR__ . '/../../../../autoload.php';
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Constants\PaymentState;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
 if (!isset($_POST['paymentTypeId'])) {
@@ -45,13 +46,29 @@ try {
     $authorization = $heidelpay->authorize(100.0, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL);
     $response[] = [
         'result' => 'success',
-        'message' => 'Authorization ' . $authorization->getId() . ' has been created for payment ' . $authorization->getPaymentId() . '.'
+        'message' => $authorization->getAmount() . ' ' . $authorization->getCurrency() .
+            ' have been authorized for payment ' . $authorization->getPaymentId() . '.'
+    ];
+
+    $reversal = $heidelpay->cancelAuthorizationByPayment($authorization->getPaymentId(), 50.00);
+    $response[] = [
+        'result' => 'success',
+        'message' => 'The amount of ' . $reversal->getAmount() . ' ' . $authorization->getCurrency() .
+            ' of Authorization ' . $authorization->getId() . ' of payment ' . $authorization->getPaymentId() .
+            ' has been canceled .'
     ];
 
     $charge = $authorization->charge();
     $response[] = [
         'result' => 'success',
-        'message' => 'Charge ' . $charge->getId() . ' has been created for Authorization '. $authorization->getId() . ' of payment ' . $authorization->getPaymentId() . '.'
+        'message' => 'The amount of ' . $charge->getAmount() . ' ' . $charge->getCurrency() .
+            ' has been charged for payment ' . $authorization->getPaymentId() . '.'
+    ];
+
+    $payment = $charge->getPayment();
+    $response[] = [
+        'result' => 'info',
+        'message' => 'The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.'
     ];
 
 } catch (RuntimeException $e) {

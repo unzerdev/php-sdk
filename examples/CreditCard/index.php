@@ -144,6 +144,10 @@ require_once __DIR__ . '/../../../../autoload.php';
             logMessage(message, 'Success', 'green');
         }
 
+        function logInfo(message){
+            logMessage(message, 'Info', 'blue');
+        }
+
         function logError(message){
             logMessage(message, 'Error', 'red');
         }
@@ -165,10 +169,16 @@ require_once __DIR__ . '/../../../../autoload.php';
 
         function logResponseJson(response) {
             JSON.parse(response).forEach(function(item) {
-                if (item['result'] === 'success') {
-                    logSuccess(item['message']);
-                } else {
-                    logError(item['message']);
+                switch(item['result']) {
+                    case 'success':
+                        logSuccess(item['message']);
+                        break;
+                    case 'info':
+                        logInfo(item['message']);
+                        break;
+                    default:
+                        logError(item['message']);
+                        break;
                 }
             })
         }
