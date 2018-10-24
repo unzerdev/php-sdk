@@ -14,7 +14,7 @@
 
 
 //#######   Checks whether examples are enabled. #######################################################################
-require_once __DIR__ . '/CardConstants.php';
+require_once __DIR__ . '/Constants.php';
 
 /**
  * Require the composer autoloader file
