@@ -41,11 +41,24 @@ header('Content-Type: application/json');
 
 try {
     $heidelpay  = new Heidelpay(PRIVATE_KEY);
-    $charge     = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CONTROLLER_URL);
 
+    $charge     = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CONTROLLER_URL);
     $response[] = [
         'result' => 'success',
         'message' => 'Charge ' . $charge->getId() . ' has been created for payment ' . $charge->getPaymentId() . '.'
+    ];
+
+    $cancel     = $charge->cancel(50.0);
+    $response[] = [
+        'result' => 'success',
+        'message' => 'The amount of ' . $cancel->getAmount() . ' ' . $charge->getCurrency() .
+            ' of payment ' . $charge->getPaymentId() . ' has been canceled .'
+    ];
+
+    $payment = $charge->getPayment();
+    $response[] = [
+        'result' => 'info',
+        'message' => 'The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.'
     ];
 
 } catch (RuntimeException $e) {
