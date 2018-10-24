@@ -23,6 +23,8 @@
  */
 namespace heidelpay\MgwPhpSdk\Constants;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+
 class PaymentState
 {
     const STATE_PENDING = 0;
@@ -31,4 +33,76 @@ class PaymentState
     const STATE_PARTLY = 3;
     const STATE_PAYMENT_REVIEW = 4;
     const STATE_CHARGEBACK = 5;
+
+    const STATE_NAME_PENDING = 'pending';
+    const STATE_NAME_COMPLETED = 'completed';
+    const STATE_NAME_CANCELED = 'canceled';
+    const STATE_NAME_PARTLY = 'partly';
+    const STATE_NAME_PAYMENT_REVIEW = 'review';
+    const STATE_NAME_CHARGEBACK = 'chargeback';
+
+    /**
+     * Returns the name of the state with the given code.
+     *
+     * @param int $stateCode The code of the payment state.
+     * @return string The name of the code.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown when the $stateCode is unknown.
+     */
+    public static function mapStateCodeToName($stateCode) {
+        switch ($stateCode) {
+            case self::STATE_PENDING :
+                return self::STATE_NAME_PENDING;
+                break;
+            case self::STATE_COMPLETED:
+                return self::STATE_NAME_COMPLETED;
+                break;
+            case self::STATE_CANCELED:
+                return self::STATE_NAME_CANCELED;
+                break;
+            case self::STATE_PARTLY:
+                return self::STATE_NAME_PARTLY;
+                break;
+            case self::STATE_PAYMENT_REVIEW:
+                return self::STATE_NAME_PAYMENT_REVIEW;
+                break;
+            case self::STATE_CHARGEBACK:
+                return self::STATE_NAME_CHARGEBACK;
+                break;
+            default:
+                throw new HeidelpaySdkException ('Unknown payment state #' . $stateCode);
+        }
+    }
+
+    /**
+     * Returns the name of the state with the given code.
+     *
+     * @param string $stateName The name of the code.
+     * @return int The code of the payment state.
+     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown when the $stateName is unknown.
+     */
+    public static function mapStateNameToCode($stateName) {
+        switch ($stateName) {
+            case self::STATE_NAME_PENDING :
+                return self::STATE_PENDING;
+                break;
+            case self::STATE_NAME_COMPLETED:
+                return self::STATE_COMPLETED;
+                break;
+            case self::STATE_NAME_CANCELED:
+                return self::STATE_CANCELED;
+                break;
+            case self::STATE_NAME_PARTLY:
+                return self::STATE_PARTLY;
+                break;
+            case self::STATE_NAME_PAYMENT_REVIEW:
+                return self::STATE_PAYMENT_REVIEW;
+                break;
+            case self::STATE_NAME_CHARGEBACK:
+                return self::STATE_CHARGEBACK;
+                break;
+            default:
+                throw new HeidelpaySdkException ('Unknown payment state ' . $stateName);
+        }
+    }
+
 }
