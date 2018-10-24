@@ -87,13 +87,15 @@ require_once __DIR__ . '/CardConstants.php';
 
             <p id="error-holder" style="color: #9f3a38"></p>
             <div class="field">
-                <button class="ui primary button" type="submit">Pay</button>
+                <button class="ui primary button transaction" transaction="authorization">Authorize</button>
+                <button class="ui primary button transaction" transaction="charge">Charge</button>
             </div>
         </form>
     </div>
 
-<!--    <button class="ui primary button" type="submit"></button>-->
-<!--    <button class="ui primary button" type="submit"></button>-->
+
+
+
 
     <script>
         var heidelpayObj = new heidelpay(<?php echo '\''.PUBLIC_KEY . '\''?>);
@@ -134,36 +136,38 @@ require_once __DIR__ . '/CardConstants.php';
             }
         });
 
-        // // Handle card form submission.
-        var form = document.getElementById('payment-form');
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
+        // Handle card form submission.
+        $(".transaction").click(
+            function (event) {
+                event.preventDefault();
+                $button = $(this);
 
-            document.getElementById('dimmer-holder').style.display = 'block';
-            Card.createResource()
-                .then(function (data) {
-                    document.getElementById('dimmer-holder').innerHTML
-                        = `<div style="color: #eee;top: 43%;position: relative;" class="ui">Resource Id: ${data.id}</div>`
-                    $.ajax(
-                        {
-                            type: "POST",
-                            url: '<?php echo CONTROLLER_URL ?>',
-                            success: function (result) {
-                                alert(result);
-                            },
-                            error: function (result) {
-                                alert(result);
-                            },
-                            data: {'paymentTypeId': data.id},
-                            dataType: "text"
-                        }
-                    );
-                })
-                .catch(function (error) {
-                    document.getElementById('dimmer-holder').style.display = 'none';
-                    document.getElementById('error-holder').innerHTML = error.customerMessage || error.message || 'Error'
-                })
-        });
+                document.getElementById('dimmer-holder').style.display = 'block';
+                Card.createResource()
+                    .then(function (data) {
+                        document.getElementById('dimmer-holder').innerHTML
+                            = `<div style="color: #eee;top: 43%;position: relative;" class="ui">Resource Id: ${data.id}</div>`
+                        $.ajax(
+                            {
+                                type: "POST",
+                                url: '<?php echo CONTROLLER_URL ?>',
+                                success: function (result) {
+                                    alert(result);
+                                },
+                                error: function (result) {
+                                    alert(result);
+                                },
+                                data: {'paymentTypeId': data.id, 'transaction': $button.attr("transaction")},
+                                dataType: "text"
+                            }
+                        );
+                    })
+                    .catch(function (error) {
+                        document.getElementById('dimmer-holder').style.display = 'none';
+                        document.getElementById('error-holder').innerHTML = error.customerMessage || error.message || 'Error'
+                    })
+            });
+
     </script>
 </body>
 
