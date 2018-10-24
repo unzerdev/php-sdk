@@ -158,6 +158,16 @@ require_once __DIR__ . '/CardConstants.php';
             $('.messages').append(message);
         }
 
+        function logResponseJson(response) {
+            JSON.parse(response).forEach(function(item) {
+                if (item['result'] === 'success') {
+                    logSuccess(item['message']);
+                } else {
+                    logError(item['message']);
+                }
+            })
+        }
+
         // Handle card form submission.
         $(".transaction").click(
             function (event) {
@@ -186,10 +196,10 @@ require_once __DIR__ . '/CardConstants.php';
                                 type: 'POST',
                                 url: url,
                                 success: function (result) {
-                                    logSuccess(result);
+                                    logResponseJson(result);
                                 },
                                 error: function (result) {
-                                    logError(result.responseText);
+                                    logResponseJson(result.responseText);
                                 },
                                 data: {'paymentTypeId': data.id},
                                 dataType: 'text'
