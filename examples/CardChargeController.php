@@ -25,31 +25,14 @@ require_once __DIR__ . '/../../../autoload.php';
 
 
 if (!isset($_POST['paymentTypeId'])) {
-    throw new RuntimeException('PaymentType id is missing!');
+    returnError('PaymentType id is missing!');
 }
-if (!isset($_POST['transaction'])) {
-    throw new RuntimeException('Transaction is missing!');
-}
-
 $paymentTypeId   = $_POST['paymentTypeId'];
-$transactionType = $_POST['transaction'];
-$transaction = null;
 
 try {
     $heidelpay = new Heidelpay(PRIVATE_KEY);
-    switch ($transactionType) {
-        case 'authorization':
-            $transaction = $heidelpay->authorize(100.0, Currencies::EURO, $paymentTypeId, CONTROLLER_URL);
-            break;
-        case 'charge':
-            $transaction = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CONTROLLER_URL);
-            break;
-        default:
-            throw new RuntimeException('Transaction type ' . $transactionType . ' is unknown!');
-            break;
-    }
-
-    returnMessage(ucfirst($transactionType) . ' has been created for payment ' . $transaction->getPaymentId() . '.');
+    $charge    = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL);
+    echo 'Charge ' . $charge->getId() . ' has been created for payment ' . $charge->getPaymentId() . '.';
 
 } catch (RuntimeException $e) {
     returnError($e->getMessage());
@@ -62,8 +45,5 @@ try {
 function returnError($message) {
     header('HTTP/1.1 500 Internal Server Error');
     echo($message);
-}
-
-function returnMessage($message) {
-    echo $message;
+    die();
 }

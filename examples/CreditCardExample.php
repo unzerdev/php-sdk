@@ -163,6 +163,17 @@ require_once __DIR__ . '/CardConstants.php';
             function (event) {
                 event.preventDefault();
                 $button = $(this);
+                switch ($button.attr("transaction")) {
+                    case 'authorization':
+                        url = '<?php echo AUTH_CONTROLLER_URL; ?>';
+                        break;
+                    case 'charge':
+                        url = '<?php echo CHARGE_CONTROLLER_URL; ?>';
+                        break;
+                    default:
+                        logError('Unknown paymentType');
+                        return;
+                }
 
                 document.getElementById('dimmer-holder').style.display = 'block';
                 Card.createResource()
@@ -172,16 +183,16 @@ require_once __DIR__ . '/CardConstants.php';
                             = `<div style="color: #eee;top: 43%;position: relative;" class="ui">Reload Page to perform a new request</div>`;
                         $.ajax(
                             {
-                                type: "POST",
-                                url: '<?php echo CONTROLLER_URL ?>',
+                                type: 'POST',
+                                url: url,
                                 success: function (result) {
                                     logSuccess(result);
                                 },
                                 error: function (result) {
                                     logError(result.responseText);
                                 },
-                                data: {'paymentTypeId': data.id, 'transaction': $button.attr("transaction")},
-                                dataType: "text"
+                                data: {'paymentTypeId': data.id},
+                                dataType: 'text'
                             }
                         );
                     })
