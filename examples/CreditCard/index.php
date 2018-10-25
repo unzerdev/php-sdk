@@ -211,21 +211,21 @@ require_once __DIR__ . '/../../../../autoload.php';
                         return;
                 }
 
-                document.getElementById('dimmer-holder').style.display = 'block';
+                showDimmerLoader();
                 Card.createResource()
                     .then(function (data) {
                         logSuccess('PaymentType ' + data.id + ' has been successfully created.');
-                        document.getElementById('dimmer-holder').innerHTML
-                            = `<div style="color: #eee;top: 43%;position: relative;" class="ui">Reload Page to perform a new request</div>`;
                         $.ajax(
                             {
                                 type: 'POST',
                                 url: url,
                                 success: function (result) {
                                     handleResponseJson(result);
+                                    showDimmerMessage('Reload Page to perform a new request');
                                 },
                                 error: function (result) {
                                     handleResponseJson(result.responseText);
+                                    showDimmerMessage('Reload Page to perform a new request');
                                 },
                                 data: {'paymentTypeId': data.id},
                                 dataType: 'text'
@@ -233,14 +233,30 @@ require_once __DIR__ . '/../../../../autoload.php';
                         );
                     })
                     .catch(function (error) {
-                        document.getElementById('dimmer-holder').style.display = 'none';
+                        hideDimmer()
                         errorMessage = error.customerMessage;
                         if (errorMessage === undefined) {
                             errorMessage = error.message;
                         }
                         document.getElementById('error-holder').innerHTML = errorMessage || error.message || 'Error';
-                    })
+                    });
             });
+
+        function showDimmerMessage(message) {
+            document.getElementById('dimmer-holder').innerHTML
+                = '<div style="color: #eee;top: 43%;position: relative;" class="ui">' + message + '</div>';
+            document.getElementById('dimmer-holder').style.display = 'block';
+        }
+
+        function showDimmerLoader() {
+            document.getElementById('dimmer-holder').innerHTML = '<div class="ui loader"></div>';
+            document.getElementById('dimmer-holder').style.display = 'block';
+        }
+
+        function hideDimmer() {
+            document.getElementById('dimmer-holder').style.display = 'none';
+        }
+
     </script>
 </body>
 
