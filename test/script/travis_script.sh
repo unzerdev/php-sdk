@@ -4,6 +4,7 @@ set -e
 trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit code $?' ERR
 
 # run static php-cs-fixer code analysis
+ls -la
 ../../vendor/bin/php-cs-fixer fix --dry-run --diff --verbose
 
 ## enable xdebug again
