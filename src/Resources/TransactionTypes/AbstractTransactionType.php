@@ -168,6 +168,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     /**
      * @param string $url
+     *
      * @return AbstractTransactionType
      */
     public function setUrl(string $url): AbstractTransactionType
