@@ -20,10 +20,10 @@ cache:
     - $HOME/.composer/cache
     - $HOME/.local
 before_install:
-    - ./tests/script/travis_before_install.sh
+    - ./test/script/travis_before_install.sh
 install:
-    - ./tests/script/travis_install.sh
+    - ./test/script/travis_install.sh
 script:
-    - ./tests/script/travis_script.sh
+    - ./test/script/travis_script.sh
 after_success:
     - php vendor/bin/codacycoverage clover log/xml/index.xml
