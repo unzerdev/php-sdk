@@ -57,6 +57,48 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body>
+    <div class="ui container">
+        <div class="ui styled fluid accordion">
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Test Credit Card data
+            </div>
+            <div class="content">
+                <p>Please use the following test data with this example. Refer to our <a href="https://docs.heidelpay.com/docs/testdata" target="_blank">documentation</a> for additional test data.</p>
+                <table class="ui celled table">
+                    <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Number</th>
+                        <th>Expiration Date</th>
+                        <th>CVC</th>
+                        <th>Success</th>
+                    </tr></thead>
+                    <tbody>
+                    <tr class="positive">
+                        <td data-label="Brand">VISA</td>
+                        <td data-label="Number">4711100000000000</td>
+                        <td data-label="Expiration Date">Date in the future</td>
+                        <td data-label="CVC">123</td>
+                        <td class="center aligned">
+                            <i class="large green checkmark icon"></i>
+                        </td>
+                    </tr>
+                    <tr class="positive">
+                        <td data-label="Brand">Mastercard</td>
+                        <td data-label="Number">5453010000059543</td>
+                        <td data-label="Expiration Date">Date in the future</td>
+                        <td data-label="CVC">123</td>
+                        <td class="center aligned">
+                            <i class="large green checkmark icon"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
     <div class="ui container segment">
         <div id="dimmer-holder" class="ui active dimmer" style="display: none;">
             <div class="ui loader"></div>
@@ -239,6 +281,10 @@ require_once __DIR__ . '/../../../../autoload.php';
             });
 
 //#######  The following code is specific to this implementation. ######################################################
+        $('.ui.accordion')
+            .accordion()
+        ;
+
         function showDimmerMessage(message) {
             document.getElementById('dimmer-holder').innerHTML
                 = '<div style="color: #eee;top: 43%;position: relative;" class="ui">' + message + '</div>';
