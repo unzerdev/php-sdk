@@ -45,12 +45,15 @@ class PaymentState
      * Returns the name of the state with the given code.
      *
      * @param int $stateCode The code of the payment state.
+     *
      * @return string The name of the code.
+     *
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown when the $stateCode is unknown.
      */
-    public static function mapStateCodeToName($stateCode) {
+    public static function mapStateCodeToName($stateCode)
+    {
         switch ($stateCode) {
-            case self::STATE_PENDING :
+            case self::STATE_PENDING:
                 return self::STATE_NAME_PENDING;
                 break;
             case self::STATE_COMPLETED:
@@ -69,7 +72,7 @@ class PaymentState
                 return self::STATE_NAME_CHARGEBACK;
                 break;
             default:
-                throw new HeidelpaySdkException ('Unknown payment state #' . $stateCode);
+                throw new HeidelpaySdkException('Unknown payment state #' . $stateCode);
         }
     }
 
@@ -77,12 +80,15 @@ class PaymentState
      * Returns the name of the state with the given code.
      *
      * @param string $stateName The name of the code.
+     *
      * @return int The code of the payment state.
+     *
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown when the $stateName is unknown.
      */
-    public static function mapStateNameToCode($stateName) {
+    public static function mapStateNameToCode($stateName)
+    {
         switch ($stateName) {
-            case self::STATE_NAME_PENDING :
+            case self::STATE_NAME_PENDING:
                 return self::STATE_PENDING;
                 break;
             case self::STATE_NAME_COMPLETED:
@@ -101,8 +107,7 @@ class PaymentState
                 return self::STATE_CHARGEBACK;
                 break;
             default:
-                throw new HeidelpaySdkException ('Unknown payment state ' . $stateName);
+                throw new HeidelpaySdkException('Unknown payment state ' . $stateName);
         }
     }
-
 }

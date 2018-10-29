@@ -111,6 +111,7 @@ trait HasPaymentState
      * Returns the current state code (ref. Constants/PaymentState).
      *
      * @return string The name of the current payment state.
+     *
      * @throws HeidelpaySdkException
      */
     public function getStateName(): string
