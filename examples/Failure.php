@@ -65,6 +65,7 @@ require_once __DIR__ . '/../../../autoload.php';
             </div>
             There has been an error performing the transaction.
         </div>
+        <a href="javascript:history.go(-1)">go back</a>
     </div>
 </body>
 

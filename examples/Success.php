@@ -65,6 +65,7 @@ require_once __DIR__ . '/../../../autoload.php';
             </div>
             The payment has been successfully completed.
         </div>
+        <a href="javascript:history.go(-1)">go back</a>
     </div>
 </body>
 
