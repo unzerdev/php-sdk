@@ -26,12 +26,9 @@
 //#######   Checks whether examples are enabled. #######################################################################
 require_once __DIR__ . '/Constants.php';
 
-/**
- * Require the composer autoloader file
- */
+//#######   User the composer autoloader. ##############################################################################
 require_once __DIR__ . '/../../../../autoload.php';
-
- ?>
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,12 +57,15 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body>
-
     <div class="ui container segment">
         <div id="dimmer-holder" class="ui active dimmer" style="display: none;">
             <div class="ui loader"></div>
         </div>
+
+        <!-- #######  1. Create a payment form. #####################################################################-->
         <form id="payment-form" class="heidelpayUI form" novalidate>
+
+            <!-- #######  2. Add the necessary fields. ##############################################################-->
             <div class="field">
                 <label for="card-number">Card Number</label>
                 <div class="heidelpayUI left icon input">
@@ -90,6 +90,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 </div>
             </div>
 
+            <!-- #######  3. Add an error holder. ###################################################################-->
             <p id="error-holder" style="color: #9f3a38"></p>
             <div class="field">
                 <button class="ui primary button transaction" transaction="authorization">Authorize</button>
@@ -103,10 +104,13 @@ require_once __DIR__ . '/../../../../autoload.php';
     <div class="ui container messages">
     </div>
 
+    <!-- #######  4. Initialize the form and add the functionality. #################################################-->
     <script>
+        //#######  4.a Create the heidelpay object using your public key. ##############################################
         var heidelpayObj = new heidelpay(<?php echo '\''.PUBLIC_KEY . '\''?>);
 
-        // Credit Card example
+        //#######  4.b Create a card object to use for the payment.     ################################################
+        //#######      And add map the fields from your form.           ################################################
         var Card = heidelpayObj.Card();
         Card.create('number', {
             containerId: 'heidelpay-i-card-number',
@@ -118,6 +122,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             containerId: 'heidelpay-i-card-cvc',
         });
 
+        //#######  4.c Add a listener to react to changes in the fields. ###############################################
         Card.addEventListener('change', function (e) {
             if (e.cardType) {
                 let $card = $('#card-icon');
@@ -142,57 +147,14 @@ require_once __DIR__ . '/../../../../autoload.php';
             }
         });
 
-        function logSuccess(message){
-            logMessage(message, 'Success', 'green');
-        }
-
-        function logInfo(message){
-            logMessage(message, 'Info', 'blue');
-        }
-
-        function logError(message){
-            logMessage(message, 'Error', 'red');
-        }
-
-        function logMessage(message, title, color){
-            var count = $('.messages .message').length;
-
-            message =
-                '<div class="ui ' + color + ' info message">' +
-                // '<i class="close icon"></i>'+
-                '<div class="header">' +
-                (count + 1) + '. ' + title +
-                '</div>' +
-                message +
-                '</div>';
-
-            $('.messages').append(message);
-        }
-
-        function handleResponseJson(response) {
-            JSON.parse(response).forEach(function(item) {
-                switch(item['result']) {
-                    case 'success':
-                        logSuccess(item['message']);
-                        break;
-                    case 'info':
-                        logInfo(item['message']);
-                        break;
-                    case 'redirect':
-                        window.location.href = item['redirectUrl'];
-                        break;
-                    default:
-                        logError(item['message']);
-                        break;
-                }
-            })
-        }
-
-        // Handle card form submission.
+        //#######  4.d Handle the Form submit. #########################################################################
+        //#######      In this case we have different buttons to show different use-cases. #############################
+        //#######      In your case you will probably just handle the form submit. #####################################
         $(".transaction").click(
             function (event) {
                 event.preventDefault();
                 $button = $(this);
+
                 switch ($button.attr("transaction")) {
                     case 'authorization':
                         url = '<?php echo AUTH_CONTROLLER_URL; ?>';
@@ -212,9 +174,13 @@ require_once __DIR__ . '/../../../../autoload.php';
                 }
 
                 showDimmerLoader();
+
+                //#######  4.e Create the card resource. ###############################################################
                 Card.createResource()
                     .then(function (data) {
                         logSuccess('PaymentType ' + data.id + ' has been successfully created.');
+
+                        //#######  4.f And post the card id to your shop. ##############################################
                         $.ajax(
                             {
                                 type: 'POST',
@@ -242,6 +208,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                     });
             });
 
+//#######  The following code is specific to this implementation. ######################################################
         function showDimmerMessage(message) {
             document.getElementById('dimmer-holder').innerHTML
                 = '<div style="color: #eee;top: 43%;position: relative;" class="ui">' + message + '</div>';
@@ -255,6 +222,52 @@ require_once __DIR__ . '/../../../../autoload.php';
 
         function hideDimmer() {
             document.getElementById('dimmer-holder').style.display = 'none';
+        }
+
+        function handleResponseJson(response) {
+            JSON.parse(response).forEach(function(item) {
+                switch(item['result']) {
+                    case 'success':
+                        logSuccess(item['message']);
+                        break;
+                    case 'info':
+                        logInfo(item['message']);
+                        break;
+                    case 'redirect':
+                        window.location.href = item['redirectUrl'];
+                        break;
+                    default:
+                        logError(item['message']);
+                        break;
+                }
+            })
+        }
+
+        function logSuccess(message){
+            logMessage(message, 'Success', 'green');
+        }
+
+        function logInfo(message){
+            logMessage(message, 'Info', 'blue');
+        }
+
+        function logError(message){
+            logMessage(message, 'Error', 'red');
+        }
+
+        function logMessage(message, title, color){
+            var count = $('.messages .message').length;
+
+            message =
+                '<div class="ui ' + color + ' info message">' +
+                // '<i class="close icon"></i>'+
+                '<div class="header">' +
+                (count + 1) + '. ' + title +
+                '</div>' +
+                message +
+                '</div>';
+
+            $('.messages').append(message);
         }
 
     </script>

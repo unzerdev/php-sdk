@@ -23,6 +23,7 @@
  */
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Customer;
 
 //#######   Checks whether examples are enabled. #######################################################################
 require_once __DIR__ . '/Constants.php';
@@ -37,39 +38,53 @@ if (!isset($_POST['paymentTypeId'])) {
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
 
-header('Content-Type: application/json');
-
+//#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
+    //#######  2. Create a heidelpay object using your private key. ####################################################
     $heidelpay  = new Heidelpay(PRIVATE_KEY);
 
-    $charge     = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CANCEL_CONTROLLER_URL);
-    $response[] = [
-        'result' => 'success',
-        'message' => 'Charge ' . $charge->getId() . ' has been created for payment ' . $charge->getPaymentId() . '.'
-    ];
+    //#######  3. Create a direct charge. ##############################################################################
+    $customer      = new Customer('Linda', 'Heideich');
+    $charge     = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CANCEL_CONTROLLER_URL, $customer);
+    addSuccess('Charge ' . $charge->getId() . ' has been created for payment ' . $charge->getPaymentId() . '.');
 
+    //#######  4. Create a refund for part of the charged amount. ######################################################
     $cancel     = $charge->cancel(50.0);
-    $response[] = [
-        'result' => 'success',
-        'message' => 'The amount of ' . $cancel->getAmount() . ' ' . $charge->getCurrency() .
-            ' of payment ' . $charge->getPaymentId() . ' has been canceled .'
-    ];
+    addSuccess('The amount of ' . $cancel->getAmount() . ' ' . $charge->getCurrency() . ' of payment ' .
+        $charge->getPaymentId() . ' has been canceled .');
 
+    //#######  5. Fetch the payment object to get the current state. ###################################################
     $payment = $charge->getPayment();
-    $response[] = [
-        'result' => 'info',
-        'message' => 'The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.'
-    ];
+    addInfo('The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.');
 
-} catch (RuntimeException $e) {
-    header('HTTP/1.1 500 Internal Server Error');
-    $response[] = ['result' => 'error', 'message' => $e->getMessage()];
 } catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
-    header('HTTP/1.1 500 Internal Server Error');
-    $response[] = ['result' => 'error', 'message' => $e->getClientMessage()];
+    returnError($e->getClientMessage());
 } catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException $e) {
-    header('HTTP/1.1 500 Internal Server Error');
-    $response[] = ['result' => 'error', 'message' => $e->getClientMessage()];
+    returnError($e->getClientMessage());
 }
 
-echo json_encode($response);
+returnResponse();
+
+function returnError($message) {
+    header('HTTP/1.1 500 Internal Server Error');
+    addMessage('error', $message);
+    returnResponse();
+}
+
+function addSuccess($message) {
+    addMessage('success', $message);
+}
+
+function addInfo($message) {
+    addMessage('info', $message);
+}
+
+function addMessage($type, $message) {
+    $GLOBALS['response'][] = ['result' => $type, 'message' => $message];
+}
+
+function returnResponse() {
+    header('Content-Type: application/json');
+    echo json_encode($GLOBALS['response']);
+    die;
+}

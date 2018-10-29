@@ -31,7 +31,6 @@ require_once __DIR__ . '/Constants.php';
 require_once __DIR__ . '/../../../../autoload.php';
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Constants\PaymentState;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
 if (!isset($_POST['paymentTypeId'])) {
@@ -39,47 +38,59 @@ if (!isset($_POST['paymentTypeId'])) {
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
 
-header('Content-Type: application/json');
-
+//#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
+    //#######  2. Create a heidelpay object using your private key #####################################################
     $heidelpay     = new Heidelpay(PRIVATE_KEY);
+
+    //#######  3. Create an authorization. #############################################################################
     $authorization = $heidelpay->authorize(100.0, Currencies::EURO, $paymentTypeId, AUTH_REVERSAL_CONTROLLER_URL);
-    $response[] = [
-        'result' => 'success',
-        'message' => $authorization->getAmount() . ' ' . $authorization->getCurrency() .
-            ' have been authorized for payment ' . $authorization->getPaymentId() . '.'
-    ];
+    addSuccess($authorization->getAmount() . ' ' . $authorization->getCurrency() .
+            ' have been authorized for payment ' . $authorization->getPaymentId() . '.');
 
+    //#######  4. Create a reversal for part of the authorized amount. #################################################
     $reversal = $heidelpay->cancelAuthorizationByPayment($authorization->getPaymentId(), 50.00);
-    $response[] = [
-        'result' => 'success',
-        'message' => 'The amount of ' . $reversal->getAmount() . ' ' . $authorization->getCurrency() .
+    addSuccess('The amount of ' . $reversal->getAmount() . ' ' . $authorization->getCurrency() .
             ' of Authorization ' . $authorization->getId() . ' of payment ' . $authorization->getPaymentId() .
-            ' has been canceled .'
-    ];
+            ' has been canceled .');
 
-    $charge = $authorization->charge();
-    $response[] = [
-        'result' => 'success',
-        'message' => 'The amount of ' . $charge->getAmount() . ' ' . $charge->getCurrency() .
-            ' has been charged for payment ' . $authorization->getPaymentId() . '.'
-    ];
+    //#######  5. Charge the full amount of the authorization. #########################################################
+    $charge = $heidelpay->chargeAuthorization($authorization->getPaymentId());
+    addSuccess('The amount of ' . $charge->getAmount() . ' ' . $charge->getCurrency() .
+            ' has been charged for payment ' . $authorization->getPaymentId() . '.');
 
+    //#######  6. Fetch the payment object to get the current state. ###################################################
     $payment = $charge->getPayment();
-    $response[] = [
-        'result' => 'info',
-        'message' => 'The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.'
-    ];
+    addInfo('The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.');
 
-} catch (RuntimeException $e) {
-    header('HTTP/1.1 500 Internal Server Error');
-    $response[] = ['result' => 'error', 'message' => $e->getMessage()];
 } catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
-    header('HTTP/1.1 500 Internal Server Error');
-    $response[] = ['result' => 'error', 'message' => $e->getClientMessage()];
+    returnError($e->getClientMessage());
 } catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException $e) {
-    header('HTTP/1.1 500 Internal Server Error');
-    $response[] = ['result' => 'error', 'message' => $e->getClientMessage()];
+    returnError($e->getClientMessage());
 }
 
-echo json_encode($response);
+returnResponse();
+
+function returnError($message) {
+    header('HTTP/1.1 500 Internal Server Error');
+    addMessage('error', $message);
+    returnResponse();
+}
+
+function addSuccess($message) {
+    addMessage('success', $message);
+}
+
+function addInfo($message) {
+    addMessage('info', $message);
+}
+
+function addMessage($type, $message) {
+    $GLOBALS['response'][] = ['result' => $type, 'message' => $message];
+}
+
+function returnResponse() {
+    header('Content-Type: application/json');
+    echo json_encode($GLOBALS['response']);
+    die;
+}

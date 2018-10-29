@@ -31,32 +31,42 @@ require_once __DIR__ . '/Constants.php';
 require_once __DIR__ . '/../../../../autoload.php';
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Constants\PaymentState;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Customer;
 
 if (!isset($_POST['paymentTypeId'])) {
-    returnError('PaymentType id is missing!');
+    redirect(FAILURE_URL);
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
 
+//#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
+    //#######  2. Create a heidelpay object using your private key #####################################################
     $heidelpay     = new Heidelpay(PRIVATE_KEY);
-    $charge = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CONTROLLER_URL);
+
+    //#######  3. Create a charge with a new customer. #################################################################
+    $customer      = new Customer('Linda', 'Heideich');
+    $charge = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CONTROLLER_URL, $customer);
 
     if ($charge->getPayment()->isCompleted()) {
-        $response[] = ['result' => 'redirect', 'redirectUrl' => SUCCESS_URL];
+        redirect(SUCCESS_URL);
     }
 
-} catch (RuntimeException $e) {
-    $response[] = ['result' => 'redirect', 'redirectUrl' => FAILURE_URL];
 } catch (HeidelpayApiException $e) {
-    $response[] = ['result' => 'redirect', 'redirectUrl' => FAILURE_URL];
+    //#######  4. In case of an error redirect to your failure page. ###################################################
+    redirect(FAILURE_URL);
 } catch (HeidelpaySdkException $e) {
-    $response[] = ['result' => 'redirect', 'redirectUrl' => FAILURE_URL];
+    redirect(FAILURE_URL);
 }
 
-// The response to index.php is json encoded.
-header('Content-Type: application/json');
-echo json_encode($response);
+//#######  5. If everything is fine redirect to your success page. #####################################################
+redirect(SUCCESS_URL);
+
+function redirect($url) {
+    $response[] = ['result' => 'redirect', 'redirectUrl' => $url];
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    die;
+}
