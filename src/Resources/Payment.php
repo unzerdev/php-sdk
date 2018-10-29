@@ -390,6 +390,16 @@ class Payment extends AbstractHeidelpayResource
     }
 
     /**
+     * Returns all Shipment transactions of this payment.
+     *
+     * @return array
+     */
+    public function getShipments(): array
+    {
+        return $this->shipments;
+    }
+
+    /**
      * Retrieves a Shipment object of this Payment by its id.
      *
      * @param string $shipmentId The id of the Shipment to be retrieved.

@@ -47,6 +47,9 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /** @var string $shortId */
     private $shortId;
 
+    /** @var string $url */
+    private $url;
+
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
@@ -118,9 +121,9 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUniqueId(): string
+    public function getUniqueId()
     {
         return $this->uniqueId;
     }
@@ -137,9 +140,9 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getShortId(): string
+    public function getShortId()
     {
         return $this->shortId;
     }
@@ -152,6 +155,24 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     public function setShortId(string $shortId): AbstractTransactionType
     {
         $this->shortId = $shortId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     * @return AbstractTransactionType
+     */
+    public function setUrl(string $url): AbstractTransactionType
+    {
+        $this->url = $url;
         return $this;
     }
 

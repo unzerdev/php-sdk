@@ -51,7 +51,7 @@ try {
     $charge = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CONTROLLER_URL, $customer);
 
     if ($charge->getPayment()->isCompleted()) {
-        redirect(SUCCESS_URL);
+        redirect(SUCCESS_URL, $charge->getPaymentId());
     }
 
 } catch (HeidelpayApiException $e) {
@@ -64,8 +64,8 @@ try {
 //#######  5. If everything is fine redirect to your success page. #####################################################
 redirect(SUCCESS_URL);
 
-function redirect($url) {
-    $response[] = ['result' => 'redirect', 'redirectUrl' => $url];
+function redirect($url, $paymentId = null) {
+    $response[] = ['result' => 'redirect', 'redirectUrl' => $url, 'paymentId' => $paymentId];
     header('Content-Type: application/json');
     echo json_encode($response);
     die;

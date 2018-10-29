@@ -28,6 +28,3 @@ define('CHARGE_CANCEL_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/ChargeC
 define('AUTH_REVERSAL_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/AuthReversalController.php');
 define('AUTH_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/AuthController.php');
 define('CHARGE_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/ChargeController.php');
-
-define('PUBLIC_KEY', 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');
-define('PRIVATE_KEY', 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');

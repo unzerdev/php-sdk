@@ -310,7 +310,11 @@ require_once __DIR__ . '/../../../../autoload.php';
                         logInfo(item['message']);
                         break;
                     case 'redirect':
-                        window.location.href = item['redirectUrl'];
+                        let url = item['redirectUrl'];
+                        if (item['paymentId'] !== undefined) {
+                            url = url + '?paymentid=' + item['paymentId'];
+                        }
+                        window.location.href = url;
                         break;
                     default:
                         logError(item['message']);

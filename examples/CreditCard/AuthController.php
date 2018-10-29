@@ -58,10 +58,10 @@ try {
 }
 
 //#######  6. If everything is fine redirect to your success page. #####################################################
-redirect(SUCCESS_URL);
+redirect(SUCCESS_URL, $authorization->getPaymentId());
 
-function redirect($url) {
-    $response[] = ['result' => 'redirect', 'redirectUrl' => $url];
+function redirect($url, $paymentId = null) {
+    $response[] = ['result' => 'redirect', 'redirectUrl' => $url, 'paymentId' => $paymentId];
     header('Content-Type: application/json');
     echo json_encode($response);
     die;
