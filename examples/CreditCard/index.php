@@ -92,11 +92,41 @@ require_once __DIR__ . '/../../../../autoload.php';
 
             <!-- #######  3. Add an error holder. ###################################################################-->
             <p id="error-holder" style="color: #9f3a38"></p>
-            <div class="field">
-                <button class="ui primary button transaction" transaction="authorization">Authorize</button>
-                <button class="ui primary button transaction" transaction="charge">Charge</button>
-                <button class="ui primary button transaction" transaction="authorizeReversal">Authorize with Reversal</button>
-                <button class="ui primary button transaction" transaction="chargeCancel">Charge with Cancel</button>
+
+            <div class="ui container segment">
+                <div class="ui medium header">Normal use cases:</div>
+                <div class="ui two column grid">
+                    <div class="row">
+                        <div class="twelve wide column">This example will perform the reservation of an amount from the given card. The amount can be charged later on e.g. on shipment. After authorization the customer will be redirected to the success or failure page.</div>
+                        <div class="four wide column">
+                            <button class="ui fluid primary button transaction" transaction="authorization">Authorize</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="twelve wide column">This example will charge an amount from the the given card directly. After charge the customer will be redirected to the success or failure page.</div>
+                        <div class="four wide column">
+                            <button class="ui fluid primary button transaction" transaction="charge">Charge</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui container segment">
+                <div class="ui medium header">Extended examples:</div>
+                <div class="ui two column grid">
+                    <div class="row">
+                        <div class="twelve wide column">This example will perform an authorization, cancel part of it and then charge the authorization.</div>
+                        <div class="four wide column">
+                            <button class="ui fluid primary button transaction" transaction="authorizeReversal">Authorize with Reversal</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="twelve wide column">This example will perform a charge and cancel part of it.</div>
+                        <div class="four wide column">
+                            <button class="ui fluid primary button transaction" transaction="chargeCancel">Charge with Cancel</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
