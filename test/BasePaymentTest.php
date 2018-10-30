@@ -123,7 +123,7 @@ class BasePaymentTest extends TestCase
     public function createAuthorization(): Authorization
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
-        $orderId       = time();
+        $orderId       = microtime(true);
         $authorization = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, null, $orderId);
         return $authorization;
     }
