@@ -102,7 +102,7 @@ function printTransactionMetaData($transaction) {
                 <li>Transactions:
                     <ul>
                         <?php
-                        $authorization = $payment->getAuthorization(true);
+                        $authorization = $payment->getAuthorization();
                         if ($authorization instanceof Authorization) {
                             echo '<li>Authorization:</li>';
                             printTransactionMetaData($authorization);
