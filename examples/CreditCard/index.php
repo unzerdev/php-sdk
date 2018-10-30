@@ -93,6 +93,24 @@ require_once __DIR__ . '/../../../../autoload.php';
                             <i class="large green checkmark icon"></i>
                         </td>
                     </tr>
+                    <tr class="positive">
+                        <td data-label="Brand">American Express</td>
+                        <td data-label="Number">375000000000007</td>
+                        <td data-label="Expiration Date">Date in the future</td>
+                        <td data-label="CVC">1234</td>
+                        <td class="center aligned">
+                            <i class="large green checkmark icon"></i>
+                        </td>
+                    </tr>
+                    <tr class="negative">
+                        <td data-label="Brand">VISA</td>
+                        <td data-label="Number">4644400000308888</td>
+                        <td data-label="Expiration Date">Date in the future</td>
+                        <td data-label="CVC">123</td>
+                        <td class="center aligned">
+                            <i class="large red x icon"></i>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
