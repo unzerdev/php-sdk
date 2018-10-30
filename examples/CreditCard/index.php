@@ -225,7 +225,8 @@ require_once __DIR__ . '/../../../../autoload.php';
         $(".transaction").click(
             function (event) {
                 event.preventDefault();
-                $button = $(this);
+                let $button = $(this);
+                let url = '';
 
                 switch ($button.attr("transaction")) {
                     case 'authorization':
