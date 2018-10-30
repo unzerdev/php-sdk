@@ -137,14 +137,16 @@ class Przelewy24Test extends BasePaymentTest
     //<editor-fold desc="Data Providers">
 
     /**
-     * Provides all defined currencies.
-     *
-     * @throws \ReflectionException
+     * Provides a subset of currencies not allowed by this payment method.
      */
     public function przelewy24CurrencyCodeProvider(): array
     {
-        $currencyArray = $this->currencyCodeProvider();
-        unset($currencyArray['POLISH_ZLOTY']);
+        $currencyArray = [
+            Currencies::EURO => [Currencies::EURO],
+            Currencies::UNITED_STATES_DOLLAR => [Currencies::UNITED_STATES_DOLLAR],
+            Currencies::SWISS_FRANC => [Currencies::SWISS_FRANC]
+        ];
+
         return $currencyArray;
     }
 
