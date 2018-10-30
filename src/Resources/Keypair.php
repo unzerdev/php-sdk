@@ -58,11 +58,11 @@ class Keypair extends AbstractHeidelpayResource
     }
 
     /**
-     * @param array $availablePaymentTypes
+     * @param array $paymentTypes
      */
-    public function setAvailablePaymentTypes(array $availablePaymentTypes)
+    public function setAvailablePaymentTypes(array $paymentTypes)
     {
-        $this->availablePaymentTypes = $availablePaymentTypes;
+        $this->availablePaymentTypes = $paymentTypes;
     }
 
     //</editor-fold>
