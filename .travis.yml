@@ -26,4 +26,4 @@ install:
 script:
     - ./test/script/travis_script.sh
 after_success:
-    - php vendor/bin/codacycoverage clover log/xml/index.xml
+    - php vendor/bin/codacycoverage clover build/logs/clover.xml
