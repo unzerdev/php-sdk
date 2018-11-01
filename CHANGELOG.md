@@ -8,4 +8,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 * Beta release for the new php sdk.
 
-[1.0.0-beta.1]: https://github.com/heidelpay/heidelpayPhpSdk/tree/1.0.0-beta.1
+[1.0.0-beta.1]: https://github.com/heidelpay/heidelpayPHP/tree/1.0.0-beta.1
