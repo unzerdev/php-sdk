@@ -51,7 +51,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_VERSION = 'HeidelpayPHP 1.0.0-beta';
-    const DEBUG_MODE = true;
+    const DEBUG_MODE = false;
 
     /** @var string $key */
     private $key;
@@ -90,9 +90,9 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Send the resource object to the url using the specified Http method (default = GET).
      *
-     * @param string                     $uri      The URI to send the request to.
+     * @param string                    $uri      The URI to send the request to.
      * @param AbstractHeidelpayResource $resource The resource to be send.
-     * @param string                     $method   The Http method to be used.
+     * @param string                    $method   The Http method to be used.
      *
      * @return string The response as a JSON string.
      *
@@ -534,7 +534,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpaySdkException A HeidelpaySdkException is thrown if an error occurs in the SDK.
      * @throws RuntimeException      A RuntimeException is thrown when there is a general error while sending a request.
      */
-    public function fetchShipmentByPayment($payment, $shipmentId): AbstractHeidelpayResource
+    public function fetchShipment($payment, $shipmentId): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchShipment($payment, $shipmentId);
     }

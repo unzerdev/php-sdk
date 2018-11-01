@@ -390,6 +390,16 @@ class Payment extends AbstractHeidelpayResource
     }
 
     /**
+     * Returns all Shipment transactions of this payment.
+     *
+     * @return array
+     */
+    public function getShipments(): array
+    {
+        return $this->shipments;
+    }
+
+    /**
      * Retrieves a Shipment object of this Payment by its id.
      *
      * @param string $shipmentId The id of the Shipment to be retrieved.
@@ -546,14 +556,14 @@ class Payment extends AbstractHeidelpayResource
     public function cancel($amount = null): Cancellation
     {
         $cancel = null;
-        $alreadyCanceledException = null;
+        $exception = null;
 
         /** @var Charge $charge */
         foreach ($this->getCharges() as $charge) {
             try {
                 $cancel = $charge->cancel();
             } catch (HeidelpayApiException $e) {
-                $alreadyCanceledException = $e;
+                $exception = $e;
                 if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
                     throw $e;
                 }
@@ -565,7 +575,7 @@ class Payment extends AbstractHeidelpayResource
                 $cancel = $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
             }
         } catch (HeidelpayApiException $e) {
-            $alreadyCanceledException = $e;
+            $exception = $e;
             if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
                 throw $e;
             }
@@ -576,8 +586,8 @@ class Payment extends AbstractHeidelpayResource
         }
 
         // throw the last exception if no cancellation has been created
-        if ($alreadyCanceledException instanceof HeidelpayApiException) {
-            throw $alreadyCanceledException;
+        if ($exception instanceof HeidelpayApiException) {
+            throw $exception;
         }
 
         throw new HeidelpaySdkException('This Payment could not be cancelled.');

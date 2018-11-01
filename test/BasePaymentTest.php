@@ -42,7 +42,7 @@ class BasePaymentTest extends TestCase
     /** @var Heidelpay $heidelpay */
     protected $heidelpay;
 
-    const RETURN_URL = 'http://vnexpress.vn';
+    const RETURN_URL = 'http://dev.heidelpay.com';
     const PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
     const PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT = 's-priv-2a107CYZMp3UbyVPAuqWoxQHi9nFyeiW'; // todo replace
 
@@ -123,7 +123,7 @@ class BasePaymentTest extends TestCase
     public function createAuthorization(): Authorization
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
-        $orderId       = time();
+        $orderId       = microtime(true);
         $authorization = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, null, $orderId);
         return $authorization;
     }

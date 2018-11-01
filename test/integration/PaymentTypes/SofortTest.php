@@ -89,28 +89,6 @@ class SofortTest extends BasePaymentTest
     }
 
     /**
-     * Verify sofort charge can be canceled.
-     *
-     * @test
-     *
-     * @depends sofortShouldBeAbleToCharge
-     *
-     * @param Charge $charge
-     *
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
-     * @throws \RuntimeException
-     */
-    public function sofortChargeCanBeCanceled(Charge $charge)
-    {
-        $cancel = $charge->cancel();
-        $this->assertNotNull($cancel);
-        $this->assertNotEmpty($cancel->getId());
-    }
-
-    /**
      * Verify sofort is not authorizable.
      *
      * @test

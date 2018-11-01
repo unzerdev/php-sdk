@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is used to bootstrap the unit/integration tests in this project.
+ * This file defines the constants needed for the card example.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests
+ * @package  heidelpay/mgw_sdk/examples
  */
-require_once __DIR__ . '/../vendor/autoload.php';
+
+require_once __DIR__ . '/../Constants.php';
+
+define('CHARGE_CANCEL_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/ChargeCancelController.php');
+define('AUTH_REVERSAL_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/AuthReversalController.php');
+define('AUTH_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/AuthController.php');
+define('CHARGE_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/ChargeController.php');

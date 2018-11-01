@@ -88,35 +88,6 @@ class PaymentTest extends BasePaymentTest
     }
 
     /**
-     * Verify full charge on payment with authorization.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
-     */
-    public function moreThanOneChargeShouldBePossibleOnPaymentObject()
-    {
-        $charge = $this->createCharge();
-        $payment = $charge->getPayment();
-
-        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
-        $this->assertTrue($payment->isCompleted());
-
-        /** @var Charge $charge */
-        $charge = $payment->charge(100.0);
-        $paymentNew = $charge->getPayment();
-
-        // verify payment has been updated properly
-        $this->assertAmounts($paymentNew, 0.0, 200.0, 200.0, 0.0);
-        $this->assertTrue($paymentNew->isCompleted());
-    }
-
-    /**
      * Verify payment can be fetched with charges.
      *
      * @test

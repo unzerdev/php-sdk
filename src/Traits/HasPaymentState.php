@@ -24,6 +24,7 @@
 namespace heidelpay\MgwPhpSdk\Traits;
 
 use heidelpay\MgwPhpSdk\Constants\PaymentState;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 
 trait HasPaymentState
 {
@@ -104,6 +105,18 @@ trait HasPaymentState
     public function getState(): int
     {
         return $this->state;
+    }
+
+    /**
+     * Returns the current state code (ref. Constants/PaymentState).
+     *
+     * @return string The name of the current payment state.
+     *
+     * @throws HeidelpaySdkException
+     */
+    public function getStateName(): string
+    {
+        return PaymentState::mapStateCodeToName($this->state);
     }
 
     /**

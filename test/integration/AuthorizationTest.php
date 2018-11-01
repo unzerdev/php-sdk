@@ -116,10 +116,12 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizationWithCustomerId(): Authorization
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card       = $this->heidelpay->createPaymentType($this->createCardObject());
         $customerId = $this->heidelpay->createCustomer($this->getMinimalCustomer())->getId();
-        $authorize = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, $customerId, time());
-        $payment = $authorize->getPayment();
+        $orderId    = microtime(true);
+        $authorize  = $this->heidelpay
+            ->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, $customerId, $orderId);
+        $payment    = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
 

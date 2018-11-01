@@ -43,12 +43,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
     /**
      * @param HeidelpayParentInterface $parent
-     * @param string                   $id
+     * @param string                   $resourceId
      */
-    public function __construct($parent = null, $id = null)
+    public function __construct($parent = null, $resourceId = null)
     {
         $this->parentResource = $parent;
-        $this->id = $id;
+        $this->id = $resourceId;
     }
 
     //<editor-fold desc="Helpers">
@@ -125,13 +125,13 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * @param int $id
+     * @param int $resourceId
      *
      * @return $this
      */
-    public function setId($id): self
+    public function setId($resourceId): self
     {
-        $this->id = $id;
+        $this->id = $resourceId;
         return $this;
     }
 
@@ -284,7 +284,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         // Add linked resources if any
         $resources = [];
         /**
-         * @var string                     $key
+         * @var string                    $key
          * @var AbstractHeidelpayResource $linkedResource
          */
         foreach ($this->getLinkedResources() as $key=>$linkedResource) {
