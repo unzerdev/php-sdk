@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the authorization transaction for the card example.
+ * This is the controller for the 'Authorization with Reversal' example for Card.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

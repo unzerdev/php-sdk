@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the authorization transaction for the card example.
+ * This is the controller for the 'Charge' transaction example for Card.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,11 @@ try {
 }
 
 //#######  5. If everything is fine redirect to your success page. #####################################################
-redirect(SUCCESS_URL);
+if ($charge->getPayment()->isCompleted()) {
+    redirect(SUCCESS_URL, $charge->getPaymentId());
+}
+redirect(FAILURE_URL);
+
 
 function redirect($url, $paymentId = null) {
     $response[] = ['result' => 'redirect', 'redirectUrl' => $url, 'paymentId' => $paymentId];

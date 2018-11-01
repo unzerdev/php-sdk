@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the charge transaction for the card example.
+ * This is the controller for the 'Charge with Refund' transaction example for Card.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
