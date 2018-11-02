@@ -22,6 +22,9 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+use heidelpay\MgwPhpSdk\Heidelpay;
+
 //#######   Checks whether examples are enabled. #######################################################################
 require_once __DIR__ . '/Constants.php';
 
@@ -30,10 +33,20 @@ require_once __DIR__ . '/Constants.php';
  */
 require_once __DIR__ . '/../../../../autoload.php';
 
-echo print_r($_POST, true);
+session_start();
 
+$paymentId = $_SESSION['paymentId'];
 
-//if (!isset($_POST['paymentTypeId'])) {
-//    redirect(FAILURE_URL);
-//}
-//$paymentTypeId   = $_POST['paymentTypeId'];
+try {
+    $heidelpay = new Heidelpay(PRIVATE_KEY);
+    $payment = $heidelpay->fetchPayment($paymentId);
+
+    if ($payment->isCompleted()) {
+        header('Location: ' . SUCCESS_URL);
+        exit();
+    }
+} catch (HeidelpaySdkException $e) {
+} catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
+}
+header('Location: ' . FAILURE_URL);
+exit();

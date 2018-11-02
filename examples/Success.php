@@ -23,6 +23,7 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
@@ -36,11 +37,13 @@ require_once __DIR__ . '/Constants.php';
  */
 require_once __DIR__ . '/../../../autoload.php';
 
-if (!isset($_GET['paymentid'])) {
+session_start();
+
+if (!isset($_SESSION['paymentId'])) {
     throw new \RuntimeException('PaymentId is missing!');
 }
 
-$paymentId = $_GET['paymentid'];
+$paymentId = $_SESSION['paymentId'];
 
 /** @var Heidelpay $heidelpay */
 $heidelpay     = new Heidelpay(PRIVATE_KEY);
@@ -48,16 +51,49 @@ $payment = $heidelpay->fetchPayment($paymentId);
 
 /**
  * @param AbstractTransactionType $transaction
+ * @return string
  */
-function printTransactionMetaData($transaction) {
-//    $url = $transaction->getUrl();
-    echo
+function renderTransactionMetaData($transaction) {
+    return
         '<ul>' .
         '<li>Id: ' . $transaction->getId() . '</li>' .
         '<li>ShortId: ' . $transaction->getShortId() . '</li>'.
         '<li>UniqueId: ' . $transaction->getUniqueId() . '</li>'.
-//        ($url ? '<li>URL: <a href="' . $url . '">' . $url . '</a></li>' : '').
         '</ul>';
+}
+
+function renderPaymentDetails(Payment $payment) {
+    $authorization = $payment->getAuthorization();
+
+    $transactionHtml = $authorization instanceof Authorization ?
+        '<li>Authorization:</li>' . renderTransactionMetaData($authorization) : '';
+
+    /** @var Charge $charge */
+    foreach ($payment->getCharges() as $charge) {
+        $transactionHtml .= '<li>Charge:</li>' . renderTransactionMetaData($payment->getChargeById($charge->getId()));
+    }
+
+    /** @var Cancellation $cancellation */
+    foreach ($payment->getCancellations() as $cancellation) {
+        $transactionHtml .= '<li>Cancellation:</li>' . renderTransactionMetaData($payment->getCancellation($cancellation->getId()));
+    }
+
+    /** @var Shipment $shipment */
+    foreach ($payment->getShipments() as $shipment) {
+        $transactionHtml .= '<li>Shipment:</li>' . renderTransactionMetaData($payment->getShipmentById($shipment->getId()));
+    }
+
+    return
+    '<p>Payment Details:</p>' .
+    '<ul class="ui list">' .
+        '<li>Id:' . $payment->getId() . '</li>' .
+        '<li>Transactions:' .
+            '<ul>' .
+                $transactionHtml .
+            '</ul>'.
+        '</li>' .
+        '<li>Status:'. $payment->getStateName() . '</li>'.
+    '</ul>';
 }
 
  ?>
@@ -96,39 +132,10 @@ function printTransactionMetaData($transaction) {
                 Success
             </div>
             <p>The payment has been successfully completed.</p>
-            <p>Payment Details:</p>
-            <ul class="ui list">
-                <li>Id: <?php echo $paymentId; ?></li>
-                <li>Transactions:
-                    <ul>
-                        <?php
-                        $authorization = $payment->getAuthorization();
-                        if ($authorization instanceof Authorization) {
-                            echo '<li>Authorization:</li>';
-                            printTransactionMetaData($authorization);
-                        }
+            <?php
+                echo renderPaymentDetails($payment);
+            ?>
 
-                        /** @var Charge $charge */
-                        foreach ($payment->getCharges() as $charge) {
-                            echo '<li>Charge:</li>';
-                            printTransactionMetaData($payment->getChargeById($charge->getId()));
-                        }
-
-                        /** @var Cancellation $cancellation */
-                        foreach ($payment->getCancellations() as $cancellation) {
-                            echo '<li>Cancellation:</li>';
-                            printTransactionMetaData($payment->getCancellation($cancellation->getId()));
-                        }
-
-                        /** @var Shipment $shipment */
-                        foreach ($payment->getShipments() as $shipment) {
-                            echo '<li>Shipment:</li>';
-                            printTransactionMetaData($payment->getShipmentById($shipment->getId()));
-                        }
-                        ?>
-                    </ul>
-                </li>
-            </ul>
         </div>
 
         <a href="javascript:history.go(-1)">go back</a>

@@ -42,6 +42,8 @@ if (!isset($_POST['paymentTypeId'])) {
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
 
+session_start();
+
 //#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
     //#######  2. Create a heidelpay object using your private key #####################################################
@@ -60,10 +62,10 @@ try {
 
 //#######  5. If everything is fine redirect to your success page. #####################################################
 if (($charge->getPayment() instanceof Payment) && $charge->getRedirectUrl() !== null) {
+    $_SESSION['paymentId'] = $charge->getPaymentId();
     redirect($charge->getRedirectUrl(), $charge->getPaymentId());
 }
 redirect(FAILURE_URL);
-
 
 function redirect($url, $paymentId = null) {
     $response[] = ['result' => 'redirect', 'redirectUrl' => $url, 'paymentId' => $paymentId];
@@ -71,29 +73,3 @@ function redirect($url, $paymentId = null) {
     echo json_encode($response);
     die;
 }
-
-
-
-//function returnError($message) {
-//    header('HTTP/1.1 500 Internal Server Error');
-//    addMessage('error', $message);
-//    returnResponse();
-//}
-//
-//function addSuccess($message) {
-//    addMessage('success', $message);
-//}
-//
-//function addInfo($message) {
-//    addMessage('info', $message);
-//}
-//
-//function addMessage($type, $message) {
-//    $GLOBALS['response'][] = ['result' => $type, 'message' => $message];
-//}
-//
-//function returnResponse() {
-//    header('Content-Type: application/json');
-//    echo json_encode($GLOBALS['response']);
-//    die;
-//}

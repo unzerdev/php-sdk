@@ -22,13 +22,81 @@
  *
  * @package  heidelpay/mgw_sdk/examples
  */
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
+
+//#######   Checks whether examples are enabled. #######################################################################
+require_once __DIR__ . '/Constants.php';
 
 /**
  * Require the composer autoloader file
  */
 require_once __DIR__ . '/../../../autoload.php';
 
- ?>
+session_start();
+
+if (!isset($_SESSION['paymentId'])) {
+    throw new \RuntimeException('PaymentId is missing!');
+}
+
+$paymentId = $_SESSION['paymentId'];
+
+/** @var Heidelpay $heidelpay */
+$heidelpay     = new Heidelpay(PRIVATE_KEY);
+$payment = $heidelpay->fetchPayment($paymentId);
+
+/**
+ * @param AbstractTransactionType $transaction
+ * @return string
+ */
+function renderTransactionMetaData($transaction) {
+    return
+        '<ul>' .
+        '<li>Id: ' . $transaction->getId() . '</li>' .
+        '<li>ShortId: ' . $transaction->getShortId() . '</li>'.
+        '<li>UniqueId: ' . $transaction->getUniqueId() . '</li>'.
+        '</ul>';
+}
+
+function renderPaymentDetails(Payment $payment) {
+    $authorization = $payment->getAuthorization();
+
+    $transactionHtml = $authorization instanceof Authorization ?
+        '<li>Authorization:</li>' . renderTransactionMetaData($authorization) : '';
+
+    /** @var Charge $charge */
+    foreach ($payment->getCharges() as $charge) {
+        $transactionHtml .= '<li>Charge:</li>' . renderTransactionMetaData($payment->getChargeById($charge->getId()));
+    }
+
+    /** @var Cancellation $cancellation */
+    foreach ($payment->getCancellations() as $cancellation) {
+        $transactionHtml .= '<li>Cancellation:</li>' . renderTransactionMetaData($payment->getCancellation($cancellation->getId()));
+    }
+
+    /** @var Shipment $shipment */
+    foreach ($payment->getShipments() as $shipment) {
+        $transactionHtml .= '<li>Shipment:</li>' . renderTransactionMetaData($payment->getShipmentById($shipment->getId()));
+    }
+
+    return
+        '<p>Payment Details:</p>' .
+        '<ul class="ui list">' .
+        '<li>Id:' . $payment->getId() . '</li>' .
+        '<li>Transactions:' .
+        '<ul>' .
+        $transactionHtml .
+        '</ul>'.
+        '</li>' .
+        '<li>Status:'. $payment->getStateName() . '</li>'.
+        '</ul>';
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,16 +125,21 @@ require_once __DIR__ . '/../../../autoload.php';
 </head>
 
 <body>
-    <div class="ui container messages">
+<div class="ui container messages">
 
-        <div class="ui red info message">
-            <div class="header">
-                Failure
-            </div>
-            There has been an error performing the transaction.
+    <div class="ui red info message">
+        <div class="header">
+            Failure
         </div>
-        <a href="javascript:history.go(-1)">go back</a>
+        <p>There has been an error completing the payment.</p>
+        <?php
+        echo renderPaymentDetails($payment);
+        ?>
+
     </div>
+
+    <a href="javascript:history.go(-1)">go back</a>
+</div>
 </body>
 
 </html>
