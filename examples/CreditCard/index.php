@@ -321,11 +321,7 @@ session_unset();
                         logInfo(item['message']);
                         break;
                     case 'redirect':
-                        let url = item['redirectUrl'];
-                        if (item['paymentId'] !== undefined) {
-                            url = url + '?paymentid=' + item['paymentId'];
-                        }
-                        window.location.href = url;
+                        window.location.href = item['redirectUrl'];
                         break;
                     default:
                         logError(item['message']);
