@@ -48,6 +48,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
 
     <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'js/logger.js' ?>"></script>
+    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'js/dimmer.js' ?>"></script>
 
     <style>
         html, body {
@@ -306,21 +307,6 @@ require_once __DIR__ . '/../../../../autoload.php';
         $('.ui.accordion')
             .accordion()
         ;
-
-        function showDimmerMessage(message) {
-            document.getElementById('dimmer-holder').innerHTML
-                = '<div style="color: #eee;top: 43%;position: relative;" class="ui">' + message + '</div>';
-            document.getElementById('dimmer-holder').style.display = 'block';
-        }
-
-        function showDimmerLoader() {
-            document.getElementById('dimmer-holder').innerHTML = '<div class="ui loader"></div>';
-            document.getElementById('dimmer-holder').style.display = 'block';
-        }
-
-        function hideDimmer() {
-            document.getElementById('dimmer-holder').style.display = 'none';
-        }
 
         function handleResponseJson(response) {
             JSON.parse(response).forEach(function(item) {
