@@ -22,7 +22,6 @@
  *
  * @package  heidelpay/mgw_sdk/examples
  */
-use heidelpay\MgwPhpSdk\Heidelpay;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
