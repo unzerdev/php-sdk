@@ -33,7 +33,7 @@ include 'assets/partials/_resultPage_php.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
     <?php include 'assets/partials/_resultPage_html.php'; ?>
 
