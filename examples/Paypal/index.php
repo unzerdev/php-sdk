@@ -120,24 +120,6 @@ $_SESSION['startUrl'] = EXAMPLE_URL;
                 </div>
             </div>
         </div>
-
-<!--        <div class="ui container segment">-->
-<!--            <div class="ui medium header">Extended examples:</div>-->
-<!--            <div class="ui two column grid">-->
-<!--                <div class="row">-->
-<!--                    <div class="twelve wide column">This example will perform an authorization, cancel part of it and then charge the remaining amount of the authorization.</div>-->
-<!--                    <div class="four wide column">-->
-<!--                        <button class="ui fluid primary button transaction" transaction="authorizeReversal" disabled>Authorize with Reversal</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="row">-->
-<!--                    <div class="twelve wide column">This example will perform a charge and cancel part of it.</div>-->
-<!--                    <div class="four wide column">-->
-<!--                        <button class="ui fluid primary button transaction" transaction="chargeCancel" disabled>Charge with Cancel</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 
     <div class="ui container messages">
@@ -167,12 +149,6 @@ $_SESSION['startUrl'] = EXAMPLE_URL;
                         break;
                     case 'charge':
                         url = '<?php echo CHARGE_CONTROLLER_URL; ?>';
-                        break;
-                    case 'authorizeReversal':
-                        url = '<?php echo AUTH_REVERSAL_CONTROLLER_URL; ?>';
-                        break;
-                    case 'chargeCancel':
-                        url = '<?php echo CHARGE_CANCEL_CONTROLLER_URL; ?>';
                         break;
                     default:
                         logError('Unknown paymentType');
