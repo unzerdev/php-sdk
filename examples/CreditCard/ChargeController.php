@@ -35,11 +35,14 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Payment;
 
 if (!isset($_POST['paymentTypeId'])) {
     redirect(FAILURE_URL);
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
+
+session_start();
 
 //#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
@@ -49,11 +52,6 @@ try {
     //#######  3. Create a charge with a new customer. #################################################################
     $customer      = new Customer('Linda', 'Heideich');
     $charge = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CONTROLLER_URL, $customer);
-
-    if ($charge->getPayment()->isCompleted()) {
-        redirect(SUCCESS_URL, $charge->getPaymentId());
-    }
-
 } catch (HeidelpayApiException $e) {
     //#######  4. In case of an error redirect to your failure page. ###################################################
     redirect(FAILURE_URL);
@@ -62,14 +60,18 @@ try {
 }
 
 //#######  5. If everything is fine redirect to your success page. #####################################################
-if ($charge->getPayment()->isCompleted()) {
-    redirect(SUCCESS_URL, $charge->getPaymentId());
+if ($charge->getPayment() instanceof Payment) {
+    $_SESSION['paymentId'] = $charge->getPaymentId();
+
+    if ($charge->getPayment()->isCompleted()) {
+        redirect(SUCCESS_URL);
+    }
 }
+
 redirect(FAILURE_URL);
 
-
-function redirect($url, $paymentId = null) {
-    $response[] = ['result' => 'redirect', 'redirectUrl' => $url, 'paymentId' => $paymentId];
+function redirect($url) {
+    $response[] = ['result' => 'redirect', 'redirectUrl' => $url,];
     header('Content-Type: application/json');
     echo json_encode($response);
     die;
