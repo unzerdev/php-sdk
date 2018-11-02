@@ -52,7 +52,6 @@ session_unset();
 
     <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'js/logger.js' ?>"></script>
     <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'js/dimmer.js' ?>"></script>
-    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'js/cookieHandler.js' ?>"></script>
 
     <style>
         html, body {
@@ -221,7 +220,6 @@ session_unset();
         function handleResponseJson(response) {
             JSON.parse(response).forEach(function(item) {
 
-                setCookie('PaymentId', item['paymentId']);
                 switch(item['result']) {
                     case 'success':
                         logSuccess(item['message']);
@@ -230,11 +228,7 @@ session_unset();
                         logInfo(item['message']);
                         break;
                     case 'redirect':
-                        let url = item['redirectUrl'];
-                        if (item['paymentId'] !== undefined) {
-                            url = url + '?paymentid=' + item['paymentId'];
-                        }
-                        window.location.href = url;
+                        window.location.href = item['redirectUrl'];
                         break;
                     default:
                         logError(item['message']);
