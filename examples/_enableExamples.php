@@ -31,4 +31,4 @@ define('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES', false);
 define('HEIDELPAY_PHP_PAYMENT_API_URL', 'http://'.$_SERVER['HTTP_HOST']);
 
 /* Please enter the path from root directory to the example folder */
-define('HEIDELPAY_PHP_PAYMENT_API_FOLDER', '/simon/projects/heidelpayPHP/vendor/heidelpay/heidelpay-php/examples/');
+define('HEIDELPAY_PHP_PAYMENT_API_FOLDER', '/vendor/heidelpay/heidelpay-php/examples/');
