@@ -63,12 +63,12 @@ try {
 //#######  5. If everything is fine redirect to your success page. #####################################################
 if (($charge->getPayment() instanceof Payment) && $charge->getRedirectUrl() !== null) {
     $_SESSION['paymentId'] = $charge->getPaymentId();
-    redirect($charge->getRedirectUrl(), $charge->getPaymentId());
+    redirect($charge->getRedirectUrl());
 }
 redirect(FAILURE_URL);
 
-function redirect($url, $paymentId = null) {
-    $response[] = ['result' => 'redirect', 'redirectUrl' => $url, 'paymentId' => $paymentId];
+function redirect($url) {
+    $response[] = ['result' => 'redirect', 'redirectUrl' => $url];
     header('Content-Type: application/json');
     echo json_encode($response);
     die;
