@@ -31,6 +31,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 session_start();
 session_unset();
+$_SESSION['startUrl'] = EXAMPLE_URL;
 ?>
 
 <!DOCTYPE html>

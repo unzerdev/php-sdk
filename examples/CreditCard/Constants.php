@@ -24,7 +24,8 @@
 
 require_once __DIR__ . '/../Constants.php';
 
-define('CHARGE_CANCEL_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/ChargeCancelController.php');
-define('AUTH_REVERSAL_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/AuthReversalController.php');
-define('AUTH_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/AuthController.php');
-define('CHARGE_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CreditCard/ChargeController.php');
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCard');
+define('CHARGE_CANCEL_CONTROLLER_URL', EXAMPLE_URL . '/ChargeCancelController.php');
+define('AUTH_REVERSAL_CONTROLLER_URL', EXAMPLE_URL . '/AuthReversalController.php');
+define('AUTH_CONTROLLER_URL', EXAMPLE_URL . '/AuthController.php');
+define('CHARGE_CONTROLLER_URL', EXAMPLE_URL . '/ChargeController.php');

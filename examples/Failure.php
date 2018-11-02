@@ -138,7 +138,7 @@ function renderPaymentDetails(Payment $payment) {
 
     </div>
 
-    <a href="javascript:history.go(-1)">go back</a>
+    <a href="<?php echo $_SESSION['startUrl']; ?>">go back</a>
 </div>
 </body>
 
