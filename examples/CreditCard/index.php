@@ -23,9 +23,10 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
+/** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
-//#######   User the composer autoloader. ##############################################################################
+/** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
 session_start();
@@ -34,7 +35,7 @@ $_SESSION['startUrl'] = EXAMPLE_URL;
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">

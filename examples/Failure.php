@@ -29,13 +29,13 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../autoload.php';
 
-include 'assets/partials/_phpHead.php';
+include 'assets/partials/_resultPhpHead.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-    <?php include 'assets/partials/_htmlHead.php'; ?>
+    <?php include 'assets/partials/_resultHtmlHead.php'; ?>
 
     <body>
         <div class="ui container messages">
