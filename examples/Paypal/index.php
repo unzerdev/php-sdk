@@ -23,46 +23,19 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-//#######   Checks whether examples are enabled. #######################################################################
+/** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
-//#######   User the composer autoloader. ##############################################################################
+/** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-session_start();
-session_unset();
-$_SESSION['startUrl'] = EXAMPLE_URL;
+include '../assets/partials/_index_phpHead.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>
-        Heidelpay UI Examples
-    </title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-
-    <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
-    <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
-
-    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'assets/js/logger.js' ?>"></script>
-    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'assets/js/dimmer.js' ?>"></script>
-
-    <style>
-        html, body {
-            margin: 0;
-            padding: 70px 0 0;
-            height: 330px;
-            min-width: initial;
-        }
-    </style>
-</head>
+<?php include '../assets/partials/_index_htmlHead.php'; ?>
 
 <body>
     <div class="ui container">
@@ -196,32 +169,7 @@ $_SESSION['startUrl'] = EXAMPLE_URL;
                         document.getElementById('error-holder').innerHTML = errorMessage || error.message || 'Error';
                     });
             });
-
-        $('.ui.accordion')
-            .accordion()
-        ;
-
-        function handleResponseJson(response) {
-            JSON.parse(response).forEach(function(item) {
-
-                switch(item['result']) {
-                    case 'success':
-                        logSuccess(item['message']);
-                        break;
-                    case 'info':
-                        logInfo(item['message']);
-                        break;
-                    case 'redirect':
-                        window.location.href = item['redirectUrl'];
-                        break;
-                    default:
-                        logError(item['message']);
-                        break;
-                }
-            })
-        }
-
     </script>
+    <?php include '../assets/partials/_index_scripts.php'; ?>
 </body>
-
 </html>
