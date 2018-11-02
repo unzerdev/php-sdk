@@ -23,7 +23,6 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-//#######   Checks whether examples are enabled. #######################################################################
 require_once __DIR__ . '/Constants.php';
 
 //#######   User the composer autoloader. ##############################################################################
@@ -51,8 +50,8 @@ $_SESSION['startUrl'] = EXAMPLE_URL;
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
     <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
 
-    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'js/logger.js' ?>"></script>
-    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'js/dimmer.js' ?>"></script>
+    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'assets/js/logger.js' ?>"></script>
+    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'assets/js/dimmer.js' ?>"></script>
 
     <style>
         html, body {

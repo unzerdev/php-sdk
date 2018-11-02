@@ -22,7 +22,6 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-//#######   Checks whether examples are enabled. #######################################################################
 require_once __DIR__ . '/Constants.php';
 
 /**
