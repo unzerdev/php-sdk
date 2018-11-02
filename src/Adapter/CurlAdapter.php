@@ -71,9 +71,10 @@ class CurlAdapter implements HttpAdapterInterface
         curl_close($request);
 
         if (Heidelpay::DEBUG_MODE) {
-            fwrite(STDOUT, 'Curl ' . $httpMethod . '-Request: ' . $uri);
-            fwrite(STDOUT, 'Request: ' . $heidelpayResource->jsonSerialize());
-            fwrite(STDOUT, 'Response: ' . $response);
+            $resourceJson = $heidelpayResource->jsonSerialize();
+            echo 'Curl ' . strip_tags($httpMethod) . '-Request: ' . strip_tags($uri) . "\n";
+            echo 'Request: ' . strip_tags($resourceJson) . "\n";
+            echo 'Response: ' . strip_tags($response) . "\n\n";
         }
 
         $this->handleErrors($info, $response);
