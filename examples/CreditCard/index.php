@@ -46,6 +46,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
     <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
+
+    <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'js/logger.js' ?>"></script>
+
     <style>
         html, body {
             margin: 0;
@@ -341,34 +344,6 @@ require_once __DIR__ . '/../../../../autoload.php';
                 }
             })
         }
-
-        function logSuccess(message){
-            logMessage(message, 'Success', 'green');
-        }
-
-        function logInfo(message){
-            logMessage(message, 'Info', 'blue');
-        }
-
-        function logError(message){
-            logMessage(message, 'Error', 'red');
-        }
-
-        function logMessage(message, title, color){
-            var count = $('.messages .message').length;
-
-            message =
-                '<div class="ui ' + color + ' info message">' +
-                // '<i class="close icon"></i>'+
-                '<div class="header">' +
-                (count + 1) + '. ' + title +
-                '</div>' +
-                message +
-                '</div>';
-
-            $('.messages').append(message);
-        }
-
     </script>
 </body>
 
