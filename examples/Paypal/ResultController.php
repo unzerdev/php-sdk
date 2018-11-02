@@ -25,12 +25,10 @@
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
-//#######   Checks whether examples are enabled. #######################################################################
+/** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
-/**
- * Require the composer autoloader file
- */
+/** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
 session_start();

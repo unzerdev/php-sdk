@@ -22,12 +22,10 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-//#######   Checks whether examples are enabled. #######################################################################
+/** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
-/**
- * Require the composer autoloader file
- */
+/** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
@@ -37,12 +35,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 
-if (!isset($_POST['paymentTypeId'])) {
-    redirect(FAILURE_URL);
-}
-$paymentTypeId   = $_POST['paymentTypeId'];
-
-session_start();
+include '../assets/partials/_controller_php.php';
 
 //#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
@@ -66,10 +59,3 @@ if (($charge->getPayment() instanceof Payment) && $charge->getRedirectUrl() !== 
     redirect($charge->getRedirectUrl());
 }
 redirect(FAILURE_URL);
-
-function redirect($url) {
-    $response[] = ['result' => 'redirect', 'redirectUrl' => $url];
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    die;
-}

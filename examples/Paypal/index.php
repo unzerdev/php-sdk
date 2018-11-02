@@ -29,13 +29,13 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-include '../assets/partials/_index_phpHead.php';
+include '../assets/partials/_indexPage_php.php';
 ?>
 
 <!DOCTYPE html>
 <html>
 
-<?php include '../assets/partials/_index_htmlHead.php'; ?>
+<?php include '../assets/partials/_indexPage_html.php'; ?>
 
 <body>
     <div class="ui container">
@@ -170,6 +170,6 @@ include '../assets/partials/_index_phpHead.php';
                     });
             });
     </script>
-    <?php include '../assets/partials/_index_scripts.php'; ?>
+    <?php include '../assets/partials/_indexPage_scripts.php'; ?>
 </body>
 </html>

@@ -22,21 +22,16 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-//#######   Checks whether examples are enabled. #######################################################################
+/** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
-/**
- * Require the composer autoloader file
- */
+/** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
-if (!isset($_POST['paymentTypeId'])) {
-    returnError('PaymentType id is missing!');
-}
-$paymentTypeId   = $_POST['paymentTypeId'];
+include '../assets/partials/_controller_php.php';
 
 //#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
@@ -70,27 +65,3 @@ try {
 }
 
 returnResponse();
-
-function returnError($message) {
-    header('HTTP/1.1 500 Internal Server Error');
-    addMessage('error', $message);
-    returnResponse();
-}
-
-function addSuccess($message) {
-    addMessage('success', $message);
-}
-
-function addInfo($message) {
-    addMessage('info', $message);
-}
-
-function addMessage($type, $message) {
-    $GLOBALS['response'][] = ['result' => $type, 'message' => $message];
-}
-
-function returnResponse() {
-    header('Content-Type: application/json');
-    echo json_encode($GLOBALS['response']);
-    die;
-}
