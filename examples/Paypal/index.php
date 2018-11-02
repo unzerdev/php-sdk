@@ -28,6 +28,9 @@ require_once __DIR__ . '/Constants.php';
 
 //#######   User the composer autoloader. ##############################################################################
 require_once __DIR__ . '/../../../../autoload.php';
+
+session_start();
+session_unset();
 ?>
 
 <!DOCTYPE html>
