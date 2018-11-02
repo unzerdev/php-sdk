@@ -66,38 +66,45 @@ $_SESSION['startUrl'] = EXAMPLE_URL;
 
 <body>
     <div class="ui container">
-        <!--<div class="ui styled fluid accordion">
+        <div class="ui styled fluid accordion">
             <div class="title">
                 <i class="dropdown icon"></i>
-                Test PayPal data
+                Paypal Test data
             </div>
             <div class="content">
                 <p>Please use the following test data with this example. Refer to our <a href="https://docs.heidelpay.com/docs/testdata" target="_blank">documentation</a> for additional test data.</p>
                 <table class="ui celled table">
                     <thead>
-                    <tr>
-                        <th>Brand</th>
-                        <th>Number</th>
-                        <th>Expiration Date</th>
-                        <th>CVC</th>
-                        <th>Success</th>
-                    </tr></thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Pay with</th>
+                            <th>Success</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                    <tr class="positive">
-                        <td data-label="Brand">VISA</td>
-                        <td data-label="Number">4711100000000000</td>
-                        <td data-label="Expiration Date">Date in the future</td>
-                        <td data-label="CVC">123</td>
-                        <td class="center aligned">
-                            <i class="large green checkmark icon"></i>
-                        </td>
-                    </tr>
+                        <tr class="positive">
+                            <td data-label="Username">paypal-customer@heidelpay.de</td>
+                            <td data-label="Password">heidelpay</td>
+                            <td data-label="Pay with">MasterCard x-9675</td>
+                            <td class="center aligned">
+                                <i class="large green checkmark icon"></i>
+                            </td>
+                        </tr>
+                        <tr class="negative">
+                            <td data-label="Username">paypal-customer@heidelpay.de</td>
+                            <td data-label="Password">heidelpay</td>
+                            <td data-label="Pay with">KBC Bank NV x-1231</td>
+                            <td class="center aligned">
+                                <i class="large red x icon"></i>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-        </div>-->
-
+        </div>
     </div>
+
     <div class="ui container segment">
         <div id="dimmer-holder" class="ui active dimmer" style="display: none;">
             <div class="ui loader"></div>
@@ -106,12 +113,12 @@ $_SESSION['startUrl'] = EXAMPLE_URL;
         <div class="ui container segment">
             <div class="ui medium header">Normal use cases:</div>
             <div class="ui two column grid">
-<!--                <div class="row">-->
-<!--                    <div class="twelve wide column">This example will redirect the customer to the Paypal page and will perform the reservation of an amount. The amount can be charged later on e.g. before shipment. After authorization the customer will be redirected to the success or failure page.</div>-->
-<!--                    <div class="four wide column">-->
-<!--                        <button class="ui fluid primary button transaction" transaction="authorization">Authorize</button>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="row">
+                    <div class="twelve wide column">This example will redirect the customer to the Paypal page and will perform the reservation of an amount. The amount can be charged later on e.g. before shipment. After authorization the customer will be redirected to the success or failure page.</div>
+                    <div class="four wide column">
+                        <button class="ui fluid primary button transaction" transaction="authorization" disabled>Authorize</button>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="twelve wide column">This example will redirect the customer to the Paypal page and will charge an amount directly. After charge the customer will be redirected to the success or failure page.</div>
                     <div class="four wide column">
