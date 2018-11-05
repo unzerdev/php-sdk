@@ -43,8 +43,15 @@ class BasePaymentTest extends TestCase
     protected $heidelpay;
 
     const RETURN_URL = 'http://dev.heidelpay.com';
-    const PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
-    const PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT = 's-priv-2a107CYZMp3UbyVPAuqWoxQHi9nFyeiW'; // todo replace
+
+    // SAQ-D certified merchants are allowed to handle and store CreditCard data,
+    // thus can create a CreditCard via this SDK.
+    // If the merchant is not certified to handle the CreditCard data SAQ-A applies
+    // in which case the merchant has to embed our iFrame via JS (UIComponents).
+    const PRIVATE_KEY_SAQ_D= 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
+    const PUBLIC_KEY_SAQ_D = 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa';
+    const PRIVATE_KEY_SAQ_A = 's-priv-2a10an6aJK0Jg7sMdpu9gK7ih8pCccze';
+    const PUBLIC_KEY_SAQ_A = 's-pub-2a10nxkuA4lC7bIRtz2hKcFGeHhlkr2e';
 
     /**
      * {@inheritDoc}
@@ -53,7 +60,7 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocales::GERMAN_GERMAN);
+        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY_SAQ_D, SupportedLocales::GERMAN_GERMAN);
     }
 
     //<editor-fold desc="Custom asserts">

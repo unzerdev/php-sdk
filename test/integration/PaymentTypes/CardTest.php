@@ -49,22 +49,17 @@ class CardTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
-     *
-     * @group skip
      */
     public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
     {
-        $this->heidelpay->setKey(self::PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT);
+        $this->heidelpay->setKey(self::PRIVATE_KEY_SAQ_A);
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INSUFFICIENT_PERMISSIONS);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INVALID_KEY);
         $card = $this->createCardObject();
-        $this->assertNull($card->getId());
         $this->heidelpay->createPaymentType($card);
-        $this->assertNotNull($card->getId());
     }
 
     /**
