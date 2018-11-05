@@ -29,6 +29,7 @@ class ResourceNameService
      * Return class short name.
      *
      * @param string $classString
+     *
      * @return string
      */
     public static function getClassShortNameKebapCase($classString): string

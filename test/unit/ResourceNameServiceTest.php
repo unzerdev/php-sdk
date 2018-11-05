@@ -35,8 +35,10 @@ class ResourceNameServiceTest extends TestCase
      *
      * @test
      * @dataProvider classShortNameTestDP
+     *
      * @param string $className
      * @param string $expected
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      */
