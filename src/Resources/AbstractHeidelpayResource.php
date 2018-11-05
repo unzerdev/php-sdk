@@ -28,6 +28,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Services\ResourceNameService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
@@ -81,35 +82,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         $uri[] = '';
 
         return implode('/', $uri);
-    }
-
-    /**
-     * Return class short name.
-     *
-     * @return string
-     */
-    protected static function getClassShortNameKebapCase(): string
-    {
-        $classNameParts = explode('\\', static::class);
-        return self::toKebapCase(end($classNameParts));
-    }
-
-    /**
-     * Change camel case string to kebap-case.
-     *
-     * @param $str
-     *
-     * @return string
-     */
-    private static function toKebapCase($str): string
-    {
-        return preg_replace_callback(
-            '/([A-Z]+)/',
-            function ($str) {
-                return '-' . strtolower($str[0]);
-            },
-            lcfirst($str)
-        );
     }
 
     //</editor-fold>
@@ -324,7 +296,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     protected function getResourcePath()
     {
-        return self::getClassShortNameKebapCase();
+        return ResourceNameService::getClassShortNameKebapCase(static::class);
     }
 
     /**
