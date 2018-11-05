@@ -258,6 +258,7 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * @param Address $shippingAddress
+     *
      * @return Customer
      */
     public function setShippingAddress(Address $shippingAddress): Customer
