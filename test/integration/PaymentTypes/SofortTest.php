@@ -1,7 +1,7 @@
 <?php
 /**
  * This class defines integration tests to verify interface and
- * functionality of the payment method sepa direct debit.
+ * functionality of the payment method sofort.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class SofortTest extends BasePaymentTest
@@ -43,7 +44,7 @@ class SofortTest extends BasePaymentTest
      *
      * @return Sofort
      *
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -79,7 +80,7 @@ class SofortTest extends BasePaymentTest
      * @throws HeidelpaySdkException
      * @depends sofortShouldBeCreatableAndFetchable
      */
-    public function sofortShouldBeAbleToCharge(Sofort $sofort)
+    public function sofortShouldBeAbleToCharge(Sofort $sofort): Charge
     {
         $charge = $sofort->charge(100.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
