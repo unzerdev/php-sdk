@@ -80,7 +80,7 @@ class CustomerTest extends BasePaymentTest
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
      */
-    public function maxCustomerCanBeCreatedAndFetched(): Customer
+    public function fullCustomerCanBeCreatedAndFetched(): Customer
     {
         $customer = $this->getMaximumCustomer();
         $this->assertEmpty($customer->getId());
@@ -102,7 +102,7 @@ class CustomerTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpaySdkException
-     * @depends maxCustomerCanBeCreatedAndFetched
+     * @depends fullCustomerCanBeCreatedAndFetched
      * @test
      */
     public function customerCanBeFetched(Customer $customer)
@@ -124,7 +124,7 @@ class CustomerTest extends BasePaymentTest
      */
     public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
     {
-        $customer = $this->getMaximumCustomer();
+        $customer = $this->getMaximumCustomerInclShippingAddress();
 
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
@@ -200,7 +200,7 @@ class CustomerTest extends BasePaymentTest
     /**
      * Customer can be updated.
      *
-     * @depends maxCustomerCanBeCreatedAndFetched
+     * @depends fullCustomerCanBeCreatedAndFetched
      * @test
      *
      * @param Customer $customer
@@ -227,7 +227,7 @@ class CustomerTest extends BasePaymentTest
     /**
      * Customer can be deleted.
      *
-     * @depends maxCustomerCanBeCreatedAndFetched
+     * @depends fullCustomerCanBeCreatedAndFetched
      * @test
      *
      * @param Customer $customer
