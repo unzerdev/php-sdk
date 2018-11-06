@@ -28,8 +28,6 @@ require_once __DIR__ . '/Constants.php';
 
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
-
-include '../assets/partials/_indexPage_php.php';
 ?>
 
 <!DOCTYPE html>
@@ -178,7 +176,7 @@ include '../assets/partials/_indexPage_php.php';
     <!-- #######  4. Initialize the form and add the functionality. #################################################-->
     <script>
         //#######  4.a Create the heidelpay object using your public key. ##############################################
-        var heidelpayObj = new heidelpay(<?php echo '\''.PUBLIC_KEY . '\''?>);
+        var heidelpayObj = new heidelpay(<?php echo '\'' . EXAMPLE_PUBLIC_KEY . '\''?>);
 
         //#######  4.b Create a card object to use for the payment.     ################################################
         //#######      And add map the fields from your form.           ################################################

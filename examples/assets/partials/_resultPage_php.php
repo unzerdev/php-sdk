@@ -33,15 +33,21 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 
 session_start();
 
+/** Require the constants of this example */
+$examplePath = $_SESSION['examplePath'];
+require_once $examplePath . '/Constants.php';
+
+/** Require the composer autoloader file */
+require_once __DIR__ . '/../../../../../autoload.php';
+
 if (!isset($_SESSION['paymentId'])) {
     echo 'PaymentId is missing!';
     die;
 }
-
 $paymentId = $_SESSION['paymentId'];
 
 /** @var Heidelpay $heidelpay */
-$heidelpay     = new Heidelpay(PRIVATE_KEY);
+$heidelpay     = new Heidelpay(EXAMPLE_PRIVATE_KEY);
 $payment = $heidelpay->fetchPayment($paymentId);
 
 /**

@@ -36,7 +36,7 @@ include '../assets/partials/_controller_php.php';
 //#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
     //#######  2. Create a heidelpay object using your private key. ####################################################
-    $heidelpay  = new Heidelpay(PRIVATE_KEY);
+    $heidelpay  = new Heidelpay(EXAMPLE_PRIVATE_KEY);
 
     //#######  3. Create a direct charge. ##############################################################################
     $customer      = new Customer('Linda', 'Heideich');

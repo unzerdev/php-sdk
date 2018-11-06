@@ -23,12 +23,6 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-/** Require the constants of this example */
-require_once __DIR__ . '/Constants.php';
-
-/** Require the composer autoloader file */
-require_once __DIR__ . '/../../../autoload.php';
-
 include 'assets/partials/_resultPage_php.php';
 ?>
 
@@ -46,7 +40,7 @@ include 'assets/partials/_resultPage_php.php';
                     echo renderPaymentDetails($payment);
                 ?>
             </div>
-            <a href="<?php echo $_SESSION['startUrl']; ?>">go back</a>
+            <a href="<?php echo EXAMPLE_URL; ?>">go back</a>
         </div>
     </body>
 

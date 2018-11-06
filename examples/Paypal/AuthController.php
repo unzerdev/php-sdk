@@ -39,22 +39,22 @@ include '../assets/partials/_controller_php.php';
 //#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
     //#######  2. Create a heidelpay object using your private key #####################################################
-    $heidelpay     = new Heidelpay(PRIVATE_KEY);
+    $heidelpay     = new Heidelpay(EXAMPLE_PRIVATE_KEY);
 
     //#######  3. Create an authorization (aka reservation) ############################################################
     $customer      = new Customer('Linda', 'Heideich');
-    $authorization = $heidelpay->authorize(100.0, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL, $customer);
+    $authorization = $heidelpay->authorize(12.0, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL, $customer);
 
     addSuccess('Redirect to: ' . $authorization->getRedirectUrl());
 
 
 } catch (HeidelpayApiException $e) {
-    //#######  5. In case of an error redirect to your failure page. ###################################################
+    //#######  4. In case of an error redirect to your failure page. ###################################################
     returnError($e->getClientMessage());
 } catch (HeidelpaySdkException $e) {
     returnError($e->getClientMessage());
 }
 
-//#######  6. If everything is fine redirect to your success page. #####################################################
+//#######  5. If everything is fine redirect to your success page. #####################################################
 //redirect(SUCCESS_URL, $authorization->getPaymentId());
 returnResponse();

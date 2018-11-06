@@ -24,8 +24,11 @@
 
 require_once __DIR__ . '/../Constants.php';
 
+define('EXAMPLE_PATH', __DIR__);
 define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCard');
 define('CHARGE_CANCEL_CONTROLLER_URL', EXAMPLE_URL . '/ChargeCancelController.php');
 define('AUTH_REVERSAL_CONTROLLER_URL', EXAMPLE_URL . '/AuthReversalController.php');
 define('AUTH_CONTROLLER_URL', EXAMPLE_URL . '/AuthController.php');
 define('CHARGE_CONTROLLER_URL', EXAMPLE_URL . '/ChargeController.php');
+define('EXAMPLE_PUBLIC_KEY', PUBLIC_KEY);
+define('EXAMPLE_PRIVATE_KEY', PRIVATE_KEY);

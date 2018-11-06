@@ -36,7 +36,7 @@ session_start();
 $paymentId = $_SESSION['paymentId'];
 
 try {
-    $heidelpay = new Heidelpay(PRIVATE_KEY);
+    $heidelpay = new Heidelpay(EXAMPLE_PRIVATE_KEY);
     $payment = $heidelpay->fetchPayment($paymentId);
 
     if ($payment->isCompleted()) {

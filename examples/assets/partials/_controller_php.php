@@ -23,12 +23,15 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
+// Reset session prohibit refering to the wrong one
+session_start();
+session_unset();
+$_SESSION['examplePath'] = EXAMPLE_PATH;
+
 if (!isset($_POST['paymentTypeId'])) {
     redirect(FAILURE_URL);
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
-
-session_start();
 
 function redirect($url) {
     $response[] = ['result' => 'redirect', 'redirectUrl' => $url];
