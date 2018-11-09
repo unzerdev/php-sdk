@@ -28,7 +28,6 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class ShipmentTest extends BasePaymentTest
@@ -39,7 +38,6 @@ class ShipmentTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -71,7 +69,6 @@ class ShipmentTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -105,7 +102,6 @@ class ShipmentTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException

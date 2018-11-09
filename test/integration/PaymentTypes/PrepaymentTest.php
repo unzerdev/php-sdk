@@ -31,7 +31,6 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class PrepaymentTest extends BasePaymentTest
@@ -43,7 +42,6 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @test
@@ -99,7 +97,6 @@ class PrepaymentTest extends BasePaymentTest
      * @param Prepayment $prepayment
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function prepaymentTypeShouldNotBeChargeable(Prepayment $prepayment)
@@ -120,7 +117,6 @@ class PrepaymentTest extends BasePaymentTest
      * @param Authorization $authorization
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function prepaymentTypeShouldNotBeShippable(Authorization $authorization)

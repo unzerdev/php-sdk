@@ -29,7 +29,6 @@ use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class SepaDirectDebitGuaranteedTest extends BasePaymentTest
@@ -40,7 +39,6 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -70,7 +68,6 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @return SepaDirectDebitGuaranteed
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -105,7 +102,6 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */

@@ -29,7 +29,6 @@ use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class ChargeTest extends BasePaymentTest
@@ -40,7 +39,6 @@ class ChargeTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -64,7 +62,6 @@ class ChargeTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException

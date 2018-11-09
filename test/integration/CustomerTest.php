@@ -31,7 +31,6 @@ use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class CustomerTest extends BasePaymentTest
@@ -45,7 +44,6 @@ class CustomerTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -73,7 +71,6 @@ class CustomerTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -95,7 +92,6 @@ class CustomerTest extends BasePaymentTest
      * @param Customer $customer
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @depends maxCustomerCanBeCreatedAndFetched
@@ -113,7 +109,6 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -140,7 +135,6 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -168,7 +162,6 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -199,7 +192,6 @@ class CustomerTest extends BasePaymentTest
      * @param Customer $customer
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -225,7 +217,6 @@ class CustomerTest extends BasePaymentTest
      * @param Customer $customer
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -247,7 +238,6 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */

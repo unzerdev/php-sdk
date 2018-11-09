@@ -29,7 +29,6 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class InvoiceTest extends BasePaymentTest
@@ -42,7 +41,6 @@ class InvoiceTest extends BasePaymentTest
      * @return Invoice
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -64,7 +62,6 @@ class InvoiceTest extends BasePaymentTest
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
@@ -85,7 +82,6 @@ class InvoiceTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
@@ -117,7 +113,6 @@ class InvoiceTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
@@ -138,7 +133,6 @@ class InvoiceTest extends BasePaymentTest
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable

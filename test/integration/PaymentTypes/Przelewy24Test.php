@@ -31,7 +31,6 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class Przelewy24Test extends BasePaymentTest
@@ -45,7 +44,6 @@ class Przelewy24Test extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -96,7 +94,6 @@ class Przelewy24Test extends BasePaymentTest
      * @param Przelewy24 $przelewy24
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24)
@@ -117,7 +114,6 @@ class Przelewy24Test extends BasePaymentTest
      * @param string $currencyCode
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function przelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode)

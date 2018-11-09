@@ -30,7 +30,6 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class SepaDirectDebitTest extends BasePaymentTest
@@ -41,7 +40,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -68,7 +66,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @return SepaDirectDebit
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -101,7 +98,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @param SepaDirectDebit $directDebit
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
      * @depends sepaDirectDebitShouldBeCreatable
      */
@@ -148,8 +144,8 @@ class SepaDirectDebitTest extends BasePaymentTest
      */
     public function directDebitChargeShouldBeRefundable(Charge $charge)
     {
-        $cancelation = $charge->cancel();
-        $this->assertNotNull($cancelation);
-        $this->assertNotNull($cancelation->getId());
+        $cancellation = $charge->cancel();
+        $this->assertNotNull($cancellation);
+        $this->assertNotNull($cancellation->getId());
     }
 }

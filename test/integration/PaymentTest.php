@@ -31,7 +31,7 @@ use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class PaymentTest extends BasePaymentTest
@@ -42,8 +42,7 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws Exception
+     * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -64,8 +63,7 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws Exception
+     * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -93,7 +91,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -125,7 +122,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -145,7 +141,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -169,7 +164,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
@@ -227,7 +221,7 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */

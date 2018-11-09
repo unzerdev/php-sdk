@@ -25,7 +25,6 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class CancelTest extends BasePaymentTest
@@ -35,7 +34,6 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -55,7 +53,6 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -75,7 +72,6 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -96,7 +92,6 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -116,7 +111,6 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -137,7 +131,6 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
