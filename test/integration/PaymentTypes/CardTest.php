@@ -27,14 +27,12 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class CardTest extends BasePaymentTest
@@ -48,23 +46,16 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
-     *
-     * @group skip
      */
     public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
     {
-        $this->heidelpay->setKey(self::PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT);
+        $this->heidelpay->setKey(self::PRIVATE_KEY_SAQ_A);
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INSUFFICIENT_PERMISSIONS);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INVALID_KEY);
         $card = $this->createCardObject();
-        $this->assertNull($card->getId());
         $this->heidelpay->createPaymentType($card);
-        $this->assertNotNull($card->getId());
     }
 
     /**
@@ -75,10 +66,8 @@ class CardTest extends BasePaymentTest
      * @return BasePaymentType
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function cardShouldBeCreatable(): BasePaymentType
     {
@@ -99,10 +88,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -137,10 +124,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -175,10 +160,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function cardCanBeFetched()
@@ -201,10 +184,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -236,10 +217,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -275,10 +254,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -307,10 +284,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -341,10 +316,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function authorizationShouldBeFetchable()
@@ -363,10 +336,8 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function fullCancelAfterCharge()
@@ -391,10 +362,8 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function fullCancelOnFullyChargedPayment()
@@ -429,10 +398,8 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function fullCancelOnPartlyPaidAuthWithCanceledCharges()
@@ -467,7 +434,6 @@ class CardTest extends BasePaymentTest
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function cardChargeCanBeCanceled()
@@ -489,7 +455,6 @@ class CardTest extends BasePaymentTest
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function cardAuthorizeCanBeCanceled()

@@ -25,12 +25,10 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class CancelAfterAuthorizationTest extends BasePaymentTest
@@ -41,11 +39,9 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function fullCancelOnAuthorization()
     {
@@ -72,10 +68,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function partCancelOnPayment()
@@ -99,10 +93,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function partCancelOnAuthorize()
@@ -129,10 +121,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function anAuthorizationsFullReversalShallBeFetchable()
@@ -174,10 +164,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function anAuthorizationsReversalsShouldBeFetchable()

@@ -41,7 +41,6 @@ class ApiResponseCodes
     const API_ERROR_ALREADY_CHARGED                         = 'API.340.100.018';
     const API_ERROR_CUSTOMER_DOES_NOT_EXIST                 = 'API.410.100.100';
     const API_ERROR_INVALID_KEY                             = 'API.710.000.002';
-    const API_ERROR_INSUFFICIENT_PERMISSIONS                = 'API.710.000.005';
     const API_ERROR_WRONG_AUTHENTICATION_METHOD             = 'API.710.000.007';
     const API_ERROR_FIELD_IS_MISSING                        = 'API.710.200.100';
 

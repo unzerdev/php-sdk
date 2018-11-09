@@ -23,7 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Traits;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -43,8 +43,7 @@ trait CanAuthorize
      * @return Authorization
      *
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
      */
     public function authorize($amount, $currency, $returnUrl, $customer = null, $orderId = null): Authorization
     {
@@ -52,7 +51,7 @@ trait CanAuthorize
             return $this->getHeidelpayObject()->authorize($amount, $currency, $this, $returnUrl, $customer, $orderId);
         }
 
-        throw new HeidelpaySdkException(
+        throw new \RuntimeException(
             self::class . ' must implement HeidelpayParentInterface to enable ' . __METHOD__ . ' transaction.'
         );
     }

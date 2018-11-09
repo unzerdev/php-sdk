@@ -24,9 +24,12 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class ChargeTest extends BasePaymentTest
 {
@@ -35,12 +38,10 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
      */
     public function chargeShouldWorkWithTypeId()
     {
@@ -60,12 +61,10 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws AssertionFailedError
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
      */
     public function chargeShouldWorkWithTypeObject()
     {

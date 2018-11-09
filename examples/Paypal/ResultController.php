@@ -1,6 +1,6 @@
 <?php
 /**
- * This exception is thrown whenever the api returns an error.
+ * This is the controller handling the redirect from Paypal back into the shop.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,24 +19,31 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/exceptions
+ * @package  heidelpay/mgw_sdk/examples
  */
-namespace heidelpay\MgwPhpSdk\Exceptions;
 
-class HeidelpaySdkException extends HeidelpayBaseException
-{
-    const MESSAGE = 'There has been an unexpected error please contact as for further information.';
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Heidelpay;
 
-    /**
-     * HeidelpayApiException constructor.
-     *
-     * @param string $merchantMessage
-     * @param string $customerMessage
-     * @param string $code
-     */
-    public function __construct($merchantMessage = '', $customerMessage = '', $code = '')
-    {
-        parent::__construct($merchantMessage, $customerMessage);
-        $this->code = $code;
+/** Require the constants of this example */
+require_once __DIR__ . '/Constants.php';
+
+/** Require the composer autoloader file */
+require_once __DIR__ . '/../../../../autoload.php';
+
+session_start();
+
+$paymentId = $_SESSION['paymentId'];
+
+try {
+    $heidelpay = new Heidelpay(EXAMPLE_PRIVATE_KEY);
+    $payment = $heidelpay->fetchPayment($paymentId);
+
+    if ($payment->isCompleted()) {
+        header('Location: ' . SUCCESS_URL);
+        exit();
     }
+} catch (HeidelpayApiException $e) {
 }
+header('Location: ' . FAILURE_URL);
+exit();

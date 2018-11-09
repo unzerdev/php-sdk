@@ -24,7 +24,6 @@
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
@@ -221,7 +220,7 @@ class Authorization extends AbstractTransactionType
     /**
      * {@inheritDoc}
      *
-     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function getLinkedResources(): array
     {
@@ -229,7 +228,7 @@ class Authorization extends AbstractTransactionType
         $payment = $this->getPayment();
         $paymentType = $payment ? $payment->getPaymentType() : null;
         if (!$paymentType instanceof BasePaymentType) {
-            throw new HeidelpaySdkException();
+            throw new \RuntimeException('Payment type is undefined!');
         }
 
         return [
@@ -249,7 +248,6 @@ class Authorization extends AbstractTransactionType
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function cancel($amount = null): Cancellation
     {
@@ -264,14 +262,13 @@ class Authorization extends AbstractTransactionType
      * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function charge($amount = null): Charge
     {
         $payment = $this->getPayment();
-        if (null === $payment) {
-            throw new HeidelpaySdkException();
+        if (!$payment instanceof Payment) {
+            throw new \RuntimeException('Payment object is missing. Try fetching the object first!');
         }
         return $this->getHeidelpayObject()->chargeAuthorization($payment->getId(), $amount);
     }

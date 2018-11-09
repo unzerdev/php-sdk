@@ -25,7 +25,6 @@ namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
@@ -61,7 +60,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         $heidelpayObject = $this->parentResource->getHeidelpayObject();
 
         if (!$heidelpayObject instanceof Heidelpay) {
-            throw new HeidelpaySdkException('Heidelpay object reference is not set!');
+            throw new \RuntimeException('Heidelpay object reference is not set!');
         }
 
         return $heidelpayObject;
@@ -180,7 +179,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * @return ResourceService
      *
-     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     private function getResourceService(): ResourceService
     {
@@ -195,7 +194,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @return AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
@@ -209,7 +207,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param AbstractHeidelpayResource $resource
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function fetchResource(AbstractHeidelpayResource $resource)
@@ -224,7 +221,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @return string
      *
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function getResourceIdFromUrl($url, $typePattern): string
     {

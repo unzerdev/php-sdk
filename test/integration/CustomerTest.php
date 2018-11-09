@@ -27,12 +27,10 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class CustomerTest extends BasePaymentTest
@@ -46,10 +44,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function minCustomerCanBeCreatedAndFetched(): Customer
     {
@@ -75,10 +71,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function maxCustomerCanBeCreatedAndFetched(): Customer
     {
@@ -98,10 +92,8 @@ class CustomerTest extends BasePaymentTest
      * @param Customer $customer
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
@@ -117,10 +109,8 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
     {
@@ -145,10 +135,8 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function transactionShouldReferenceCustomerIfItExist()
     {
@@ -174,10 +162,8 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function transactionShouldReferenceCustomerIfItExistAndItsIdHasBeenPassed()
     {
@@ -206,10 +192,8 @@ class CustomerTest extends BasePaymentTest
      * @param Customer $customer
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function customerShouldBeUpdatable(Customer $customer)
     {
@@ -233,10 +217,8 @@ class CustomerTest extends BasePaymentTest
      * @param Customer $customer
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function customerShouldBeDeletableById(Customer $customer)
     {
@@ -256,10 +238,8 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function customerShouldBeDeletableByObject()
     {

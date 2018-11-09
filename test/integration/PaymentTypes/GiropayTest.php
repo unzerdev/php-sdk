@@ -26,10 +26,8 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class GiropayTest extends BasePaymentTest
@@ -40,10 +38,8 @@ class GiropayTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function giroPayShouldBeCreatable()
     {
@@ -60,9 +56,7 @@ class GiropayTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function giroPayShouldThrowExceptionOnAuthorize()
     {
@@ -79,10 +73,8 @@ class GiropayTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      *
      * @group skip
      */
@@ -105,10 +97,8 @@ class GiropayTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function giroPayCanBeFetched()
     {

@@ -9,3 +9,13 @@ Please refer to the following documentation for installation instructions and us
 
 *   [API Documentation](https://docs.heidelpay.com/docs/introduction)
 *   [PHP SDK Documentation](https://docs.heidelpay.com/docs/php-sdk)
+
+## Activate the Integration Examples
+In order to enable the examples do the following:
+
+1.  Navigate to the examples folder open the file: `_enableExamples.php` and change
+`define('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES', FALSE);` to TRUE
+Please make sure to switch it off again, after you launch your application.
+
+2.  You may need to adapt the constant `HEIDELPAY_PHP_PAYMENT_API_FOLDER` to match the folder structure of the example.
+E.g. `define('HEIDELPAY_PHP_PAYMENT_API_FOLDER', '/projects/heidelpayPHP/vendor/heidelpay/heidelpay-php/examples/');`

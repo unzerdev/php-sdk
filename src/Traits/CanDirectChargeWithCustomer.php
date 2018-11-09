@@ -23,7 +23,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Traits;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
@@ -43,8 +43,7 @@ trait CanDirectChargeWithCustomer
      * @return Charge
      *
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
+     * @throws HeidelpayApiException
      */
     public function charge($amount, $currency, $returnUrl, $customer, $orderId = null): Charge
     {
@@ -52,7 +51,7 @@ trait CanDirectChargeWithCustomer
             return $this->getHeidelpayObject()->charge($amount, $currency, $this, $returnUrl, $customer, $orderId);
         }
 
-        throw new HeidelpaySdkException(
+        throw new \RuntimeException(
             self::class . ' must implement HeidelpayParentInterface to enable ' . __METHOD__ . ' transaction.'
         );
     }

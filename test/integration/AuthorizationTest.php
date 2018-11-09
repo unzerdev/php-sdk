@@ -26,7 +26,6 @@ namespace heidelpay\MgwPhpSdk\integration\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -41,7 +40,6 @@ class AuthorizationTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function authorizeWithTypeId()
     {
@@ -65,7 +63,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function authorizeWithType()
@@ -83,7 +80,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function authorizationProducesPaymentAndCustomer()
@@ -111,7 +107,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function authorizationWithCustomerId(): Authorization
@@ -142,7 +137,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
      */

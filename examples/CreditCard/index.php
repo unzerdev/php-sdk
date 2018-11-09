@@ -23,38 +23,17 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-//#######   Checks whether examples are enabled. #######################################################################
+/** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
-//#######   User the composer autoloader. ##############################################################################
+/** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>
-        Heidelpay UI Examples
-    </title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-
-    <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
-    <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 70px 0 0;
-            height: 330px;
-            min-width: initial;
-        }
-    </style>
-</head>
+<?php include '../assets/partials/_indexPage_html.php'; ?>
 
 <body>
     <div class="ui container">
@@ -197,7 +176,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     <!-- #######  4. Initialize the form and add the functionality. #################################################-->
     <script>
         //#######  4.a Create the heidelpay object using your public key. ##############################################
-        var heidelpayObj = new heidelpay(<?php echo '\''.PUBLIC_KEY . '\''?>);
+        var heidelpayObj = new heidelpay(<?php echo '\'' . EXAMPLE_PUBLIC_KEY . '\''?>);
 
         //#######  4.b Create a card object to use for the payment.     ################################################
         //#######      And add map the fields from your form.           ################################################
@@ -298,78 +277,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                         document.getElementById('error-holder').innerHTML = errorMessage || error.message || 'Error';
                     });
             });
-
-//#######  The following code is specific to this implementation. ######################################################
-        $('.ui.accordion')
-            .accordion()
-        ;
-
-        function showDimmerMessage(message) {
-            document.getElementById('dimmer-holder').innerHTML
-                = '<div style="color: #eee;top: 43%;position: relative;" class="ui">' + message + '</div>';
-            document.getElementById('dimmer-holder').style.display = 'block';
-        }
-
-        function showDimmerLoader() {
-            document.getElementById('dimmer-holder').innerHTML = '<div class="ui loader"></div>';
-            document.getElementById('dimmer-holder').style.display = 'block';
-        }
-
-        function hideDimmer() {
-            document.getElementById('dimmer-holder').style.display = 'none';
-        }
-
-        function handleResponseJson(response) {
-            JSON.parse(response).forEach(function(item) {
-                switch(item['result']) {
-                    case 'success':
-                        logSuccess(item['message']);
-                        break;
-                    case 'info':
-                        logInfo(item['message']);
-                        break;
-                    case 'redirect':
-                        let url = item['redirectUrl'];
-                        if (item['paymentId'] !== undefined) {
-                            url = url + '?paymentid=' + item['paymentId'];
-                        }
-                        window.location.href = url;
-                        break;
-                    default:
-                        logError(item['message']);
-                        break;
-                }
-            })
-        }
-
-        function logSuccess(message){
-            logMessage(message, 'Success', 'green');
-        }
-
-        function logInfo(message){
-            logMessage(message, 'Info', 'blue');
-        }
-
-        function logError(message){
-            logMessage(message, 'Error', 'red');
-        }
-
-        function logMessage(message, title, color){
-            var count = $('.messages .message').length;
-
-            message =
-                '<div class="ui ' + color + ' info message">' +
-                // '<i class="close icon"></i>'+
-                '<div class="header">' +
-                (count + 1) + '. ' + title +
-                '</div>' +
-                message +
-                '</div>';
-
-            $('.messages').append(message);
-        }
-
     </script>
+    <?php include '../assets/partials/_indexPage_scripts.php'; ?>
 </body>
-
 </html>

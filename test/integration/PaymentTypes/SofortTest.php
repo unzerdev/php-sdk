@@ -27,7 +27,6 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -47,7 +46,6 @@ class SofortTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function sofortShouldBeCreatableAndFetchable(): Sofort
     {
@@ -76,10 +74,9 @@ class SofortTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @depends sofortShouldBeCreatableAndFetchable
      */
-    public function sofortShouldBeAbleToCharge(Sofort $sofort)
+    public function sofortShouldBeAbleToCharge(Sofort $sofort): Charge
     {
         $charge = $sofort->charge(100.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
@@ -97,7 +94,6 @@ class SofortTest extends BasePaymentTest
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @depends sofortShouldBeCreatableAndFetchable
      */
     public function sofortShouldNotBeAuthorizable(Sofort $sofort)

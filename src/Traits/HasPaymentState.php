@@ -24,7 +24,6 @@
 namespace heidelpay\MgwPhpSdk\Traits;
 
 use heidelpay\MgwPhpSdk\Constants\PaymentState;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 
 trait HasPaymentState
 {
@@ -112,7 +111,7 @@ trait HasPaymentState
      *
      * @return string The name of the current payment state.
      *
-     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function getStateName(): string
     {
