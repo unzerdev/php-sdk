@@ -23,9 +23,12 @@
  */
 namespace heidelpay\MgwPhpSdk\Exceptions;
 
-class HeidelpayApiException extends HeidelpayBaseException
+class HeidelpayApiException extends \Exception
 {
     const MESSAGE = 'The payment api returned an error!';
+
+    /** @var string $clientMessage */
+    protected $clientMessage = 'An unexpected error occurred. Please contact us for further information.';
 
     /**
      * HeidelpayApiException constructor.
@@ -36,7 +39,17 @@ class HeidelpayApiException extends HeidelpayBaseException
      */
     public function __construct($merchantMessage = '', $customerMessage = '', $code = '')
     {
-        parent::__construct($merchantMessage, $customerMessage);
+        $merchantMessage = empty($merchantMessage) ? static::MESSAGE : $merchantMessage;
+        $this->clientMessage = empty($customerMessage) ? static::MESSAGE : $customerMessage;
+        parent::__construct($merchantMessage);
         $this->code = $code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientMessage(): string
+    {
+        return $this->clientMessage;
     }
 }
