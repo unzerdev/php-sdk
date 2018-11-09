@@ -26,7 +26,6 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
@@ -46,7 +45,6 @@ class InvoiceTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function invoiceTypeShouldBeCreatable(): Invoice
     {
@@ -68,7 +66,6 @@ class InvoiceTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceIsNotChargeable(Invoice $invoice)
@@ -91,7 +88,6 @@ class InvoiceTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceIsNotShippable(Invoice $invoice)
@@ -124,7 +120,6 @@ class InvoiceTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceAuthorizeCanBeCanceled(Invoice $invoice)
@@ -146,7 +141,6 @@ class InvoiceTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function invoiceTypeCanBeFetched(Invoice $invoice)

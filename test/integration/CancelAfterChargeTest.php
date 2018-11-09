@@ -25,7 +25,6 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -43,7 +42,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      *
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
      */
@@ -70,7 +68,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function chargeShouldBeFullyRefundable(Charge $charge)
     {
@@ -89,7 +86,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function chargeShouldBeFullyRefundableWithId()
     {
@@ -110,7 +106,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
      */
@@ -142,7 +137,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
      */

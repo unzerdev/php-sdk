@@ -24,7 +24,6 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -40,7 +39,6 @@ class CancelTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function reversalShouldBeFetchableViaHeidelpayObject()
     {
@@ -61,7 +59,6 @@ class CancelTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function reversalShouldBeFetchableViaPaymentObject()
     {
@@ -82,7 +79,6 @@ class CancelTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function refundShouldBeFetchableViaHeidelpayObject()
     {
@@ -104,7 +100,6 @@ class CancelTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function refundShouldBeFetchableViaPaymentObject()
     {
@@ -125,7 +120,6 @@ class CancelTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function authorizationCancellationsShouldBeFetchableViaPaymentObject()
     {
@@ -147,7 +141,6 @@ class CancelTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function chargeCancellationsShouldBeFetchableViaPaymentObject()
     {

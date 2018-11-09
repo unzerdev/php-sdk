@@ -60,8 +60,6 @@ try {
 
 } catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
     returnError($e->getClientMessage());
-} catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException $e) {
-    returnError($e->getClientMessage());
 }
 
 returnResponse();

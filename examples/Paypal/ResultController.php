@@ -22,7 +22,7 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
 /** Require the constants of this example */
@@ -43,8 +43,7 @@ try {
         header('Location: ' . SUCCESS_URL);
         exit();
     }
-} catch (HeidelpaySdkException $e) {
-} catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
+} catch (HeidelpayApiException $e) {
 }
 header('Location: ' . FAILURE_URL);
 exit();

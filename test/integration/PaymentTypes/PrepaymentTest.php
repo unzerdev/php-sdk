@@ -26,7 +26,6 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -47,7 +46,6 @@ class PrepaymentTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @test
      */
     public function prepaymentShouldBeCreatableAndFetchable(): AbstractHeidelpayResource
@@ -77,7 +75,6 @@ class PrepaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function prepaymentTypeShouldBeAuthorizable(Prepayment $prepayment): Authorization
     {
@@ -104,7 +101,6 @@ class PrepaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function prepaymentTypeShouldNotBeChargeable(Prepayment $prepayment)
     {
@@ -126,7 +122,6 @@ class PrepaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function prepaymentTypeShouldNotBeShippable(Authorization $authorization)
     {
@@ -148,7 +143,6 @@ class PrepaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function prepaymentAuthorizeCanBeCanceled(Prepayment $prepayment)
     {

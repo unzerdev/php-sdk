@@ -25,7 +25,6 @@ namespace heidelpay\MgwPhpSdk\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
@@ -56,7 +55,7 @@ class BasePaymentTest extends TestCase
     /**
      * {@inheritDoc}
      *
-     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     protected function setUp()
     {
@@ -123,7 +122,6 @@ class BasePaymentTest extends TestCase
      *
      * @return Authorization
      *
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
      */
@@ -140,7 +138,6 @@ class BasePaymentTest extends TestCase
      *
      * @return Charge
      *
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
      */

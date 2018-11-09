@@ -27,7 +27,6 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -45,7 +44,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -73,7 +71,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function sepaDirectDebitShouldBeCreatable(): SepaDirectDebit
     {
@@ -106,7 +103,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function authorizeShouldThrowException(SepaDirectDebit $directDebit)
@@ -127,7 +123,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function directDebitShouldBeChargeable(SepaDirectDebit $directDebit): Charge
@@ -148,7 +143,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      *
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      * @depends directDebitShouldBeChargeable
      */

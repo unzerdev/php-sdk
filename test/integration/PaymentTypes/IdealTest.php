@@ -26,7 +26,6 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
@@ -45,7 +44,6 @@ class IdealTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function idealShouldBeCreatable(): Ideal
     {
@@ -67,7 +65,6 @@ class IdealTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends idealShouldBeCreatable
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal)
@@ -90,7 +87,6 @@ class IdealTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function idealShouldBeChargeable(Ideal $ideal)
     {
@@ -115,7 +111,6 @@ class IdealTest extends BasePaymentTest
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function idealTypeCanBeFetched(Ideal $ideal)
     {

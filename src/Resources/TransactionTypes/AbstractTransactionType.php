@@ -24,7 +24,6 @@
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
@@ -185,7 +184,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * {@inheritDoc}
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
@@ -215,7 +213,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     private function updatePayment()
     {
