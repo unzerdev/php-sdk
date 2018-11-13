@@ -35,5 +35,4 @@ class TestDebugHandler implements DebugHandlerInterface
     {
         echo 'heidelpay debug message: ' . $message . "\n";
     }
-
 }

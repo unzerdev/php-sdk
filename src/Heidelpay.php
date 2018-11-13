@@ -199,6 +199,7 @@ class Heidelpay implements HeidelpayParentInterface
      * for this to work.
      *
      * @param bool $debugMode
+     *
      * @return Heidelpay
      */
     public function setDebugMode(bool $debugMode): Heidelpay
@@ -220,6 +221,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Remember to enable debug output by setting the constant Heidelpay::DEBUG_MODE true.
      *
      * @param DebugHandlerInterface $debugHandler
+     *
      * @return Heidelpay
      */
     public function setDebugHandler(DebugHandlerInterface $debugHandler): Heidelpay

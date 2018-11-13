@@ -30,6 +30,7 @@ interface DebugHandlerInterface
      * This method will allow custom handling of debug output.
      *
      * @param string $message
+     *
      * @return mixed
      */
     public function log(string $message);
