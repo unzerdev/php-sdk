@@ -27,6 +27,7 @@ namespace heidelpay\MgwPhpSdk\Adapter;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 class CurlAdapter implements HttpAdapterInterface
@@ -62,11 +63,14 @@ class CurlAdapter implements HttpAdapterInterface
         $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
         curl_close($request);
 
-        if (Heidelpay::DEBUG_MODE) {
+        $heidelpayObj = $heidelpayResource->getHeidelpayObject();
+        if ($heidelpayObj->isDebugMode() &&
+            $heidelpayObj->getDebugHandler() instanceof DebugHandlerInterface) {
             $resourceJson = $heidelpayResource->jsonSerialize();
-            echo 'Curl ' . strip_tags($httpMethod) . '-Request: ' . strip_tags($uri) . "\n";
-            echo 'Request: ' . strip_tags($resourceJson) . "\n";
-            echo 'Response: ' . strip_tags($response) . "\n\n";
+            $handler = $heidelpayObj->getDebugHandler();
+            $handler->log('Curl ' . strip_tags($httpMethod) . '-Request: ' . strip_tags($uri));
+            $handler->log('Request: ' . strip_tags($resourceJson));
+            $handler->log('Response: ' . strip_tags(json_encode(json_decode($response))));
         }
 
         $this->handleErrors($info, $response);
