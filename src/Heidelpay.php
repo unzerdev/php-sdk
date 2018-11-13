@@ -28,6 +28,7 @@ namespace heidelpay\MgwPhpSdk;
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
+use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Keypair;
@@ -50,7 +51,6 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_VERSION = 'HeidelpayPHP 1.0.0-beta.2';
-    const DEBUG_MODE = false;
 
     /** @var string $key */
     private $key;
@@ -66,6 +66,12 @@ class Heidelpay implements HeidelpayParentInterface
 
     /** @var PaymentService $paymentService */
     private $paymentService;
+
+    /** @var DebugHandlerInterface $debugHandler */
+    private $debugHandler;
+
+    /** @var boolean $debugMode */
+    private $debugMode = false;
 
     /**
      * Construct a new heidelpay object.
@@ -177,6 +183,49 @@ class Heidelpay implements HeidelpayParentInterface
     public function getResourceService(): ResourceService
     {
         return $this->resourceService;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebugMode(): bool
+    {
+        return $this->debugMode;
+    }
+
+    /**
+     * Enable debug output.
+     * You need to setter inject a custom handler implementing the DebugOutputHandlerInterface via setDebugHandler
+     * for this to work.
+     *
+     * @param bool $debugMode
+     * @return Heidelpay
+     */
+    public function setDebugMode(bool $debugMode): Heidelpay
+    {
+        $this->debugMode = $debugMode;
+        return $this;
+    }
+
+    /**
+     * @return DebugHandlerInterface
+     */
+    public function getDebugHandler(): DebugHandlerInterface
+    {
+        return $this->debugHandler;
+    }
+
+    /**
+     * Use this method to inject a custom handler for debug messages form the curl adapter.
+     * Remember to enable debug output by setting the constant Heidelpay::DEBUG_MODE true.
+     *
+     * @param DebugHandlerInterface $debugHandler
+     * @return Heidelpay
+     */
+    public function setDebugHandler(DebugHandlerInterface $debugHandler): Heidelpay
+    {
+        $this->debugHandler = $debugHandler;
+        return $this;
     }
 
     //</editor-fold>

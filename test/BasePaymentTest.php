@@ -60,7 +60,8 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY_SAQ_D, SupportedLocales::GERMAN_GERMAN);
+        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D, SupportedLocales::GERMAN_GERMAN))
+            ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
     }
 
     //<editor-fold desc="Custom asserts">
