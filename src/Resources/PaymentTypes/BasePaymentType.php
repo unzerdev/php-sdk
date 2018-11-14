@@ -35,7 +35,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource
      */
     public function getResourcePath()
     {
-        return 'types/' . $this::getClassShortNameKebapCase();
+        return 'types/' . parent::getResourcePath();
     }
 
     //</editor-fold>
