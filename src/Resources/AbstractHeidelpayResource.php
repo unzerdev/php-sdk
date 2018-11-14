@@ -2,18 +2,19 @@
 /**
  * This is the base class for all resource types managed by the api.
  *
+ * Copyright (C) 2018 Heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
@@ -25,7 +26,6 @@ namespace heidelpay\MgwPhpSdk\Resources;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Services\ResourceNameService;
@@ -62,7 +62,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         $heidelpayObject = $this->parentResource->getHeidelpayObject();
 
         if (!$heidelpayObject instanceof Heidelpay) {
-            throw new HeidelpaySdkException('Heidelpay object reference is not set!');
+            throw new \RuntimeException('Heidelpay object reference is not set!');
         }
 
         return $heidelpayObject;
@@ -152,7 +152,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * @return ResourceService
      *
-     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     private function getResourceService(): ResourceService
     {
@@ -167,7 +167,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @return AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
@@ -181,7 +180,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param AbstractHeidelpayResource $resource
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function fetchResource(AbstractHeidelpayResource $resource)
@@ -196,7 +194,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @return string
      *
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function getResourceIdFromUrl($url, $typePattern): string
     {

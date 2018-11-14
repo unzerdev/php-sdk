@@ -9,3 +9,5 @@ Please refer to the following documentation for installation instructions and us
 
 *   [API Documentation](https://docs.heidelpay.com/docs/introduction)
 *   [PHP SDK Documentation](https://docs.heidelpay.com/docs/php-sdk)
+*   [How to use the examples](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-using-the-example-implementations)
+*   [Debugging](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-debugging)

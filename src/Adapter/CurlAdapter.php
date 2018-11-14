@@ -3,37 +3,31 @@
  * By default this adapter will be used for communication however a custom adapter implementing the
  * HttpAdapterInterface can be used.
  *
- * @license
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (C) 2018 Heidelpay GmbH
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * @copyright Copyright © 2018 Heidelpay GmbH
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @link  http://dev.heidelpay.com/heidelpay-php-payment-api/
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @link http://dev.heidelpay.com/
  *
- * @package  heidelpay/mgw_sdk/adapter
+ * @author Simon Gabriel <development@heidelpay.com>
+ *
+ * @package heidelpay/mgw_sdk/tests/integration
  */
 namespace heidelpay\MgwPhpSdk\Adapter;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 class CurlAdapter implements HttpAdapterInterface
@@ -49,7 +43,6 @@ class CurlAdapter implements HttpAdapterInterface
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function send(
         $uri = null,
@@ -70,10 +63,14 @@ class CurlAdapter implements HttpAdapterInterface
         $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
         curl_close($request);
 
-        if (Heidelpay::DEBUG_MODE) {
-            echo 'Curl ' . $httpMethod . '-Request: ' . $uri . "\n";
-            echo 'Request: ' . $heidelpayResource->jsonSerialize() . "\n";
-            echo 'Response: ' . $response . "\n\n";
+        $heidelpayObj = $heidelpayResource->getHeidelpayObject();
+        if ($heidelpayObj->isDebugMode() &&
+            $heidelpayObj->getDebugHandler() instanceof DebugHandlerInterface) {
+            $resourceJson = $heidelpayResource->jsonSerialize();
+            $handler = $heidelpayObj->getDebugHandler();
+            $handler->log('Curl ' . strip_tags($httpMethod) . '-Request: ' . strip_tags($uri));
+            $handler->log('Request: ' . strip_tags($resourceJson));
+            $handler->log('Response: ' . strip_tags(json_encode(json_decode($response))));
         }
 
         $this->handleErrors($info, $response);
@@ -116,7 +113,7 @@ class CurlAdapter implements HttpAdapterInterface
      *
      * @return mixed
      *
-     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     private function initCurlRequest($uri, AbstractHeidelpayResource $heidelpayResource, $httpMethod)
     {
