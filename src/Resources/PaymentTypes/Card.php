@@ -62,6 +62,8 @@ class Card extends BasePaymentType
     /** @var string $brand */
     private $brand = '';
 
+    //</editor-fold>
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -95,13 +97,20 @@ class Card extends BasePaymentType
      * @param string $expiryDate
      *
      * @return Card
+     *
+     * @throws \RuntimeException
      */
     public function setExpiryDate($expiryDate): Card
     {
         $expiryDateParts = explode('/', $expiryDate);
-        if (\count($expiryDateParts) > 1) {
-            $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
+        if (\count($expiryDateParts) !== 2 ||
+            !\is_numeric($expiryDateParts[0]) || !\is_numeric($expiryDateParts[1]) ||
+            !\ctype_digit($expiryDateParts[0]) || !\ctype_digit($expiryDateParts[1]) ||
+            ($expiryDateParts[0] > 12) || \strlen($expiryDateParts[1]) > 4) {
+            throw new \RuntimeException('Invalid expiry date!');
         }
+        $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
+
         return $this;
     }
 
@@ -165,6 +174,5 @@ class Card extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
     //</editor-fold>
 }
