@@ -19,7 +19,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration
+ * @package  heidelpay/mgw_sdk/test/unit
  */
 namespace heidelpay\MgwPhpSdk\test\unit;
 
