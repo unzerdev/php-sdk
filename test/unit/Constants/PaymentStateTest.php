@@ -25,6 +25,7 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Constants;
 
 use heidelpay\MgwPhpSdk\Constants\PaymentState;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 class PaymentStateTest extends TestCase
@@ -59,6 +60,36 @@ class PaymentStateTest extends TestCase
     public function shouldMapNameToCode($name, $code)
     {
         $this->assertEquals($code, PaymentState::mapStateNameToCode($name));
+    }
+
+    /**
+     * This verifies that an exception is thrown when the code to map is unknown.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     */
+    public function mapCodeToNameShouldThrowAnExceptionIfTheCodeIsUnknown()
+    {
+        $this->expectException(\RuntimeException::class);
+
+        PaymentState::mapStateCodeToName(6);
+    }
+
+    /**
+     * This verifies that an exception is thrown when the name to map is unknown.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     */
+    public function mapNameToCodeShouldThrowAnExceptionIfTheNameIsUnknown()
+    {
+        $this->expectException(\RuntimeException::class);
+
+        PaymentState::mapStateNameToCode('unknown');
     }
 
     //<editor-fold desc="Data Providers">
