@@ -37,7 +37,7 @@ class PaymentState
     const STATE_NAME_COMPLETED = 'completed';
     const STATE_NAME_CANCELED = 'canceled';
     const STATE_NAME_PARTLY = 'partly';
-    const STATE_NAME_PAYMENT_REVIEW = 'review';
+    const STATE_NAME_PAYMENT_REVIEW = 'payment review';
     const STATE_NAME_CHARGEBACK = 'chargeback';
 
     /**
