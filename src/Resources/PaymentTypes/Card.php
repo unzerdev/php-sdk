@@ -88,9 +88,9 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpiryDate(): string
+    public function getExpiryDate()
     {
         return $this->expiryDate;
     }
@@ -122,9 +122,9 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCvc(): string
+    public function getCvc()
     {
         return $this->cvc;
     }
@@ -141,9 +141,9 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getHolder(): string
+    public function getHolder()
     {
         return $this->holder;
     }

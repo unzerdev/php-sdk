@@ -31,12 +31,21 @@ use PHPUnit\Framework\TestCase;
 
 class CardTest extends TestCase
 {
+    const TEST_ID = 's-crd-l4bbx7ory1ec';
+    const TEST_METHOD_TYPE = 'card';
+    const TEST_NUMBER = '444433******1111';
+    const TEST_BRAND = 'VISA';
+    const TEST_CVC = '***';
+    const TEST_EXPIRY_DATE = '03/2020';
+    const TEST_HOLDER = 'Max Mustermann';
+
     private $number     = '4111111111111111';
     private $expiryDate = '12/2030';
 
     /** @var Card $card */
     private $card;
 
+    //<editor-fold desc="Data Providers">
     /**
      * @return array
      */
@@ -64,6 +73,7 @@ class CardTest extends TestCase
             ['12/20199']
         ];
     }
+    //</editor-fold>
 
     /**
      * {@inheritDoc}
@@ -128,5 +138,82 @@ class CardTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->card->setExpiryDate($testData);
+    }
+
+    /**
+     * Verify setting ExpiryDate null does nothing.
+     * This needs to be allowed in order to be able to instantiate the Card without any data to fetch
+     * it afterwards by just setting the id.
+     *
+     * @test
+     * @throws \RuntimeException
+     */
+    public function verifySettingExpiryDateNullChangesNothing()
+    {
+        $card = new Card(null, null);
+        $this->assertEquals(null, $card->getExpiryDate());
+
+        $this->assertEquals('12/2030', $this->card->getExpiryDate());
+        $this->card->setExpiryDate(null);
+        $this->assertEquals('12/2030', $this->card->getExpiryDate());
+    }
+
+    /**
+     * Verify setting cvc.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function verifyCvcCanBeSetAndChanged()
+    {
+        $this->assertEquals(null, $this->card->getCvc());
+        $this->card->setCvc('123');
+        $this->assertEquals('123', $this->card->getCvc());
+        $this->card->setCvc('456');
+        $this->assertEquals('456', $this->card->getCvc());
+    }
+
+    /**
+     * Verify setting holder.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function verifyHolderCanBeSetAndChanged()
+    {
+        $this->assertEquals(null, $this->card->getHolder());
+        $this->card->setHolder('Julia Heideich');
+        $this->assertEquals('Julia Heideich', $this->card->getHolder());
+        $this->card->setHolder(self::TEST_HOLDER);
+        $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
+    }
+
+    /**
+     * Verify setting brand.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function verifyCardCanBeUpdated()
+    {
+        $testResponse = new \stdClass();
+        $testResponse->id = self::TEST_ID;
+        $testResponse->number = self::TEST_NUMBER;
+        $testResponse->brand = self::TEST_BRAND;
+        $testResponse->cvc = self::TEST_CVC;
+        $testResponse->expiryDate = self::TEST_EXPIRY_DATE;
+        $testResponse->holder = self::TEST_HOLDER;
+
+        $this->card->handleResponse($testResponse);
+
+        $this->assertEquals(self::TEST_ID, $this->card->getId());
+        $this->assertEquals(self::TEST_NUMBER, $this->card->getNumber());
+        $this->assertEquals(self::TEST_BRAND, $this->card->getBrand());
+        $this->assertEquals(self::TEST_CVC, $this->card->getCvc());
+        $this->assertEquals(self::TEST_EXPIRY_DATE, $this->card->getExpiryDate());
+        $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
     }
 }
