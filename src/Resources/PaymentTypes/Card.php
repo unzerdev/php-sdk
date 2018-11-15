@@ -104,6 +104,11 @@ class Card extends BasePaymentType
      */
     public function setExpiryDate($expiryDate): Card
     {
+        // Null value is allowed to be able to fetch a card object with nothing but the id set.
+        if ($expiryDate === null) {
+            return $this;
+        }
+
         $expiryDateParts = explode('/', $expiryDate);
         if (\count($expiryDateParts) !== 2 || $expiryDateParts[0] > 12 ||
             !\is_numeric($expiryDateParts[0]) || !\is_numeric($expiryDateParts[1]) ||

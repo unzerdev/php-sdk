@@ -111,6 +111,7 @@ class BasePaymentTest extends TestCase
      * Creates a Card object for tests.
      *
      * @return Card
+     * @throws \RuntimeException
      */
     protected function createCardObject(): Card
     {

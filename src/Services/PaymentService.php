@@ -94,8 +94,14 @@ class PaymentService
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null, $orderId = null): AbstractTransactionType
-    {
+    public function authorize(
+        $amount,
+        $currency,
+        $paymentType,
+        $returnUrl,
+        $customer = null,
+        $orderId = null
+    ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType, $customer);
         return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
     }
