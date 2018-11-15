@@ -22,6 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/examples
  */
+
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;

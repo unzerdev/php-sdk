@@ -55,6 +55,9 @@ class Customer extends AbstractHeidelpayResource
     /** @var Address $billingAddress */
     protected $billingAddress;
 
+    /** @var Address $shippingAddress */
+    protected $shippingAddress;
+
     /** @var string $customerId */
     protected $customerId;
 
@@ -69,6 +72,7 @@ class Customer extends AbstractHeidelpayResource
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->billingAddress = new Address();
+        $this->shippingAddress = new Address();
 
         parent::__construct();
     }
@@ -243,6 +247,25 @@ class Customer extends AbstractHeidelpayResource
     public function setBillingAddress(Address $billingAddress): Customer
     {
         $this->billingAddress = $billingAddress;
+        return $this;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getShippingAddress(): Address
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * @param Address $shippingAddress
+     *
+     * @return Customer
+     */
+    public function setShippingAddress(Address $shippingAddress): Customer
+    {
+        $this->shippingAddress = $shippingAddress;
         return $this;
     }
 

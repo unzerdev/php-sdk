@@ -61,6 +61,16 @@ trait CustomerFixtureTrait
     }
 
     /**
+     * Creates a customer object with shippingAddress
+     *
+     * @return Customer
+     */
+    public function getMaximumCustomerInclShippingAddress(): Customer
+    {
+        return $this->getMaximumCustomer()->setShippingAddress($this->getAddress());
+    }
+
+    /**
      * Create a test Address
      *
      * @return Address

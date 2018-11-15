@@ -152,7 +152,7 @@ class CustomerTest extends BasePaymentTest
      */
     public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
     {
-        $customer = $this->getMaximumCustomer();
+        $customer = $this->getMaximumCustomerInclShippingAddress();
 
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());

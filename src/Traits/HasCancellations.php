@@ -25,8 +25,8 @@
 namespace heidelpay\MgwPhpSdk\Traits;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 
 trait HasCancellations
 {

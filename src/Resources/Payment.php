@@ -31,12 +31,12 @@ use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Traits\HasOrderId;
 use heidelpay\MgwPhpSdk\Traits\HasPaymentState;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 
 class Payment extends AbstractHeidelpayResource
 {
