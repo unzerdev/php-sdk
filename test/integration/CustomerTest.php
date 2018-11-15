@@ -105,6 +105,22 @@ class CustomerTest extends BasePaymentTest
     }
 
     /**
+     * @param Customer $customer
+     *
+     * @throws HeidelpayApiException
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @depends maxCustomerCanBeCreatedAndFetched
+     * @test
+     */
+    public function customerCanBeFetchedByObject(Customer $customer)
+    {
+        $customerToFetch = (new Customer())->setId($customer->getId());
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customerToFetch);
+        $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
+    }
+
+    /**
      * Customer can be referenced by payment.
      *
      * @test

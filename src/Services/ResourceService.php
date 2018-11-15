@@ -374,10 +374,10 @@ class ResourceService
         $customerObject = $customer;
 
         if (\is_string($customer)) {
-            $customerObject = (new Customer())->setParentResource($this->heidelpay)->setId($customer);
+            $customerObject = (new Customer())->setId($customer);
         }
 
-        return $this->fetch($customerObject);
+        return $this->fetch($customerObject->setParentResource($this->heidelpay));
     }
 
     /**
