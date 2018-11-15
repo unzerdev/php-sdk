@@ -245,9 +245,7 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Returns the URL-string of this resource.
-     *
-     * @return string The URL-string of this resource.
+     * {@inheritDoc}
      */
     public function getUri(): string
     {

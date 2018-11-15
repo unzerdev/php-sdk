@@ -77,8 +77,10 @@ class ResourceService
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function send(AbstractHeidelpayResource $resource, $httpMethod = HttpAdapterInterface::REQUEST_GET): \stdClass
-    {
+    public function send(
+        AbstractHeidelpayResource $resource,
+        $httpMethod = HttpAdapterInterface::REQUEST_GET
+    ): \stdClass {
         $responseJson = $resource->getHeidelpayObject()->send($resource->getUri(), $resource, $httpMethod);
         return json_decode($responseJson);
     }

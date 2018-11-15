@@ -27,6 +27,7 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
@@ -58,7 +59,9 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
-        $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
+        $exposeArray     = $customer->expose();
+        $exposeArray['salutation'] = Salutations::UNKNOWN;
+        $this->assertEquals($exposeArray, $fetchedCustomer->expose());
 
         return $customer;
     }

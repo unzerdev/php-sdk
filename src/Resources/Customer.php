@@ -28,28 +28,28 @@ use heidelpay\MgwPhpSdk\Constants\Salutations;
 
 class Customer extends AbstractHeidelpayResource
 {
-    /** @var string */
+    /** @var string $firstname */
     protected $firstname;
 
-    /** @var string */
+    /** @var string $lastname */
     protected $lastname;
 
     /** @var string $salutation */
-    protected $salutation = Salutations::UNKNOWN;
+    protected $salutation;
 
     /** @var string $birthDate */
     protected $birthDate;
 
-    /** @var string */
+    /** @var string $company*/
     protected $company;
 
-    /** @var string */
+    /** @var string $email*/
     protected $email;
 
-    /** @var string */
+    /** @var string $phone*/
     protected $phone;
 
-    /** @var string */
+    /** @var string $mobile*/
     protected $mobile;
 
     /** @var Address $billingAddress */

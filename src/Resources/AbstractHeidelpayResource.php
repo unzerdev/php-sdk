@@ -52,40 +52,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         $this->id = $resourceId;
     }
 
-    //<editor-fold desc="Helpers">
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getHeidelpayObject(): Heidelpay
-    {
-        $heidelpayObject = $this->parentResource->getHeidelpayObject();
-
-        if (!$heidelpayObject instanceof Heidelpay) {
-            throw new \RuntimeException('Heidelpay object reference is not set!');
-        }
-
-        return $heidelpayObject;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUri(): string
-    {
-        // remove trailing slash and explode
-        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
-        if ($this->getId() !== null) {
-            $uri[] = $this->getId();
-        }
-
-        $uri[] = '';
-
-        return implode('/', $uri);
-    }
-
-    //</editor-fold>
-
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -143,6 +109,40 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     {
         $this->fetchedAt = $fetchedAt;
         return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHeidelpayObject(): Heidelpay
+    {
+        $heidelpayObject = $this->parentResource->getHeidelpayObject();
+
+        if (!$heidelpayObject instanceof Heidelpay) {
+            throw new \RuntimeException('Heidelpay object reference is not set!');
+        }
+
+        return $heidelpayObject;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUri(): string
+    {
+        // remove trailing slash and explode
+        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
+        if ($this->getId() !== null) {
+            $uri[] = $this->getId();
+        }
+
+        $uri[] = '';
+
+        return implode('/', $uri);
     }
 
     //</editor-fold>
@@ -256,7 +256,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
          * @var string                    $key
          * @var AbstractHeidelpayResource $linkedResource
          */
-        foreach ($this->getLinkedResources() as $key=>$linkedResource) {
+        foreach ($this->getLinkedResources() as $key => $linkedResource) {
             $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
         }
 
