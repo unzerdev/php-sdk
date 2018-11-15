@@ -56,7 +56,18 @@ trait CustomerFixtureTrait
             ->setEmail('peter.universum@universum-group.de')
             ->setMobile('+49172123456')
             ->setPhone('+4962216471100')
-            ->setBillingAddress($this->getAddress());
+            ->setBillingAddress($this->getAddress())
+            ->setParentResource($this->heidelpay);
+    }
+
+    /**
+     * Creates a customer object with shippingAddress
+     *
+     * @return Customer
+     */
+    public function getMaximumCustomerInclShippingAddress(): Customer
+    {
+        return $this->getMaximumCustomer()->setShippingAddress($this->getAddress());
     }
 
     /**

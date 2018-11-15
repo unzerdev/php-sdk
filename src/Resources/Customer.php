@@ -28,32 +28,35 @@ use heidelpay\MgwPhpSdk\Constants\Salutations;
 
 class Customer extends AbstractHeidelpayResource
 {
-    /** @var string */
+    /** @var string $firstname */
     protected $firstname;
 
-    /** @var string */
+    /** @var string $lastname */
     protected $lastname;
 
     /** @var string $salutation */
-    protected $salutation = Salutations::UNKNOWN;
+    protected $salutation;
 
     /** @var string $birthDate */
     protected $birthDate;
 
-    /** @var string */
+    /** @var string $company*/
     protected $company;
 
-    /** @var string */
+    /** @var string $email*/
     protected $email;
 
-    /** @var string */
+    /** @var string $phone*/
     protected $phone;
 
-    /** @var string */
+    /** @var string $mobile*/
     protected $mobile;
 
     /** @var Address $billingAddress */
     protected $billingAddress;
+
+    /** @var Address $shippingAddress */
+    protected $shippingAddress;
 
     /** @var string $customerId */
     protected $customerId;
@@ -69,6 +72,7 @@ class Customer extends AbstractHeidelpayResource
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->billingAddress = new Address();
+        $this->shippingAddress = new Address();
 
         parent::__construct();
     }
@@ -247,9 +251,28 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return Address
      */
-    public function getCustomerId(): string
+    public function getShippingAddress(): Address
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * @param Address $shippingAddress
+     *
+     * @return Customer
+     */
+    public function setShippingAddress(Address $shippingAddress): Customer
+    {
+        $this->shippingAddress = $shippingAddress;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomerId()
     {
         return $this->customerId;
     }
@@ -272,6 +295,18 @@ class Customer extends AbstractHeidelpayResource
     }
 
     //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getExternalId()
+    {
+        return $this->getCustomerId();
+    }
 
     //</editor-fold>
 }
