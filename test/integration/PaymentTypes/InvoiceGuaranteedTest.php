@@ -73,7 +73,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
             100.0,
             Currencies::EURO,
             self::RETURN_URL,
-            $this->getMaximumCustomer()
+            $this->getMaximumCustomerInclShippingAddress()
         );
         $this->assertNotNull($authorization);
         $this->assertNotEmpty($authorization->getId());
@@ -107,7 +107,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
             100.0,
             Currencies::EURO,
             self::RETURN_URL,
-            $this->getMaximumCustomer()
+            $this->getMaximumCustomerInclShippingAddress()
         );
 
         $cancel = $authorization->cancel();
