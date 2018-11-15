@@ -275,4 +275,26 @@ class CustomerTest extends BasePaymentTest
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
         $this->heidelpay->fetchCustomer($fetchedCustomer->getId());
     }
+
+    /**
+     * Verify an Exception is thrown if the customerId already exists.
+     *
+     * @test
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function apiShouldReturnErrorIfCustomerAlreadyExists()
+    {
+        $customerId = str_replace(' ', '', \microtime());
+
+        // create customer with api
+        $customer = $this->heidelpay->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+        $this->assertNotEmpty($customer->getCustomerId());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS);
+
+        // create new customer with the same customerId
+        $this->heidelpay->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+    }
 }
