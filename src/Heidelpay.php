@@ -27,7 +27,6 @@ namespace heidelpay\MgwPhpSdk;
 
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
@@ -389,21 +388,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function createOrUpdateCustomer(Customer $customer): AbstractHeidelpayResource
     {
-        try {
-            $this->resourceService->createCustomer($customer);
-        } catch (HeidelpayApiException $e) {
-            if (!ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS === $e->getCode()) {
-                throw $e;
-            }
-
-            // fetch Customer resource by customerId
-            $fetchedCustomer = $this->fetchCustomer((new Customer())->setCustomerId($customer->getCustomerId()));
-
-            // update the existing customer with the data of the new customer
-            $this->updateCustomer($customer->setId($fetchedCustomer->getId()));
-        }
-
-        return $customer;
+        return $this->resourceService->createOrUpdateCustomer($customer);
     }
 
     /**

@@ -298,6 +298,7 @@ class CustomerTest extends BasePaymentTest
      * Verify an Exception is thrown if the customerId already exists.
      *
      * @test
+     *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -320,6 +321,7 @@ class CustomerTest extends BasePaymentTest
      * Verify a Customer is fetched by customerId if the id is not set.
      *
      * @test
+     *
      * @throws \RuntimeException
      */
     public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet()
@@ -334,6 +336,7 @@ class CustomerTest extends BasePaymentTest
      * Verify a Customer is fetched and updated when its customerId already exist.
      *
      * @test
+     *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */

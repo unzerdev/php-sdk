@@ -30,6 +30,7 @@ class ResourceNameService
      * Extracts the short name of the given full qualified class name.
      *
      * @param string $classString
+     *
      * @return string
      */
     public static function getClassShortName($classString): string

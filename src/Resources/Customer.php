@@ -247,9 +247,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCustomerId(): string
+    public function getCustomerId()
     {
         return $this->customerId;
     }
@@ -276,6 +276,7 @@ class Customer extends AbstractHeidelpayResource
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
+
     /**
      * {@inheritDoc}
      */
@@ -283,5 +284,6 @@ class Customer extends AbstractHeidelpayResource
     {
         return $this->getCustomerId();
     }
+
     //</editor-fold>
 }
