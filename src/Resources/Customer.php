@@ -274,4 +274,14 @@ class Customer extends AbstractHeidelpayResource
     //</editor-fold>
 
     //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
+    /**
+     * {@inheritDoc}
+     */
+    public function getExternalId()
+    {
+        return $this->getCustomerId();
+    }
+    //</editor-fold>
 }

@@ -315,4 +315,52 @@ class CustomerTest extends BasePaymentTest
         // create new customer with the same customerId
         $this->heidelpay->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
     }
+
+    /**
+     * Verify a Customer is fetched by customerId if the id is not set.
+     *
+     * @test
+     * @throws \RuntimeException
+     */
+    public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet()
+    {
+        $customerId = str_replace(' ', '', \microtime());
+        $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
+        $lastElement      = explode('/', rtrim($customer->getUri(), '/'));
+        $this->assertEquals($customerId, end($lastElement));
+    }
+
+    /**
+     * Verify a Customer is fetched and updated when its customerId already exist.
+     *
+     * @test
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function customerShouldBeFetchedByCustomerIdAndUpdatedIfItAlreadyExists()
+    {
+        $customerId = str_replace(' ', '', \microtime());
+
+        $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
+
+        try {
+            // fetch non-existing customer by customerId
+            $this->heidelpay->fetchCustomer($customer);
+        } catch (HeidelpayApiException $e) {
+            $this->assertEquals($e->getCode(), ApiResponseCodes::API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND);
+        }
+
+        // create customer with api
+        $customer = $this->heidelpay->createOrUpdateCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+        $this->assertNotEmpty($customer->getCustomerId());
+        $this->assertEquals($customerId, $customer->getCustomerId());
+        $this->assertEquals('Peter', $customer->getFirstname());
+
+        $newCustomerData = $this->getMaximumCustomer()->setCustomerId($customerId)->setFirstname('Petra');
+        $this->heidelpay->createOrUpdateCustomer($newCustomerData);
+
+        $this->assertEquals('Petra', $newCustomerData->getFirstname());
+        $this->assertEquals($customerId, $newCustomerData->getCustomerId());
+        $this->assertEquals($customer->getId(), $newCustomerData->getId());
+    }
 }

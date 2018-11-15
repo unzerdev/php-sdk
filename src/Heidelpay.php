@@ -27,6 +27,7 @@ namespace heidelpay\MgwPhpSdk;
 
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
@@ -247,7 +248,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * {@inheritDoc}
      */
-    public function getUri(): string
+    public function getUri($appendId = true): string
     {
         return '';
     }
@@ -374,6 +375,35 @@ class Heidelpay implements HeidelpayParentInterface
     public function createCustomer(Customer $customer): AbstractHeidelpayResource
     {
         return $this->resourceService->createCustomer($customer);
+    }
+
+    /**
+     * Creates a Customer resource via API using the given Customer object.
+     *
+     * @param Customer $customer The Customer object to be created using the API.
+     *
+     * @return Customer The created and updated Customer object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function createOrUpdateCustomer(Customer $customer): AbstractHeidelpayResource
+    {
+        try {
+            $this->resourceService->createCustomer($customer);
+        } catch (HeidelpayApiException $e) {
+            if (!ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS === $e->getCode()) {
+                throw $e;
+            }
+
+            // fetch Customer resource by customerId
+            $fetchedCustomer = $this->fetchCustomer((new Customer())->setCustomerId($customer->getCustomerId()));
+
+            // update the existing customer with the data of the new customer
+            $this->updateCustomer($customer->setId($fetchedCustomer->getId()));
+        }
+
+        return $customer;
     }
 
     /**

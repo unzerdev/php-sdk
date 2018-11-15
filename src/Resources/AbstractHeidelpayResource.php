@@ -59,7 +59,11 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     public function getId()
     {
-        return $this->id;
+        $resourceId = $this->id;
+        if (null === $resourceId) {
+            $resourceId = $this->getExternalId();
+        }
+        return $resourceId;
     }
 
     /**
@@ -132,17 +136,41 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * {@inheritDoc}
      */
-    public function getUri(): string
+    public function getUri($appendId = true): string
     {
         // remove trailing slash and explode
         $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
-        if ($this->getId() !== null) {
+        if ($appendId && $this->getId() !== null) {
             $uri[] = $this->getId();
         }
 
         $uri[] = '';
 
         return implode('/', $uri);
+    }
+
+    /**
+     * This method updates the properties of the resource.
+     *
+     * @param $object
+     * @param \stdClass $response
+     */
+    private function updateValues($object, \stdClass $response)
+    {
+        foreach ($response as $key => $value) {
+            $newValue = $value ?: null;
+            $setter = 'set' . ucfirst($key);
+            $getter = 'get' . ucfirst($key);
+            if (\is_object($value)) {
+                if (\is_callable([$object, $getter])) {
+                    $this->updateValues($object->$getter(), $newValue);
+                } elseif ('processing' === $key) {
+                    $this->updateValues($object, $newValue);
+                }
+            } elseif (\is_callable([$object, $setter])) {
+                $object->$setter($newValue);
+            }
+        }
     }
 
     //</editor-fold>
@@ -309,27 +337,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * This method updates the properties of the resource.
+     * Returns the externalId of a resource if the resource supports to be loaded by it.
+     * Override this in the resource class.
      *
-     * @param $object
-     * @param \stdClass $response
+     * @return string|null
      */
-    private function updateValues($object, \stdClass $response)
+    public function getExternalId()
     {
-        foreach ($response as $key => $value) {
-            $newValue = $value ?: null;
-            $setter = 'set' . ucfirst($key);
-            $getter = 'get' . ucfirst($key);
-            if (\is_object($value)) {
-                if (\is_callable([$object, $getter])) {
-                    $this->updateValues($object->$getter(), $newValue);
-                } elseif ('processing' === $key) {
-                    $this->updateValues($object, $newValue);
-                }
-            } elseif (\is_callable([$object, $setter])) {
-                $object->$setter($newValue);
-            }
-        }
+        return null;
     }
 
     //</editor-fold>

@@ -42,9 +42,10 @@ interface HeidelpayParentInterface
     /**
      * Returns the url string for this resource.
      *
+     * @param bool $appendId
      * @return string
      */
-    public function getUri(): string;
+    public function getUri($appendId = true): string;
 
     /**
      * Fetches the Resource if necessary.
