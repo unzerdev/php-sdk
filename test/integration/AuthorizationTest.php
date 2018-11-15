@@ -140,6 +140,8 @@ class AuthorizationTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
+     *
+     * @group skip
      */
     public function authorizationCanBeFetched(Authorization $authorization)
     {
