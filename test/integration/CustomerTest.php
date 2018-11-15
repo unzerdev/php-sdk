@@ -101,7 +101,7 @@ class CustomerTest extends BasePaymentTest
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
-    public function customerCanBeFetched(Customer $customer)
+    public function customerCanBeFetchedById(Customer $customer)
     {
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
@@ -121,6 +121,24 @@ class CustomerTest extends BasePaymentTest
         $customerToFetch = (new Customer())->setId($customer->getId());
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customerToFetch);
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
+    }
+
+    /**
+     * @param Customer $customer
+     *
+     * @throws HeidelpayApiException
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @depends maxCustomerCanBeCreatedAndFetched
+     * @test
+     */
+    public function customerCanBeFetchedByObjectWithData(Customer $customer)
+    {
+        $customerToFetch = $this->getMinimalCustomer()->setId($customer->getId());
+        $this->assertNotEquals($customer->getFirstname(), $customerToFetch->getFirstname());
+
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customerToFetch);
+        $this->assertEquals($customer->getFirstname(), $fetchedCustomer->getFirstname());
     }
 
     /**
