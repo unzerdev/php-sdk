@@ -339,6 +339,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
+     *
+     * @group skip
      */
     public function customerShouldBeFetchedByCustomerIdAndUpdatedIfItAlreadyExists()
     {
