@@ -2,18 +2,19 @@
 /**
  * This service provides for functionalities concerning payment transactions.
  *
+ * Copyright (C) 2018 Heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
@@ -24,7 +25,6 @@
 namespace heidelpay\MgwPhpSdk\Services;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
@@ -67,7 +67,6 @@ class PaymentService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     private function createPayment($paymentType, $customer = null): AbstractHeidelpayResource
     {
@@ -93,7 +92,6 @@ class PaymentService
      * @return Authorization Resulting Authorization object.
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null, $orderId = null): AbstractTransactionType
@@ -115,7 +113,6 @@ class PaymentService
      * @return Authorization Resulting Authorization object.
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function authorizeWithPayment(
@@ -150,7 +147,6 @@ class PaymentService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function charge(
         $amount,
@@ -181,7 +177,6 @@ class PaymentService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
     {
@@ -205,7 +200,6 @@ class PaymentService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
     {
@@ -230,7 +224,6 @@ class PaymentService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
     {
@@ -251,7 +244,6 @@ class PaymentService
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType
@@ -273,7 +265,6 @@ class PaymentService
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function cancelChargeById($payment, $chargeId, $amount = null): AbstractTransactionType
@@ -291,7 +282,6 @@ class PaymentService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
     {
@@ -316,7 +306,6 @@ class PaymentService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function ship($payment): AbstractHeidelpayResource
     {
@@ -327,7 +316,7 @@ class PaymentService
         }
 
         if (!$paymentObject instanceof Payment) {
-            throw new HeidelpaySdkException('Payment object is not set.');
+            throw new \RuntimeException('Payment object is not set.');
         }
 
         $shipment = new Shipment();

@@ -3,18 +3,19 @@
  * This class defines integration tests to verify interface and
  * functionality of the payment method sepa direct debit guaranteed.
  *
+ * Copyright (C) 2018 Heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
@@ -29,6 +30,7 @@ use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class SepaDirectDebitGuaranteedTest extends BasePaymentTest
 {
@@ -38,10 +40,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -69,10 +69,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @return SepaDirectDebitGuaranteed
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
@@ -105,9 +103,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
     public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitGuaranteed $directDebitGuaranteed)
@@ -125,9 +121,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\AssertionFailedError
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException
      */
     public function directDebitGuaranteedShouldAllowCharge()
     {
