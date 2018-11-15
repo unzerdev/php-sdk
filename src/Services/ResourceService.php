@@ -82,8 +82,8 @@ class ResourceService
         AbstractHeidelpayResource $resource,
         $httpMethod = HttpAdapterInterface::REQUEST_GET
     ): \stdClass {
-        $uri          = $resource->getUri($httpMethod !== HttpAdapterInterface::REQUEST_POST);
-        $responseJson = $resource->getHeidelpayObject()->send($uri, $resource, $httpMethod);
+        $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
+        $responseJson = $resource->getHeidelpayObject()->send($resource->getUri($appendId), $resource, $httpMethod);
         return json_decode($responseJson);
     }
 
