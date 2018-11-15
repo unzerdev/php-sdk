@@ -28,7 +28,9 @@ namespace heidelpay\MgwPhpSdk;
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
+use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Keypair;
@@ -38,12 +40,9 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
-
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Validators\KeyValidator;
 
 class Heidelpay implements HeidelpayParentInterface
@@ -245,11 +244,9 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Returns the URL-string of this resource.
-     *
-     * @return string The URL-string of this resource.
+     * {@inheritDoc}
      */
-    public function getUri(): string
+    public function getUri($appendId = true): string
     {
         return '';
     }
@@ -376,6 +373,21 @@ class Heidelpay implements HeidelpayParentInterface
     public function createCustomer(Customer $customer): AbstractHeidelpayResource
     {
         return $this->resourceService->createCustomer($customer);
+    }
+
+    /**
+     * Creates a Customer resource via API using the given Customer object.
+     *
+     * @param Customer $customer The Customer object to be created using the API.
+     *
+     * @return Customer The created and updated Customer object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function createOrUpdateCustomer(Customer $customer): AbstractHeidelpayResource
+    {
+        return $this->resourceService->createOrUpdateCustomer($customer);
     }
 
     /**

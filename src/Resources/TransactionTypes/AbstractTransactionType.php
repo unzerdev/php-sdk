@@ -24,10 +24,10 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Traits\HasOrderId;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource

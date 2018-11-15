@@ -133,7 +133,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
             100.0,
             Currencies::EURO,
             self::RETURN_URL,
-            $this->getMaximumCustomer()
+            $this->getMaximumCustomerInclShippingAddress()
         );
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());

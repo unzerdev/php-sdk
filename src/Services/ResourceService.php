@@ -25,6 +25,7 @@
 namespace heidelpay\MgwPhpSdk\Services;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\IdStrings;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
@@ -77,9 +78,12 @@ class ResourceService
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function send(AbstractHeidelpayResource $resource, $httpMethod = HttpAdapterInterface::REQUEST_GET): \stdClass
-    {
-        $responseJson = $resource->getHeidelpayObject()->send($resource->getUri(), $resource, $httpMethod);
+    public function send(
+        AbstractHeidelpayResource $resource,
+        $httpMethod = HttpAdapterInterface::REQUEST_GET
+    ): \stdClass {
+        $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
+        $responseJson = $resource->getHeidelpayObject()->send($resource->getUri($appendId), $resource, $httpMethod);
         return json_decode($responseJson);
     }
 
@@ -360,6 +364,35 @@ class ResourceService
     }
 
     /**
+     * Create the given Customer object via API.
+     *
+     * @param Customer $customer
+     *
+     * @return Customer
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createOrUpdateCustomer(Customer $customer): AbstractHeidelpayResource
+    {
+        try {
+            $this->createCustomer($customer);
+        } catch (HeidelpayApiException $e) {
+            if (!ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS === $e->getCode()) {
+                throw $e;
+            }
+
+            // fetch Customer resource by customerId
+            $fetchedCustomer = $this->fetchCustomer((new Customer())->setCustomerId($customer->getCustomerId()));
+
+            // update the existing customer with the data of the new customer
+            $this->updateCustomer($customer->setId($fetchedCustomer->getId()));
+        }
+
+        return $customer;
+    }
+
+    /**
      * Fetch and return Customer object from API by the given id.
      *
      * @param Customer|string $customer
@@ -374,10 +407,10 @@ class ResourceService
         $customerObject = $customer;
 
         if (\is_string($customer)) {
-            $customerObject = (new Customer())->setParentResource($this->heidelpay)->setId($customer);
+            $customerObject = (new Customer())->setId($customer);
         }
 
-        return $this->fetch($customerObject);
+        return $this->fetch($customerObject->setParentResource($this->heidelpay));
     }
 
     /**

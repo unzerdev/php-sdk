@@ -27,6 +27,19 @@ namespace heidelpay\MgwPhpSdk\Services;
 class ResourceNameService
 {
     /**
+     * Extracts the short name of the given full qualified class name.
+     *
+     * @param string $classString
+     *
+     * @return string
+     */
+    public static function getClassShortName($classString): string
+    {
+        $classNameParts = explode('\\', $classString);
+        return end($classNameParts);
+    }
+
+    /**
      * Return class short name.
      *
      * @param string $classString
@@ -35,14 +48,13 @@ class ResourceNameService
      */
     public static function getClassShortNameKebapCase($classString): string
     {
-        $classNameParts = explode('\\', $classString);
-        return self::toKebapCase(end($classNameParts));
+        return self::toKebapCase(self::getClassShortName($classString));
     }
 
     /**
      * Change camel case string to kebap-case.
      *
-     * @param $str
+     * @param string $str
      *
      * @return string
      */
