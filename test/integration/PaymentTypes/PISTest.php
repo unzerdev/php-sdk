@@ -27,7 +27,6 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\PIS;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -48,7 +47,6 @@ class PISTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function pisShouldBeCreatableAndFetchable(): PIS
     {
@@ -77,7 +75,6 @@ class PISTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @depends pisShouldBeCreatableAndFetchable
      */
     public function pisShouldBeAbleToCharge(PIS $pis): Charge
@@ -98,7 +95,6 @@ class PISTest extends BasePaymentTest
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @depends pisShouldBeCreatableAndFetchable
      */
     public function pisShouldNotBeAuthorizable(PIS $pis)
