@@ -245,11 +245,9 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Returns the URL-string of this resource.
-     *
-     * @return string The URL-string of this resource.
+     * {@inheritDoc}
      */
-    public function getUri(): string
+    public function getUri($appendId = true): string
     {
         return '';
     }
@@ -376,6 +374,21 @@ class Heidelpay implements HeidelpayParentInterface
     public function createCustomer(Customer $customer): AbstractHeidelpayResource
     {
         return $this->resourceService->createCustomer($customer);
+    }
+
+    /**
+     * Creates a Customer resource via API using the given Customer object.
+     *
+     * @param Customer $customer The Customer object to be created using the API.
+     *
+     * @return Customer The created and updated Customer object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function createOrUpdateCustomer(Customer $customer): AbstractHeidelpayResource
+    {
+        return $this->resourceService->createOrUpdateCustomer($customer);
     }
 
     /**

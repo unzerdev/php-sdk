@@ -27,6 +27,7 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
@@ -58,7 +59,9 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
-        $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
+        $exposeArray     = $customer->expose();
+        $exposeArray['salutation'] = Salutations::UNKNOWN;
+        $this->assertEquals($exposeArray, $fetchedCustomer->expose());
 
         return $customer;
     }
@@ -98,10 +101,44 @@ class CustomerTest extends BasePaymentTest
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
-    public function customerCanBeFetched(Customer $customer)
+    public function customerCanBeFetchedById(Customer $customer)
     {
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
+    }
+
+    /**
+     * @param Customer $customer
+     *
+     * @throws HeidelpayApiException
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @depends maxCustomerCanBeCreatedAndFetched
+     * @test
+     */
+    public function customerCanBeFetchedByObject(Customer $customer)
+    {
+        $customerToFetch = (new Customer())->setId($customer->getId());
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customerToFetch);
+        $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
+    }
+
+    /**
+     * @param Customer $customer
+     *
+     * @throws HeidelpayApiException
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @depends maxCustomerCanBeCreatedAndFetched
+     * @test
+     */
+    public function customerCanBeFetchedByObjectWithData(Customer $customer)
+    {
+        $customerToFetch = $this->getMinimalCustomer()->setId($customer->getId());
+        $this->assertNotEquals($customer->getFirstname(), $customerToFetch->getFirstname());
+
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customerToFetch);
+        $this->assertEquals($customer->getFirstname(), $fetchedCustomer->getFirstname());
     }
 
     /**
@@ -255,5 +292,80 @@ class CustomerTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
         $this->heidelpay->fetchCustomer($fetchedCustomer->getId());
+    }
+
+    /**
+     * Verify an Exception is thrown if the customerId already exists.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function apiShouldReturnErrorIfCustomerAlreadyExists()
+    {
+        $customerId = str_replace(' ', '', \microtime());
+
+        // create customer with api
+        $customer = $this->heidelpay->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+        $this->assertNotEmpty($customer->getCustomerId());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS);
+
+        // create new customer with the same customerId
+        $this->heidelpay->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+    }
+
+    /**
+     * Verify a Customer is fetched by customerId if the id is not set.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     */
+    public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet()
+    {
+        $customerId = str_replace(' ', '', \microtime());
+        $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
+        $lastElement      = explode('/', rtrim($customer->getUri(), '/'));
+        $this->assertEquals($customerId, end($lastElement));
+    }
+
+    /**
+     * Verify a Customer is fetched and updated when its customerId already exist.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     *
+     * @group skip
+     */
+    public function customerShouldBeFetchedByCustomerIdAndUpdatedIfItAlreadyExists()
+    {
+        $customerId = str_replace(' ', '', \microtime());
+
+        $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
+
+        try {
+            // fetch non-existing customer by customerId
+            $this->heidelpay->fetchCustomer($customer);
+        } catch (HeidelpayApiException $e) {
+            $this->assertEquals($e->getCode(), ApiResponseCodes::API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND);
+        }
+
+        // create customer with api
+        $customer = $this->heidelpay->createOrUpdateCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+        $this->assertNotEmpty($customer->getCustomerId());
+        $this->assertEquals($customerId, $customer->getCustomerId());
+        $this->assertEquals('Peter', $customer->getFirstname());
+
+        $newCustomerData = $this->getMaximumCustomer()->setCustomerId($customerId)->setFirstname('Petra');
+        $this->heidelpay->createOrUpdateCustomer($newCustomerData);
+
+        $this->assertEquals('Petra', $newCustomerData->getFirstname());
+        $this->assertEquals($customerId, $newCustomerData->getCustomerId());
+        $this->assertEquals($customer->getId(), $newCustomerData->getId());
     }
 }

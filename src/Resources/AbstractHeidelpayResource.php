@@ -28,6 +28,7 @@ use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Services\ResourceNameService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 
 abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
@@ -51,69 +52,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         $this->id = $resourceId;
     }
 
-    //<editor-fold desc="Helpers">
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getHeidelpayObject(): Heidelpay
-    {
-        $heidelpayObject = $this->parentResource->getHeidelpayObject();
-
-        if (!$heidelpayObject instanceof Heidelpay) {
-            throw new \RuntimeException('Heidelpay object reference is not set!');
-        }
-
-        return $heidelpayObject;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUri(): string
-    {
-        // remove trailing slash and explode
-        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
-        if ($this->getId() !== null) {
-            $uri[] = $this->getId();
-        }
-
-        $uri[] = '';
-
-        return implode('/', $uri);
-    }
-
-    /**
-     * Return class short name.
-     *
-     * @return string
-     */
-    protected static function getClassShortNameKebapCase(): string
-    {
-        $classNameParts = explode('\\', static::class);
-        return self::toKebapCase(end($classNameParts));
-    }
-
-    /**
-     * Change camel case string to kebap-case.
-     *
-     * @param $str
-     *
-     * @return string
-     */
-    private static function toKebapCase($str): string
-    {
-        return preg_replace_callback(
-            '/([A-Z]+)/',
-            function ($str) {
-                return '-' . strtolower($str[0]);
-            },
-            lcfirst($str)
-        );
-    }
-
-    //</editor-fold>
-
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -121,7 +59,11 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     public function getId()
     {
-        return $this->id;
+        $resourceId = $this->id;
+        if (null === $resourceId) {
+            $resourceId = $this->getExternalId();
+        }
+        return $resourceId;
     }
 
     /**
@@ -171,6 +113,64 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     {
         $this->fetchedAt = $fetchedAt;
         return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHeidelpayObject(): Heidelpay
+    {
+        $heidelpayObject = $this->parentResource->getHeidelpayObject();
+
+        if (!$heidelpayObject instanceof Heidelpay) {
+            throw new \RuntimeException('Heidelpay object reference is not set!');
+        }
+
+        return $heidelpayObject;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUri($appendId = true): string
+    {
+        // remove trailing slash and explode
+        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
+        if ($appendId && $this->getId() !== null) {
+            $uri[] = $this->getId();
+        }
+
+        $uri[] = '';
+
+        return implode('/', $uri);
+    }
+
+    /**
+     * This method updates the properties of the resource.
+     *
+     * @param $object
+     * @param \stdClass $response
+     */
+    private function updateValues($object, \stdClass $response)
+    {
+        foreach ($response as $key => $value) {
+            $newValue = $value ?: null;
+            $setter = 'set' . ucfirst($key);
+            $getter = 'get' . ucfirst($key);
+            if (\is_object($value)) {
+                if (\is_callable([$object, $getter])) {
+                    $this->updateValues($object->$getter(), $newValue);
+                } elseif ('processing' === $key) {
+                    $this->updateValues($object, $newValue);
+                }
+            } elseif (\is_callable([$object, $setter])) {
+                $object->$setter($newValue);
+            }
+        }
     }
 
     //</editor-fold>
@@ -284,7 +284,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
          * @var string                    $key
          * @var AbstractHeidelpayResource $linkedResource
          */
-        foreach ($this->getLinkedResources() as $key=>$linkedResource) {
+        foreach ($this->getLinkedResources() as $key => $linkedResource) {
             $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
         }
 
@@ -321,7 +321,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     protected function getResourcePath()
     {
-        return self::getClassShortNameKebapCase();
+        return ResourceNameService::getClassShortNameKebapCase(static::class);
     }
 
     /**
@@ -337,27 +337,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * This method updates the properties of the resource.
+     * Returns the externalId of a resource if the resource supports to be loaded by it.
+     * Override this in the resource class.
      *
-     * @param $object
-     * @param \stdClass $response
+     * @return string|null
      */
-    private function updateValues($object, \stdClass $response)
+    public function getExternalId()
     {
-        foreach ($response as $key => $value) {
-            $newValue = $value ?: null;
-            $setter = 'set' . ucfirst($key);
-            $getter = 'get' . ucfirst($key);
-            if (\is_object($value)) {
-                if (\is_callable([$object, $getter])) {
-                    $this->updateValues($object->$getter(), $newValue);
-                } elseif ('processing' === $key) {
-                    $this->updateValues($object, $newValue);
-                }
-            } elseif (\is_callable([$object, $setter])) {
-                $object->$setter($newValue);
-            }
-        }
+        return null;
     }
 
     //</editor-fold>
