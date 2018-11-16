@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the ideal payment type.
+ * This class defines unit tests to verify functionality of Card payment type.
  *
  * Copyright (C) 2018 Heidelpay GmbH
  *
@@ -20,39 +20,30 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/payment_types
+ * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\test\unit\Resources\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Traits\CanDirectCharge;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 
-class Ideal extends BasePaymentType
+class IdealTest extends TestCase
 {
-    use CanDirectCharge;
-
-    /** @var string $bic */
-    protected $bic;
-
-    //<editor-fold desc="Getter/Setter">
-
     /**
-     * @return string|null
-     */
-    public function getBic()
-    {
-        return $this->bic;
-    }
-
-    /**
-     * @param string $bic
+     * Verify the bic can be set and read.
      *
-     * @return Ideal
+     * @test
+     *
+     * @throws ExpectationFailedException
+     * @throws Exception
      */
-    public function setBic(string $bic): Ideal
+    public function bicShouldBeRW()
     {
-        $this->bic = $bic;
-        return $this;
+        $ideal = new Ideal();
+        $this->assertNull($ideal->getBic());
+        $ideal->setBic('RABONL2U');
+        $this->assertEquals('RABONL2U', $ideal->getBic());
     }
-
-    //</editor-fold>
 }

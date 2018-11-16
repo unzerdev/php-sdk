@@ -46,6 +46,7 @@ class CardTest extends TestCase
     private $card;
 
     //<editor-fold desc="Data Providers">
+
     /**
      * @return array
      */
@@ -73,6 +74,7 @@ class CardTest extends TestCase
             ['12/20199']
         ];
     }
+
     //</editor-fold>
 
     /**
@@ -146,6 +148,7 @@ class CardTest extends TestCase
      * it afterwards by just setting the id.
      *
      * @test
+     *
      * @throws \RuntimeException
      */
     public function verifySettingExpiryDateNullChangesNothing()
@@ -162,6 +165,7 @@ class CardTest extends TestCase
      * Verify setting cvc.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      */
@@ -178,6 +182,7 @@ class CardTest extends TestCase
      * Verify setting holder.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      */
@@ -194,6 +199,7 @@ class CardTest extends TestCase
      * Verify setting brand.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      */
