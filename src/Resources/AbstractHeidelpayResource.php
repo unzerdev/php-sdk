@@ -201,7 +201,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    protected function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         return $this->getResourceService()->getResource($resource);
     }
@@ -214,7 +214,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function fetchResource(AbstractHeidelpayResource $resource)
+    protected function fetchResource(AbstractHeidelpayResource $resource)
     {
         $this->getResourceService()->fetch($resource);
     }
@@ -227,7 +227,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @throws \RuntimeException
      */
-    public function getResourceIdFromUrl($url, $typePattern): string
+    protected function getResourceIdFromUrl($url, $typePattern): string
     {
         return $this->getResourceService()->getResourceIdFromUrl($url, $typePattern);
     }
