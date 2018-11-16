@@ -133,13 +133,16 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
+     * Fetches the parent URI and combines it with the uri of the current resource.
+     * If appendId is set the id of the current resource will be appended if it is set.
+     * The flag appendId is always set for getUri of the parent resource.
+     *
      * {@inheritDoc}
      *
      * @throws \RuntimeException
      */
     public function getUri($appendId = true): string
     {
-        // remove trailing slash and explode
         $uri = [rtrim($this->getParentResource()->getUri(), '/'), $this->getResourcePath()];
         if ($appendId && $this->getId() !== null) {
             $uri[] = $this->getId();

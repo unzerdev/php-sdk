@@ -104,4 +104,73 @@ class AbstractHeidelpayResourceTest extends TestCase
         $this->assertSame($heidelpayObj, $customer->getParentResource());
         $this->assertSame($heidelpayObj, $customer->getHeidelpayObject());
     }
+
+    /**
+     * Verify getUri will call parentResource.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function getUriWillCallGetUriOnItsParentResource()
+    {
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUri'])
+            ->getMock();
+        $heidelpayMock->expects($this->once())->method('getUri')->willReturn('parent/resource/path/');
+
+        /** @var Customer $heidelpayMock */
+        $customer = (new Customer())->setParentResource($heidelpayMock);
+        $this->assertEquals('parent/resource/path/customers/', $customer->getUri());
+    }
+
+    /**
+     * Verify getUri will return the expected path.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet()
+    {
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUri'])
+            ->getMock();
+        $heidelpayMock->method('getUri')->willReturn('parent/resource/path/');
+
+        /** @var Customer $heidelpayMock */
+        $customer = (new Customer())->setParentResource($heidelpayMock)->setId('myId');
+        $this->assertEquals('parent/resource/path/customers/myId/', $customer->getUri());
+        $this->assertEquals('parent/resource/path/customers/', $customer->getUri(false));
+    }
+
+    /**
+     * Verify getUri with appendId == true will append the externalId if it is returned and the id is not set.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function getUriWillAddExternalIdToTheUriIfTheIdIsNotSetButAppendIdIs()
+    {
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUri'])
+            ->getMock();
+        $heidelpayMock->method('getUri')->willReturn('parent/resource/path/');
+
+        $customerMock = $this->getMockBuilder(Customer::class)->setMethods(['getExternalId'])->getMock();
+        $customerMock->expects($this->atLeast(1))->method('getExternalId')->willReturn('myExternalId');
+
+        /** @var Customer $customerMock */
+        /** @var Heidelpay $heidelpayMock*/
+        $customerMock->setParentResource($heidelpayMock);
+        $this->assertEquals('parent/resource/path/customers/myExternalId/', $customerMock->getUri());
+        $this->assertEquals('parent/resource/path/customers/', $customerMock->getUri(false));
+    }
 }
