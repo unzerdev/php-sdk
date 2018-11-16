@@ -129,13 +129,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     public function getHeidelpayObject(): Heidelpay
     {
-        $heidelpayObject = $this->getParentResource()->getHeidelpayObject();
-
-        if (!$heidelpayObject instanceof Heidelpay) {
-            throw new \RuntimeException('Heidelpay object reference is not set!');
-        }
-
-        return $heidelpayObject;
+        return $this->getParentResource()->getHeidelpayObject();
     }
 
     /**

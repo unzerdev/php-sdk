@@ -66,22 +66,42 @@ class AbstractHeidelpayResourceTest extends TestCase
         $customer = new Customer();
 
         $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Parent resource reference is not set!');
         $customer->getParentResource();
     }
 
     /**
-     * Verify getter/setter of ParentResource.
+     * Verify getHeidelpayObject calls getParentResource.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function getHeidelpayObjectShouldCallGetParentResourceOnce()
+    {
+        $customerMock = $this->getMockBuilder(Customer::class)->setMethods(['getParentResource'])->getMock();
+        $customerMock->expects($this->once())->method('getParentResource');
+
+        /** @var Customer $customerMock */
+        $customerMock->getHeidelpayObject();
+    }
+
+    /**
+     * Verify getter/setter of ParentResource and Heidelpay object.
      *
      * @test
      *
      * @throws Exception
      * @throws \RuntimeException
      */
-    public function parentResourceGetterSetterShouldWork()
+    public function parentResourceAndHeidelpayGetterSetterShouldWork()
     {
         $heidelpayObj = new Heidelpay('s-priv-123');
         $customer = new Customer();
         $customer->setParentResource($heidelpayObj);
         $this->assertSame($heidelpayObj, $customer->getParentResource());
+        $this->assertSame($heidelpayObj, $customer->getHeidelpayObject());
     }
 }
