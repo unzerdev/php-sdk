@@ -24,7 +24,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
+use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -49,5 +51,37 @@ class AbstractHeidelpayResourceTest extends TestCase
 
         $customer->setFetchedAt(new \dateTime('2018-12-03'));
         $this->assertEquals(new \dateTime('2018-12-03'), $customer->getFetchedAt());
+    }
+
+    /**
+     * Verify getParentResource throws exception if it is not set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     */
+    public function getParentResourceShouldThrowExceptionIfItIsNotSet()
+    {
+        $customer = new Customer();
+
+        $this->expectException(\RuntimeException::class);
+        $customer->getParentResource();
+    }
+
+    /**
+     * Verify getter/setter of ParentResource.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     */
+    public function parentResourceGetterSetterShouldWork()
+    {
+        $heidelpayObj = new Heidelpay('s-priv-123');
+        $customer = new Customer();
+        $customer->setParentResource($heidelpayObj);
+        $this->assertSame($heidelpayObj, $customer->getParentResource());
     }
 }
