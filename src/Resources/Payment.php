@@ -283,7 +283,7 @@ class Payment extends AbstractHeidelpayResource
      * Sets the Payments reference to the given PaymentType resource.
      * The PaymentType can be either a PaymentType object or the id of a PaymentType resource.
      *
-     * @param BasePaymentType|string $paymentType The PaymentType object or the id of the PaymenType to be referenced.
+     * @param BasePaymentType|string $paymentType The PaymentType object or the id of the PaymentType to be referenced.
      *
      * @return Payment This Payment object.
      *
