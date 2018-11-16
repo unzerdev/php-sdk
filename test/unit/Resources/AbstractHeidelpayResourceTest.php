@@ -179,6 +179,7 @@ class AbstractHeidelpayResourceTest extends TestCase
      * Verify updateValues will update child objects.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      */
@@ -205,5 +206,34 @@ class AbstractHeidelpayResourceTest extends TestCase
         $this->assertEquals('Heidelberg', $billingAddress->getCity());
         $this->assertEquals('69115', $billingAddress->getZip());
         $this->assertEquals('Musterstrasse 15', $billingAddress->getStreet());
+    }
+
+    /**
+     * Verify updateValues will update resource fields with values from processing group in response.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function updateValuesShouldUpdateValuesFromProcessingInTheActualObject()
+    {
+        $testResponse = new \stdClass();
+        $processing = new \stdClass();
+        $processing->customerId = 'processingCustomerId';
+        $processing->firstname = 'processingFirstName';
+        $processing->lastname = 'processingLastName';
+        $testResponse->processing = $processing;
+
+        /** @var Customer $customer */
+        $customer = (new Customer())->setCustomerId('customerId')->setFirstname('firstName')->setLastname('lastName');
+        $this->assertEquals('customerId', $customer->getCustomerId());
+        $this->assertEquals('firstName', $customer->getFirstname());
+        $this->assertEquals('lastName', $customer->getLastname());
+
+        $customer->handleResponse($testResponse);
+        $this->assertEquals('processingCustomerId', $customer->getCustomerId());
+        $this->assertEquals('processingFirstName', $customer->getFirstname());
+        $this->assertEquals('processingLastName', $customer->getLastname());
     }
 }
