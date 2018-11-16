@@ -1,8 +1,8 @@
 <?php
 /**
- * This class defines unit tests to verify functionality of Card payment type.
+ * This class defines unit tests to verify functionality of Ideal payment type.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
