@@ -84,10 +84,6 @@ class PaypalTest extends BasePaymentTest
         $payment = $authorization->getPayment();
         $this->assertNotNull($payment);
         $this->assertTrue($payment->isPending());
-
-        $cancellation = $authorization->cancel();
-        $this->assertNotNull($cancellation);
-        $this->assertNotEmpty($cancellation->getId());
     }
 
     /**
