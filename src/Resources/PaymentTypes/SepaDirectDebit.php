@@ -52,9 +52,9 @@ class SepaDirectDebit extends BasePaymentType
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIban(): string
+    public function getIban()
     {
         return $this->iban;
     }
@@ -71,9 +71,9 @@ class SepaDirectDebit extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBic(): string
+    public function getBic()
     {
         return $this->bic;
     }
