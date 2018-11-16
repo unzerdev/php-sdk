@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
+use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Address;
 use heidelpay\MgwPhpSdk\Resources\Customer;
@@ -235,5 +236,46 @@ class AbstractHeidelpayResourceTest extends TestCase
         $this->assertEquals('processingCustomerId', $customer->getCustomerId());
         $this->assertEquals('processingFirstName', $customer->getFirstname());
         $this->assertEquals('processingLastName', $customer->getLastname());
+    }
+
+    /**
+     * Verify json_serialize translates a resource in valid json format and values are exposed correctly.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     */
+    public function jsonSerializeShouldTranslateResourceIntoJson()
+    {
+        $heidelpay =  new Heidelpay('s-priv-123');
+        $address = (new Address())
+            ->setName('Peter Universum')
+            ->setStreet('Hugo-Junkers-Str. 5')
+            ->setZip('60386')
+            ->setCity('Frankfurt am Main')
+            ->setCountry('DE')
+            ->setState('DE-BO');
+
+        $customer = (new Customer())
+            ->setCustomerId('CustomerId')
+            ->setFirstname('Peter')
+            ->setLastname('Universum')
+            ->setSalutation(Salutations::MR)
+            ->setCompany('heidelpay GmbH')
+            ->setBirthDate('1989-12-24')
+            ->setEmail('peter.universum@universum-group.de')
+            ->setMobile('+49172123456')
+            ->setPhone('+4962216471100')
+            ->setBillingAddress($address)
+            ->setShippingAddress($address)
+            ->setParentResource($heidelpay);
+
+        $expectedJson = '{"billingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
+            '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"},"birthDate":"1989-12-24",' .
+            '"company":"heidelpay GmbH","customerId":"CustomerId","email":"peter.universum@universum-group.de",' .
+            '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","phone":"+4962216471100",' .
+            '"salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
+            '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
+        $this->assertEquals($expectedJson, $customer->jsonSerialize());
     }
 }
