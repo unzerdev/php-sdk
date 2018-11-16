@@ -35,7 +35,7 @@ class Customer extends AbstractHeidelpayResource
     protected $lastname;
 
     /** @var string $salutation */
-    protected $salutation;
+    protected $salutation = Salutations::UNKNOWN;
 
     /** @var string $birthDate */
     protected $birthDate;
@@ -80,9 +80,9 @@ class Customer extends AbstractHeidelpayResource
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFirstname(): string
+    public function getFirstname()
     {
         return $this->firstname;
     }
@@ -99,9 +99,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLastname(): string
+    public function getLastname()
     {
         return $this->lastname;
     }
@@ -132,14 +132,15 @@ class Customer extends AbstractHeidelpayResource
      */
     public function setSalutation($salutation): Customer
     {
-        $this->salutation = $salutation ?: Salutations::UNKNOWN;
+        $allowedSalutations = [Salutations::MR, Salutations::MRS, Salutations::UNKNOWN];
+        $this->salutation = \in_array($salutation, $allowedSalutations, true) ? $salutation : Salutations::UNKNOWN;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBirthday(): string
+    public function getBirthDate()
     {
         return $this->birthDate;
     }
@@ -156,9 +157,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCompany(): string
+    public function getCompany()
     {
         return $this->company;
     }
@@ -175,9 +176,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail()
     {
         return $this->email;
     }
@@ -194,9 +195,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string
+    public function getPhone()
     {
         return $this->phone;
     }
@@ -213,9 +214,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMobile(): string
+    public function getMobile()
     {
         return $this->mobile;
     }

@@ -90,9 +90,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
     /**
      * @return HeidelpayParentInterface
+     *
+     * @throws \RuntimeException
      */
     public function getParentResource(): HeidelpayParentInterface
     {
+        if (!$this->parentResource instanceof HeidelpayParentInterface) {
+            throw new \RuntimeException('Parent resource reference is not set!');
+        }
         return $this->parentResource;
     }
 
@@ -124,7 +129,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     public function getHeidelpayObject(): Heidelpay
     {
-        $heidelpayObject = $this->parentResource->getHeidelpayObject();
+        $heidelpayObject = $this->getParentResource()->getHeidelpayObject();
 
         if (!$heidelpayObject instanceof Heidelpay) {
             throw new \RuntimeException('Heidelpay object reference is not set!');
@@ -135,11 +140,13 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \RuntimeException
      */
     public function getUri($appendId = true): string
     {
         // remove trailing slash and explode
-        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
+        $uri = [rtrim($this->getParentResource()->getUri(), '/'), $this->getResourcePath()];
         if ($appendId && $this->getId() !== null) {
             $uri[] = $this->getId();
         }
