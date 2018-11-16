@@ -25,6 +25,7 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Address;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -172,5 +173,37 @@ class AbstractHeidelpayResourceTest extends TestCase
         $customerMock->setParentResource($heidelpayMock);
         $this->assertEquals('parent/resource/path/customers/myExternalId/', $customerMock->getUri());
         $this->assertEquals('parent/resource/path/customers/', $customerMock->getUri(false));
+    }
+
+    /**
+     * Verify updateValues will update child objects.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function updateValuesShouldUpdateChildObjects()
+    {
+        $address = (new Address())
+            ->setState('DE-BW')
+            ->setCountry('DE')
+            ->setName('Max Mustermann')
+            ->setCity('Heidelberg')
+            ->setZip('69115')
+            ->setStreet('Musterstrasse 15');
+
+        $testResponse = new \stdClass();
+        $testResponse->billingAddress = json_decode($address->jsonSerialize());
+
+        /** @var Customer $customer */
+        $customer = new Customer();
+        $customer->handleResponse($testResponse);
+        $billingAddress = $customer->getBillingAddress();
+        $this->assertEquals('DE-BW', $billingAddress->getState());
+        $this->assertEquals('DE', $billingAddress->getCountry());
+        $this->assertEquals('Max Mustermann', $billingAddress->getName());
+        $this->assertEquals('Heidelberg', $billingAddress->getCity());
+        $this->assertEquals('69115', $billingAddress->getZip());
+        $this->assertEquals('Musterstrasse 15', $billingAddress->getStreet());
     }
 }
