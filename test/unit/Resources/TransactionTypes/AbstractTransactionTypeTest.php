@@ -36,6 +36,7 @@ class AbstractTransactionTypeTest extends TestCase
      * Verify getters and setters work properly.
      *
      * @test
+     *
      * @throws ExpectationFailedException
      * @throws Exception
      */
@@ -46,8 +47,6 @@ class AbstractTransactionTypeTest extends TestCase
         $this->assertNull($transactionType->getPayment());
         $this->assertNull($transactionType->getDate());
         $this->assertNull($transactionType->getPaymentId());
-        $this->assertNull($transactionType->getUniqueId());
-        $this->assertNull($transactionType->getShortId());
 
         $transactionType->setPayment($payment);
         $this->assertNull($transactionType->getRedirectUrl());
@@ -67,6 +66,7 @@ class AbstractTransactionTypeTest extends TestCase
      * Verify getRedirectUrl() calls Payment::getRedirectUrl().
      *
      * @test
+     *
      * @throws Exception
      * @throws \ReflectionException
      * @throws RuntimeException

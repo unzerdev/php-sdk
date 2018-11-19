@@ -28,5 +28,4 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 
 class DummyTransactionType extends AbstractTransactionType
 {
-
 }
