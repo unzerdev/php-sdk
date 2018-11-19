@@ -90,6 +90,7 @@ class AbstractTransactionTypeTest extends TestCase
      * Verify abstract transaction allows for updating.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
@@ -120,12 +121,14 @@ class AbstractTransactionTypeTest extends TestCase
     }
 
     /**
-     * Verify updatePayment is never called after a Get-Request.
+     * Verify fetchPayment is never called after a Get-Request.
      *
      * @test
      * @dataProvider updatePaymentDataProvider
-     * @param string $method
+     *
+     * @param string  $method
      * @param integer $timesCalled
+     *
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
@@ -143,6 +146,7 @@ class AbstractTransactionTypeTest extends TestCase
     }
 
     //<editor-fold desc="Data Providers">
+
     /**
      * DataProvider for updatePaymentShouldOnlyBeCalledOnGetRequests.
      *
@@ -157,5 +161,6 @@ class AbstractTransactionTypeTest extends TestCase
             HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, 1],
         ];
     }
+
     //</editor-fold>
 }

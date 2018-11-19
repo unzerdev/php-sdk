@@ -186,7 +186,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
-            $this->updatePayment();
+            $this->fetchPayment();
         }
     }
 
@@ -199,7 +199,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    public function updatePayment()
+    public function fetchPayment()
     {
         if (!$this instanceof Payment) {
             $payment = $this->getPayment();
