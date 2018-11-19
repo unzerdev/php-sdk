@@ -26,8 +26,10 @@ namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
+use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -143,6 +145,31 @@ class AbstractTransactionTypeTest extends TestCase
 
         /** @var AbstractTransactionType $transactionTypeMock */
         $transactionTypeMock->handleResponse(new \stdClass(), $method);
+    }
+
+    /**
+     * Verify payment object is fetched on fetchPayment call using the Heidelpays resource service object.
+     *
+     * @test
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function fetchPaymentShouldFetchPaymentObject()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['fetch'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetch')->with($payment);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        /** @var DummyTransactionType $transactionType */
+        $transactionType = (new DummyTransactionType())->setPayment($payment)->setParentResource($payment);
+        $transactionType->fetchPayment();
     }
 
     //<editor-fold desc="Data Providers">
