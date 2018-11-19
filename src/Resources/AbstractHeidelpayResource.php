@@ -67,6 +67,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
+     * This setter must be public to enable fetching a resource by setting the id and then call fetch.
+     *
      * @param int $resourceId
      *
      * @return $this
