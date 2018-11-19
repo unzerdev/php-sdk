@@ -289,13 +289,13 @@ class Customer extends AbstractHeidelpayResource
         return $this;
     }
 
+    //</editor-fold>
+
     //<editor-fold desc="Resource IF">
     public function getResourcePath(): string
     {
         return 'customers';
     }
-
-    //</editor-fold>
 
     //</editor-fold>
 
