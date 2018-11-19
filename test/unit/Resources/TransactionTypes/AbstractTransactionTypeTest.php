@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -81,5 +82,38 @@ class AbstractTransactionTypeTest extends TestCase
         /** @var Payment $paymentMock */
         $transactionType->setPayment($paymentMock);
         $this->assertEquals('https://my-redirect-url.test', $transactionType->getRedirectUrl());
+    }
+
+    /**
+     * Verify abstract transaction allows for updating.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldUpdateValuesOfAbstractTransaction()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $transactionType = (new DummyTransactionType())->setPayment($payment);
+        $this->assertNull($transactionType->getUniqueId());
+        $this->assertNull($transactionType->getShortId());
+        $this->assertNull($transactionType->getRedirectUrl());
+        $this->assertEquals('myPaymentId', $transactionType->getPaymentId());
+
+        $testResponse = new \stdClass();
+        $testResponse->uniqueId = 'myUniqueId';
+        $testResponse->shortId = 'myShortId';
+        $testResponse->redirectUrl = 'myRedirectUrl';
+        $testResources = new \stdClass();
+        $testResources->paymentId = 'myNewPaymentId';
+        $testResponse->resources = $testResources;
+        $transactionType->handleResponse($testResponse);
+
+        $this->assertEquals('myUniqueId', $transactionType->getUniqueId());
+        $this->assertEquals('myShortId', $transactionType->getShortId());
+        $this->assertEquals('myRedirectUrl', $payment->getRedirectUrl());
+        $this->assertEquals('myNewPaymentId', $payment->getId());
     }
 }
