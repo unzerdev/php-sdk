@@ -26,6 +26,7 @@ namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -75,6 +76,80 @@ class CustomerTest extends TestCase
 
         $customer->setCompany('heidelpay GmbH');
         $this->assertEquals('heidelpay GmbH', $customer->getCompany());
+    }
+
+    /**
+     * Verify setter and getter of the billing address.
+     *
+     * @test
+     *
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     */
+    public function settersAndGettersOfBillingAddressShouldWork()
+    {
+        $address = (new Address())
+            ->setState('billing_state')
+            ->setCountry('billing_country')
+            ->setName('billing_name')
+            ->setCity('billing_city')
+            ->setZip('billing_zip')
+            ->setStreet('billing_street');
+
+        $customer = new Customer();
+        $billingAddress = $customer->getBillingAddress();
+        $this->assertNull($billingAddress->getState());
+        $this->assertNull($billingAddress->getCountry());
+        $this->assertNull($billingAddress->getName());
+        $this->assertNull($billingAddress->getCity());
+        $this->assertNull($billingAddress->getZip());
+        $this->assertNull($billingAddress->getStreet());
+
+        $customer->setBillingAddress($address);
+        $billingAddress = $customer->getBillingAddress();
+        $this->assertEquals('billing_state', $billingAddress->getState());
+        $this->assertEquals('billing_country', $billingAddress->getCountry());
+        $this->assertEquals('billing_name', $billingAddress->getName());
+        $this->assertEquals('billing_city', $billingAddress->getCity());
+        $this->assertEquals('billing_zip', $billingAddress->getZip());
+        $this->assertEquals('billing_street', $billingAddress->getStreet());
+    }
+
+    /**
+     * Verify setter and getter of the shipping address.
+     *
+     * @test
+     *
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     */
+    public function settersAndGettersOfShippingAddressShouldWork()
+    {
+        $address = (new Address())
+            ->setState('shipping_state')
+            ->setCountry('shipping_country')
+            ->setName('shipping_name')
+            ->setCity('shipping_city')
+            ->setZip('shipping_zip')
+            ->setStreet('shipping_street');
+
+        $customer = new Customer();
+        $shippingAddress = $customer->getBillingAddress();
+        $this->assertNull($shippingAddress->getState());
+        $this->assertNull($shippingAddress->getCountry());
+        $this->assertNull($shippingAddress->getName());
+        $this->assertNull($shippingAddress->getCity());
+        $this->assertNull($shippingAddress->getZip());
+        $this->assertNull($shippingAddress->getStreet());
+
+        $customer->setShippingAddress($address);
+        $shippingAddress = $customer->getShippingAddress();
+        $this->assertEquals('shipping_state', $shippingAddress->getState());
+        $this->assertEquals('shipping_country', $shippingAddress->getCountry());
+        $this->assertEquals('shipping_name', $shippingAddress->getName());
+        $this->assertEquals('shipping_city', $shippingAddress->getCity());
+        $this->assertEquals('shipping_zip', $shippingAddress->getZip());
+        $this->assertEquals('shipping_street', $shippingAddress->getStreet());
     }
 
     /**

@@ -49,9 +49,9 @@ class Address extends AbstractHeidelpayResource
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -68,9 +68,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStreet(): string
+    public function getStreet()
     {
         return $this->street;
     }
@@ -87,9 +87,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getState(): string
+    public function getState()
     {
         return $this->state;
     }
@@ -106,9 +106,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getZip(): string
+    public function getZip()
     {
         return $this->zip;
     }
@@ -125,9 +125,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity()
     {
         return $this->city;
     }
@@ -144,9 +144,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCountry(): string
+    public function getCountry()
     {
         return $this->country;
     }
