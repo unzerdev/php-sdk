@@ -26,7 +26,6 @@ namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Address;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use PHPUnit\Framework\Exception;
@@ -102,7 +101,7 @@ class AbstractHeidelpayResourceTest extends TestCase
     public function parentResourceAndHeidelpayGetterSetterShouldWork()
     {
         $heidelpayObj = new Heidelpay('s-priv-123');
-        $customer = new Customer();
+        $customer     = new Customer();
         $customer->setParentResource($heidelpayObj);
         $this->assertSame($heidelpayObj, $customer->getParentResource());
         $this->assertSame($heidelpayObj, $customer->getHeidelpayObject());
@@ -171,7 +170,7 @@ class AbstractHeidelpayResourceTest extends TestCase
         $customerMock->expects($this->atLeast(1))->method('getExternalId')->willReturn('myExternalId');
 
         /** @var Customer $customerMock */
-        /** @var Heidelpay $heidelpayMock*/
+        /** @var Heidelpay $heidelpayMock */
         $customerMock->setParentResource($heidelpayMock);
         $this->assertEquals('parent/resource/path/customers/myExternalId/', $customerMock->getUri());
         $this->assertEquals('parent/resource/path/customers/', $customerMock->getUri(false));
@@ -195,7 +194,7 @@ class AbstractHeidelpayResourceTest extends TestCase
             ->setZip('69115')
             ->setStreet('Musterstrasse 15');
 
-        $testResponse = new \stdClass();
+        $testResponse                 = new \stdClass();
         $testResponse->billingAddress = json_decode($address->jsonSerialize());
 
         /** @var Customer $customer */
@@ -220,11 +219,11 @@ class AbstractHeidelpayResourceTest extends TestCase
      */
     public function updateValuesShouldUpdateValuesFromProcessingInTheActualObject()
     {
-        $testResponse = new \stdClass();
-        $processing = new \stdClass();
-        $processing->customerId = 'processingCustomerId';
-        $processing->firstname = 'processingFirstName';
-        $processing->lastname = 'processingLastName';
+        $testResponse             = new \stdClass();
+        $processing               = new \stdClass();
+        $processing->customerId   = 'processingCustomerId';
+        $processing->firstname    = 'processingFirstName';
+        $processing->lastname     = 'processingLastName';
         $testResponse->processing = $processing;
 
         /** @var Customer $customer */
@@ -248,8 +247,8 @@ class AbstractHeidelpayResourceTest extends TestCase
      */
     public function jsonSerializeShouldTranslateResourceIntoJson()
     {
-        $heidelpay =  new Heidelpay('s-priv-123');
-        $address = (new Address())
+        $heidelpay = new Heidelpay('s-priv-123');
+        $address   = (new Address())
             ->setName('Peter Universum')
             ->setStreet('Hugo-Junkers-Str. 5')
             ->setZip('60386')
@@ -284,6 +283,7 @@ class AbstractHeidelpayResourceTest extends TestCase
      * Verify that empty values are not set on expose.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      */
@@ -301,6 +301,7 @@ class AbstractHeidelpayResourceTest extends TestCase
      * Verify that ids of linked resources are added.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      */
@@ -308,36 +309,25 @@ class AbstractHeidelpayResourceTest extends TestCase
     {
         $customer = new Customer('Max', ' Mustermann');
         $customer->setId('MyTestId');
-        $dummy = new DummyHeidelpayResource($customer);
+        $dummy      = new DummyHeidelpayResource($customer);
         $dummyArray = $dummy->expose();
         $this->assertArrayHasKey('resources', $dummyArray);
         $this->assertArrayHasKey('customerId', $dummyArray['resources']);
         $this->assertEquals('MyTestId', $dummyArray['resources']['customerId']);
     }
-}
-
-/**
- * Dummy class to verify certain behaviour.
- *
- * @package heidelpay\MgwPhpSdk\test\unit
- */
-class DummyHeidelpayResource extends AbstractHeidelpayResource
-{
-    /** @var Customer $customer */
-    private $customer;
 
     /**
-     * DummyHeidelpayResource constructor.
-     * @param Customer $customer
+     * Verify null is returned as externalId if the class does not implement the getter any.
+     *
+     * @test
+     *
+     * @throws ExpectationFailedException
      */
-    public function __construct(Customer $customer)
+    public function getExternalIdShouldReturnNullIfItIsNotImplementedInTheExtendingClass()
     {
-        $this->customer = $customer;
-        parent::__construct();
-    }
-
-    public function getLinkedResources(): array
-    {
-        return ['customer' => $this->customer];
+        $customer = new Customer('Max', ' Mustermann');
+        $customer->setId('MyTestId');
+        $dummy = new DummyHeidelPayResource($customer);
+        $this->assertNull($dummy->getExternalId());
     }
 }
