@@ -278,4 +278,21 @@ class AbstractHeidelpayResourceTest extends TestCase
             '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
         $this->assertEquals($expectedJson, $customer->jsonSerialize());
     }
+
+    /**
+     * Verify that empty values are not set on expose.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function nullValuesShouldBeUnsetOnExpose()
+    {
+        $customer = new Customer();
+        $customer->setEmail('my.email@test.com');
+        $this->assertArrayHasKey('email', $customer->expose());
+
+        $customer->setEmail(null);
+        $this->assertArrayNotHasKey('email', $customer->expose());
+    }
 }
