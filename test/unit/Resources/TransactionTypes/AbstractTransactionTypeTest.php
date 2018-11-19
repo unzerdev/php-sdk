@@ -151,6 +151,7 @@ class AbstractTransactionTypeTest extends TestCase
      * Verify payment object is fetched on fetchPayment call using the Heidelpays resource service object.
      *
      * @test
+     *
      * @throws \RuntimeException
      * @throws \ReflectionException
      * @throws HeidelpayApiException

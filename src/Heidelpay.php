@@ -176,6 +176,7 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * @param ResourceService $resourceService
+     *
      * @return Heidelpay
      */
     public function setResourceService(ResourceService $resourceService): Heidelpay
@@ -196,6 +197,7 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * @param PaymentService $paymentService
+     *
      * @return Heidelpay
      */
     public function setPaymentService(PaymentService $paymentService): Heidelpay
