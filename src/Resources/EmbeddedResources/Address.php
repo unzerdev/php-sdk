@@ -20,9 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/resources
+ * @package  heidelpay/mgw_sdk/resources/embedded_resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpay\MgwPhpSdk\Resources\EmbeddedResources;
+
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 class Address extends AbstractHeidelpayResource
 {

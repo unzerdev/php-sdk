@@ -25,8 +25,8 @@
 namespace heidelpay\MgwPhpSdk\test\Fixtures;
 
 use heidelpay\MgwPhpSdk\Constants\Salutations;
-use heidelpay\MgwPhpSdk\Resources\Address;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
 
 trait CustomerFixtureTrait
 {
