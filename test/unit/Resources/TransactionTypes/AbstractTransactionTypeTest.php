@@ -27,6 +27,7 @@ namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class AbstractTransactionTypeTest extends TestCase
@@ -60,5 +61,25 @@ class AbstractTransactionTypeTest extends TestCase
         $this->assertEquals($date, $transactionType->getDate());
         $this->assertNull($transactionType->getExternalId());
         $this->assertEquals($payment->getId(), $transactionType->getPaymentId());
+    }
+
+    /**
+     * Verify getRedirectUrl() calls Payment::getRedirectUrl().
+     *
+     * @test
+     * @throws Exception
+     * @throws \ReflectionException
+     * @throws RuntimeException
+     */
+    public function getRedirectUrlShouldCallPaymentGetRedirectUrl()
+    {
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getRedirectUrl'])->getMock();
+        $paymentMock->expects($this->once())->method('getRedirectUrl')->willReturn('https://my-redirect-url.test');
+
+        $transactionType = new DummyTransactionType();
+
+        /** @var Payment $paymentMock */
+        $transactionType->setPayment($paymentMock);
+        $this->assertEquals('https://my-redirect-url.test', $transactionType->getRedirectUrl());
     }
 }
