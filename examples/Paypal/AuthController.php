@@ -46,8 +46,6 @@ try {
     $authorization = $heidelpay->authorize(12.0, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL, $customer);
 
     addSuccess('Redirect to: ' . $authorization->getRedirectUrl());
-
-
 } catch (HeidelpayApiException $e) {
     //#######  4. In case of an error redirect to your failure page. ###################################################
     returnError($e->getClientMessage());

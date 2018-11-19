@@ -47,7 +47,7 @@ class PaymentTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
-    public function PaymentShouldBeFetchableById()
+    public function paymentShouldBeFetchableById()
     {
         $authorize = $this->createAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorize->getPayment()->getId());

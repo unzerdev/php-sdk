@@ -58,7 +58,6 @@ try {
     //#######  6. Fetch the payment object to get the current state. ###################################################
     $payment = $charge->getPayment();
     addInfo('The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.');
-
 } catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
     returnError($e->getClientMessage());
 }

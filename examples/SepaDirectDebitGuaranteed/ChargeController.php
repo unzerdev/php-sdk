@@ -43,7 +43,6 @@ try {
 
     //#######  3. Create a charge with a new customer. #################################################################
     $charge = $heidelpay->charge(11.0, Currencies::EURO, $paymentTypeId, RESULT_CONTROLLER_URL, $customer);
-
 } catch (HeidelpayApiException $e) {
     //#######  4. In case of an error redirect to your failure page. ###################################################
     redirect(FAILURE_URL);

@@ -45,7 +45,6 @@ try {
     //#######  3. Create an authorization (aka reservation) ############################################################
     $customer      = new Customer('Linda', 'Heideich');
     $authorization = $heidelpay->authorize(12.99, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL, $customer);
-
 } catch (HeidelpayApiException $e) {
     //#######  4. In case of an error redirect to your failure page. ###################################################
 }

@@ -43,7 +43,11 @@ require_once __DIR__ . '/../../../../autoload.php';
                 Test Credit Card data
             </div>
             <div class="content">
-                <p>Please use the following test data with this example. Refer to our <a href="https://docs.heidelpay.com/docs/testdata" target="_blank">documentation</a> for additional test data.</p>
+                <p>
+                    Please use the following test data with this example.
+                    Refer to our <a href="https://docs.heidelpay.com/docs/testdata"
+                                    target="_blank">documentation</a> for additional test data.
+                </p>
                 <table class="ui celled table">
                     <thead>
                     <tr>

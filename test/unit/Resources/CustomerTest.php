@@ -25,6 +25,7 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase

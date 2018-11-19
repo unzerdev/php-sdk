@@ -42,5 +42,9 @@ interface HttpAdapterInterface
      *
      * @return string result json of the transaction
      */
-    public function send($uri = null, AbstractHeidelpayResource $heidelpayResource = null, $httpMethod = self::REQUEST_POST): string;
+    public function send(
+        $uri = null,
+        AbstractHeidelpayResource $heidelpayResource = null,
+        $httpMethod = self::REQUEST_POST
+    ): string;
 }
