@@ -34,7 +34,7 @@ class Amount extends AbstractHeidelpayResource
     private $remaining = 0.0;
 
     /** @var string $currency */
-    private $currency = '';
+    private $currency;
 
     //<editor-fold desc="Getters/Setters">
 
@@ -115,9 +115,9 @@ class Amount extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCurrency(): string
+    public function getCurrency()
     {
         return $this->currency;
     }
