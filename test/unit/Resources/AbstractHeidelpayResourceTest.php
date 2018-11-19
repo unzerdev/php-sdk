@@ -26,6 +26,7 @@ namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Address;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use PHPUnit\Framework\Exception;
@@ -294,5 +295,49 @@ class AbstractHeidelpayResourceTest extends TestCase
 
         $customer->setEmail(null);
         $this->assertArrayNotHasKey('email', $customer->expose());
+    }
+
+    /**
+     * Verify that ids of linked resources are added.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function idsOfLinkedResourcesShouldBeAddedOnExpose()
+    {
+        $customer = new Customer('Max', ' Mustermann');
+        $customer->setId('MyTestId');
+        $dummy = new DummyHeidelpayResource($customer);
+        $dummyArray = $dummy->expose();
+        $this->assertArrayHasKey('resources', $dummyArray);
+        $this->assertArrayHasKey('customerId', $dummyArray['resources']);
+        $this->assertEquals('MyTestId', $dummyArray['resources']['customerId']);
+    }
+}
+
+/**
+ * Dummy class to verify certain behaviour.
+ *
+ * @package heidelpay\MgwPhpSdk\test\unit
+ */
+class DummyHeidelpayResource extends AbstractHeidelpayResource
+{
+    /** @var Customer $customer */
+    private $customer;
+
+    /**
+     * DummyHeidelpayResource constructor.
+     * @param Customer $customer
+     */
+    public function __construct(Customer $customer)
+    {
+        $this->customer = $customer;
+        parent::__construct();
+    }
+
+    public function getLinkedResources(): array
+    {
+        return ['customer' => $this->customer];
     }
 }
