@@ -74,9 +74,9 @@ class Authorization extends AbstractTransactionType
     //<editor-fold desc="Setters/Getters">
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmount(): float
+    public function getAmount()
     {
         return $this->amount;
     }
@@ -93,9 +93,9 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCurrency(): string
+    public function getCurrency()
     {
         return $this->currency;
     }
@@ -103,18 +103,18 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $currency
      *
-     * @return AbstractHeidelpayResource
+     * @return self
      */
-    public function setCurrency($currency): AbstractHeidelpayResource
+    public function setCurrency($currency): self
     {
         $this->currency = $currency;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getReturnUrl(): string
+    public function getReturnUrl()
     {
         return $this->returnUrl;
     }
@@ -122,9 +122,9 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $returnUrl
      *
-     * @return AbstractHeidelpayResource
+     * @return self
      */
-    public function setReturnUrl($returnUrl): AbstractHeidelpayResource
+    public function setReturnUrl($returnUrl): self
     {
         $this->returnUrl = $returnUrl;
         return $this;
@@ -141,9 +141,9 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $iban
      *
-     * @return Authorization
+     * @return self
      */
-    public function setIban(string $iban): Authorization
+    public function setIban(string $iban): self
     {
         $this->iban = $iban;
         return $this;
@@ -160,9 +160,9 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $bic
      *
-     * @return Authorization
+     * @return self
      */
-    public function setBic(string $bic): Authorization
+    public function setBic(string $bic): self
     {
         $this->bic = $bic;
         return $this;
@@ -179,9 +179,9 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $holder
      *
-     * @return Authorization
+     * @return self
      */
-    public function setHolder(string $holder): Authorization
+    public function setHolder(string $holder): self
     {
         $this->holder = $holder;
         return $this;
@@ -198,9 +198,9 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $descriptor
      *
-     * @return Authorization
+     * @return self
      */
-    public function setDescriptor(string $descriptor): Authorization
+    public function setDescriptor(string $descriptor): self
     {
         $this->descriptor = $descriptor;
         return $this;
