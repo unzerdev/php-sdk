@@ -24,7 +24,9 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
+use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -73,5 +75,25 @@ class CustomerTest extends TestCase
 
         $customer->setCompany('heidelpay GmbH');
         $this->assertEquals('heidelpay GmbH', $customer->getCompany());
+    }
+
+    /**
+     * Verify salutation only uses the given values.
+     *
+     * @test
+     *
+     * @throws ExpectationFailedException
+     * @throws Exception
+     */
+    public function salutationShouldOnlyTakeTheAllowedValues()
+    {
+        $customer = new Customer();
+        $this->assertEquals(Salutations::UNKNOWN, $customer->getSalutation());
+        $customer->setSalutation(Salutations::MRS);
+        $this->assertEquals(Salutations::MRS, $customer->getSalutation());
+        $customer->setSalutation(Salutations::MR);
+        $this->assertEquals(Salutations::MR, $customer->getSalutation());
+        $customer->setSalutation('MySalutation');
+        $this->assertEquals(Salutations::UNKNOWN, $customer->getSalutation());
     }
 }
