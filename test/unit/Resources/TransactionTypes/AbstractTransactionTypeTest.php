@@ -138,8 +138,8 @@ class AbstractTransactionTypeTest extends TestCase
     public function updatePaymentShouldOnlyBeCalledOnNotRequests($method, $timesCalled)
     {
         $transactionTypeMock =
-            $this->getMockBuilder(DummyTransactionType::class)->setMethods(['updatePayment'])->getMock();
-        $transactionTypeMock->expects($this->exactly($timesCalled))->method('updatePayment');
+            $this->getMockBuilder(DummyTransactionType::class)->setMethods(['fetchPayment'])->getMock();
+        $transactionTypeMock->expects($this->exactly($timesCalled))->method('fetchPayment');
 
         /** @var AbstractTransactionType $transactionTypeMock */
         $transactionTypeMock->handleResponse(new \stdClass(), $method);
