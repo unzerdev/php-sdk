@@ -201,11 +201,9 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      */
     public function fetchPayment()
     {
-        if (!$this instanceof Payment) {
-            $payment = $this->getPayment();
-            if ($payment instanceof AbstractHeidelpayResource) {
-                $this->fetchResource($payment);
-            }
+        $payment = $this->getPayment();
+        if ($payment instanceof AbstractHeidelpayResource) {
+            $this->fetchResource($payment);
         }
     }
 }
