@@ -161,25 +161,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return AbstractTransactionType
-     */
-    public function setUrl(string $url): AbstractTransactionType
-    {
-        $this->url = $url;
-        return $this;
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
