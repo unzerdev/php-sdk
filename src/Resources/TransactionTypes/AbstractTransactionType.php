@@ -199,7 +199,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    private function updatePayment()
+    public function updatePayment()
     {
         if (!$this instanceof Payment) {
             $payment = $this->getPayment();

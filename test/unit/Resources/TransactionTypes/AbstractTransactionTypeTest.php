@@ -24,8 +24,10 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
 
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -116,4 +118,44 @@ class AbstractTransactionTypeTest extends TestCase
         $this->assertEquals('myRedirectUrl', $payment->getRedirectUrl());
         $this->assertEquals('myNewPaymentId', $payment->getId());
     }
+
+    /**
+     * Verify updatePayment is never called after a Get-Request.
+     *
+     * @test
+     * @dataProvider updatePaymentDataProvider
+     * @param string $method
+     * @param integer $timesCalled
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function updatePaymentShouldOnlyBeCalledOnNotRequests($method, $timesCalled)
+    {
+        $transactionTypeMock =
+            $this->getMockBuilder(DummyTransactionType::class)->setMethods(['updatePayment'])->getMock();
+        $transactionTypeMock->expects($this->exactly($timesCalled))->method('updatePayment');
+
+        /** @var AbstractTransactionType $transactionTypeMock */
+        $transactionTypeMock->handleResponse(new \stdClass(), $method);
+    }
+
+    //<editor-fold desc="Data Providers">
+    /**
+     * DataProvider for updatePaymentShouldOnlyBeCalledOnGetRequests.
+     *
+     * @return array
+     */
+    public function updatePaymentDataProvider(): array
+    {
+        return [
+            HttpAdapterInterface::REQUEST_GET => [HttpAdapterInterface::REQUEST_GET, 0],
+            HttpAdapterInterface::REQUEST_POST => [HttpAdapterInterface::REQUEST_POST, 1],
+            HttpAdapterInterface::REQUEST_PUT => [HttpAdapterInterface::REQUEST_PUT, 1],
+            HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, 1],
+        ];
+    }
+    //</editor-fold>
 }
