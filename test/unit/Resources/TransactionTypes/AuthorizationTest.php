@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -55,5 +56,50 @@ class AuthorizationTest extends TestCase
         $this->assertEquals(567.8, $authorization->getAmount());
         $this->assertEquals('myNewCurrency', $authorization->getCurrency());
         $this->assertEquals('https://another-return-url.test', $authorization->getReturnUrl());
+    }
+
+    /**
+     * Verify that an Authorization can be updated on handle response.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function anAuthorizationShouldBeUpdatedThroughResponseHandling()
+    {
+        $authorization = new Authorization();
+        $this->assertNull($authorization->getAmount());
+        $this->assertNull($authorization->getCurrency());
+        $this->assertNull($authorization->getReturnUrl());
+        $this->assertNull($authorization->getIban());
+        $this->assertNull($authorization->getBic());
+        $this->assertNull($authorization->getHolder());
+        $this->assertNull($authorization->getDescriptor());
+
+        $authorization = new Authorization(123.4, 'myCurrency', 'https://my-return-url.test');
+        $this->assertEquals(123.4, $authorization->getAmount());
+        $this->assertEquals('myCurrency', $authorization->getCurrency());
+        $this->assertEquals('https://my-return-url.test', $authorization->getReturnUrl());
+
+        $testResponse = new \stdClass();
+        $testResponse->amount = '789.0';
+        $testResponse->currency = 'TestCurrency';
+        $testResponse->returnUrl = 'https://return-url.test';
+        $testResponse->Iban = 'DE89370400440532013000';
+        $testResponse->Bic = 'COBADEFFXXX';
+        $testResponse->Holder = 'Merchant Khang';
+        $testResponse->Descriptor = '4065.6865.6416';
+
+        $authorization->handleResponse($testResponse);
+        $this->assertEquals(789.0, $authorization->getAmount());
+        $this->assertEquals('TestCurrency', $authorization->getCurrency());
+        $this->assertEquals('https://return-url.test', $authorization->getReturnUrl());
+        $this->assertEquals('DE89370400440532013000', $authorization->getIban());
+        $this->assertEquals('COBADEFFXXX', $authorization->getBic());
+        $this->assertEquals('Merchant Khang', $authorization->getHolder());
+        $this->assertEquals('4065.6865.6416', $authorization->getDescriptor());
     }
 }

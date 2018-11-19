@@ -25,7 +25,6 @@
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Traits\HasCancellations;
@@ -131,9 +130,12 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * Returns the IBAN of the account the customer needs to transfer the amount to.
+     * E. g. invoice, prepayment, etc.
+     *
+     * @return string|null
      */
-    public function getIban(): string
+    public function getIban()
     {
         return $this->iban;
     }
@@ -143,16 +145,19 @@ class Authorization extends AbstractTransactionType
      *
      * @return self
      */
-    public function setIban(string $iban): self
+    protected function setIban(string $iban): self
     {
         $this->iban = $iban;
         return $this;
     }
 
     /**
-     * @return string
+     * Returns the BIC of the account the customer needs to transfer the amount to.
+     * E. g. invoice, prepayment, etc.
+     *
+     * @return string|null
      */
-    public function getBic(): string
+    public function getBic()
     {
         return $this->bic;
     }
@@ -162,16 +167,19 @@ class Authorization extends AbstractTransactionType
      *
      * @return self
      */
-    public function setBic(string $bic): self
+    protected function setBic(string $bic): self
     {
         $this->bic = $bic;
         return $this;
     }
 
     /**
-     * @return string
+     * Returns the holder of the account the customer needs to transfer the amount to.
+     * E. g. invoice, prepayment, etc.
+     *
+     * @return string|null
      */
-    public function getHolder(): string
+    public function getHolder()
     {
         return $this->holder;
     }
@@ -181,16 +189,19 @@ class Authorization extends AbstractTransactionType
      *
      * @return self
      */
-    public function setHolder(string $holder): self
+    protected function setHolder(string $holder): self
     {
         $this->holder = $holder;
         return $this;
     }
 
     /**
-     * @return string
+     * Returns the Descriptor the customer needs to use when transferring the amount.
+     * E. g. invoice, prepayment, etc.
+     *
+     * @return string|null
      */
-    public function getDescriptor(): string
+    public function getDescriptor()
     {
         return $this->descriptor;
     }
@@ -200,7 +211,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return self
      */
-    public function setDescriptor(string $descriptor): self
+    protected function setDescriptor(string $descriptor): self
     {
         $this->descriptor = $descriptor;
         return $this;
