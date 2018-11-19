@@ -56,7 +56,7 @@ class Payment extends AbstractHeidelpayResource
 
     //<editor-fold desc="Properties">
     /** @var string $redirectUrl */
-    private $redirectUrl = '';
+    private $redirectUrl;
 
     /** @var Authorization $authorization */
     private $authorization;
@@ -82,9 +82,9 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Returns the redirectUrl set by the API.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRedirectUrl(): string
+    public function getRedirectUrl()
     {
         return $this->redirectUrl;
     }
