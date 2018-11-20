@@ -25,9 +25,15 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class AuthorizationTest extends TestCase
@@ -101,5 +107,87 @@ class AuthorizationTest extends TestCase
         $this->assertEquals('COBADEFFXXX', $authorization->getBic());
         $this->assertEquals('Merchant Khang', $authorization->getHolder());
         $this->assertEquals('4065.6865.6416', $authorization->getDescriptor());
+    }
+
+    /**
+     * Verify path.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function getResourcePathShouldReturnCorrectUri()
+    {
+        $this->assertEquals('authorize', (new Authorization())->getResourcePath());
+    }
+
+    /**
+     * Verify getLinkedResources throws exception if the paymentType is not set.
+     *
+     * @test
+     * @throws \RuntimeException
+     */
+    public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Payment type is undefined!');
+
+        (new Authorization())->getLinkedResources();
+    }
+
+    /**
+     * Verify linked resource.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function getLinkedResourceShouldReturnResourcesBelongingToAuthorization()
+    {
+        $heidelpayObj    = new Heidelpay('s-priv-123345');
+        $paymentType     = (new Sofort())->setId('123');
+        $customer        = (new Customer('Max', 'Mustermann'))->setId('123');
+        $payment         = new Payment();
+        $payment->setParentResource($heidelpayObj)->setPaymentType($paymentType)->setCustomer($customer);
+
+        $authorize       = (new Authorization())->setParentResource($payment)->setPayment($payment);
+        $linkedResources = $authorize->getLinkedResources();
+        $this->assertArrayHasKey('customer', $linkedResources);
+        $this->assertArrayHasKey('type', $linkedResources);
+
+        $this->assertSame($paymentType, $linkedResources['type']);
+        $this->assertSame($customer, $linkedResources['customer']);
+    }
+
+    /**
+     * Verify cancel() calls cancel Authorization on heidelpay object with the given amount.
+     *
+     * @test
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function cancelShouldCallCancelAuthorizationOnHeidelpayObject()
+    {
+        $authorization =  new Authorization();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['cancelAuthorization'])
+            ->getMock();
+        $heidelpayMock->expects($this->exactly(2))
+            ->method('cancelAuthorization')->willReturn(new Cancellation())
+            ->withConsecutive(
+                [$this->identicalTo($authorization), $this->isNull()],
+                [$this->identicalTo($authorization), 321.9]
+            );
+
+        /** @var Heidelpay $heidelpayMock */
+        $authorization->setParentResource($heidelpayMock);
+        $authorization->cancel();
+        $authorization->cancel(321.9);
     }
 }
