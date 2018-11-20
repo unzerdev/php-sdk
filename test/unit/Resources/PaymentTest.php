@@ -270,6 +270,59 @@ class PaymentTest extends TestCase
         $this->assertSame($customer, $payment->getCustomer());
     }
 
+    /**
+     * Verify setCustomer will try to fetch the customer if it is passed as string (i. e. id).
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function setCustomerShouldFetchCustomerIfItIsPassedAsIdString()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['fetchCustomer'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchCustomer')->with('MyCustomerId');
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->setCustomer('MyCustomerId');
+    }
+
+    /**
+     * Verify setCustomer will create the resource if it is passed as object without id.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function setCustomerShouldCreateCustomerIfItIsPassedAsObjectWithoutId()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $customer = new Customer();
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['createCustomer'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('createCustomer')->with($customer);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->setCustomer($customer);
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
