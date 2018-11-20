@@ -487,49 +487,10 @@ class Payment extends AbstractHeidelpayResource
         }
 
         if (isset($response->resources)) {
-            $resources = $response->resources;
-
-            if (isset($resources->paymentId)) {
-                $this->setId($resources->paymentId);
-            }
-
-            if (isset($resources->customerId) && !empty($resources->customerId)) {
-                if (!$this->customer instanceof Customer) {
-                    $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
-                } else {
-                    $this->getHeidelpayObject()->fetchCustomer($this->customer);
-                }
-            }
-
-            if (isset($resources->typeId) && !empty($resources->typeId)) {
-                if (!$this->paymentType instanceof BasePaymentType) {
-                    $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
-                }
-            }
+            $this->updateResponseResources($response->resources);
         }
-        if (isset($response->transactions) && !empty($response->transactions)) {
-            foreach ($response->transactions as $transaction) {
-                switch ($transaction->type) {
-                    case TransactionTypes::AUTHORIZATION:
-                        $this->updateAuthorizationTransaction($transaction);
-                        break;
-                    case TransactionTypes::CHARGE:
-                        $this->updateChargeTransaction($transaction);
-                        break;
-                    case TransactionTypes::REVERSAL:
-                        $this->updateReversalTransaction($transaction);
-                        break;
-                    case TransactionTypes::REFUND:
-                        $this->updateRefundTransaction($transaction);
-                        break;
-                    case TransactionTypes::SHIPMENT:
-                        $this->updateShipmentTransaction($transaction);
-                        break;
-                    default:
-                        // skip
-                        break;
-                }
-            }
+        if (isset($response->transactions)) {
+            $this->updateResponseTransactions($response->transactions);
         }
     }
 
@@ -540,7 +501,6 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Performs a Cancellation transaction on the Payment.
      * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
-     * todo: What happens on cancel with amount?
      *
      * @param float|null $amount The amount to canceled.
      *
@@ -645,7 +605,72 @@ class Payment extends AbstractHeidelpayResource
 
     //</editor-fold>
 
-    //<editor-fold desc="Transaction Update">
+    //<editor-fold desc="Payment Update">
+
+    /**
+     * @param array $transactions
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    private function updateResponseTransactions(array $transactions = [])
+    {
+        if (empty($transactions)) {
+            return;
+        }
+
+        foreach ($transactions as $transaction) {
+            switch ($transaction->type) {
+                case TransactionTypes::AUTHORIZATION:
+                    $this->updateAuthorizationTransaction($transaction);
+                    break;
+                case TransactionTypes::CHARGE:
+                    $this->updateChargeTransaction($transaction);
+                    break;
+                case TransactionTypes::REVERSAL:
+                    $this->updateReversalTransaction($transaction);
+                    break;
+                case TransactionTypes::REFUND:
+                    $this->updateRefundTransaction($transaction);
+                    break;
+                case TransactionTypes::SHIPMENT:
+                    $this->updateShipmentTransaction($transaction);
+                    break;
+                default:
+                    // skip
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Handles the resources from a response and updates the payment object accordingly.
+     *
+     * @param $resources
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    private function updateResponseResources($resources)
+    {
+        if (isset($resources->paymentId)) {
+            $this->setId($resources->paymentId);
+        }
+
+        if (isset($resources->customerId) && !empty($resources->customerId)) {
+            if (!$this->customer instanceof Customer) {
+                $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
+            } else {
+                $this->getHeidelpayObject()->fetchCustomer($this->customer);
+            }
+        }
+
+        if (isset($resources->typeId) && !empty($resources->typeId)) {
+            if (!$this->paymentType instanceof BasePaymentType) {
+                $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
+            }
+        }
+    }
 
     /**
      * This updates the local Authorization object referenced by this Payment with the given Authorization transaction
