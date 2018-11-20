@@ -400,10 +400,10 @@ class Payment extends AbstractHeidelpayResource
     public function getShipmentById($shipmentId, $lazy = false)
     {
         /** @var Shipment $shipment */
-        foreach ($this->shipments as $shipment) {
+        foreach ($this->getShipments() as $shipment) {
             if ($shipment->getId() === $shipmentId) {
                 if (!$lazy) {
-                    $this->fetchResource($shipment);
+                    $this->getResource($shipment);
                 }
                 return $shipment;
             }

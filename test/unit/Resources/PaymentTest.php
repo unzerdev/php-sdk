@@ -33,6 +33,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
@@ -536,6 +537,69 @@ class PaymentTest extends TestCase
 
         $this->assertSame($cancellation, $paymentMock->getCancellation('cancellation123'));
         $this->assertNull($paymentMock->getCancellation('cancellation1234'));
+    }
+
+    /**
+     * Verify Shipments are handled properly.
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function shipmentsShouldBeHandledProperly()
+    {
+        $payment = new Payment();
+        $this->assertIsEmptyArray($payment->getShipments());
+
+        $shipment1 = (new Shipment())->setId('firstShipment');
+        $shipment2 = (new Shipment())->setId('secondShipment');
+
+        $subset[] = $shipment1;
+        $payment->addShipment($shipment1);
+        $this->assertArraySubset($subset, $payment->getShipments());
+
+        $subset[] = $shipment2;
+        $payment->addShipment($shipment2);
+        $this->assertArraySubset($subset, $payment->getShipments());
+
+        $this->assertSame($shipment2, $payment->getShipmentById('secondShipment', true));
+        $this->assertSame($shipment1, $payment->getShipmentById('firstShipment', true));
+    }
+
+    /**
+     * Verify getCancellation fetches cancellation if it exists and lazy loading is false.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function getShipmentByIdShouldReturnShipmentIfItExistsAndFetchItIfNotLazy()
+    {
+        $shipment = (new Shipment())->setId('shipment123');
+
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getShipments'])->getMock();
+        $paymentMock->expects($this->exactly(2))->method('getShipments')->willReturn([$shipment]);
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('getResource')->with($shipment);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+
+        /** @var Payment $paymentMock */
+        $paymentMock->setParentResource($heidelpayObj);
+
+        $this->assertSame($shipment, $paymentMock->getShipmentById('shipment123'));
+        $this->assertNull($paymentMock->getShipmentById('shipment1234'));
     }
 
     //<editor-fold desc="Helpers">
