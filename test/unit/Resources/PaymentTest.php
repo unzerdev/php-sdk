@@ -26,6 +26,7 @@ namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -243,6 +244,30 @@ class PaymentTest extends TestCase
         $this->assertSame($charge1, $payment->getCharge(0, true));
         $this->assertSame($charge2, $payment->getCharge(1, true));
         $this->assertNull($payment->getCharge(2));
+    }
+
+    /**
+     * Verify setCustomer does nothing if the passed customer is empty.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function setCustomerShouldDoNothingIfTheCustomerIsEmpty()
+    {
+        $heidelpayObj = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpayObj);
+        $customer = (new Customer('Max', 'Mustermann'))->setId('myCustomer');
+        $payment->setCustomer($customer);
+
+        $this->assertSame($customer, $payment->getCustomer());
+
+        $payment->setCustomer(0);
+        $this->assertSame($customer, $payment->getCustomer());
+
+        $payment->setCustomer(null);
+        $this->assertSame($customer, $payment->getCustomer());
     }
 
     //<editor-fold desc="Helpers">
