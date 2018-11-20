@@ -416,7 +416,7 @@ class PaymentTest extends TestCase
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
-    public function getCancellationsShouldFetchAllCancellationsOfCorrespondingTransactions()
+    public function getCancellationsShouldCollectAllCancellationsOfCorrespondingTransactions()
     {
         $payment = new Payment();
         $cancellation1 = (new Cancellation())->setId('cancellation1');
@@ -459,6 +459,83 @@ class PaymentTest extends TestCase
         /** @var Charge $charge3 */
         $payment->addCharge($charge3);
         $this->assertArraySubset($expectedCancellations, $payment->getCancellations());
+    }
+
+    /**
+     * Verify getCancellation calls getCancellations and returns null if cancellation does not exist.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function getCancellationShouldCallGetCancellationsAndReturnNullIfNoCancellationExists()
+    {
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCancellations'])->getMock();
+        $paymentMock->expects($this->once())->method('getCancellations')->willReturn([]);
+
+        /** @var Payment $paymentMock */
+        $this->assertNull($paymentMock->getCancellation('123'));
+    }
+
+    /**
+     * Verify getCancellation returns cancellation if it exists.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function getCancellationShouldReturnCancellationIfItExists()
+    {
+        $cancellation1 = (new Cancellation())->setId('cancellation1');
+        $cancellation2 = (new Cancellation())->setId('cancellation2');
+        $cancellation3 = (new Cancellation())->setId('cancellation3');
+        $cancellations = [$cancellation1, $cancellation2, $cancellation3];
+
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCancellations'])->getMock();
+        $paymentMock->expects($this->once())->method('getCancellations')->willReturn($cancellations);
+
+        /** @var Payment $paymentMock */
+        $this->assertSame($cancellation2, $paymentMock->getCancellation('cancellation2', true));
+    }
+
+    /**
+     * Verify getCancellation fetches cancellation if it exists and lazy loading is false.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function getCancellationShouldReturnCancellationIfItExistsAndFetchItIfNotLazy()
+    {
+        $cancellation = (new Cancellation())->setId('cancellation123');
+
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCancellations'])->getMock();
+        $paymentMock->expects($this->exactly(2))->method('getCancellations')->willReturn([$cancellation]);
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('getResource')->with($cancellation);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+
+        /** @var Payment $paymentMock */
+        $paymentMock->setParentResource($heidelpayObj);
+
+        $this->assertSame($cancellation, $paymentMock->getCancellation('cancellation123'));
+        $this->assertNull($paymentMock->getCancellation('cancellation1234'));
     }
 
     //<editor-fold desc="Helpers">

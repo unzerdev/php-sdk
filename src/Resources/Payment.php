@@ -318,12 +318,12 @@ class Payment extends AbstractHeidelpayResource
      *                               via API and possibly containing just the meta data known from the Payment object
      *                               response.
      *
-     * @return Cancellation The retrieved Cancellation object.
+     * @return Cancellation|null The retrieved Cancellation object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function getCancellation($cancellationId, $lazy = false): Cancellation
+    public function getCancellation($cancellationId, $lazy = false)
     {
         /** @var Cancellation $cancellation */
         foreach ($this->getCancellations() as $cancellation) {
@@ -335,7 +335,7 @@ class Payment extends AbstractHeidelpayResource
             }
         }
 
-        throw new \RuntimeException('Cancellation #' . $cancellationId . ' does not exist.');
+        return null;
     }
 
     /**
