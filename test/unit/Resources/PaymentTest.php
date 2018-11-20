@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
@@ -89,6 +90,159 @@ class PaymentTest extends TestCase
         $payment->setParentResource($heidelpayObj);
 
         $payment->getAuthorization();
+    }
+
+    /**
+     * Verify getAuthorization should try to fetch resource if lazy loading is off and the authorization is not null.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function getAuthorizationShouldNotFetchAuthorizeIfNotLazyAndAuthIsNull()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->never())->method('getResource');
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->getAuthorization();
+    }
+
+    /**
+     * Verify Charge array is handled properly.
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function chargesShouldBeHandledProperly()
+    {
+        $payment = new Payment();
+        $this->assertIsEmptyArray($payment->getCharges());
+
+        $charge1 = (new Charge())->setId('firstCharge');
+        $charge2 = (new Charge())->setId('secondCharge');
+
+        $subset[] = $charge1;
+        $payment->addCharge($charge1);
+        $this->assertArraySubset($subset, $payment->getCharges());
+
+        $subset[] = $charge2;
+        $payment->addCharge($charge2);
+        $this->assertArraySubset($subset, $payment->getCharges());
+
+        $this->assertSame($charge2, $payment->getChargeById('secondCharge', true));
+        $this->assertSame($charge1, $payment->getChargeById('firstCharge', true));
+
+        $this->assertSame($charge1, $payment->getCharge(0, true));
+        $this->assertSame($charge2, $payment->getCharge(1, true));
+    }
+
+    /**
+     * Verify getChargeById will fetch the Charge if lazy loading is off and the charge exists.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function getChargeByIdShouldFetchChargeIfItExistsAndLazyLoadingIsOff()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $charge1 = (new Charge())->setId('firstCharge');
+        $charge2 = (new Charge())->setId('secondCharge');
+
+        $payment->addCharge($charge1);
+        $payment->addCharge($charge2);
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->exactly(2))
+            ->method('getResource')
+            ->withConsecutive([$charge1], [$charge2]);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->getChargeById('firstCharge');
+        $payment->getChargeById('secondCharge');
+    }
+
+    /**
+     * Verify getCharge will fetch the Charge if lazy loading is off and the charge exists.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function getChargeShouldFetchChargeIfItExistsAndLazyLoadingIsOff()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $charge1 = (new Charge())->setId('firstCharge');
+        $charge2 = (new Charge())->setId('secondCharge');
+
+        $payment->addCharge($charge1);
+        $payment->addCharge($charge2);
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->exactly(2))
+            ->method('getResource')
+            ->withConsecutive([$charge1], [$charge2]);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->getCharge(0);
+        $payment->getCharge(1);
+    }
+
+    /**
+     * Verify getCharge and getChargeById will return null if the Charge does not exist.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function getChargeMethodsShouldReturnNullIfTheChargeIdUnknown()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $charge1 = (new Charge())->setId('firstCharge');
+        $charge2 = (new Charge())->setId('secondCharge');
+        $payment->addCharge($charge1);
+        $payment->addCharge($charge2);
+
+        $this->assertSame($charge1, $payment->getChargeById('firstCharge', true));
+        $this->assertSame($charge2, $payment->getChargeById('secondCharge', true));
+        $this->assertNull($payment->getChargeById('thirdCharge'));
+
+        $this->assertSame($charge1, $payment->getCharge(0, true));
+        $this->assertSame($charge2, $payment->getCharge(1, true));
+        $this->assertNull($payment->getCharge(2));
     }
 
     //<editor-fold desc="Helpers">
