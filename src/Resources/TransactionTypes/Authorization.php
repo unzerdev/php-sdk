@@ -282,6 +282,6 @@ class Authorization extends AbstractTransactionType
         if (!$payment instanceof Payment) {
             throw new \RuntimeException('Payment object is missing. Try fetching the object first!');
         }
-        return $this->getHeidelpayObject()->chargeAuthorization($payment->getId(), $amount);
+        return $this->getHeidelpayObject()->chargeAuthorization($payment, $amount);
     }
 }

@@ -31,6 +31,7 @@ use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -165,7 +166,7 @@ class AuthorizationTest extends TestCase
     }
 
     /**
-     * Verify cancel() calls cancel Authorization on heidelpay object with the given amount.
+     * Verify cancel() calls cancelAuthorization() on heidelpay object with the given amount.
      *
      * @test
      *
@@ -214,6 +215,39 @@ class AuthorizationTest extends TestCase
 
         $authorization =  new Authorization();
         $authorization->charge($value);
+    }
+
+    /**
+     * Verify charge() calls chargeAuthorization() on heidelpay object with the given amount.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function chargeShouldCallChargeAuthorizationOnHeidelpayObject()
+    {
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['chargeAuthorization'])
+            ->getMock();
+        /** @var Heidelpay $heidelpayMock */
+        $payment = (new Payment())->setParentResource($heidelpayMock)->setId('myPayment');
+        $heidelpayMock->expects($this->exactly(2))
+            ->method('chargeAuthorization')->willReturn(new Charge())
+            ->withConsecutive(
+                [$this->identicalTo($payment), $this->isNull()],
+                [$this->identicalTo($payment), 321.9]
+            );
+
+        $authorization =  new Authorization();
+        $authorization->setParentResource($payment);
+        $authorization->setPayment($payment);
+        $authorization->charge();
+        $authorization->charge(321.9);
     }
 
     //<editor-fold desc="Data Providers">
