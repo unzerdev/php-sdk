@@ -240,7 +240,7 @@ class Authorization extends AbstractTransactionType
         $payment = $this->getPayment();
         $paymentType = $payment ? $payment->getPaymentType() : null;
         if (!$paymentType instanceof BasePaymentType) {
-            throw new \RuntimeException('Payment type is undefined!');
+            throw new \RuntimeException('Payment type is missing!');
         }
 
         return [

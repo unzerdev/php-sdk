@@ -120,7 +120,7 @@ class AuthorizationTest extends TestCase
     public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Payment type is undefined!');
+        $this->expectExceptionMessage('Payment type is missing!');
 
         (new Authorization())->getLinkedResources();
     }
