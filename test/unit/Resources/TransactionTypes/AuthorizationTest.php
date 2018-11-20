@@ -113,6 +113,7 @@ class AuthorizationTest extends TestCase
      * Verify path.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      */
@@ -125,6 +126,7 @@ class AuthorizationTest extends TestCase
      * Verify getLinkedResources throws exception if the paymentType is not set.
      *
      * @test
+     *
      * @throws \RuntimeException
      */
     public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
@@ -139,6 +141,7 @@ class AuthorizationTest extends TestCase
      * Verify linked resource.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
@@ -165,6 +168,7 @@ class AuthorizationTest extends TestCase
      * Verify cancel() calls cancel Authorization on heidelpay object with the given amount.
      *
      * @test
+     *
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
@@ -190,4 +194,43 @@ class AuthorizationTest extends TestCase
         $authorization->cancel();
         $authorization->cancel(321.9);
     }
+
+    /**
+     * Verify charge throws exception if payment is not set.
+     *
+     * @test
+     * @dataProvider chargeValueProvider
+     *
+     * @param float|null $value
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function chargeShouldThrowExceptionIfPaymentIsNotSet($value)
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Payment object is missing. Try fetching the object first!');
+
+        $authorization =  new Authorization();
+        $authorization->charge($value);
+    }
+
+    //<editor-fold desc="Data Providers">
+
+    /**
+     * Provide different amounts
+     *
+     * @return array
+     */
+    public function chargeValueProvider(): array
+    {
+        return [
+            'Amount = null' => [null],
+            'Amount = 0.0' => [0.0],
+            'Amount = 123.8' => [123.8]
+        ];
+    }
+
+    //</editor-fold>
 }
