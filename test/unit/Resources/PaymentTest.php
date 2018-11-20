@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
+use heidelpay\MgwPhpSdk\Constants\PaymentState;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
@@ -625,6 +626,117 @@ class PaymentTest extends TestCase
         $this->assertEquals('MyTestGetCurrency', $payment->getCurrency());
     }
 
+    /**
+     * Verify handleResponse will update stateId.
+     *
+     * @test
+     * @dataProvider stateDataProvider
+     *
+     * @param integer $state
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function handleResponseShouldUpdateStateId($state)
+    {
+        $payment = new Payment();
+        $this->assertEquals(PaymentState::STATE_PENDING, $payment->getState());
+
+        $response = new \stdClass();
+        $response->state = new \stdClass();
+        $response->state->id = $state;
+        $payment->handleResponse($response);
+        $this->assertEquals($state, $payment->getState());
+    }
+
+    /**
+     * Verify handleResponse updates payment id.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function handleResponseShouldUpdatePaymentId()
+    {
+        $payment = (new Payment())->setId('MyPaymentId');
+        $this->assertEquals('MyPaymentId', $payment->getId());
+
+        $response = new \stdClass();
+        $response->resources = new \stdClass();
+        $response->resources->paymentId = 'MyNewPaymentId';
+        $payment->handleResponse($response);
+        $this->assertEquals('MyNewPaymentId', $payment->getId());
+    }
+
+    /**
+     * Verify handleResponse fetches Customer if it is not set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function handleResponseShouldFetchCustomerIfItIsNotSet()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $authorization = (new Authorization())->setParentResource($payment);
+        $payment->setAuthorization($authorization);
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['fetchCustomer'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchCustomer')->with('MyNewCustomerId');
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $this->assertNull($payment->getCustomer());
+
+        $response = new \stdClass();
+        $response->resources = new \stdClass();
+        $response->resources->customerId = 'MyNewCustomerId';
+        $payment->handleResponse($response);
+    }
+
+    /**
+     * Verify handleResponse updates customer if it set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function handleResponseShouldFetchAndUpdateCustomerIfItIsAlreadySet()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $customer = (new Customer())->setId('customerId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('getResource')->with($customer);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+        $payment->setCustomer($customer);
+
+        $response = new \stdClass();
+        $response->resources = new \stdClass();
+        $response->resources->customerId = 'customerId';
+        $payment->handleResponse($response);
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
@@ -640,6 +752,27 @@ class PaymentTest extends TestCase
     {
         $this->assertInternalType('array', $value);
         $this->assertEmpty($value);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Data Providers">
+
+    /**
+     * Provides the different payment states.
+     *
+     * @return array
+     */
+    public function stateDataProvider(): array
+    {
+        return [
+            [PaymentState::STATE_PENDING],
+            [PaymentState::STATE_COMPLETED],
+            [PaymentState::STATE_CANCELED],
+            [PaymentState::STATE_PARTLY],
+            [PaymentState::STATE_PAYMENT_REVIEW],
+            [PaymentState::STATE_CHARGEBACK]
+        ];
     }
 
     //</editor-fold>

@@ -661,7 +661,7 @@ class Payment extends AbstractHeidelpayResource
             if (!$this->customer instanceof Customer) {
                 $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
             } else {
-                $this->getHeidelpayObject()->fetchCustomer($this->customer);
+                $this->getResource($this->customer);
             }
         }
 
