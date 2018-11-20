@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
 use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
@@ -321,6 +322,32 @@ class PaymentTest extends TestCase
         $payment->setParentResource($heidelpayObj);
 
         $payment->setCustomer($customer);
+    }
+
+    /**
+     * Verify setPaymentType will do nothing if the paymentType is empty.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function setPaymentTypeShouldDoNothingIfThePaymentTypeIsEmpty()
+    {
+        $heidelpayObj = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpayObj);
+        $paymentType = (new Sofort())->setId('123');
+
+        $payment->setPaymentType($paymentType);
+        $this->assertSame($paymentType, $payment->getPaymentType());
+
+        $payment->setPaymentType(0);
+        $this->assertSame($paymentType, $payment->getPaymentType());
+
+        $payment->setPaymentType(null);
+        $this->assertSame($paymentType, $payment->getPaymentType());
     }
 
     //<editor-fold desc="Helpers">

@@ -287,7 +287,7 @@ class Payment extends AbstractHeidelpayResource
     public function setPaymentType($paymentType): Payment
     {
         if (empty($paymentType)) {
-            throw new \RuntimeException('Payment type is missing!');
+            return $this;
         }
 
         /** @var Heidelpay $heidelpay */
