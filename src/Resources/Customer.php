@@ -293,7 +293,11 @@ class Customer extends AbstractHeidelpayResource
     //</editor-fold>
 
     //<editor-fold desc="Resource IF">
-    public function getResourcePath(): string
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getResourcePath(): string
     {
         return 'customers';
     }

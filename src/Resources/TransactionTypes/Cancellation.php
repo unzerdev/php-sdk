@@ -44,7 +44,7 @@ class Cancellation extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath()
+    protected function getResourcePath(): string
     {
         return 'cancels';
     }

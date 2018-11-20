@@ -53,7 +53,11 @@ class Shipment extends AbstractTransactionType
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
-    protected function getResourcePath()
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getResourcePath(): string
     {
         return 'shipments';
     }

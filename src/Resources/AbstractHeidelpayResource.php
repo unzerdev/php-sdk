@@ -323,9 +323,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * This returns the path of this resource within the parent resource.
      * Override this if the path does not match the class name.
      *
-     * @return null
+     * @return string
      */
-    protected function getResourcePath()
+    protected function getResourcePath(): string
     {
         return ResourceNameService::getClassShortNameKebapCase(static::class);
     }

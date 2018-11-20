@@ -33,7 +33,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath()
+    protected function getResourcePath(): string
     {
         return 'types/' . parent::getResourcePath();
     }

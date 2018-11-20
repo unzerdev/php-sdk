@@ -460,7 +460,7 @@ class Payment extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath()
+    protected function getResourcePath(): string
     {
         return 'payments';
     }

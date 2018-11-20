@@ -224,7 +224,7 @@ class Authorization extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath()
+    protected function getResourcePath(): string
     {
         return 'authorize';
     }

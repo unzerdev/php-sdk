@@ -111,19 +111,6 @@ class AuthorizationTest extends TestCase
     }
 
     /**
-     * Verify path.
-     *
-     * @test
-     *
-     * @throws Exception
-     * @throws ExpectationFailedException
-     */
-    public function getResourcePathShouldReturnCorrectUri()
-    {
-        $this->assertEquals('authorize', (new Authorization())->getResourcePath());
-    }
-
-    /**
      * Verify getLinkedResources throws exception if the paymentType is not set.
      *
      * @test
