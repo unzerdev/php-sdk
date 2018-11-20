@@ -350,6 +350,59 @@ class PaymentTest extends TestCase
         $this->assertSame($paymentType, $payment->getPaymentType());
     }
 
+    /**
+     * Verify setPaymentType will try to fetch the payment type if it is passed as string (i. e. id).
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function setPaymentTypeShouldFetchResourceIfItIsPassedAsIdString()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['fetchPaymentType'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchPaymentType')->with('MyPaymentId');
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->setPaymentType('MyPaymentId');
+    }
+
+    /**
+     * Verify setCustomer will create the resource if it is passed as object without id.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function setPaymentTypeShouldCreateResourceIfItIsPassedAsObjectWithoutId()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $paymentType = new Sofort();
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['createPaymentType'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('createPaymentType')->with($paymentType);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->setPaymentType($paymentType);
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
