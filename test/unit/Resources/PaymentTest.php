@@ -31,6 +31,7 @@ use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\AssertionFailedError;
@@ -401,6 +402,63 @@ class PaymentTest extends TestCase
         $payment->setParentResource($heidelpayObj);
 
         $payment->setPaymentType($paymentType);
+    }
+
+    /**
+     * Verify getCancellations will call getCancellations on all Charge and Authorization objects to fetch its refunds.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function getCancellationsShouldFetchAllCancellationsOfCorrespondingTransactions()
+    {
+        $payment = new Payment();
+        $cancellation1 = (new Cancellation())->setId('cancellation1');
+        $cancellation2 = (new Cancellation())->setId('cancellation2');
+        $cancellation3 = (new Cancellation())->setId('cancellation3');
+        $cancellation4 = (new Cancellation())->setId('cancellation4');
+
+        $expectedCancellations = [];
+
+        $this->assertArraySubset($expectedCancellations, $payment->getCancellations());
+
+        $authorize = $this->getMockBuilder(Authorization::class)->setMethods(['getCancellations'])->getMock();
+        $authorize->expects($this->exactly(4))->method('getCancellations')->willReturn([$cancellation1]);
+
+        /** @var Authorization $authorize */
+        $payment->setAuthorization($authorize);
+        $expectedCancellations[] = $cancellation1;
+        $this->assertArraySubset($expectedCancellations, $payment->getCancellations());
+
+        $charge1 = $this->getMockBuilder(Charge::class)->setMethods(['getCancellations'])->getMock();
+        $charge1->expects($this->exactly(3))->method('getCancellations')->willReturn([$cancellation2]);
+
+        /** @var Charge $charge1 */
+        $payment->addCharge($charge1);
+        $expectedCancellations[] = $cancellation2;
+        $this->assertArraySubset($expectedCancellations, $payment->getCancellations());
+
+        $charge2 = $this->getMockBuilder(Charge::class)->setMethods(['getCancellations'])->getMock();
+        $charge2->expects($this->exactly(2))->method('getCancellations')->willReturn([$cancellation3, $cancellation4]);
+
+        /** @var Charge $charge2 */
+        $payment->addCharge($charge2);
+        $expectedCancellations[] = $cancellation3;
+        $expectedCancellations[] = $cancellation4;
+        $this->assertArraySubset($expectedCancellations, $payment->getCancellations());
+
+        $charge3 = $this->getMockBuilder(Charge::class)->setMethods(['getCancellations'])->getMock();
+        $charge3->expects($this->once())->method('getCancellations')->willReturn([]);
+
+        /** @var Charge $charge3 */
+        $payment->addCharge($charge3);
+        $this->assertArraySubset($expectedCancellations, $payment->getCancellations());
     }
 
     //<editor-fold desc="Helpers">
