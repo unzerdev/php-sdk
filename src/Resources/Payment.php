@@ -266,18 +266,11 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Returns the Payment Type object referenced by this Payment or throws a \RuntimeException if none exists.
      *
-     * @return BasePaymentType The PaymentType referenced by this Payment.
-     *
-     * @throws \RuntimeException An exception is thrown when the Payment does not reference a PaymentType.
+     * @return BasePaymentType|null The PaymentType referenced by this Payment.
      */
-    public function getPaymentType(): BasePaymentType
+    public function getPaymentType()
     {
-        $paymentType = $this->paymentType;
-        if (!$paymentType instanceof BasePaymentType) {
-            throw new \RuntimeException('The paymentType is not set.');
-        }
-
-        return $paymentType;
+        return $this->paymentType;
     }
 
     /**
