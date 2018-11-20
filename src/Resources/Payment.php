@@ -49,7 +49,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function __construct($parent = null)
     {
-        $this->amount = new Amount();
+        $this->setAmount(new Amount());
 
         parent::__construct($parent);
     }
@@ -410,6 +410,20 @@ class Payment extends AbstractHeidelpayResource
         }
 
         return null;
+    }
+
+    /**
+     * Sets the Amount object of this Payment.
+     * The Amount stores the total, remaining, charged and cancelled amount of this Payment.
+     *
+     * @param Amount $amount
+     *
+     * @return Payment
+     */
+    public function setAmount(Amount $amount): Payment
+    {
+        $this->amount = $amount;
+        return $this;
     }
 
     /**

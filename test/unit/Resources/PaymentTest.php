@@ -602,6 +602,29 @@ class PaymentTest extends TestCase
         $this->assertNull($paymentMock->getShipmentById('shipment1234'));
     }
 
+    /**
+     * Verify the currency is fetched from the amount object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     */
+    public function getAndSetCurrencyShouldPropagateToTheAmountObject()
+    {
+        $amountMock = $this->getMockBuilder(Amount::class)->setMethods(['getCurrency', 'setCurrency'])->getMock();
+        $amountMock->expects($this->once())->method('getCurrency')->willReturn('MyTestGetCurrency');
+        $amountMock->expects($this->once())->method('setCurrency')->with('MyTestSetCurrency');
+
+        $payment = new Payment();
+        /** @var Amount $amountMock */
+        $payment->setAmount($amountMock);
+
+        $payment->setCurrency('MyTestSetCurrency');
+        $this->assertEquals('MyTestGetCurrency', $payment->getCurrency());
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
