@@ -25,7 +25,6 @@
 namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Traits\HasCancellations;
@@ -62,9 +61,9 @@ class Charge extends AbstractTransactionType
     //<editor-fold desc="Setters/Getters">
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmount(): float
+    public function getAmount()
     {
         return $this->amount;
     }
@@ -72,9 +71,9 @@ class Charge extends AbstractTransactionType
     /**
      * @param float $amount
      *
-     * @return AbstractHeidelpayResource
+     * @return self
      */
-    public function setAmount($amount): AbstractHeidelpayResource
+    public function setAmount($amount): self
     {
         $this->amount = $amount;
         return $this;
@@ -91,9 +90,9 @@ class Charge extends AbstractTransactionType
     /**
      * @param string $currency
      *
-     * @return AbstractHeidelpayResource
+     * @return self
      */
-    public function setCurrency($currency): AbstractHeidelpayResource
+    public function setCurrency($currency): self
     {
         $this->currency = $currency;
         return $this;
@@ -110,9 +109,9 @@ class Charge extends AbstractTransactionType
     /**
      * @param string $returnUrl
      *
-     * @return AbstractHeidelpayResource
+     * @return self
      */
-    public function setReturnUrl($returnUrl): AbstractHeidelpayResource
+    public function setReturnUrl($returnUrl): self
     {
         $this->returnUrl = $returnUrl;
         return $this;
