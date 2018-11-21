@@ -990,6 +990,33 @@ class PaymentTest extends TestCase
         $this->assertCount(2, $authorize->getCancellations());
     }
 
+    /**
+     * Verify that handleResponse will throw an exception if the authorization to a reversal does not exist.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldThrowExceptionIfAnAuthorizeToAReversalDoesNotExist()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+
+        $chargeData = new \stdClass();
+        $chargeData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
+        $chargeData->amount = '11.111';
+        $chargeData->type = 'cancel-authorize';
+
+        $response = new \stdClass();
+        $response->transactions = [$chargeData];
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('The Authorization object can not be found.');
+        $payment->handleResponse($response);
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
