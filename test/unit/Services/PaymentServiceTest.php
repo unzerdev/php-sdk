@@ -30,6 +30,7 @@ use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
+use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -37,9 +38,36 @@ use PHPUnit\Framework\TestCase;
 class PaymentServiceTest extends TestCase
 {
     /**
+     * Verify setters and getters work properly.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     */
+    public function gettersAndSettersShouldWorkProperly()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $paymentService = new PaymentService($heidelpay);
+        $this->assertSame($heidelpay, $paymentService->getHeidelpay());
+        $this->assertSame($heidelpay->getResourceService(), $paymentService->getResourceService());
+
+        $heidelpay2 = new Heidelpay('s-priv-1234');
+        $resourceService2 = new ResourceService($heidelpay2);
+        $paymentService->setResourceService($resourceService2);
+        $this->assertSame($heidelpay, $paymentService->getHeidelpay());
+        $this->assertNotSame($heidelpay2->getResourceService(), $paymentService->getResourceService());
+        $this->assertSame($resourceService2, $paymentService->getResourceService());
+
+        $paymentService->setHeidelpay($heidelpay2);
+        $this->assertSame($heidelpay2, $paymentService->getHeidelpay());
+        $this->assertNotSame($heidelpay2->getResourceService(), $paymentService->getResourceService());
+    }
+
+    /**
      * Verify authorize method calls authorize with payment.
      *
      * @test
+     *
      * @throws Exception
      * @throws RuntimeException
      * @throws \ReflectionException
