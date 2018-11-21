@@ -790,6 +790,36 @@ class PaymentTest extends TestCase
         $this->assertNull($payment->getAuthorization());
     }
 
+    /**
+     * Verify handleResponse adds authorization from response.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldAddAuthorizationFromResponse()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $this->assertNull($payment->getAuthorization());
+
+        $authorizationData = new \stdClass();
+        $authorizationData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1';
+        $authorizationData->amount = '10.123';
+        $authorizationData->type = 'authorize';
+
+        $response = new \stdClass();
+        $response->transactions = [$authorizationData];
+        $payment->handleResponse($response);
+
+        $authorization = $payment->getAuthorization(true);
+        $this->assertInstanceOf(Authorization::class, $authorization);
+        $this->assertEquals('s-aut-1', $authorization->getId());
+        $this->assertEquals(10.123, $authorization->getAmount());
+        $this->assertSame($payment, $authorization->getPayment());
+        $this->assertSame($payment, $authorization->getParentResource());
+    }
 
     //<editor-fold desc="Helpers">
 
