@@ -511,42 +511,76 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancel($amount = null): Cancellation
     {
-        $cancel = null;
-        $exception = null;
+        list($chargeCancels, $chargeExceptions) = $this->cancelAllCharges();
+        list($authCancel, $authException) = $this->cancelAuthorization($amount);
+
+        $cancels = array_merge($chargeCancels, $authCancel);
+        $exceptions = array_merge($chargeExceptions, $authException);
+
+        if (isset($cancels[0]) && $cancels[0] instanceof Cancellation) {
+            return $cancels[0];
+        }
+
+        // throw the last exception if no cancellation has been created
+        if (isset($exceptions[0]) && $exceptions[0] instanceof HeidelpayApiException) {
+            throw $exceptions[0];
+        }
+
+        throw new \RuntimeException('This Payment could not be cancelled.');
+    }
+
+    /**
+     * Cancels all charges of the payment and returns an array of the cancellations and already charged exceptions that
+     * occur.
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function cancelAllCharges(): array
+    {
+        $cancels = [];
+        $exceptions = [];
 
         /** @var Charge $charge */
         foreach ($this->getCharges() as $charge) {
             try {
-                $cancel = $charge->cancel();
+                $cancels[] = $charge->cancel();
             } catch (HeidelpayApiException $e) {
-                $exception = $e;
                 if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
                     throw $e;
                 }
+                $exceptions[] = $e;
             }
         }
+        return array($cancels, $exceptions);
+    }
+
+    /**
+     * @param $amount
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function cancelAuthorization($amount): array
+    {
+        $cancels = [];
+        $exceptions = [];
 
         try {
             if ($this->getAuthorization() instanceof Authorization) {
-                $cancel = $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
+                $cancels[] = $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
             }
         } catch (HeidelpayApiException $e) {
-            $exception = $e;
             if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
                 throw $e;
             }
+            $exceptions[] = $e;
         }
-
-        if ($cancel instanceof Cancellation) {
-            return $cancel;
-        }
-
-        // throw the last exception if no cancellation has been created
-        if ($exception instanceof HeidelpayApiException) {
-            throw $exception;
-        }
-
-        throw new \RuntimeException('This Payment could not be cancelled.');
+        return array($cancels, $exceptions);
     }
 
     /**
