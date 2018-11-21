@@ -1542,6 +1542,29 @@ class PaymentTest extends TestCase
         $payment->charge(2.2, 'MyCurrency');
     }
 
+    /**
+     * Verify ship will call ship method on heidelpay object.
+     *
+     * @test
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function shipMethodShouldPropagateToHeidelpayChargePaymentMethod()
+    {
+        $payment = new Payment();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()
+            ->setMethods(['ship'])->getMock();
+        $heidelpayMock->expects($this->once())->method('ship')->willReturn(new Shipment());
+
+        /** @var Heidelpay $heidelpayMock */
+        $payment->setParentResource($heidelpayMock);
+
+        $payment->ship();
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
