@@ -169,7 +169,7 @@ class AbstractTransactionTypeTest extends TestCase
         $payment->setParentResource($heidelpayObj);
 
         /** @var DummyTransactionType $transactionType */
-        $transactionType = (new DummyTransactionType())->setPayment($payment)->setParentResource($payment);
+        $transactionType = (new DummyTransactionType())->setPayment($payment);
         $transactionType->fetchPayment();
     }
 

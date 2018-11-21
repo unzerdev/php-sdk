@@ -134,7 +134,6 @@ class Payment extends AbstractHeidelpayResource
     public function setAuthorization(Authorization $authorize): Payment
     {
         $authorize->setPayment($this);
-        $authorize->setParentResource($this);
         $this->authorization = $authorize;
         return $this;
     }
@@ -370,7 +369,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function addShipment(Shipment $shipment): Payment
     {
-        $shipment->setPayment($this)->setParentResource($this);
+        $shipment->setPayment($this);
         $this->shipments[] = $shipment;
         return $this;
     }
@@ -686,10 +685,7 @@ class Payment extends AbstractHeidelpayResource
         $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::AUTHORIZE);
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
-            $authorization = (new Authorization())
-                ->setPayment($this)
-                ->setParentResource($this)
-                ->setId($transactionId);
+            $authorization = (new Authorization())->setPayment($this)->setId($transactionId);
             $this->setAuthorization($authorization);
         }
         $authorization->setAmount($transaction->amount);
@@ -709,10 +705,7 @@ class Payment extends AbstractHeidelpayResource
         $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
         $charge = $this->getChargeById($transactionId, true);
         if (!$charge instanceof Charge) {
-            $charge = (new Charge())
-                ->setPayment($this)
-                ->setParentResource($this)
-                ->setId($transactionId);
+            $charge = (new Charge())->setPayment($this)->setId($transactionId);
             $this->addCharge($charge);
         }
         $charge->setAmount($transaction->amount);
@@ -737,10 +730,7 @@ class Payment extends AbstractHeidelpayResource
 
         $cancellation = $authorization->getCancellation($transactionId, true);
         if (!$cancellation instanceof Cancellation) {
-            $cancellation =  (new Cancellation())
-                ->setPayment($this)
-                ->setParentResource($this)
-                ->setId($transactionId);
+            $cancellation =  (new Cancellation())->setPayment($this)->setId($transactionId);
             $authorization->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
@@ -767,10 +757,7 @@ class Payment extends AbstractHeidelpayResource
 
         $cancellation = $charge->getCancellation($refundId, true);
         if (!$cancellation instanceof Cancellation) {
-            $cancellation =  (new Cancellation())
-                ->setPayment($this)
-                ->setParentResource($this)
-                ->setId($refundId);
+            $cancellation =  (new Cancellation())->setPayment($this)->setId($refundId);
             $charge->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);

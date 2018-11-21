@@ -83,7 +83,7 @@ class PaymentTest extends TestCase
     public function getAuthorizationShouldFetchAuthorizeIfNotLazyAndAuthIsNotNull()
     {
         $payment = (new Payment())->setId('myPaymentId');
-        $authorization = (new Authorization())->setParentResource($payment);
+        $authorization = new Authorization();
         $payment->setAuthorization($authorization);
 
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
@@ -687,8 +687,6 @@ class PaymentTest extends TestCase
     public function handleResponseShouldFetchCustomerIfItIsNotSet()
     {
         $payment = (new Payment())->setId('myPaymentId');
-        $authorization = (new Authorization())->setParentResource($payment);
-        $payment->setAuthorization($authorization);
 
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
             ->disableOriginalConstructor()->setMethods(['fetchCustomer'])->getMock();

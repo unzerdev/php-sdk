@@ -164,7 +164,7 @@ class PaymentService
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType, $customer);
         $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setParentResource($payment)->setPayment($payment);
+        $charge->setPayment($payment);
         $charge->setOrderId($orderId);
         $payment->addCharge($charge);
         $this->resourceService->create($charge);
@@ -210,7 +210,7 @@ class PaymentService
     public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
     {
         $charge = new Charge($amount, $currency);
-        $charge->setParentResource($payment)->setPayment($payment);
+        $charge->setPayment($payment);
         $payment->addCharge($charge);
         $this->resourceService->create($charge);
         return $charge;
@@ -234,8 +234,8 @@ class PaymentService
     public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
     {
         $cancellation = new Cancellation($amount);
-        $authorization->addCancellation($cancellation);
         $cancellation->setPayment($authorization->getPayment());
+        $authorization->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
 
         return $cancellation;
@@ -292,8 +292,8 @@ class PaymentService
     public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
     {
         $cancellation = new Cancellation($amount);
-        $charge->addCancellation($cancellation);
         $cancellation->setPayment($charge->getPayment());
+        $charge->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
 
         return $cancellation;

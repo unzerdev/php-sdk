@@ -74,6 +74,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     public function setPayment($payment): self
     {
         $this->payment = $payment;
+        $this->setParentResource($payment);
         return $this;
     }
 

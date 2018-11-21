@@ -130,7 +130,7 @@ class ChargeTest extends TestCase
         $payment         = new Payment();
         $payment->setParentResource($heidelpayObj)->setPaymentType($paymentType)->setCustomer($customer);
 
-        $charge       = (new Charge())->setParentResource($payment)->setPayment($payment);
+        $charge          = (new Charge())->setPayment($payment);
         $linkedResources = $charge->getLinkedResources();
         $this->assertArrayHasKey('customer', $linkedResources);
         $this->assertArrayHasKey('type', $linkedResources);

@@ -143,7 +143,7 @@ class AuthorizationTest extends TestCase
         $payment         = new Payment();
         $payment->setParentResource($heidelpayObj)->setPaymentType($paymentType)->setCustomer($customer);
 
-        $authorize       = (new Authorization())->setParentResource($payment)->setPayment($payment);
+        $authorize       = (new Authorization())->setPayment($payment);
         $linkedResources = $authorize->getLinkedResources();
         $this->assertArrayHasKey('customer', $linkedResources);
         $this->assertArrayHasKey('type', $linkedResources);
@@ -231,7 +231,6 @@ class AuthorizationTest extends TestCase
             );
 
         $authorization =  new Authorization();
-        $authorization->setParentResource($payment);
         $authorization->setPayment($payment);
         $authorization->charge();
         $authorization->charge(321.9);
