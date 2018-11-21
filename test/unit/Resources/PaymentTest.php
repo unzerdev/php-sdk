@@ -712,7 +712,6 @@ class PaymentTest extends TestCase
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @throws \ReflectionException
@@ -736,6 +735,36 @@ class PaymentTest extends TestCase
         $response->resources->customerId = 'customerId';
         $payment->handleResponse($response);
     }
+
+    /**
+     * Verify handleResponse updates paymenType.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function handleResponseShouldFetchAndUpdatePaymentTypeIfTheIdIsSet()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['fetchPaymentType'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchPaymentType')->with('PaymentTypeId');
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $response = new \stdClass();
+        $response->resources = new \stdClass();
+        $response->resources->typeId = 'PaymentTypeId';
+        $payment->handleResponse($response);
+    }
+
+
 
     //<editor-fold desc="Helpers">
 
