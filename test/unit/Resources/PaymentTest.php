@@ -1263,6 +1263,7 @@ class PaymentTest extends TestCase
         try {
             /** @var Payment $paymentMock */
             $paymentMock->cancel();
+            $this->assertFalse(true, 'The expected exception has not been thrown.');
         } catch (HeidelpayApiException $e) {
             $this->assertSame($exception1, $e);
         }
@@ -1289,6 +1290,7 @@ class PaymentTest extends TestCase
         try {
             /** @var Payment $paymentMock */
             $paymentMock->cancel();
+            $this->assertFalse(true, 'The expected exception has not been thrown.');
         } catch (HeidelpayApiException $e) {
             $this->assertSame($exception, $e);
         }
@@ -1383,7 +1385,6 @@ class PaymentTest extends TestCase
      * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
-     * @throws HeidelpayApiException
      */
     public function cancelAllChargesShouldThrowChargeCancelExceptionsOtherThanAlreadyCharged()
     {
@@ -1404,8 +1405,9 @@ class PaymentTest extends TestCase
 
         try {
             $payment->cancelAllCharges();
+            $this->assertFalse(true, 'The expected exception has not been thrown.');
         } catch (HeidelpayApiException $e) {
-            $this->assertSame($exception2, $e);
+            $this->assertSame($ex2, $e);
         }
     }
 
