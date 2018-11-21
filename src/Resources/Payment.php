@@ -558,27 +558,28 @@ class Payment extends AbstractHeidelpayResource
     }
 
     /**
-     * @param $amount
+     * @param float|null $amount
      *
      * @return array
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function cancelAuthorization($amount): array
+    public function cancelAuthorization($amount = null): array
     {
         $cancels = [];
         $exceptions = [];
 
-        try {
-            if ($this->getAuthorization() instanceof Authorization) {
-                $cancels[] = $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
+        $authorization = $this->getAuthorization();
+        if ($authorization instanceof Authorization) {
+            try {
+                $cancels[] = $authorization->cancel($amount);
+            } catch (HeidelpayApiException $e) {
+                if (ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED !== $e->getCode()) {
+                    throw $e;
+                }
+                $exceptions[] = $e;
             }
-        } catch (HeidelpayApiException $e) {
-            if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
-                throw $e;
-            }
-            $exceptions[] = $e;
         }
         return array($cancels, $exceptions);
     }

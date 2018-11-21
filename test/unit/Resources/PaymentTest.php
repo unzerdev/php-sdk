@@ -1411,6 +1411,105 @@ class PaymentTest extends TestCase
         }
     }
 
+    /**
+     * Verify cancelAuthorization will call cancel on the authorization and will return a list of cancels.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnCancels()
+    {
+        $cancellation = new Cancellation(1.0);
+        $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
+        $authorizationMock->expects($this->once())->method('cancel')->willReturn($cancellation);
+
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
+        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
+
+        /**
+         * @var Authorization $authorizationMock
+         * @var Payment $paymentMock
+         */
+        $paymentMock->setAuthorization($authorizationMock);
+        list($cancellations, $exceptions) = $paymentMock->cancelAuthorization();
+        $this->assertArraySubset([$cancellation], $cancellations);
+        $this->assertIsEmptyArray($exceptions);
+    }
+
+    /**
+     * Verify cancelAuthorization will call cancel on the authorization and will return a list of exceptions.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnExceptions()
+    {
+        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+
+        $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
+        $authorizationMock->expects($this->once())->method('cancel')->willThrowException($exception);
+
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
+        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
+
+        /**
+         * @var Authorization $authorizationMock
+         * @var Payment $paymentMock
+         */
+        $paymentMock->setAuthorization($authorizationMock);
+        list($cancellations, $exceptions) = $paymentMock->cancelAuthorization();
+
+        $this->assertIsEmptyArray($cancellations);
+        $this->assertArraySubset([$exception], $exceptions);
+    }
+
+    /**
+     * Verify cancelAuthorization will throw any exception with Code different to
+     * ApiResponseCodes::API_ERROR_AUTHORIZATION_ALREADY_CANCELED.
+     *
+     * todo: API_ERROR_AUTHORIZATION_ALREADY_CANCELED is not defined
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function cancelAllChargesShouldThrowAuthorizationCancelExceptionsOtherThanAlreadyCharged()
+    {
+        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
+
+        $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
+        $authorizationMock->expects($this->once())->method('cancel')->willThrowException($exception);
+
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
+        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
+
+        /**
+         * @var Authorization $authorizationMock
+         * @var Payment $paymentMock
+         */
+        $paymentMock->setAuthorization($authorizationMock);
+
+        try {
+            $paymentMock->cancelAuthorization();
+            $this->assertFalse(true, 'The expected exception has not been thrown.');
+        } catch (HeidelpayApiException $e) {
+            $this->assertSame($exception, $e);
+        }
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
