@@ -790,6 +790,38 @@ class PaymentTest extends TestCase
     }
 
     /**
+     * Verify handleResponse updates existing authorization from response.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldUpdateAuthorizationFromResponse()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+
+        $authorization = (new Authorization(11.98, Currencies::EURO))->setId('s-aut-1');
+        $this->assertEquals(11.98, $authorization->getAmount());
+
+        $payment->setAuthorization($authorization);
+
+        $authorizationData = new \stdClass();
+        $authorizationData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1';
+        $authorizationData->amount = '10.321';
+        $authorizationData->type = 'authorize';
+
+        $response = new \stdClass();
+        $response->transactions = [$authorizationData];
+        $payment->handleResponse($response);
+
+        $authorization = $payment->getAuthorization(true);
+        $this->assertInstanceOf(Authorization::class, $authorization);
+        $this->assertEquals(10.321, $authorization->getAmount());
+    }
+
+    /**
      * Verify handleResponse adds authorization from response.
      *
      * @test
@@ -821,35 +853,37 @@ class PaymentTest extends TestCase
     }
 
     /**
-     * Verify handleResponse updates existing authorization from response.
+     * Verify handleResponse updates existing charge from response.
      *
      * @test
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    public function handleResponseShouldUpdateAuthorizationFromResponse()
+    public function handleResponseShouldUpdateChargeFromResponseIfItExists()
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
 
-        $authorization = (new Authorization(11.98, Currencies::EURO))->setId('s-aut-1');
-        $this->assertEquals(11.98, $authorization->getAmount());
+        $charge1 = (new Charge(11.98, Currencies::EURO))->setId('s-chg-1');
+        $charge2 = (new Charge(22.98, Currencies::EURO))->setId('s-chg-2');
+        $this->assertEquals(22.98, $charge2->getAmount());
 
-        $payment->setAuthorization($authorization);
+        $payment->addCharge($charge1)->addCharge($charge2);
 
-        $authorizationData = new \stdClass();
-        $authorizationData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1';
-        $authorizationData->amount = '10.321';
-        $authorizationData->type = 'authorize';
+        $chargeData = new \stdClass();
+        $chargeData->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-2';
+        $chargeData->amount = '11.111';
+        $chargeData->type = 'charge';
 
         $response = new \stdClass();
-        $response->transactions = [$authorizationData];
+        $response->transactions = [$chargeData];
         $payment->handleResponse($response);
 
-        $authorization = $payment->getAuthorization(true);
-        $this->assertInstanceOf(Authorization::class, $authorization);
-        $this->assertEquals(10.321, $authorization->getAmount());
+        $charge = $payment->getChargeById('s-chg-2', true);
+        $this->assertInstanceOf(Charge::class, $charge);
+        $this->assertSame($charge2, $charge);
+        $this->assertEquals(11.111, $charge->getAmount());
     }
 
     //<editor-fold desc="Helpers">
