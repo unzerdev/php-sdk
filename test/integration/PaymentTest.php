@@ -226,23 +226,11 @@ class PaymentTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
-    public function authorizationShouldBePossibleWithPaymentObject()
+    public function authorizationShouldBePossibleOnHeidelpayObject()
     {
         $card = $this->createCardObject();
         $this->heidelpay->createPaymentType($card);
 
-        // Variant 1
-        $payment = new Payment($this->heidelpay);
-        $authorizationUsingPayment = $payment->authorize(
-            100.0,
-            Currencies::EURO,
-            $card,
-            self::RETURN_URL
-        );
-        $this->assertNotNull($authorizationUsingPayment);
-        $this->assertNotEmpty($authorizationUsingPayment->getId());
-
-        // Variant 2
         $authorizationUsingHeidelpay = $this->heidelpay->authorize(
             100.0,
             Currencies::EURO,

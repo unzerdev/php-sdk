@@ -597,31 +597,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function charge($amount = null, $currency = null): Charge
     {
-        if ($this->getAuthorization(true) !== null) {
-            return $this->getHeidelpayObject()->chargeAuthorization($this, $amount);
-        }
         return $this->getHeidelpayObject()->chargePayment($this, $amount, $currency);
-    }
-
-    /**
-     * Performs an Authorization on this payment object.
-     *
-     * @param float                $amount      The amount to be authorized.
-     * @param string               $currency    The currency of the amount to be authorized.
-     * @param BasePaymentType      $paymentType The PaymentType of this Payment.
-     * @param string               $returnUrl   The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null $customer    The Customer object or the id of the Customer to be referenced.
-     *                                          No Customer will be referenced if set or left null.
-     *
-     * @return Authorization The resulting Authorization object.
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
-     */
-    public function authorize($amount, $currency, $paymentType, $returnUrl = null, $customer = null): Authorization
-    {
-        $this->setPaymentType($paymentType);
-        return $this->getHeidelpayObject()->authorizeWithPayment($amount, $currency, $this, $returnUrl, $customer);
     }
 
     /**
