@@ -73,7 +73,7 @@ function renderPaymentDetails(Payment $payment)
 
     /** @var Charge $charge */
     foreach ($payment->getCharges() as $charge) {
-        $transactionHtml .= '<li>Charge:</li>' . renderTransactionMetaData($payment->getChargeById($charge->getId()));
+        $transactionHtml .= '<li>Charge:</li>' . renderTransactionMetaData($payment->getCharge($charge->getId()));
     }
 
     /** @var Cancellation $cancellation */

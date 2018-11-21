@@ -175,7 +175,7 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function getChargeById($chargeId, $lazy = false)
+    public function getCharge($chargeId, $lazy = false)
     {
         /** @var Charge $charge */
         foreach ($this->charges as $charge) {
@@ -203,7 +203,7 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function getCharge($index, $lazy = false)
+    public function getChargeByIndex($index, $lazy = false)
     {
         if (isset($this->getCharges()[$index])) {
             $resource = $this->getCharges()[$index];
@@ -703,7 +703,7 @@ class Payment extends AbstractHeidelpayResource
     private function updateChargeTransaction($transaction)
     {
         $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
-        $charge = $this->getChargeById($transactionId, true);
+        $charge = $this->getCharge($transactionId, true);
         if (!$charge instanceof Charge) {
             $charge = (new Charge())->setPayment($this)->setId($transactionId);
             $this->addCharge($charge);
@@ -750,7 +750,7 @@ class Payment extends AbstractHeidelpayResource
         $refundId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
         $chargeId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
 
-        $charge = $this->getChargeById($chargeId, true);
+        $charge = $this->getCharge($chargeId, true);
         if (!$charge instanceof Charge) {
             throw new \RuntimeException('Charge object does not exist.');
         }

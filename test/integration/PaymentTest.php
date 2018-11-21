@@ -109,7 +109,7 @@ class PaymentTest extends BasePaymentTest
         $this->assertNotNull($fetchedPayment->getCharges());
         $this->assertCount(1, $fetchedPayment->getCharges());
 
-        $fetchedCharge = $fetchedPayment->getCharge(0);
+        $fetchedCharge = $fetchedPayment->getChargeByIndex(0);
         $this->assertEquals($charge->getAmount(), $fetchedCharge->getAmount());
         $this->assertEquals($charge->getCurrency(), $fetchedCharge->getCurrency());
         $this->assertEquals($charge->getId(), $fetchedCharge->getId());
@@ -194,7 +194,7 @@ class PaymentTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
-        $fetchedCharge = $fetchedPayment->getChargeById('s-chg-1');
+        $fetchedCharge = $fetchedPayment->getCharge('s-chg-1');
         $cancellation = $fetchedCharge->cancel();
         $this->assertNotNull($cancellation);
     }
@@ -212,7 +212,7 @@ class PaymentTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
-        $cancel = $fetchedPayment->getCharge(0)->cancel(10.0);
+        $cancel = $fetchedPayment->getChargeByIndex(0)->cancel(10.0);
         $this->assertNotNull($cancel);
     }
 

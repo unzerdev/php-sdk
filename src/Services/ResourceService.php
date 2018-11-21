@@ -490,7 +490,7 @@ class ResourceService
     {
         /** @var Payment $paymentObject */
         $paymentObject = $this->fetchPayment($payment);
-        return $this->fetch($paymentObject->getChargeById($chargeId, true));
+        return $this->fetch($paymentObject->getCharge($chargeId, true));
     }
 
     //</editor-fold>

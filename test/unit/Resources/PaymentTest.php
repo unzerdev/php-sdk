@@ -151,11 +151,11 @@ class PaymentTest extends TestCase
         $payment->addCharge($charge2);
         $this->assertArraySubset($subset, $payment->getCharges());
 
-        $this->assertSame($charge2, $payment->getChargeById('secondCharge', true));
-        $this->assertSame($charge1, $payment->getChargeById('firstCharge', true));
+        $this->assertSame($charge2, $payment->getCharge('secondCharge', true));
+        $this->assertSame($charge1, $payment->getCharge('firstCharge', true));
 
-        $this->assertSame($charge1, $payment->getCharge(0, true));
-        $this->assertSame($charge2, $payment->getCharge(1, true));
+        $this->assertSame($charge1, $payment->getChargeByIndex(0, true));
+        $this->assertSame($charge2, $payment->getChargeByIndex(1, true));
     }
 
     /**
@@ -187,8 +187,8 @@ class PaymentTest extends TestCase
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment->setParentResource($heidelpayObj);
 
-        $payment->getChargeById('firstCharge');
-        $payment->getChargeById('secondCharge');
+        $payment->getCharge('firstCharge');
+        $payment->getCharge('secondCharge');
     }
 
     /**
@@ -220,8 +220,8 @@ class PaymentTest extends TestCase
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment->setParentResource($heidelpayObj);
 
-        $payment->getCharge(0);
-        $payment->getCharge(1);
+        $payment->getChargeByIndex(0);
+        $payment->getChargeByIndex(1);
     }
 
     /**
@@ -242,13 +242,13 @@ class PaymentTest extends TestCase
         $payment->addCharge($charge1);
         $payment->addCharge($charge2);
 
-        $this->assertSame($charge1, $payment->getChargeById('firstCharge', true));
-        $this->assertSame($charge2, $payment->getChargeById('secondCharge', true));
-        $this->assertNull($payment->getChargeById('thirdCharge'));
+        $this->assertSame($charge1, $payment->getCharge('firstCharge', true));
+        $this->assertSame($charge2, $payment->getCharge('secondCharge', true));
+        $this->assertNull($payment->getCharge('thirdCharge'));
 
-        $this->assertSame($charge1, $payment->getCharge(0, true));
-        $this->assertSame($charge2, $payment->getCharge(1, true));
-        $this->assertNull($payment->getCharge(2));
+        $this->assertSame($charge1, $payment->getChargeByIndex(0, true));
+        $this->assertSame($charge2, $payment->getChargeByIndex(1, true));
+        $this->assertNull($payment->getChargeByIndex(2));
     }
 
     /**
@@ -880,7 +880,7 @@ class PaymentTest extends TestCase
         $response->transactions = [$chargeData];
         $payment->handleResponse($response);
 
-        $charge = $payment->getChargeById('s-chg-2', true);
+        $charge = $payment->getCharge('s-chg-2', true);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertSame($charge2, $charge);
         $this->assertEquals(11.111, $charge->getAmount());
@@ -902,7 +902,7 @@ class PaymentTest extends TestCase
         $charge1 = (new Charge(11.98, Currencies::EURO))->setId('s-chg-1');
         $payment->addCharge($charge1);
         $this->assertCount(1, $payment->getCharges());
-        $this->assertNull($payment->getChargeById('s-chg-2'));
+        $this->assertNull($payment->getCharge('s-chg-2'));
 
         $chargeData = new \stdClass();
         $chargeData->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-2';
@@ -913,7 +913,7 @@ class PaymentTest extends TestCase
         $response->transactions = [$chargeData];
         $payment->handleResponse($response);
 
-        $charge = $payment->getChargeById('s-chg-2', true);
+        $charge = $payment->getCharge('s-chg-2', true);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertCount(2, $payment->getCharges());
         $this->assertEquals(11.111, $charge->getAmount());
