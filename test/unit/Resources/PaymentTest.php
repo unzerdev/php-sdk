@@ -627,6 +627,8 @@ class PaymentTest extends TestCase
         $this->assertEquals('MyTestGetCurrency', $payment->getCurrency());
     }
 
+    //<editor-fold desc="Handle Response Tests">
+
     /**
      * Verify handleResponse will update stateId.
      *
@@ -1175,6 +1177,8 @@ class PaymentTest extends TestCase
         $this->assertEquals(11.111, $fetchedShipment->getAmount());
         $this->assertCount(1, $payment->getShipments());
     }
+
+    //</editor-fold>
 
     //<editor-fold desc="Helpers">
 
