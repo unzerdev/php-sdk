@@ -938,13 +938,13 @@ class PaymentTest extends TestCase
         $this->assertEquals(2.98, $reversal2->getAmount());
         $authorize->addCancellation($reversal1)->addCancellation($reversal2);
 
-        $chargeData = new \stdClass();
-        $chargeData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
-        $chargeData->amount = '11.111';
-        $chargeData->type = 'cancel-authorize';
+        $cancellation = new \stdClass();
+        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
+        $cancellation->amount = '11.111';
+        $cancellation->type = 'cancel-authorize';
 
         $response = new \stdClass();
-        $response->transactions = [$chargeData];
+        $response->transactions = [$cancellation];
         $payment->handleResponse($response);
 
         $authorization = $payment->getAuthorization(true);
@@ -974,13 +974,13 @@ class PaymentTest extends TestCase
         $this->assertCount(1, $authorize->getCancellations());
 
 
-        $chargeData = new \stdClass();
-        $chargeData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
-        $chargeData->amount = '11.111';
-        $chargeData->type = 'cancel-authorize';
+        $cancellation = new \stdClass();
+        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
+        $cancellation->amount = '11.111';
+        $cancellation->type = 'cancel-authorize';
 
         $response = new \stdClass();
-        $response->transactions = [$chargeData];
+        $response->transactions = [$cancellation];
         $payment->handleResponse($response);
 
         $authorization = $payment->getAuthorization(true);
@@ -1004,16 +1004,114 @@ class PaymentTest extends TestCase
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
 
-        $chargeData = new \stdClass();
-        $chargeData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
-        $chargeData->amount = '11.111';
-        $chargeData->type = 'cancel-authorize';
+        $cancellation = new \stdClass();
+        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
+        $cancellation->amount = '11.111';
+        $cancellation->type = 'cancel-authorize';
 
         $response = new \stdClass();
-        $response->transactions = [$chargeData];
+        $response->transactions = [$cancellation];
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('The Authorization object can not be found.');
+        $payment->handleResponse($response);
+    }
+
+    /**
+     * Verify handleResponse updates existing refunds from response.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldUpdateRefundsFromResponseIfItExists()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $charge = (new Charge(23.55, Currencies::EURO))->setId('s-chg-1');
+        $payment->addCharge($charge);
+        $refund1 = (new Cancellation(1.98))->setId('s-cnl-1');
+        $refund2 = (new Cancellation(2.98))->setId('s-cnl-2');
+        $this->assertEquals(2.98, $refund2->getAmount());
+        $charge->addCancellation($refund1)->addCancellation($refund2);
+
+        $cancellation = new \stdClass();
+        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-1/cancel/s-cnl-2';
+        $cancellation->amount = '11.111';
+        $cancellation->type = 'cancel-charge';
+
+        $response = new \stdClass();
+        $response->transactions = [$cancellation];
+        $payment->handleResponse($response);
+
+        $fetchedCharge = $payment->getCharge('s-chg-1', true);
+        $cancellation = $fetchedCharge->getCancellation('s-cnl-2', true);
+        $this->assertInstanceOf(Cancellation::class, $cancellation);
+        $this->assertSame($refund2, $cancellation);
+        $this->assertEquals(11.111, $cancellation->getAmount());
+    }
+
+    /**
+     * Verify handleResponse adds non existing refund from response.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldAddRefundFromResponseIfItDoesNotExists()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $charge = (new Charge(23.55, Currencies::EURO))->setId('s-chg-1');
+        $payment->addCharge($charge);
+        $reversal1 = (new Cancellation(1.98))->setId('s-cnl-1');
+        $charge->addCancellation($reversal1);
+        $this->assertNull($charge->getCancellation('s-cnl-2'));
+        $this->assertCount(1, $charge->getCancellations());
+
+
+        $cancellation = new \stdClass();
+        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-1/cancel/s-cnl-2';
+        $cancellation->amount = '11.111';
+        $cancellation->type = 'cancel-charge';
+
+        $response = new \stdClass();
+        $response->transactions = [$cancellation];
+        $payment->handleResponse($response);
+
+        $fetchedCharge = $payment->getCharge('s-chg-1', true);
+        $cancellation = $fetchedCharge->getCancellation('s-cnl-2', true);
+        $this->assertInstanceOf(Cancellation::class, $cancellation);
+        $this->assertEquals(11.111, $cancellation->getAmount());
+        $this->assertCount(2, $charge->getCancellations());
+    }
+
+    /**
+     * Verify that handleResponse will throw an exception if the charge to a refund does not exist.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldThrowExceptionIfAChargeToARefundDoesNotExist()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+
+        $cancellation = new \stdClass();
+        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-1/cancel/s-cnl-2';
+        $cancellation->amount = '11.111';
+        $cancellation->type = 'cancel-charge';
+
+        $response = new \stdClass();
+        $response->transactions = [$cancellation];
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('The Charge object can not be found.');
         $payment->handleResponse($response);
     }
 

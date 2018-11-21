@@ -752,7 +752,7 @@ class Payment extends AbstractHeidelpayResource
 
         $charge = $this->getCharge($chargeId, true);
         if (!$charge instanceof Charge) {
-            throw new \RuntimeException('Charge object does not exist.');
+            throw new \RuntimeException('The Charge object can not be found.');
         }
 
         $cancellation = $charge->getCancellation($refundId, true);
