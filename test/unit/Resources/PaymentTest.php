@@ -1336,8 +1336,8 @@ class PaymentTest extends TestCase
         $cancellation1 = new Cancellation(1.0);
         $cancellation2 = new Cancellation(2.0);
         $cancellation3 = new Cancellation(3.0);
-        $exception1 = new HeidelpayApiException('', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception2 = new HeidelpayApiException('', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
 
         $chargeMock1 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
         $chargeMock1->expects($this->once())->method('cancel')->willReturn($cancellation1);
@@ -1380,21 +1380,21 @@ class PaymentTest extends TestCase
      * @test
      *
      * @throws Exception
-     * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function cancelAllChargesShouldThrowChargeCancelExceptionsOtherThanAlreadyCharged()
     {
-        $exception1 = new HeidelpayApiException('', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception2 = new HeidelpayApiException('', ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
+        $ex1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $ex2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
 
         $chargeMock1 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock1->expects($this->once())->method('cancel')->willThrowException($exception1);
+        $chargeMock1->expects($this->once())->method('cancel')->willThrowException($ex1);
 
         $chargeMock2 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock2->expects($this->once())->method('cancel')->willThrowException($exception2);
+        $chargeMock2->expects($this->once())->method('cancel')->willThrowException($ex2);
 
         /**
          * @var Charge $chargeMock1
