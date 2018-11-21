@@ -1512,6 +1512,36 @@ class PaymentTest extends TestCase
 
     //</editor-fold>
 
+    /**
+     * Verify charge will call chargePayment on heidelpay object.
+     *
+     * @test
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function chargeMethodShouldPropagateToHeidelpayChargePaymentMethod()
+    {
+        $payment = new Payment();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()
+            ->setMethods(['chargePayment'])->getMock();
+        $heidelpayMock->expects($this->exactly(3))->method('chargePayment')
+            ->withConsecutive(
+                [$payment, null, null],
+                [$payment, 1.1, null],
+                [$payment, 2.2, 'MyCurrency']
+            )->willReturn(new Charge());
+
+        /** @var Heidelpay $heidelpayMock */
+        $payment->setParentResource($heidelpayMock);
+
+        $payment->charge();
+        $payment->charge(1.1);
+        $payment->charge(2.2, 'MyCurrency');
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
