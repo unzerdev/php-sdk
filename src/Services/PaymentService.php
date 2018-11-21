@@ -55,6 +55,49 @@ class PaymentService
         $this->resourceService = $heidelpay->getResourceService();
     }
 
+    //<editor-fold desc="Getters/Setters">
+
+    /**
+     * @return Heidelpay
+     */
+    public function getHeidelpay(): Heidelpay
+    {
+        return $this->heidelpay;
+    }
+
+    /**
+     * @param Heidelpay $heidelpay
+     *
+     * @return PaymentService
+     */
+    public function setHeidelpay(Heidelpay $heidelpay): PaymentService
+    {
+        $this->heidelpay = $heidelpay;
+        return $this;
+    }
+
+    /**
+     * @return ResourceService
+     */
+    public function getResourceService(): ResourceService
+    {
+        return $this->resourceService;
+    }
+
+    /**
+     * @param ResourceService $resourceService
+     *
+     * @return PaymentService
+     */
+    public function setResourceService(ResourceService $resourceService): PaymentService
+    {
+        $this->resourceService = $resourceService;
+        return $this;
+    }
+
+    //</editor-fold>
+
+
     //<editor-fold desc="Helpers">
 
     /**
