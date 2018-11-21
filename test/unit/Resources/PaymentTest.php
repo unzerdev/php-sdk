@@ -1433,7 +1433,7 @@ class PaymentTest extends TestCase
 
         /**
          * @var Authorization $authorizationMock
-         * @var Payment $paymentMock
+         * @var Payment       $paymentMock
          */
         $paymentMock->setAuthorization($authorizationMock);
         list($cancellations, $exceptions) = $paymentMock->cancelAuthorization();
@@ -1464,7 +1464,7 @@ class PaymentTest extends TestCase
 
         /**
          * @var Authorization $authorizationMock
-         * @var Payment $paymentMock
+         * @var Payment       $paymentMock
          */
         $paymentMock->setAuthorization($authorizationMock);
         list($cancellations, $exceptions) = $paymentMock->cancelAuthorization();
@@ -1498,7 +1498,7 @@ class PaymentTest extends TestCase
 
         /**
          * @var Authorization $authorizationMock
-         * @var Payment $paymentMock
+         * @var Payment       $paymentMock
          */
         $paymentMock->setAuthorization($authorizationMock);
 
@@ -1516,6 +1516,7 @@ class PaymentTest extends TestCase
      * Verify charge will call chargePayment on heidelpay object.
      *
      * @test
+     *
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
@@ -1546,6 +1547,7 @@ class PaymentTest extends TestCase
      * Verify ship will call ship method on heidelpay object.
      *
      * @test
+     *
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
