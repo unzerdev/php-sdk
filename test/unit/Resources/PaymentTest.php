@@ -1115,6 +1115,67 @@ class PaymentTest extends TestCase
         $payment->handleResponse($response);
     }
 
+    /**
+     * Verify handleResponse updates existing refunds from response.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldUpdateShipmentFromResponseIfItExists()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $shipment = (new Shipment())->setAmount('1.23')->setId('s-shp-1');
+        $this->assertEquals('1.23', $shipment->getAmount());
+        $payment->addShipment($shipment);
+
+        $cancellation = new \stdClass();
+        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/shipment/s-shp-1';
+        $cancellation->amount = '11.111';
+        $cancellation->type = 'shipment';
+
+        $response = new \stdClass();
+        $response->transactions = [$cancellation];
+        $payment->handleResponse($response);
+
+        $fetchedShipment = $payment->getShipment('s-shp-1', true);
+        $this->assertInstanceOf(Shipment::class, $fetchedShipment);
+        $this->assertSame($shipment, $fetchedShipment);
+        $this->assertEquals(11.111, $fetchedShipment->getAmount());
+    }
+
+    /**
+     * Verify handleResponse adds non existing refund from response.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldAddShipmentFromResponseIfItDoesNotExists()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $this->assertNull($payment->getShipment('s-shp-1'));
+        $this->assertCount(0, $payment->getShipments());
+
+        $cancellation = new \stdClass();
+        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/shipment/s-shp-1';
+        $cancellation->amount = '11.111';
+        $cancellation->type = 'shipment';
+
+        $response = new \stdClass();
+        $response->transactions = [$cancellation];
+        $payment->handleResponse($response);
+
+        $fetchedShipment = $payment->getShipment('s-shp-1', true);
+        $this->assertInstanceOf(Shipment::class, $fetchedShipment);
+        $this->assertEquals(11.111, $fetchedShipment->getAmount());
+        $this->assertCount(1, $payment->getShipments());
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
