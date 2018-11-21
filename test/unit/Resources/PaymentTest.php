@@ -886,6 +886,39 @@ class PaymentTest extends TestCase
         $this->assertEquals(11.111, $charge->getAmount());
     }
 
+    /**
+     * Verify handleResponse adds non existing charge from response.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldAddChargeFromResponseIfItDoesNotExists()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+
+        $charge1 = (new Charge(11.98, Currencies::EURO))->setId('s-chg-1');
+        $payment->addCharge($charge1);
+        $this->assertCount(1, $payment->getCharges());
+        $this->assertNull($payment->getChargeById('s-chg-2'));
+
+        $chargeData = new \stdClass();
+        $chargeData->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-2';
+        $chargeData->amount = '11.111';
+        $chargeData->type = 'charge';
+
+        $response = new \stdClass();
+        $response->transactions = [$chargeData];
+        $payment->handleResponse($response);
+
+        $charge = $payment->getChargeById('s-chg-2', true);
+        $this->assertInstanceOf(Charge::class, $charge);
+        $this->assertCount(2, $payment->getCharges());
+        $this->assertEquals(11.111, $charge->getAmount());
+    }
+
     //<editor-fold desc="Helpers">
 
     /**
