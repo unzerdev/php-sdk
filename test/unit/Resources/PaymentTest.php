@@ -568,8 +568,8 @@ class PaymentTest extends TestCase
         $payment->addShipment($shipment2);
         $this->assertArraySubset($subset, $payment->getShipments());
 
-        $this->assertSame($shipment2, $payment->getShipmentById('secondShipment', true));
-        $this->assertSame($shipment1, $payment->getShipmentById('firstShipment', true));
+        $this->assertSame($shipment2, $payment->getShipment('secondShipment', true));
+        $this->assertSame($shipment1, $payment->getShipment('firstShipment', true));
     }
 
     /**
@@ -600,8 +600,8 @@ class PaymentTest extends TestCase
         /** @var Payment $paymentMock */
         $paymentMock->setParentResource($heidelpayObj);
 
-        $this->assertSame($shipment, $paymentMock->getShipmentById('shipment123'));
-        $this->assertNull($paymentMock->getShipmentById('shipment1234'));
+        $this->assertSame($shipment, $paymentMock->getShipment('shipment123'));
+        $this->assertNull($paymentMock->getShipment('shipment1234'));
     }
 
     /**

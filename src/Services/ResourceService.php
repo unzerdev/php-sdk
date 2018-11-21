@@ -585,7 +585,7 @@ class ResourceService
     public function fetchShipment($payment, $shipmentId): AbstractHeidelpayResource
     {
         $paymentObject = $this->fetchPayment($payment);
-        return $paymentObject->getShipmentById($shipmentId);
+        return $paymentObject->getShipment($shipmentId);
     }
 
     //</editor-fold>

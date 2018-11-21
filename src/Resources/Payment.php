@@ -396,7 +396,7 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function getShipmentById($shipmentId, $lazy = false)
+    public function getShipment($shipmentId, $lazy = false)
     {
         /** @var Shipment $shipment */
         foreach ($this->getShipments() as $shipment) {
@@ -775,7 +775,7 @@ class Payment extends AbstractHeidelpayResource
     private function updateShipmentTransaction($transaction)
     {
         $shipmentId = $this->getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
-        $shipment = $this->getShipmentById($shipmentId, true);
+        $shipment = $this->getShipment($shipmentId, true);
         if (!$shipment instanceof Shipment) {
             $shipment = new Shipment(null, $shipmentId);
             $this->addShipment($shipment);
