@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
+use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Constants\PaymentState;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
@@ -817,6 +818,38 @@ class PaymentTest extends TestCase
         $this->assertEquals(10.123, $authorization->getAmount());
         $this->assertSame($payment, $authorization->getPayment());
         $this->assertSame($payment, $authorization->getParentResource());
+    }
+
+    /**
+     * Verify handleResponse updates existing authorization from response.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldUpdateAuthorizationFromResponse()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+
+        $authorization = (new Authorization(11.98, Currencies::EURO))->setId('s-aut-1');
+        $this->assertEquals(11.98, $authorization->getAmount());
+
+        $payment->setAuthorization($authorization);
+
+        $authorizationData = new \stdClass();
+        $authorizationData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1';
+        $authorizationData->amount = '10.321';
+        $authorizationData->type = 'authorize';
+
+        $response = new \stdClass();
+        $response->transactions = [$authorizationData];
+        $payment->handleResponse($response);
+
+        $authorization = $payment->getAuthorization(true);
+        $this->assertInstanceOf(Authorization::class, $authorization);
+        $this->assertEquals(10.321, $authorization->getAmount());
     }
 
     //<editor-fold desc="Helpers">
