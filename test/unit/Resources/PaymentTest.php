@@ -764,6 +764,31 @@ class PaymentTest extends TestCase
         $payment->handleResponse($response);
     }
 
+    /**
+     * Verify handleResponse does nothing if transactions is empty.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldUpdateChargeTransactions()
+    {
+        $payment = (new Payment())->setId('MyPaymentId');
+        $this->assertIsEmptyArray($payment->getCharges());
+        $this->assertIsEmptyArray($payment->getShipments());
+        $this->assertIsEmptyArray($payment->getCancellations());
+        $this->assertNull($payment->getAuthorization());
+
+        $response = new \stdClass();
+        $response->transactions = [];
+        $payment->handleResponse($response);
+
+        $this->assertIsEmptyArray($payment->getCharges());
+        $this->assertIsEmptyArray($payment->getShipments());
+        $this->assertIsEmptyArray($payment->getCancellations());
+        $this->assertNull($payment->getAuthorization());
+    }
 
 
     //<editor-fold desc="Helpers">
