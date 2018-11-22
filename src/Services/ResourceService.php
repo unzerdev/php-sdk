@@ -83,7 +83,8 @@ class ResourceService
         $httpMethod = HttpAdapterInterface::REQUEST_GET
     ): \stdClass {
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
-        $responseJson = $resource->getHeidelpayObject()->send($resource->getUri($appendId), $resource, $httpMethod);
+        $uri          = $resource->getUri($appendId);
+        $responseJson = $resource->getHeidelpayObject()->send($uri, $resource, $httpMethod);
         return json_decode($responseJson);
     }
 
