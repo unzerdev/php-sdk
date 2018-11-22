@@ -31,6 +31,7 @@ use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
@@ -115,4 +116,75 @@ class ResourceServiceTest extends TestCase
         $resourceService->send($testResource, HttpAdapterInterface::REQUEST_PUT);
         $resourceService->send($testResource, HttpAdapterInterface::REQUEST_DELETE);
     }
+
+    /**
+     * Verify getResourceIdFromUrl works correctly.
+     *
+     * @test
+     * @dataProvider urlIdStringProvider
+     *
+     * @param string $expected
+     * @param string $uri
+     * @param string $idString
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     */
+    public function getResourceIdFromUrlShouldIdentifyAndReturnTheIdStringFromAGivenString($expected, $uri, $idString)
+    {
+        $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
+        $this->assertEquals($expected, $resourceService->getResourceIdFromUrl($uri, $idString));
+    }
+
+    /**
+     * Verify getResourceIdFromUrl throws exception if the id cannot be found.
+     *
+     * @test
+     * @dataProvider failingUrlIdStringProvider
+     *
+     * @throws \RuntimeException
+     *
+     * @param mixed $uri
+     * @param mixed $idString
+     */
+    public function getResourceIdFromUrlShouldThrowExceptionIfTheIdCanNotBeFound($uri, $idString)
+    {
+        $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Id not found!');
+        $resourceService->getResourceIdFromUrl($uri, $idString);
+    }
+
+    //<editor-fold desc="Data Providers">
+
+    /**
+     * Data provider for getResourceIdFromUrlShouldIdentifyAndReturnTheIdStringFromAGivenString.
+     *
+     * @return array
+     */
+    public function urlIdStringProvider(): array
+    {
+        return [
+            ['s-test-1234', 'https://myurl.test/s-test-1234', 'test'],
+            ['p-foo-99988776655', 'https://myurl.test/p-foo-99988776655', 'foo'],
+            ['s-bar-123456787', 'https://myurl.test/s-test-1234/s-bar-123456787', 'bar']
+        ];
+    }
+
+    /**
+     * Data provider for getResourceIdFromUrlShouldThrowExceptionIfTheIdCanNotBeFound.
+     *
+     * @return array
+     */
+    public function failingUrlIdStringProvider(): array
+    {
+        return[
+            ['https://myurl.test/s-test-1234', 'aut'],
+            ['https://myurl.test/authorizep-aut-99988776655', 'foo'],
+            ['https://myurl.test/s-test-1234/z-bar-123456787', 'bar']
+        ];
+    }
+
+    //</editor-fold>
 }
