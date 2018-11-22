@@ -32,6 +32,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
@@ -390,5 +391,79 @@ class PaymentServiceTest extends TestCase
 
         $paymentSrvMock->cancelChargeById($payment, 's-chg-1');
         $paymentSrvMock->cancelChargeById($payment, 's-chg-1', 10.11);
+    }
+
+    /**
+     * Verify cancelCharge creates new Cancellation and calls create on resourceService with it.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function cancelChargeShouldCreateCancellationAndCallsCreate()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $paymentSrv = new PaymentService($heidelpay);
+        $payment = (new Payment())->setParentResource($heidelpay);
+        $charge = (new Charge())->setPayment($payment);
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')->with(
+            $this->callback(
+                function ($cancellation) use ($payment, $charge) {
+                    return $cancellation instanceof Cancellation &&
+                           $cancellation->getAmount() === 12.22 &&
+                           $cancellation->getPayment() === $payment &&
+                           $cancellation->getParentResource() === $charge;
+                }
+            )
+        );
+        /** @var ResourceService $resourceSrvMock */
+        $paymentSrv->setResourceService($resourceSrvMock);
+
+        $paymentSrv->cancelCharge($charge, 12.22);
+    }
+
+    /**
+     * Verify ship method will create a new Shipment, add it to the given payment object and call create on
+     * ResourceService with the shipment object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function shipShouldCreateShipmentAndCallCreateOnResourceServiceWithIt()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $paymentSrv = new PaymentService($heidelpay);
+        $payment = new Payment();
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create', 'fetchPayment'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->exactly(2))->method('create')->with(
+            $this->callback(
+                function ($shipment) use ($payment) {
+                    return $shipment instanceof Shipment &&
+                        $shipment->getPayment() === $payment &&
+                        $shipment->getParentResource() === $payment;
+                }
+            )
+        );
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->with('myPaymentId')->willReturn($payment);
+
+        /** @var ResourceService $resourceSrvMock */
+        $paymentSrv->setResourceService($resourceSrvMock);
+
+        $this->assertInstanceOf(Shipment::class, $paymentSrv->ship($payment));
+        $this->assertCount(1, $payment->getShipments());
+        $this->assertInstanceOf(Shipment::class, $paymentSrv->ship('myPaymentId'));
+        $this->assertCount(2, $payment->getShipments());
     }
 }

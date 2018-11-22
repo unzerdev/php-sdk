@@ -365,13 +365,10 @@ class PaymentService
             $paymentObject = $this->resourceService->fetchPayment($payment);
         }
 
-        if (!$paymentObject instanceof Payment) {
-            throw new \RuntimeException('Payment object is not set.');
-        }
-
         $shipment = new Shipment();
         $paymentObject->addShipment($shipment);
-        return $this->resourceService->create($shipment);
+        $this->resourceService->create($shipment);
+        return $shipment;
     }
 
     //</editor-fold>
