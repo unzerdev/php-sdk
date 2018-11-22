@@ -250,6 +250,70 @@ class ResourceServiceTest extends TestCase
         $this->assertSame($testResource, $resourceServiceMock->create($testResource));
         $this->assertNull($testResource->getId());
     }
+
+    /**
+     * Verify update method will call send method and call the resources handleResponse method with the response.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function updateShouldCallSendAndThenHandleResponseWithTheResponseData()
+    {
+        $response = new \stdClass();
+
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
+        $testResource->expects($this->once())->method('handleResponse')
+            ->with($response, HttpAdapterInterface::REQUEST_PUT);
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceServiceMock->expects($this->once())->method('send')
+            ->with($testResource, HttpAdapterInterface::REQUEST_PUT)->willReturn($response);
+
+        /**
+         * @var ResourceService           $resourceServiceMock
+         * @var AbstractHeidelpayResource $testResource
+         */
+        $this->assertSame($testResource, $resourceServiceMock->update($testResource));
+    }
+
+    /**
+     * Verify update does not handle response with error.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function updateShouldNotHandleResponseWithError()
+    {
+        $response = new \stdClass();
+        $response->isError = true;
+
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
+        $testResource->expects($this->never())->method('handleResponse');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceServiceMock->expects($this->once())->method('send')
+            ->with($testResource, HttpAdapterInterface::REQUEST_PUT)->willReturn($response);
+
+        /**
+         * @var ResourceService           $resourceServiceMock
+         * @var AbstractHeidelpayResource $testResource
+         */
+        $this->assertSame($testResource, $resourceServiceMock->update($testResource));
+    }
     
     //<editor-fold desc="Data Providers">
 
