@@ -235,4 +235,44 @@ class PaymentServiceTest extends TestCase
         $paymentSrvMock->setResourceService($resourceSrvMock);
         $paymentSrvMock->chargeAuthorization('myPaymentId');
     }
+
+    /**
+     * Verify chargePayment will create a charge object and call create on ResourceService with it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function chargePaymentShouldCallCreateOnResourceServiceWithNewCharge()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')->with(
+            $this->callback(
+                function ($charge) use ($payment) {
+                    /** @var Charge $charge */
+                    $newPayment = $charge->getPayment();
+                    return $charge instanceof Charge &&
+                        $charge->getAmount() === 1.234 &&
+                        $charge->getCurrency() === 'myTestCurrency' &&
+                        $newPayment instanceof Payment &&
+                        $newPayment === $payment &&
+                        \in_array($charge, $newPayment->getCharges(), true);
+                }
+            )
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
+        $returnedCharge = $paymentSrv->chargePayment($payment, 1.234, 'myTestCurrency');
+        $this->assertArraySubset([$returnedCharge], $payment->getCharges());
+    }
 }
