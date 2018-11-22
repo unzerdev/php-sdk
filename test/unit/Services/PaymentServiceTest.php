@@ -30,6 +30,7 @@ use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
@@ -274,5 +275,45 @@ class PaymentServiceTest extends TestCase
         $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
         $returnedCharge = $paymentSrv->chargePayment($payment, 1.234, 'myTestCurrency');
         $this->assertArraySubset([$returnedCharge], $payment->getCharges());
+    }
+
+    /**
+     * Verify cancelAuthorization will create a cancellation object and call create on ResourceService with it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function cancelAuthorizationShouldCallCreateOnResourceServiceWithNewCancellation()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
+        $authorization = (new Authorization())->setPayment($payment)->setId('s-aut-1');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')->with(
+            $this->callback(
+                function ($cancellation) use ($authorization, $payment) {
+                    /** @var Cancellation $cancellation */
+                    $newPayment = $cancellation->getPayment();
+                    return $cancellation instanceof Cancellation &&
+                        $cancellation->getAmount() === 12.122 &&
+                        $newPayment instanceof Payment &&
+                        $newPayment === $payment &&
+                        \in_array($cancellation, $authorization->getCancellations(), true);
+                }
+            )
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
+        $returnedCancellation = $paymentSrv->cancelAuthorization($authorization, 12.122);
+        $this->assertArraySubset([$returnedCancellation], $authorization->getCancellations());
     }
 }
