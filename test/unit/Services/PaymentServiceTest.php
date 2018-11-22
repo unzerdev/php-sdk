@@ -353,4 +353,42 @@ class PaymentServiceTest extends TestCase
         $paymentSrvMock->cancelAuthorizationByPayment(new Payment());
         $paymentSrvMock->cancelAuthorizationByPayment(new Payment(), 1.123);
     }
+
+    /**
+     * Verify cancelChargeById fetches Charge and propagates to cancelCharge method.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function cancelChargeByIdShouldFetchChargeAndPropagateToCancelCharge()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $charge = new Charge();
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchChargeById'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->exactly(2))->method('fetchChargeById')->with($payment, 's-chg-1')
+            ->willReturn($charge);
+
+        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['cancelCharge'])
+            ->disableOriginalConstructor()->getMock();
+        $paymentSrvMock->expects($this->exactly(2))->method('cancelCharge')->withConsecutive(
+            [$charge],
+            [$charge, 10.11]
+        );
+
+        /**
+         * @var PaymentService  $paymentSrvMock
+         * @var ResourceService $resourceSrvMock
+         */
+        $paymentSrvMock->setResourceService($resourceSrvMock);
+
+        $paymentSrvMock->cancelChargeById($payment, 's-chg-1');
+        $paymentSrvMock->cancelChargeById($payment, 's-chg-1', 10.11);
+    }
 }

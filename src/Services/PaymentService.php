@@ -296,7 +296,8 @@ class PaymentService
      */
     public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType
     {
-        return $this->cancelAuthorization($this->resourceService->fetchAuthorization($payment), $amount);
+        $authorization = $this->resourceService->fetchAuthorization($payment);
+        return $this->cancelAuthorization($authorization, $amount);
     }
 
     //</editor-fold>
@@ -317,7 +318,8 @@ class PaymentService
      */
     public function cancelChargeById($payment, $chargeId, $amount = null): AbstractTransactionType
     {
-        return $this->cancelCharge($this->resourceService->fetchChargeById($payment, $chargeId), $amount);
+        $charge = $this->resourceService->fetchChargeById($payment, $chargeId);
+        return $this->cancelCharge($charge, $amount);
     }
 
     /**
