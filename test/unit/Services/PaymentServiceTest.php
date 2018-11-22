@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines unit tests to verify functionality of the resource name service.
+ * This class defines unit tests to verify functionality of the payment service.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
