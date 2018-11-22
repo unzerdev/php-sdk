@@ -316,4 +316,41 @@ class PaymentServiceTest extends TestCase
         $returnedCancellation = $paymentSrv->cancelAuthorization($authorization, 12.122);
         $this->assertArraySubset([$returnedCancellation], $authorization->getCancellations());
     }
+
+    /**
+     * Verify cancelAuthorizationByPayment will propagate to cancelAuthorization method.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function cancelAuthorizationByPaymentShouldCallCancelAuthorization()
+    {
+        $authorization = (new Authorization())->setId('s-aut-1');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchAuthorization'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->exactly(2))->method('fetchAuthorization')->willReturn($authorization);
+
+        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['cancelAuthorization'])
+            ->disableOriginalConstructor()->getMock();
+        $paymentSrvMock->expects($this->exactly(2))->method('cancelAuthorization')->withConsecutive(
+            [$authorization, null],
+            [$authorization, 1.123]
+        );
+
+        /**
+         * @var PaymentService  $paymentSrvMock
+         * @var ResourceService $resourceSrvMock
+         */
+        $paymentSrvMock->setResourceService($resourceSrvMock);
+
+        /** @var PaymentService $paymentSrvMock */
+        $paymentSrvMock->cancelAuthorizationByPayment(new Payment());
+        $paymentSrvMock->cancelAuthorizationByPayment(new Payment(), 1.123);
+    }
 }
