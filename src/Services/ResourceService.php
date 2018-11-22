@@ -90,16 +90,16 @@ class ResourceService
 
     /**
      * @param string $url
-     * @param string $typePattern
+     * @param string $idString
      *
      * @return string
      *
      * @throws \RuntimeException
      */
-    public function getResourceIdFromUrl($url, $typePattern): string
+    public function getResourceIdFromUrl($url, $idString): string
     {
         $matches = [];
-        preg_match('~\/([s|p]{1}-' . $typePattern . '-[\d]+)~', $url, $matches);
+        preg_match('~\/([s|p]{1}-' . $idString . '-[\d]+)~', $url, $matches);
 
         if (\count($matches) < 2) {
             throw new \RuntimeException('Id not found!');
