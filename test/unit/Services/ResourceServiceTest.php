@@ -156,6 +156,33 @@ class ResourceServiceTest extends TestCase
         $resourceService->getResourceIdFromUrl($uri, $idString);
     }
 
+    /**
+     * Verify getResource calls fetch if its id is set and it has never been fetched before.
+     *
+     * @test
+     * @dataProvider getResourceFetchCallDataProvider
+     *
+     * @param $resource
+     * @param $timesFetchIsCalled
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function getResourceShouldFetchIfTheResourcesIdIsSetAndItHasNotBeenFetchedBefore(
+        $resource,
+        $timesFetchIsCalled
+    ) {
+        $resourceSrv = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrv->expects($this->exactly($timesFetchIsCalled))->method('fetch')->with($resource);
+
+        /** @var ResourceService $resourceSrv */
+        $resourceSrv->getResource($resource);
+    }
+    
     //<editor-fold desc="Data Providers">
 
     /**
@@ -183,6 +210,21 @@ class ResourceServiceTest extends TestCase
             ['https://myurl.test/s-test-1234', 'aut'],
             ['https://myurl.test/authorizep-aut-99988776655', 'foo'],
             ['https://myurl.test/s-test-1234/z-bar-123456787', 'bar']
+        ];
+    }
+
+    /**
+     * Data provider for getResourceShouldFetchIfTheResourcesIdIsSetAndItHasNotBeenFetchedBefore.
+     *
+     * @return array
+     */
+    public function getResourceFetchCallDataProvider(): array
+    {
+        return [
+            'fetchedAt is null, Id is null' => [new Customer(), 0],
+            'fetchedAt is null, id is set' => [(new Customer())->setId('testId'), 1],
+            'fetchedAt is set, id is null' => [(new Customer())->setFetchedAt(new \DateTime('now')), 0],
+            'fetchedAt is set, id is set' => [(new Customer())->setFetchedAt(new \DateTime('now'))->setId('testId'), 0],
         ];
     }
 
