@@ -182,6 +182,74 @@ class ResourceServiceTest extends TestCase
         /** @var ResourceService $resourceSrv */
         $resourceSrv->getResource($resource);
     }
+
+    /**
+     * Verify create method will call send method and call the resources handleResponse method with the response.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function createShouldCallSendAndThenHandleResponseWithTheResponseData()
+    {
+        $response = new \stdClass();
+        $response->id = 'myTestId';
+
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
+        $testResource->expects($this->once())->method('handleResponse')
+            ->with($response, HttpAdapterInterface::REQUEST_POST);
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceServiceMock->expects($this->once())->method('send')
+            ->with($testResource, HttpAdapterInterface::REQUEST_POST)->willReturn($response);
+
+        /**
+         * @var ResourceService           $resourceServiceMock
+         * @var AbstractHeidelpayResource $testResource
+         */
+        $this->assertSame($testResource, $resourceServiceMock->create($testResource));
+        $this->assertEquals('myTestId', $testResource->getId());
+    }
+
+    /**
+     * Verify create does not handle response with error.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function createShouldNotHandleResponseWithError()
+    {
+        $response = new \stdClass();
+        $response->isError = true;
+        $response->id = 'myId';
+
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
+        $testResource->expects($this->never())->method('handleResponse');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceServiceMock->expects($this->once())->method('send')
+            ->with($testResource, HttpAdapterInterface::REQUEST_POST)->willReturn($response);
+
+        /**
+         * @var ResourceService           $resourceServiceMock
+         * @var AbstractHeidelpayResource $testResource
+         */
+        $this->assertSame($testResource, $resourceServiceMock->create($testResource));
+        $this->assertNull($testResource->getId());
+    }
     
     //<editor-fold desc="Data Providers">
 
