@@ -30,9 +30,11 @@ use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
@@ -124,7 +126,7 @@ class PaymentServiceTest extends TestCase
                            $authorize->getAmount() === 1.234 &&
                            $authorize->getCurrency() === 'myTestCurrency' &&
                            $authorize->getOrderId() === 'myOrderId' &&
-                           $authorize->getReturnUrl() === 'myTestReturnUrl' &&
+                           $authorize->getReturnUrl() === 'myTestUrl' &&
                            $newPayment instanceof Payment &&
                            $newPayment === $payment &&
                            $newPayment->getCustomer() === $customer &&
@@ -135,15 +137,53 @@ class PaymentServiceTest extends TestCase
 
         /** @var ResourceService $resourceSrvMock */
         $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
-
-        $returnedAuth = $paymentSrv->authorizeWithPayment(
-            1.234,
-            'myTestCurrency',
-            $payment,
-            'myTestReturnUrl',
-            $customer,
-            'myOrderId'
-        );
+        $returnedAuth =
+            $paymentSrv->authorizeWithPayment(1.234, 'myTestCurrency', $payment, 'myTestUrl', $customer, 'myOrderId');
         $this->assertSame($payment->getAuthorization(), $returnedAuth);
+    }
+
+    /**
+     * Verify charge method calls create with a charge object on resource service.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ExpectationFailedException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function chargeShouldCreateAPaymentAndCallCreateOnResourceServiceWithPayment()
+    {
+        $customer = (new Customer())->setId('myCustomerId');
+        $heidelpay = new Heidelpay('s-priv-123');
+        $paymentType = (new Sofort())->setId('myPaymentTypeId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')->with(
+            $this->callback(
+                function ($charge) use ($customer, $paymentType) {
+                    /** @var Charge $charge */
+                    $newPayment = $charge->getPayment();
+                    return $charge instanceof Charge &&
+                        $charge->getAmount() === 1.234 &&
+                        $charge->getCurrency() === 'myTestCurrency' &&
+                        $charge->getOrderId() === 'myOrderId' &&
+                        $charge->getReturnUrl() === 'myTestUrl' &&
+                        $newPayment instanceof Payment &&
+                        $newPayment->getCustomer() === $customer &&
+                        $newPayment->getPaymentType() === $paymentType &&
+                        \in_array($charge, $newPayment->getCharges(), true);
+                }
+            )
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
+        $returnedCharge =
+            $paymentSrv->charge(1.234, 'myTestCurrency', $paymentType, 'myTestUrl', $customer, 'myOrderId');
+        $this->assertSame($paymentType, $returnedCharge->getPayment()->getPaymentType());
     }
 }
