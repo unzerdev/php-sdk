@@ -74,4 +74,45 @@ class ResourceServiceTest extends TestCase
         $expectedResponse->myTestKey2->myTestKey3 = 'myTestValue2';
         $this->assertEquals($expectedResponse, $response);
     }
+
+    /**
+     * Verify send method will call getUri with appendId depending on Http method.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function sendShouldCallGetUriWithAppendIdDependingOnHttpMethod()
+    {
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['getUri'])->getMock();
+        $testResource->expects($this->exactly(5))->method('getUri')->withConsecutive(
+            [true],
+            [true],
+            [false],
+            [true],
+            [true]
+        );
+
+        $heidelpay = $this->getMockBuilder(Heidelpay::class)->setMethods(['send'])->disableOriginalConstructor()
+            ->getMock();
+        $heidelpay->method('send')->withAnyParameters()->willReturn('{}');
+
+        /**
+         * @var Heidelpay                 $heidelpay
+         * @var AbstractHeidelpayResource $testResource
+         */
+        $testResource->setParentResource($heidelpay);
+        $resourceService = new ResourceService($heidelpay);
+
+        /** @var AbstractHeidelpayResource $testResource */
+        $resourceService->send($testResource);
+        $resourceService->send($testResource, HttpAdapterInterface::REQUEST_GET);
+        $resourceService->send($testResource, HttpAdapterInterface::REQUEST_POST);
+        $resourceService->send($testResource, HttpAdapterInterface::REQUEST_PUT);
+        $resourceService->send($testResource, HttpAdapterInterface::REQUEST_DELETE);
+    }
 }
