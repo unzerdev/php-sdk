@@ -97,7 +97,6 @@ class PaymentService
 
     //</editor-fold>
 
-
     //<editor-fold desc="Helpers">
 
     /**
@@ -171,7 +170,7 @@ class PaymentService
         $returnUrl = null,
         $customer = null,
         $orderId = null
-    ): AbstractTransactionType {
+    ): Authorization {
         $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
         $payment->setAuthorization($authorization)->setCustomer($customer);
         $this->resourceService->create($authorization);

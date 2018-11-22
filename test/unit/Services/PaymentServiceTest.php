@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
@@ -93,5 +94,56 @@ class PaymentServiceTest extends TestCase
         $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url');
         $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer);
         $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, 'OrderId');
+    }
+
+    /**
+     * Verify authorizeWithPayment calls create for a new authorization using the passed values.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function authorizeWithPaymentShouldCallCreateOnResourceServiceWithANewAuthorization()
+    {
+        $customer = (new Customer())->setId('myCustomerId');
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')->with(
+            $this->callback(
+                function ($authorize) use ($customer, $payment) {
+                    /** @var Authorization $authorize */
+                    $newPayment = $authorize->getPayment();
+                    return $authorize instanceof Authorization &&
+                           $authorize->getAmount() === 1.234 &&
+                           $authorize->getCurrency() === 'myTestCurrency' &&
+                           $authorize->getOrderId() === 'myOrderId' &&
+                           $authorize->getReturnUrl() === 'myTestReturnUrl' &&
+                           $newPayment instanceof Payment &&
+                           $newPayment === $payment &&
+                           $newPayment->getCustomer() === $customer &&
+                           $newPayment->getAuthorization() === $authorize;
+                }
+            )
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
+
+        $returnedAuth = $paymentSrv->authorizeWithPayment(
+            1.234,
+            'myTestCurrency',
+            $payment,
+            'myTestReturnUrl',
+            $customer,
+            'myOrderId'
+        );
+        $this->assertSame($payment->getAuthorization(), $returnedAuth);
     }
 }
