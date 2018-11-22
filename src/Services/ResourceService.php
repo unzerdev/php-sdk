@@ -188,9 +188,14 @@ class ResourceService
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function delete(AbstractHeidelpayResource $resource)
+    public function delete(AbstractHeidelpayResource &$resource)
     {
-        $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
+        $response = $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
+
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
+            return $resource;
+        }
 
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $resource = null;

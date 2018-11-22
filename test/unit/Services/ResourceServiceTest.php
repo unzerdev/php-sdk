@@ -314,6 +314,70 @@ class ResourceServiceTest extends TestCase
          */
         $this->assertSame($testResource, $resourceServiceMock->update($testResource));
     }
+
+    /**
+     * Verify delete method will call send method and set resource null if successful.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function deleteShouldCallSendAndThenSetTheResourceNull()
+    {
+        $response = new \stdClass();
+
+        $testResource = $this->getMockBuilder(Customer::class)->getMock();
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceServiceMock->expects($this->once())->method('send')
+            ->with($testResource, HttpAdapterInterface::REQUEST_DELETE)->willReturn($response);
+
+        /**
+         * @var ResourceService           $resourceServiceMock
+         * @var AbstractHeidelpayResource $testResource
+         */
+        $this->assertNull($resourceServiceMock->delete($testResource));
+        $this->assertNull($testResource);
+    }
+
+    /**
+     * Verify delete does not delete resource object on error response.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function deleteShouldNotDeleteObjectOnResponseWithError()
+    {
+        $response = new \stdClass();
+        $response->isError = true;
+
+        $testResource = $this->getMockBuilder(Customer::class)->getMock();
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceServiceMock->expects($this->once())->method('send')
+            ->with($testResource, HttpAdapterInterface::REQUEST_DELETE)->willReturn($response);
+
+        /**
+         * @var ResourceService           $resourceServiceMock
+         * @var AbstractHeidelpayResource $testResource
+         */
+        $responseResource = $resourceServiceMock->delete($testResource);
+        $this->assertNotNull($responseResource);
+        $this->assertNotNull($testResource);
+        $this->assertSame($testResource, $responseResource);
+    }
     
     //<editor-fold desc="Data Providers">
 
