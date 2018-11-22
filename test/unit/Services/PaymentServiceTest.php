@@ -186,4 +186,53 @@ class PaymentServiceTest extends TestCase
             $paymentSrv->charge(1.234, 'myTestCurrency', $paymentType, 'myTestUrl', $customer, 'myOrderId');
         $this->assertSame($paymentType, $returnedCharge->getPayment()->getPaymentType());
     }
+
+    /**
+     * Verify chargeAuthorization calls chargePayment with the given payment object.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws \ReflectionException
+     */
+    public function chargeAuthorizationShouldCallChargePaymentWithTheGivenPaymentObject()
+    {
+        $paymentObject = (new Payment())->setId('myPaymentId');
+        $paymentSrv = $this->getMockBuilder(PaymentService::class)->setMethods(['chargePayment'])
+            ->disableOriginalConstructor()->getMock();
+        $paymentSrv->expects($this->exactly(2))->method('chargePayment')
+            ->withConsecutive([$paymentObject, null], [$paymentObject, 1.234]);
+
+        /** @var PaymentService $paymentSrv */
+        $paymentSrv->chargeAuthorization($paymentObject);
+        $paymentSrv->chargeAuthorization($paymentObject, 1.234);
+    }
+
+    /**
+     * Verify chargeAuthorization calls fetchPayment if the payment object is passed as id string.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @throws \ReflectionException
+     */
+    public function chargeAuthorizationShouldCallFetchPaymentIfThePaymentIsPassedAsIdString()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->willReturn(new Payment());
+
+        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['chargePayment'])
+            ->disableOriginalConstructor()->getMock();
+        $paymentSrvMock->expects($this->once())->method('chargePayment')->withAnyParameters();
+
+        /**
+         * @var PaymentService  $paymentSrvMock
+         * @var ResourceService $resourceSrvMock
+         */
+        $paymentSrvMock->setResourceService($resourceSrvMock);
+        $paymentSrvMock->chargeAuthorization('myPaymentId');
+    }
 }
