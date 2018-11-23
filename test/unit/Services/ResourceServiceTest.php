@@ -899,6 +899,33 @@ class ResourceServiceTest extends TestCase
         $this->assertSame($charge, $returnedCharge);
     }
 
+    /**
+     * Verify fetchReversalByAuthorization fetches authorization and gets and returns the reversal object from it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchReversalByAuthorizationShouldFetchAuthorizeAndReturnTheReversalFromIt()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $authorizeMock = $this->getMockBuilder(Authorization::class)->setMethods(['getCancellation'])->getMock();
+
+        $cancellation = new Cancellation();
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($authorizeMock);
+
+        $authorizeMock->expects($this->once())->method('getCancellation')->with('cancelId')->willReturn($cancellation);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCancel = $resourceSrvMock->fetchReversalByAuthorization($authorizeMock, 'cancelId');
+        $this->assertSame($cancellation, $returnedCancel);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
