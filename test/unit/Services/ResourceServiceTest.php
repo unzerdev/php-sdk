@@ -954,6 +954,64 @@ class ResourceServiceTest extends TestCase
         $this->assertSame($cancel, $returnedCancel);
     }
 
+    /**
+     * Verify fetchRefundById fetches charge object by id and fetches desired refund from it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchRefundByIdShouldFetchChargeByIdAndThenFetchTheDesiredRefundFromIt()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchChargeById', 'fetchRefund'])
+            ->disableOriginalConstructor()->getMock();
+
+        $charge = (new Charge())->setId('chargeId');
+        $cancel = (new Cancellation())->setId('cancellationId');
+        $resourceSrvMock->expects($this->once())->method('fetchChargeById')->with('paymentId', 'chargeId')
+            ->willReturn($charge);
+        $resourceSrvMock->expects($this->once())->method('fetchRefund')->with($charge, 'cancellationId')
+            ->willReturn($cancel);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCancellation = $resourceSrvMock->fetchRefundById('paymentId', 'chargeId', 'cancellationId');
+        $this->assertSame($cancel, $returnedCancellation);
+    }
+
+    /**
+     * Verify fetchRefund gets and fetches desired charge cancellation.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchRefundShouldGetAndFetchDesiredChargeCancellation()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $chargeMock = $this->getMockBuilder(Charge::class)->setMethods(['getCancellation'])->getMock();
+
+        $cancel = (new Cancellation())->setId('cancellationId');
+        $chargeMock->expects($this->once())->method('getCancellation')->with('cancellationId', true)
+            ->willReturn($cancel);
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($cancel)->willReturn($cancel);
+
+        /**
+         * @var ResourceService $resourceSrvMock
+         * @var Charge          $chargeMock
+         */
+        $returnedCancellation = $resourceSrvMock->fetchRefund($chargeMock, 'cancellationId');
+        $this->assertSame($cancel, $returnedCancellation);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
