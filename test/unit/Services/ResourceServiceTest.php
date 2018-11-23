@@ -926,6 +926,34 @@ class ResourceServiceTest extends TestCase
         $this->assertSame($cancellation, $returnedCancel);
     }
 
+    /**
+     * Verify fetchReversal will fetch payment by id and get and return the desired reversal from it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchReversalShouldFetchPaymentAndReturnDesiredReversalFromIt()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment'])
+            ->disableOriginalConstructor()->getMock();
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
+        $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['getCancellation'])->getMock();
+
+        $cancel = (new Cancellation())->setId('cancelId');
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->willReturn($paymentMock);
+        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
+        $authorizationMock->expects($this->once())->method('getCancellation')->willReturn($cancel);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCancel = $resourceSrvMock->fetchReversal('paymentId', 'cancelId');
+        $this->assertSame($cancel, $returnedCancel);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
