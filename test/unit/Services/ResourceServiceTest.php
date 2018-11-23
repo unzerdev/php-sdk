@@ -45,6 +45,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -840,6 +841,34 @@ class ResourceServiceTest extends TestCase
         /** @var ResourceService $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->deleteCustomer('myCustomerId');
         $this->assertSame($customer, $returnedCustomer);
+    }
+
+    /**
+     * Verify fetchAuthorization fetches payment object and returns its authorization.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchAuthorizationShouldFetchPaymentAndReturnItsAuthorization()
+    {
+        $authorize = (new Authorization())->setId('s-aut-1');
+
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
+        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorize);
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->with($paymentMock)->willReturn($paymentMock);
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($authorize)->willReturn($authorize);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedAuthorize = $resourceSrvMock->fetchAuthorization($paymentMock);
+        $this->assertSame($authorize, $returnedAuthorize);
     }
 
     //<editor-fold desc="Data Providers">
