@@ -26,10 +26,22 @@ namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
+use heidelpay\MgwPhpSdk\Resources\Keypair;
+use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class AbstractHeidelpayResourceTest extends TestCase
@@ -129,25 +141,31 @@ class AbstractHeidelpayResourceTest extends TestCase
     }
 
     /**
-     * Verify getUri will return the expected path.
+     * Verify getUri will return the expected path with id if the flag is set.
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @dataProvider uriDataProvider
+     *
+     * @param AbstractHeidelpayResource $resource
+     * @param string                    $resourcePath
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws RuntimeException
      * @throws \ReflectionException
+     * @throws \RuntimeException
      */
-    public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet()
+    public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractHeidelpayResource$resource, $resourcePath)
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUri'])
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['getUri'])
             ->getMock();
         $heidelpayMock->method('getUri')->willReturn('parent/resource/path/');
 
-        /** @var Customer $heidelpayMock */
-        $customer = (new Customer())->setParentResource($heidelpayMock)->setId('myId');
-        $this->assertEquals('parent/resource/path/customers/myId/', $customer->getUri());
-        $this->assertEquals('parent/resource/path/customers/', $customer->getUri(false));
+        /** @var Heidelpay $heidelpayMock */
+        $resource->setParentResource($heidelpayMock)->setId('myId');
+        $this->assertEquals($resourcePath . 'myId/', $resource->getUri());
+        $this->assertEquals($resourcePath, $resource->getUri(false));
     }
 
     /**
@@ -330,4 +348,32 @@ class AbstractHeidelpayResourceTest extends TestCase
         $dummy = new DummyHeidelPayResource($customer);
         $this->assertNull($dummy->getExternalId());
     }
+
+    //<editor-fold desc="Data Providers">
+
+    /**
+     * Data provider for getUriShouldReturnResourcePath.
+     *
+     * @return array
+     *
+     * @throws \RuntimeException
+     */
+    public function uriDataProvider(): array
+    {
+        return [
+            [new Customer(), 'parent/resource/path/customers/'],
+            [new Keypair(), 'parent/resource/path/keypair/'],
+            [new Payment(), 'parent/resource/path/payments/'],
+            [new Card('', '03/30'), 'parent/resource/path/types/card/'],
+            [new Ideal(), 'parent/resource/path/types/ideal/'],
+            [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
+            [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed/'],
+            [new Cancellation(), 'parent/resource/path/cancels/'],
+            [new Authorization(), 'parent/resource/path/authorize/'],
+            [new Shipment(), 'parent/resource/path/shipments/'],
+            [new Charge(), 'parent/resource/path/charges/']
+        ];
+    }
+
+    //</editor-fold>
 }
