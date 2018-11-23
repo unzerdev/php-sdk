@@ -48,6 +48,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -1010,6 +1011,35 @@ class ResourceServiceTest extends TestCase
          */
         $returnedCancellation = $resourceSrvMock->fetchRefund($chargeMock, 'cancellationId');
         $this->assertSame($cancel, $returnedCancellation);
+    }
+
+    /**
+     * Verify fetchShipment fetches payment object and returns the desired shipment from it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchShipmentShouldFetchPaymentAndReturnTheDesiredShipmentFromIt()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment'])
+            ->disableOriginalConstructor()->getMock();
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getShipment'])->getMock();
+
+        $shipment = (new Shipment())->setId('shipmentId');
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->with('paymentId')->willReturn($paymentMock);
+        $paymentMock->expects($this->once())->method('getShipment')->with('shipmentId', false)->willReturn($shipment);
+
+        /**
+         * @var ResourceService $resourceSrvMock
+         * @var Payment         $paymentMock
+         */
+        $returnedShipment = $resourceSrvMock->fetchShipment('paymentId', 'shipmentId');
+        $this->assertSame($shipment, $returnedShipment);
     }
 
     //<editor-fold desc="Data Providers">
