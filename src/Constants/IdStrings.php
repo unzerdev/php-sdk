@@ -44,4 +44,5 @@ class IdStrings
     const SEPA_DIRECT_DEBIT_GUARANTEED = 'ddg';
     const SEPA_DIRECT_DEBIT = 'sdd';
     const SOFORT = 'sft';
+    const PIS = 'pis';
 }

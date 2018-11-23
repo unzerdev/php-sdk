@@ -40,6 +40,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\PIS;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
@@ -334,6 +335,9 @@ class ResourceService
                 break;
             case IdStrings::SOFORT:
                 $paymentType = new Sofort();
+                break;
+            case IdStrings::PIS:
+                $paymentType = new PIS();
                 break;
             default:
                 throw new \RuntimeException(sprintf('Payment type "%s" is not allowed!', $typeIdParts[1]));
