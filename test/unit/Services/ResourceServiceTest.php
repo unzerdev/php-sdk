@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -405,7 +406,7 @@ class ResourceServiceTest extends TestCase
 
         /**
          * @var AbstractHeidelpayResource $resourceMock
-         * @var ResourceService $resourceSrvMock
+         * @var ResourceService           $resourceSrvMock
          */
         $this->assertNull($resourceMock->getFetchedAt());
         $resourceSrvMock->fetch($resourceMock);
@@ -413,6 +414,54 @@ class ResourceServiceTest extends TestCase
         $now = (new \DateTime('now'))->getTimestamp();
         $then = $resourceMock->getFetchedAt()->getTimestamp();
         $this->assertTrue(($now - $then) < 60);
+    }
+
+    /**
+     * Verify fetchPayment method will fetch the passed payment object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchPaymentShouldCallFetchWithTheGivenPaymentObject()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($payment);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedPayment = $resourceSrvMock->fetchPayment($payment);
+        $this->assertSame($payment, $returnedPayment);
+    }
+
+    /**
+     * Verify fetchPayment method called with paymentId will create a payment object set its id and call fetch with it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchPaymentCalledWithIdShouldCreatePaymentObjectWithIdAndCallFetch()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')
+            ->with($this->callback(function ($payment) {
+                return $payment instanceof Payment && $payment->getId() === 'testPaymentId';
+            }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchPayment('testPaymentId');
     }
     
     //<editor-fold desc="Data Providers">

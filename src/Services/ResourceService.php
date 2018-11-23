@@ -247,9 +247,6 @@ class ResourceService
         }
 
         $this->fetch($paymentObject);
-        if (!$paymentObject instanceof Payment) {
-            throw new \RuntimeException('Fetched object is not a payment object!');
-        }
         return $paymentObject;
     }
 
