@@ -593,6 +593,36 @@ class ResourceServiceTest extends TestCase
         $resourceSrvMock->fetchPaymentType($typeId);
     }
 
+    /**
+     * Verify createCustomer calls create with customer object and the heidelpay resource is set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function createCustomerShouldCallCreateWithCustomerObjectAndSetHeidelpayReference()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $customer = new Customer();
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
+            ->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')
+            ->with($this->callback(function ($resource) use ($heidelpay, $customer) {
+                return $resource === $customer && $resource->getHeidelpayObject() === $heidelpay;
+            }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCustomer = $resourceSrvMock->createCustomer($customer);
+
+        $this->assertSame($customer, $returnedCustomer);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**

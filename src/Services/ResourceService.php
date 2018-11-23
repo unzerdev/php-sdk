@@ -373,7 +373,8 @@ class ResourceService
     public function createCustomer(Customer $customer): AbstractHeidelpayResource
     {
         $customer->setParentResource($this->heidelpay);
-        return $this->create($customer);
+        $this->create($customer);
+        return $customer;
     }
 
     /**
