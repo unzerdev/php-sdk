@@ -31,6 +31,18 @@ use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Keypair;
 use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\PIS;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
@@ -523,6 +535,64 @@ class ResourceServiceTest extends TestCase
         $this->assertSame($paymentType, $returnedType);
     }
 
+    /**
+     * Verify fetchPaymentType method is creating the correct payment type instance depending on the passed id.
+     *
+     * @test
+     * @dataProvider paymentTypeAndIdProvider
+     *
+     * @param string $typeClass
+     * @param string $typeId
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function fetchPaymentTypeShouldFetchCorrectPaymentInstanceDependingOnId($typeClass, $typeId)
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')
+            ->with($this->callback(function ($type) use ($heidelpay, $typeClass, $typeId) {
+                /** @var BasePaymentType $type */
+                return $type instanceof $typeClass &&
+                    $type->getHeidelpayObject() === $heidelpay &&
+                    $type->getId() === $typeId;
+            }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchPaymentType($typeId);
+    }
+
+    /**
+     * Verify fetchPaymentType will throw exception if the id does not fit any type or is invalid.
+     *
+     * @test
+     * @dataProvider paymentTypeIdProviderInvalid
+     *
+     * @param string $typeId
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchPaymentTypeShouldThrowExceptionOnInvalidTypeId($typeId)
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->never())->method('fetch');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid payment type!');
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchPaymentType($typeId);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
@@ -565,6 +635,60 @@ class ResourceServiceTest extends TestCase
             'fetchedAt is null, id is set' => [(new Customer())->setId('testId'), 1],
             'fetchedAt is set, id is null' => [(new Customer())->setFetchedAt(new \DateTime('now')), 0],
             'fetchedAt is set, id is set' => [(new Customer())->setFetchedAt(new \DateTime('now'))->setId('testId'), 0],
+        ];
+    }
+
+    /**
+     * Data provider for fetchPaymentTypeShouldCreateCorrectPaymentInstanceDependingOnId.
+     *
+     * @return array
+     */
+    public function paymentTypeAndIdProvider(): array
+    {
+        return [
+            'Card sandbox' => [Card::class, 's-crd-12345678'],
+            'Giropay sandbox' => [Giropay::class, 's-gro-12345678'],
+            'Ideal sandbox' => [Ideal::class, 's-idl-12345678'],
+            'Invoice sandbox' => [Invoice::class, 's-ivc-12345678'],
+            'InvoiceGuaranteed sandbox' => [InvoiceGuaranteed::class, 's-ivg-12345678'],
+            'Paypal sandbox' => [Paypal::class, 's-ppl-12345678'],
+            'Prepayment sandbox' => [Prepayment::class, 's-ppy-12345678'],
+            'Przelewy24 sandbox' => [Przelewy24::class, 's-p24-12345678'],
+            'SepaDirectDebit sandbox' => [SepaDirectDebit::class, 's-sdd-12345678'],
+            'SepaDirectDebitGuaranteed sandbox' => [SepaDirectDebitGuaranteed::class, 's-ddg-12345678'],
+            'Sofort sandbox' => [Sofort::class, 's-sft-12345678'],
+            'PIS sandbox' => [PIS::class, 's-pis-12345678'],
+            'Card production' => [Card::class, 'p-crd-12345678'],
+            'Giropay production' => [Giropay::class, 'p-gro-12345678'],
+            'Ideal production' => [Ideal::class, 'p-idl-12345678'],
+            'Invoice production' => [Invoice::class, 'p-ivc-12345678'],
+            'InvoiceGuaranteed production' => [InvoiceGuaranteed::class, 'p-ivg-12345678'],
+            'Paypal production' => [Paypal::class, 'p-ppl-12345678'],
+            'Prepayment production' => [Prepayment::class, 'p-ppy-12345678'],
+            'Przelewy24 production' => [Przelewy24::class, 'p-p24-12345678'],
+            'SepaDirectDebit production' => [SepaDirectDebit::class, 'p-sdd-12345678'],
+            'SepaDirectDebitGuaranteed production' => [SepaDirectDebitGuaranteed::class, 'p-ddg-12345678'],
+            'Sofort production' => [Sofort::class, 'p-sft-12345678'],
+            'PIS production' => [PIS::class, 'p-pis-12345678']
+        ];
+    }
+
+    /**
+     * Data provider for fetchPaymentTypeShouldThrowExceptionOnInvalidTypeId.
+     *
+     * @return array
+     */
+    public function paymentTypeIdProviderInvalid(): array
+    {
+        return [
+            ['z-crd-12345678123'],
+            ['p-xyz-123456ss78a'],
+            ['scrd-1234567sfsbc'],
+            ['p-crd12345678abc'],
+            ['pcrd12345678abc'],
+            ['myId'],
+            [null],
+            ['']
         ];
     }
 

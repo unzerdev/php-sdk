@@ -302,11 +302,16 @@ class ResourceService
     public function fetchPaymentType($typeId): AbstractHeidelpayResource
     {
         $paymentType = null;
+        $typeIdString = null;
 
         $typeIdParts = [];
         preg_match('/^[sp]{1}-([a-z]{3}|p24)-[a-z0-9]*/', $typeId, $typeIdParts);
 
-        switch ($typeIdParts[1]) {
+        if (\count($typeIdParts) >= 2) {
+            $typeIdString = $typeIdParts[1];
+        }
+
+        switch ($typeIdString) {
             case IdStrings::CARD:
                 $paymentType = new Card(null, null);
                 break;
@@ -344,7 +349,7 @@ class ResourceService
                 $paymentType = new PIS();
                 break;
             default:
-                throw new \RuntimeException(sprintf('Payment type "%s" is not allowed!', $typeIdParts[1]));
+                throw new \RuntimeException('Invalid payment type!');
                 break;
         }
 
