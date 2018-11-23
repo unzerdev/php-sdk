@@ -1,21 +1,20 @@
 <?php
 /**
  * This class defines integration tests to verify interface and
- * functionality of the payment method sofort.
- *
- * Copyright (C) 2018 Heidelpay GmbH
+ * functionality of the payment method PIS.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
@@ -28,47 +27,47 @@ namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\PIS;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
-class SofortTest extends BasePaymentTest
+class PISTest extends BasePaymentTest
 {
     /**
-     * Verify sofort can be created.
+     * Verify pis can be created.
      *
      * @test
      *
-     * @return Sofort
+     * @return PIS
      *
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    public function sofortShouldBeCreatableAndFetchable(): Sofort
+    public function pisShouldBeCreatableAndFetchable(): PIS
     {
-        $sofort = $this->heidelpay->createPaymentType(new Sofort());
-        $this->assertInstanceOf(Sofort::class, $sofort);
-        $this->assertNotNull($sofort->getId());
+        $pis = $this->heidelpay->createPaymentType(new PIS());
+        $this->assertInstanceOf(PIS::class, $pis);
+        $this->assertNotNull($pis->getId());
 
-        /** @var Sofort $fetchedSofort */
-        $fetchedSofort = $this->heidelpay->fetchPaymentType($sofort->getId());
-        $this->assertInstanceOf(Sofort::class, $fetchedSofort);
-        $this->assertEquals($sofort->expose(), $fetchedSofort->expose());
+        /** @var PIS $fetchedPIS */
+        $fetchedPIS = $this->heidelpay->fetchPaymentType($pis->getId());
+        $this->assertInstanceOf(PIS::class, $fetchedPIS);
+        $this->assertEquals($pis->expose(), $fetchedPIS->expose());
 
-        return $fetchedSofort;
+        return $fetchedPIS;
     }
 
     /**
-     * Verify sofort is chargeable.
+     * Verify pis is chargeable.
      *
      * @test
      *
-     * @param Sofort $sofort
+     * @param PIS $pis
      *
      * @return Charge
      *
@@ -76,11 +75,11 @@ class SofortTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @depends sofortShouldBeCreatableAndFetchable
+     * @depends pisShouldBeCreatableAndFetchable
      */
-    public function sofortShouldBeAbleToCharge(Sofort $sofort): Charge
+    public function pisShouldBeAbleToCharge(PIS $pis): Charge
     {
-        $charge = $sofort->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $pis->charge(100.0, Currencies::EURO, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
 
@@ -88,21 +87,21 @@ class SofortTest extends BasePaymentTest
     }
 
     /**
-     * Verify sofort is not authorizable.
+     * Verify pis is not authorizable.
      *
      * @test
      *
-     * @param Sofort $sofort
+     * @param PIS $pis
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @depends sofortShouldBeCreatableAndFetchable
+     * @depends pisShouldBeCreatableAndFetchable
      */
-    public function sofortShouldNotBeAuthorizable(Sofort $sofort)
+    public function pisShouldNotBeAuthorizable(PIS $pis)
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, Currencies::EURO, $sofort, self::RETURN_URL);
+        $this->heidelpay->authorize(100.0, Currencies::EURO, $pis, self::RETURN_URL);
     }
 }
