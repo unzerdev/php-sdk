@@ -424,7 +424,8 @@ class ResourceService
             $customerObject = (new Customer())->setId($customer);
         }
 
-        return $this->fetch($customerObject->setParentResource($this->heidelpay));
+        $this->fetch($customerObject->setParentResource($this->heidelpay));
+        return $customerObject;
     }
 
     /**

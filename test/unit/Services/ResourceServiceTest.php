@@ -701,6 +701,73 @@ class ResourceServiceTest extends TestCase
         $resourceSrvMock->createOrUpdateCustomer($customer);
     }
 
+    /**
+     * Verify fetchCustomer method calls fetch with the customer object provided.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchCustomerShouldCallFetchWithTheGivenCustomerAndSetHeidelpayReference()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $customer = (new Customer())->setId('myCustomerId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($customer);
+
+        try {
+            $customer->getHeidelpayObject();
+            $this->assertTrue(false, 'This exception should have been thrown!');
+        } catch (\RuntimeException $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+            $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
+        }
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCustomer = $resourceSrvMock->fetchCustomer($customer);
+        $this->assertSame($customer, $returnedCustomer);
+        $this->assertSame($heidelpay, $customer->getHeidelpayObject());
+    }
+
+    /**
+     * Verify fetchCustomer will call fetch with a new Customer object if the customer is referenced by id.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchCustomerShouldCallFetchWithNewCustomerObject()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')->with(
+            $this->callback(function ($param) use ($heidelpay) {
+                return $param instanceof Customer &&
+                       $param->getId() === 'myCustomerId' &&
+                       $param->getHeidelpayObject() === $heidelpay;
+            })
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCustomer = $resourceSrvMock->fetchCustomer('myCustomerId');
+        $this->assertEquals('myCustomerId', $returnedCustomer->getId());
+        $this->assertEquals($heidelpay, $returnedCustomer->getHeidelpayObject());
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
