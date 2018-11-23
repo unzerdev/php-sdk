@@ -285,7 +285,8 @@ class ResourceService
     {
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this->heidelpay);
-        return $this->create($paymentType);
+        $this->create($paymentType);
+        return $paymentType;
     }
 
     /**

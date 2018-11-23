@@ -31,6 +31,7 @@ use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Keypair;
 use heidelpay\MgwPhpSdk\Resources\Payment;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -491,6 +492,35 @@ class ResourceServiceTest extends TestCase
 
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchKeypair();
+    }
+
+    /**
+     * Verify createPaymentType method will set parentResource to heidelpay object and call create.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function createPaymentTypeShouldSetHeidelpayObjectAndCallCreate()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $paymentType = new Sofort();
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
+            ->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')
+            ->with($this->callback(function ($type) use ($heidelpay, $paymentType) {
+                return $type === $paymentType && $type->getHeidelpayObject() === $heidelpay;
+            }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedType = $resourceSrvMock->createPaymentType($paymentType);
+
+        $this->assertSame($paymentType, $returnedType);
     }
 
     //<editor-fold desc="Data Providers">
