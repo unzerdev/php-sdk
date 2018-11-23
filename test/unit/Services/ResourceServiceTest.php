@@ -454,11 +454,14 @@ class ResourceServiceTest extends TestCase
      */
     public function fetchPaymentCalledWithIdShouldCreatePaymentObjectWithIdAndCallFetch()
     {
+        $heidelpay = new Heidelpay('s-priv-1234');
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
-            ->disableOriginalConstructor()->getMock();
+            ->setConstructorArgs([$heidelpay])->getMock();
         $resourceSrvMock->expects($this->once())->method('fetch')
-            ->with($this->callback(function ($payment) {
-                return $payment instanceof Payment && $payment->getId() === 'testPaymentId';
+            ->with($this->callback(function ($payment) use ($heidelpay) {
+                return $payment instanceof Payment &&
+                    $payment->getId() === 'testPaymentId' &&
+                    $payment->getHeidelpayObject() === $heidelpay;
             }));
 
         /** @var ResourceService $resourceSrvMock */
@@ -478,11 +481,12 @@ class ResourceServiceTest extends TestCase
      */
     public function fetchKeypairShouldCallFetchWithAKeypairObject()
     {
+        $heidelpay = new Heidelpay('s-priv-1234');
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
-            ->disableOriginalConstructor()->getMock();
+            ->setConstructorArgs([$heidelpay])->getMock();
         $resourceSrvMock->expects($this->once())->method('fetch')
-            ->with($this->callback(function ($keypair) {
-                return $keypair instanceof Keypair;
+            ->with($this->callback(function ($keypair) use ($heidelpay) {
+                return $keypair instanceof Keypair && $keypair->getHeidelpayObject() === $heidelpay;
             }));
 
         /** @var ResourceService $resourceSrvMock */
