@@ -440,7 +440,8 @@ class ResourceService
      */
     public function updateCustomer(Customer $customer): AbstractHeidelpayResource
     {
-        return $this->update($customer);
+        $this->update($customer);
+        return $customer;
     }
 
     /**

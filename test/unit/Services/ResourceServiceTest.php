@@ -768,6 +768,31 @@ class ResourceServiceTest extends TestCase
         $this->assertEquals($heidelpay, $returnedCustomer->getHeidelpayObject());
     }
 
+    /**
+     * Verify updateCustomer calls update with customer object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function updateCustomerShouldCallUpdateWithCustomerObject()
+    {
+        $customer = (new Customer())->setId('customerId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['update'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('update')->with($customer);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCustomer = $resourceSrvMock->updateCustomer($customer);
+
+        $this->assertSame($customer, $returnedCustomer);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
