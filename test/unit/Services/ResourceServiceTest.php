@@ -46,6 +46,8 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -856,19 +858,45 @@ class ResourceServiceTest extends TestCase
      */
     public function fetchAuthorizationShouldFetchPaymentAndReturnItsAuthorization()
     {
-        $authorize = (new Authorization())->setId('s-aut-1');
-
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
-        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorize);
-
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetch'])
             ->disableOriginalConstructor()->getMock();
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
+
+        $authorize = (new Authorization())->setId('s-aut-1');
         $resourceSrvMock->expects($this->once())->method('fetchPayment')->with($paymentMock)->willReturn($paymentMock);
+        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorize);
         $resourceSrvMock->expects($this->once())->method('fetch')->with($authorize)->willReturn($authorize);
 
         /** @var ResourceService $resourceSrvMock */
         $returnedAuthorize = $resourceSrvMock->fetchAuthorization($paymentMock);
         $this->assertSame($authorize, $returnedAuthorize);
+    }
+
+    /**
+     * Verify fetchChargeById fetches payment object and gets and returns the charge object from it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchChargeByIdShouldFetchPaymentAndReturnTheChargeOfThePayment()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCharge'])->getMock();
+
+        $charge = (new Charge())->setId('chargeId');
+        $paymentMock->expects($this->once())->method('getCharge')->with('chargeId')->willReturn($charge);
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->with($paymentMock)->willReturn($paymentMock);
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($charge)->willReturn($charge);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCharge = $resourceSrvMock->fetchChargeById($paymentMock, 'chargeId');
+        $this->assertSame($charge, $returnedCharge);
     }
 
     //<editor-fold desc="Data Providers">
