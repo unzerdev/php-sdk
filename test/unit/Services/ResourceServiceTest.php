@@ -25,6 +25,7 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Services;
 
 use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
+use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
@@ -621,6 +622,83 @@ class ResourceServiceTest extends TestCase
         $returnedCustomer = $resourceSrvMock->createCustomer($customer);
 
         $this->assertSame($customer, $returnedCustomer);
+    }
+
+    /**
+     * Verify createOrUpdateCustomer method tries to fetch and update the given customer.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function createOrUpdateCustomerShouldFetchAndUpdateCustomerIfItAlreadyExists()
+    {
+        $customer = (new Customer())->setCustomerId('externalCustomerId')->setEmail('customer@email.de');
+        $fetchedCustomer = (new Customer('Max', 'Mustermann'))
+            ->setCustomerId('externalCustomerId')
+            ->setId('customerId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['createCustomer', 'fetchCustomer', 'updateCustomer'])->getMock();
+
+        $resourceSrvMock->expects($this->once())->method('createCustomer')->with($customer)->willThrowException(
+            new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS)
+        );
+        $resourceSrvMock->expects($this->once())->method('fetchCustomer')
+            ->with($this->callback(function ($customerToFetch) use ($customer) {
+                /** @var Customer $customerToFetch */
+                return $customerToFetch !== $customer &&
+                       $customerToFetch->getId() === $customer->getId() &&
+                       $customerToFetch->getCustomerId() === $customer->getCustomerId();
+            }))->willReturn($fetchedCustomer);
+        $resourceSrvMock->expects($this->once())->method('updateCustomer')
+            ->with($this->callback(function ($customerToUpdate) use ($customer) {
+                /** @var Customer $customerToUpdate */
+                return $customerToUpdate === $customer &&
+                       $customerToUpdate->getId() === $customer->getId() &&
+                       $customerToUpdate->getEmail() === 'customer@email.de';
+            }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCustomer = $resourceSrvMock->createOrUpdateCustomer($customer);
+        $this->assertSame($customer, $returnedCustomer);
+        $this->assertEquals('customerId', $customer->getId());
+        $this->assertEquals('customer@email.de', $customer->getEmail());
+    }
+
+    /**
+     * Verify createOrUpdateCustomer method does not call fetch or update if a the customer could not be created due
+     * to another reason then id already exists.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function createOrUpdateCustomerShouldThrowTheExceptionIfItIsNotCustomerIdAlreadyExists()
+    {
+        $customer = (new Customer())->setCustomerId('externalCustomerId')->setEmail('customer@email.de');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['createCustomer', 'fetchCustomer', 'updateCustomer'])->getMock();
+
+        $exc = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_REQUIRED);
+        $resourceSrvMock->expects($this->once())->method('createCustomer')->with($customer)->willThrowException($exc);
+        $resourceSrvMock->expects($this->never())->method('fetchCustomer');
+        $resourceSrvMock->expects($this->never())->method('updateCustomer');
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_REQUIRED);
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->createOrUpdateCustomer($customer);
     }
 
     //<editor-fold desc="Data Providers">

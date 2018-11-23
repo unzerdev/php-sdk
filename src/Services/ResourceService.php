@@ -392,7 +392,7 @@ class ResourceService
         try {
             $this->createCustomer($customer);
         } catch (HeidelpayApiException $e) {
-            if (!ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS === $e->getCode()) {
+            if (ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS !== $e->getCode()) {
                 throw $e;
             }
 
