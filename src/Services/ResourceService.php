@@ -447,7 +447,9 @@ class ResourceService
     /**
      * Delete the given Customer resource.
      *
-     * @param Customer|string $customer
+     * @param Customer|string|null $customer
+     *
+     * @return Customer|null|string
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
@@ -461,6 +463,7 @@ class ResourceService
         }
 
         $this->delete($customerObject);
+        return $customerObject;
     }
 
     //</editor-fold>

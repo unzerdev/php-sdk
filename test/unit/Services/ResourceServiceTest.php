@@ -793,6 +793,55 @@ class ResourceServiceTest extends TestCase
         $this->assertSame($customer, $returnedCustomer);
     }
 
+    /**
+     * Verify deleteCustomer method calls delete with customer object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function deleteCustomerShouldCallDeleteWithTheGivenCustomer()
+    {
+        $customer = (new Customer())->setId('customerId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['delete'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('delete')->with($customer);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCustomer = $resourceSrvMock->deleteCustomer($customer);
+        $this->assertSame($customer, $returnedCustomer);
+    }
+
+    /**
+     * Verify deleteCustomer cals fetchCustomer with id if the customer object is referenced by id.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function deleteCustomerShouldFetchCustomerByIdIfTheIdIsGiven()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['delete', 'fetchCustomer'])
+            ->disableOriginalConstructor()->getMock();
+        $customer       = new Customer('Max', 'Mustermann');
+        $resourceSrvMock->expects($this->once())->method('fetchCustomer')->with('myCustomerId')->willReturn($customer);
+        $resourceSrvMock->expects($this->once())->method('delete')->with($customer);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedCustomer = $resourceSrvMock->deleteCustomer('myCustomerId');
+        $this->assertSame($customer, $returnedCustomer);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
