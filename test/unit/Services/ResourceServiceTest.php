@@ -378,6 +378,42 @@ class ResourceServiceTest extends TestCase
         $this->assertNotNull($testResource);
         $this->assertSame($testResource, $responseResource);
     }
+
+    /**
+     * Verify fetch method will call send with GET the resource and then call handleResponse.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchShouldCallSendWithGetUpdateFetchedAtAndCallHandleResponse()
+    {
+        $response = new \stdClass();
+        $response->test = '234';
+        $resourceMock = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
+        $resourceMock->expects($this->once())->method('handleResponse')->with($response);
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('send')
+            ->with($resourceMock, HttpAdapterInterface::REQUEST_GET)
+            ->willReturn($response);
+
+        /**
+         * @var AbstractHeidelpayResource $resourceMock
+         * @var ResourceService $resourceSrvMock
+         */
+        $this->assertNull($resourceMock->getFetchedAt());
+        $resourceSrvMock->fetch($resourceMock);
+
+        $now = (new \DateTime('now'))->getTimestamp();
+        $then = $resourceMock->getFetchedAt()->getTimestamp();
+        $this->assertTrue(($now - $then) < 60);
+    }
     
     //<editor-fold desc="Data Providers">
 
