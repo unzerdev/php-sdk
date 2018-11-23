@@ -29,6 +29,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Keypair;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use PHPUnit\Framework\Exception;
@@ -463,7 +464,31 @@ class ResourceServiceTest extends TestCase
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchPayment('testPaymentId');
     }
-    
+
+    /**
+     * Verify fetchKeypair will call fetch with a Keypair object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchKeypairShouldCallFetchWithAKeypairObject()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')
+            ->with($this->callback(function ($keypair) {
+                return $keypair instanceof Keypair;
+            }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchKeypair();
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
