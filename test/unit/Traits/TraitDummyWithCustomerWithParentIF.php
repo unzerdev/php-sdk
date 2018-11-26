@@ -28,10 +28,12 @@ namespace heidelpay\MgwPhpSdk\test\unit\Traits;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Traits\CanAuthorizeWithCustomer;
+use heidelpay\MgwPhpSdk\Traits\CanDirectChargeWithCustomer;
 
 class TraitDummyWithCustomerWithParentIF implements HeidelpayParentInterface
 {
     use CanAuthorizeWithCustomer;
+    use CanDirectChargeWithCustomer;
 
     /**
      * Returns the heidelpay root object.

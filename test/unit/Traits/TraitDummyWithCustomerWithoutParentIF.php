@@ -26,8 +26,10 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Traits;
 
 use heidelpay\MgwPhpSdk\Traits\CanAuthorizeWithCustomer;
+use heidelpay\MgwPhpSdk\Traits\CanDirectChargeWithCustomer;
 
 class TraitDummyWithCustomerWithoutParentIF
 {
     use CanAuthorizeWithCustomer;
+    use CanDirectChargeWithCustomer;
 }
