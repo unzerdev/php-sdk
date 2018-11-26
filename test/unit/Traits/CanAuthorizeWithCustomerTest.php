@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines unit tests to verify functionality of the CanAuthorize trait.
+ * This class defines unit tests to verify functionality of the CanAuthorizeWithCustomer trait.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -47,7 +47,7 @@ class CanAuthorizeWithCustomerTest extends TestCase
         $dummy = new TraitDummyWithCustomerWithoutParentIF();
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('TraitDummyWithoutCustomerWithoutParentIF');
+        $this->expectExceptionMessage('TraitDummyWithCustomerWithoutParentIF');
 
         $dummy->authorize(1.0, 'MyCurrency', 'https://return.url', new Customer());
     }
@@ -71,10 +71,9 @@ class CanAuthorizeWithCustomerTest extends TestCase
 
         $authorize = new Authorization();
         $customer = (new Customer())->setId('123');
-        $dummyMock->expects($this->exactly(3))->method('getHeidelpayObject')->willReturn($heidelpayMock);
-        $heidelpayMock->expects($this->exactly(3))->method('authorize')
+        $dummyMock->expects($this->exactly(2))->method('getHeidelpayObject')->willReturn($heidelpayMock);
+        $heidelpayMock->expects($this->exactly(2))->method('authorize')
             ->withConsecutive(
-                [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
                 [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId']
             )->willReturn($authorize);
