@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines integration tests to verify metadata functionalities.
+ * This class defines unit tests to verify metadata functionalities.
  *
  * Copyright (C) 2018 Heidelpay GmbH
  *
@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration
+ * @package  heidelpay/mgw_sdk/test/unit
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
