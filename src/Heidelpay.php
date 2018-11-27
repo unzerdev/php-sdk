@@ -92,7 +92,7 @@ class Heidelpay implements HeidelpayParentInterface
 
         $this->resourceService = new ResourceService($this);
         $this->paymentService = new PaymentService($this);
-        $this->metadata = new Metadata();
+        $this->metadata = new Metadata($this);
     }
 
     //<editor-fold desc="General">

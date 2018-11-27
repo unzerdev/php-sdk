@@ -45,5 +45,6 @@ class MetadataTest extends BasePaymentTest
 
         /** @noinspection UnnecessaryAssertionInspection */
         $this->assertInstanceOf(Metadata::class, $metadata);
+        $this->assertSame($this->heidelpay, $metadata->getParentResource());
     }
 }
