@@ -28,10 +28,10 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\TestCase;
 
-class CanDirectChargeWithCustomerTest extends TestCase
+class CanDirectChargeWithCustomerTest extends BaseUnitTest
 {
     /**
      * Verify direct charge throws exception if the class does not implement the HeidelpayParentInterface.

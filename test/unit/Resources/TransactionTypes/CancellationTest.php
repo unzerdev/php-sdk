@@ -25,11 +25,11 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
 
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
-class CancellationTest extends TestCase
+class CancellationTest extends BaseUnitTest
 {
     /**
      * Verify getters and setters.

@@ -30,12 +30,12 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
-use PHPUnit\Framework\TestCase;
 
-class AbstractTransactionTypeTest extends TestCase
+class AbstractTransactionTypeTest extends BaseUnitTest
 {
     /**
      * Verify getters and setters work properly.
@@ -44,6 +44,7 @@ class AbstractTransactionTypeTest extends TestCase
      *
      * @throws ExpectationFailedException
      * @throws Exception
+     * @throws \Exception
      */
     public function theGettersAndSettersShouldWorkProperly()
     {

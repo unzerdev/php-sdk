@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines unit tests to verify functionality of Ideal payment type.
+ * This class defines base for unit tests to add generic helpers.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -22,28 +22,27 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources\PaymentTypes;
+namespace heidelpay\MgwPhpSdk\test;
 
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 
-class IdealTest extends BaseUnitTest
+class BaseUnitTest extends TestCase
 {
     /**
-     * Verify the bic can be set and read.
+     * This performs assertions to verify the tested value is an empty array.
      *
-     * @test
+     * @param mixed $value
      *
-     * @throws ExpectationFailedException
+     * @throws AssertionFailedError
      * @throws Exception
+     * @throws ExpectationFailedException
      */
-    public function bicShouldBeRW()
+    public function assertIsEmptyArray($value)
     {
-        $ideal = new Ideal();
-        $this->assertNull($ideal->getBic());
-        $ideal->setBic('RABONL2U');
-        $this->assertEquals('RABONL2U', $ideal->getBic());
+        $this->assertInternalType('array', $value);
+        $this->assertEmpty($value);
     }
 }

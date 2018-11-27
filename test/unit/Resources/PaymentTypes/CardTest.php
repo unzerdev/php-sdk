@@ -25,11 +25,11 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
-class CardTest extends TestCase
+class CardTest extends BaseUnitTest
 {
     const TEST_ID = 's-crd-l4bbx7ory1ec';
     const TEST_METHOD_TYPE = 'card';

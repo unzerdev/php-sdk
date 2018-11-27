@@ -35,12 +35,12 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
-use PHPUnit\Framework\TestCase;
 
-class PaymentServiceTest extends TestCase
+class PaymentServiceTest extends BaseUnitTest
 {
     /**
      * Verify setters and getters work properly.

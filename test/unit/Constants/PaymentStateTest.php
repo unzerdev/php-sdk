@@ -25,10 +25,10 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Constants;
 
 use heidelpay\MgwPhpSdk\Constants\PaymentState;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\TestCase;
 
-class PaymentStateTest extends TestCase
+class PaymentStateTest extends BaseUnitTest
 {
     /**
      * This should verify the mapping of the payment state to the state code.

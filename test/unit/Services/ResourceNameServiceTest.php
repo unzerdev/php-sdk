@@ -25,11 +25,11 @@
 namespace heidelpay\MgwPhpSdk\test\unit;
 
 use heidelpay\MgwPhpSdk\Services\ResourceNameService;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
-class ResourceNameServiceTest extends TestCase
+class ResourceNameServiceTest extends BaseUnitTest
 {
     /**
      * Verify getting the short name of a class.

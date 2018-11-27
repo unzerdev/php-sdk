@@ -25,11 +25,11 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Exceptions;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
-class HeidelpayApiExceptionTest extends TestCase
+class HeidelpayApiExceptionTest extends BaseUnitTest
 {
     /**
      * Verify the exception stores the given data.

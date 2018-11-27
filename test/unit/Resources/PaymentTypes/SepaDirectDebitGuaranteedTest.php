@@ -25,11 +25,11 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
-class SepaDirectDebitGuaranteedTest extends TestCase
+class SepaDirectDebitGuaranteedTest extends BaseUnitTest
 {
     /**
      * Verify constructor sets iban.

@@ -50,12 +50,12 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
-use PHPUnit\Framework\TestCase;
 
-class ResourceServiceTest extends TestCase
+class ResourceServiceTest extends BaseUnitTest
 {
     /**
      * Verify send method will get the uri from the given resource.
@@ -409,6 +409,7 @@ class ResourceServiceTest extends TestCase
      * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
+     * @throws \Exception
      */
     public function fetchShouldCallSendWithGetUpdateFetchedAtAndCallHandleResponse()
     {
@@ -1076,6 +1077,7 @@ class ResourceServiceTest extends TestCase
      * Data provider for getResourceShouldFetchIfTheResourcesIdIsSetAndItHasNotBeenFetchedBefore.
      *
      * @return array
+     * @throws \Exception
      */
     public function getResourceFetchCallDataProvider(): array
     {

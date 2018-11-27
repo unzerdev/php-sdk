@@ -27,11 +27,11 @@ namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
-class CustomerTest extends TestCase
+class CustomerTest extends BaseUnitTest
 {
     /**
      * Verify setter and getter functionality.
@@ -40,6 +40,7 @@ class CustomerTest extends TestCase
      *
      * @throws ExpectationFailedException
      * @throws \RuntimeException
+     * @throws \Exception
      */
     public function settersAndGettersShouldWork()
     {

@@ -32,12 +32,12 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
-use PHPUnit\Framework\TestCase;
 
-class AuthorizationTest extends TestCase
+class AuthorizationTest extends BaseUnitTest
 {
     /**
      * Verify getters and setters.

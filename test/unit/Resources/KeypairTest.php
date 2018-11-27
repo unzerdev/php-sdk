@@ -25,11 +25,11 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Resources\Keypair;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
-class KeypairTest extends TestCase
+class KeypairTest extends BaseUnitTest
 {
     /**
      * Verify that an Authorization can be updated on handle response.

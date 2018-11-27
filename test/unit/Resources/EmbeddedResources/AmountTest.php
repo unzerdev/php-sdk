@@ -25,11 +25,11 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
-class AmountTest extends TestCase
+class AmountTest extends BaseUnitTest
 {
     /**
      * Verify setter and getter functionalities.

@@ -39,12 +39,12 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
-use PHPUnit\Framework\TestCase;
 
-class AbstractHeidelpayResourceTest extends TestCase
+class AbstractHeidelpayResourceTest extends BaseUnitTest
 {
     /**
      * Verify setter and getter functionality.
@@ -53,6 +53,7 @@ class AbstractHeidelpayResourceTest extends TestCase
      *
      * @throws ExpectationFailedException
      * @throws \RuntimeException
+     * @throws \Exception
      */
     public function settersAndGettersShouldWork()
     {
@@ -63,8 +64,8 @@ class AbstractHeidelpayResourceTest extends TestCase
         $customer->setId('CustomerId-123');
         $this->assertEquals('CustomerId-123', $customer->getId());
 
-        $customer->setFetchedAt(new \dateTime('2018-12-03'));
-        $this->assertEquals(new \dateTime('2018-12-03'), $customer->getFetchedAt());
+        $customer->setFetchedAt(new \DateTime('2018-12-03'));
+        $this->assertEquals(new \DateTime('2018-12-03'), $customer->getFetchedAt());
     }
 
     /**

@@ -38,13 +38,13 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
+use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
-use PHPUnit\Framework\TestCase;
 
-class PaymentTest extends TestCase
+class PaymentTest extends BaseUnitTest
 {
     /**
      * Verify getters and setters work properly.
@@ -1566,25 +1566,6 @@ class PaymentTest extends TestCase
 
         $payment->ship();
     }
-
-    //<editor-fold desc="Helpers">
-
-    /**
-     * This performs assertions to verify the tested value is an empty array.
-     *
-     * @param mixed $value
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws ExpectationFailedException
-     */
-    public function assertIsEmptyArray($value)
-    {
-        $this->assertInternalType('array', $value);
-        $this->assertEmpty($value);
-    }
-
-    //</editor-fold>
 
     //<editor-fold desc="Data Providers">
 
