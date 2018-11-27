@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
+use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
@@ -46,5 +47,20 @@ class MetadataTest extends BasePaymentTest
         /** @noinspection UnnecessaryAssertionInspection */
         $this->assertInstanceOf(Metadata::class, $metadata);
         $this->assertSame($this->heidelpay, $metadata->getParentResource());
+    }
+
+    /**
+     * Verify SDK-Data is initially set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function metadataShouldSetSDKDataAutomatically()
+    {
+        $metaData = new Metadata();
+        $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
+        $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
     }
 }
