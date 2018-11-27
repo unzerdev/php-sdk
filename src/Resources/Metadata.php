@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Resources;
 
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
 class Metadata extends AbstractHeidelpayResource
@@ -76,11 +77,31 @@ class Metadata extends AbstractHeidelpayResource
     }
 
     /**
+     * @param string $sdkType
+     * @return Metadata
+     */
+    protected function setSdkType(string $sdkType): Metadata
+    {
+        $this->sdkType = $sdkType;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getSdkType(): string
     {
         return $this->sdkType;
+    }
+
+    /**
+     * @param string $sdkVersion
+     * @return Metadata
+     */
+    protected function setSdkVersion(string $sdkVersion): Metadata
+    {
+        $this->sdkVersion = $sdkVersion;
+        return $this;
     }
 
     /**
@@ -133,6 +154,19 @@ class Metadata extends AbstractHeidelpayResource
     {
         return array_merge(parent::expose(), $this->metadata);
     }
+
+    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        parent::handleResponse($response, $method);
+
+        foreach ($response as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            if (!\is_callable([$this, $setter])) {
+                $this->set($key, $value);
+            }
+        }
+    }
+
 
     //</editor-fold>
 }
