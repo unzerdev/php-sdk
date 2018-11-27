@@ -34,6 +34,7 @@ use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Keypair;
+use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
@@ -49,7 +50,8 @@ class Heidelpay implements HeidelpayParentInterface
 {
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
-    const SDK_VERSION = 'HeidelpayPHP 1.0.0-beta.2';
+    const SDK_TYPE = 'HeidelpayPHP';
+    const SDK_VERSION = '1.0.0.0-beta.3';
 
     /** @var string $key */
     private $key;
@@ -72,6 +74,9 @@ class Heidelpay implements HeidelpayParentInterface
     /** @var boolean $debugMode */
     private $debugMode = false;
 
+    /** @var Metadata $metadata */
+    private $metadata;
+
     /**
      * Construct a new heidelpay object.
      *
@@ -87,6 +92,7 @@ class Heidelpay implements HeidelpayParentInterface
 
         $this->resourceService = new ResourceService($this);
         $this->paymentService = new PaymentService($this);
+        $this->metadata = new Metadata();
     }
 
     //<editor-fold desc="General">
@@ -227,6 +233,14 @@ class Heidelpay implements HeidelpayParentInterface
     {
         $this->debugHandler = $debugHandler;
         return $this;
+    }
+
+    /**
+     * @return Metadata
+     */
+    public function getMetadata(): Metadata
+    {
+        return $this->metadata;
     }
 
     //</editor-fold>
