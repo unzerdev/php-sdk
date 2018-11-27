@@ -30,17 +30,17 @@ class Metadata extends AbstractHeidelpayResource
 {
     private $metadata = [];
 
-    protected $shopType = '';
-    protected $shopVersion = '';
+    protected $shopType;
+    protected $shopVersion;
     protected $sdkType = Heidelpay::SDK_TYPE;
     protected $sdkVersion = Heidelpay::SDK_VERSION;
 
     //<editor-fold desc="Setters/Getters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getShopType(): string
+    public function getShopType()
     {
         return $this->shopType;
     }
@@ -57,9 +57,9 @@ class Metadata extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getShopVersion(): string
+    public function getShopVersion()
     {
         return $this->shopVersion;
     }
@@ -92,44 +92,46 @@ class Metadata extends AbstractHeidelpayResource
     }
 
     /**
-     * Magic setter for custom data (aka: Criterion).
+     * Magic setter
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param string $value
+     *
+     * @return Metadata
      */
-    public function __set($name, $value)
+    public function set($name, $value): Metadata
     {
-        if (\in_array($name, ['SdkVersion', 'SdkType', 'ShopType', 'ShopVersion'])) {
-            return;
+        if (!\in_array(strtolower($name), ['sdkversion', 'sdktype', 'shoptype', 'shopversion'])) {
+            $this->metadata[$name] = $value;
         }
 
-        $this->metadata[$name] = $value;
+        return $this;
     }
 
     /**
-     * Magic getter for custom data (aka: Criterion).
+     * Getter function for custom criterion fields.
      *
-     * @param $name
-     * @return mixed|null
+     * @param string $name
+     *
+     * @return mixed
      */
-    public function __get($name)
+    public function get($name)
     {
-        if (!$this->__isset($name)) {
-            return null;
-        }
-
-        return $this->metadata[$name];
+        return $this->metadata[$name] ?? null;
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable Methods">
+
     /**
-     * Magic isset method to check whether the given variable is set.
+     * Add the dynamically set meta data.
      *
-     * @param $name
-     * @return bool
+     * {@inheritDoc}
      */
-    public function __isset($name)
+    public function expose(): array
     {
-        return isset($this->metadata[$name]);
+        return array_merge(parent::expose(), $this->metadata);
     }
 
     //</editor-fold>
