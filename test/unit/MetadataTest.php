@@ -22,6 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
+/** @noinspection PhpUndefinedFieldInspection */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Heidelpay;
@@ -62,5 +63,48 @@ class MetadataTest extends BasePaymentTest
         $metaData = new Metadata();
         $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
         $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
+    }
+
+    /**
+     * Verify custom data can be set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function metaDataShouldAllowForCustomDataToBeSet()
+    {
+        $metaData = new Metadata();
+        $metaData->myCustomData = 'Wow I can add custom information';
+        $this->assertEquals('Wow I can add custom information', $metaData->myCustomData);
+
+        $this->assertNull($metaData->myCustomDataNo2);
+    }
+
+    /**
+     * Verify defined data can not be set.
+     *
+     * @test
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function metadataShouldNotAllowForMagicAccessToSdkAndShopData()
+    {
+        $metaData = new Metadata();
+        $metaData->SdkVersion = 'sdkVersion';
+        $metaData->SdkType = 'sdkType';
+        $metaData->ShopType = 'shopType';
+        $metaData->ShopVersion = 'shopVersion';
+
+        $this->assertNotEquals($metaData->SdkVersion, 'sdkVersion');
+        $this->assertNotEquals($metaData->SdkVersion, 'sdkType');
+        $this->assertNotEquals($metaData->SdkVersion, 'shopType');
+        $this->assertNotEquals($metaData->SdkVersion, 'shopVersion');
+
+        $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
+        $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
+        $this->assertEmpty($metaData->getShopType());
+        $this->assertEmpty($metaData->getShopVersion());
     }
 }

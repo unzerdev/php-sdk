@@ -28,10 +28,12 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 
 class Metadata extends AbstractHeidelpayResource
 {
-    private $shopType = '';
-    private $shopVersion = '';
-    private $sdkType = Heidelpay::SDK_TYPE;
-    private $sdkVersion = Heidelpay::SDK_VERSION;
+    private $metadata = [];
+
+    protected $shopType = '';
+    protected $shopVersion = '';
+    protected $sdkType = Heidelpay::SDK_TYPE;
+    protected $sdkVersion = Heidelpay::SDK_VERSION;
 
     //<editor-fold desc="Setters/Getters">
 
@@ -87,6 +89,47 @@ class Metadata extends AbstractHeidelpayResource
     public function getSdkVersion(): string
     {
         return $this->sdkVersion;
+    }
+
+    /**
+     * Magic setter for custom data (aka: Criterion).
+     *
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        if (\in_array($name, ['SdkVersion', 'SdkType', 'ShopType', 'ShopVersion'])) {
+            return;
+        }
+
+        $this->metadata[$name] = $value;
+    }
+
+    /**
+     * Magic getter for custom data (aka: Criterion).
+     *
+     * @param $name
+     * @return mixed|null
+     */
+    public function __get($name)
+    {
+        if (!$this->__isset($name)) {
+            return null;
+        }
+
+        return $this->metadata[$name];
+    }
+
+    /**
+     * Magic isset method to check whether the given variable is set.
+     *
+     * @param $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->metadata[$name]);
     }
 
     //</editor-fold>
