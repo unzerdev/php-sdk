@@ -24,6 +24,8 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit\Traits;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use PHPUnit\Framework\AssertionFailedError;
@@ -36,15 +38,22 @@ class HasCancellationsTest extends BaseUnitTest
      * Verify getters setters.
      *
      * @test
+     *
      * @throws AssertionFailedError
      * @throws Exception
      * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function hasCancellationGettersAndSettersShouldWorkProperly()
     {
         $dummy = new TraitDummyWithCustomerWithoutParentIF();
         $this->assertIsEmptyArray($dummy->getCancellations());
 
+        // assert getCancellation
+        $this->assertNull($dummy->getCancellation('3'));
+
+        // assert addCancellation
         $cancellation1 = (new Cancellation())->setId('1');
         $cancellation2 = (new Cancellation())->setId('2');
         $cancellation3 = (new Cancellation())->setId('3');
@@ -53,10 +62,36 @@ class HasCancellationsTest extends BaseUnitTest
         $dummy->addCancellation($cancellation3);
         $this->assertArraySubset([$cancellation1, $cancellation2, $cancellation3], $dummy->getCancellations());
 
+        // assert getCancellation
+        $this->assertSame($cancellation3, $dummy->getCancellation('3'));
+
+        // assert setCancellations
         $cancellation4 = (new Cancellation())->setId('4');
         $cancellation5 = (new Cancellation())->setId('5');
         $cancellation6 = (new Cancellation())->setId('6');
         $dummy->setCancellations([$cancellation4, $cancellation5, $cancellation6]);
         $this->assertArraySubset([$cancellation4, $cancellation5, $cancellation6], $dummy->getCancellations());
+    }
+
+    /**
+     * Verify getCancellation will call getResource with the selected Cancellation if it is not lazy loaded.
+     *
+     * @test
+     *
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function getCancellationShouldCallgetResourceIfItIsNotLazyLoaded()
+    {
+        $cancel = (new Cancellation())->setId('myCancelId');
+        $authorizeMock = $this->getMockBuilder(Authorization::class)->setMethods(['getResource'])->getMock();
+        $authorizeMock->expects($this->once())->method('getResource')->with($cancel);
+
+        /** @var Authorization $authorizeMock */
+        $authorizeMock->addCancellation($cancel);
+        $this->assertSame($authorizeMock, $cancel->getParentResource());
+        $this->assertSame($cancel, $authorizeMock->getCancellation('myCancelId'));
     }
 }

@@ -1077,6 +1077,7 @@ class ResourceServiceTest extends BaseUnitTest
      * Data provider for getResourceShouldFetchIfTheResourcesIdIsSetAndItHasNotBeenFetchedBefore.
      *
      * @return array
+     *
      * @throws \Exception
      */
     public function getResourceFetchCallDataProvider(): array
