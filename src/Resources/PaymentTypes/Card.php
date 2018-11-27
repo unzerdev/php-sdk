@@ -2,7 +2,7 @@
 /**
  * This represents the card payment type which supports credit card as well as debit card payments.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,8 @@ class Card extends BasePaymentType
      *
      * @param string $number
      * @param string $expiryDate
+     *
+     * @throws \RuntimeException
      */
     public function __construct($number, $expiryDate)
     {
@@ -62,6 +64,8 @@ class Card extends BasePaymentType
     /** @var string $brand */
     private $brand = '';
 
+    //</editor-fold>
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -84,9 +88,9 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpiryDate(): string
+    public function getExpiryDate()
     {
         return $this->expiryDate;
     }
@@ -95,20 +99,32 @@ class Card extends BasePaymentType
      * @param string $expiryDate
      *
      * @return Card
+     *
+     * @throws \RuntimeException
      */
     public function setExpiryDate($expiryDate): Card
     {
-        $expiryDateParts = explode('/', $expiryDate);
-        if (\count($expiryDateParts) > 1) {
-            $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
+        // Null value is allowed to be able to fetch a card object with nothing but the id set.
+        if ($expiryDate === null) {
+            return $this;
         }
+
+        $expiryDateParts = explode('/', $expiryDate);
+        if (\count($expiryDateParts) !== 2 || $expiryDateParts[0] > 12 ||
+            !\is_numeric($expiryDateParts[0]) || !\is_numeric($expiryDateParts[1]) ||
+            !\ctype_digit($expiryDateParts[0]) || !\ctype_digit($expiryDateParts[1]) ||
+            \strlen($expiryDateParts[1]) > 4) {
+            throw new \RuntimeException('Invalid expiry date!');
+        }
+        $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
+
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCvc(): string
+    public function getCvc()
     {
         return $this->cvc;
     }
@@ -125,9 +141,9 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getHolder(): string
+    public function getHolder()
     {
         return $this->holder;
     }
@@ -165,6 +181,5 @@ class Card extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
     //</editor-fold>
 }

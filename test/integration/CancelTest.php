@@ -2,7 +2,7 @@
 /**
  * This class defines integration tests to verify cancellation in general.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration
+ * @package  heidelpay/mgw_sdk/test/integration
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
@@ -101,7 +101,7 @@ class CancelTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
-        $fetchedCancel = $cancel->getPayment()->getChargeById($charge->getId())->getCancellation($cancel->getId());
+        $fetchedCancel = $cancel->getPayment()->getCharge($charge->getId())->getCancellation($cancel->getId());
         $this->assertNotNull($fetchedCancel);
         $this->assertNotNull($fetchedCancel->getId());
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());

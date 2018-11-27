@@ -2,7 +2,7 @@
 /**
  * This represents the shipment transaction.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,11 @@ class Shipment extends AbstractTransactionType
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
-    protected function getResourcePath()
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getResourcePath(): string
     {
         return 'shipments';
     }

@@ -23,7 +23,7 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-// Reset session prohibit refering to the wrong one
+// Reset session prohibit referring to the wrong one
 session_start();
 session_unset();
 $_SESSION['examplePath'] = EXAMPLE_PATH;
@@ -33,32 +33,38 @@ if (!isset($_POST['paymentTypeId'])) {
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
 
-function redirect($url) {
+function redirect($url)
+{
     $response[] = ['result' => 'redirect', 'redirectUrl' => $url];
     header('Content-Type: application/json');
     echo json_encode($response);
     die;
 }
 
-function returnError($message) {
+function returnError($message)
+{
     header('HTTP/1.1 500 Internal Server Error');
     addMessage('error', $message);
     returnResponse();
 }
 
-function addSuccess($message) {
+function addSuccess($message)
+{
     addMessage('success', $message);
 }
 
-function addInfo($message) {
+function addInfo($message)
+{
     addMessage('info', $message);
 }
 
-function addMessage($type, $message) {
+function addMessage($type, $message)
+{
     $GLOBALS['response'][] = ['result' => $type, 'message' => $message];
 }
 
-function returnResponse() {
+function returnResponse()
+{
     header('Content-Type: application/json');
     echo json_encode($GLOBALS['response']);
     die;

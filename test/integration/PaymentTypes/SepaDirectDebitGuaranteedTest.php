@@ -3,7 +3,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the payment method sepa direct debit guaranteed.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration/payment_types
+ * @package  heidelpay/mgw_sdk/test/integration/payment_types
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
@@ -89,7 +89,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->assertEquals($directDebitGuaranteed->getHolder(), $fetchedDirectDebitGuaranteed->getHolder());
         $this->assertEquals($directDebitGuaranteed->getBic(), $fetchedDirectDebitGuaranteed->getBic());
         $this->assertEquals(
-            $this->maskNumber($directDebitGuaranteed->getIban()), $fetchedDirectDebitGuaranteed->getIban()
+            $this->maskNumber($directDebitGuaranteed->getIban()),
+            $fetchedDirectDebitGuaranteed->getIban()
         );
 
         return $fetchedDirectDebitGuaranteed;

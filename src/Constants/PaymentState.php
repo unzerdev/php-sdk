@@ -2,7 +2,7 @@
 /**
  * This file contains definitions of the payment states.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class PaymentState
     const STATE_NAME_COMPLETED = 'completed';
     const STATE_NAME_CANCELED = 'canceled';
     const STATE_NAME_PARTLY = 'partly';
-    const STATE_NAME_PAYMENT_REVIEW = 'review';
+    const STATE_NAME_PAYMENT_REVIEW = 'payment review';
     const STATE_NAME_CHARGEBACK = 'chargeback';
 
     /**

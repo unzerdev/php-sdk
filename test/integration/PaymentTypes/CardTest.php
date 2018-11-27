@@ -3,7 +3,7 @@
  * This class defines integration tests to verify interface and functionality
  * of the card payment methods e.g. Credit Card and Debit Card.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration/payment_types
+ * @package  heidelpay/mgw_sdk/test/integration/payment_types
  */
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
@@ -56,7 +56,8 @@ class CardTest extends BasePaymentTest
         $this->heidelpay->setKey(self::PRIVATE_KEY_SAQ_A);
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode('The key seems to be not existing!');
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INVALID_KEY);
+        $this->expectExceptionCode('The code seems to be wrong!');
         $card = $this->createCardObject();
         $this->heidelpay->createPaymentType($card);
     }
@@ -150,7 +151,7 @@ class CardTest extends BasePaymentTest
         $this->assertNotNull($payment->getId());
 
         // verify resources are linked properly
-        $this->assertEquals($charge->expose(), $payment->getChargeById($charge->getId())->expose());
+        $this->assertEquals($charge->expose(), $payment->getCharge($charge->getId())->expose());
         $this->assertSame($card, $payment->getPaymentType());
 
         // verify the payment object has been updated properly

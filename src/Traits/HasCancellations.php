@@ -2,7 +2,7 @@
 /**
  * This trait adds the cancellation property to a class.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ namespace heidelpay\MgwPhpSdk\Traits;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 
 trait HasCancellations
@@ -74,10 +75,10 @@ trait HasCancellations
      * @param string  $cancellationId
      * @param boolean $lazy
      *
-     * @return mixed
-     *
-     * @throws \RuntimeException
      * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     *
+     * @return mixed
      */
     public function getCancellation($cancellationId, $lazy = false)
     {
@@ -85,6 +86,7 @@ trait HasCancellations
         foreach ($this->cancellations as $cancellation) {
             if ($cancellation->getId() === $cancellationId) {
                 if (!$lazy && $this instanceof HeidelpayParentInterface) {
+                    /** @var AbstractHeidelpayResource $this*/
                     $this->getResource($cancellation);
                 }
                 return $cancellation;

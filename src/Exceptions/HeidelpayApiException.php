@@ -2,7 +2,7 @@
 /**
  * This exception is thrown whenever the api returns an error.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,21 +27,22 @@ namespace heidelpay\MgwPhpSdk\Exceptions;
 class HeidelpayApiException extends \Exception
 {
     const MESSAGE = 'The payment api returned an error!';
+    const CLIENT_MESSAGE = 'The payment api returned an error!';
 
     /** @var string $clientMessage */
-    protected $clientMessage = 'An unexpected error occurred. Please contact us for further information.';
+    protected $clientMessage;
 
     /**
      * HeidelpayApiException constructor.
      *
      * @param string $merchantMessage
-     * @param string $customerMessage
+     * @param string $clientMessage
      * @param string $code
      */
-    public function __construct($merchantMessage = '', $customerMessage = '', $code = '')
+    public function __construct($merchantMessage = '', $clientMessage = '', $code = '')
     {
         $merchantMessage = empty($merchantMessage) ? static::MESSAGE : $merchantMessage;
-        $this->clientMessage = empty($customerMessage) ? static::MESSAGE : $customerMessage;
+        $this->clientMessage = empty($clientMessage) ? static::CLIENT_MESSAGE : $clientMessage;
         parent::__construct($merchantMessage);
         $this->code = $code;
     }

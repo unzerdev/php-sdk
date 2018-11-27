@@ -2,7 +2,7 @@
 /**
  * This represents the payment resource.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ use heidelpay\MgwPhpSdk\Constants\IdStrings;
 use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
@@ -48,14 +49,14 @@ class Payment extends AbstractHeidelpayResource
      */
     public function __construct($parent = null)
     {
-        $this->amount = new Amount();
+        $this->setAmount(new Amount());
 
         parent::__construct($parent);
     }
 
     //<editor-fold desc="Properties">
     /** @var string $redirectUrl */
-    private $redirectUrl = '';
+    private $redirectUrl;
 
     /** @var Authorization $authorization */
     private $authorization;
@@ -81,9 +82,9 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Returns the redirectUrl set by the API.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRedirectUrl(): string
+    public function getRedirectUrl()
     {
         return $this->redirectUrl;
     }
@@ -133,7 +134,6 @@ class Payment extends AbstractHeidelpayResource
     public function setAuthorization(Authorization $authorize): Payment
     {
         $authorize->setPayment($this);
-        $authorize->setParentResource($this);
         $this->authorization = $authorize;
         return $this;
     }
@@ -175,7 +175,7 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function getChargeById($chargeId, $lazy = false)
+    public function getCharge($chargeId, $lazy = false)
     {
         /** @var Charge $charge */
         foreach ($this->charges as $charge) {
@@ -203,7 +203,7 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function getCharge($index, $lazy = false)
+    public function getChargeByIndex($index, $lazy = false)
     {
         if (isset($this->getCharges()[$index])) {
             $resource = $this->getCharges()[$index];
@@ -265,25 +265,18 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Returns the Payment Type object referenced by this Payment or throws a \RuntimeException if none exists.
      *
-     * @return BasePaymentType The PaymentType referenced by this Payment.
-     *
-     * @throws \RuntimeException An exception is thrown when the Payment does not reference a PaymentType.
+     * @return BasePaymentType|null The PaymentType referenced by this Payment.
      */
-    public function getPaymentType(): BasePaymentType
+    public function getPaymentType()
     {
-        $paymentType = $this->paymentType;
-        if (!$paymentType instanceof BasePaymentType) {
-            throw new \RuntimeException('The paymentType is not set.');
-        }
-
-        return $paymentType;
+        return $this->paymentType;
     }
 
     /**
      * Sets the Payments reference to the given PaymentType resource.
      * The PaymentType can be either a PaymentType object or the id of a PaymentType resource.
      *
-     * @param BasePaymentType|string $paymentType The PaymentType object or the id of the PaymenType to be referenced.
+     * @param BasePaymentType|string $paymentType The PaymentType object or the id of the PaymentType to be referenced.
      *
      * @return Payment This Payment object.
      *
@@ -293,7 +286,7 @@ class Payment extends AbstractHeidelpayResource
     public function setPaymentType($paymentType): Payment
     {
         if (empty($paymentType)) {
-            throw new \RuntimeException('Payment type is missing!');
+            return $this; //todo: maybe throw exception here (call from paymentSrv)
         }
 
         /** @var Heidelpay $heidelpay */
@@ -324,12 +317,12 @@ class Payment extends AbstractHeidelpayResource
      *                               via API and possibly containing just the meta data known from the Payment object
      *                               response.
      *
-     * @return Cancellation The retrieved Cancellation object.
+     * @return Cancellation|null The retrieved Cancellation object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function getCancellation($cancellationId, $lazy = false): Cancellation
+    public function getCancellation($cancellationId, $lazy = false)
     {
         /** @var Cancellation $cancellation */
         foreach ($this->getCancellations() as $cancellation) {
@@ -341,7 +334,7 @@ class Payment extends AbstractHeidelpayResource
             }
         }
 
-        throw new \RuntimeException('Cancellation #' . $cancellationId . ' does not exist.');
+        return null;
     }
 
     /**
@@ -376,7 +369,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function addShipment(Shipment $shipment): Payment
     {
-        $shipment->setPayment($this)->setParentResource($this);
+        $shipment->setPayment($this);
         $this->shipments[] = $shipment;
         return $this;
     }
@@ -403,19 +396,33 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function getShipmentById($shipmentId, $lazy = false)
+    public function getShipment($shipmentId, $lazy = false)
     {
         /** @var Shipment $shipment */
-        foreach ($this->shipments as $shipment) {
+        foreach ($this->getShipments() as $shipment) {
             if ($shipment->getId() === $shipmentId) {
                 if (!$lazy) {
-                    $this->fetchResource($shipment);
+                    $this->getResource($shipment);
                 }
                 return $shipment;
             }
         }
 
         return null;
+    }
+
+    /**
+     * Sets the Amount object of this Payment.
+     * The Amount stores the total, remaining, charged and cancelled amount of this Payment.
+     *
+     * @param Amount $amount
+     *
+     * @return Payment
+     */
+    public function setAmount(Amount $amount): Payment
+    {
+        $this->amount = $amount;
+        return $this;
     }
 
     /**
@@ -459,7 +466,7 @@ class Payment extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath()
+    protected function getResourcePath(): string
     {
         return 'payments';
     }
@@ -479,49 +486,10 @@ class Payment extends AbstractHeidelpayResource
         }
 
         if (isset($response->resources)) {
-            $resources = $response->resources;
-
-            if (isset($resources->paymentId)) {
-                $this->setId($resources->paymentId);
-            }
-
-            if (isset($resources->customerId) && !empty($resources->customerId)) {
-                if (!$this->customer instanceof Customer) {
-                    $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
-                } else {
-                    $this->getHeidelpayObject()->fetchCustomer($this->customer);
-                }
-            }
-
-            if (isset($resources->typeId) && !empty($resources->typeId)) {
-                if (!$this->paymentType instanceof BasePaymentType) {
-                    $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
-                }
-            }
+            $this->updateResponseResources($response->resources);
         }
-        if (isset($response->transactions) && !empty($response->transactions)) {
-            foreach ($response->transactions as $transaction) {
-                switch ($transaction->type) {
-                    case TransactionTypes::AUTHORIZATION:
-                        $this->updateAuthorizationTransaction($transaction);
-                        break;
-                    case TransactionTypes::CHARGE:
-                        $this->updateChargeTransaction($transaction);
-                        break;
-                    case TransactionTypes::REVERSAL:
-                        $this->updateReversalTransaction($transaction);
-                        break;
-                    case TransactionTypes::REFUND:
-                        $this->updateRefundTransaction($transaction);
-                        break;
-                    case TransactionTypes::SHIPMENT:
-                        $this->updateShipmentTransaction($transaction);
-                        break;
-                    default:
-                        // skip
-                        break;
-                }
-            }
+        if (isset($response->transactions)) {
+            $this->updateResponseTransactions($response->transactions);
         }
     }
 
@@ -532,7 +500,6 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Performs a Cancellation transaction on the Payment.
      * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
-     * todo: What happens on cancel with amount?
      *
      * @param float|null $amount The amount to canceled.
      *
@@ -544,42 +511,77 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancel($amount = null): Cancellation
     {
-        $cancel = null;
-        $exception = null;
+        list($chargeCancels, $chargeExceptions) = $this->cancelAllCharges();
+        list($authCancel, $authException) = $this->cancelAuthorization($amount);
+
+        $cancels = array_merge($chargeCancels, $authCancel);
+        $exceptions = array_merge($chargeExceptions, $authException);
+
+        if (isset($cancels[0]) && $cancels[0] instanceof Cancellation) {
+            return $cancels[0];
+        }
+
+        // throw the last exception if no cancellation has been created
+        if (isset($exceptions[0]) && $exceptions[0] instanceof HeidelpayApiException) {
+            throw $exceptions[0];
+        }
+
+        throw new \RuntimeException('This Payment could not be cancelled.');
+    }
+
+    /**
+     * Cancels all charges of the payment and returns an array of the cancellations and already charged exceptions that
+     * occur.
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function cancelAllCharges(): array
+    {
+        $cancels = [];
+        $exceptions = [];
 
         /** @var Charge $charge */
         foreach ($this->getCharges() as $charge) {
             try {
-                $cancel = $charge->cancel();
+                $cancels[] = $charge->cancel();
             } catch (HeidelpayApiException $e) {
-                $exception = $e;
-                if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
+                if (ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED !== $e->getCode()) {
                     throw $e;
                 }
+                $exceptions[] = $e;
             }
         }
+        return array($cancels, $exceptions);
+    }
 
-        try {
-            if ($this->getAuthorization() instanceof Authorization) {
-                $cancel = $this->getHeidelpayObject()->cancelAuthorization($this->getAuthorization(), $amount);
+    /**
+     * @param float|null $amount
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function cancelAuthorization($amount = null): array
+    {
+        $cancels = [];
+        $exceptions = [];
+
+        $authorization = $this->getAuthorization();
+        if ($authorization instanceof Authorization) {
+            try {
+                $cancels[] = $authorization->cancel($amount);
+            } catch (HeidelpayApiException $e) {
+                if (ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED !== $e->getCode()) {
+                    throw $e;
+                }
+                $exceptions[] = $e;
             }
-        } catch (HeidelpayApiException $e) {
-            $exception = $e;
-            if (!ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED === $e->getCode()) {
-                throw $e;
-            }
         }
-
-        if ($cancel instanceof Cancellation) {
-            return $cancel;
-        }
-
-        // throw the last exception if no cancellation has been created
-        if ($exception instanceof HeidelpayApiException) {
-            throw $exception;
-        }
-
-        throw new \RuntimeException('This Payment could not be cancelled.');
+        return array($cancels, $exceptions);
     }
 
     /**
@@ -595,31 +597,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function charge($amount = null, $currency = null): Charge
     {
-        if ($this->getAuthorization(true) !== null) {
-            return $this->getHeidelpayObject()->chargeAuthorization($this, $amount);
-        }
         return $this->getHeidelpayObject()->chargePayment($this, $amount, $currency);
-    }
-
-    /**
-     * Performs an Authorization on this payment object.
-     *
-     * @param float                $amount      The amount to be authorized.
-     * @param string               $currency    The currency of the amount to be authorized.
-     * @param BasePaymentType      $paymentType The PaymentType of this Payment.
-     * @param string               $returnUrl   The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null $customer    The Customer object or the id of the Customer to be referenced.
-     *                                          No Customer will be referenced if set or left null.
-     *
-     * @return Authorization The resulting Authorization object.
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
-     */
-    public function authorize($amount, $currency, $paymentType, $returnUrl = null, $customer = null): Authorization
-    {
-        $this->setPaymentType($paymentType);
-        return $this->getHeidelpayObject()->authorizeWithPayment($amount, $currency, $this, $returnUrl, $customer);
     }
 
     /**
@@ -637,7 +615,72 @@ class Payment extends AbstractHeidelpayResource
 
     //</editor-fold>
 
-    //<editor-fold desc="Transaction Update">
+    //<editor-fold desc="Payment Update">
+
+    /**
+     * @param array $transactions
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    private function updateResponseTransactions(array $transactions = [])
+    {
+        if (empty($transactions)) {
+            return;
+        }
+
+        foreach ($transactions as $transaction) {
+            switch ($transaction->type) {
+                case TransactionTypes::AUTHORIZATION:
+                    $this->updateAuthorizationTransaction($transaction);
+                    break;
+                case TransactionTypes::CHARGE:
+                    $this->updateChargeTransaction($transaction);
+                    break;
+                case TransactionTypes::REVERSAL:
+                    $this->updateReversalTransaction($transaction);
+                    break;
+                case TransactionTypes::REFUND:
+                    $this->updateRefundTransaction($transaction);
+                    break;
+                case TransactionTypes::SHIPMENT:
+                    $this->updateShipmentTransaction($transaction);
+                    break;
+                default:
+                    // skip
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Handles the resources from a response and updates the payment object accordingly.
+     *
+     * @param $resources
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    private function updateResponseResources($resources)
+    {
+        if (isset($resources->paymentId)) {
+            $this->setId($resources->paymentId);
+        }
+
+        if (isset($resources->customerId) && !empty($resources->customerId)) {
+            if (!$this->customer instanceof Customer) {
+                $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
+            } else {
+                $this->getResource($this->customer);
+            }
+        }
+
+        if (isset($resources->typeId) && !empty($resources->typeId)) {
+            if (!$this->paymentType instanceof BasePaymentType) {
+                $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
+            }
+        }
+    }
 
     /**
      * This updates the local Authorization object referenced by this Payment with the given Authorization transaction
@@ -653,10 +696,7 @@ class Payment extends AbstractHeidelpayResource
         $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::AUTHORIZE);
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
-            $authorization = (new Authorization())
-                ->setPayment($this)
-                ->setParentResource($this)
-                ->setId($transactionId);
+            $authorization = (new Authorization())->setPayment($this)->setId($transactionId);
             $this->setAuthorization($authorization);
         }
         $authorization->setAmount($transaction->amount);
@@ -674,12 +714,9 @@ class Payment extends AbstractHeidelpayResource
     private function updateChargeTransaction($transaction)
     {
         $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
-        $charge = $this->getChargeById($transactionId, true);
+        $charge = $this->getCharge($transactionId, true);
         if (!$charge instanceof Charge) {
-            $charge = (new Charge())
-                ->setPayment($this)
-                ->setParentResource($this)
-                ->setId($transactionId);
+            $charge = (new Charge())->setPayment($this)->setId($transactionId);
             $this->addCharge($charge);
         }
         $charge->setAmount($transaction->amount);
@@ -704,10 +741,7 @@ class Payment extends AbstractHeidelpayResource
 
         $cancellation = $authorization->getCancellation($transactionId, true);
         if (!$cancellation instanceof Cancellation) {
-            $cancellation =  (new Cancellation())
-                ->setPayment($this)
-                ->setParentResource($this)
-                ->setId($transactionId);
+            $cancellation =  (new Cancellation())->setPayment($this)->setId($transactionId);
             $authorization->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
@@ -727,17 +761,14 @@ class Payment extends AbstractHeidelpayResource
         $refundId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
         $chargeId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
 
-        $charge = $this->getChargeById($chargeId, true);
+        $charge = $this->getCharge($chargeId, true);
         if (!$charge instanceof Charge) {
-            throw new \RuntimeException('Charge object does not exist.');
+            throw new \RuntimeException('The Charge object can not be found.');
         }
 
         $cancellation = $charge->getCancellation($refundId, true);
         if (!$cancellation instanceof Cancellation) {
-            $cancellation =  (new Cancellation())
-                ->setPayment($this)
-                ->setParentResource($this)
-                ->setId($refundId);
+            $cancellation =  (new Cancellation())->setPayment($this)->setId($refundId);
             $charge->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
@@ -755,7 +786,7 @@ class Payment extends AbstractHeidelpayResource
     private function updateShipmentTransaction($transaction)
     {
         $shipmentId = $this->getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
-        $shipment = $this->getShipmentById($shipmentId, true);
+        $shipment = $this->getShipment($shipmentId, true);
         if (!$shipment instanceof Shipment) {
             $shipment = new Shipment(null, $shipmentId);
             $this->addShipment($shipment);

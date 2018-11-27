@@ -2,7 +2,7 @@
 /**
  * This trait makes a payment type authorizable.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,9 @@ trait CanAuthorize
      * Authorize an amount with the given currency.
      * Throws HeidelpayApiException if the transaction could not be performed (e. g. increased risk etc.).
      *
-     * @param $amount
-     * @param $currency
-     * @param $returnUrl
+     * @param float                $amount
+     * @param string               $currency
+     * @param string               $returnUrl
      * @param Customer|string|null $customer
      * @param null                 $orderId
      *

@@ -3,7 +3,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the authorization transaction type.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,12 +45,7 @@ class AuthorizationTest extends BasePaymentTest
     public function authorizeWithTypeId()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $this->heidelpay->authorize(
-            100.0,
-            Currencies::EURO,
-            $card->getId(),
-            self::RETURN_URL
-        );
+        $authorize = $this->heidelpay->authorize(100.0, Currencies::EURO, $card->getId(), self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
         $this->assertNotEmpty($authorize->getUniqueId());

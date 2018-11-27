@@ -2,7 +2,7 @@
 /**
  * This interface defines the methods for a parent heidelpay object.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Interfaces;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 interface HeidelpayParentInterface
 {
@@ -47,16 +45,4 @@ interface HeidelpayParentInterface
      * @return string
      */
     public function getUri($appendId = true): string;
-
-    /**
-     * Fetches the Resource if necessary.
-     *
-     * @param AbstractHeidelpayResource $resource
-     *
-     * @return AbstractHeidelpayResource
-     *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     */
-    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource;
 }

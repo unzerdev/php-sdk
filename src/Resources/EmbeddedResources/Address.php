@@ -2,7 +2,7 @@
 /**
  * Represents the address resource.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/resources
+ * @package  heidelpay/mgw_sdk/resources/embedded_resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpay\MgwPhpSdk\Resources\EmbeddedResources;
+
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 class Address extends AbstractHeidelpayResource
 {
@@ -47,9 +49,9 @@ class Address extends AbstractHeidelpayResource
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -66,9 +68,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStreet(): string
+    public function getStreet()
     {
         return $this->street;
     }
@@ -85,9 +87,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getState(): string
+    public function getState()
     {
         return $this->state;
     }
@@ -104,9 +106,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getZip(): string
+    public function getZip()
     {
         return $this->zip;
     }
@@ -123,9 +125,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity()
     {
         return $this->city;
     }
@@ -142,9 +144,9 @@ class Address extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCountry(): string
+    public function getCountry()
     {
         return $this->country;
     }
