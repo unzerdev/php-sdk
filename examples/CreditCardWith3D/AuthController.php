@@ -2,7 +2,7 @@
 /**
  * This is the controller for the 'Authorization' transaction example for Card.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ try {
     //#######  3. Create an authorization (aka reservation) ############################################################
     $customer      = new Customer('Linda', 'Heideich');
     $authorization = $heidelpay->authorize(12.99, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL, $customer);
-
 } catch (HeidelpayApiException $e) {
     //#######  4. In case of an error redirect to your failure page. ###################################################
 }

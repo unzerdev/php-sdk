@@ -2,7 +2,7 @@
 /**
  * This trait adds amount properties to a class.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/resources
+ * @package  heidelpay/mgw_sdk/resources/embedded_resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpay\MgwPhpSdk\Resources\EmbeddedResources;
+
+use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 class Amount extends AbstractHeidelpayResource
 {
@@ -32,7 +34,7 @@ class Amount extends AbstractHeidelpayResource
     private $remaining = 0.0;
 
     /** @var string $currency */
-    private $currency = '';
+    private $currency;
 
     //<editor-fold desc="Getters/Setters">
 
@@ -113,9 +115,9 @@ class Amount extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCurrency(): string
+    public function getCurrency()
     {
         return $this->currency;
     }

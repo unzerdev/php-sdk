@@ -3,7 +3,7 @@
  * This is the heidelpay object which is the base object providing all functionalities needed to
  * access the api.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -175,6 +175,17 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * @param ResourceService $resourceService
+     *
+     * @return Heidelpay
+     */
+    public function setResourceService(ResourceService $resourceService): Heidelpay
+    {
+        $this->resourceService = $resourceService;
+        return $this;
+    }
+
+    /**
      * Returns the ResourceService object.
      *
      * @return ResourceService The resource service object of this heidelpay instance.
@@ -182,6 +193,25 @@ class Heidelpay implements HeidelpayParentInterface
     public function getResourceService(): ResourceService
     {
         return $this->resourceService;
+    }
+
+    /**
+     * @param PaymentService $paymentService
+     *
+     * @return Heidelpay
+     */
+    public function setPaymentService(PaymentService $paymentService): Heidelpay
+    {
+        $this->paymentService = $paymentService;
+        return $this;
+    }
+
+    /**
+     * @return PaymentService
+     */
+    public function getPaymentService(): PaymentService
+    {
+        return $this->paymentService;
     }
 
     /**

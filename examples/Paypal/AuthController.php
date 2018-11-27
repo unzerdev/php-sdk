@@ -2,7 +2,7 @@
 /**
  * This is the controller for the 'Authorization' transaction example for Paypal.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +46,6 @@ try {
     $authorization = $heidelpay->authorize(12.0, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL, $customer);
 
     addSuccess('Redirect to: ' . $authorization->getRedirectUrl());
-
-
 } catch (HeidelpayApiException $e) {
     //#######  4. In case of an error redirect to your failure page. ###################################################
     returnError($e->getClientMessage());

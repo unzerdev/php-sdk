@@ -2,7 +2,7 @@
 /**
  * Http adapters to be used by this api have to implement this interface.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,5 +42,9 @@ interface HttpAdapterInterface
      *
      * @return string result json of the transaction
      */
-    public function send($uri = null, AbstractHeidelpayResource $heidelpayResource = null, $httpMethod = self::REQUEST_POST): string;
+    public function send(
+        $uri = null,
+        AbstractHeidelpayResource $heidelpayResource = null,
+        $httpMethod = self::REQUEST_POST
+    ): string;
 }

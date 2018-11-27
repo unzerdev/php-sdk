@@ -2,7 +2,7 @@
 /**
  * This service provides for all methods to manage resources with the api.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,22 +84,23 @@ class ResourceService
         $httpMethod = HttpAdapterInterface::REQUEST_GET
     ): \stdClass {
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
-        $responseJson = $resource->getHeidelpayObject()->send($resource->getUri($appendId), $resource, $httpMethod);
+        $uri          = $resource->getUri($appendId);
+        $responseJson = $resource->getHeidelpayObject()->send($uri, $resource, $httpMethod);
         return json_decode($responseJson);
     }
 
     /**
      * @param string $url
-     * @param string $typePattern
+     * @param string $idString
      *
      * @return string
      *
      * @throws \RuntimeException
      */
-    public function getResourceIdFromUrl($url, $typePattern): string
+    public function getResourceIdFromUrl($url, $idString): string
     {
         $matches = [];
-        preg_match('~\/([s|p]{1}-' . $typePattern . '-[\d]+)~', $url, $matches);
+        preg_match('~\/([s|p]{1}-' . $idString . '-[\d]+)~', $url, $matches);
 
         if (\count($matches) < 2) {
             throw new \RuntimeException('Id not found!');
@@ -188,9 +189,14 @@ class ResourceService
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function delete(AbstractHeidelpayResource $resource)
+    public function delete(AbstractHeidelpayResource &$resource)
     {
-        $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
+        $response = $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
+
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
+            return $resource;
+        }
 
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $resource = null;
@@ -241,9 +247,6 @@ class ResourceService
         }
 
         $this->fetch($paymentObject);
-        if (!$paymentObject instanceof Payment) {
-            throw new \RuntimeException('Fetched object is not a payment object!');
-        }
         return $paymentObject;
     }
 
@@ -282,7 +285,8 @@ class ResourceService
     {
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this->heidelpay);
-        return $this->create($paymentType);
+        $this->create($paymentType);
+        return $paymentType;
     }
 
     /**
@@ -298,11 +302,16 @@ class ResourceService
     public function fetchPaymentType($typeId): AbstractHeidelpayResource
     {
         $paymentType = null;
+        $typeIdString = null;
 
         $typeIdParts = [];
         preg_match('/^[sp]{1}-([a-z]{3}|p24)-[a-z0-9]*/', $typeId, $typeIdParts);
 
-        switch ($typeIdParts[1]) {
+        if (\count($typeIdParts) >= 2) {
+            $typeIdString = $typeIdParts[1];
+        }
+
+        switch ($typeIdString) {
             case IdStrings::CARD:
                 $paymentType = new Card(null, null);
                 break;
@@ -340,7 +349,7 @@ class ResourceService
                 $paymentType = new PIS();
                 break;
             default:
-                throw new \RuntimeException(sprintf('Payment type "%s" is not allowed!', $typeIdParts[1]));
+                throw new \RuntimeException('Invalid payment type!');
                 break;
         }
 
@@ -364,7 +373,8 @@ class ResourceService
     public function createCustomer(Customer $customer): AbstractHeidelpayResource
     {
         $customer->setParentResource($this->heidelpay);
-        return $this->create($customer);
+        $this->create($customer);
+        return $customer;
     }
 
     /**
@@ -382,7 +392,7 @@ class ResourceService
         try {
             $this->createCustomer($customer);
         } catch (HeidelpayApiException $e) {
-            if (!ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS === $e->getCode()) {
+            if (ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS !== $e->getCode()) {
                 throw $e;
             }
 
@@ -414,7 +424,8 @@ class ResourceService
             $customerObject = (new Customer())->setId($customer);
         }
 
-        return $this->fetch($customerObject->setParentResource($this->heidelpay));
+        $this->fetch($customerObject->setParentResource($this->heidelpay));
+        return $customerObject;
     }
 
     /**
@@ -429,13 +440,16 @@ class ResourceService
      */
     public function updateCustomer(Customer $customer): AbstractHeidelpayResource
     {
-        return $this->update($customer);
+        $this->update($customer);
+        return $customer;
     }
 
     /**
      * Delete the given Customer resource.
      *
-     * @param Customer|string $customer
+     * @param Customer|string|null $customer
+     *
+     * @return Customer|null|string
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
@@ -449,6 +463,7 @@ class ResourceService
         }
 
         $this->delete($customerObject);
+        return $customerObject;
     }
 
     //</editor-fold>
@@ -494,7 +509,7 @@ class ResourceService
     {
         /** @var Payment $paymentObject */
         $paymentObject = $this->fetchPayment($payment);
-        return $this->fetch($paymentObject->getChargeById($chargeId, true));
+        return $this->fetch($paymentObject->getCharge($chargeId, true));
     }
 
     //</editor-fold>
@@ -589,7 +604,7 @@ class ResourceService
     public function fetchShipment($payment, $shipmentId): AbstractHeidelpayResource
     {
         $paymentObject = $this->fetchPayment($payment);
-        return $paymentObject->getShipmentById($shipmentId);
+        return $paymentObject->getShipment($shipmentId);
     }
 
     //</editor-fold>

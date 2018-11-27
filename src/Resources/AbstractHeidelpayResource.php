@@ -2,7 +2,7 @@
 /**
  * This is the base class for all resource types managed by the api.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
+     * This setter must be public to enable fetching a resource by setting the id and then call fetch.
+     *
      * @param int $resourceId
      *
      * @return $this
@@ -90,9 +92,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
     /**
      * @return HeidelpayParentInterface
+     *
+     * @throws \RuntimeException
      */
     public function getParentResource(): HeidelpayParentInterface
     {
+        if (!$this->parentResource instanceof HeidelpayParentInterface) {
+            throw new \RuntimeException('Parent resource reference is not set!');
+        }
         return $this->parentResource;
     }
 
@@ -124,22 +131,21 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     public function getHeidelpayObject(): Heidelpay
     {
-        $heidelpayObject = $this->parentResource->getHeidelpayObject();
-
-        if (!$heidelpayObject instanceof Heidelpay) {
-            throw new \RuntimeException('Heidelpay object reference is not set!');
-        }
-
-        return $heidelpayObject;
+        return $this->getParentResource()->getHeidelpayObject();
     }
 
     /**
+     * Fetches the parent URI and combines it with the uri of the current resource.
+     * If appendId is set the id of the current resource will be appended if it is set.
+     * The flag appendId is always set for getUri of the parent resource.
+     *
      * {@inheritDoc}
+     *
+     * @throws \RuntimeException
      */
     public function getUri($appendId = true): string
     {
-        // remove trailing slash and explode
-        $uri = [rtrim($this->parentResource->getUri(), '/'), $this->getResourcePath()];
+        $uri = [rtrim($this->getParentResource()->getUri(), '/'), $this->getResourcePath()];
         if ($appendId && $this->getId() !== null) {
             $uri[] = $this->getId();
         }
@@ -197,7 +203,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    protected function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         return $this->getResourceService()->getResource($resource);
     }
@@ -210,22 +216,22 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function fetchResource(AbstractHeidelpayResource $resource)
+    protected function fetchResource(AbstractHeidelpayResource $resource)
     {
         $this->getResourceService()->fetch($resource);
     }
 
     /**
      * @param string $url
-     * @param string $typePattern
+     * @param string $idString
      *
      * @return string
      *
      * @throws \RuntimeException
      */
-    public function getResourceIdFromUrl($url, $typePattern): string
+    protected function getResourceIdFromUrl($url, $idString): string
     {
-        return $this->getResourceService()->getResourceIdFromUrl($url, $typePattern);
+        return $this->getResourceService()->getResourceIdFromUrl($url, $idString);
     }
 
     //</editor-fold>
@@ -317,9 +323,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * This returns the path of this resource within the parent resource.
      * Override this if the path does not match the class name.
      *
-     * @return null
+     * @return string
      */
-    protected function getResourcePath()
+    protected function getResourcePath(): string
     {
         return ResourceNameService::getClassShortNameKebapCase(static::class);
     }

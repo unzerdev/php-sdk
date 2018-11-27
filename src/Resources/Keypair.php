@@ -2,7 +2,7 @@
 /**
  * This represents the key pair resource.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,18 @@ class Keypair extends AbstractHeidelpayResource
     /** @var string $publicKey */
     private $publicKey;
 
+    /** @var string $privateKey */
+    private $privateKey;
+
     /** @var array $availablePaymentTypes */
     private $availablePaymentTypes = [];
 
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPublicKey(): string
+    public function getPublicKey()
     {
         return $this->publicKey;
     }
@@ -45,9 +48,25 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @param string $publicKey
      */
-    public function setPublicKey(string $publicKey)
+    protected function setPublicKey(string $publicKey)
     {
         $this->publicKey = $publicKey;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPrivateKey()
+    {
+        return $this->privateKey;
+    }
+
+    /**
+     * @param string $privateKey
+     */
+    protected function setPrivateKey(string $privateKey)
+    {
+        $this->privateKey = $privateKey;
     }
 
     /**
@@ -61,7 +80,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @param array $paymentTypes
      */
-    public function setAvailablePaymentTypes(array $paymentTypes)
+    protected function setAvailablePaymentTypes(array $paymentTypes)
     {
         $this->availablePaymentTypes = $paymentTypes;
     }

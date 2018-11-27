@@ -2,7 +2,7 @@
 /**
  * This file provides an example implementation of the credit card payment type with active 3D secure.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

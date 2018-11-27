@@ -3,7 +3,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the Payment resource.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration
+ * @package  heidelpay/mgw_sdk/test/integration
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
@@ -47,7 +47,7 @@ class PaymentTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
-    public function PaymentShouldBeFetchableById()
+    public function paymentShouldBeFetchableById()
     {
         $authorize = $this->createAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorize->getPayment()->getId());
@@ -109,7 +109,7 @@ class PaymentTest extends BasePaymentTest
         $this->assertNotNull($fetchedPayment->getCharges());
         $this->assertCount(1, $fetchedPayment->getCharges());
 
-        $fetchedCharge = $fetchedPayment->getCharge(0);
+        $fetchedCharge = $fetchedPayment->getChargeByIndex(0);
         $this->assertEquals($charge->getAmount(), $fetchedCharge->getAmount());
         $this->assertEquals($charge->getCurrency(), $fetchedCharge->getCurrency());
         $this->assertEquals($charge->getId(), $fetchedCharge->getId());
@@ -194,7 +194,7 @@ class PaymentTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
-        $fetchedCharge = $fetchedPayment->getChargeById('s-chg-1');
+        $fetchedCharge = $fetchedPayment->getCharge('s-chg-1');
         $cancellation = $fetchedCharge->cancel();
         $this->assertNotNull($cancellation);
     }
@@ -212,7 +212,7 @@ class PaymentTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
-        $cancel = $fetchedPayment->getCharge(0)->cancel(10.0);
+        $cancel = $fetchedPayment->getChargeByIndex(0)->cancel(10.0);
         $this->assertNotNull($cancel);
     }
 
@@ -226,23 +226,11 @@ class PaymentTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
-    public function authorizationShouldBePossibleWithPaymentObject()
+    public function authorizationShouldBePossibleOnHeidelpayObject()
     {
         $card = $this->createCardObject();
         $this->heidelpay->createPaymentType($card);
 
-        // Variant 1
-        $payment = new Payment($this->heidelpay);
-        $authorizationUsingPayment = $payment->authorize(
-            100.0,
-            Currencies::EURO,
-            $card,
-            self::RETURN_URL
-        );
-        $this->assertNotNull($authorizationUsingPayment);
-        $this->assertNotEmpty($authorizationUsingPayment->getId());
-
-        // Variant 2
         $authorizationUsingHeidelpay = $this->heidelpay->authorize(
             100.0,
             Currencies::EURO,

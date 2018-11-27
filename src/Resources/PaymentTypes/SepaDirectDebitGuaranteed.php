@@ -2,7 +2,7 @@
 /**
  * This represents the SEPA direct debit guaranteed payment type.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,9 +52,9 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIban(): string
+    public function getIban()
     {
         return $this->iban;
     }
@@ -71,9 +71,9 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBic(): string
+    public function getBic()
     {
         return $this->bic;
     }

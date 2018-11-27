@@ -2,7 +2,7 @@
 /**
  * This service provides for functionalities concerning payment transactions.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,48 @@ class PaymentService
         $this->resourceService = $heidelpay->getResourceService();
     }
 
+    //<editor-fold desc="Getters/Setters">
+
+    /**
+     * @return Heidelpay
+     */
+    public function getHeidelpay(): Heidelpay
+    {
+        return $this->heidelpay;
+    }
+
+    /**
+     * @param Heidelpay $heidelpay
+     *
+     * @return PaymentService
+     */
+    public function setHeidelpay(Heidelpay $heidelpay): PaymentService
+    {
+        $this->heidelpay = $heidelpay;
+        return $this;
+    }
+
+    /**
+     * @return ResourceService
+     */
+    public function getResourceService(): ResourceService
+    {
+        return $this->resourceService;
+    }
+
+    /**
+     * @param ResourceService $resourceService
+     *
+     * @return PaymentService
+     */
+    public function setResourceService(ResourceService $resourceService): PaymentService
+    {
+        $this->resourceService = $resourceService;
+        return $this;
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="Helpers">
 
     /**
@@ -94,8 +136,14 @@ class PaymentService
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function authorize($amount, $currency, $paymentType, $returnUrl, $customer = null, $orderId = null): AbstractTransactionType
-    {
+    public function authorize(
+        $amount,
+        $currency,
+        $paymentType,
+        $returnUrl,
+        $customer = null,
+        $orderId = null
+    ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType, $customer);
         return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
     }
@@ -122,7 +170,7 @@ class PaymentService
         $returnUrl = null,
         $customer = null,
         $orderId = null
-    ): AbstractTransactionType {
+    ): Authorization {
         $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
         $payment->setAuthorization($authorization)->setCustomer($customer);
         $this->resourceService->create($authorization);
@@ -158,7 +206,7 @@ class PaymentService
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType, $customer);
         $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setParentResource($payment)->setPayment($payment);
+        $charge->setPayment($payment);
         $charge->setOrderId($orderId);
         $payment->addCharge($charge);
         $this->resourceService->create($charge);
@@ -204,7 +252,7 @@ class PaymentService
     public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
     {
         $charge = new Charge($amount, $currency);
-        $charge->setParentResource($payment)->setPayment($payment);
+        $charge->setPayment($payment);
         $payment->addCharge($charge);
         $this->resourceService->create($charge);
         return $charge;
@@ -228,8 +276,8 @@ class PaymentService
     public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
     {
         $cancellation = new Cancellation($amount);
-        $authorization->addCancellation($cancellation);
         $cancellation->setPayment($authorization->getPayment());
+        $authorization->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
 
         return $cancellation;
@@ -248,7 +296,8 @@ class PaymentService
      */
     public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType
     {
-        return $this->cancelAuthorization($this->resourceService->fetchAuthorization($payment), $amount);
+        $authorization = $this->resourceService->fetchAuthorization($payment);
+        return $this->cancelAuthorization($authorization, $amount);
     }
 
     //</editor-fold>
@@ -269,7 +318,8 @@ class PaymentService
      */
     public function cancelChargeById($payment, $chargeId, $amount = null): AbstractTransactionType
     {
-        return $this->cancelCharge($this->resourceService->fetchChargeById($payment, $chargeId), $amount);
+        $charge = $this->resourceService->fetchChargeById($payment, $chargeId);
+        return $this->cancelCharge($charge, $amount);
     }
 
     /**
@@ -286,8 +336,8 @@ class PaymentService
     public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
     {
         $cancellation = new Cancellation($amount);
-        $charge->addCancellation($cancellation);
         $cancellation->setPayment($charge->getPayment());
+        $charge->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
 
         return $cancellation;
@@ -315,13 +365,10 @@ class PaymentService
             $paymentObject = $this->resourceService->fetchPayment($payment);
         }
 
-        if (!$paymentObject instanceof Payment) {
-            throw new \RuntimeException('Payment object is not set.');
-        }
-
         $shipment = new Shipment();
         $paymentObject->addShipment($shipment);
-        return $this->resourceService->create($shipment);
+        $this->resourceService->create($shipment);
+        return $shipment;
     }
 
     //</editor-fold>

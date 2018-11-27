@@ -2,7 +2,7 @@
 /**
  * This trait adds customer fixtures to test classes.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/fixtures
+ * @package  heidelpay/mgw_sdk/test/fixtures
  */
 namespace heidelpay\MgwPhpSdk\test\Fixtures;
 
 use heidelpay\MgwPhpSdk\Constants\Salutations;
-use heidelpay\MgwPhpSdk\Resources\Address;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
 
 trait CustomerFixtureTrait
 {

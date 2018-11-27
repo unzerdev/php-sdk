@@ -2,7 +2,7 @@
 /**
  * This defines a base class for all payment types e.g. Card, GiroPay, etc.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ abstract class BasePaymentType extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath()
+    protected function getResourcePath(): string
     {
         return 'types/' . parent::getResourcePath();
     }
