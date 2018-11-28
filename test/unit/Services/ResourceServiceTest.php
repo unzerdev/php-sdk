@@ -31,6 +31,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Keypair;
+use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
@@ -1041,6 +1042,55 @@ class ResourceServiceTest extends BaseUnitTest
          */
         $returnedShipment = $resourceSrvMock->fetchShipment('paymentId', 'shipmentId');
         $this->assertSame($shipment, $returnedShipment);
+    }
+
+    /**
+     * Verify fetchMetadata calls fetch with the given metadata object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchMetadataShouldCallFetchWithTheGivenMetadataObject()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+
+        $metadata = (new Metadata())->setId('myMetadataId');
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($metadata);
+
+        /** @var ResourceService $resourceSrvMock */
+        $this->assertSame($metadata, $resourceSrvMock->fetchMetadata($metadata));
+    }
+
+    /**
+     * Verify fetchMetadata calls fetch with a new metadata object with the given id.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchMetadataShouldCallFetchWithANewMetadataObjectWithTheGivenId()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+
+        $resourceSrvMock->expects($this->once())->method('fetch')->with(
+            $this->callback(function ($metadata) {
+                return $metadata instanceof Metadata && $metadata->getId() === 's-mtd-1234';
+            })
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchMetadata('s-mtd-1234');
     }
 
     //<editor-fold desc="Data Providers">
