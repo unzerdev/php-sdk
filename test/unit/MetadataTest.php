@@ -39,10 +39,11 @@ class MetadataTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws ExpectationFailedException
+     * @throws \RuntimeException
      */
     public function heidelpayShouldAutomaticallyProvideAMetadataObject()
     {
-        $metadata = $this->heidelpay->getMetadata();
+        $metadata = new Metadata($this->heidelpay);
 
         /** @noinspection UnnecessaryAssertionInspection */
         $this->assertInstanceOf(Metadata::class, $metadata);

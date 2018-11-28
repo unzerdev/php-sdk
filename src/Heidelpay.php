@@ -74,9 +74,6 @@ class Heidelpay implements HeidelpayParentInterface
     /** @var boolean $debugMode */
     private $debugMode = false;
 
-    /** @var Metadata $metadata */
-    private $metadata;
-
     /**
      * Construct a new heidelpay object.
      *
@@ -92,7 +89,6 @@ class Heidelpay implements HeidelpayParentInterface
 
         $this->resourceService = new ResourceService($this);
         $this->paymentService = new PaymentService($this);
-        $this->metadata = new Metadata($this);
     }
 
     //<editor-fold desc="General">
@@ -263,14 +259,6 @@ class Heidelpay implements HeidelpayParentInterface
     {
         $this->debugHandler = $debugHandler;
         return $this;
-    }
-
-    /**
-     * @return Metadata
-     */
-    public function getMetadata(): Metadata
-    {
-        return $this->metadata;
     }
 
     //</editor-fold>
@@ -643,6 +631,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
      * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
      * @param string|null            $orderId     A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
      *
      * @return Authorization The resulting object of the Authorization resource.
      *
@@ -655,9 +644,18 @@ class Heidelpay implements HeidelpayParentInterface
         $paymentType,
         $returnUrl,
         $customer = null,
-        $orderId = null
+        $orderId = null,
+        $metadata = null
     ): AbstractTransactionType {
-        return $this->paymentService->authorize($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
+        return $this->paymentService->authorize(
+            $amount,
+            $currency,
+            $paymentType,
+            $returnUrl,
+            $customer,
+            $orderId,
+            $metadata
+        );
     }
 
     /**
@@ -669,6 +667,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
      * @param Customer|string|null $customer  The Customer object or the id of the customer resource to reference.
      * @param string|null          $orderId   A custom order id which can be set by the merchant.
+     * @param Metadata|null        $metadata  The Metadata object containing custom information for the payment.
      *
      * @return Authorization The resulting object of the Authorization resource.
      *
@@ -681,10 +680,11 @@ class Heidelpay implements HeidelpayParentInterface
         Payment $payment,
         $returnUrl = null,
         $customer = null,
-        $orderId = null
+        $orderId = null,
+        $metadata = null
     ): AbstractTransactionType {
         return $this->paymentService
-            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
+            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata);
     }
 
     //</editor-fold>

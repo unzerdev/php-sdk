@@ -27,6 +27,7 @@ namespace heidelpay\MgwPhpSdk\test\unit\Services;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -83,21 +84,33 @@ class PaymentServiceTest extends BaseUnitTest
     {
         $paymentType = (new Sofort())->setId('typeId');
         $customer = (new Customer())->setId('customerId');
+        $metadata = (new Metadata())->setId('metadataId');
 
         $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->disableOriginalConstructor()
             ->setMethods(['authorizeWithPayment'])->getMock();
-        $paymentSrvMock->expects($this->exactly(3))->method('authorizeWithPayment')
+        $paymentSrvMock->expects($this->exactly(4))->method('authorizeWithPayment')
             ->withConsecutive(
                 [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url'],
                 [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer],
-                [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer, 'OrderId']
+                [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer, $metadata],
+                [
+                    1.23,
+                    'testCurrency',
+                    $this->isInstanceOf(Payment::class),
+                    'http://return.url',
+                    $customer,
+                    $metadata,
+                    'OrderId'
+                ]
             );
 
         /** @var PaymentService $paymentSrvMock */
         $paymentSrvMock->setHeidelpay(new Heidelpay('s-priv-123'));
         $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url');
         $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer);
-        $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, 'OrderId');
+        $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, $metadata);
+        $paymentSrvMock
+            ->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, $metadata, 'OrderId');
     }
 
     /**
@@ -114,6 +127,7 @@ class PaymentServiceTest extends BaseUnitTest
     public function authorizeWithPaymentShouldCallCreateOnResourceServiceWithANewAuthorization()
     {
         $customer = (new Customer())->setId('myCustomerId');
+        $metadata = (new Metadata())->setId('myMetadataId');
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
 
@@ -121,7 +135,7 @@ class PaymentServiceTest extends BaseUnitTest
             ->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
-                function ($authorize) use ($customer, $payment) {
+                function ($authorize) use ($customer, $payment, $metadata) {
                     /** @var Authorization $authorize */
                     $newPayment = $authorize->getPayment();
                     return $authorize instanceof Authorization &&
@@ -131,6 +145,7 @@ class PaymentServiceTest extends BaseUnitTest
                            $authorize->getReturnUrl() === 'myTestUrl' &&
                            $newPayment instanceof Payment &&
                            $newPayment === $payment &&
+                           $newPayment->getMetadata() === $metadata &&
                            $newPayment->getCustomer() === $customer &&
                            $newPayment->getAuthorization() === $authorize;
                 }
@@ -140,7 +155,15 @@ class PaymentServiceTest extends BaseUnitTest
         /** @var ResourceService $resourceSrvMock */
         $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
         $returnedAuth =
-            $paymentSrv->authorizeWithPayment(1.234, 'myTestCurrency', $payment, 'myTestUrl', $customer, 'myOrderId');
+            $paymentSrv->authorizeWithPayment(
+                1.234,
+                'myTestCurrency',
+                $payment,
+                'myTestUrl',
+                $customer,
+                'myOrderId',
+                $metadata
+            );
         $this->assertSame($payment->getAuthorization(), $returnedAuth);
     }
 

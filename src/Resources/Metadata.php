@@ -78,6 +78,7 @@ class Metadata extends AbstractHeidelpayResource
 
     /**
      * @param string $sdkType
+     *
      * @return Metadata
      */
     protected function setSdkType(string $sdkType): Metadata
@@ -96,6 +97,7 @@ class Metadata extends AbstractHeidelpayResource
 
     /**
      * @param string $sdkVersion
+     *
      * @return Metadata
      */
     protected function setSdkVersion(string $sdkVersion): Metadata
@@ -166,7 +168,6 @@ class Metadata extends AbstractHeidelpayResource
             }
         }
     }
-
 
     //</editor-fold>
 }

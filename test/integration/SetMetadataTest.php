@@ -41,7 +41,7 @@ class SetMetadataTest extends BasePaymentTest
     {
         $resourceService = $this->heidelpay->getResourceService();
 
-        $metadata = $this->heidelpay->getMetadata();
+        $metadata = new Metadata($this->heidelpay);
         $this->assertNull($metadata->getShopType());
         $this->assertNull($metadata->getShopVersion());
         $this->assertNull($metadata->get('MyCustomData'));
@@ -64,6 +64,4 @@ class SetMetadataTest extends BasePaymentTest
         $this->assertEquals('v2.0.0', $fetchedMetadata->getShopVersion());
         $this->assertEquals('my custom information', $fetchedMetadata->get('MyCustomData'));
     }
-
-
 }
