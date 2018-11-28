@@ -69,7 +69,7 @@ class SetMetadataTest extends BasePaymentTest
     }
 
     /**
-     * Verify metadata will automatically created on authorize if it does not exist yet (has no id).
+     * Verify metadata will automatically created on authorize.
      *
      * @test
      *
@@ -77,7 +77,7 @@ class SetMetadataTest extends BasePaymentTest
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    public function authorizeShouldCreateMetaDataIfItDoesNotExistYet()
+    public function authorizeShouldCreateMetadata()
     {
         $metadata = new Metadata();
         $metadata->setShopType('Shopware');
@@ -88,6 +88,29 @@ class SetMetadataTest extends BasePaymentTest
 
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $this->heidelpay->authorize(1.23, Currencies::EURO, $card, 'https://heidelpay.com', null, null, $metadata);
-        $this->assertNotEmpty($metadata);
+        $this->assertNotEmpty($metadata->getId());
+    }
+
+    /**
+     * Verify metadata will automatically created on charge.
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function chargeShouldCreateMetadata()
+    {
+        $metadata = new Metadata();
+        $metadata->setShopType('Shopware');
+        $metadata->setShopVersion('5.12');
+        $metadata->set('ModuleType', 'Shopware 5');
+        $metadata->set('ModuleVersion', '18.3.12');
+        $this->assertEmpty($metadata->getId());
+
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $this->heidelpay->charge(1.23, Currencies::EURO, $card, 'https://heidelpay.com', null, null, $metadata);
+        $this->assertNotEmpty($metadata->getId());
     }
 }

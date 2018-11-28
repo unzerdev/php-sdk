@@ -194,6 +194,7 @@ class PaymentService
      * @param string                 $returnUrl
      * @param Customer|string|null   $customer
      * @param string|null            $orderId
+     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
      *
      * @return Charge Resulting Charge object.
      *
@@ -206,13 +207,12 @@ class PaymentService
         $paymentType,
         $returnUrl,
         $customer = null,
-        $orderId = null
+        $orderId = null,
+        $metadata = null
     ): AbstractTransactionType {
-        $payment = $this->createPayment($paymentType)->setCustomer($customer);
-        $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setPayment($payment);
-        $charge->setOrderId($orderId);
-        $payment->addCharge($charge);
+        $payment = $this->createPayment($paymentType);
+        $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata);
         $this->resourceService->create($charge);
 
         return $charge;

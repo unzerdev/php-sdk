@@ -161,6 +161,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function addCharge(Charge $charge): self
     {
+        $charge->setPayment($this);
         $this->charges[] = $charge;
         return $this;
     }

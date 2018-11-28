@@ -88,7 +88,7 @@ class Heidelpay implements HeidelpayParentInterface
         $this->locale = $locale;
 
         $this->resourceService = new ResourceService($this);
-        $this->paymentService = new PaymentService($this);
+        $this->paymentService  = new PaymentService($this);
     }
 
     //<editor-fold desc="General">
@@ -700,6 +700,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
      * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
      * @param string|null            $orderId     A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -712,9 +713,18 @@ class Heidelpay implements HeidelpayParentInterface
         $paymentType,
         $returnUrl,
         $customer = null,
-        $orderId = null
+        $orderId = null,
+        $metadata = null
     ): AbstractTransactionType {
-        return $this->paymentService->charge($amount, $currency, $paymentType, $returnUrl, $customer, $orderId);
+        return $this->paymentService->charge(
+            $amount,
+            $currency,
+            $paymentType,
+            $returnUrl,
+            $customer,
+            $orderId,
+            $metadata
+        );
     }
 
     /**
