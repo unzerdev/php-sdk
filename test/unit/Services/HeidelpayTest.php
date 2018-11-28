@@ -59,4 +59,32 @@ class HeidelpayTest extends BaseUnitTest
         $heidelpayGerman = new Heidelpay('s-priv-1234', SupportedLocales::GERMAN_GERMAN);
         $this->assertEquals(SupportedLocales::GERMAN_GERMAN, $heidelpayGerman->getLocale());
     }
+
+    /**
+     * Verify getters and setters work properly.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     */
+    public function gettersAndSettersShouldWorkProperly()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $heidelpay->setLocale('myLocale');
+        $this->assertEquals('myLocale', $heidelpay->getLocale());
+
+        $resourceSrv = new ResourceService($heidelpay);
+        $heidelpay->setResourceService($resourceSrv);
+        $this->assertSame($resourceSrv, $heidelpay->getResourceService());
+
+        $paymentSrv = new PaymentService($heidelpay);
+        $heidelpay->setPaymentService($paymentSrv);
+        $this->assertSame($paymentSrv, $heidelpay->getPaymentService());
+
+        $this->assertFalse($heidelpay->isDebugMode());
+        $heidelpay->setDebugMode(true);
+        $this->assertTrue($heidelpay->isDebugMode());
+        $heidelpay->setDebugMode(false);
+        $this->assertFalse($heidelpay->isDebugMode());
+    }
 }
