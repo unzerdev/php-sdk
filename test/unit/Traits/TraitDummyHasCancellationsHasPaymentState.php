@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines a dummy implementing HasCancellations traits.
+ * This class defines a dummy implementing HasCancellations and HasPaymentState traits.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -25,8 +25,10 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Traits;
 
 use heidelpay\MgwPhpSdk\Traits\HasCancellations;
+use heidelpay\MgwPhpSdk\Traits\HasPaymentState;
 
-class TraitDummyHasCancellations
+class TraitDummyHasCancellationsHasPaymentState
 {
     use HasCancellations;
+    use HasPaymentState;
 }

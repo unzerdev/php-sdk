@@ -47,7 +47,7 @@ class HasCancellationsTest extends BaseUnitTest
      */
     public function hasCancellationGettersAndSettersShouldWorkProperly()
     {
-        $dummy = new TraitDummyHasCancellations();
+        $dummy = new TraitDummyHasCancellationsHasPaymentState();
         $this->assertIsEmptyArray($dummy->getCancellations());
 
         // assert getCancellation
