@@ -24,8 +24,11 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
+use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
 
 class SetMetadataTest extends BasePaymentTest
 {
@@ -35,7 +38,7 @@ class SetMetadataTest extends BasePaymentTest
      * @test
      *
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws HeidelpayApiException
      */
     public function metadataShouldBeCreatableAndFetchableWithTheApi()
     {
@@ -63,5 +66,28 @@ class SetMetadataTest extends BasePaymentTest
         $this->assertEquals('my awesome shop', $fetchedMetadata->getShopType());
         $this->assertEquals('v2.0.0', $fetchedMetadata->getShopVersion());
         $this->assertEquals('my custom information', $fetchedMetadata->get('MyCustomData'));
+    }
+
+    /**
+     * Verify metadata will automatically created on authorize if it does not exist yet (has no id).
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function authorizeShouldCreateMetaDataIfItDoesNotExistYet()
+    {
+        $metadata = new Metadata();
+        $metadata->setShopType('Shopware');
+        $metadata->setShopVersion('5.12');
+        $metadata->set('ModuleType', 'Shopware 5');
+        $metadata->set('ModuleVersion', '18.3.12');
+        $this->assertEmpty($metadata->getId());
+
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $this->heidelpay->authorize(1.23, Currencies::EURO, $card, 'https://heidelpay.com', null, null, $metadata);
+        $this->assertNotEmpty($metadata);
     }
 }

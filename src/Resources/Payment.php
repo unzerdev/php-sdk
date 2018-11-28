@@ -335,10 +335,10 @@ class Payment extends AbstractHeidelpayResource
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
         if ($metadata->getId() === null) {
-            $heidelpay->getResourceService()->create($metadata);
+            $heidelpay->getResourceService()->create($metadata->setParentResource($heidelpay));
         }
 
-        $this->metadata = $metadata->setParentResource($heidelpay);
+        $this->metadata = $metadata;
         return $this;
     }
 
