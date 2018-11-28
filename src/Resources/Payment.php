@@ -49,7 +49,8 @@ class Payment extends AbstractHeidelpayResource
      */
     public function __construct($parent = null)
     {
-        $this->setAmount(new Amount());
+        $this->amount = new Amount();
+        $this->metadata = new Metadata();
 
         parent::__construct($parent);
     }
@@ -75,6 +76,9 @@ class Payment extends AbstractHeidelpayResource
 
     /** @var Amount $amount */
     protected $amount;
+
+    /** @var Metadata $metadata */
+    private $metadata;
     //</editor-fold>
 
     //<editor-fold desc="Setters/Getters">
@@ -157,6 +161,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function addCharge(Charge $charge): self
     {
+        $charge->setPayment($this);
         $this->charges[] = $charge;
         return $this;
     }
@@ -303,6 +308,38 @@ class Payment extends AbstractHeidelpayResource
         }
 
         $this->paymentType = $paymentTypeObject;
+        return $this;
+    }
+
+    /**
+     * @return Metadata
+     */
+    public function getMetadata(): Metadata
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * @param Metadata|null $metadata
+     *
+     * @return Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function setMetadata($metadata): Payment
+    {
+        if (!$metadata instanceof Metadata) {
+            return $this;
+        }
+
+        /** @var Heidelpay $heidelpay */
+        $heidelpay = $this->getHeidelpayObject();
+        if ($metadata->getId() === null) {
+            $heidelpay->getResourceService()->create($metadata->setParentResource($heidelpay));
+        }
+
+        $this->metadata = $metadata;
         return $this;
     }
 
@@ -678,6 +715,12 @@ class Payment extends AbstractHeidelpayResource
         if (isset($resources->typeId) && !empty($resources->typeId)) {
             if (!$this->paymentType instanceof BasePaymentType) {
                 $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
+            }
+        }
+
+        if (isset($resources->metadataId) && !empty($resources->metadataId)) {
+            if ($this->metadata->getId() === null) {
+                $this->metadata = $this->getHeidelpayObject()->fetchMetadata($resources->metadataId);
             }
         }
     }

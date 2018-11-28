@@ -245,7 +245,8 @@ class Authorization extends AbstractTransactionType
 
         return [
             'customer'=> $payment->getCustomer(),
-            'type' => $paymentType
+            'type' => $paymentType,
+            'metadata' => $payment->getMetadata()
         ];
     }
 

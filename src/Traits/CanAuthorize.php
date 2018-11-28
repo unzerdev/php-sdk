@@ -27,6 +27,7 @@ namespace heidelpay\MgwPhpSdk\Traits;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 
 trait CanAuthorize
@@ -39,17 +40,32 @@ trait CanAuthorize
      * @param string               $currency
      * @param string               $returnUrl
      * @param Customer|string|null $customer
-     * @param null                 $orderId
+     * @param string|null          $orderId
+     * @param Metadata|string|null $metadata
      *
      * @return Authorization
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    public function authorize($amount, $currency, $returnUrl, $customer = null, $orderId = null): Authorization
-    {
+    public function authorize(
+        $amount,
+        $currency,
+        $returnUrl,
+        $customer = null,
+        $orderId = null,
+        $metadata = null
+    ): Authorization {
         if ($this instanceof HeidelpayParentInterface) {
-            return $this->getHeidelpayObject()->authorize($amount, $currency, $this, $returnUrl, $customer, $orderId);
+            return $this->getHeidelpayObject()->authorize(
+                $amount,
+                $currency,
+                $this,
+                $returnUrl,
+                $customer,
+                $orderId,
+                $metadata
+            );
         }
 
         throw new \RuntimeException(

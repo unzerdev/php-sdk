@@ -28,6 +28,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
@@ -103,16 +104,15 @@ class PaymentService
      * Create a Payment object with the given properties.
      *
      * @param BasePaymentType|string $paymentType
-     * @param Customer|string|null   $customer
      *
      * @return Payment The resulting Payment object.
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    private function createPayment($paymentType, $customer = null): AbstractHeidelpayResource
+    private function createPayment($paymentType): AbstractHeidelpayResource
     {
-        return (new Payment($this->heidelpay))->setPaymentType($paymentType)->setCustomer($customer);
+        return (new Payment($this->heidelpay))->setPaymentType($paymentType);
     }
 
     //</editor-fold>
@@ -124,12 +124,13 @@ class PaymentService
     /**
      * Perform an Authorization transaction and return the corresponding Authorization object.
      *
-     * @param float  $amount
-     * @param string $currency
-     * @param $paymentType
-     * @param string               $returnUrl
-     * @param Customer|string|null $customer
-     * @param string|null          $orderId
+     * @param float                  $amount
+     * @param string                 $currency
+     * @param BasePaymentType|string $paymentType
+     * @param string                 $returnUrl
+     * @param Customer|string|null   $customer
+     * @param string|null            $orderId
+     * @param Metadata|string|null   $metadata
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -142,21 +143,23 @@ class PaymentService
         $paymentType,
         $returnUrl,
         $customer = null,
-        $orderId = null
+        $orderId = null,
+        $metadata = null
     ): AbstractTransactionType {
-        $payment = $this->createPayment($paymentType, $customer);
-        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId);
+        $payment = $this->createPayment($paymentType);
+        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata);
     }
 
     /**
      * Perform an authorization and return the corresponding Authorization object.
      *
-     * @param $amount
-     * @param $currency
-     * @param Payment $payment
-     * @param $returnUrl
-     * @param string|null $customer
-     * @param string|null $orderId
+     * @param float                $amount
+     * @param string               $currency
+     * @param Payment              $payment
+     * @param string               $returnUrl
+     * @param Customer|string|null $customer
+     * @param string|null          $orderId
+     * @param Metadata|string|null $metadata
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -169,10 +172,11 @@ class PaymentService
         Payment $payment,
         $returnUrl = null,
         $customer = null,
-        $orderId = null
+        $orderId = null,
+        $metadata = null
     ): Authorization {
         $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
-        $payment->setAuthorization($authorization)->setCustomer($customer);
+        $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata);
         $this->resourceService->create($authorization);
         return $authorization;
     }
@@ -190,6 +194,7 @@ class PaymentService
      * @param string                 $returnUrl
      * @param Customer|string|null   $customer
      * @param string|null            $orderId
+     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
      *
      * @return Charge Resulting Charge object.
      *
@@ -202,13 +207,12 @@ class PaymentService
         $paymentType,
         $returnUrl,
         $customer = null,
-        $orderId = null
+        $orderId = null,
+        $metadata = null
     ): AbstractTransactionType {
-        $payment = $this->createPayment($paymentType, $customer);
-        $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setPayment($payment);
-        $charge->setOrderId($orderId);
-        $payment->addCharge($charge);
+        $payment = $this->createPayment($paymentType);
+        $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata);
         $this->resourceService->create($charge);
 
         return $charge;
