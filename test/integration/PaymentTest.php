@@ -155,7 +155,7 @@ class PaymentTest extends BasePaymentTest
         $this->assertEquals($authorization->getAmount(), $cancel->getAmount());
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED);
         $fetchedPayment->cancel();
     }
 
