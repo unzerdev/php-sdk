@@ -149,7 +149,6 @@ class Metadata extends AbstractHeidelpayResource
 
     /**
      * Add the dynamically set meta data.
-     *
      * {@inheritDoc}
      */
     public function expose(): array
@@ -157,6 +156,10 @@ class Metadata extends AbstractHeidelpayResource
         return array_merge(parent::expose(), $this->metadata);
     }
 
+    /**
+     * Add custom properties (i. e. properties without setter) to the metadata array.
+     * {@inheritDoc}
+     */
     public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         parent::handleResponse($response, $method);
