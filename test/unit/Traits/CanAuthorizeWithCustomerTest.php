@@ -22,7 +22,6 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-
 namespace heidelpay\MgwPhpSdk\test\unit\Traits;
 
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;

@@ -139,4 +139,50 @@ class MetadataTest extends BasePaymentTest
         $this->assertEquals('This should be my Data', $metaDataArray['myData']);
         $this->assertEquals('some information', $metaDataArray['additionalData']);
     }
+
+    /**
+     * Verify metadata can be updated.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function handleResponseShouldUpdateMetadata()
+    {
+        $metaData = new Metadata();
+        $metaData->set('myData', 'This should be my Data');
+        $metaData->set('additionalData', 'some information');
+        $metaData->setShopType('my own shop');
+        $metaData->setShopVersion('1.0.0.0-beta3');
+
+        $this->assertNull($metaData->getId());
+        $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
+        $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
+        $this->assertEquals('my own shop', $metaData->getShopType());
+        $this->assertEquals('1.0.0.0-beta3', $metaData->getShopVersion());
+        $this->assertEquals('This should be my Data', $metaData->get('myData'));
+        $this->assertEquals('some information', $metaData->get('additionalData'));
+        $this->assertNull($metaData->get('extraData'));
+
+        $response = new \stdClass();
+        $response->id = 'newId';
+        $response->sdkType = 'newSdkType';
+        $response->sdkVersion = 'newSdkVersion';
+        $response->shopType = 'my new shop';
+        $response->shopVersion = '1.0.0.0-beta4';
+        $response->myData = 'This should be my new Data';
+        $response->additionalData = 'some new information';
+        $response->extraData = 'This is brand new information';
+
+        $metaData->handleResponse($response);
+        $this->assertEquals('newId', $metaData->getId());
+        $this->assertEquals('newSdkType', $metaData->getSdkType());
+        $this->assertEquals('newSdkVersion', $metaData->getSdkVersion());
+        $this->assertEquals('my new shop', $metaData->getShopType());
+        $this->assertEquals('1.0.0.0-beta4', $metaData->getShopVersion());
+        $this->assertEquals('This should be my new Data', $metaData->get('myData'));
+        $this->assertEquals('some new information', $metaData->get('additionalData'));
+        $this->assertEquals('This is brand new information', $metaData->get('extraData'));
+    }
 }
