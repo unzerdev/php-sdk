@@ -354,6 +354,25 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
+    //<editor-fold desc="Metadata resource">
+
+    /**
+     * Fetch and return Metadata resource.
+     *
+     * @param Metadata|string $metadata The local payment object to be fetched.
+     *
+     * @return Metadata The fetched Metadata resource.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchMetadata($metadata): Metadata
+    {
+        return $this->resourceService->fetchMetadata($metadata);
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="PaymentType resource">
 
     /**

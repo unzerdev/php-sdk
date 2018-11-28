@@ -32,6 +32,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Keypair;
+use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
@@ -213,6 +214,7 @@ class ResourceService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
+     * @throws \Exception
      */
     public function fetch(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -265,6 +267,32 @@ class ResourceService
     public function fetchKeypair(): AbstractHeidelpayResource
     {
         return $this->fetch(new Keypair($this->heidelpay));
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Metadata resource">
+
+    /**
+     * Fetch and return Metadata resource.
+     *
+     * @param Metadata|string $metadata
+     *
+     * @return Metadata
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchMetadata($metadata): Metadata
+    {
+        $metadataObject = $metadata;
+        if (\is_string($metadata)) {
+            $metadataObject = new Metadata($this->heidelpay);
+            $metadataObject->setId($metadata);
+        }
+
+        $this->fetch($metadataObject);
+        return $metadataObject;
     }
 
     //</editor-fold>

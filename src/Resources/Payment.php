@@ -717,6 +717,12 @@ class Payment extends AbstractHeidelpayResource
                 $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
             }
         }
+
+        if (isset($resources->metadataId) && !empty($resources->metadataId)) {
+            if ($this->metadata->getId() === null) {
+                $this->metadata = $this->getHeidelpayObject()->fetchMetadata($resources->metadataId);
+            }
+        }
     }
 
     /**

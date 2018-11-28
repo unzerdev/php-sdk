@@ -27,6 +27,7 @@ namespace heidelpay\MgwPhpSdk\test\integration;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Metadata;
+use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 
@@ -112,5 +113,28 @@ class SetMetadataTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $this->heidelpay->charge(1.23, Currencies::EURO, $card, 'https://heidelpay.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
+    }
+
+    /**
+     * Verify Metadata is fetched when payment is fetched.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function paymentShouldFetchMetadataResourceOnFetch()
+    {
+        $metadata = (new Metadata())->set('key', 'value');
+
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorize = $card->authorize(10.0, Currencies::EURO, 'https://heidelpay.com', null, null, $metadata);
+        $payment = $authorize->getPayment();
+        $this->assertSame($metadata, $payment->getMetadata());
+
+        $fetchedPayment = $this->heidelpay->fetchPayment($payment->getId());
+        $fetchedMetadata = $fetchedPayment->getMetadata();
+        $this->assertEquals($metadata->expose(), $fetchedMetadata->expose());
     }
 }
