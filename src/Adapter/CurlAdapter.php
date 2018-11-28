@@ -89,6 +89,10 @@ class CurlAdapter implements HttpAdapterInterface
      */
     private function handleErrors($info, $response)
     {
+        if ($response === null) {
+            throw new HeidelpayApiException('The Request returned a null response!');
+        }
+
         $responseArray = json_decode($response);
         if ($info >= 400 || isset($responseArray->errors)) {
             $merchantMessage = $customerMessage = $code = null;
@@ -100,10 +104,6 @@ class CurlAdapter implements HttpAdapterInterface
             }
 
             throw new HeidelpayApiException($merchantMessage, $customerMessage, $code);
-        }
-
-        if ($response === null) {
-            throw new HeidelpayApiException('The Request returned a null response!');
         }
     }
 
