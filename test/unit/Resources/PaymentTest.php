@@ -31,6 +31,7 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
+use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
@@ -1565,6 +1566,39 @@ class PaymentTest extends BaseUnitTest
         $payment->setParentResource($heidelpayMock);
 
         $payment->ship();
+    }
+
+    /**
+     * Verify setMetadata will set parent resource and call create with metadata object.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function setMetaDataShouldSetParentResourceAndCreateMetaDataObject()
+    {
+        $metadata = (new Metadata())->set('myData', 'myValue');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
+            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')->with($metadata);
+
+        /** @var ResourceService $resourceSrvMock */
+        $heidelpay = (new Heidelpay('s-priv-1234'))->setResourceService($resourceSrvMock);
+        $payment = new Payment($heidelpay);
+
+        try {
+            $metadata->getParentResource();
+            $this->assertTrue(false, 'This exception should have been thrown!');
+        } catch (\RuntimeException $e) {
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+            $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
+        }
+
+        $payment->setMetadata($metadata);
+        $this->assertSame($heidelpay, $metadata->getParentResource());
     }
 
     //<editor-fold desc="Data Providers">
