@@ -142,7 +142,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function setKey($key): Heidelpay
     {
         if (!KeyValidator::validate($key)) {
-            throw new \RuntimeException('Illegal key type: Use the private key with this SDK!');
+            throw new \RuntimeException('Illegal key: Use a valid private key with this SDK!');
         }
 
         $this->key = $key;
@@ -240,9 +240,9 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * @return DebugHandlerInterface
+     * @return DebugHandlerInterface|null
      */
-    public function getDebugHandler(): DebugHandlerInterface
+    public function getDebugHandler()
     {
         return $this->debugHandler;
     }

@@ -30,6 +30,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpay\MgwPhpSdk\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -73,6 +74,13 @@ class HeidelpayTest extends BaseUnitTest
         $heidelpay->setLocale('myLocale');
         $this->assertEquals('myLocale', $heidelpay->getLocale());
 
+        try {
+            $heidelpay->setKey('söiodufhreoöhf');
+            $this->assertTrue(false, 'This exception should have been thrown');
+        } catch (\RuntimeException $e) {
+            $this->assertEquals('Illegal key: Use a valid private key with this SDK!', $e->getMessage());
+        }
+
         $resourceSrv = new ResourceService($heidelpay);
         $heidelpay->setResourceService($resourceSrv);
         $this->assertSame($resourceSrv, $heidelpay->getResourceService());
@@ -86,5 +94,12 @@ class HeidelpayTest extends BaseUnitTest
         $this->assertTrue($heidelpay->isDebugMode());
         $heidelpay->setDebugMode(false);
         $this->assertFalse($heidelpay->isDebugMode());
+
+        $this->assertNull($heidelpay->getDebugHandler());
+        $dummyDebugHandler = new DummyDebugHandler();
+        $heidelpay->setDebugHandler($dummyDebugHandler);
+        $this->assertSame($dummyDebugHandler, $heidelpay->getDebugHandler());
+
+        $this->assertEquals('', $heidelpay->getUri());
     }
 }
