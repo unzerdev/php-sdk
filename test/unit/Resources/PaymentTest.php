@@ -768,6 +768,34 @@ class PaymentTest extends BaseUnitTest
     }
 
     /**
+     * Verify handleResponse updates metadata.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function handleResponseShouldFetchAndUpdateMetadataIfTheIdIsSet()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['fetchMetadata'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchMetadata')->with('MetadataId');
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $response = new \stdClass();
+        $response->resources = new \stdClass();
+        $response->resources->metadataId = 'MetadataId';
+        $payment->handleResponse($response);
+    }
+
+    /**
      * Verify handleResponse does nothing if transactions is empty.
      *
      * @test
