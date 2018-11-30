@@ -24,6 +24,7 @@
  */
 namespace heidelpay\MgwPhpSdk\Adapter;
 
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 
 interface HttpAdapterInterface
@@ -41,6 +42,9 @@ interface HttpAdapterInterface
      * @param $httpMethod
      *
      * @return string result json of the transaction
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
      */
     public function send(
         $uri = null,

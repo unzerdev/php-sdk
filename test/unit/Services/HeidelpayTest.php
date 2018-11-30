@@ -25,8 +25,11 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit;
 
+use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
+use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Metadata;
@@ -89,6 +92,13 @@ class HeidelpayTest extends BaseUnitTest
         } catch (\RuntimeException $e) {
             $this->assertEquals('Illegal key: Use a valid private key with this SDK!', $e->getMessage());
         }
+
+        $adapter = new CurlAdapter();
+        $this->assertInstanceOf(HttpAdapterInterface::class, $heidelpay->getAdapter());
+        $this->assertNotSame($adapter, $heidelpay->getAdapter());
+
+        $heidelpay->setAdapter($adapter);
+        $this->assertSame($adapter, $heidelpay->getAdapter());
 
         $resourceSrv = new ResourceService($heidelpay);
         $heidelpay->setResourceService($resourceSrv);
@@ -178,6 +188,36 @@ class HeidelpayTest extends BaseUnitTest
         $heidelpay->setPaymentService($paymentSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
+    }
+
+    /**
+     * Verify send method propagates to adapter.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function sendWillCallSendOnAdapter()
+    {
+        $adapterMock = $this->getMockBuilder(HttpAdapterInterface::class)->setMethods(['send'])->getMock();
+
+        /** @var HttpAdapterInterface $adapterMock */
+        $heidelpay = (new Heidelpay('s-priv-123'))->setAdapter($adapterMock);
+        $resource = new Customer();
+
+        $adapterMock->expects($this->exactly(3))->method('send')->withConsecutive(
+            ['https://api.heidelpay.com/v1/my-test-uri/123/', $resource, HttpAdapterInterface::REQUEST_GET],
+            ['https://api.heidelpay.com/v1/my-test-uri/123/', $resource, HttpAdapterInterface::REQUEST_DELETE],
+            ['https://api.heidelpay.com/v1/my-test-uri/123/', $resource, HttpAdapterInterface::REQUEST_GET]
+        );
+
+        $heidelpay->send('/my-test-uri/123/', $resource);
+        $heidelpay->send('/my-test-uri/123/', $resource, HttpAdapterInterface::REQUEST_DELETE);
+        $heidelpay->send('/my-test-uri/123/', $resource, HttpAdapterInterface::REQUEST_GET);
     }
 
     //<editor-fold desc="DataProvider">

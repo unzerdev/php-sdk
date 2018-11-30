@@ -110,10 +110,7 @@ class Heidelpay implements HeidelpayParentInterface
         AbstractHeidelpayResource $resource,
         $method = HttpAdapterInterface::REQUEST_GET
     ): string {
-        if (!$this->adapter instanceof HttpAdapterInterface) {
-            $this->adapter = new CurlAdapter();
-        }
-        return $this->adapter->send(self::BASE_URL . self::API_VERSION . $uri, $resource, $method);
+        return $this->getAdapter()->send(self::BASE_URL . self::API_VERSION . $uri, $resource, $method);
     }
 
     //</editor-fold>
@@ -258,6 +255,34 @@ class Heidelpay implements HeidelpayParentInterface
     public function setDebugHandler(DebugHandlerInterface $debugHandler): Heidelpay
     {
         $this->debugHandler = $debugHandler;
+        return $this;
+    }
+
+    /**
+     * Returns the currently set HttpAdapter.
+     * If it is not set it will create a CurlAdapter by default and return it.
+     *
+     * @return HttpAdapterInterface
+     */
+    public function getAdapter(): HttpAdapterInterface
+    {
+        if (!$this->adapter instanceof HttpAdapterInterface) {
+            $this->adapter = new CurlAdapter();
+        }
+        return $this->adapter;
+    }
+
+    /**
+     * Sets the HttpAdapter reference.
+     * This can be used to inject a custom HttpAdapter.
+     *
+     * @param HttpAdapterInterface $adapter
+     *
+     * @return Heidelpay
+     */
+    public function setAdapter(HttpAdapterInterface $adapter): Heidelpay
+    {
+        $this->adapter = $adapter;
         return $this;
     }
 
