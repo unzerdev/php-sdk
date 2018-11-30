@@ -72,8 +72,6 @@ class PaypalTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     *
-     * @group skip
      */
     public function paypalShouldBeAuthorizable(Paypal $paypal)
     {
