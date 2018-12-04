@@ -25,6 +25,7 @@
 namespace heidelpay\MgwPhpSdk\test\unit;
 
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Services\HttpService;
 use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use heidelpay\MgwPhpSdk\test\unit\Services\DummyAdapter;
@@ -37,6 +38,7 @@ class HttpServiceTest extends BaseUnitTest
      * Verify getAdapter will return a CurlAdapter if none has been set.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
@@ -51,6 +53,7 @@ class HttpServiceTest extends BaseUnitTest
      * Verify getAdapter will return custom adapter if it has been set.
      *
      * @test
+     *
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
@@ -60,5 +63,22 @@ class HttpServiceTest extends BaseUnitTest
         $dummyAdapter = new DummyAdapter();
         $httpService = (new HttpService())->setHttpAdapter($dummyAdapter);
         $this->assertSame($dummyAdapter, $httpService->getAdapter());
+    }
+
+    /**
+     * Verify send will throw exception if resource is null.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function sendShouldThrowExceptionIfResourceIsNotSet()
+    {
+        $httpService = new HttpService();
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Transfer object is empty!');
+        $httpService->send();
     }
 }

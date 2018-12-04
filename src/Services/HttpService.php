@@ -54,6 +54,7 @@ class HttpService
 
     /**
      * @param HttpAdapterInterface $httpAdapter
+     *
      * @return HttpService
      */
     public function setHttpAdapter(HttpAdapterInterface $httpAdapter): HttpService
@@ -82,7 +83,7 @@ class HttpService
         $url = Heidelpay::BASE_URL . Heidelpay::API_VERSION . $uri;
 
         if (null === $resource) {
-            throw new \RuntimeException('Transfer object is empty');
+            throw new \RuntimeException('Transfer object is empty!');
         }
 
         // perform request
