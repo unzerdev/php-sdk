@@ -88,9 +88,10 @@ class HttpService
 
         // perform request
         $this->initRequest($url, $resource, $httpMethod);
-        $response = $this->getAdapter()->execute();
-        $responseCode = $this->getAdapter()->getResponseCode();
-        $this->getAdapter()->close();
+        $httpAdapter  = $this->getAdapter();
+        $response     = $httpAdapter->execute();
+        $responseCode = $httpAdapter->getResponseCode();
+        $httpAdapter->close();
 
         // handle response
         $this->debugLog($resource, $httpMethod, $url, $response);
@@ -112,7 +113,7 @@ class HttpService
     {
         $httpAdapter = $this->getAdapter();
         $httpAdapter->init($uri, $heidelpayResource->jsonSerialize(), $httpMethod);
-        $httpAdapter->setUserAgent('HeidelpayPHP');
+        $httpAdapter->setUserAgent(Heidelpay::SDK_TYPE);
         $httpAdapter->setHeaders(
             [
                 'Authorization' => 'Basic ' . base64_encode($heidelpayResource->getHeidelpayObject()->getKey() . ':'),
