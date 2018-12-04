@@ -1,6 +1,6 @@
 <?php
 /**
- * This custom debug handler will echo out the debug messages provided by the curl adapter.
+ * This custom debug handler will echo out debug messages.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *

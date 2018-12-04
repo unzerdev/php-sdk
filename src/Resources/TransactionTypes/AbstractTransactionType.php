@@ -117,6 +117,8 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * @param string $date
      *
      * @return $this
+     *
+     * @throws \Exception
      */
     public function setDate(string $date): self
     {
