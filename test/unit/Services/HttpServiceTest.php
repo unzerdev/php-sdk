@@ -176,13 +176,12 @@ class HttpServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
-    public function handleErrorsShouldThrowExceptionIdResponsIsEmpty()
+    public function handleErrorsShouldThrowExceptionIfResponseIsEmpty()
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
 
@@ -201,4 +200,131 @@ class HttpServiceTest extends BaseUnitTest
         /** @var HttpService $httpServiceMock*/
         $httpServiceMock->send('/my/uri/123', $resource);
     }
+
+    /**
+     * Verify handleErrors will throw Exception if responseCode is greaterOrEqual to 400.
+     *
+     * @test
+     * @dataProvider responseCodeProvider
+     *
+     * @param string $responseCode
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function handleErrorsShouldThrowExceptionIfResponseCodeIsGoE400($responseCode)
+    {
+        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
+
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(
+            ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
+        )->getMock();
+        $adapterMock->method('getResponseCode')->willReturn($responseCode);
+        $adapterMock->method('execute')->willReturn('{"response" : "myResponseString"}');
+        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
+
+        $resource  = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionMessage('The payment api returned an error!');
+        $this->expectExceptionCode('');
+
+        /** @var HttpService $httpServiceMock*/
+        $httpServiceMock->send('/my/uri/123', $resource);
+    }
+
+    /**
+     * Verify handleErrors will throw Exception if response contains errors field.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function handleErrorsShouldThrowExceptionIfResponseContainsErrorField()
+    {
+        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
+
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(
+            ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
+        )->getMock();
+
+        $firstResponse = '{"errors": [{}]}';
+        $secondResponse = '{"errors": [{"merchantMessage": "This is an error message for the merchant!"}]}';
+        $thirdResponse = '{"errors": [{"customerMessage": "This is an error message for the customer!"}]}';
+        $fourthResponse = '{"errors": [{"code": "This is the error code!"}]}';
+
+        $adapterMock->method('execute')->willReturnOnConsecutiveCalls(
+            $firstResponse,
+            $secondResponse,
+            $thirdResponse,
+            $fourthResponse
+        );
+        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
+
+        $resource  = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
+
+        /** @var HttpService $httpServiceMock*/
+        try {
+            $httpServiceMock->send('/my/uri/123', $resource);
+            $this->assertTrue(false, 'The first exception should have been thrown!');
+        } catch (HeidelpayApiException $e) {
+            $this->assertEquals('The payment api returned an error!', $e->getMessage());
+            $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
+            $this->assertEmpty($e->getCode());
+        }
+
+        try {
+            $httpServiceMock->send('/my/uri/123', $resource);
+            $this->assertTrue(false, 'The second exception should have been thrown!');
+        } catch (HeidelpayApiException $e) {
+            $this->assertEquals('This is an error message for the merchant!', $e->getMessage());
+            $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
+            $this->assertEmpty($e->getCode());
+        }
+
+        try {
+            $httpServiceMock->send('/my/uri/123', $resource);
+            $this->assertTrue(false, 'The third exception should have been thrown!');
+        } catch (HeidelpayApiException $e) {
+            $this->assertEquals('The payment api returned an error!', $e->getMessage());
+            $this->assertEquals('This is an error message for the customer!', $e->getClientMessage());
+            $this->assertEmpty($e->getCode());
+        }
+
+        try {
+            $httpServiceMock->send('/my/uri/123', $resource);
+            $this->assertTrue(false, 'The fourth exception should have been thrown!');
+        } catch (HeidelpayApiException $e) {
+            $this->assertEquals('The payment api returned an error!', $e->getMessage());
+            $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
+            $this->assertEquals('This is the error code!', $e->getCode());
+        }
+    }
+
+    //<editor-fold desc="DataProviders">
+
+    /**
+     * Data provider for handleErrorsShouldThrowExceptionIfResponseCodeIsGoE400.
+     *
+     * @return array
+     */
+    public function responseCodeProvider(): array
+    {
+        return [
+            '400' => ['400'],
+            '401' => ['401'],
+            '404' => ['404'],
+            '500' => ['500'],
+            '600' => ['600'],
+            '1000' => ['1000']
+        ];
+    }
+
+    //</editor-fold>
 }

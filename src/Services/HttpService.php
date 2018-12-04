@@ -127,19 +127,19 @@ class HttpService
      * Handles error responses by throwing a HeidelpayApiException with the returned messages and error code.
      * Returns doing nothing if no error occurred.
      *
-     * @param $info
-     * @param $response
+     * @param string      $responseCode
+     * @param string|null $response
      *
      * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
      */
-    private function handleErrors($info, $response)
+    private function handleErrors($responseCode, $response)
     {
         if ($response === null) {
             throw new HeidelpayApiException('The Request returned a null response!');
         }
 
         $responseArray = json_decode($response);
-        if ($info >= 400 || isset($responseArray->errors)) {
+        if ($responseCode >= 400 || isset($responseArray->errors)) {
             $merchantMessage = $customerMessage = $code = null;
             if (isset($responseArray->errors[0])) {
                 $errors = $responseArray->errors[0];
