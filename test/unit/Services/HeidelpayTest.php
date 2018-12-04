@@ -35,6 +35,7 @@ use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpay\MgwPhpSdk\Services\HttpService;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use heidelpay\MgwPhpSdk\test\BaseUnitTest;
@@ -89,6 +90,12 @@ class HeidelpayTest extends BaseUnitTest
         } catch (\RuntimeException $e) {
             $this->assertEquals('Illegal key: Use a valid private key with this SDK!', $e->getMessage());
         }
+
+        $httpService = new HttpService();
+        $this->assertInstanceOf(HttpService::class, $heidelpay->getHttpService());
+        $this->assertNotSame($httpService, $heidelpay->getHttpService());
+        $heidelpay->setHttpService($httpService);
+        $this->assertSame($httpService, $heidelpay->getHttpService());
 
         $resourceSrv = new ResourceService($heidelpay);
         $heidelpay->setResourceService($resourceSrv);
