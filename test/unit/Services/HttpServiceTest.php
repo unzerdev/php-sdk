@@ -27,9 +27,11 @@ namespace heidelpay\MgwPhpSdk\test\unit;
 use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
 use heidelpay\MgwPhpSdk\Services\HttpService;
 use heidelpay\MgwPhpSdk\test\BaseUnitTest;
 use heidelpay\MgwPhpSdk\test\unit\Services\DummyAdapter;
+use heidelpay\MgwPhpSdk\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -85,7 +87,7 @@ class HttpServiceTest extends BaseUnitTest
     }
 
     /**
-     * Verify send calls methods to setup and send request as well as handling the response.
+     * Verify send calls methods to setup and send request.
      *
      * @test
      *
@@ -96,7 +98,7 @@ class HttpServiceTest extends BaseUnitTest
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
-    public function sendShouldSendRequestAndHandleResponse()
+    public function sendShouldInitAndSendRequest()
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
 
@@ -105,7 +107,7 @@ class HttpServiceTest extends BaseUnitTest
         )->getMock();
 
         $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
-        $adapterMock->expects($this->once())->method('init')->willReturn(
+        $adapterMock->expects($this->once())->method('init')->with(
             'https://api.heidelpay.com/v1/my/uri/123',
             'dummyResourceJsonSerialized',
             'GET'
@@ -127,5 +129,44 @@ class HttpServiceTest extends BaseUnitTest
         $response = $httpServiceMock->send('/my/uri/123', $resource);
 
         $this->assertEquals('myResponseString', $response);
+    }
+
+    /**
+     * Verify debugLog logs to debug handler if debug mode and a handler are set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function sendShouldLogDebugMessagesIfDebugModeAndHandlerAreSet()
+    {
+        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
+
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(
+            ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
+        )->getMock();
+        $adapterMock->method('execute')->willReturn('{"response" : "myResponseString"}');
+        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
+
+        $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
+        $loggerMock->expects($this->exactly(3))->method('log')->withConsecutive(
+            ['Http GET-Request: https://api.heidelpay.com/v1/my/uri/123'],
+            ['Request: dummyResourceJsonSerialized'],
+            ['Response: {"response" : "myResponseString"}']
+        );
+
+        /** @var DebugHandlerInterface $loggerMock */
+        $heidelpay = (new Heidelpay('s-priv-MyTestKey'))->setDebugMode(true)->setDebugHandler($loggerMock);
+        $resource  = (new DummyResource())->setParentResource($heidelpay);
+
+        /** @var HttpService $httpServiceMock*/
+        $response = $httpServiceMock->send('/my/uri/123', $resource);
+
+        $this->assertEquals('{"response" : "myResponseString"}', $response);
     }
 }

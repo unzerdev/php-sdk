@@ -167,9 +167,9 @@ class HttpService
             $debugHandler = $heidelpayObj->getDebugHandler();
             if ($debugHandler instanceof DebugHandlerInterface) {
                 $resourceJson = $resource->jsonSerialize();
-                $debugHandler->log('Http ' . strip_tags($httpMethod) . '-Request: ' . strip_tags($url));
-                $debugHandler->log('Request: ' . strip_tags($resourceJson));
-                $debugHandler->log('Response: ' . strip_tags(json_encode(json_decode($response))));
+                $debugHandler->log('Http ' . $httpMethod . '-Request: ' . $url);
+                $debugHandler->log('Request: ' . $resourceJson);
+                $debugHandler->log('Response: ' . $response);
             }
         }
     }
