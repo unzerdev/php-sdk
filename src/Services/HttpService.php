@@ -154,13 +154,13 @@ class HttpService
 
     /**
      * @param AbstractHeidelpayResource $resource
-     * @param $httpMethod
-     * @param string $url
-     * @param string $response
+     * @param string                    $httpMethod
+     * @param string                    $url
+     * @param string|null               $response
      *
      * @throws \RuntimeException
      */
-    public function debugLog(AbstractHeidelpayResource $resource, $httpMethod, string $url, string $response)
+    public function debugLog(AbstractHeidelpayResource $resource, $httpMethod, string $url, $response)
     {
         $heidelpayObj = $resource->getHeidelpayObject();
         if ($heidelpayObj->isDebugMode()) {

@@ -65,7 +65,7 @@ class CurlAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function execute(): string
+    public function execute()
     {
         return curl_exec($this->request);
     }

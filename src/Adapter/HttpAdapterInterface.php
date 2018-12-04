@@ -43,9 +43,9 @@ interface HttpAdapterInterface
     /**
      * Executes the request and returns the response.
      *
-     * @return string
+     * @return string|null
      */
-    public function execute(): string;
+    public function execute();
 
     /**
      * Returns the Http code of the response.

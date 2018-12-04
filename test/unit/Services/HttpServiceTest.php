@@ -169,4 +169,36 @@ class HttpServiceTest extends BaseUnitTest
 
         $this->assertEquals('{"response" : "myResponseString"}', $response);
     }
+
+    /**
+     * Verify handleErrors will throw Exception if response string is null.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function handleErrorsShouldThrowExceptionIdResponsIsEmpty()
+    {
+        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
+
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(
+            ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
+        )->getMock();
+        $adapterMock->method('execute')->willReturn(null);
+        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
+
+        $resource  = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionMessage('The Request returned a null response!');
+        $this->expectExceptionCode('');
+
+        /** @var HttpService $httpServiceMock*/
+        $httpServiceMock->send('/my/uri/123', $resource);
+    }
 }
