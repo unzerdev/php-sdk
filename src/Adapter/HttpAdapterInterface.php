@@ -56,8 +56,6 @@ interface HttpAdapterInterface
 
     /**
      * Closes the connection of the request.
-     *
-     * @return mixed
      */
     public function close();
 
@@ -73,8 +71,6 @@ interface HttpAdapterInterface
      * Sets the user Agent.
      *
      * @param $userAgent
-     *
-     * @return mixed
      */
     public function setUserAgent($userAgent);
 }

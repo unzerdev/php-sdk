@@ -53,6 +53,16 @@ class HttpService
     }
 
     /**
+     * @param HttpAdapterInterface $httpAdapter
+     * @return HttpService
+     */
+    public function setHttpAdapter(HttpAdapterInterface $httpAdapter): HttpService
+    {
+        $this->httpAdapter = $httpAdapter;
+        return $this;
+    }
+
+    /**
      * send post request to payment server
      *
      * @param $uri string url of the target system
