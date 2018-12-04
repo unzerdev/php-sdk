@@ -50,8 +50,10 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
+use heidelpay\MgwPhpSdk\Services\HttpService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpay\MgwPhpSdk\test\unit\DummyResource;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -1011,6 +1013,51 @@ class ResourceServiceTest extends BaseUnitTest
 
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchMetadata('s-mtd-1234');
+    }
+
+    /**
+     * Verify send will call send on httpService.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function sendShouldCallSendOnHttpService()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $resourceMock = $this->getMockBuilder(DummyResource::class)->setMethods(
+            ['getUri', 'getHeidelpayObject']
+        )->getMock();
+        $resourceMock->expects($this->exactly(4))->method('getUri')
+            ->withConsecutive([true], [false], [true], [true])
+            ->willReturnOnConsecutiveCalls('/my/get/uri', '/my/post/uri', '/my/put/uri', '/my/delete/uri');
+        $resourceMock->method('getHeidelpayObject')->willReturn($heidelpay);
+        $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
+        $resourceSrv = new ResourceService($heidelpay);
+
+        /** @var HttpService $httpSrvMock */
+        $heidelpay->setHttpService($httpSrvMock);
+        $httpSrvMock->expects($this->exactly(4))->method('send')->withConsecutive(
+            ['/my/get/uri', $resourceMock, 'GET'],
+            ['/my/post/uri', $resourceMock, 'POST'],
+            ['/my/put/uri', $resourceMock, 'PUT'],
+            ['/my/delete/uri', $resourceMock, 'DELETE']
+        )->willReturn('{"response": "This is the response"}');
+
+        /** @var AbstractHeidelpayResource $resourceMock */
+        $response = $resourceSrv->send($resourceMock);
+        $this->assertEquals('This is the response', $response->response);
+
+        $response = $resourceSrv->send($resourceMock, HttpAdapterInterface::REQUEST_POST);
+        $this->assertEquals('This is the response', $response->response);
+
+        $response = $resourceSrv->send($resourceMock, HttpAdapterInterface::REQUEST_PUT);
+        $this->assertEquals('This is the response', $response->response);
+
+        $response = $resourceSrv->send($resourceMock, HttpAdapterInterface::REQUEST_DELETE);
+        $this->assertEquals('This is the response', $response->response);
     }
 
     //<editor-fold desc="Data Providers">

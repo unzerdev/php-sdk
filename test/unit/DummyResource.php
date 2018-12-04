@@ -32,4 +32,9 @@ class DummyResource extends AbstractHeidelpayResource
     {
         return 'dummyResourceJsonSerialized';
     }
+
+    public function getUri($appendId = true): string
+    {
+        return '/my/uri' . ($appendId ? '/123' : '');
+    }
 }
