@@ -33,6 +33,10 @@ class TestDebugHandler implements DebugHandlerInterface
      */
     public function log(string $message)
     {
+        if (getenv('DISABLE_TEST_DEBUG_LOG')) {
+            return;
+        }
+
         echo 'heidelpay debug message: ' . $message . "\n";
     }
 }
