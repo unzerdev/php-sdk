@@ -54,8 +54,7 @@ class CardTest extends BaseUnitTest
     {
         return [
             ['11/22', '11/2022'],
-            ['1/12', '01/2012'],
-            ['0/12', '12/2011']
+            ['1/12', '01/2012']
         ];
     }
 
@@ -71,7 +70,8 @@ class CardTest extends BaseUnitTest
             ['asd/12'],
             ['1/asdf'],
             ['13/12'],
-            ['12/20199']
+            ['12/20199'],
+            ['0/12']
         ];
     }
 
