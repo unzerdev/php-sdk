@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Added ResourceNameService.
 *   Added method to create or update customer (uses customerId field to update if the id is not set).
 *   Added shipping address to customer.
+*   Added support info to readme file.
 
 ## [1.0.0-beta.2][1.0.0-beta.2]
 
