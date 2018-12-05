@@ -12,3 +12,18 @@ Please refer to the following documentation for installation instructions and us
 *   [PHP SDK Documentation](https://docs.heidelpay.com/docs/php-sdk)
 *   [How to use the examples](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-using-the-example-implementations)
 *   [Debugging](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-debugging)
+
+## Support
+For any issues or questions please get in touch with our support.
+
+#### Web page
+https://dev.heidelpay.com/
+ 
+#### Email
+support@heidelpay.com
+ 
+#### Phone
++49 (0)6221/6471-100
+
+#### Twitter
+@devHeidelpay
