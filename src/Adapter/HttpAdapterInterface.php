@@ -24,8 +24,6 @@
  */
 namespace heidelpay\MgwPhpSdk\Adapter;
 
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-
 interface HttpAdapterInterface
 {
     const REQUEST_POST = 'POST';
@@ -34,17 +32,45 @@ interface HttpAdapterInterface
     const REQUEST_GET = 'GET';
 
     /**
-     * send post request to payment server
+     * Initializes the request.
      *
-     * @param $uri string url of the target system
-     * @param AbstractHeidelpayResource $heidelpayResource
-     * @param $httpMethod
-     *
-     * @return string result json of the transaction
+     * @param string $url        The full url to connect to.
+     * @param string $payload    Json encoded payload string.
+     * @param string $httpMethod The Http method to perform.
      */
-    public function send(
-        $uri = null,
-        AbstractHeidelpayResource $heidelpayResource = null,
-        $httpMethod = self::REQUEST_POST
-    ): string;
+    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET);
+
+    /**
+     * Executes the request and returns the response.
+     *
+     * @return string|null
+     */
+    public function execute();
+
+    /**
+     * Returns the Http code of the response.
+     *
+     * @return string
+     */
+    public function getResponseCode(): string;
+
+    /**
+     * Closes the connection of the request.
+     */
+    public function close();
+
+    /**
+     * Sets the headers for the request.
+     * Expects an associative array with $key being the header name and $value being the header value.
+     *
+     * @param array $headers
+     */
+    public function setHeaders(array $headers);
+
+    /**
+     * Sets the user Agent.
+     *
+     * @param $userAgent
+     */
+    public function setUserAgent($userAgent);
 }

@@ -768,6 +768,34 @@ class PaymentTest extends BaseUnitTest
     }
 
     /**
+     * Verify handleResponse updates metadata.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    public function handleResponseShouldFetchAndUpdateMetadataIfTheIdIsSet()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['fetchMetadata'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchMetadata')->with('MetadataId');
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $response = new \stdClass();
+        $response->resources = new \stdClass();
+        $response->resources->metadataId = 'MetadataId';
+        $payment->handleResponse($response);
+    }
+
+    /**
      * Verify handleResponse does nothing if transactions is empty.
      *
      * @test
@@ -1201,9 +1229,9 @@ class PaymentTest extends BaseUnitTest
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->setMethods(['cancelAllCharges', 'cancelAuthorization'])->getMock();
         $cancellation = new Cancellation(1.0);
-        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception3 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
+        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
+        $exception3 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
         $paymentMock->expects($this->once())->method('cancelAllCharges')
             ->willReturn([[$cancellation], [$exception1, $exception2]]);
         $paymentMock->expects($this->once())->method('cancelAuthorization')->willReturn([[], [$exception3]]);
@@ -1229,9 +1257,9 @@ class PaymentTest extends BaseUnitTest
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->setMethods(['cancelAllCharges', 'cancelAuthorization'])->getMock();
         $cancellation = new Cancellation(2.0);
-        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception3 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
+        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
+        $exception3 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
         $paymentMock->expects($this->once())->method('cancelAllCharges')
             ->willReturn([[], [$exception1, $exception2]]);
         $paymentMock->expects($this->once())->method('cancelAuthorization')
@@ -1255,9 +1283,9 @@ class PaymentTest extends BaseUnitTest
     {
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->setMethods(['cancelAllCharges', 'cancelAuthorization'])->getMock();
-        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception3 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
+        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
+        $exception3 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
         $paymentMock->expects($this->once())->method('cancelAllCharges')->willReturn([[], [$exception1, $exception2]]);
         $paymentMock->expects($this->once())->method('cancelAuthorization')->willReturn([[], [$exception3]]);
 
@@ -1284,7 +1312,7 @@ class PaymentTest extends BaseUnitTest
     {
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->setMethods(['cancelAllCharges', 'cancelAuthorization'])->getMock();
-        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
         $paymentMock->expects($this->once())->method('cancelAllCharges')->willReturn([[], []]);
         $paymentMock->expects($this->once())->method('cancelAuthorization')->willReturn([[], [$exception]]);
 
@@ -1339,8 +1367,8 @@ class PaymentTest extends BaseUnitTest
         $cancellation1 = new Cancellation(1.0);
         $cancellation2 = new Cancellation(2.0);
         $cancellation3 = new Cancellation(3.0);
-        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
-        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
+        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
 
         $chargeMock1 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
         $chargeMock1->expects($this->once())->method('cancel')->willReturn($cancellation1);
@@ -1389,7 +1417,7 @@ class PaymentTest extends BaseUnitTest
      */
     public function cancelAllChargesShouldThrowChargeCancelExceptionsOtherThanAlreadyCharged()
     {
-        $ex1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $ex1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK);
         $ex2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
 
         $chargeMock1 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
@@ -1455,7 +1483,7 @@ class PaymentTest extends BaseUnitTest
      */
     public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnExceptions()
     {
-        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED);
+        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED);
 
         $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
         $authorizationMock->expects($this->once())->method('cancel')->willThrowException($exception);

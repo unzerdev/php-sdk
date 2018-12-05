@@ -1,6 +1,6 @@
 <?php
 /**
- * Use this interface in order to implement a custom handler for debug information.
+ * This class defines a dummy implementing HasCancellations and HasPaymentState traits.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -20,16 +20,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/interfaces
+ * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\Interfaces;
+namespace heidelpay\MgwPhpSdk\test\unit\Traits;
 
-interface DebugHandlerInterface
+use heidelpay\MgwPhpSdk\Traits\HasCancellations;
+use heidelpay\MgwPhpSdk\Traits\HasPaymentState;
+
+class TraitDummyHasCancellationsHasPaymentState
 {
-    /**
-     * This method will allow custom handling of debug output.
-     *
-     * @param string $message
-     */
-    public function log(string $message);
+    use HasCancellations;
+    use HasPaymentState;
 }

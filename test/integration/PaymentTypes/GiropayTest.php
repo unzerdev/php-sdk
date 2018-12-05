@@ -76,8 +76,6 @@ class GiropayTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function giroPayShouldBeChargeable()
     {

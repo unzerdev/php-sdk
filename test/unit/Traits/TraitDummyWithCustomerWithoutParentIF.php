@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines a dummy implementing traits without customer dependency and without implementing the parent
+ * This class defines a dummy implementing traits with customer dependency and without implementing the parent
  * interface.
  *
  * Copyright (C) 2018 heidelpay GmbH
@@ -27,11 +27,9 @@ namespace heidelpay\MgwPhpSdk\test\unit\Traits;
 
 use heidelpay\MgwPhpSdk\Traits\CanAuthorizeWithCustomer;
 use heidelpay\MgwPhpSdk\Traits\CanDirectChargeWithCustomer;
-use heidelpay\MgwPhpSdk\Traits\HasCancellations;
 
 class TraitDummyWithCustomerWithoutParentIF
 {
     use CanAuthorizeWithCustomer;
     use CanDirectChargeWithCustomer;
-    use HasCancellations;
 }

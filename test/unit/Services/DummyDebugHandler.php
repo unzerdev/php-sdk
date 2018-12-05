@@ -1,6 +1,6 @@
 <?php
 /**
- * Use this interface in order to implement a custom handler for debug information.
+ * This class defines a dummy used to test the DebugHandlerInterface.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -20,16 +20,21 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/interfaces
+ * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\Interfaces;
+namespace heidelpay\MgwPhpSdk\test\unit\Services;
 
-interface DebugHandlerInterface
+use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
+
+class DummyDebugHandler implements DebugHandlerInterface
 {
     /**
      * This method will allow custom handling of debug output.
      *
      * @param string $message
      */
-    public function log(string $message);
+    public function log(string $message)
+    {
+        // do nothing
+    }
 }

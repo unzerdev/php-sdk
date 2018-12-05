@@ -31,6 +31,7 @@ use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Keypair;
+use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
@@ -49,94 +50,16 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
+use heidelpay\MgwPhpSdk\Services\HttpService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpay\MgwPhpSdk\test\unit\DummyResource;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 
 class ResourceServiceTest extends BaseUnitTest
 {
-    /**
-     * Verify send method will get the uri from the given resource.
-     *
-     * @test
-     *
-     * @throws Exception
-     * @throws RuntimeException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
-     * @throws HeidelpayApiException
-     */
-    public function sendWillGetTheUriFromTheGivenResourceSendItViaHeidelpayObjectAndReturnAJsonDecodedResponse()
-    {
-        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['getUri'])->getMock();
-        $testResource->expects($this->once())->method('getUri')->willReturn('myUri');
-
-        $heidelpay = $this->getMockBuilder(Heidelpay::class)->setMethods(['send'])->disableOriginalConstructor()
-            ->getMock();
-        $heidelpay->expects($this->once())->method('send')
-            ->with('myUri', $testResource, HttpAdapterInterface::REQUEST_GET)
-            ->willReturn('{"myTestKey": "myTestValue", "myTestKey2": {"myTestKey3": "myTestValue2"}}');
-
-        /**
-         * @var Heidelpay                 $heidelpay
-         * @var AbstractHeidelpayResource $testResource
-         */
-        $testResource->setParentResource($heidelpay);
-        $resourceService = new ResourceService($heidelpay);
-
-        /** @var AbstractHeidelpayResource $testResource */
-        $response = $resourceService->send($testResource);
-
-        $expectedResponse = new \stdClass();
-        $expectedResponse->myTestKey = 'myTestValue';
-        $expectedResponse->myTestKey2 = new \stdClass();
-        $expectedResponse->myTestKey2->myTestKey3 = 'myTestValue2';
-        $this->assertEquals($expectedResponse, $response);
-    }
-
-    /**
-     * Verify send method will call getUri with appendId depending on Http method.
-     *
-     * @test
-     *
-     * @throws Exception
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
-     */
-    public function sendShouldCallGetUriWithAppendIdDependingOnHttpMethod()
-    {
-        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['getUri'])->getMock();
-        $testResource->expects($this->exactly(5))->method('getUri')->withConsecutive(
-            [true],
-            [true],
-            [false],
-            [true],
-            [true]
-        );
-
-        $heidelpay = $this->getMockBuilder(Heidelpay::class)->setMethods(['send'])->disableOriginalConstructor()
-            ->getMock();
-        $heidelpay->method('send')->withAnyParameters()->willReturn('{}');
-
-        /**
-         * @var Heidelpay                 $heidelpay
-         * @var AbstractHeidelpayResource $testResource
-         */
-        $testResource->setParentResource($heidelpay);
-        $resourceService = new ResourceService($heidelpay);
-
-        /** @var AbstractHeidelpayResource $testResource */
-        $resourceService->send($testResource);
-        $resourceService->send($testResource, HttpAdapterInterface::REQUEST_GET);
-        $resourceService->send($testResource, HttpAdapterInterface::REQUEST_POST);
-        $resourceService->send($testResource, HttpAdapterInterface::REQUEST_PUT);
-        $resourceService->send($testResource, HttpAdapterInterface::REQUEST_DELETE);
-    }
-
     /**
      * Verify getResourceIdFromUrl works correctly.
      *
@@ -1041,6 +964,100 @@ class ResourceServiceTest extends BaseUnitTest
          */
         $returnedShipment = $resourceSrvMock->fetchShipment('paymentId', 'shipmentId');
         $this->assertSame($shipment, $returnedShipment);
+    }
+
+    /**
+     * Verify fetchMetadata calls fetch with the given metadata object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchMetadataShouldCallFetchWithTheGivenMetadataObject()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+
+        $metadata = (new Metadata())->setId('myMetadataId');
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($metadata);
+
+        /** @var ResourceService $resourceSrvMock */
+        $this->assertSame($metadata, $resourceSrvMock->fetchMetadata($metadata));
+    }
+
+    /**
+     * Verify fetchMetadata calls fetch with a new metadata object with the given id.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchMetadataShouldCallFetchWithANewMetadataObjectWithTheGivenId()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
+            ->disableOriginalConstructor()->getMock();
+
+        $resourceSrvMock->expects($this->once())->method('fetch')->with(
+            $this->callback(function ($metadata) {
+                return $metadata instanceof Metadata && $metadata->getId() === 's-mtd-1234';
+            })
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchMetadata('s-mtd-1234');
+    }
+
+    /**
+     * Verify send will call send on httpService.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function sendShouldCallSendOnHttpService()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $resourceMock = $this->getMockBuilder(DummyResource::class)->setMethods(
+            ['getUri', 'getHeidelpayObject']
+        )->getMock();
+        $resourceMock->expects($this->exactly(4))->method('getUri')
+            ->withConsecutive([true], [false], [true], [true])
+            ->willReturnOnConsecutiveCalls('/my/get/uri', '/my/post/uri', '/my/put/uri', '/my/delete/uri');
+        $resourceMock->method('getHeidelpayObject')->willReturn($heidelpay);
+        $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
+        $resourceSrv = new ResourceService($heidelpay);
+
+        /** @var HttpService $httpSrvMock */
+        $heidelpay->setHttpService($httpSrvMock);
+        $httpSrvMock->expects($this->exactly(4))->method('send')->withConsecutive(
+            ['/my/get/uri', $resourceMock, 'GET'],
+            ['/my/post/uri', $resourceMock, 'POST'],
+            ['/my/put/uri', $resourceMock, 'PUT'],
+            ['/my/delete/uri', $resourceMock, 'DELETE']
+        )->willReturn('{"response": "This is the response"}');
+
+        /** @var AbstractHeidelpayResource $resourceMock */
+        $response = $resourceSrv->send($resourceMock);
+        $this->assertEquals('This is the response', $response->response);
+
+        $response = $resourceSrv->send($resourceMock, HttpAdapterInterface::REQUEST_POST);
+        $this->assertEquals('This is the response', $response->response);
+
+        $response = $resourceSrv->send($resourceMock, HttpAdapterInterface::REQUEST_PUT);
+        $this->assertEquals('This is the response', $response->response);
+
+        $response = $resourceSrv->send($resourceMock, HttpAdapterInterface::REQUEST_DELETE);
+        $this->assertEquals('This is the response', $response->response);
     }
 
     //<editor-fold desc="Data Providers">

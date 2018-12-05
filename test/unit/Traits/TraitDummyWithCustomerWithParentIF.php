@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines a dummy implementing traits without customer dependency and with implementing the parent
+ * This class defines a dummy implementing traits with customer dependency and with implementing the parent
  * interface.
  *
  * Copyright (C) 2018 heidelpay GmbH

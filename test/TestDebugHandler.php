@@ -1,6 +1,6 @@
 <?php
 /**
- * This custom debug handler will echo out the debug messages provided by the curl adapter.
+ * This custom debug handler will echo out debug messages.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -33,6 +33,10 @@ class TestDebugHandler implements DebugHandlerInterface
      */
     public function log(string $message)
     {
+        if (getenv('DISABLE_TEST_DEBUG_LOG')) {
+            return;
+        }
+
         echo 'heidelpay debug message: ' . $message . "\n";
     }
 }

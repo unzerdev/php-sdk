@@ -25,8 +25,6 @@
  */
 namespace heidelpay\MgwPhpSdk;
 
-use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
 use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
@@ -42,6 +40,7 @@ use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
+use heidelpay\MgwPhpSdk\Services\HttpService;
 use heidelpay\MgwPhpSdk\Services\PaymentService;
 use heidelpay\MgwPhpSdk\Services\ResourceService;
 use heidelpay\MgwPhpSdk\Validators\KeyValidator;
@@ -59,14 +58,14 @@ class Heidelpay implements HeidelpayParentInterface
     /** @var string $locale */
     private $locale;
 
-    /** @var HttpAdapterInterface $adapter */
-    private $adapter;
-
     /** @var ResourceService $resourceService */
     private $resourceService;
 
     /** @var PaymentService $paymentService */
     private $paymentService;
+
+    /** @var HttpService $httpService */
+    private $httpService;
 
     /** @var DebugHandlerInterface $debugHandler */
     private $debugHandler;
@@ -89,34 +88,8 @@ class Heidelpay implements HeidelpayParentInterface
 
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
+        $this->httpService = new HttpService();
     }
-
-    //<editor-fold desc="General">
-
-    /**
-     * Send the resource object to the url using the specified Http method (default = GET).
-     *
-     * @param string                    $uri      The URI to send the request to.
-     * @param AbstractHeidelpayResource $resource The resource to be send.
-     * @param string                    $method   The Http method to be used.
-     *
-     * @return string The response as a JSON string.
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
-     */
-    public function send(
-        $uri,
-        AbstractHeidelpayResource $resource,
-        $method = HttpAdapterInterface::REQUEST_GET
-    ): string {
-        if (!$this->adapter instanceof HttpAdapterInterface) {
-            $this->adapter = new CurlAdapter();
-        }
-        return $this->adapter->send(self::BASE_URL . self::API_VERSION . $uri, $resource, $method);
-    }
-
-    //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
 
@@ -142,7 +115,7 @@ class Heidelpay implements HeidelpayParentInterface
     public function setKey($key): Heidelpay
     {
         if (!KeyValidator::validate($key)) {
-            throw new \RuntimeException('Illegal key type: Use the private key with this SDK!');
+            throw new \RuntimeException('Illegal key: Use a valid private key with this SDK!');
         }
 
         $this->key = $key;
@@ -240,15 +213,15 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * @return DebugHandlerInterface
+     * @return DebugHandlerInterface|null
      */
-    public function getDebugHandler(): DebugHandlerInterface
+    public function getDebugHandler()
     {
         return $this->debugHandler;
     }
 
     /**
-     * Use this method to inject a custom handler for debug messages form the curl adapter.
+     * Use this method to inject a custom handler for debug messages form the http-adapter.
      * Remember to enable debug output by setting the constant Heidelpay::DEBUG_MODE true.
      *
      * @param DebugHandlerInterface $debugHandler
@@ -258,6 +231,25 @@ class Heidelpay implements HeidelpayParentInterface
     public function setDebugHandler(DebugHandlerInterface $debugHandler): Heidelpay
     {
         $this->debugHandler = $debugHandler;
+        return $this;
+    }
+
+    /**
+     * @return HttpService
+     */
+    public function getHttpService(): HttpService
+    {
+        return $this->httpService;
+    }
+
+    /**
+     * @param HttpService $httpService
+     *
+     * @return Heidelpay
+     */
+    public function setHttpService(HttpService $httpService): Heidelpay
+    {
+        $this->httpService = $httpService;
         return $this;
     }
 
