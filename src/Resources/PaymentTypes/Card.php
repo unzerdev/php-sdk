@@ -26,6 +26,7 @@ namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Traits\CanAuthorize;
 use heidelpay\MgwPhpSdk\Traits\CanDirectCharge;
+use heidelpay\MgwPhpSdk\Validators\ExpiryDateValidator;
 
 class Card extends BasePaymentType
 {
@@ -109,13 +110,10 @@ class Card extends BasePaymentType
             return $this;
         }
 
-        $expiryDateParts = explode('/', $expiryDate);
-        if (\count($expiryDateParts) !== 2 || $expiryDateParts[0] > 12 ||
-            !\is_numeric($expiryDateParts[0]) || !\is_numeric($expiryDateParts[1]) ||
-            !\ctype_digit($expiryDateParts[0]) || !\ctype_digit($expiryDateParts[1]) ||
-            \strlen($expiryDateParts[1]) > 4) {
+        if (!ExpiryDateValidator::validate($expiryDate)) {
             throw new \RuntimeException('Invalid expiry date!');
         }
+        $expiryDateParts = explode('/', $expiryDate);
         $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
 
         return $this;
