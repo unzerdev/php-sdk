@@ -1,5 +1,5 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/46f5a3e14f2144fb84d1989dca2a7a5c)](https://www.codacy.com/app/heidelpay/heidelpayPHP?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=heidelpay/heidelpayPHP&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/46f5a3e14f2144fb84d1989dca2a7a5c)](https://www.codacy.com/app/heidelpay/heidelpayPHP?utm_source=github.com&utm_medium=referral&utm_content=heidelpay/heidelpayPHP&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/46c7d9e8c2c84355b55f1404ddc3bd06)](https://www.codacy.com/app/development_6/heidelpayPHP?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=heidelpay/heidelpayPHP&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/46c7d9e8c2c84355b55f1404ddc3bd06)](https://www.codacy.com/app/heidelpay/heidelpayPHP?utm_source=github.com&utm_medium=referral&utm_content=heidelpay/heidelpayPHP&utm_campaign=Badge_Coverage)
 
 ![Logo](https://dev.heidelpay.com/devHeidelpay_400_180.jpg)
 
