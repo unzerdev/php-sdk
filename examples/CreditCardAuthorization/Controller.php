@@ -53,8 +53,8 @@ try {
 
     //#######  3. Create an authorization (aka reservation) ############################################################
     $customer      = new Customer('Linda', 'Heideich');
-    $authorization = $heidelpay->authorize(12.99, Currencies::EURO, $paymentTypeId, CONTROLLER_URL, $customer);
-    redirect(SUCCESS_URL);
+    $authorization = $heidelpay->authorize(12.99, Currencies::EURO, $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+    redirect($authorization->getRedirectUrl());
 } catch (HeidelpayApiException $e) {
     redirect(FAILURE_URL);
 }

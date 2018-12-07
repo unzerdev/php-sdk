@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the card example.
+ * This is the controller for the 'Authorization' transaction example for Card.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -23,13 +23,15 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-require_once __DIR__ . '/../Constants.php';
+/** Require the constants of this example */
+require_once __DIR__ . '/Constants.php';
 
-define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCard');
-define('CHARGE_CANCEL_CONTROLLER_URL', EXAMPLE_URL . '/ChargeCancelController.php');
-define('AUTH_REVERSAL_CONTROLLER_URL', EXAMPLE_URL . '/AuthReversalController.php');
-define('AUTH_CONTROLLER_URL', EXAMPLE_URL . '/AuthController.php');
-define('CHARGE_CONTROLLER_URL', EXAMPLE_URL . '/ChargeController.php');
-define('EXAMPLE_PUBLIC_KEY', PUBLIC_KEY);
-define('EXAMPLE_PRIVATE_KEY', PRIVATE_KEY);
+/** Require the composer autoloader file */
+require_once __DIR__ . '/../../../../autoload.php';
+
+use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Customer;
+
+echo 'Returned';
