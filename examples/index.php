@@ -45,21 +45,9 @@ require_once __DIR__ . '/../../../autoload.php';
 
         <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
         <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
-
-        <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'assets/js/logger.js' ?>"></script>
-        <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'assets/js/dimmer.js' ?>"></script>
-
-        <style>
-            html, body {
-                margin: 0;
-                padding: 70px 0 0;
-                height: 330px;
-                min-width: initial;
-            }
-        </style>
     </head>
 
-    <body>
+    <body style="margin: 70px 70px 0;">
         <div class="ui container segment">
             <h2 class="ui header">
                 <i class="shopping cart icon"></i>
@@ -69,7 +57,14 @@ require_once __DIR__ . '/../../../autoload.php';
                 </div>
             </h2>
             <ul style="list-style: none;">
-                <li><i class="credit card icon"></i><a href="CreditCardAuthorization/">CreditCardAuthorization</a></li>
+                <li>
+                    <i class="credit card icon"></i>
+                    <a href="CreditCardAuthorization/">Credit Card - Authorization</a>
+                </li>
+                <li>
+                    <i class="credit card icon"></i>
+                    <a href="CreditCardCharge/">Credit Card - Charge</a>
+                </li>
             </ul>
         </div>
     </body>
