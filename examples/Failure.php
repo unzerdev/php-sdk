@@ -22,26 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/examples
  */
-
-include 'assets/partials/_resultPage_php.php';
 ?>
 
 <!DOCTYPE html>
 <html>
-
-    <?php include 'assets/partials/_resultPage_html.php'; ?>
-
     <body>
-        <div class="ui container messages">
-            <div class="ui red info message">
-                <div class="header">Failure</div>
-                <p>There has been an error completing the payment.</p>
-                <?php
-                    echo renderPaymentDetails($payment);
-                ?>
-            </div>
-            <a href="<?php echo EXAMPLE_URL; ?>">go back</a>
-        </div>
+        <h1>Failure</h1>
+        <p>There has been an error completing the payment.</p>
     </body>
-
 </html>

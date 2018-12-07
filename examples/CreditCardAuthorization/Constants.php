@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the success page for the example payments.
+ * This file defines the constants needed for the card example.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -22,13 +22,11 @@
  *
  * @package  heidelpay/mgw_sdk/examples
  */
-?>
 
-<!DOCTYPE html>
-<html>
-    <body>
-        <h1>Success</h1>
-        <p>The payment has been successfully completed.</p>
-    </body>
+require_once __DIR__ . '/../Constants.php';
 
-</html>
+define('EXAMPLE_PATH', __DIR__);
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCardAuthorization');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
+define('EXAMPLE_PUBLIC_KEY', PUBLIC_KEY);
+define('EXAMPLE_PRIVATE_KEY', PRIVATE_KEY);

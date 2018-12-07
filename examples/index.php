@@ -32,7 +32,32 @@ require_once __DIR__ . '/../../../autoload.php';
 
 <!DOCTYPE html>
 <html>
-    <?php include './assets/partials/_indexPage_html.php'; ?>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            Heidelpay UI Examples
+        </title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+
+        <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
+        <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
+
+        <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'assets/js/logger.js' ?>"></script>
+        <script type="text/javascript" src="<?php echo EXAMPLE_BASE_FOLDER . 'assets/js/dimmer.js' ?>"></script>
+
+        <style>
+            html, body {
+                margin: 0;
+                padding: 70px 0 0;
+                height: 330px;
+                min-width: initial;
+            }
+        </style>
+    </head>
 
     <body>
         <div class="ui container segment">
@@ -44,10 +69,7 @@ require_once __DIR__ . '/../../../autoload.php';
                 </div>
             </h2>
             <ul style="list-style: none;">
-                <li><i class="credit card icon"></i><a href="CreditCard/">CreditCard</a></li>
-                <li><i class="credit card outline icon"></i>CreditCard with 3D <i>(not available)</i></li>
-                <li><i class="paypal icon"></i><a href="Paypal/">PayPal</a></li>
-                <li><i class="credit card icon"></i>Sepa Direct Debit (guaranteed) <i>(not available)</i></li>
+                <li><i class="credit card icon"></i><a href="CreditCardAuthorization/">CreditCardAuthorization</a></li>
             </ul>
         </div>
     </body>
