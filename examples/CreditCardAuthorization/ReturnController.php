@@ -34,4 +34,26 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 
-echo 'Returned';
+function redirect($url)
+{
+    header('Location: ' . $url);
+    die();
+}
+
+session_start();
+
+if (!isset($_SESSION['PaymentId'])) {
+    redirect(FAILURE_URL);
+}
+
+$paymentId = $_SESSION['PaymentId'];
+try {
+    $heidelpay = new Heidelpay(EXAMPLE_PRIVATE_KEY);
+    $payment   = $heidelpay->fetchPayment($paymentId);
+    if ($payment->isCompleted() || $payment->isPending()) {
+        redirect(SUCCESS_URL);
+    }
+} catch (HeidelpayApiException $e) {
+    redirect(FAILURE_URL);
+}
+redirect(FAILURE_URL);

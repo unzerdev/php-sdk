@@ -34,6 +34,9 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 
+session_start();
+session_unset();
+
 function redirect($url)
 {
     header('Location: ' . $url);
@@ -54,6 +57,7 @@ try {
     //#######  3. Create an authorization (aka reservation) ############################################################
     $customer      = new Customer('Linda', 'Heideich');
     $authorization = $heidelpay->authorize(12.99, Currencies::EURO, $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+    $_SESSION['PaymentId'] = $authorization->getPaymentId();
     redirect($authorization->getRedirectUrl());
 } catch (HeidelpayApiException $e) {
     redirect(FAILURE_URL);
