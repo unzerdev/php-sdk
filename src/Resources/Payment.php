@@ -329,17 +329,16 @@ class Payment extends AbstractHeidelpayResource
      */
     public function setMetadata($metadata): Payment
     {
-        if (!$metadata instanceof Metadata) {
-            return $this;
+        if ($metadata instanceof Metadata) {
+            $this->metadata = $metadata;
         }
 
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
-        if ($metadata->getId() === null) {
-            $heidelpay->getResourceService()->create($metadata->setParentResource($heidelpay));
+        if ($this->metadata->getId() === null) {
+            $heidelpay->getResourceService()->create($this->metadata->setParentResource($heidelpay));
         }
 
-        $this->metadata = $metadata;
         return $this;
     }
 

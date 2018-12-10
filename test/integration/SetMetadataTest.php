@@ -134,4 +134,22 @@ class SetMetadataTest extends BasePaymentTest
         $fetchedMetadata = $fetchedPayment->getMetadata();
         $this->assertEquals($metadata->expose(), $fetchedMetadata->expose());
     }
+
+    /**
+     * Verify metadata will automatically created on authorize.
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function authorizeShouldCreateMetadataEvenIfItHasNotBeenSet()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorize = $this->heidelpay->authorize(1.23, 'EUR', $card, 'https://heidelpay.com');
+
+        $metadata = $authorize->getPayment()->getMetadata();
+        $this->assertNotEmpty($metadata->getId());
+    }
 }
