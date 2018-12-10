@@ -65,6 +65,14 @@ require_once __DIR__ . '/../../../autoload.php';
                     <i class="credit card icon"></i>
                     <a href="CreditCardCharge/">Credit Card - Charge</a>
                 </li>
+                <li>
+                    <i class="credit card icon"></i>
+                    <a href="CreditCard3DAuthorization/">Credit Card with 3D - Authorization</a>
+                </li>
+                <li>
+                    <i class="credit card icon"></i>
+                    <a href="CreditCard3DCharge/">Credit Card with 3D - Charge</a>
+                </li>
             </ul>
         </div>
     </body>

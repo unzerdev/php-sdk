@@ -45,11 +45,19 @@ require_once __DIR__ . '/../../../../autoload.php';
     </head>
 
     <body style="margin: 70px 70px 0;">
-        <h3>Example data:</h3>
+        <h3>Example data without 3D secure:</h3>
         <ul>
             <li>Number: 4111 1111 1111 1111</li>
             <li>Expiry date: Date in the future</li>
             <li>Cvc: 123</li>
+        </ul>
+
+        <h3>Example data with 3D secure:</h3>
+        <ul>
+            <li>Number: 4444 3333 2222 1111</li>
+            <li>Expiry date: Date in the future</li>
+            <li>Cvc: 123</li>
+            <li>Secret: VISA123</li>
         </ul>
 
         <form id="payment-form" class="heidelpayUI form" novalidate>
@@ -77,7 +85,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
         <script>
             // Creating a heidelpay instance with your public key
-            let heidelpayInstance = new heidelpay('s-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');
+            let heidelpayInstance = new heidelpay('s-pub-2a10gsZJ2IeiiK80Wh68qrOzu4IZse6k');
 
             // Creating a credit card instance
             let Card = heidelpayInstance.Card();

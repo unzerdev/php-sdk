@@ -52,13 +52,15 @@ $paymentTypeId   = $_POST['resourceId'];
 //#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
     //#######  2. Create a heidelpay object using your private key #####################################################
-    $heidelpay = new Heidelpay(EXAMPLE_PRIVATE_KEY);
+    $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
 
     //#######  3. Create an authorization (aka reservation) ############################################################
     $customer      = new Customer('Linda', 'Heideich');
-    $authorization = $heidelpay->authorize(12.99, Currencies::EURO, $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
-    $_SESSION['PaymentId'] = $authorization->getPaymentId();
-    redirect($authorization->getRedirectUrl());
+    $authorization = $heidelpay->authorize(12.99, Currencies::EURO, $paymentTypeId, CONTROLLER_URL, $customer);
+    if ($authorization->getPayment()->isPending()) {
+        redirect(SUCCESS_URL);
+    }
 } catch (HeidelpayApiException $e) {
     redirect(FAILURE_URL);
 }
+redirect(FAILURE_URL);

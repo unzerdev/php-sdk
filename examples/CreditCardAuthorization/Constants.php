@@ -28,6 +28,3 @@ require_once __DIR__ . '/../Constants.php';
 define('EXAMPLE_PATH', __DIR__);
 define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCardAuthorization');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
-define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');
-define('EXAMPLE_PUBLIC_KEY', 's-pub-2a10gsZJ2IeiiK80Wh68qrOzu4IZse6k');
-define('EXAMPLE_PRIVATE_KEY', 's-priv-2a10BF2Cq2YvAo6ALSGHc3X7F42oWAIp');
