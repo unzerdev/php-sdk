@@ -57,7 +57,6 @@ require_once __DIR__ . '/../../../../autoload.php';
         <li>Number: 4444 3333 2222 1111</li>
         <li>Expiry date: Date in the future</li>
         <li>Cvc: 123</li>
-        <li>Secret: VISA123</li>
     </ul>
 
         <form id="payment-form" class="heidelpayUI form" novalidate>
