@@ -1505,8 +1505,6 @@ class PaymentTest extends BaseUnitTest
      * Verify cancelAuthorization will throw any exception with Code different to
      * ApiResponseCodes::API_ERROR_AUTHORIZATION_ALREADY_CANCELED.
      *
-     * todo: API_ERROR_AUTHORIZATION_ALREADY_CANCELED is not defined
-     *
      * @test
      *
      * @throws Exception

@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.0.0.0-beta.3][1.0.0.0-beta.3]
+## [1.0.0.0][1.0.0.0]
 
 ### Fix
 *   Fixed license information.
@@ -12,16 +12,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Changed
 *   Changed versioning paradigm.
-*   Changed documentation.
+*   Update documentation.
 *   Refactored examples.
 *   Refactored HttpAdapter implementation and made custom adapters injectable.
-*   Refactored Exceptions.
+*   Refactored exceptions.
 *   Reduced complexity in general.
 *   Refactored expiry date validation.
-*   Store transaction date as \DateTime.
+*   Store transaction date as \DateTime instead of string.
 *   Enabled some skipped tests.
 *   Refactored integration tests.
 *   Changed travis configuration to perform unit tests with coverage-analysis instead of integration tests.
+*   Changed namespaces and packages.
 
 ### Added
 *   Added unit tests.
@@ -32,8 +33,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Added PIS payment type.
 *   Added ResourceNameService.
 *   Added method to create or update customer (uses customerId field to update if the id is not set).
-*   Added shipping address to customer.
+*   Added shipping address to customer resource.
 *   Added support info to readme file.
+*   Removed supported currencies and locales.
 
 ## [1.0.0-beta.2][1.0.0-beta.2]
 
@@ -48,4 +50,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [1.0.0-beta.1]: https://github.com/heidelpay/heidelpayPHP/tree/1.0.0-beta.1
 [1.0.0-beta.2]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.0-beta.1..1.0.0-beta.2
-[1.0.0.0-beta.3]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.0-beta.2..1.0.0.0-beta.3
+[1.0.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.0-beta.2..1.0.0.0
