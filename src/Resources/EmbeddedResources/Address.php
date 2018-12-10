@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/resources/embedded_resources
+ * @package  heidelpayPHP/resources/embedded_resources
  */
 namespace heidelpayPHP\Resources\EmbeddedResources;
 

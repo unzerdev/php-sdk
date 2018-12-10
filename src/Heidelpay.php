@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk
+ * @package  heidelpayPHP
  */
 namespace heidelpayPHP;
 

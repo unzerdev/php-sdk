@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/payment_types
+ * @package  heidelpayPHP/payment_types
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 

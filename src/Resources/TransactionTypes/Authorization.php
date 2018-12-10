@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/transaction_types
+ * @package  heidelpayPHP/transaction_types
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 

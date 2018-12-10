@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/exceptions
+ * @package  heidelpayPHP/exceptions
  */
 namespace heidelpayPHP\Exceptions;
 

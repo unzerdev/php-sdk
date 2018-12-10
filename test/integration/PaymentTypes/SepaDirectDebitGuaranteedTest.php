@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/test/integration/payment_types
+ * @package  heidelpayPHP/test/integration/payment_types
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 

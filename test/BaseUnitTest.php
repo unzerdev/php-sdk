@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/test/unit
+ * @package  heidelpayPHP/test/unit
  */
 namespace heidelpayPHP\test;
 
