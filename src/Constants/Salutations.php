@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/constants
+ * @package  heidelpayPHP/constants
  */
 namespace heidelpayPHP\Constants;
 

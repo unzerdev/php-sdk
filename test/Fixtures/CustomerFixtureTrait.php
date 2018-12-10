@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/test/fixtures
+ * @package  heidelpayPHP/test/fixtures
  */
 namespace heidelpayPHP\test\Fixtures;
 

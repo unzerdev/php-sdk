@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/examples
+ * @package  heidelpayPHP/examples
  */
 
 /** Require the constants of this example */

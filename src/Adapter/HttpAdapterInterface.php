@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <simon.gabriel@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/adapter
+ * @package  heidelpayPHP/adapter
  */
 namespace heidelpayPHP\Adapter;
 

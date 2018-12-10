@@ -20,6 +20,6 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests
+ * @package  heidelpayPHP/tests
  */
 require_once __DIR__ . '/../vendor/autoload.php';
