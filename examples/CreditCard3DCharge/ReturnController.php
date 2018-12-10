@@ -1,6 +1,6 @@
 <?php
 /**
- * todo description missing
+ * This is the controller for the 'Authorization' transaction example for Card.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -23,28 +23,37 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use heidelpay\MgwPhpSdk\Constants\Currencies;
+use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
+use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpay\MgwPhpSdk\Resources\Customer;
+
+function redirect($url)
+{
+    header('Location: ' . $url);
+    die();
+}
+
 session_start();
 
-$paymentId = $_SESSION['paymentId'];
+if (!isset($_SESSION['PaymentId'])) {
+    redirect(FAILURE_URL);
+}
 
+$paymentId = $_SESSION['PaymentId'];
 try {
-    $heidelpay = new Heidelpay(EXAMPLE_PRIVATE_KEY);
-    $payment = $heidelpay->fetchPayment($paymentId);
-
+    $heidelpay = new Heidelpay('s-priv-2a10BF2Cq2YvAo6ALSGHc3X7F42oWAIp');
+    $payment   = $heidelpay->fetchPayment($paymentId);
     if ($payment->isCompleted()) {
-        header('Location: ' . SUCCESS_URL);
-        exit();
+        redirect(SUCCESS_URL);
     }
 } catch (HeidelpayApiException $e) {
+    redirect(FAILURE_URL);
 }
-header('Location: ' . FAILURE_URL);
-exit();
+redirect(FAILURE_URL);

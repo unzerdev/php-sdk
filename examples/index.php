@@ -32,9 +32,22 @@ require_once __DIR__ . '/../../../autoload.php';
 
 <!DOCTYPE html>
 <html>
-    <?php include './assets/partials/_indexPage_html.php'; ?>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            Heidelpay UI Examples
+        </title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
-    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+
+        <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
+        <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
+    </head>
+
+    <body style="margin: 70px 70px 0;">
         <div class="ui container segment">
             <h2 class="ui header">
                 <i class="shopping cart icon"></i>
@@ -44,10 +57,22 @@ require_once __DIR__ . '/../../../autoload.php';
                 </div>
             </h2>
             <ul style="list-style: none;">
-                <li><i class="credit card icon"></i><a href="CreditCard/">CreditCard</a></li>
-                <li><i class="credit card outline icon"></i>CreditCard with 3D <i>(not available)</i></li>
-                <li><i class="paypal icon"></i><a href="Paypal/">PayPal</a></li>
-                <li><i class="credit card icon"></i>Sepa Direct Debit (guaranteed) <i>(not available)</i></li>
+                <li>
+                    <i class="credit card icon"></i>
+                    <a href="CreditCardAuthorization/">Credit Card - Authorization</a>
+                </li>
+                <li>
+                    <i class="credit card icon"></i>
+                    <a href="CreditCardCharge/">Credit Card - Charge</a>
+                </li>
+                <li>
+                    <i class="credit card icon"></i>
+                    <a href="CreditCard3DAuthorization/">Credit Card with 3D - Authorization</a>
+                </li>
+                <li>
+                    <i class="credit card icon"></i>
+                    <a href="CreditCard3DCharge/">Credit Card with 3D - Charge</a>
+                </li>
             </ul>
         </div>
     </body>
