@@ -274,6 +274,23 @@ class ResourceService
     //<editor-fold desc="Metadata resource">
 
     /**
+     * Create Metadata resource.
+     *
+     * @param Metadata $metadata The Metadata object to be created.
+     *
+     * @return Metadata The fetched Metadata resource.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createMetadata(Metadata $metadata): Metadata
+    {
+        $metadata->setParentResource($this->heidelpay);
+        $this->create($metadata);
+        return $metadata;
+    }
+
+    /**
      * Fetch and return Metadata resource.
      *
      * @param Metadata|string $metadata

@@ -221,6 +221,7 @@ class HeidelpayTest extends BaseUnitTest
             'fetchPayment'                 => ['fetchPayment', [$payment], 'fetchPayment', [$payment]],
             'fetchPaymentStr'              => ['fetchPayment', [$paymentId], 'fetchPayment', [$paymentId]],
             'fetchKeypair'                 => ['fetchKeypair', [], 'fetchKeypair', []],
+            'createMetadata'               => ['createMetadata', [$metadata], 'createMetadata', [$metadata]],
             'fetchMetadata'                => ['fetchMetadata', [$metadata], 'fetchMetadata', [$metadata]],
             'fetchMetadataStr'             => ['fetchMetadata', [$metadataId], 'fetchMetadata', [$metadataId]],
             'createPaymentType'            => ['createPaymentType', [$sofort], 'createPaymentType', [$sofort]],

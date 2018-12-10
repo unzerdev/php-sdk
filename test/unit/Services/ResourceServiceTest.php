@@ -990,6 +990,29 @@ class ResourceServiceTest extends BaseUnitTest
     }
 
     /**
+     * Verify createMetadata calls create with the given metadata object.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function createMetadataShouldCallCreateWithTheGivenMetadataObject()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
+            ->disableOriginalConstructor()->getMock();
+
+        $metadata = new Metadata();
+        $resourceSrvMock->expects($this->once())->method('create')->with($metadata);
+
+        /** @var ResourceService $resourceSrvMock */
+        $this->assertSame($metadata, $resourceSrvMock->createMetadata($metadata));
+    }
+
+    /**
      * Verify fetchMetadata calls fetch with a new metadata object with the given id.
      *
      * @test
