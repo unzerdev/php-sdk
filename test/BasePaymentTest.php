@@ -25,7 +25,6 @@
 namespace heidelpay\MgwPhpSdk\test;
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Payment;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
@@ -60,7 +59,7 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D, SupportedLocales::GERMAN_GERMAN))
+        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D, 'de_DE'))
             ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
     }
 

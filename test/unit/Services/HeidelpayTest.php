@@ -26,7 +26,6 @@
 namespace heidelpay\MgwPhpSdk\test\unit;
 
 use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Metadata;
@@ -62,13 +61,13 @@ class HeidelpayTest extends BaseUnitTest
         $this->assertInstanceOf(PaymentService::class, $heidelpay->getPaymentService());
         $this->assertSame($heidelpay, $heidelpay->getPaymentService()->getHeidelpay());
         $this->assertEquals('s-priv-1234', $heidelpay->getKey());
-        $this->assertEquals(SupportedLocales::USA_ENGLISH, $heidelpay->getLocale());
+        $this->assertEquals('en_US', $heidelpay->getLocale());
 
-        $heidelpaySwiss = new Heidelpay('s-priv-1234', SupportedLocales::SWISS_GERMAN);
-        $this->assertEquals(SupportedLocales::SWISS_GERMAN, $heidelpaySwiss->getLocale());
+        $heidelpaySwiss = new Heidelpay('s-priv-1234', 'de_CH');
+        $this->assertEquals('de_CH', $heidelpaySwiss->getLocale());
 
-        $heidelpayGerman = new Heidelpay('s-priv-1234', SupportedLocales::GERMAN_GERMAN);
-        $this->assertEquals(SupportedLocales::GERMAN_GERMAN, $heidelpayGerman->getLocale());
+        $heidelpayGerman = new Heidelpay('s-priv-1234', 'de_DE');
+        $this->assertEquals('de_DE', $heidelpayGerman->getLocale());
     }
 
     /**

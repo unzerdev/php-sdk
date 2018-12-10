@@ -25,7 +25,6 @@
  */
 namespace heidelpay\MgwPhpSdk;
 
-use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
 use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
@@ -81,7 +80,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @throws \RuntimeException A \RuntimeException will be thrown if the key is not of type private.
      */
-    public function __construct($key, $locale = SupportedLocales::USA_ENGLISH)
+    public function __construct($key, $locale = 'en_US')
     {
         $this->setKey($key);
         $this->locale = $locale;
@@ -126,8 +125,8 @@ class Heidelpay implements HeidelpayParentInterface
      * Returns the set customer locale.
      *
      * @return string The locale of the customer.
-     *                For a list of supported values please refer to the class
-     *                \heidelpay\MgwPhpSdk\Constants\SupportedLocales
+     *                For a list of supported values please refer to the documentation
+     *                todo: add link to documentation
      */
     public function getLocale(): string
     {
@@ -138,8 +137,8 @@ class Heidelpay implements HeidelpayParentInterface
      * Sets the customer locale.
      *
      * @param string $locale The customer locale to set.
-     *                       For a list of supported values please refer to the class
-     *                       \heidelpay\MgwPhpSdk\Constants\SupportedLocales
+     *                       For a list of supported values please refer to the documentation
+     *                       todo: add link to documentation
      *
      * @return Heidelpay This heidelpay object.
      */

@@ -24,7 +24,6 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
-use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -45,7 +44,7 @@ class KeyTest extends BasePaymentTest
      */
     public function validKeysShouldBeExcepted($key)
     {
-        $heidelpay = new Heidelpay($key, SupportedLocales::GERMAN_GERMAN);
+        $heidelpay = new Heidelpay($key, 'de_DE');
         $this->assertEquals($key, $heidelpay->getKey());
     }
 
@@ -62,7 +61,7 @@ class KeyTest extends BasePaymentTest
     public function invalidKeysShouldResultInException($key)
     {
         $this->expectException(\RuntimeException::class);
-        new Heidelpay($key, SupportedLocales::GERMAN_GERMAN);
+        new Heidelpay($key, 'de_DE');
     }
 
     /**
