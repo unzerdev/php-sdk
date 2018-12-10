@@ -23,7 +23,6 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 
@@ -42,7 +41,7 @@ try {
 
     //#######  3. Create a direct charge. ##############################################################################
     $customer      = new Customer('Linda', 'Heideich');
-    $charge     = $heidelpay->charge(100.0, Currencies::EURO, $paymentTypeId, CHARGE_CANCEL_CONTROLLER_URL, $customer);
+    $charge     = $heidelpay->charge(100.0, 'EUR', $paymentTypeId, CHARGE_CANCEL_CONTROLLER_URL, $customer);
     addSuccess('Charge ' . $charge->getId() . ' has been created for payment ' . $charge->getPaymentId() . '.');
 
     //#######  4. Create a refund for part of the charged amount. ######################################################

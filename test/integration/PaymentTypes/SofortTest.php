@@ -26,7 +26,6 @@
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
@@ -80,7 +79,7 @@ class SofortTest extends BasePaymentTest
      */
     public function sofortShouldBeAbleToCharge(Sofort $sofort): Charge
     {
-        $charge = $sofort->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $sofort->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
 
@@ -103,6 +102,6 @@ class SofortTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, Currencies::EURO, $sofort, self::RETURN_URL);
+        $this->heidelpay->authorize(100.0, 'EUR', $sofort, self::RETURN_URL);
     }
 }

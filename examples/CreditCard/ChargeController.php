@@ -29,7 +29,6 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
@@ -44,7 +43,7 @@ try {
 
     //#######  3. Create a charge with a new customer. #################################################################
     $customer      = new Customer('Linda', 'Heideich');
-    $charge = $heidelpay->charge(45.0, Currencies::EURO, $paymentTypeId, CHARGE_CONTROLLER_URL, $customer);
+    $charge = $heidelpay->charge(45.0, 'EUR', $paymentTypeId, CHARGE_CONTROLLER_URL, $customer);
 } catch (HeidelpayApiException $e) {
     //#######  4. In case of an error redirect to your failure page. ###################################################
     redirect(FAILURE_URL);

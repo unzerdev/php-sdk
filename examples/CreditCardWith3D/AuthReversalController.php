@@ -29,7 +29,6 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Heidelpay;
 
 include '../assets/partials/_controller_php.php';
@@ -40,7 +39,7 @@ try {
     $heidelpay     = new Heidelpay(EXAMPLE_PRIVATE_KEY);
 
     //#######  3. Create an authorization. #############################################################################
-    $authorization = $heidelpay->authorize(100.0, Currencies::EURO, $paymentTypeId, AUTH_REVERSAL_CONTROLLER_URL);
+    $authorization = $heidelpay->authorize(100.0, 'EUR', $paymentTypeId, AUTH_REVERSAL_CONTROLLER_URL);
     addSuccess($authorization->getAmount() . ' ' . $authorization->getCurrency() .
             ' have been authorized for payment ' . $authorization->getPaymentId() . '.');
 

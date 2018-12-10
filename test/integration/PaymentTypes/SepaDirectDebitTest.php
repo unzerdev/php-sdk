@@ -26,7 +26,6 @@
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
@@ -107,7 +106,7 @@ class SepaDirectDebitTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(1.0, Currencies::EURO, $directDebit, self::RETURN_URL);
+        $this->heidelpay->authorize(1.0, 'EUR', $directDebit, self::RETURN_URL);
     }
 
     /**
@@ -124,7 +123,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      */
     public function directDebitShouldBeChargeable(SepaDirectDebit $directDebit): Charge
     {
-        $charge = $directDebit->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $directDebit->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
 

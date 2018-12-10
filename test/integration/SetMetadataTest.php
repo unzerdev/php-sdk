@@ -24,7 +24,6 @@
  */
 namespace heidelpay\MgwPhpSdk\test\integration;
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Metadata;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
@@ -88,7 +87,7 @@ class SetMetadataTest extends BasePaymentTest
         $this->assertEmpty($metadata->getId());
 
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $this->heidelpay->authorize(1.23, Currencies::EURO, $card, 'https://heidelpay.com', null, null, $metadata);
+        $this->heidelpay->authorize(1.23, 'EUR', $card, 'https://heidelpay.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -111,7 +110,7 @@ class SetMetadataTest extends BasePaymentTest
         $this->assertEmpty($metadata->getId());
 
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $this->heidelpay->charge(1.23, Currencies::EURO, $card, 'https://heidelpay.com', null, null, $metadata);
+        $this->heidelpay->charge(1.23, 'EUR', $card, 'https://heidelpay.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -129,7 +128,7 @@ class SetMetadataTest extends BasePaymentTest
 
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $card->authorize(10.0, Currencies::EURO, 'https://heidelpay.com', null, null, $metadata);
+        $authorize = $card->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, $metadata);
         $payment = $authorize->getPayment();
         $this->assertSame($metadata, $payment->getMetadata());
 

@@ -25,7 +25,6 @@
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\PIS;
 use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
@@ -79,7 +78,7 @@ class PISTest extends BasePaymentTest
      */
     public function pisShouldBeAbleToCharge(PIS $pis): Charge
     {
-        $charge = $pis->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $pis->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
 
@@ -102,6 +101,6 @@ class PISTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, Currencies::EURO, $pis, self::RETURN_URL);
+        $this->heidelpay->authorize(100.0, 'EUR', $pis, self::RETURN_URL);
     }
 }

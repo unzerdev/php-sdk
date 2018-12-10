@@ -25,7 +25,6 @@
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
@@ -77,7 +76,7 @@ class PrepaymentTest extends BasePaymentTest
      */
     public function prepaymentTypeShouldBeAuthorizable(Prepayment $prepayment): Authorization
     {
-        $authorization = $prepayment->authorize(100.0, Currencies::EURO, self::RETURN_URL);
+        $authorization = $prepayment->authorize(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($authorization);
         $this->assertNotNull($authorization->getId());
         $this->assertNotEmpty($authorization->getIban());
@@ -105,7 +104,7 @@ class PrepaymentTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
 
-        $prepayment->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $prepayment->charge(100.0, 'EUR', self::RETURN_URL);
     }
 
     /**
@@ -143,7 +142,7 @@ class PrepaymentTest extends BasePaymentTest
      */
     public function prepaymentAuthorizeCanBeCanceled(Prepayment $prepayment)
     {
-        $authorization = $prepayment->authorize(100.0, Currencies::EURO, self::RETURN_URL);
+        $authorization = $prepayment->authorize(100.0, 'EUR', self::RETURN_URL);
         $cancellation = $authorization->cancel();
         $this->assertNotNull($cancellation);
         $this->assertNotNull($cancellation->getId());

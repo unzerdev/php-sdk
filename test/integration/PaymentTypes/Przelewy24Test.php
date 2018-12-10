@@ -26,7 +26,6 @@
 namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
@@ -77,7 +76,7 @@ class Przelewy24Test extends BasePaymentTest
      */
     public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24)
     {
-        $charge = $przelewy24->charge(100.0, Currencies::POLISH_ZLOTY, self::RETURN_URL);
+        $charge = $przelewy24->charge(100.0, 'PLN', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
 
@@ -102,7 +101,7 @@ class Przelewy24Test extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, Currencies::POLISH_ZLOTY, $przelewy24, self::RETURN_URL);
+        $this->heidelpay->authorize(100.0, 'PLN', $przelewy24, self::RETURN_URL);
     }
 
     /**
@@ -134,9 +133,9 @@ class Przelewy24Test extends BasePaymentTest
     public function przelewy24CurrencyCodeProvider(): array
     {
         $currencyArray = [
-            Currencies::EURO => [Currencies::EURO],
-            Currencies::UNITED_STATES_DOLLAR => [Currencies::UNITED_STATES_DOLLAR],
-            Currencies::SWISS_FRANC => [Currencies::SWISS_FRANC]
+            'EUR' => ['EUR'],
+            'US Dollar'=> ['USD'],
+            'Swiss Franc' => ['CHF']
         ];
 
         return $currencyArray;

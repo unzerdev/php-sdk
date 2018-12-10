@@ -25,7 +25,6 @@
 namespace heidelpay\MgwPhpSdk\test\unit\Resources;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Constants\PaymentState;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
@@ -834,7 +833,7 @@ class PaymentTest extends BaseUnitTest
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
 
-        $authorization = (new Authorization(11.98, Currencies::EURO))->setId('s-aut-1');
+        $authorization = (new Authorization(11.98, 'EUR'))->setId('s-aut-1');
         $this->assertEquals(11.98, $authorization->getAmount());
 
         $payment->setAuthorization($authorization);
@@ -897,8 +896,8 @@ class PaymentTest extends BaseUnitTest
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
 
-        $charge1 = (new Charge(11.98, Currencies::EURO))->setId('s-chg-1');
-        $charge2 = (new Charge(22.98, Currencies::EURO))->setId('s-chg-2');
+        $charge1 = (new Charge(11.98, 'EUR'))->setId('s-chg-1');
+        $charge2 = (new Charge(22.98, 'EUR'))->setId('s-chg-2');
         $this->assertEquals(22.98, $charge2->getAmount());
 
         $payment->addCharge($charge1)->addCharge($charge2);
@@ -931,7 +930,7 @@ class PaymentTest extends BaseUnitTest
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
 
-        $charge1 = (new Charge(11.98, Currencies::EURO))->setId('s-chg-1');
+        $charge1 = (new Charge(11.98, 'EUR'))->setId('s-chg-1');
         $payment->addCharge($charge1);
         $this->assertCount(1, $payment->getCharges());
         $this->assertNull($payment->getCharge('s-chg-2'));
@@ -963,7 +962,7 @@ class PaymentTest extends BaseUnitTest
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
-        $authorize = (new Authorization(23.55, Currencies::EURO))->setId('s-aut-1');
+        $authorize = (new Authorization(23.55, 'EUR'))->setId('s-aut-1');
         $payment->setAuthorization($authorize);
         $reversal1 = (new Cancellation(1.98))->setId('s-cnl-1');
         $reversal2 = (new Cancellation(2.98))->setId('s-cnl-2');
@@ -998,7 +997,7 @@ class PaymentTest extends BaseUnitTest
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
-        $authorize = (new Authorization(23.55, Currencies::EURO))->setId('s-aut-1');
+        $authorize = (new Authorization(23.55, 'EUR'))->setId('s-aut-1');
         $payment->setAuthorization($authorize);
         $reversal1 = (new Cancellation(1.98))->setId('s-cnl-1');
         $authorize->addCancellation($reversal1);
@@ -1061,7 +1060,7 @@ class PaymentTest extends BaseUnitTest
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
-        $charge = (new Charge(23.55, Currencies::EURO))->setId('s-chg-1');
+        $charge = (new Charge(23.55, 'EUR'))->setId('s-chg-1');
         $payment->addCharge($charge);
         $refund1 = (new Cancellation(1.98))->setId('s-cnl-1');
         $refund2 = (new Cancellation(2.98))->setId('s-cnl-2');
@@ -1096,7 +1095,7 @@ class PaymentTest extends BaseUnitTest
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
-        $charge = (new Charge(23.55, Currencies::EURO))->setId('s-chg-1');
+        $charge = (new Charge(23.55, 'EUR'))->setId('s-chg-1');
         $payment->addCharge($charge);
         $reversal1 = (new Cancellation(1.98))->setId('s-cnl-1');
         $charge->addCancellation($reversal1);

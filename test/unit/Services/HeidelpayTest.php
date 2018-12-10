@@ -25,7 +25,6 @@
  */
 namespace heidelpay\MgwPhpSdk\test\unit;
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 use heidelpay\MgwPhpSdk\Resources\Metadata;
@@ -310,51 +309,51 @@ class HeidelpayTest extends BaseUnitTest
         return [
             'authorize'                       => [
                 'authorize',
-                [1.234, Currencies::AFGHAN_AFGHANI, $sofort, $url, $customer, $orderId, $metadata],
+                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata],
                 'authorize',
-                [1.234, Currencies::AFGHAN_AFGHANI, $sofort, $url, $customer, $orderId, $metadata]
+                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]
             ],
             'authorizeAlt'                    => [
                 'authorize',
-                [234.1, Currencies::ALGERIAN_DINAR, $sofort, $url],
+                [234.1, 'DZD', $sofort, $url],
                 'authorize',
-                [234.1, Currencies::ALGERIAN_DINAR, $sofort, $url]
+                [234.1, 'DZD', $sofort, $url]
             ],
             'authorizeStr'                    => [
                 'authorize',
-                [34.12, Currencies::DANISH_KRONE, $paymentTypeId, $url, $customerId, $orderId],
+                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId],
                 'authorize',
-                [34.12, Currencies::DANISH_KRONE, $paymentTypeId, $url, $customerId, $orderId]
+                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]
             ],
             'authorizeWithPayment'            => [
                 'authorizeWithPayment',
-                [1.234, Currencies::AFGHAN_AFGHANI, $payment, $url, $customer, $orderId, $metadata],
+                [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata],
                 'authorizeWithPayment',
-                [1.234, Currencies::AFGHAN_AFGHANI, $payment, $url, $customer, $orderId, $metadata]
+                [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata]
             ],
             'authorizeWithPaymentStr'         => [
                 'authorizeWithPayment',
-                [34.12, Currencies::DANISH_KRONE, $payment, $url, $customerId, $orderId],
+                [34.12, 'DKK', $payment, $url, $customerId, $orderId],
                 'authorizeWithPayment',
-                [34.12, Currencies::DANISH_KRONE, $payment, $url, $customerId, $orderId]
+                [34.12, 'DKK', $payment, $url, $customerId, $orderId]
             ],
             'charge'                          => [
                 'charge',
-                [1.234, Currencies::AFGHAN_AFGHANI, $sofort, $url, $customer, $orderId, $metadata],
+                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata],
                 'charge',
-                [1.234, Currencies::AFGHAN_AFGHANI, $sofort, $url, $customer, $orderId, $metadata]
+                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]
             ],
             'chargeAlt'                       => [
                 'charge',
-                [234.1, Currencies::ALGERIAN_DINAR, $sofort, $url],
+                [234.1, 'DZD', $sofort, $url],
                 'charge',
-                [234.1, Currencies::ALGERIAN_DINAR, $sofort, $url]
+                [234.1, 'DZD', $sofort, $url]
             ],
             'chargeStr'                       => [
                 'charge',
-                [34.12, Currencies::DANISH_KRONE, $paymentTypeId, $url, $customerId, $orderId],
+                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId],
                 'charge',
-                [34.12, Currencies::DANISH_KRONE, $paymentTypeId, $url, $customerId, $orderId]
+                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]
             ],
             'chargeAuthorization'             => [
                 'chargeAuthorization',
@@ -376,9 +375,9 @@ class HeidelpayTest extends BaseUnitTest
             ],
             'chargePayment'                   => [
                 'chargePayment',
-                [$payment, 1.234, Currencies::ALBANIAN_LEK],
+                [$payment, 1.234, 'ALL'],
                 'chargePayment',
-                [$payment, 1.234, Currencies::ALBANIAN_LEK]
+                [$payment, 1.234, 'ALL']
             ],
             'chargePaymentAlt'                => [
                 'chargePayment',

@@ -26,7 +26,6 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Constants\Salutations;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\Customer;
@@ -156,7 +155,7 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, Currencies::EURO, self::RETURN_URL, $customer);
+        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -183,7 +182,7 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, Currencies::EURO, self::RETURN_URL, $customer);
+        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -210,7 +209,7 @@ class CustomerTest extends BasePaymentTest
 
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, Currencies::EURO, self::RETURN_URL, $customer->getId());
+        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer->getId());
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());

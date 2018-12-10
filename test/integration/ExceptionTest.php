@@ -26,7 +26,6 @@
 namespace heidelpay\MgwPhpSdk\test\integration;
 
 use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
 use heidelpay\MgwPhpSdk\test\BasePaymentTest;
@@ -47,7 +46,7 @@ class ExceptionTest extends BasePaymentTest
     {
         $giropay = $this->heidelpay->createPaymentType(new Giropay());
         try {
-            $this->heidelpay->authorize(1.0, Currencies::EURO, $giropay, self::RETURN_URL);
+            $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
         } catch (HeidelpayApiException $e) {
             $this->assertInstanceOf(HeidelpayApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
