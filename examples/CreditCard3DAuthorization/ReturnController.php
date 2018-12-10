@@ -43,7 +43,6 @@ function redirect($url)
 session_start();
 
 if (!isset($_SESSION['PaymentId'])) {
-    echo 'blä';
     redirect(FAILURE_URL);
 }
 
@@ -55,7 +54,6 @@ try {
         redirect(SUCCESS_URL);
     }
 } catch (HeidelpayApiException $e) {
-    echo $e->getMessage();
-//    redirect(FAILURE_URL);
+    redirect(FAILURE_URL);
 }
-//redirect(FAILURE_URL);
+redirect(FAILURE_URL);

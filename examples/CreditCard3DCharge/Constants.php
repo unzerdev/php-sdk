@@ -26,6 +26,6 @@
 require_once __DIR__ . '/../Constants.php';
 
 define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCardCharge');
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCard3DCharge');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
 define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

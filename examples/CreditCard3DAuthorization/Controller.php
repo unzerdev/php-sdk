@@ -62,3 +62,4 @@ try {
 } catch (HeidelpayApiException $e) {
     redirect(FAILURE_URL);
 }
+redirect(FAILURE_URL);
