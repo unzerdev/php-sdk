@@ -291,7 +291,7 @@ class Payment extends AbstractHeidelpayResource
     public function setPaymentType($paymentType): Payment
     {
         if (empty($paymentType)) {
-            return $this; //todo: maybe throw exception here (call from paymentSrv)
+            return $this;
         }
 
         /** @var Heidelpay $heidelpay */

@@ -125,8 +125,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Returns the set customer locale.
      *
      * @return string The locale of the customer.
-     *                For a list of supported values please refer to the documentation
-     *                todo: add link to documentation
+     *                Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
      */
     public function getLocale(): string
     {
@@ -137,8 +136,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Sets the customer locale.
      *
      * @param string $locale The customer locale to set.
-     *                       For a list of supported values please refer to the documentation
-     *                       todo: add link to documentation
+     *                       Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
      *
      * @return Heidelpay This heidelpay object.
      */
