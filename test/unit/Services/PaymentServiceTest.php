@@ -184,6 +184,7 @@ class PaymentServiceTest extends BaseUnitTest
         $customer = (new Customer())->setId('myCustomerId');
         $heidelpay = new Heidelpay('s-priv-123');
         $paymentType = (new Sofort())->setId('myPaymentTypeId');
+        $metadata = (new Metadata())->setId('myMetadataId');
 
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['create'])->getMock();
@@ -208,7 +209,7 @@ class PaymentServiceTest extends BaseUnitTest
         /** @var ResourceService $resourceSrvMock */
         $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
         $returnedCharge =
-            $paymentSrv->charge(1.234, 'myTestCurrency', $paymentType, 'myTestUrl', $customer, 'myOrderId');
+            $paymentSrv->charge(1.234, 'myTestCurrency', $paymentType, 'myTestUrl', $customer, 'myOrderId', $metadata);
         $this->assertSame($paymentType, $returnedCharge->getPayment()->getPaymentType());
     }
 
