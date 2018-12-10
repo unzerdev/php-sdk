@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the 'Charge' transaction example for Paypal.
+ * This is the controller for the 'Authorization' transaction example for Card.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -33,26 +33,34 @@ use heidelpay\MgwPhpSdk\Constants\Currencies;
 use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\Payment;
 
-include '../assets/partials/_controller_php.php';
+session_start();
+session_unset();
+
+function redirect($url)
+{
+    header('Location: ' . $url);
+    die();
+}
+
+if (!isset($_POST['resourceId'])) {
+    redirect(FAILURE_URL);
+}
+
+$paymentTypeId   = $_POST['resourceId'];
 
 //#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
     //#######  2. Create a heidelpay object using your private key #####################################################
-    $heidelpay     = new Heidelpay(EXAMPLE_PRIVATE_KEY);
+    $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
 
-    //#######  3. Create a charge with a new customer. #################################################################
+    //#######  3. Create an authorization (aka reservation) ############################################################
     $customer      = new Customer('Linda', 'Heideich');
-    $charge = $heidelpay->charge(11.0, Currencies::EURO, $paymentTypeId, RESULT_CONTROLLER_URL, $customer);
+    $authorization = $heidelpay->authorize(12.99, Currencies::EURO, $paymentTypeId, CONTROLLER_URL, $customer);
+    if ($authorization->getPayment()->isPending()) {
+        redirect(SUCCESS_URL);
+    }
 } catch (HeidelpayApiException $e) {
-    //#######  4. In case of an error redirect to your failure page. ###################################################
     redirect(FAILURE_URL);
-}
-
-//#######  5. If everything is fine redirect to your success page. #####################################################
-if (($charge->getPayment() instanceof Payment) && $charge->getRedirectUrl() !== null) {
-    $_SESSION['paymentId'] = $charge->getPaymentId();
-    redirect($charge->getRedirectUrl());
 }
 redirect(FAILURE_URL);

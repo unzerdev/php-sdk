@@ -26,10 +26,5 @@
 require_once __DIR__ . '/../Constants.php';
 
 define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCardWith3D');
-define('CHARGE_CANCEL_CONTROLLER_URL', EXAMPLE_URL . '/ChargeCancelController.php');
-define('AUTH_REVERSAL_CONTROLLER_URL', EXAMPLE_URL . '/AuthReversalController.php');
-define('AUTH_CONTROLLER_URL', EXAMPLE_URL . '/AuthController.php');
-define('CHARGE_CONTROLLER_URL', EXAMPLE_URL . '/ChargeController.php');
-define('EXAMPLE_PUBLIC_KEY', 's-pub-2a10nxkuA4lC7bIRtz2hKcFGeHhlkr2e'); // todo replace
-define('EXAMPLE_PRIVATE_KEY', 's-priv-2a10an6aJK0Jg7sMdpu9gK7ih8pCccze');  // todo replace
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCardCharge');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');

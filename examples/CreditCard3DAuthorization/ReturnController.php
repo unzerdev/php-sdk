@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the 'Authorization' transaction example for Paypal.
+ * This is the controller for the 'Authorization' transaction example for Card.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -34,23 +34,26 @@ use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
 use heidelpay\MgwPhpSdk\Heidelpay;
 use heidelpay\MgwPhpSdk\Resources\Customer;
 
-include '../assets/partials/_controller_php.php';
-
-//#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
-try {
-    //#######  2. Create a heidelpay object using your private key #####################################################
-    $heidelpay     = new Heidelpay(EXAMPLE_PRIVATE_KEY);
-
-    //#######  3. Create an authorization (aka reservation) ############################################################
-    $customer      = new Customer('Linda', 'Heideich');
-    $authorization = $heidelpay->authorize(12.0, Currencies::EURO, $paymentTypeId, AUTH_CONTROLLER_URL, $customer);
-
-    addSuccess('Redirect to: ' . $authorization->getRedirectUrl());
-} catch (HeidelpayApiException $e) {
-    //#######  4. In case of an error redirect to your failure page. ###################################################
-    returnError($e->getClientMessage());
+function redirect($url)
+{
+    header('Location: ' . $url);
+    die();
 }
 
-//#######  5. If everything is fine redirect to your success page. #####################################################
-//redirect(SUCCESS_URL, $authorization->getPaymentId());
-returnResponse();
+session_start();
+
+if (!isset($_SESSION['PaymentId'])) {
+    redirect(FAILURE_URL);
+}
+
+$paymentId = $_SESSION['PaymentId'];
+try {
+    $heidelpay = new Heidelpay('s-priv-2a10BF2Cq2YvAo6ALSGHc3X7F42oWAIp');
+    $payment   = $heidelpay->fetchPayment($paymentId);
+    if ($payment->isPending()) {
+        redirect(SUCCESS_URL);
+    }
+} catch (HeidelpayApiException $e) {
+    redirect(FAILURE_URL);
+}
+redirect(FAILURE_URL);

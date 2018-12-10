@@ -1,6 +1,6 @@
 <?php
 /**
- * todo description missing
+ * This file defines the constants needed for the card example.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -23,28 +23,9 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
+require_once __DIR__ . '/../Constants.php';
 
-/** Require the constants of this example */
-require_once __DIR__ . '/Constants.php';
-
-/** Require the composer autoloader file */
-require_once __DIR__ . '/../../../../autoload.php';
-
-session_start();
-
-$paymentId = $_SESSION['paymentId'];
-
-try {
-    $heidelpay = new Heidelpay(EXAMPLE_PRIVATE_KEY);
-    $payment = $heidelpay->fetchPayment($paymentId);
-
-    if ($payment->isCompleted()) {
-        header('Location: ' . SUCCESS_URL);
-        exit();
-    }
-} catch (HeidelpayApiException $e) {
-}
-header('Location: ' . FAILURE_URL);
-exit();
+define('EXAMPLE_PATH', __DIR__);
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCard3DCharge');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
+define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');
