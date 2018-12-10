@@ -23,21 +23,21 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit;
+namespace heidelpayPHP\test\unit;
 
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\Metadata;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Services\HttpService;
-use heidelpay\MgwPhpSdk\Services\PaymentService;
-use heidelpay\MgwPhpSdk\Services\ResourceService;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
-use heidelpay\MgwPhpSdk\test\unit\Services\DummyDebugHandler;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Services\HttpService;
+use heidelpayPHP\Services\PaymentService;
+use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;

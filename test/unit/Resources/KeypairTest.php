@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources;
+namespace heidelpayPHP\test\unit\Resources;
 
-use heidelpay\MgwPhpSdk\Resources\Keypair;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Resources\Keypair;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 

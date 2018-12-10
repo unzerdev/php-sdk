@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources\PaymentTypes;
+namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Resources\PaymentTypes\Ideal;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 

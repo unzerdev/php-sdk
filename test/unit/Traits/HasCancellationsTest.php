@@ -22,12 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Traits;
+namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;

@@ -22,9 +22,9 @@
  *
  * @package  heidelpay/mgw_sdk/payment_types
  */
-namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
+namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Traits\CanAuthorizeWithCustomer;
+use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
 
 class InvoiceGuaranteed extends BasePaymentType
 {

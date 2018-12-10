@@ -23,8 +23,8 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';

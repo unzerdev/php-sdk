@@ -22,35 +22,35 @@
  *
  * @package  heidelpay/mgw_sdk/services
  */
-namespace heidelpay\MgwPhpSdk\Services;
+namespace heidelpayPHP\Services;
 
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\IdStrings;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\Keypair;
-use heidelpay\MgwPhpSdk\Resources\Metadata;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Invoice;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Paypal;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\PIS;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Constants\IdStrings;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Keypair;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Giropay;
+use heidelpayPHP\Resources\PaymentTypes\Ideal;
+use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
+use heidelpayPHP\Resources\PaymentTypes\PIS;
+use heidelpayPHP\Resources\PaymentTypes\Prepayment;
+use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Shipment;
 
 class ResourceService
 {

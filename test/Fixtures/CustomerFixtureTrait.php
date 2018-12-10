@@ -22,11 +22,11 @@
  *
  * @package  heidelpay/mgw_sdk/test/fixtures
  */
-namespace heidelpay\MgwPhpSdk\test\Fixtures;
+namespace heidelpayPHP\test\Fixtures;
 
-use heidelpay\MgwPhpSdk\Constants\Salutations;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Constants\Salutations;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\EmbeddedResources\Address;
 
 trait CustomerFixtureTrait
 {

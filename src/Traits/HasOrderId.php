@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/traits
  */
-namespace heidelpay\MgwPhpSdk\Traits;
+namespace heidelpayPHP\Traits;
 
 trait HasOrderId
 {

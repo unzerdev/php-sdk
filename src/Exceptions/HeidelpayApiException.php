@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/exceptions
  */
-namespace heidelpay\MgwPhpSdk\Exceptions;
+namespace heidelpayPHP\Exceptions;
 
 class HeidelpayApiException extends \Exception
 {

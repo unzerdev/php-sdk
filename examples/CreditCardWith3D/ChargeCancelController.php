@@ -23,8 +23,8 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Customer;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Customer;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
@@ -52,7 +52,7 @@ try {
     //#######  5. Fetch the payment object to get the current state. ###################################################
     $payment = $charge->getPayment();
     addInfo('The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.');
-} catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
+} catch (\heidelpayPHP\Exceptions\HeidelpayApiException $e) {
     returnError($e->getClientMessage());
 }
 

@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources\PaymentTypes;
+namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 

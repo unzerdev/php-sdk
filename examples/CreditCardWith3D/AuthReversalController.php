@@ -29,7 +29,7 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpayPHP\Heidelpay;
 
 include '../assets/partials/_controller_php.php';
 
@@ -57,7 +57,7 @@ try {
     //#######  6. Fetch the payment object to get the current state. ###################################################
     $payment = $charge->getPayment();
     addInfo('The payment ' . $payment->getId() . ' has the status ' . $payment->getStateName() . '.');
-} catch (\heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException $e) {
+} catch (\heidelpayPHP\Exceptions\HeidelpayApiException $e) {
     returnError($e->getClientMessage());
 }
 

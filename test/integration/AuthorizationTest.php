@@ -23,11 +23,11 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration
  */
-namespace heidelpay\MgwPhpSdk\test\integration;
+namespace heidelpayPHP\test\integration;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class AuthorizationTest extends BasePaymentTest

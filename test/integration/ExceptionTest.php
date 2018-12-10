@@ -23,12 +23,12 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration
  */
-namespace heidelpay\MgwPhpSdk\test\integration;
+namespace heidelpayPHP\test\integration;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Giropay;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\Giropay;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class ExceptionTest extends BasePaymentTest

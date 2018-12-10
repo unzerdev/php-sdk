@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
+namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 

@@ -22,24 +22,24 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources;
+namespace heidelpayPHP\test\unit\Resources;
 
-use heidelpay\MgwPhpSdk\Constants\Salutations;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
-use heidelpay\MgwPhpSdk\Resources\Keypair;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Ideal;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Constants\Salutations;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Resources\Keypair;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Ideal;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;

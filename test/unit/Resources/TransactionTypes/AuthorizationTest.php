@@ -22,17 +22,17 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
+namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;

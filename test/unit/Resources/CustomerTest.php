@@ -22,12 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources;
+namespace heidelpayPHP\test\unit\Resources;
 
-use heidelpay\MgwPhpSdk\Constants\Salutations;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Constants\Salutations;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 

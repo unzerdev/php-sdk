@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/interfaces
  */
-namespace heidelpay\MgwPhpSdk\Interfaces;
+namespace heidelpayPHP\Interfaces;
 
 interface DebugHandlerInterface
 {

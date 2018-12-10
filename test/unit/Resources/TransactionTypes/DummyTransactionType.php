@@ -22,9 +22,9 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources\TransactionTypes;
+namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
+use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 
 class DummyTransactionType extends AbstractTransactionType
 {

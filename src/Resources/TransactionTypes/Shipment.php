@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/transaction_types
  */
-namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
+namespace heidelpayPHP\Resources\TransactionTypes;
 
 class Shipment extends AbstractTransactionType
 {

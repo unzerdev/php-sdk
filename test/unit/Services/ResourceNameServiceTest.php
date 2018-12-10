@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit;
+namespace heidelpayPHP\test\unit;
 
-use heidelpay\MgwPhpSdk\Services\ResourceNameService;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Services\ResourceNameService;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 

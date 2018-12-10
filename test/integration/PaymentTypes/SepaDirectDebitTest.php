@@ -23,13 +23,13 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class SepaDirectDebitTest extends BasePaymentTest

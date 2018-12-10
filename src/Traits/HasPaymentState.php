@@ -22,9 +22,9 @@
  *
  * @package  heidelpay/mgw_sdk/traits
  */
-namespace heidelpay\MgwPhpSdk\Traits;
+namespace heidelpayPHP\Traits;
 
-use heidelpay\MgwPhpSdk\Constants\PaymentState;
+use heidelpayPHP\Constants\PaymentState;
 
 trait HasPaymentState
 {

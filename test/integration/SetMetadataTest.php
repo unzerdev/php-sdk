@@ -22,12 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/tests/integration
  */
-namespace heidelpay\MgwPhpSdk\test\integration;
+namespace heidelpayPHP\test\integration;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\Metadata;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 
 class SetMetadataTest extends BasePaymentTest

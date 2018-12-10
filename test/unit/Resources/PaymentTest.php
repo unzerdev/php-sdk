@@ -22,23 +22,23 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Resources;
+namespace heidelpayPHP\test\unit\Resources;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\PaymentState;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
-use heidelpay\MgwPhpSdk\Resources\Metadata;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
-use heidelpay\MgwPhpSdk\Services\ResourceService;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Constants\PaymentState;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\EmbeddedResources\Amount;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;

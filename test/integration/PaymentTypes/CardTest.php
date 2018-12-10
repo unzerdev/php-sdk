@@ -23,15 +23,15 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
 

@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Constants;
+namespace heidelpayPHP\test\unit\Constants;
 
-use heidelpay\MgwPhpSdk\Constants\PaymentState;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Constants\PaymentState;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 
 class PaymentStateTest extends BaseUnitTest

@@ -22,14 +22,14 @@
  *
  * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpayPHP\Resources;
 
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\MgwPhpSdk\Services\ResourceNameService;
-use heidelpay\MgwPhpSdk\Services\ResourceService;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\HeidelpayParentInterface;
+use heidelpayPHP\Services\ResourceNameService;
+use heidelpayPHP\Services\ResourceService;
 
 abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 {

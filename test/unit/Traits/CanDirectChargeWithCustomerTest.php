@@ -22,13 +22,13 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Traits;
+namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 
 class CanDirectChargeWithCustomerTest extends BaseUnitTest

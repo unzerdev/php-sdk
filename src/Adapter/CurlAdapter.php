@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/adapter
  */
-namespace heidelpay\MgwPhpSdk\Adapter;
+namespace heidelpayPHP\Adapter;
 
 class CurlAdapter implements HttpAdapterInterface
 {

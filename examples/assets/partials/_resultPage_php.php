@@ -23,13 +23,13 @@
  * @package  heidelpay/mgw_sdk/examples
  */
 
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Shipment;
 
 session_start();
 

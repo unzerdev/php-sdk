@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpayPHP\Resources;
 
-use heidelpay\MgwPhpSdk\Constants\Salutations;
-use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Constants\Salutations;
+use heidelpayPHP\Resources\EmbeddedResources\Address;
 
 class Customer extends AbstractHeidelpayResource
 {

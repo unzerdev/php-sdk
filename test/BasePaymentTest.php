@@ -22,14 +22,14 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration
  */
-namespace heidelpay\MgwPhpSdk\test;
+namespace heidelpayPHP\test;
 
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\Fixtures\CustomerFixtureTrait;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 class BasePaymentTest extends TestCase
@@ -124,7 +124,7 @@ class BasePaymentTest extends TestCase
      * @return Authorization
      *
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
      */
     public function createAuthorization(): Authorization
     {
@@ -140,7 +140,7 @@ class BasePaymentTest extends TestCase
      * @return Charge
      *
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
      */
     public function createCharge(): Charge
     {

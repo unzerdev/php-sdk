@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpayPHP\Resources;
 
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Heidelpay;
 
 class Metadata extends AbstractHeidelpayResource
 {

@@ -21,12 +21,12 @@
   },
   "autoload": {
     "psr-4": {
-      "heidelpay\\MgwPhpSdk\\": "src"
+      "heidelpayPHP\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "heidelpay\\MgwPhpSdk\\test\\": "test"
+      "heidelpayPHP\\test\\": "test"
     }
   },
   "support": {

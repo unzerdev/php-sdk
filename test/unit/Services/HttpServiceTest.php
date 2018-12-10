@@ -22,16 +22,16 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit;
+namespace heidelpayPHP\test\unit;
 
-use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
-use heidelpay\MgwPhpSdk\Services\HttpService;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
-use heidelpay\MgwPhpSdk\test\unit\Services\DummyAdapter;
-use heidelpay\MgwPhpSdk\test\unit\Services\DummyDebugHandler;
+use heidelpayPHP\Adapter\CurlAdapter;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\DebugHandlerInterface;
+use heidelpayPHP\Services\HttpService;
+use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\unit\Services\DummyAdapter;
+use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;

@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/services
  */
-namespace heidelpay\MgwPhpSdk\Services;
+namespace heidelpayPHP\Services;
 
 class ResourceNameService
 {

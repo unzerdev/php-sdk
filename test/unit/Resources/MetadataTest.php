@@ -22,11 +22,11 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\integration;
+namespace heidelpayPHP\test\integration;
 
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Metadata;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
