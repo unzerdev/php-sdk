@@ -128,14 +128,14 @@ class MetadataTest extends BasePaymentTest
         $metaData->addMetadata('myData', 'This should be my Data');
         $metaData->addMetadata('additionalData', 'some information');
         $metaData->setShopType('my own shop');
-        $metaData->setShopVersion('1.0.0.0-beta3');
+        $metaData->setShopVersion('1.0.0.0');
 
         $metaDataArray = $metaData->expose();
         $this->assertCount(6, $metaDataArray);
         $this->assertEquals(Heidelpay::SDK_VERSION, $metaDataArray['sdkVersion']);
         $this->assertEquals(Heidelpay::SDK_TYPE, $metaDataArray['sdkType']);
         $this->assertEquals('my own shop', $metaDataArray['shopType']);
-        $this->assertEquals('1.0.0.0-beta3', $metaDataArray['shopVersion']);
+        $this->assertEquals('1.0.0.0', $metaDataArray['shopVersion']);
         $this->assertEquals('This should be my Data', $metaDataArray['myData']);
         $this->assertEquals('some information', $metaDataArray['additionalData']);
     }
@@ -154,13 +154,13 @@ class MetadataTest extends BasePaymentTest
         $metaData->addMetadata('myData', 'This should be my Data');
         $metaData->addMetadata('additionalData', 'some information');
         $metaData->setShopType('my own shop');
-        $metaData->setShopVersion('1.0.0.0-beta3');
+        $metaData->setShopVersion('1.0.0.0');
 
         $this->assertNull($metaData->getId());
         $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
         $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
         $this->assertEquals('my own shop', $metaData->getShopType());
-        $this->assertEquals('1.0.0.0-beta3', $metaData->getShopVersion());
+        $this->assertEquals('1.0.0.0', $metaData->getShopVersion());
         $this->assertEquals('This should be my Data', $metaData->getMetadata('myData'));
         $this->assertEquals('some information', $metaData->getMetadata('additionalData'));
         $this->assertNull($metaData->getMetadata('extraData'));
@@ -170,7 +170,7 @@ class MetadataTest extends BasePaymentTest
         $response->sdkType = 'newSdkType';
         $response->sdkVersion = 'newSdkVersion';
         $response->shopType = 'my new shop';
-        $response->shopVersion = '1.0.0.0-beta4';
+        $response->shopVersion = '1.0.0.1';
         $response->myData = 'This should be my new Data';
         $response->additionalData = 'some new information';
         $response->extraData = 'This is brand new information';
@@ -180,7 +180,7 @@ class MetadataTest extends BasePaymentTest
         $this->assertEquals('newSdkType', $metaData->getSdkType());
         $this->assertEquals('newSdkVersion', $metaData->getSdkVersion());
         $this->assertEquals('my new shop', $metaData->getShopType());
-        $this->assertEquals('1.0.0.0-beta4', $metaData->getShopVersion());
+        $this->assertEquals('1.0.0.1', $metaData->getShopVersion());
         $this->assertEquals('This should be my new Data', $metaData->getMetadata('myData'));
         $this->assertEquals('some new information', $metaData->getMetadata('additionalData'));
         $this->assertEquals('This is brand new information', $metaData->getMetadata('extraData'));
