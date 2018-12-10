@@ -47,9 +47,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /** @var string $shortId */
     private $shortId;
 
-    /** @var string $url */
-    private $url;
-
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
