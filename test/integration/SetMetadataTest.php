@@ -42,9 +42,7 @@ class SetMetadataTest extends BasePaymentTest
      */
     public function metadataShouldBeCreatableAndFetchableWithTheApi()
     {
-        $resourceService = $this->heidelpay->getResourceService();
-
-        $metadata = new Metadata($this->heidelpay);
+        $metadata = new Metadata();
         $this->assertNull($metadata->getShopType());
         $this->assertNull($metadata->getShopVersion());
         $this->assertNull($metadata->getMetadata('MyCustomData'));
@@ -54,7 +52,7 @@ class SetMetadataTest extends BasePaymentTest
         $metadata->addMetadata('MyCustomData', 'my custom information');
         $this->assertNull($metadata->getId());
 
-        $resourceService->create($metadata);
+        $this->heidelpay->createMetadata($metadata);
         $this->assertNotNull($metadata->getId());
 
         $fetchedMetadata = (new Metadata($this->heidelpay))->setId($metadata->getId());
@@ -62,7 +60,7 @@ class SetMetadataTest extends BasePaymentTest
         $this->assertNull($fetchedMetadata->getShopVersion());
         $this->assertNull($fetchedMetadata->getMetadata('MyCustomData'));
 
-        $resourceService->fetch($fetchedMetadata);
+        $this->heidelpay->fetchMetadata($fetchedMetadata);
         $this->assertEquals('my awesome shop', $fetchedMetadata->getShopType());
         $this->assertEquals('v2.0.0', $fetchedMetadata->getShopVersion());
         $this->assertEquals('my custom information', $fetchedMetadata->getMetadata('MyCustomData'));
