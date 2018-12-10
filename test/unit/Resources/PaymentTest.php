@@ -1606,7 +1606,7 @@ class PaymentTest extends BaseUnitTest
      */
     public function setMetaDataShouldSetParentResourceAndCreateMetaDataObject()
     {
-        $metadata = (new Metadata())->set('myData', 'myValue');
+        $metadata = (new Metadata())->addMetadata('myData', 'myValue');
 
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();

@@ -47,11 +47,11 @@ class SetMetadataTest extends BasePaymentTest
         $metadata = new Metadata($this->heidelpay);
         $this->assertNull($metadata->getShopType());
         $this->assertNull($metadata->getShopVersion());
-        $this->assertNull($metadata->get('MyCustomData'));
+        $this->assertNull($metadata->getMetadata('MyCustomData'));
 
         $metadata->setShopType('my awesome shop');
         $metadata->setShopVersion('v2.0.0');
-        $metadata->set('MyCustomData', 'my custom information');
+        $metadata->addMetadata('MyCustomData', 'my custom information');
         $this->assertNull($metadata->getId());
 
         $resourceService->create($metadata);
@@ -60,12 +60,12 @@ class SetMetadataTest extends BasePaymentTest
         $fetchedMetadata = (new Metadata($this->heidelpay))->setId($metadata->getId());
         $this->assertNull($fetchedMetadata->getShopType());
         $this->assertNull($fetchedMetadata->getShopVersion());
-        $this->assertNull($fetchedMetadata->get('MyCustomData'));
+        $this->assertNull($fetchedMetadata->getMetadata('MyCustomData'));
 
         $resourceService->fetch($fetchedMetadata);
         $this->assertEquals('my awesome shop', $fetchedMetadata->getShopType());
         $this->assertEquals('v2.0.0', $fetchedMetadata->getShopVersion());
-        $this->assertEquals('my custom information', $fetchedMetadata->get('MyCustomData'));
+        $this->assertEquals('my custom information', $fetchedMetadata->getMetadata('MyCustomData'));
     }
 
     /**
@@ -82,8 +82,8 @@ class SetMetadataTest extends BasePaymentTest
         $metadata = new Metadata();
         $metadata->setShopType('Shopware');
         $metadata->setShopVersion('5.12');
-        $metadata->set('ModuleType', 'Shopware 5');
-        $metadata->set('ModuleVersion', '18.3.12');
+        $metadata->addMetadata('ModuleType', 'Shopware 5');
+        $metadata->addMetadata('ModuleVersion', '18.3.12');
         $this->assertEmpty($metadata->getId());
 
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
@@ -105,8 +105,8 @@ class SetMetadataTest extends BasePaymentTest
         $metadata = new Metadata();
         $metadata->setShopType('Shopware');
         $metadata->setShopVersion('5.12');
-        $metadata->set('ModuleType', 'Shopware 5');
-        $metadata->set('ModuleVersion', '18.3.12');
+        $metadata->addMetadata('ModuleType', 'Shopware 5');
+        $metadata->addMetadata('ModuleVersion', '18.3.12');
         $this->assertEmpty($metadata->getId());
 
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
@@ -124,7 +124,7 @@ class SetMetadataTest extends BasePaymentTest
      */
     public function paymentShouldFetchMetadataResourceOnFetch()
     {
-        $metadata = (new Metadata())->set('key', 'value');
+        $metadata = (new Metadata())->addMetadata('key', 'value');
 
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
