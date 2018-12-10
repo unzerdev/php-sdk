@@ -29,6 +29,6 @@
     <body>
         <h1>Success</h1>
         <p>The payment has been successfully completed.</p>
+        <p><a href=".">start again</a></p>
     </body>
-
 </html>

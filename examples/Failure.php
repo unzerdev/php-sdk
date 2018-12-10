@@ -29,5 +29,6 @@
     <body>
         <h1>Failure</h1>
         <p>There has been an error completing the payment.</p>
+        <p><a href=".">start again</a></p>
     </body>
 </html>
