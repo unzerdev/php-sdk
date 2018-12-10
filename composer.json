@@ -10,25 +10,28 @@
     }
   ],
   "require": {
-    "ext-json": "*",
-    "ext-curl": "*"
+    "php": "^7.0.0|^7.1.0|^7.2.0",
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.5",
     "codacy/coverage": "^1.4",
     "friendsofphp/php-cs-fixer": "^2.0"
   },
+  "suggest": {
+    "ext-curl": "*"
+  },
   "autoload": {
     "psr-4": {
-      "heidelpay\\MgwPhpSdk\\": "src"
+      "heidelpayPHP\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "heidelpay\\MgwPhpSdk\\test\\": "test"
+      "heidelpayPHP\\test\\": "test"
     }
   },
   "support": {
-    "email": "development@heidelpay.com"
+    "email": "support@heidelpay.com"
   }
 }

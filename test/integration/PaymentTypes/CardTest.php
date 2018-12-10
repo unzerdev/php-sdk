@@ -3,38 +3,36 @@
  * This class defines integration tests to verify interface and functionality
  * of the card payment methods e.g. Credit Card and Debit Card.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration/payment_types
+ * @package  heidelpayPHP/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class CardTest extends BasePaymentTest
@@ -48,23 +46,19 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      *
      * @group skip
      */
     public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
     {
-        $this->heidelpay->setKey(self::PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT);
+        $this->heidelpay->setKey(self::PRIVATE_KEY_SAQ_A);
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INSUFFICIENT_PERMISSIONS);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INVALID_KEY);
+        $this->expectExceptionCode('The code seems to be wrong!');
         $card = $this->createCardObject();
-        $this->assertNull($card->getId());
         $this->heidelpay->createPaymentType($card);
-        $this->assertNotNull($card->getId());
     }
 
     /**
@@ -75,10 +69,8 @@ class CardTest extends BasePaymentTest
      * @return BasePaymentType
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function cardShouldBeCreatable(): BasePaymentType
     {
@@ -99,10 +91,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -113,7 +103,7 @@ class CardTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var Authorization $authorization */
-        $authorization = $card->authorize(1.0, Currencies::EURO, self::RETURN_URL);
+        $authorization = $card->authorize(1.0, 'EUR', self::RETURN_URL);
 
         // verify authorization has been created
         $this->assertNotNull($authorization->getId());
@@ -137,10 +127,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -151,7 +139,7 @@ class CardTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var Charge $charge */
-        $charge = $card->charge(1.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $card->charge(1.0, 'EUR', self::RETURN_URL);
 
         // verify charge has been created
         $this->assertNotNull($charge->getId());
@@ -162,7 +150,7 @@ class CardTest extends BasePaymentTest
         $this->assertNotNull($payment->getId());
 
         // verify resources are linked properly
-        $this->assertEquals($charge->expose(), $payment->getChargeById($charge->getId())->expose());
+        $this->assertEquals($charge->expose(), $payment->getCharge($charge->getId())->expose());
         $this->assertSame($card, $payment->getPaymentType());
 
         // verify the payment object has been updated properly
@@ -175,10 +163,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function cardCanBeFetched()
@@ -201,10 +187,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -215,7 +199,7 @@ class CardTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var Authorization $authorization */
-        $authorization = $card->authorize(1.0, Currencies::EURO, self::RETURN_URL);
+        $authorization = $card->authorize(1.0, 'EUR', self::RETURN_URL);
         $payment = $authorization->getPayment();
 
         // pre-check to verify changes due to fullCharge call
@@ -236,10 +220,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -248,7 +230,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL);
 
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -275,10 +257,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -287,7 +267,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $card->authorize(100.0000, Currencies::EURO, self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
@@ -307,10 +287,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws AssertionFailedError
      * @throws \RuntimeException
      */
@@ -319,7 +297,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $card->authorize(100.0000, Currencies::EURO, self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
         $payment = $authorization->getPayment();
 
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -341,10 +319,8 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function authorizationShouldBeFetchable()
@@ -352,7 +328,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $card->authorize(100.0000, Currencies::EURO, self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
         $payment = $authorization->getPayment();
 
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($payment->getId());
@@ -363,10 +339,8 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function fullCancelAfterCharge()
@@ -374,7 +348,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $charge = $card->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $card->charge(100.0, 'EUR', self::RETURN_URL);
         $payment = $charge->getPayment();
 
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
@@ -391,10 +365,8 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function fullCancelOnFullyChargedPayment()
@@ -403,7 +375,7 @@ class CardTest extends BasePaymentTest
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
-        $authorization = $card->authorize(100.0000, Currencies::EURO, self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
         $payment = $authorization->getPayment();
 
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -429,10 +401,8 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function fullCancelOnPartlyPaidAuthWithCanceledCharges()
@@ -441,7 +411,7 @@ class CardTest extends BasePaymentTest
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
-        $authorization = $card->authorize(100.0000, Currencies::EURO, self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
         $payment = $authorization->getPayment();
 
         $payment->charge(10.0);
@@ -467,14 +437,13 @@ class CardTest extends BasePaymentTest
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function cardChargeCanBeCanceled()
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $card->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $card->charge(100.0, 'EUR', self::RETURN_URL);
 
         $cancel = $charge->cancel();
         $this->assertNotNull($cancel);
@@ -489,14 +458,13 @@ class CardTest extends BasePaymentTest
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function cardAuthorizeCanBeCanceled()
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $card->authorize(100.0, Currencies::EURO, self::RETURN_URL);
+        $authorize = $card->authorize(100.0, 'EUR', self::RETURN_URL);
 
         $cancel = $authorize->cancel();
         $this->assertNotNull($cancel);

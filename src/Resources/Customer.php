@@ -2,35 +2,37 @@
 /**
  * This represents the customer resource.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/resources
+ * @package  heidelpayPHP/resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpayPHP\Resources;
 
-use heidelpay\MgwPhpSdk\Constants\Salutations;
+use heidelpayPHP\Constants\Salutations;
+use heidelpayPHP\Resources\EmbeddedResources\Address;
 
 class Customer extends AbstractHeidelpayResource
 {
-    /** @var string */
+    /** @var string $firstname */
     protected $firstname;
 
-    /** @var string */
+    /** @var string $lastname */
     protected $lastname;
 
     /** @var string $salutation */
@@ -39,20 +41,23 @@ class Customer extends AbstractHeidelpayResource
     /** @var string $birthDate */
     protected $birthDate;
 
-    /** @var string */
+    /** @var string $company*/
     protected $company;
 
-    /** @var string */
+    /** @var string $email*/
     protected $email;
 
-    /** @var string */
+    /** @var string $phone*/
     protected $phone;
 
-    /** @var string */
+    /** @var string $mobile*/
     protected $mobile;
 
     /** @var Address $billingAddress */
     protected $billingAddress;
+
+    /** @var Address $shippingAddress */
+    protected $shippingAddress;
 
     /** @var string $customerId */
     protected $customerId;
@@ -68,6 +73,7 @@ class Customer extends AbstractHeidelpayResource
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->billingAddress = new Address();
+        $this->shippingAddress = new Address();
 
         parent::__construct();
     }
@@ -75,9 +81,9 @@ class Customer extends AbstractHeidelpayResource
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFirstname(): string
+    public function getFirstname()
     {
         return $this->firstname;
     }
@@ -94,9 +100,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLastname(): string
+    public function getLastname()
     {
         return $this->lastname;
     }
@@ -127,14 +133,15 @@ class Customer extends AbstractHeidelpayResource
      */
     public function setSalutation($salutation): Customer
     {
-        $this->salutation = $salutation ?: Salutations::UNKNOWN;
+        $allowedSalutations = [Salutations::MR, Salutations::MRS, Salutations::UNKNOWN];
+        $this->salutation = \in_array($salutation, $allowedSalutations, true) ? $salutation : Salutations::UNKNOWN;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBirthday(): string
+    public function getBirthDate()
     {
         return $this->birthDate;
     }
@@ -151,9 +158,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCompany(): string
+    public function getCompany()
     {
         return $this->company;
     }
@@ -170,9 +177,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail()
     {
         return $this->email;
     }
@@ -189,9 +196,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string
+    public function getPhone()
     {
         return $this->phone;
     }
@@ -208,9 +215,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMobile(): string
+    public function getMobile()
     {
         return $this->mobile;
     }
@@ -246,9 +253,28 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return Address
      */
-    public function getCustomerId(): string
+    public function getShippingAddress(): Address
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * @param Address $shippingAddress
+     *
+     * @return Customer
+     */
+    public function setShippingAddress(Address $shippingAddress): Customer
+    {
+        $this->shippingAddress = $shippingAddress;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomerId()
     {
         return $this->customerId;
     }
@@ -264,13 +290,29 @@ class Customer extends AbstractHeidelpayResource
         return $this;
     }
 
+    //</editor-fold>
+
     //<editor-fold desc="Resource IF">
-    public function getResourcePath(): string
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getResourcePath(): string
     {
         return 'customers';
     }
 
     //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getExternalId()
+    {
+        return $this->getCustomerId();
+    }
 
     //</editor-fold>
 }

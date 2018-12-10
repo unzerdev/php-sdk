@@ -3,36 +3,34 @@
  * This class defines integration tests to verify interface and functionality
  * of the payment method Przelewy24.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration/payment_types
+ * @package  heidelpayPHP/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Przelewy24;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class Przelewy24Test extends BasePaymentTest
@@ -46,10 +44,8 @@ class Przelewy24Test extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function przelewy24ShouldBeCreatableAndFetchable(): BasePaymentType
     {
@@ -77,11 +73,10 @@ class Przelewy24Test extends BasePaymentTest
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24)
     {
-        $charge = $przelewy24->charge(100.0, Currencies::POLISH_ZLOTY, self::RETURN_URL);
+        $charge = $przelewy24->charge(100.0, 'PLN', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
 
@@ -99,16 +94,14 @@ class Przelewy24Test extends BasePaymentTest
      * @param Przelewy24 $przelewy24
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24)
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, Currencies::POLISH_ZLOTY, $przelewy24, self::RETURN_URL);
+        $this->heidelpay->authorize(100.0, 'PLN', $przelewy24, self::RETURN_URL);
     }
 
     /**
@@ -121,9 +114,7 @@ class Przelewy24Test extends BasePaymentTest
      * @param string $currencyCode
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function przelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode)
     {
@@ -142,9 +133,9 @@ class Przelewy24Test extends BasePaymentTest
     public function przelewy24CurrencyCodeProvider(): array
     {
         $currencyArray = [
-            Currencies::EURO => [Currencies::EURO],
-            Currencies::UNITED_STATES_DOLLAR => [Currencies::UNITED_STATES_DOLLAR],
-            Currencies::SWISS_FRANC => [Currencies::SWISS_FRANC]
+            'EUR' => ['EUR'],
+            'US Dollar'=> ['USD'],
+            'Swiss Franc' => ['CHF']
         ];
 
         return $currencyArray;

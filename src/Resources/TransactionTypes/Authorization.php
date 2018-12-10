@@ -2,33 +2,32 @@
 /**
  * This represents the authorization transaction.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/transaction_types
+ * @package  heidelpayPHP/transaction_types
  */
-namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
+namespace heidelpayPHP\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Traits\HasCancellations;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Traits\HasCancellations;
 
 class Authorization extends AbstractTransactionType
 {
@@ -74,9 +73,9 @@ class Authorization extends AbstractTransactionType
     //<editor-fold desc="Setters/Getters">
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmount(): float
+    public function getAmount()
     {
         return $this->amount;
     }
@@ -93,9 +92,9 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCurrency(): string
+    public function getCurrency()
     {
         return $this->currency;
     }
@@ -103,18 +102,18 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $currency
      *
-     * @return AbstractHeidelpayResource
+     * @return self
      */
-    public function setCurrency($currency): AbstractHeidelpayResource
+    public function setCurrency($currency): self
     {
         $this->currency = $currency;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getReturnUrl(): string
+    public function getReturnUrl()
     {
         return $this->returnUrl;
     }
@@ -122,18 +121,21 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $returnUrl
      *
-     * @return AbstractHeidelpayResource
+     * @return self
      */
-    public function setReturnUrl($returnUrl): AbstractHeidelpayResource
+    public function setReturnUrl($returnUrl): self
     {
         $this->returnUrl = $returnUrl;
         return $this;
     }
 
     /**
-     * @return string
+     * Returns the IBAN of the account the customer needs to transfer the amount to.
+     * E. g. invoice, prepayment, etc.
+     *
+     * @return string|null
      */
-    public function getIban(): string
+    public function getIban()
     {
         return $this->iban;
     }
@@ -141,18 +143,21 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $iban
      *
-     * @return Authorization
+     * @return self
      */
-    public function setIban(string $iban): Authorization
+    protected function setIban(string $iban): self
     {
         $this->iban = $iban;
         return $this;
     }
 
     /**
-     * @return string
+     * Returns the BIC of the account the customer needs to transfer the amount to.
+     * E. g. invoice, prepayment, etc.
+     *
+     * @return string|null
      */
-    public function getBic(): string
+    public function getBic()
     {
         return $this->bic;
     }
@@ -160,18 +165,21 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $bic
      *
-     * @return Authorization
+     * @return self
      */
-    public function setBic(string $bic): Authorization
+    protected function setBic(string $bic): self
     {
         $this->bic = $bic;
         return $this;
     }
 
     /**
-     * @return string
+     * Returns the holder of the account the customer needs to transfer the amount to.
+     * E. g. invoice, prepayment, etc.
+     *
+     * @return string|null
      */
-    public function getHolder(): string
+    public function getHolder()
     {
         return $this->holder;
     }
@@ -179,18 +187,21 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $holder
      *
-     * @return Authorization
+     * @return self
      */
-    public function setHolder(string $holder): Authorization
+    protected function setHolder(string $holder): self
     {
         $this->holder = $holder;
         return $this;
     }
 
     /**
-     * @return string
+     * Returns the Descriptor the customer needs to use when transferring the amount.
+     * E. g. invoice, prepayment, etc.
+     *
+     * @return string|null
      */
-    public function getDescriptor(): string
+    public function getDescriptor()
     {
         return $this->descriptor;
     }
@@ -198,9 +209,9 @@ class Authorization extends AbstractTransactionType
     /**
      * @param string $descriptor
      *
-     * @return Authorization
+     * @return self
      */
-    public function setDescriptor(string $descriptor): Authorization
+    protected function setDescriptor(string $descriptor): self
     {
         $this->descriptor = $descriptor;
         return $this;
@@ -213,7 +224,7 @@ class Authorization extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath()
+    protected function getResourcePath(): string
     {
         return 'authorize';
     }
@@ -221,7 +232,7 @@ class Authorization extends AbstractTransactionType
     /**
      * {@inheritDoc}
      *
-     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     public function getLinkedResources(): array
     {
@@ -229,12 +240,13 @@ class Authorization extends AbstractTransactionType
         $payment = $this->getPayment();
         $paymentType = $payment ? $payment->getPaymentType() : null;
         if (!$paymentType instanceof BasePaymentType) {
-            throw new HeidelpaySdkException();
+            throw new \RuntimeException('Payment type is missing!');
         }
 
         return [
             'customer'=> $payment->getCustomer(),
-            'type' => $paymentType
+            'type' => $paymentType,
+            'metadata' => $payment->getMetadata()
         ];
     }
 
@@ -249,7 +261,6 @@ class Authorization extends AbstractTransactionType
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function cancel($amount = null): Cancellation
     {
@@ -264,15 +275,14 @@ class Authorization extends AbstractTransactionType
      * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function charge($amount = null): Charge
     {
         $payment = $this->getPayment();
-        if (null === $payment) {
-            throw new HeidelpaySdkException();
+        if (!$payment instanceof Payment) {
+            throw new \RuntimeException('Payment object is missing. Try fetching the object first!');
         }
-        return $this->getHeidelpayObject()->chargeAuthorization($payment->getId(), $amount);
+        return $this->getHeidelpayObject()->chargeAuthorization($payment, $amount);
     }
 }

@@ -3,35 +3,33 @@
  * This class defines integration tests to verify interface and
  * functionality of the payment method sepa direct debit.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration/payment_types
+ * @package  heidelpayPHP/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class SepaDirectDebitTest extends BasePaymentTest
@@ -42,10 +40,8 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -70,10 +66,8 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @return SepaDirectDebit
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function sepaDirectDebitShouldBeCreatable(): SepaDirectDebit
     {
@@ -104,9 +98,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @param SepaDirectDebit $directDebit
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function authorizeShouldThrowException(SepaDirectDebit $directDebit)
@@ -114,7 +106,7 @@ class SepaDirectDebitTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(1.0, Currencies::EURO, $directDebit, self::RETURN_URL);
+        $this->heidelpay->authorize(1.0, 'EUR', $directDebit, self::RETURN_URL);
     }
 
     /**
@@ -127,12 +119,11 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function directDebitShouldBeChargeable(SepaDirectDebit $directDebit): Charge
     {
-        $charge = $directDebit->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $directDebit->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
 
@@ -148,14 +139,13 @@ class SepaDirectDebitTest extends BasePaymentTest
      *
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      * @depends directDebitShouldBeChargeable
      */
     public function directDebitChargeShouldBeRefundable(Charge $charge)
     {
-        $cancelation = $charge->cancel();
-        $this->assertNotNull($cancelation);
-        $this->assertNotNull($cancelation->getId());
+        $cancellation = $charge->cancel();
+        $this->assertNotNull($cancellation);
+        $this->assertNotNull($cancellation->getId());
     }
 }

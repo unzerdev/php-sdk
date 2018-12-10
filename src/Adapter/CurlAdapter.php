@@ -1,143 +1,119 @@
 <?php
 /**
- * By default this adapter will be used for communication however a custom adapter implementing the
- * HttpAdapterInterface can be used.
+ * This is a wrapper for the default http adapter (CURL).
  *
- * @license
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (C) 2018 heidelpay GmbH
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * @copyright Copyright © 2018 Heidelpay GmbH
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @link  http://dev.heidelpay.com/heidelpay-php-payment-api/
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @link http://dev.heidelpay.com/
  *
- * @package  heidelpay/mgw_sdk/adapter
+ * @author Simon Gabriel <development@heidelpay.com>
+ *
+ * @package  heidelpayPHP/adapter
  */
-namespace heidelpay\MgwPhpSdk\Adapter;
-
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+namespace heidelpayPHP\Adapter;
 
 class CurlAdapter implements HttpAdapterInterface
 {
+    private $request;
+
     /**
-     * send post request to payment server
-     *
-     * @param $uri string url of the target system
-     * @param AbstractHeidelpayResource $heidelpayResource
-     * @param string                    $httpMethod
-     *
-     * @return string
+     * CurlAdapter constructor.
      *
      * @throws \RuntimeException
-     * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
-    public function send(
-        $uri = null,
-        AbstractHeidelpayResource $heidelpayResource = null,
-        $httpMethod = HttpAdapterInterface::REQUEST_POST
-    ): string {
+    public function __construct()
+    {
         if (!\extension_loaded('curl')) {
             throw new \RuntimeException('Connection error php-curl not installed');
         }
-
-        if (null === $heidelpayResource) {
-            throw new \RuntimeException('Transfer object is empty');
-        }
-
-        $request = $this->initCurlRequest($uri, $heidelpayResource, $httpMethod);
-
-        $response = curl_exec($request);
-        $info = curl_getinfo($request, CURLINFO_HTTP_CODE);
-        curl_close($request);
-
-        if (Heidelpay::DEBUG_MODE) {
-            echo 'Curl ' . $httpMethod . '-Request: ' . $uri . "\n";
-            echo 'Request: ' . $heidelpayResource->jsonSerialize() . "\n";
-            echo 'Response: ' . $response . "\n\n";
-        }
-
-        $this->handleErrors($info, $response);
-
-        return $response;
     }
 
     /**
-     * Handles error responses by throwing a HeidelpayApiException with the returned messages and error code.
-     * Returns doing nothing if no error occurred.
-     *
-     * @param $info
-     * @param $response
-     *
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * {@inheritDoc}
      */
-    private function handleErrors($info, $response)
+    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET)
     {
-        $responseArray = json_decode($response);
-        if ($info >= 400 || isset($responseArray->errors)) {
-            $merchantMessage = $customerMessage = $code = '';
+        $this->request = curl_init($url);
+        $this->setOption(CURLOPT_HEADER, 0);
+        $this->setOption(CURLOPT_FAILONERROR, false);
+        $this->setOption(CURLOPT_TIMEOUT, 60);
+        $this->setOption(CURLOPT_CONNECTTIMEOUT, 60);
+        $this->setOption(CURLOPT_HTTP200ALIASES, (array)400);
+        $this->setOption(CURLOPT_CUSTOMREQUEST, $httpMethod);
+        $this->setOption(CURLOPT_RETURNTRANSFER, 1);
+        $this->setOption(CURLOPT_SSL_VERIFYPEER, 1);
+        $this->setOption(CURLOPT_SSL_VERIFYHOST, 2);
+        $this->setOption(CURLOPT_SSLVERSION, 6);       // CURL_SSLVERSION_TLSv1_2
 
-            if (isset($responseArray->errors[0])) {
-                $errors = $responseArray->errors[0];
-                $merchantMessage = $errors->merchantMessage ?? '';
-                $customerMessage = $errors->customerMessage ?? '';
-                $code = $errors->code ?? '';
-            }
-
-            throw new HeidelpayApiException($merchantMessage, $customerMessage, $code);
+        if (HttpAdapterInterface::REQUEST_GET !== $httpMethod) {
+            $this->setOption(CURLOPT_POSTFIELDS, $payload);
         }
     }
 
     /**
-     * Creates and returns the curl request
-     *
-     * @param $uri
-     * @param AbstractHeidelpayResource $heidelpayResource
-     * @param $httpMethod
-     *
-     * @return mixed
-     *
-     * @throws HeidelpaySdkException
+     * {@inheritDoc}
      */
-    private function initCurlRequest($uri, AbstractHeidelpayResource $heidelpayResource, $httpMethod)
+    public function execute()
     {
-        $request = curl_init($uri);
-        curl_setopt($request, CURLOPT_HEADER, 0);
-        curl_setopt($request, CURLOPT_FAILONERROR, false);
-        curl_setopt($request, CURLOPT_TIMEOUT, 60);
-        curl_setopt($request, CURLOPT_CONNECTTIMEOUT, 60);
-        curl_setopt($request, CURLOPT_HTTP200ALIASES, (array)400);
-        curl_setopt($request, CURLOPT_CUSTOMREQUEST, $httpMethod);
-        curl_setopt($request, CURLOPT_POSTFIELDS, $heidelpayResource->jsonSerialize());
-        curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($request, CURLOPT_SSL_VERIFYPEER, 1);
-        curl_setopt($request, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($request, CURLOPT_SSLVERSION, 6);       // CURL_SSLVERSION_TLSv1_2
-        curl_setopt($request, CURLOPT_USERAGENT, 'HeidelpayPHP');
-        curl_setopt($request, CURLOPT_HTTPHEADER, array(
-            'Authorization: ' . 'Basic ' . base64_encode($heidelpayResource->getHeidelpayObject()->getKey() . ':'), // basic auth with key as user and empty password
-            'Content-Type: application/json',
-            'SDK-VERSION: ' . Heidelpay::SDK_VERSION
-        ));
-        return $request;
+        return curl_exec($this->request);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResponseCode(): string
+    {
+        return curl_getinfo($this->request, CURLINFO_HTTP_CODE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function close()
+    {
+        curl_close($this->request);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setHeaders(array $headers)
+    {
+        array_walk($headers, function (&$value, $key) {
+            $value = $key . ': ' . $value;
+        });
+
+        $this->setOption(CURLOPT_HTTPHEADER, $headers);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->setOption(CURLOPT_USERAGENT, 'HeidelpayPHP');
+    }
+
+    /**
+     * Sets curl option.
+     *
+     * @param $name
+     * @param $value
+     */
+    private function setOption($name, $value)
+    {
+        curl_setopt($this->request, $name, $value);
     }
 }

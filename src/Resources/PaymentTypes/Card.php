@@ -2,29 +2,31 @@
 /**
  * This represents the card payment type which supports credit card as well as debit card payments.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/payment_types
+ * @package  heidelpayPHP/payment_types
  */
-namespace heidelpay\MgwPhpSdk\Resources\PaymentTypes;
+namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Traits\CanAuthorize;
-use heidelpay\MgwPhpSdk\Traits\CanDirectCharge;
+use heidelpayPHP\Traits\CanAuthorize;
+use heidelpayPHP\Traits\CanDirectCharge;
+use heidelpayPHP\Validators\ExpiryDateValidator;
 
 class Card extends BasePaymentType
 {
@@ -36,6 +38,8 @@ class Card extends BasePaymentType
      *
      * @param string $number
      * @param string $expiryDate
+     *
+     * @throws \RuntimeException
      */
     public function __construct($number, $expiryDate)
     {
@@ -61,6 +65,8 @@ class Card extends BasePaymentType
     /** @var string $brand */
     private $brand = '';
 
+    //</editor-fold>
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -83,9 +89,9 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpiryDate(): string
+    public function getExpiryDate()
     {
         return $this->expiryDate;
     }
@@ -94,20 +100,29 @@ class Card extends BasePaymentType
      * @param string $expiryDate
      *
      * @return Card
+     *
+     * @throws \RuntimeException
      */
     public function setExpiryDate($expiryDate): Card
     {
-        $expiryDateParts = explode('/', $expiryDate);
-        if (\count($expiryDateParts) > 1) {
-            $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
+        // Null value is allowed to be able to fetch a card object with nothing but the id set.
+        if ($expiryDate === null) {
+            return $this;
         }
+
+        if (!ExpiryDateValidator::validate($expiryDate)) {
+            throw new \RuntimeException('Invalid expiry date!');
+        }
+        $expiryDateParts = explode('/', $expiryDate);
+        $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
+
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCvc(): string
+    public function getCvc()
     {
         return $this->cvc;
     }
@@ -124,9 +139,9 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getHolder(): string
+    public function getHolder()
     {
         return $this->holder;
     }
@@ -164,6 +179,5 @@ class Card extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
     //</editor-fold>
 }

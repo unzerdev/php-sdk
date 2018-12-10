@@ -2,28 +2,27 @@
 /**
  * This file contains definitions of the payment states.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/constants
+ * @package  heidelpayPHP/constants
  */
-namespace heidelpay\MgwPhpSdk\Constants;
-
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
+namespace heidelpayPHP\Constants;
 
 class PaymentState
 {
@@ -38,7 +37,7 @@ class PaymentState
     const STATE_NAME_COMPLETED = 'completed';
     const STATE_NAME_CANCELED = 'canceled';
     const STATE_NAME_PARTLY = 'partly';
-    const STATE_NAME_PAYMENT_REVIEW = 'review';
+    const STATE_NAME_PAYMENT_REVIEW = 'payment review';
     const STATE_NAME_CHARGEBACK = 'chargeback';
 
     /**
@@ -48,7 +47,7 @@ class PaymentState
      *
      * @return string The name of the code.
      *
-     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown when the $stateCode is unknown.
+     * @throws \RuntimeException A \RuntimeException is thrown when the $stateCode is unknown.
      */
     public static function mapStateCodeToName($stateCode)
     {
@@ -72,7 +71,7 @@ class PaymentState
                 return self::STATE_NAME_CHARGEBACK;
                 break;
             default:
-                throw new HeidelpaySdkException('Unknown payment state #' . $stateCode);
+                throw new \RuntimeException('Unknown payment state #' . $stateCode);
         }
     }
 
@@ -83,7 +82,7 @@ class PaymentState
      *
      * @return int The code of the payment state.
      *
-     * @throws HeidelpaySdkException A HeidelpaySdkException is thrown when the $stateName is unknown.
+     * @throws \RuntimeException A \RuntimeException is thrown when the $stateName is unknown.
      */
     public static function mapStateNameToCode($stateName)
     {
@@ -107,7 +106,7 @@ class PaymentState
                 return self::STATE_CHARGEBACK;
                 break;
             default:
-                throw new HeidelpaySdkException('Unknown payment state ' . $stateName);
+                throw new \RuntimeException('Unknown payment state ' . $stateName);
         }
     }
 }

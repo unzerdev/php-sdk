@@ -1,37 +1,37 @@
 <?php
 /**
  * This class defines integration tests to verify interface and
- * functionality of the payment method sepa direct debit.
+ * functionality of the payment method sofort.
+ *
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration/payment_types
+ * @package  heidelpayPHP/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class SofortTest extends BasePaymentTest
@@ -43,11 +43,10 @@ class SofortTest extends BasePaymentTest
      *
      * @return Sofort
      *
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function sofortShouldBeCreatableAndFetchable(): Sofort
     {
@@ -76,12 +75,11 @@ class SofortTest extends BasePaymentTest
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @depends sofortShouldBeCreatableAndFetchable
      */
-    public function sofortShouldBeAbleToCharge(Sofort $sofort)
+    public function sofortShouldBeAbleToCharge(Sofort $sofort): Charge
     {
-        $charge = $sofort->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $charge = $sofort->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
 
@@ -97,7 +95,6 @@ class SofortTest extends BasePaymentTest
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @depends sofortShouldBeCreatableAndFetchable
      */
     public function sofortShouldNotBeAuthorizable(Sofort $sofort)
@@ -105,6 +102,6 @@ class SofortTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, Currencies::EURO, $sofort, self::RETURN_URL);
+        $this->heidelpay->authorize(100.0, 'EUR', $sofort, self::RETURN_URL);
     }
 }

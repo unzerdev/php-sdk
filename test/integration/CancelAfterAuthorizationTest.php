@@ -2,35 +2,33 @@
 /**
  * This class defines integration tests to verify cancellation of authorizations.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration
+ * @package  heidelpayPHP/test/integration
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class CancelAfterAuthorizationTest extends BasePaymentTest
@@ -41,22 +39,20 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
     public function fullCancelOnAuthorization()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, Currencies::EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL);
 
         /** @var Authorization $fetchedAuthorization */
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
         $payment = $fetchedAuthorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
-        $this->assertEquals(Currencies::EURO, $payment->getCurrency());
+        $this->assertEquals('EUR', $payment->getCurrency());
         $this->assertTrue($payment->isPending());
 
         $cancellation = $fetchedAuthorization->cancel();
@@ -72,16 +68,14 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function partCancelOnPayment()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, Currencies::EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL);
         $payment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Cancellation $cancel */
@@ -99,16 +93,14 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function partCancelOnAuthorize()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, Currencies::EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL);
 
         /** @var Authorization $fetchedAuthorization */
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
@@ -129,16 +121,14 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function anAuthorizationsFullReversalShallBeFetchable()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, Currencies::EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
         $this->assertTrue($payment->isPending());
@@ -174,16 +164,14 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function anAuthorizationsReversalsShouldBeFetchable()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, Currencies::EURO, $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
         $this->assertTrue($payment->isPending());
@@ -214,53 +202,4 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertNotNull($secondCancelFetched);
         $this->assertEquals($secondCancel->expose(), $secondCancelFetched->expose());
     }
-
-    // todo:
-//    /**
-//     * Verify a full cancel can be performed on a partly charged card authorization.
-//     *
-//     * @test
-//     */
-//    public function fullCancelOnPartlyChargedAuthorization()
-//    {
-//        $card = $this->heidelpay->createPaymentType($this->createCard());
-//        $authorization = $this->heidelpay->authorize(100.0000, Currency::EURO, $card, self::RETURN_URL);
-//        $payment = $this->heidelpay->fetchPaymentById($authorization->getPayment()->getId());
-//
-//        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
-//        $this->assertTrue($payment->isPending());
-//
-//        $payment->charge(10.0);
-//        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
-//        $this->assertTrue($payment->isPartlyPaid());
-//
-//        $cancellation = $authorization->cancel();
-//        $this->assertNotEmpty($cancellation);
-//        $this->assertAmounts($payment, 0.0, 10.0, 10.0, 0.0);
-//        $this->assertTrue($payment->isCompleted());
-//    }
-
-//    /**
-//     * Verify an exception is thrown when trying to charge an already fully charged authorization.
-//     *
-//     * @test
-//     */
-//    public function fullCancelOnFullyChargedAuthorizationThrowsException()
-//    {
-//        /** @var Card $card */
-//        $card = $this->createCard();
-//        $card = $this->heidelpay->createPaymentType($card);
-//        $authorization = $card->authorize(100.0, Currency::EURO, self::RETURN_URL);
-//        $payment = $authorization->getPayment();
-//        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
-//        $this->assertTrue($payment->isPending());
-//
-//        $payment->charge(100.0);
-//        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
-//        $this->assertTrue($payment->isCompleted());
-//
-//        $this->expectException(HeidelpayApiException::class);
-//        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ALREADY_CHARGED);
-//        $authorization->cancel();
-//    }
 }

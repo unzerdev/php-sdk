@@ -2,38 +2,35 @@
 /**
  * This class is the base class for all integration tests of this SDK.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration
+ * @package  heidelpayPHP/test/integration
  */
-namespace heidelpay\MgwPhpSdk\test;
+namespace heidelpayPHP\test;
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\Fixtures\CustomerFixtureTrait;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 class BasePaymentTest extends TestCase
 {
@@ -43,17 +40,25 @@ class BasePaymentTest extends TestCase
     protected $heidelpay;
 
     const RETURN_URL = 'http://dev.heidelpay.com';
-    const PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
-    const PRIVATE_KEY_NOT_PCI_DDS_COMPLIANT = 's-priv-2a107CYZMp3UbyVPAuqWoxQHi9nFyeiW'; // todo replace
+
+    // SAQ-D certified merchants are allowed to handle and store CreditCard data,
+    // thus can create a CreditCard via this SDK.
+    // If the merchant is not certified to handle the CreditCard data SAQ-A applies
+    // in which case the merchant has to embed our iFrame via JS (UIComponents).
+    const PRIVATE_KEY_SAQ_D= 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
+    const PUBLIC_KEY_SAQ_D = 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa';
+    const PRIVATE_KEY_SAQ_A = 's-priv-2a10an6aJK0Jg7sMdpu9gK7ih8pCccze';
+    const PUBLIC_KEY_SAQ_A = 's-pub-2a10nxkuA4lC7bIRtz2hKcFGeHhlkr2e';
 
     /**
      * {@inheritDoc}
      *
-     * @throws HeidelpaySdkException
+     * @throws \RuntimeException
      */
     protected function setUp()
     {
-        $this->heidelpay = new Heidelpay(self::PRIVATE_KEY, SupportedLocales::GERMAN_GERMAN);
+        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D, 'de_DE'))
+            ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
     }
 
     //<editor-fold desc="Custom asserts">
@@ -103,6 +108,8 @@ class BasePaymentTest extends TestCase
      * Creates a Card object for tests.
      *
      * @return Card
+     *
+     * @throws \RuntimeException
      */
     protected function createCardObject(): Card
     {
@@ -116,15 +123,14 @@ class BasePaymentTest extends TestCase
      *
      * @return Authorization
      *
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
      */
     public function createAuthorization(): Authorization
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
-        $authorization = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, null, $orderId);
+        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId);
         return $authorization;
     }
 
@@ -133,35 +139,18 @@ class BasePaymentTest extends TestCase
      *
      * @return Charge
      *
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
      */
     public function createCharge(): Charge
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0, Currencies::EURO, $card, self::RETURN_URL);
-        return $charge;
+        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
     }
 
     //</editor-fold>
 
     //<editor-fold desc="DataProviders">
-
-    /**
-     * @return array
-     *
-     * @throws \ReflectionException
-     */
-    public function currencyCodeProvider(): array
-    {
-        $currencyReflection = new ReflectionClass(Currencies::class);
-        $currencies         = $currencyReflection->getConstants();
-
-        $keys          = array_keys($currencies);
-        $values        = array_chunk($currencies, 1);
-        return array_combine($keys, $values);
-    }
 
     /**
      * Provides valid keys.

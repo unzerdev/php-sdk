@@ -2,37 +2,35 @@
 /**
  * This class defines integration tests to verify interface and functionality of the payment method prepayment.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/tests/integration/payment_types
+ * @package  heidelpayPHP/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Prepayment;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\PaymentTypes\Prepayment;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class PrepaymentTest extends BasePaymentTest
@@ -44,10 +42,8 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      * @test
      */
     public function prepaymentShouldBeCreatableAndFetchable(): AbstractHeidelpayResource
@@ -77,11 +73,10 @@ class PrepaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function prepaymentTypeShouldBeAuthorizable(Prepayment $prepayment): Authorization
     {
-        $authorization = $prepayment->authorize(100.0, Currencies::EURO, self::RETURN_URL);
+        $authorization = $prepayment->authorize(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($authorization);
         $this->assertNotNull($authorization->getId());
         $this->assertNotEmpty($authorization->getIban());
@@ -102,16 +97,14 @@ class PrepaymentTest extends BasePaymentTest
      * @param Prepayment $prepayment
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function prepaymentTypeShouldNotBeChargeable(Prepayment $prepayment)
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
 
-        $prepayment->charge(100.0, Currencies::EURO, self::RETURN_URL);
+        $prepayment->charge(100.0, 'EUR', self::RETURN_URL);
     }
 
     /**
@@ -124,9 +117,7 @@ class PrepaymentTest extends BasePaymentTest
      * @param Authorization $authorization
      *
      * @throws HeidelpayApiException
-     * @throws Exception
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function prepaymentTypeShouldNotBeShippable(Authorization $authorization)
     {
@@ -148,11 +139,10 @@ class PrepaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws ExpectationFailedException
      * @throws \RuntimeException
-     * @throws HeidelpaySdkException
      */
     public function prepaymentAuthorizeCanBeCanceled(Prepayment $prepayment)
     {
-        $authorization = $prepayment->authorize(100.0, Currencies::EURO, self::RETURN_URL);
+        $authorization = $prepayment->authorize(100.0, 'EUR', self::RETURN_URL);
         $cancellation = $authorization->cancel();
         $this->assertNotNull($cancellation);
         $this->assertNotNull($cancellation->getId());

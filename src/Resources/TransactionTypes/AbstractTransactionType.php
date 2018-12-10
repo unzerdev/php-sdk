@@ -2,33 +2,33 @@
 /**
  * This is the base class for all transaction types.
  *
+ * Copyright (C) 2018 heidelpay GmbH
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpay/mgw_sdk/transaction_types
+ * @package  heidelpayPHP/transaction_types
  */
-namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
+namespace heidelpayPHP\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpaySdkException;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Traits\HasOrderId;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Traits\HasOrderId;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {
@@ -38,7 +38,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /** @var Payment $payment */
     private $payment;
 
-    /** @var string $date */
+    /** @var \DateTime $date */
     private $date;
 
     /** @var string $uniqueId */
@@ -46,9 +46,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     /** @var string $shortId */
     private $shortId;
-
-    /** @var string $url */
-    private $url;
 
     //</editor-fold>
 
@@ -74,6 +71,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     public function setPayment($payment): self
     {
         $this->payment = $payment;
+        $this->setParentResource($payment);
         return $this;
     }
 
@@ -94,29 +92,34 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /**
      * Return the redirect url stored in the payment object.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRedirectUrl(): string
+    public function getRedirectUrl()
     {
         return $this->payment->getRedirectUrl();
     }
 
     /**
-     * @return string
+     * This returns the date of the Transaction as string.
+     *
+     * @return string|null
      */
-    public function getDate(): string
+    public function getDate()
     {
-        return $this->date;
+        $date = $this->date;
+        return $date ? $date->format('Y-m-d h:i:s') : null;
     }
 
     /**
      * @param string $date
      *
      * @return $this
+     *
+     * @throws \Exception
      */
     public function setDate(string $date): self
     {
-        $this->date = $date;
+        $this->date = new \DateTime($date);
         return $this;
     }
 
@@ -133,7 +136,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      *
      * @return $this
      */
-    public function setUniqueId(string $uniqueId): self
+    protected function setUniqueId(string $uniqueId): self
     {
         $this->uniqueId = $uniqueId;
         return $this;
@@ -152,28 +155,9 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      *
      * @return AbstractTransactionType
      */
-    public function setShortId(string $shortId): AbstractTransactionType
+    protected function setShortId(string $shortId): AbstractTransactionType
     {
         $this->shortId = $shortId;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return AbstractTransactionType
-     */
-    public function setUrl(string $url): AbstractTransactionType
-    {
-        $this->url = $url;
         return $this;
     }
 
@@ -185,7 +169,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * {@inheritDoc}
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      * @throws \RuntimeException
      */
     public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
@@ -203,7 +186,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
-            $this->updatePayment();
+            $this->fetchPayment();
         }
     }
 
@@ -215,15 +198,12 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     * @throws HeidelpaySdkException
      */
-    private function updatePayment()
+    public function fetchPayment()
     {
-        if (!$this instanceof Payment) {
-            $payment = $this->getPayment();
-            if ($payment instanceof AbstractHeidelpayResource) {
-                $this->fetchResource($payment);
-            }
+        $payment = $this->getPayment();
+        if ($payment instanceof AbstractHeidelpayResource) {
+            $this->fetchResource($payment);
         }
     }
 }
