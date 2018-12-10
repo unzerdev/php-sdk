@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpayPHP\Resources;
 
 class Keypair extends AbstractHeidelpayResource
 {

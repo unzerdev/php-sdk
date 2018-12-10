@@ -22,22 +22,22 @@
  *
  * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpayPHP\Resources;
 
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\IdStrings;
-use heidelpay\MgwPhpSdk\Constants\TransactionTypes;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\EmbeddedResources\Amount;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
-use heidelpay\MgwPhpSdk\Traits\HasOrderId;
-use heidelpay\MgwPhpSdk\Traits\HasPaymentState;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Constants\IdStrings;
+use heidelpayPHP\Constants\TransactionTypes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\EmbeddedResources\Amount;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Traits\HasOrderId;
+use heidelpayPHP\Traits\HasPaymentState;
 
 class Payment extends AbstractHeidelpayResource
 {

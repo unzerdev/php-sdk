@@ -22,11 +22,11 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\integration;
+namespace heidelpayPHP\test\integration;
 
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Metadata;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -76,10 +76,10 @@ class MetadataTest extends BasePaymentTest
     public function metaDataShouldAllowForCustomDataToBeSet()
     {
         $metaData = new Metadata();
-        $metaData->set('myCustomData', 'Wow I can add custom information');
-        $this->assertEquals('Wow I can add custom information', $metaData->get('myCustomData'));
+        $metaData->addMetadata('myCustomData', 'Wow I can add custom information');
+        $this->assertEquals('Wow I can add custom information', $metaData->getMetadata('myCustomData'));
 
-        $this->assertNull($metaData->get('myCustomDataNo2'));
+        $this->assertNull($metaData->getMetadata('myCustomDataNo2'));
     }
 
     /**
@@ -93,15 +93,15 @@ class MetadataTest extends BasePaymentTest
     public function metadataShouldNotAllowForMagicAccessToSdkAndShopData()
     {
         $metaData = new Metadata();
-        $metaData->set('sdkType', 'sdkType');
-        $metaData->set('sdkVersion', 'sdkVersion');
-        $metaData->set('shopType', 'myShopType');
-        $metaData->set('shopVersion', 'myShopVersion');
+        $metaData->addMetadata('sdkType', 'sdkType');
+        $metaData->addMetadata('sdkVersion', 'sdkVersion');
+        $metaData->addMetadata('shopType', 'myShopType');
+        $metaData->addMetadata('shopVersion', 'myShopVersion');
 
         $this->assertNotEquals('sdkType', $metaData->getSdkType());
         $this->assertNotEquals('sdkVersion', $metaData->getSdkVersion());
-        $this->assertNotEquals('shopType', $metaData->get('shopType'));
-        $this->assertNotEquals('shopVersion', $metaData->get('sdkVersion'));
+        $this->assertNotEquals('shopType', $metaData->getMetadata('shopType'));
+        $this->assertNotEquals('shopVersion', $metaData->getMetadata('sdkVersion'));
 
         $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
         $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
@@ -125,8 +125,8 @@ class MetadataTest extends BasePaymentTest
         $this->assertEquals(Heidelpay::SDK_VERSION, $metaDataArray['sdkVersion']);
         $this->assertEquals(Heidelpay::SDK_TYPE, $metaDataArray['sdkType']);
 
-        $metaData->set('myData', 'This should be my Data');
-        $metaData->set('additionalData', 'some information');
+        $metaData->addMetadata('myData', 'This should be my Data');
+        $metaData->addMetadata('additionalData', 'some information');
         $metaData->setShopType('my own shop');
         $metaData->setShopVersion('1.0.0.0-beta3');
 
@@ -151,8 +151,8 @@ class MetadataTest extends BasePaymentTest
     public function handleResponseShouldUpdateMetadata()
     {
         $metaData = new Metadata();
-        $metaData->set('myData', 'This should be my Data');
-        $metaData->set('additionalData', 'some information');
+        $metaData->addMetadata('myData', 'This should be my Data');
+        $metaData->addMetadata('additionalData', 'some information');
         $metaData->setShopType('my own shop');
         $metaData->setShopVersion('1.0.0.0-beta3');
 
@@ -161,9 +161,9 @@ class MetadataTest extends BasePaymentTest
         $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
         $this->assertEquals('my own shop', $metaData->getShopType());
         $this->assertEquals('1.0.0.0-beta3', $metaData->getShopVersion());
-        $this->assertEquals('This should be my Data', $metaData->get('myData'));
-        $this->assertEquals('some information', $metaData->get('additionalData'));
-        $this->assertNull($metaData->get('extraData'));
+        $this->assertEquals('This should be my Data', $metaData->getMetadata('myData'));
+        $this->assertEquals('some information', $metaData->getMetadata('additionalData'));
+        $this->assertNull($metaData->getMetadata('extraData'));
 
         $response = new \stdClass();
         $response->id = 'newId';
@@ -181,8 +181,8 @@ class MetadataTest extends BasePaymentTest
         $this->assertEquals('newSdkVersion', $metaData->getSdkVersion());
         $this->assertEquals('my new shop', $metaData->getShopType());
         $this->assertEquals('1.0.0.0-beta4', $metaData->getShopVersion());
-        $this->assertEquals('This should be my new Data', $metaData->get('myData'));
-        $this->assertEquals('some new information', $metaData->get('additionalData'));
-        $this->assertEquals('This is brand new information', $metaData->get('extraData'));
+        $this->assertEquals('This should be my new Data', $metaData->getMetadata('myData'));
+        $this->assertEquals('some new information', $metaData->getMetadata('additionalData'));
+        $this->assertEquals('This is brand new information', $metaData->getMetadata('extraData'));
     }
 }

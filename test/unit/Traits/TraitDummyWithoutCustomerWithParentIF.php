@@ -23,12 +23,12 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Traits;
+namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\MgwPhpSdk\Traits\CanAuthorize;
-use heidelpay\MgwPhpSdk\Traits\CanDirectCharge;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\HeidelpayParentInterface;
+use heidelpayPHP\Traits\CanAuthorize;
+use heidelpayPHP\Traits\CanDirectCharge;
 
 class TraitDummyWithoutCustomerWithParentIF implements HeidelpayParentInterface
 {

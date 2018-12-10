@@ -22,14 +22,14 @@
  *
  * @package  heidelpay/mgw_sdk/services
  */
-namespace heidelpay\MgwPhpSdk\Services;
+namespace heidelpayPHP\Services;
 
-use heidelpay\MgwPhpSdk\Adapter\CurlAdapter;
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Adapter\CurlAdapter;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\DebugHandlerInterface;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
 
 class HttpService
 {
@@ -130,7 +130,7 @@ class HttpService
      * @param string      $responseCode
      * @param string|null $response
      *
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
      */
     private function handleErrors($responseCode, $response)
     {

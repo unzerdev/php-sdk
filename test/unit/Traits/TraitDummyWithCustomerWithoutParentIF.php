@@ -23,10 +23,10 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Traits;
+namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpay\MgwPhpSdk\Traits\CanAuthorizeWithCustomer;
-use heidelpay\MgwPhpSdk\Traits\CanDirectChargeWithCustomer;
+use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
+use heidelpayPHP\Traits\CanDirectChargeWithCustomer;
 
 class TraitDummyWithCustomerWithoutParentIF
 {

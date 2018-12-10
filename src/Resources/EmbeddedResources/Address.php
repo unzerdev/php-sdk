@@ -22,9 +22,9 @@
  *
  * @package  heidelpay/mgw_sdk/resources/embedded_resources
  */
-namespace heidelpay\MgwPhpSdk\Resources\EmbeddedResources;
+namespace heidelpayPHP\Resources\EmbeddedResources;
 
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
 
 class Address extends AbstractHeidelpayResource
 {

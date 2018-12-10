@@ -23,23 +23,21 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit;
+namespace heidelpayPHP\test\unit;
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\Metadata;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Sofort;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Services\HttpService;
-use heidelpay\MgwPhpSdk\Services\PaymentService;
-use heidelpay\MgwPhpSdk\Services\ResourceService;
-use heidelpay\MgwPhpSdk\test\BaseUnitTest;
-use heidelpay\MgwPhpSdk\test\unit\Services\DummyDebugHandler;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Services\HttpService;
+use heidelpayPHP\Services\PaymentService;
+use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -62,13 +60,13 @@ class HeidelpayTest extends BaseUnitTest
         $this->assertInstanceOf(PaymentService::class, $heidelpay->getPaymentService());
         $this->assertSame($heidelpay, $heidelpay->getPaymentService()->getHeidelpay());
         $this->assertEquals('s-priv-1234', $heidelpay->getKey());
-        $this->assertEquals(SupportedLocales::USA_ENGLISH, $heidelpay->getLocale());
+        $this->assertEquals('en_US', $heidelpay->getLocale());
 
-        $heidelpaySwiss = new Heidelpay('s-priv-1234', SupportedLocales::SWISS_GERMAN);
-        $this->assertEquals(SupportedLocales::SWISS_GERMAN, $heidelpaySwiss->getLocale());
+        $heidelpaySwiss = new Heidelpay('s-priv-1234', 'de_CH');
+        $this->assertEquals('de_CH', $heidelpaySwiss->getLocale());
 
-        $heidelpayGerman = new Heidelpay('s-priv-1234', SupportedLocales::GERMAN_GERMAN);
-        $this->assertEquals(SupportedLocales::GERMAN_GERMAN, $heidelpayGerman->getLocale());
+        $heidelpayGerman = new Heidelpay('s-priv-1234', 'de_DE');
+        $this->assertEquals('de_DE', $heidelpayGerman->getLocale());
     }
 
     /**
@@ -223,6 +221,7 @@ class HeidelpayTest extends BaseUnitTest
             'fetchPayment'                 => ['fetchPayment', [$payment], 'fetchPayment', [$payment]],
             'fetchPaymentStr'              => ['fetchPayment', [$paymentId], 'fetchPayment', [$paymentId]],
             'fetchKeypair'                 => ['fetchKeypair', [], 'fetchKeypair', []],
+            'createMetadata'               => ['createMetadata', [$metadata], 'createMetadata', [$metadata]],
             'fetchMetadata'                => ['fetchMetadata', [$metadata], 'fetchMetadata', [$metadata]],
             'fetchMetadataStr'             => ['fetchMetadata', [$metadataId], 'fetchMetadata', [$metadataId]],
             'createPaymentType'            => ['createPaymentType', [$sofort], 'createPaymentType', [$sofort]],
@@ -311,51 +310,51 @@ class HeidelpayTest extends BaseUnitTest
         return [
             'authorize'                       => [
                 'authorize',
-                [1.234, Currencies::AFGHAN_AFGHANI, $sofort, $url, $customer, $orderId, $metadata],
+                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata],
                 'authorize',
-                [1.234, Currencies::AFGHAN_AFGHANI, $sofort, $url, $customer, $orderId, $metadata]
+                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]
             ],
             'authorizeAlt'                    => [
                 'authorize',
-                [234.1, Currencies::ALGERIAN_DINAR, $sofort, $url],
+                [234.1, 'DZD', $sofort, $url],
                 'authorize',
-                [234.1, Currencies::ALGERIAN_DINAR, $sofort, $url]
+                [234.1, 'DZD', $sofort, $url]
             ],
             'authorizeStr'                    => [
                 'authorize',
-                [34.12, Currencies::DANISH_KRONE, $paymentTypeId, $url, $customerId, $orderId],
+                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId],
                 'authorize',
-                [34.12, Currencies::DANISH_KRONE, $paymentTypeId, $url, $customerId, $orderId]
+                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]
             ],
             'authorizeWithPayment'            => [
                 'authorizeWithPayment',
-                [1.234, Currencies::AFGHAN_AFGHANI, $payment, $url, $customer, $orderId, $metadata],
+                [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata],
                 'authorizeWithPayment',
-                [1.234, Currencies::AFGHAN_AFGHANI, $payment, $url, $customer, $orderId, $metadata]
+                [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata]
             ],
             'authorizeWithPaymentStr'         => [
                 'authorizeWithPayment',
-                [34.12, Currencies::DANISH_KRONE, $payment, $url, $customerId, $orderId],
+                [34.12, 'DKK', $payment, $url, $customerId, $orderId],
                 'authorizeWithPayment',
-                [34.12, Currencies::DANISH_KRONE, $payment, $url, $customerId, $orderId]
+                [34.12, 'DKK', $payment, $url, $customerId, $orderId]
             ],
             'charge'                          => [
                 'charge',
-                [1.234, Currencies::AFGHAN_AFGHANI, $sofort, $url, $customer, $orderId, $metadata],
+                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata],
                 'charge',
-                [1.234, Currencies::AFGHAN_AFGHANI, $sofort, $url, $customer, $orderId, $metadata]
+                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]
             ],
             'chargeAlt'                       => [
                 'charge',
-                [234.1, Currencies::ALGERIAN_DINAR, $sofort, $url],
+                [234.1, 'DZD', $sofort, $url],
                 'charge',
-                [234.1, Currencies::ALGERIAN_DINAR, $sofort, $url]
+                [234.1, 'DZD', $sofort, $url]
             ],
             'chargeStr'                       => [
                 'charge',
-                [34.12, Currencies::DANISH_KRONE, $paymentTypeId, $url, $customerId, $orderId],
+                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId],
                 'charge',
-                [34.12, Currencies::DANISH_KRONE, $paymentTypeId, $url, $customerId, $orderId]
+                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]
             ],
             'chargeAuthorization'             => [
                 'chargeAuthorization',
@@ -377,9 +376,9 @@ class HeidelpayTest extends BaseUnitTest
             ],
             'chargePayment'                   => [
                 'chargePayment',
-                [$payment, 1.234, Currencies::ALBANIAN_LEK],
+                [$payment, 1.234, 'ALL'],
                 'chargePayment',
-                [$payment, 1.234, Currencies::ALBANIAN_LEK]
+                [$payment, 1.234, 'ALL']
             ],
             'chargePaymentAlt'                => [
                 'chargePayment',

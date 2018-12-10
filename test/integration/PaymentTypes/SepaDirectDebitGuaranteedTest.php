@@ -23,13 +23,12 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\ApiResponseCodes;
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class SepaDirectDebitGuaranteedTest extends BasePaymentTest
@@ -112,7 +111,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(1.0, Currencies::EURO, $directDebitGuaranteed, self::RETURN_URL);
+        $this->heidelpay->authorize(1.0, 'EUR', $directDebitGuaranteed, self::RETURN_URL);
     }
 
     /**
@@ -132,7 +131,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
 
         $charge = $directDebitGuaranteed->charge(
             100.0,
-            Currencies::EURO,
+            'EUR',
             self::RETURN_URL,
             $this->getMaximumCustomerInclShippingAddress()
         );

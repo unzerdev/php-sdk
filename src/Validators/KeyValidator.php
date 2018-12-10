@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/validators
  */
-namespace heidelpay\MgwPhpSdk\Validators;
+namespace heidelpayPHP\Validators;
 
 class KeyValidator
 {

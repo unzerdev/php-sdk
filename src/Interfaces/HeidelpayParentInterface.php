@@ -22,9 +22,9 @@
  *
  * @package  heidelpay/mgw_sdk/interfaces
  */
-namespace heidelpay\MgwPhpSdk\Interfaces;
+namespace heidelpayPHP\Interfaces;
 
-use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpayPHP\Heidelpay;
 
 interface HeidelpayParentInterface
 {

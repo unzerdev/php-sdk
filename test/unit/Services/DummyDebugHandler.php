@@ -22,9 +22,9 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit\Services;
+namespace heidelpayPHP\test\unit\Services;
 
-use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
+use heidelpayPHP\Interfaces\DebugHandlerInterface;
 
 class DummyDebugHandler implements DebugHandlerInterface
 {

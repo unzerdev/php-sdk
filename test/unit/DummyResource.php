@@ -22,9 +22,9 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test\unit;
+namespace heidelpayPHP\test\unit;
 
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
 
 class DummyResource extends AbstractHeidelpayResource
 {

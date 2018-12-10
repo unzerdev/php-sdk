@@ -22,12 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/transaction_types
  */
-namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
+namespace heidelpayPHP\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Traits\HasCancellations;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Traits\HasCancellations;
 
 class Authorization extends AbstractTransactionType
 {

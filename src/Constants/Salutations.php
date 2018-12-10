@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/constants
  */
-namespace heidelpay\MgwPhpSdk\Constants;
+namespace heidelpayPHP\Constants;
 
 class Salutations
 {

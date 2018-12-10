@@ -22,13 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration
  */
-namespace heidelpay\MgwPhpSdk\test\integration;
+namespace heidelpayPHP\test\integration;
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -47,7 +46,7 @@ class ChargeTest extends BasePaymentTest
     public function chargeShouldWorkWithTypeId()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0, Currencies::EURO, $card->getId(), self::RETURN_URL);
+        $charge = $this->heidelpay->charge(100.0, 'EUR', $card->getId(), self::RETURN_URL);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getUniqueId());
@@ -70,7 +69,7 @@ class ChargeTest extends BasePaymentTest
     public function chargeShouldWorkWithTypeObject()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0, Currencies::EURO, $card, self::RETURN_URL);
+        $charge = $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertInstanceOf(Payment::class, $charge->getPayment());

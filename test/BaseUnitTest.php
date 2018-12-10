@@ -22,7 +22,7 @@
  *
  * @package  heidelpay/mgw_sdk/test/unit
  */
-namespace heidelpay\MgwPhpSdk\test;
+namespace heidelpayPHP\test;
 
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;

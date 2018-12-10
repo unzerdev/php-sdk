@@ -22,10 +22,10 @@
  *
  * @package  heidelpay/mgw_sdk/resources
  */
-namespace heidelpay\MgwPhpSdk\Resources;
+namespace heidelpayPHP\Resources;
 
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Heidelpay;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Heidelpay;
 
 class Metadata extends AbstractHeidelpayResource
 {
@@ -122,7 +122,7 @@ class Metadata extends AbstractHeidelpayResource
      *
      * @return Metadata
      */
-    public function set($name, $value): Metadata
+    public function addMetadata($name, $value): Metadata
     {
         if (!\in_array(strtolower($name), ['sdkversion', 'sdktype', 'shoptype', 'shopversion'])) {
             $this->metadata[$name] = $value;
@@ -138,7 +138,7 @@ class Metadata extends AbstractHeidelpayResource
      *
      * @return mixed
      */
-    public function get($name)
+    public function getMetadata($name)
     {
         return $this->metadata[$name] ?? null;
     }
@@ -167,7 +167,7 @@ class Metadata extends AbstractHeidelpayResource
         foreach ($response as $key => $value) {
             $setter = 'set' . ucfirst($key);
             if (!\is_callable([$this, $setter])) {
-                $this->set($key, $value);
+                $this->addMetadata($key, $value);
             }
         }
     }

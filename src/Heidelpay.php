@@ -23,27 +23,26 @@
  *
  * @package  heidelpay/mgw_sdk
  */
-namespace heidelpay\MgwPhpSdk;
+namespace heidelpayPHP;
 
-use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Interfaces\DebugHandlerInterface;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\Keypair;
-use heidelpay\MgwPhpSdk\Resources\Metadata;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\BasePaymentType;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Shipment;
-use heidelpay\MgwPhpSdk\Services\HttpService;
-use heidelpay\MgwPhpSdk\Services\PaymentService;
-use heidelpay\MgwPhpSdk\Services\ResourceService;
-use heidelpay\MgwPhpSdk\Validators\KeyValidator;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Interfaces\DebugHandlerInterface;
+use heidelpayPHP\Interfaces\HeidelpayParentInterface;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Keypair;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Services\HttpService;
+use heidelpayPHP\Services\PaymentService;
+use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\Validators\KeyValidator;
 
 class Heidelpay implements HeidelpayParentInterface
 {
@@ -81,7 +80,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @throws \RuntimeException A \RuntimeException will be thrown if the key is not of type private.
      */
-    public function __construct($key, $locale = SupportedLocales::USA_ENGLISH)
+    public function __construct($key, $locale = 'en_US')
     {
         $this->setKey($key);
         $this->locale = $locale;
@@ -126,8 +125,8 @@ class Heidelpay implements HeidelpayParentInterface
      * Returns the set customer locale.
      *
      * @return string The locale of the customer.
-     *                For a list of supported values please refer to the class
-     *                \heidelpay\MgwPhpSdk\Constants\SupportedLocales
+     *                For a list of supported values please refer to the documentation
+     *                todo: add link to documentation
      */
     public function getLocale(): string
     {
@@ -138,8 +137,8 @@ class Heidelpay implements HeidelpayParentInterface
      * Sets the customer locale.
      *
      * @param string $locale The customer locale to set.
-     *                       For a list of supported values please refer to the class
-     *                       \heidelpay\MgwPhpSdk\Constants\SupportedLocales
+     *                       For a list of supported values please refer to the documentation
+     *                       todo: add link to documentation
      *
      * @return Heidelpay This heidelpay object.
      */
@@ -349,9 +348,24 @@ class Heidelpay implements HeidelpayParentInterface
     //<editor-fold desc="Metadata resource">
 
     /**
+     * Create Metadata resource.
+     *
+     * @param Metadata $metadata The Metadata object to be created.
+     *
+     * @return Metadata The fetched Metadata resource.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createMetadata($metadata): Metadata
+    {
+        return $this->resourceService->createMetadata($metadata);
+    }
+
+    /**
      * Fetch and return Metadata resource.
      *
-     * @param Metadata|string $metadata The local payment object to be fetched.
+     * @param Metadata|string $metadata The local Metadata object to be fetched.
      *
      * @return Metadata The fetched Metadata resource.
      *

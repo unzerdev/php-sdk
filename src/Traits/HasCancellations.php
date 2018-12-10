@@ -22,12 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/traits
  */
-namespace heidelpay\MgwPhpSdk\Traits;
+namespace heidelpayPHP\Traits;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Cancellation;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Interfaces\HeidelpayParentInterface;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 
 trait HasCancellations
 {

@@ -16,14 +16,14 @@ Please refer to the following documentation for installation instructions and us
 ## Support
 For any issues or questions please get in touch with our support.
 
-#### Web page
-https://dev.heidelpay.com/
+### Web page
+[https://dev.heidelpay.com/](https://dev.heidelpay.com/)
  
-#### Email
+### Email
 support@heidelpay.com
  
-#### Phone
+### Phone
 +49 (0)6221/6471-100
 
-#### Twitter
+### Twitter
 @devHeidelpay

@@ -22,13 +22,13 @@
  *
  * @package  heidelpay/mgw_sdk/transaction_types
  */
-namespace heidelpay\MgwPhpSdk\Resources\TransactionTypes;
+namespace heidelpayPHP\Resources\TransactionTypes;
 
-use heidelpay\MgwPhpSdk\Adapter\HttpAdapterInterface;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\AbstractHeidelpayResource;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Traits\HasOrderId;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Traits\HasOrderId;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {
@@ -46,9 +46,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     /** @var string $shortId */
     private $shortId;
-
-    /** @var string $url */
-    private $url;
 
     //</editor-fold>
 

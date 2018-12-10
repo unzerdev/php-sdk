@@ -22,18 +22,15 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration
  */
-namespace heidelpay\MgwPhpSdk\test;
+namespace heidelpayPHP\test;
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Constants\SupportedLocales;
-use heidelpay\MgwPhpSdk\Heidelpay;
-use heidelpay\MgwPhpSdk\Resources\Payment;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\Card;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Authorization;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
-use heidelpay\MgwPhpSdk\test\Fixtures\CustomerFixtureTrait;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 class BasePaymentTest extends TestCase
 {
@@ -60,7 +57,7 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D, SupportedLocales::GERMAN_GERMAN))
+        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D, 'de_DE'))
             ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
     }
 
@@ -127,13 +124,13 @@ class BasePaymentTest extends TestCase
      * @return Authorization
      *
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
      */
     public function createAuthorization(): Authorization
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
-        $authorization = $this->heidelpay->authorize(100.0, Currencies::EURO, $card, self::RETURN_URL, null, $orderId);
+        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId);
         return $authorization;
     }
 
@@ -143,33 +140,17 @@ class BasePaymentTest extends TestCase
      * @return Charge
      *
      * @throws \RuntimeException
-     * @throws \heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException
+     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
      */
     public function createCharge(): Charge
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0, Currencies::EURO, $card, self::RETURN_URL);
-        return $charge;
+        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
     }
 
     //</editor-fold>
 
     //<editor-fold desc="DataProviders">
-
-    /**
-     * @return array
-     *
-     * @throws \ReflectionException
-     */
-    public function currencyCodeProvider(): array
-    {
-        $currencyReflection = new ReflectionClass(Currencies::class);
-        $currencies         = $currencyReflection->getConstants();
-
-        $keys          = array_keys($currencies);
-        $values        = array_chunk($currencies, 1);
-        return array_combine($keys, $values);
-    }
 
     /**
      * Provides valid keys.

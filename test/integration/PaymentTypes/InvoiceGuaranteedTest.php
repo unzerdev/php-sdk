@@ -22,12 +22,11 @@
  *
  * @package  heidelpay/mgw_sdk/test/integration/payment_types
  */
-namespace heidelpay\MgwPhpSdk\test\integration\PaymentTypes;
+namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpay\MgwPhpSdk\Constants\Currencies;
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpay\MgwPhpSdk\test\BasePaymentTest;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 
 class InvoiceGuaranteedTest extends BasePaymentTest
@@ -71,7 +70,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
     {
         $authorization = $invoiceGuaranteed->authorize(
             100.0,
-            Currencies::EURO,
+            'EUR',
             self::RETURN_URL,
             $this->getMaximumCustomerInclShippingAddress()
         );
@@ -105,7 +104,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
     {
         $authorization = $invoiceGuaranteed->authorize(
             100.0,
-            Currencies::EURO,
+            'EUR',
             self::RETURN_URL,
             $this->getMaximumCustomerInclShippingAddress()
         );

@@ -22,12 +22,12 @@
  *
  * @package  heidelpay/mgw_sdk/traits
  */
-namespace heidelpay\MgwPhpSdk\Traits;
+namespace heidelpayPHP\Traits;
 
-use heidelpay\MgwPhpSdk\Exceptions\HeidelpayApiException;
-use heidelpay\MgwPhpSdk\Interfaces\HeidelpayParentInterface;
-use heidelpay\MgwPhpSdk\Resources\Customer;
-use heidelpay\MgwPhpSdk\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Interfaces\HeidelpayParentInterface;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
 
 trait CanDirectChargeWithCustomer
 {
