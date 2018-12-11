@@ -379,7 +379,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
             'Charge' => [new Charge(), 'parent/resource/path/charges/'],
             'Metadata' => [new Metadata(), 'parent/resource/path/metadata/'],
-            'Basket()' => [new Basket(), 'parent/resource/path/baskets/']
+            'Basket' => [new Basket('', 0, '', []), 'parent/resource/path/baskets/']
         ];
     }
 

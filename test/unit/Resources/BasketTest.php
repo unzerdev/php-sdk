@@ -42,28 +42,25 @@ class BasketTest extends BaseUnitTest
      */
     public function gettersAndSettersShouldWorkProperly()
     {
-        $basket = new Basket();
-        $this->assertEquals(0, $basket->getAmountTotalNet());
-        $this->assertEquals(0, $basket->getAmountTotalVat());
+        $basket = new Basket('', 0, '', []);
+        $this->assertEquals(0, $basket->getAmountTotal());
         $this->assertEquals(0, $basket->getAmountTotalDiscount());
         $this->assertEquals('', $basket->getCurrencyCode());
         $this->assertEquals('', $basket->getNote());
-        $this->assertEquals('', $basket->getBasketReferenceId());
+        $this->assertEquals('', $basket->getOrderId());
         $this->assertIsEmptyArray($basket->getBasketItems());
         $this->assertNull($basket->getBasketItemByIndex(1));
 
-        $basket->setAmountTotalNet(1234);
-        $basket->setAmountTotalVat(2345);
+        $basket->setAmountTotal(1234);
         $basket->setAmountTotalDiscount(3456);
         $basket->setCurrencyCode('EUR');
         $basket->setNote('This is something I have to remember!');
-        $basket->setBasketReferenceId('MyBasketRefId');
-        $this->assertEquals(1234, $basket->getAmountTotalNet());
-        $this->assertEquals(2345, $basket->getAmountTotalVat());
+        $basket->setOrderId('myOrderId');
+        $this->assertEquals(1234, $basket->getAmountTotal());
         $this->assertEquals(3456, $basket->getAmountTotalDiscount());
         $this->assertEquals('EUR', $basket->getCurrencyCode());
         $this->assertEquals('This is something I have to remember!', $basket->getNote());
-        $this->assertEquals('MyBasketRefId', $basket->getBasketReferenceId());
+        $this->assertEquals('myOrderId', $basket->getOrderId());
 
         $this->assertEquals(0, $basket->getItemCount());
         $basketItem1 = new BasketItem();

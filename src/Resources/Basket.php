@@ -28,64 +28,60 @@ use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 
 class Basket extends AbstractHeidelpayResource
 {
-    /** @var int $amountTotalNet */
-    private $amountTotalNet = 0;
-
-    /** @var int $amountTotalVat */
-    private $amountTotalVat = 0;
+    /** @var int $amountTotal */
+    protected $amountTotal;
 
     /** @var int $amountTotalDiscount */
-    private $amountTotalDiscount = 0;
+    protected $amountTotalDiscount = 0;
 
     /** @var string $currencyCode */
-    private $currencyCode = '';
+    protected $currencyCode;
+
+    /** @var string $orderId */
+    protected $orderId;
 
     /** @var string $note */
-    private $note = '';
-
-    /** @var string $basketReferenceId */
-    private $basketReferenceId = '';
+    protected $note = '';
 
     /** @var array $basketItems */
-    private $basketItems = [];
+    private $basketItems;
+
+    /**
+     * Basket constructor.
+     *
+     * @param int    $amountTotal
+     * @param string $currencyCode
+     * @param string $orderId
+     * @param array  $basketItems
+     */
+    public function __construct(string $orderId, int $amountTotal, string $currencyCode, array $basketItems)
+    {
+        $this->amountTotal  = $amountTotal;
+        $this->currencyCode = $currencyCode;
+        $this->orderId      = $orderId;
+        $this->basketItems  = $basketItems;
+
+        parent::__construct();
+    }
 
     //<editor-fold desc="Getters/Setters">
 
     /**
      * @return int
      */
-    public function getAmountTotalNet(): int
+    public function getAmountTotal(): int
     {
-        return $this->amountTotalNet;
+        return $this->amountTotal;
     }
 
     /**
-     * @param int $amountTotalNet
+     * @param int $amountTotal
      *
      * @return Basket
      */
-    public function setAmountTotalNet(int $amountTotalNet): Basket
+    public function setAmountTotal(int $amountTotal): Basket
     {
-        $this->amountTotalNet = $amountTotalNet;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAmountTotalVat(): int
-    {
-        return $this->amountTotalVat;
-    }
-
-    /**
-     * @param int $amountTotalVat
-     *
-     * @return Basket
-     */
-    public function setAmountTotalVat(int $amountTotalVat): Basket
-    {
-        $this->amountTotalVat = $amountTotalVat;
+        $this->amountTotal = $amountTotal;
         return $this;
     }
 
@@ -157,19 +153,19 @@ class Basket extends AbstractHeidelpayResource
     /**
      * @return string
      */
-    public function getBasketReferenceId(): string
+    public function getOrderId(): string
     {
-        return $this->basketReferenceId;
+        return $this->orderId;
     }
 
     /**
-     * @param string $basketReferenceId
+     * @param string $orderId
      *
      * @return Basket
      */
-    public function setBasketReferenceId(string $basketReferenceId): Basket
+    public function setOrderId(string $orderId): Basket
     {
-        $this->basketReferenceId = $basketReferenceId;
+        $this->orderId = $orderId;
         return $this;
     }
 
@@ -216,6 +212,25 @@ class Basket extends AbstractHeidelpayResource
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
+
+    /**
+     * Add the dynamically set meta data.
+     * {@inheritDoc}
+     */
+    public function expose(): array
+    {
+        $basketItemArrays = [[]];
+
+        /** @var BasketItem $basketItem */
+        foreach ($this->getBasketItems() as $basketItem) {
+            $basketItemArrays[] = $basketItem->expose();
+        }
+
+        $returnArray = parent::expose();
+        $returnArray['basketItems'] = array_merge(...$basketItemArrays);
+
+        return $returnArray;
+    }
 
     /**
      * {@inheritDoc}
