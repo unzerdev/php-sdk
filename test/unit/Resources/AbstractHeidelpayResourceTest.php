@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\Keypair;
+use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
@@ -372,7 +373,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             [new Cancellation(), 'parent/resource/path/cancels/'],
             [new Authorization(), 'parent/resource/path/authorize/'],
             [new Shipment(), 'parent/resource/path/shipments/'],
-            [new Charge(), 'parent/resource/path/charges/']
+            [new Charge(), 'parent/resource/path/charges/'],
+            [new Metadata(), 'parent/resource/path/metadata/']
         ];
     }
 
