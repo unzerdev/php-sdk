@@ -28,109 +28,37 @@ use heidelpayPHP\Resources\AbstractHeidelpayResource;
 
 class BasketItem extends AbstractHeidelpayResource
 {
-    /** @var int $position */
-    private $position = 0;
-
-    /** @var string $channel */
-    private $channel = '';
-
-    /** @var string $usage */
-    private $usage = '';
-
     /** @var string $basketItemReferenceId */
-    private $basketItemReferenceId = '';
-
-    /** @var string $unit */
-    private $unit = '';
+    protected $basketItemReferenceId = '';
 
     /** @var int $quantity */
-    private $quantity = 0;
-
-    /** @var int $amountDiscount */
-    private $amountDiscount = 0;
+    protected $quantity = 0;
 
     /** @var int $vat */
-    private $vat = 0;
+    protected $vat = 0;
 
-    /** @var int $amountPerUnit */
-    private $amountPerUnit = 0;
+    /** @var int $amountDiscount */
+    protected $amountDiscount = 0;
 
     /** @var int $amountGross */
-    private $amountGross = 0;
+    protected $amountGross = 0;
 
-    /** @var string $articleId */
-    private $articleId = '';
+    /** @var int $amountGross */
+    protected $amountVat = 0;
 
-    /** @var string $type */
-    private $type = '';
+    /** @var int $amountPerUnit */
+    protected $amountPerUnit = 0;
+
+    /** @var int $amountNet */
+    protected $amountNet = 0;
+
+    /** @var string $unit */
+    protected $unit = '';
 
     /** @var string $title */
-    private $title = '';
-
-    /** @var string $description */
-    private $description = '';
-
-    /** @var string $imageUrl */
-    private $imageUrl = '';
+    protected $title = '';
 
     //<editor-fold desc="Getters/Setters">
-
-    /**
-     * @return int
-     */
-    public function getPosition(): int
-    {
-        return $this->position;
-    }
-
-    /**
-     * @param int $position
-     *
-     * @return BasketItem
-     */
-    public function setPosition(int $position): BasketItem
-    {
-        $this->position = $position;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getChannel(): string
-    {
-        return $this->channel;
-    }
-
-    /**
-     * @param string $channel
-     *
-     * @return BasketItem
-     */
-    public function setChannel(string $channel): BasketItem
-    {
-        $this->channel = $channel;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsage(): string
-    {
-        return $this->usage;
-    }
-
-    /**
-     * @param string $usage
-     *
-     * @return BasketItem
-     */
-    public function setUsage(string $usage): BasketItem
-    {
-        $this->usage = $usage;
-        return $this;
-    }
 
     /**
      * @return string
@@ -148,25 +76,6 @@ class BasketItem extends AbstractHeidelpayResource
     public function setBasketItemReferenceId(string $basketItemReferenceId): BasketItem
     {
         $this->basketItemReferenceId = $basketItemReferenceId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUnit(): string
-    {
-        return $this->unit;
-    }
-
-    /**
-     * @param string $unit
-     *
-     * @return BasketItem
-     */
-    public function setUnit(string $unit): BasketItem
-    {
-        $this->unit = $unit;
         return $this;
     }
 
@@ -192,6 +101,25 @@ class BasketItem extends AbstractHeidelpayResource
     /**
      * @return int
      */
+    public function getVat(): int
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @param int $vat
+     *
+     * @return BasketItem
+     */
+    public function setVat(int $vat): BasketItem
+    {
+        $this->vat = $vat;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
     public function getAmountDiscount(): int
     {
         return $this->amountDiscount;
@@ -211,19 +139,38 @@ class BasketItem extends AbstractHeidelpayResource
     /**
      * @return int
      */
-    public function getVat(): int
+    public function getAmountGross(): int
     {
-        return $this->vat;
+        return $this->amountGross;
     }
 
     /**
-     * @param int $vat
+     * @param int $amountGross
      *
      * @return BasketItem
      */
-    public function setVat(int $vat): BasketItem
+    public function setAmountGross(int $amountGross): BasketItem
     {
-        $this->vat = $vat;
+        $this->amountGross = $amountGross;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmountVat(): int
+    {
+        return $this->amountVat;
+    }
+
+    /**
+     * @param int $amountVat
+     *
+     * @return BasketItem
+     */
+    public function setAmountVat(int $amountVat): BasketItem
+    {
+        $this->amountVat = $amountVat;
         return $this;
     }
 
@@ -249,57 +196,38 @@ class BasketItem extends AbstractHeidelpayResource
     /**
      * @return int
      */
-    public function getAmountGross(): int
+    public function getAmountNet(): int
     {
-        return $this->amountGross;
+        return $this->amountNet;
     }
 
     /**
-     * @param int $amountGross
+     * @param int $amountNet
      *
      * @return BasketItem
      */
-    public function setAmountGross(int $amountGross): BasketItem
+    public function setAmountNet(int $amountNet): BasketItem
     {
-        $this->amountGross = $amountGross;
+        $this->amountNet = $amountNet;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getArticleId(): string
+    public function getUnit(): string
     {
-        return $this->articleId;
+        return $this->unit;
     }
 
     /**
-     * @param string $articleId
+     * @param string $unit
      *
      * @return BasketItem
      */
-    public function setArticleId(string $articleId): BasketItem
+    public function setUnit(string $unit): BasketItem
     {
-        $this->articleId = $articleId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return BasketItem
-     */
-    public function setType(string $type): BasketItem
-    {
-        $this->type = $type;
+        $this->unit = $unit;
         return $this;
     }
 
@@ -319,44 +247,6 @@ class BasketItem extends AbstractHeidelpayResource
     public function setTitle(string $title): BasketItem
     {
         $this->title = $title;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     *
-     * @return BasketItem
-     */
-    public function setDescription(string $description): BasketItem
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImageUrl(): string
-    {
-        return $this->imageUrl;
-    }
-
-    /**
-     * @param string $imageUrl
-     *
-     * @return BasketItem
-     */
-    public function setImageUrl(string $imageUrl): BasketItem
-    {
-        $this->imageUrl = $imageUrl;
         return $this;
     }
 

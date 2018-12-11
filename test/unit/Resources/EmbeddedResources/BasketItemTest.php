@@ -42,52 +42,37 @@ class BasketItemTest extends BaseUnitTest
     public function settersAndGettersShouldWork()
     {
         $basketItem = new BasketItem();
-        $this->assertEquals(0, $basketItem->getPosition());
         $this->assertEquals(0, $basketItem->getQuantity());
         $this->assertEquals(0, $basketItem->getAmountDiscount());
         $this->assertEquals(0, $basketItem->getAmountGross());
         $this->assertEquals(0, $basketItem->getAmountPerUnit());
+        $this->assertEquals(0, $basketItem->getAmountNet());
+        $this->assertEquals(0, $basketItem->getAmountVat());
         $this->assertEquals(0, $basketItem->getVat());
-        $this->assertEquals('', $basketItem->getChannel());
         $this->assertEquals('', $basketItem->getBasketItemReferenceId());
         $this->assertEquals('', $basketItem->getUnit());
-        $this->assertEquals('', $basketItem->getArticleId());
-        $this->assertEquals('', $basketItem->getType());
         $this->assertEquals('', $basketItem->getTitle());
-        $this->assertEquals('', $basketItem->getDescription());
-        $this->assertEquals('', $basketItem->getImageUrl());
-        $this->assertEquals('', $basketItem->getUsage());
 
-        $basketItem->setPosition(1);
         $basketItem->setQuantity(2);
         $basketItem->setAmountDiscount(9876);
         $basketItem->setAmountGross(8765);
         $basketItem->setAmountPerUnit(7654);
+        $basketItem->setAmountNet(6543);
+        $basketItem->setAmountVat(5432);
         $basketItem->setVat(6543);
-        $basketItem->setChannel('myChannel');
         $basketItem->setBasketItemReferenceId('myRefId');
         $basketItem->setUnit('myUnit');
-        $basketItem->setArticleId('myArticleId');
-        $basketItem->setType('myType');
         $basketItem->setTitle('myTitle');
-        $basketItem->setDescription('myDescription');
-        $basketItem->setImageUrl('my.image.url');
-        $basketItem->setUsage('myUsage');
 
-        $this->assertEquals(1, $basketItem->getPosition());
         $this->assertEquals(2, $basketItem->getQuantity());
         $this->assertEquals(9876, $basketItem->getAmountDiscount());
         $this->assertEquals(8765, $basketItem->getAmountGross());
         $this->assertEquals(7654, $basketItem->getAmountPerUnit());
+        $this->assertEquals(6543, $basketItem->getAmountNet());
+        $this->assertEquals(5432, $basketItem->getAmountVat());
         $this->assertEquals(6543, $basketItem->getVat());
-        $this->assertEquals('myChannel', $basketItem->getChannel());
         $this->assertEquals('myRefId', $basketItem->getBasketItemReferenceId());
         $this->assertEquals('myUnit', $basketItem->getUnit());
-        $this->assertEquals('myArticleId', $basketItem->getArticleId());
-        $this->assertEquals('myType', $basketItem->getType());
         $this->assertEquals('myTitle', $basketItem->getTitle());
-        $this->assertEquals('myDescription', $basketItem->getDescription());
-        $this->assertEquals('my.image.url', $basketItem->getImageUrl());
-        $this->assertEquals('myUsage', $basketItem->getUsage());
     }
 }
