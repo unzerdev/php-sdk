@@ -378,7 +378,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Authorization' => [new Authorization(), 'parent/resource/path/authorize/'],
             'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
             'Charge' => [new Charge(), 'parent/resource/path/charges/'],
-            'Metadata' => [new Metadata(), 'parent/resource/path/metadata/']
+            'Metadata' => [new Metadata(), 'parent/resource/path/metadata/'],
+            'Basket()' => [new Basket(), 'parent/resource/path/baskets/']
         ];
     }
 
