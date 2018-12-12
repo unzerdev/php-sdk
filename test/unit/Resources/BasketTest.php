@@ -82,4 +82,26 @@ class BasketTest extends BaseUnitTest
         $this->assertNull($basket->getBasketItemByIndex(0));
         $this->assertNull($basket->getBasketItemByIndex(1));
     }
+
+    /**
+     * Verify expose will call expose on all attached BasketItems.
+     *
+     * @test
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     * @throws \ReflectionException
+     */
+    public function exposeShouldCallExposeOnAllAttachedBasketItems()
+    {
+        $basketItemMock = $this->getMockBuilder(BasketItem::class)->setMethods(['expose'])->getMock();
+        $basketItemMock->expects($this->once())->method('expose')->willReturn('resultItem1');
+        $basketItemMock2 = $this->getMockBuilder(BasketItem::class)->setMethods(['expose'])->getMock();
+        $basketItemMock2->expects($this->once())->method('expose')->willReturn('resultItem2');
+
+        $basket = (new Basket())->setBasketItems([$basketItemMock, $basketItemMock2]);
+
+        $basketItemsExposed = $basket->expose()['basketItems'];
+        self::assertContains('resultItem1', $basketItemsExposed);
+        self::assertContains('resultItem2', $basketItemsExposed);
+    }
 }
