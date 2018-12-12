@@ -370,6 +370,7 @@ class ResourceService
      */
     public function updateBasket(Basket $basket): Basket
     {
+        $basket->setParentResource($this->heidelpay);
         $this->update($basket);
         return $basket;
     }

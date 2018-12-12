@@ -1171,6 +1171,35 @@ class ResourceServiceTest extends BaseUnitTest
         $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
     }
 
+    /**
+     * Verify updateBasket calls update with the given basket and returns it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function updateBasketShouldCallUpdateAndReturnTheGivenBasket()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$heidelpay])->setMethods(['update'])->getMock();
+
+        $basket = new Basket();
+        $resourceSrvMock->expects($this->once())->method('update')->with($basket);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedBasket = $resourceSrvMock->updateBasket($basket);
+
+        $this->assertSame($basket, $returnedBasket);
+        $this->assertEquals($heidelpay, $basket->getParentResource());
+        $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
