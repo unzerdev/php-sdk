@@ -29,51 +29,76 @@ use heidelpayPHP\Resources\AbstractHeidelpayResource;
 class BasketItem extends AbstractHeidelpayResource
 {
     /** @var string $basketItemReferenceId */
-    protected $basketItemReferenceId = '';
+    protected $basketItemReferenceId;
 
     /** @var int $quantity */
     protected $quantity = 0;
 
     /** @var int $vat */
-    protected $vat = 0;
+    protected $vat;
 
     /** @var int $amountDiscount */
-    protected $amountDiscount = 0;
+    protected $amountDiscount;
 
     /** @var int $amountGross */
-    protected $amountGross = 0;
+    protected $amountGross = 0.0;
 
     /** @var int $amountGross */
-    protected $amountVat = 0;
+    protected $amountVat;
 
     /** @var int $amountPerUnit */
-    protected $amountPerUnit = 0;
+    protected $amountPerUnit = 0.0;
 
     /** @var int $amountNet */
-    protected $amountNet = 0;
+    protected $amountNet = 0.0;
 
     /** @var string $unit */
-    protected $unit = '';
+    protected $unit;
 
     /** @var string $title */
     protected $title = '';
 
+    /**
+     * BasketItem constructor.
+     *
+     * @param string $title
+     * @param float  $amountGross
+     * @param float  $amountNet
+     * @param float  $amountPerUnit
+     * @param int    $quantity
+     */
+    public function __construct(
+        string $title = '',
+        float $amountGross = 0.0,
+        float $amountNet = 0.0,
+        float $amountPerUnit = 0.0,
+        int $quantity = 0
+    ) {
+        $this->quantity      = $quantity;
+        $this->amountGross   = $amountGross;
+        $this->amountPerUnit = $amountPerUnit;
+        $this->amountNet     = $amountNet;
+        $this->title         = $title;
+
+        parent::__construct();
+    }
+
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBasketItemReferenceId(): string
+    public function getBasketItemReferenceId()
     {
         return $this->basketItemReferenceId;
     }
 
     /**
-     * @param string $basketItemReferenceId
+     * @param string|null $basketItemReferenceId
      *
      * @return BasketItem
      */
-    public function setBasketItemReferenceId(string $basketItemReferenceId): BasketItem
+    public function setBasketItemReferenceId($basketItemReferenceId): BasketItem
     {
         $this->basketItemReferenceId = $basketItemReferenceId;
         return $this;
@@ -99,76 +124,76 @@ class BasketItem extends AbstractHeidelpayResource
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getVat(): int
+    public function getVat()
     {
         return $this->vat;
     }
 
     /**
-     * @param int $vat
+     * @param int|null $vat
      *
      * @return BasketItem
      */
-    public function setVat(int $vat): BasketItem
+    public function setVat($vat): BasketItem
     {
         $this->vat = $vat;
         return $this;
     }
 
     /**
-     * @return int
+     * @return float|null
      */
-    public function getAmountDiscount(): int
+    public function getAmountDiscount()
     {
         return $this->amountDiscount;
     }
 
     /**
-     * @param int $amountDiscount
+     * @param float|null $amountDiscount
      *
      * @return BasketItem
      */
-    public function setAmountDiscount(int $amountDiscount): BasketItem
+    public function setAmountDiscount($amountDiscount): BasketItem
     {
         $this->amountDiscount = $amountDiscount;
         return $this;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getAmountGross(): int
+    public function getAmountGross(): float
     {
         return $this->amountGross;
     }
 
     /**
-     * @param int $amountGross
+     * @param float $amountGross
      *
      * @return BasketItem
      */
-    public function setAmountGross(int $amountGross): BasketItem
+    public function setAmountGross(float $amountGross): BasketItem
     {
         $this->amountGross = $amountGross;
         return $this;
     }
 
     /**
-     * @return int
+     * @return float|null
      */
-    public function getAmountVat(): int
+    public function getAmountVat()
     {
         return $this->amountVat;
     }
 
     /**
-     * @param int $amountVat
+     * @param float|null $amountVat
      *
      * @return BasketItem
      */
-    public function setAmountVat(int $amountVat): BasketItem
+    public function setAmountVat($amountVat): BasketItem
     {
         $this->amountVat = $amountVat;
         return $this;
@@ -213,19 +238,19 @@ class BasketItem extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUnit(): string
+    public function getUnit()
     {
         return $this->unit;
     }
 
     /**
-     * @param string $unit
+     * @param string|null $unit
      *
      * @return BasketItem
      */
-    public function setUnit(string $unit): BasketItem
+    public function setUnit($unit): BasketItem
     {
         $this->unit = $unit;
         return $this;
