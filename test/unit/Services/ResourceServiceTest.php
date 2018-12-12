@@ -29,6 +29,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
@@ -1081,6 +1082,36 @@ class ResourceServiceTest extends BaseUnitTest
 
         $response = $resourceSrv->send($resourceMock, HttpAdapterInterface::REQUEST_DELETE);
         $this->assertEquals('This is the response', $response->response);
+    }
+
+    /**
+     * Verify createBasket will set parentResource and call create with the given basket.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function createBasketShouldSetTheParentResourceAndCallCreateWithTheGivenBasket()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$heidelpay])
+            ->setMethods(['create'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create');
+
+        $basket = new Basket();
+        try {
+            $basket->getParentResource();
+            $this->assertTrue(false, 'This exception should have been thrown!');
+        } catch (\RuntimeException $e) {
+            $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
+        }
+
+        /** @var ResourceService $resourceSrvMock */
+        $this->assertSame($basket, $resourceSrvMock->createBasket($basket));
+        $this->assertSame($heidelpay, $basket->getParentResource());
     }
 
     //<editor-fold desc="Data Providers">
