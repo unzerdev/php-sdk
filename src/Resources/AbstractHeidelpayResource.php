@@ -192,18 +192,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * @param $response
-     * @param $key
-     * @param $item
-     */
-    public function handleValue($response, $key, $item)
-    {
-        if (isset($response->$key)) {
-            $this->setItemProperty($item, $key, $response->$key);
-        }
-    }
-
-    /**
      * @param $item
      * @param $key
      * @param $value
