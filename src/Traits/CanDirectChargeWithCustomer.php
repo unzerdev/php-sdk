@@ -26,6 +26,7 @@ namespace heidelpayPHP\Traits;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -42,6 +43,9 @@ trait CanDirectChargeWithCustomer
      * @param Customer|string $customer
      * @param string|null     $orderId
      * @param Metadata|null   $metadata
+     * @param Basket|null     $basket    The Basket object corresponding to the payment.
+     *                                   The Basket object will be created automatically if it does not exist
+     *                                   yet (i.e. has no id).
      *
      * @return Charge
      *
@@ -54,7 +58,8 @@ trait CanDirectChargeWithCustomer
         $returnUrl,
         $customer,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): Charge {
         if ($this instanceof HeidelpayParentInterface) {
             return $this->getHeidelpayObject()->charge(
@@ -64,7 +69,8 @@ trait CanDirectChargeWithCustomer
                 $returnUrl,
                 $customer,
                 $orderId,
-                $metadata
+                $metadata,
+                $basket
             );
         }
 

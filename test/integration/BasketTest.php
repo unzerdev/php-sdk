@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\integration;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
+use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
@@ -126,5 +127,109 @@ class BasketTest extends BasePaymentTest
         $this->assertEquals(5432, $basket->getAmountTotalDiscount());
         $this->assertEquals('This basket is updateable!', $basket->getNote());
         $this->assertNotEquals($basket->getBasketItemByIndex(0)->expose(), $basketItem->expose());
+    }
+
+    /**
+     * Verify basket can be passed to the payment on authorize.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet()
+    {
+        $orderId = $this->generateOrderId();
+        $basket  = new Basket($orderId, 123.4, 'EUR', []);
+        $basket->setNote('This basket is creatable!');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basket->addBasketItem($basketItem);
+        $this->heidelpay->createBasket($basket);
+        $this->assertNotEmpty($basket->getId());
+
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorize = $card->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+
+        $fetchedPayment = $this->heidelpay->fetchPayment($authorize->getPaymentId());
+        $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
+    }
+
+    /**
+     * Verify basket can be passed to the payment on charge.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function chargeTransactionsShouldPassAlongTheBasketIdIfSet()
+    {
+        $orderId = $this->generateOrderId();
+        $basket  = new Basket($orderId, 123.4, 'EUR', []);
+        $basket->setNote('This basket is creatable!');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basket->addBasketItem($basketItem);
+        $this->heidelpay->createBasket($basket);
+        $this->assertNotEmpty($basket->getId());
+
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $charge = $card->charge(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+
+        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
+    }
+
+    /**
+     * Verify basket will be created and passed to the payment on authorize if it does not exist yet.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet()
+    {
+        $orderId = $this->generateOrderId();
+        $basket  = new Basket($orderId, 123.4, 'EUR', []);
+        $basket->setNote('This basket is creatable!');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basket->addBasketItem($basketItem);
+        $this->assertEmpty($basket->getId());
+
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorize = $card->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        $this->assertNotEmpty($basket->getId());
+
+        $fetchedPayment = $this->heidelpay->fetchPayment($authorize->getPaymentId());
+        $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
+    }
+
+    /**
+     * Verify basket will be created and passed to the payment on charge if it does not exist yet.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet()
+    {
+        $orderId = $this->generateOrderId();
+        $basket  = new Basket($orderId, 123.4, 'EUR', []);
+        $basket->setNote('This basket is creatable!');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basket->addBasketItem($basketItem);
+        $this->assertEmpty($basket->getId());
+
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $charge = $card->charge(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        $this->assertNotEmpty($basket->getId());
+
+        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
     }
 }

@@ -79,6 +79,9 @@ class Payment extends AbstractHeidelpayResource
 
     /** @var Metadata $metadata */
     private $metadata;
+
+    /** @var Basket $basket */
+    private $basket;
     //</editor-fold>
 
     //<editor-fold desc="Setters/Getters">
@@ -343,6 +346,41 @@ class Payment extends AbstractHeidelpayResource
     }
 
     /**
+     * @return Basket|null
+     */
+    public function getBasket()
+    {
+        return $this->basket;
+    }
+
+    /**
+     * Sets the basket object and creates it automatically if it does not exist yet (i. e. does not have an id).
+     *
+     * @param Basket|null $basket
+     *
+     * @return Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function setBasket($basket): Payment
+    {
+        $this->basket = $basket;
+
+        if (!$basket instanceof Basket) {
+            return $this;
+        }
+
+        /** @var Heidelpay $heidelpay */
+        $heidelpay = $this->getHeidelpayObject();
+        if ($this->basket->getId() === null) {
+            $heidelpay->getResourceService()->create($this->basket->setParentResource($heidelpay));
+        }
+
+        return $this;
+    }
+
+    /**
      * Retrieves a Cancellation object of this payment by its Id.
      * I. e. refunds (charge cancellations) and reversals (authorize cancellations).
      * Fetches the Authorization if it has not been fetched before and the lazy flag is not set.
@@ -524,6 +562,7 @@ class Payment extends AbstractHeidelpayResource
         if (isset($response->resources)) {
             $this->updateResponseResources($response->resources);
         }
+
         if (isset($response->transactions)) {
             $this->updateResponseTransactions($response->transactions);
         }
@@ -720,6 +759,12 @@ class Payment extends AbstractHeidelpayResource
         if (isset($resources->metadataId) && !empty($resources->metadataId)) {
             if ($this->metadata->getId() === null) {
                 $this->metadata = $this->getHeidelpayObject()->fetchMetadata($resources->metadataId);
+            }
+        }
+
+        if (isset($resources->basketId) && !empty($resources->basketId)) {
+            if ($this->basket->getId() === null) {
+                $this->basket = $this->getHeidelpayObject()->fetchBasket($resources->basketId);
             }
         }
     }

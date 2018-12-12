@@ -721,7 +721,8 @@ class Heidelpay implements HeidelpayParentInterface
         $returnUrl,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): AbstractTransactionType {
         return $this->paymentService->authorize(
             $amount,
@@ -730,7 +731,8 @@ class Heidelpay implements HeidelpayParentInterface
             $returnUrl,
             $customer,
             $orderId,
-            $metadata
+            $metadata,
+            $basket
         );
     }
 
@@ -744,6 +746,9 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|string|null $customer  The Customer object or the id of the customer resource to reference.
      * @param string|null          $orderId   A custom order id which can be set by the merchant.
      * @param Metadata|null        $metadata  The Metadata object containing custom information for the payment.
+     * @param Basket|null          $basket    The Basket object corresponding to the payment.
+     *                                        The Basket object will be created automatically if it does not exist
+     *                                        yet (i.e. has no id).
      *
      * @return Authorization The resulting object of the Authorization resource.
      *
@@ -757,10 +762,11 @@ class Heidelpay implements HeidelpayParentInterface
         $returnUrl = null,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): AbstractTransactionType {
         return $this->paymentService
-            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata);
+            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata, $basket);
     }
 
     //</editor-fold>
@@ -777,6 +783,9 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
      * @param string|null            $orderId     A custom order id which can be set by the merchant.
      * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
+     *                                            The Basket object will be created automatically if it does not exist
+     *                                            yet (i.e. has no id).
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -790,7 +799,8 @@ class Heidelpay implements HeidelpayParentInterface
         $returnUrl,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): AbstractTransactionType {
         return $this->paymentService->charge(
             $amount,
@@ -799,7 +809,8 @@ class Heidelpay implements HeidelpayParentInterface
             $returnUrl,
             $customer,
             $orderId,
-            $metadata
+            $metadata,
+            $basket
         );
     }
 
