@@ -350,9 +350,9 @@ class ResourceService
     {
         $basketObj = $basket;
         if (\is_string($basket)) {
-            $basketObj = (new Basket())->setParentResource($this->heidelpay);
-            $basketObj->setId($basket);
+            $basketObj = (new Basket())->setId($basket);
         }
+        $basketObj->setParentResource($this->heidelpay);
 
         $this->fetch($basketObj);
         return $basketObj;
