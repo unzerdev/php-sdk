@@ -28,20 +28,20 @@ use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 
 class Basket extends AbstractHeidelpayResource
 {
-    /** @var int $amountTotal */
-    protected $amountTotal;
+    /** @var float $amountTotal */
+    protected $amountTotal = 0.0;
 
-    /** @var int $amountTotalDiscount */
-    protected $amountTotalDiscount = 0;
+    /** @var float $amountTotalDiscount */
+    protected $amountTotalDiscount;
 
     /** @var string $currencyCode */
-    protected $currencyCode;
+    protected $currencyCode = 'EUR';
 
     /** @var string $orderId */
-    protected $orderId;
+    protected $orderId = '';
 
     /** @var string $note */
-    protected $note = '';
+    protected $note;
 
     /** @var array $basketItems */
     private $basketItems;
@@ -49,13 +49,17 @@ class Basket extends AbstractHeidelpayResource
     /**
      * Basket constructor.
      *
-     * @param int    $amountTotal
+     * @param float  $amountTotal
      * @param string $currencyCode
      * @param string $orderId
      * @param array  $basketItems
      */
-    public function __construct(string $orderId, int $amountTotal, string $currencyCode, array $basketItems)
-    {
+    public function __construct(
+        string $orderId = '',
+        float $amountTotal = 0.0,
+        string $currencyCode = 'EUR',
+        array $basketItems = []
+    ) {
         $this->amountTotal  = $amountTotal;
         $this->currencyCode = $currencyCode;
         $this->orderId      = $orderId;
@@ -67,38 +71,38 @@ class Basket extends AbstractHeidelpayResource
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return int
+     * @return float|null
      */
-    public function getAmountTotal(): int
+    public function getAmountTotal()
     {
         return $this->amountTotal;
     }
 
     /**
-     * @param int $amountTotal
+     * @param float $amountTotal
      *
      * @return Basket
      */
-    public function setAmountTotal(int $amountTotal): Basket
+    public function setAmountTotal(float $amountTotal): Basket
     {
         $this->amountTotal = $amountTotal;
         return $this;
     }
 
     /**
-     * @return int
+     * @return float|null
      */
-    public function getAmountTotalDiscount(): int
+    public function getAmountTotalDiscount()
     {
         return $this->amountTotalDiscount;
     }
 
     /**
-     * @param int $amountTotalDiscount
+     * @param float|null $amountTotalDiscount
      *
      * @return Basket
      */
-    public function setAmountTotalDiscount(int $amountTotalDiscount): Basket
+    public function setAmountTotalDiscount($amountTotalDiscount): Basket
     {
         $this->amountTotalDiscount = $amountTotalDiscount;
         return $this;
@@ -132,19 +136,19 @@ class Basket extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getNote(): string
+    public function getNote()
     {
         return $this->note;
     }
 
     /**
-     * @param string $note
+     * @param string|null $note
      *
      * @return Basket
      */
-    public function setNote(string $note): Basket
+    public function setNote($note): Basket
     {
         $this->note = $note;
         return $this;
