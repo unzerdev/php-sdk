@@ -1659,6 +1659,35 @@ class PaymentTest extends BaseUnitTest
         $payment->setBasket($basket);
     }
 
+    /**
+     * Verify updateResponseResources will fetch the basketId in response if it is set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function updateResponseResourcesShouldFetchBasketIdIfItIsSetInResponse()
+    {
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()
+            ->setMethods(['fetchBasket'])->getMock();
+
+        $basket = new Basket();
+        $heidelpayMock->expects($this->once())->method('fetchBasket')->with('myResourcesBasketId')->willReturn($basket);
+
+        $payment = new Payment($heidelpayMock);
+        $response = new \stdClass();
+        $payment->handleResponse($response);
+        $this->assertNull($payment->getBasket());
+
+        $response->resources = new \stdClass();
+        $response->resources->basketId = 'myResourcesBasketId';
+        $payment->handleResponse($response);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**

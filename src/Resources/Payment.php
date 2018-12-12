@@ -763,7 +763,7 @@ class Payment extends AbstractHeidelpayResource
         }
 
         if (isset($resources->basketId) && !empty($resources->basketId)) {
-            if ($this->basket->getId() === null) {
+            if (!$this->basket instanceof Basket) {
                 $this->basket = $this->getHeidelpayObject()->fetchBasket($resources->basketId);
             }
         }
