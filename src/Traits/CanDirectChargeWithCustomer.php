@@ -27,6 +27,7 @@ namespace heidelpayPHP\Traits;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 
 trait CanDirectChargeWithCustomer
@@ -39,17 +40,32 @@ trait CanDirectChargeWithCustomer
      * @param string          $currency
      * @param string          $returnUrl
      * @param Customer|string $customer
-     * @param null            $orderId
+     * @param string|null     $orderId
+     * @param Metadata|null   $metadata
      *
      * @return Charge
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    public function charge($amount, $currency, $returnUrl, $customer, $orderId = null): Charge
-    {
+    public function charge(
+        $amount,
+        $currency,
+        $returnUrl,
+        $customer,
+        $orderId = null,
+        $metadata = null
+    ): Charge {
         if ($this instanceof HeidelpayParentInterface) {
-            return $this->getHeidelpayObject()->charge($amount, $currency, $this, $returnUrl, $customer, $orderId);
+            return $this->getHeidelpayObject()->charge(
+                $amount,
+                $currency,
+                $this,
+                $returnUrl,
+                $customer,
+                $orderId,
+                $metadata
+            );
         }
 
         throw new \RuntimeException(
