@@ -87,6 +87,7 @@ class BasketTest extends BaseUnitTest
      * Verify expose will call expose on all attached BasketItems.
      *
      * @test
+     *
      * @throws Exception
      * @throws \PHPUnit\Framework\MockObject\RuntimeException
      * @throws \ReflectionException
