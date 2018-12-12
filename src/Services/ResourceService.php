@@ -30,6 +30,7 @@ use heidelpayPHP\Constants\IdStrings;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
@@ -310,6 +311,67 @@ class ResourceService
 
         $this->fetch($metadataObject);
         return $metadataObject;
+    }
+
+    //</editor-fold>
+
+
+
+    //<editor-fold desc="Basket resource">
+
+    /**
+     * Creates and returns the given basket resource.
+     *
+     * @param Basket $basket The basket to be created.
+     *
+     * @return Basket The created Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createBasket(Basket $basket): Basket
+    {
+        $basket->setParentResource($this->heidelpay);
+        $this->create($basket);
+        return $basket;
+    }
+
+    /**
+     * Fetches and returns the given Basket (by object or id).
+     *
+     * @param Basket|string $basket Basket object or id of basket to be fetched.
+     *
+     * @return Basket The fetched Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchBasket($basket): Basket
+    {
+        $basketObj = $basket;
+        if (\is_string($basket)) {
+            $basketObj = (new Basket())->setParentResource($this->heidelpay);
+            $basketObj->setId($basket);
+        }
+
+        $this->fetch($basketObj);
+        return $basketObj;
+    }
+
+    /**
+     * Update the a basket resource with the given basket object (id must be set).
+     *
+     * @param Basket $basket
+     *
+     * @return Basket The updated Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function updateBasket(Basket $basket): Basket
+    {
+        $this->update($basket);
+        return $basket;
     }
 
     //</editor-fold>

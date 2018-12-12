@@ -165,17 +165,57 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     {
         foreach ($response as $key => $value) {
             $newValue = $value ?: null;
-            $setter = 'set' . ucfirst($key);
-            $getter = 'get' . ucfirst($key);
+
+            // handle nested object
             if (\is_object($value)) {
+                $getter = 'get' . ucfirst($key);
                 if (\is_callable([$object, $getter])) {
                     $this->updateValues($object->$getter(), $newValue);
                 } elseif ('processing' === $key) {
                     $this->updateValues($object, $newValue);
                 }
-            } elseif (\is_callable([$object, $setter])) {
-                $object->$setter($newValue);
+                continue;
             }
+
+            // handle nested array
+            if (\is_array($value)) {
+                $firstItem = reset($value);
+                if (is_object($firstItem)) {
+                    // Handled by the owning object since we do not know the type of the items here.
+                    continue;
+                }
+            }
+
+            // handle basic types
+            $this->setItemProperty($object, $key, $newValue);
+        }
+    }
+
+    /**
+     * @param $response
+     * @param $key
+     * @param $item
+     */
+    public function handleValue($response, $key, $item)
+    {
+        if (isset($response->$key)) {
+            $this->setItemProperty($item, $key, $response->$key);
+        }
+    }
+
+    /**
+     * @param $item
+     * @param $key
+     * @param $value
+     */
+    public function setItemProperty($item, $key, $value)
+    {
+        $setter = 'set' . ucfirst($key);
+        if (!is_callable([$item, $setter])) {
+            $setter = 'add' . ucfirst($key);
+        }
+        if (is_callable([$item, $setter])) {
+            $item->$setter($value);
         }
     }
 
@@ -248,15 +288,15 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     public function jsonSerialize()
     {
-        return json_encode($this->expose(), JSON_FORCE_OBJECT);
+        return json_encode($this->expose(), JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
     }
 
     /**
      * Creates an array containing all properties to be exposed to the heidelpay api as resource parameters.
      *
-     * @return array
+     * @return array|\stdClass
      */
-    public function expose(): array
+    public function expose()
     {
         // Add resources properties
         $properties = get_object_vars($this);
@@ -274,7 +314,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                     if ($value instanceof self) {
                         $newValue = $value->expose();
                     } else {
-                        $newValue = (string)$value;
+                        $newValue = $value;
                     }
                     $properties[$property] = $newValue;
                 }
@@ -301,7 +341,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         //---------------------
 
         ksort($properties);
-        return $properties;
+        return count($properties) > 0 ? $properties : new \stdClass();
     }
 
     //</editor-fold>

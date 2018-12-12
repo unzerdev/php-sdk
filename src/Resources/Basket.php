@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\Resources;
 
+use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 
 class Basket extends AbstractHeidelpayResource
@@ -223,15 +224,15 @@ class Basket extends AbstractHeidelpayResource
      */
     public function expose(): array
     {
-        $basketItemArrays = [[]];
+        $basketItemArray = [];
 
         /** @var BasketItem $basketItem */
         foreach ($this->getBasketItems() as $basketItem) {
-            $basketItemArrays[] = $basketItem->expose();
+            $basketItemArray[] = $basketItem->expose();
         }
 
         $returnArray = parent::expose();
-        $returnArray['basketItems'] = array_merge(...$basketItemArrays);
+        $returnArray['basketItems'] = $basketItemArray;
 
         return $returnArray;
     }
@@ -243,6 +244,24 @@ class Basket extends AbstractHeidelpayResource
     {
         return 'baskets';
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        parent::handleResponse($response, $method);
+
+        if (isset($response->basketItems)) {
+            $items = [];
+            foreach ($response->basketItems as $basketItem) {
+                $item = new BasketItem();
+                $item->handleResponse($basketItem);
+                $items[] = $item;
+            }
+            $this->setBasketItems($items);
+        }
+    }
+
     //</editor-fold>
 }

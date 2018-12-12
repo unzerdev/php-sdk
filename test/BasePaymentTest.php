@@ -148,6 +148,16 @@ class BasePaymentTest extends TestCase
         return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
     }
 
+    /**
+     * Creates and returns an order id.
+     *
+     * @return float
+     */
+    public function generateOrderId(): float
+    {
+        return microtime(true);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="DataProviders">
