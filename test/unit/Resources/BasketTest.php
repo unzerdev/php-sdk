@@ -105,4 +105,29 @@ class BasketTest extends BaseUnitTest
         self::assertContains('resultItem1', $basketItemsExposed);
         self::assertContains('resultItem2', $basketItemsExposed);
     }
+
+    /**
+     * Verify handleResponse will create basket items for each basketitem in response.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     */
+    public function handleResponseShouldCreateBasketItemObjectsForAllBasketItemsInResponse()
+    {
+        $response                = new \stdClass();
+        $response->basketItems   = [];
+        $basketItem1                = new \stdClass();
+        $basketItem2                = new \stdClass();
+        $response->basketItems[] = $basketItem1;
+        $response->basketItems[] = $basketItem2;
+
+        $basket =  new Basket();
+        $this->assertEquals(0, $basket->getItemCount());
+        $basket->handleResponse($response);
+        $this->assertEquals(2, $basket->getItemCount());
+        $basket->handleResponse($response);
+        $this->assertEquals(2, $basket->getItemCount());
+    }
 }
