@@ -169,7 +169,7 @@ class HttpService
                 $resourceJson = $resource->jsonSerialize();
                 $debugHandler->log('Http ' . $httpMethod . '-Request: ' . $url);
                 $debugHandler->log('Request: ' . $resourceJson);
-                $debugHandler->log('Response: ' . $response);
+                $debugHandler->log('Response: ' . json_encode(json_decode($response)));
             }
         }
     }
