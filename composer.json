@@ -24,7 +24,7 @@
   "autoload": {
     "psr-4": {
       "heidelpayPHP\\": "src",
-      "heidelpayPHP\\examples": "examples"
+      "heidelpayPHP\\examples\\": "examples"
     }
   },
   "autoload-dev": {
