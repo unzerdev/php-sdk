@@ -116,7 +116,7 @@ class HttpServiceTest extends BaseUnitTest
         $headers = [
             'Authorization' => 'Basic cy1wcml2LU15VGVzdEtleTo=',
             'Content-Type'  => 'application/json',
-            'SDK-VERSION'   => '1.0.0.0'
+            'SDK-VERSION'   => Heidelpay::SDK_VERSION
         ];
         $adapterMock->expects($this->once())->method('setHeaders')->with($headers);
         $adapterMock->expects($this->once())->method('execute')->willReturn('myResponseString');
