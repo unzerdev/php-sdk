@@ -54,8 +54,9 @@ try {
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
 
     //#######  3. Create an authorization (aka reservation) ############################################################
-    $customer      = new Customer('Linda', 'Heideich');
-    $authorization = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customer);
+    $customer            = new Customer('Linda', 'Heideich');
+    $authorization       = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customer);
+    $_SESSION['ShortId'] = $authorization->getShortId();
     if ($authorization->getPayment()->isPending()) {
         redirect(SUCCESS_URL);
     }
