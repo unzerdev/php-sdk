@@ -32,15 +32,15 @@ trait HasOrderId
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getOrderId(): string
+    public function getOrderId()
     {
         return $this->orderId;
     }
 
     /**
-     * @param string $orderId
+     * @param string|null $orderId
      *
      * @return $this
      */
