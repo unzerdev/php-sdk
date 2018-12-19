@@ -150,14 +150,14 @@ class HttpServiceTest extends BaseUnitTest
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(
             ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
         )->getMock();
-        $adapterMock->method('execute')->willReturn('{"response" : "myResponseString"}');
+        $adapterMock->method('execute')->willReturn('{"response":"myResponseString"}');
         $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
 
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
         $loggerMock->expects($this->exactly(3))->method('log')->withConsecutive(
             ['Http GET-Request: https://api.heidelpay.com/v1/my/uri/123'],
             ['Request: dummyResourceJsonSerialized'],
-            ['Response: {"response" : "myResponseString"}']
+            ['Response: {"response":"myResponseString"}']
         );
 
         /** @var DebugHandlerInterface $loggerMock */
@@ -167,7 +167,7 @@ class HttpServiceTest extends BaseUnitTest
         /** @var HttpService $httpServiceMock*/
         $response = $httpServiceMock->send('/my/uri/123', $resource);
 
-        $this->assertEquals('{"response" : "myResponseString"}', $response);
+        $this->assertEquals('{"response":"myResponseString"}', $response);
     }
 
     /**
