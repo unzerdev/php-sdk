@@ -3,13 +3,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.0.0.1][1.0.0.1]
+## [1.0.0.0][1.0.0.0]
 
 ### Fixed
 *   Fixed a bug which resulted in an error on getOrderId when the order id has not been set.
+*   Fixed namespace configuration in composer.json.
+
+### Changed
+*   Set error code to string in HeidelpayApiException by default.
+*   Disabled pretty print of json string in response.
 
 ### Added
 *   Examples: Added shortId of the transaction to the success and failure pages.
+*   Examples: Added an example debug handler.
+*   Readme: Added list of supported payment types.
+*   Added missing ApiResponseCodes.
+*   Added additional getter to fetch the merchant message from a HeidelpayApiException.
+*   Extended integration tests to test with matching addresses and with unmatching addresses.
 
 ## [1.0.0.0][1.0.0.0]
 
