@@ -195,7 +195,7 @@ class HttpServiceTest extends BaseUnitTest
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionMessage('The Request returned a null response!');
-        $this->expectExceptionCode('');
+        $this->expectExceptionCode('No error code provided');
 
         /** @var HttpService $httpServiceMock*/
         $httpServiceMock->send('/my/uri/123', $resource);

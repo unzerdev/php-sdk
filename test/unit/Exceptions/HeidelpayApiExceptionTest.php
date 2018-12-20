@@ -44,7 +44,7 @@ class HeidelpayApiExceptionTest extends BaseUnitTest
         $exception = new HeidelpayApiException();
         $this->assertEquals(HeidelpayApiException::CLIENT_MESSAGE, $exception->getClientMessage());
         $this->assertEquals(HeidelpayApiException::MESSAGE, $exception->getMessage());
-        $this->assertEquals('', $exception->getCode());
+        $this->assertEquals('No error code provided', $exception->getCode());
     }
 
     /**
