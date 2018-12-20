@@ -33,9 +33,7 @@ class ExampleDebugHandler implements DebugHandlerInterface
      */
     public function log(string $message)
     {
-        // Attention: This writes the debug info to the error log of your webserver.
-
-        /** @noinspection ForgottenDebugOutputInspection */
-        error_log($message);
+        // ATTENTION: Uncomment following line to write debug messages to the error log of your web server.
+        //error_log($message);
     }
 }
