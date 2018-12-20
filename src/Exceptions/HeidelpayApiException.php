@@ -54,4 +54,12 @@ class HeidelpayApiException extends \Exception
     {
         return $this->clientMessage;
     }
+
+    /**
+     * @return string
+     */
+    public function getMerchantMessage(): string
+    {
+        return $this->getMessage();
+    }
 }

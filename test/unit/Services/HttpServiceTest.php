@@ -274,7 +274,7 @@ class HttpServiceTest extends BaseUnitTest
             $httpServiceMock->send('/my/uri/123', $resource);
             $this->assertTrue(false, 'The first exception should have been thrown!');
         } catch (HeidelpayApiException $e) {
-            $this->assertEquals('The payment api returned an error!', $e->getMessage());
+            $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
             $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
             $this->assertEmpty($e->getCode());
         }
@@ -283,7 +283,7 @@ class HttpServiceTest extends BaseUnitTest
             $httpServiceMock->send('/my/uri/123', $resource);
             $this->assertTrue(false, 'The second exception should have been thrown!');
         } catch (HeidelpayApiException $e) {
-            $this->assertEquals('This is an error message for the merchant!', $e->getMessage());
+            $this->assertEquals('This is an error message for the merchant!', $e->getMerchantMessage());
             $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
             $this->assertEmpty($e->getCode());
         }
@@ -292,7 +292,7 @@ class HttpServiceTest extends BaseUnitTest
             $httpServiceMock->send('/my/uri/123', $resource);
             $this->assertTrue(false, 'The third exception should have been thrown!');
         } catch (HeidelpayApiException $e) {
-            $this->assertEquals('The payment api returned an error!', $e->getMessage());
+            $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
             $this->assertEquals('This is an error message for the customer!', $e->getClientMessage());
             $this->assertEmpty($e->getCode());
         }
@@ -301,7 +301,7 @@ class HttpServiceTest extends BaseUnitTest
             $httpServiceMock->send('/my/uri/123', $resource);
             $this->assertTrue(false, 'The fourth exception should have been thrown!');
         } catch (HeidelpayApiException $e) {
-            $this->assertEquals('The payment api returned an error!', $e->getMessage());
+            $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
             $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
             $this->assertEquals('This is the error code!', $e->getCode());
         }
