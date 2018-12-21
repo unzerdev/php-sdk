@@ -5,12 +5,27 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.0.0.1][1.0.0.1]
 
-### Fix
+### Fixed
+*   Fixed a bug which resulted in an error on getOrderId when the order id has not been set.
+*   Fixed namespace configuration in composer.json.
 *   Fixed a bug which resulted in metadata not being referenced by charge transactions.
+
+### Changed
+*   Set error code to string in HeidelpayApiException by default.
+*   Disabled pretty print of json string in response.
+*   Re-enabled skipped test.
+
+### Added
+*   Examples: Added shortId of the transaction to the success and failure pages.
+*   Examples: Added an example debug handler.
+*   Readme: Added list of supported payment types.
+*   Added missing ApiResponseCodes.
+*   Added additional getter to fetch the merchant message from a HeidelpayApiException.
+*   Extended integration tests to test with matching addresses and with unmatching addresses.
 
 ## [1.0.0.0][1.0.0.0]
 
-### Fix
+### Fixed
 *   Fixed license information.
 *   Fixed package information.
 *   Fixed return values for several getters.
@@ -44,7 +59,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.0.0-beta.2][1.0.0-beta.2]
 
-### Fix
+### Fixed
 *   Fix result urls.
 *   Fix PhpDoc.
 

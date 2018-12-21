@@ -13,6 +13,17 @@ Please refer to the following documentation for installation instructions and us
 *   [How to use the examples](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-using-the-example-implementations)
 *   [Debugging](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-debugging)
 
+## Supported payment types
+*   Card (credit card and debit card)
+*   Giropay
+*   iDEAL
+*   Invoice (guaranteed)
+*   PayPal
+*   Prepayment
+*   Przelewy24
+*   SEPA direct debit (guaranteed)
+*   SOFORT
+
 ## Support
 For any issues or questions please get in touch with our support.
 

@@ -50,7 +50,7 @@ class ShipmentTest extends BasePaymentTest
             'EUR',
             $invoiceGuaranteed,
             self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
+            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
         $this->assertNotNull($authorize->getId());
         $this->assertNotNull($authorize);
@@ -82,7 +82,7 @@ class ShipmentTest extends BasePaymentTest
             'EUR',
             $invoiceGuaranteed,
             self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
+            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
 
         $payment  = $authorize->getPayment();
@@ -115,7 +115,7 @@ class ShipmentTest extends BasePaymentTest
             'EUR',
             $invoiceGuaranteed,
             self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
+            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
 
         $payment  = $authorize->getPayment();
