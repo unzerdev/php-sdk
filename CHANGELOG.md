@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 *   Set error code to string in HeidelpayApiException by default.
 *   Disabled pretty print of json string in response.
+*   Re-enabled skipped test.
 
 ### Added
 *   Examples: Added shortId of the transaction to the success and failure pages.
