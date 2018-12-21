@@ -28,6 +28,7 @@ use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\HasOrderId;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
@@ -188,6 +189,27 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
             $this->fetchPayment();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \RuntimeException
+     */
+    public function getLinkedResources(): array
+    {
+        /** @var Payment $payment */
+        $payment = $this->getPayment();
+        $paymentType = $payment ? $payment->getPaymentType() : null;
+        if (!$paymentType instanceof BasePaymentType) {
+            throw new \RuntimeException('Payment type is missing!');
+        }
+
+        return [
+            'customer'=> $payment->getCustomer(),
+            'type' => $paymentType,
+            'metadata' => $payment->getMetadata()
+        ];
     }
 
     //</editor-fold>
