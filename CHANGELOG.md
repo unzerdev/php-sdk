@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Added missing ApiResponseCodes.
 *   Added additional getter to fetch the merchant message from a HeidelpayApiException.
 *   Extended integration tests to test with matching addresses and with unmatching addresses.
+*   Added additional badges to readme file.
 
 ## [1.0.0.0][1.0.0.0]
 
