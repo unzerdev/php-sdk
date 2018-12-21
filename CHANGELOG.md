@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Fixed
 *   Fixed a bug which resulted in an error on getOrderId when the order id has not been set.
 *   Fixed namespace configuration in composer.json.
+*   Fixed a bug which resulted in metadata not being referenced by charge transactions.
 
 ### Changed
 *   Set error code to string in HeidelpayApiException by default.
@@ -57,7 +58,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.0.0-beta.2][1.0.0-beta.2]
 
-### Fix
+### Fixed
 *   Fix result urls.
 *   Fix PhpDoc.
 

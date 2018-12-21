@@ -26,7 +26,6 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\HasCancellations;
 
 class Authorization extends AbstractTransactionType
@@ -227,27 +226,6 @@ class Authorization extends AbstractTransactionType
     protected function getResourcePath(): string
     {
         return 'authorize';
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws \RuntimeException
-     */
-    public function getLinkedResources(): array
-    {
-        /** @var Payment $payment */
-        $payment = $this->getPayment();
-        $paymentType = $payment ? $payment->getPaymentType() : null;
-        if (!$paymentType instanceof BasePaymentType) {
-            throw new \RuntimeException('Payment type is missing!');
-        }
-
-        return [
-            'customer'=> $payment->getCustomer(),
-            'type' => $paymentType,
-            'metadata' => $payment->getMetadata()
-        ];
     }
 
     //</editor-fold>
