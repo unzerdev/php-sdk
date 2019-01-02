@@ -22,13 +22,22 @@
  *
  * @package  heidelpayPHP/examples
  */
+
+session_start();
 ?>
 
 <!DOCTYPE html>
 <html>
     <body>
         <h1>Success</h1>
-        <p>The payment has been successfully completed.</p>
+        <p>
+            The payment has been successfully completed.
+            <?php
+            if (isset($_SESSION['ShortId']) && !empty($_SESSION['ShortId'])) {
+                echo '<br>Please look for ShortId ' . $_SESSION['ShortId'] . ' in hIP to see the transaction.';
+            }
+            ?>
+        </p>
         <p><a href=".">start again</a></p>
     </body>
 </html>

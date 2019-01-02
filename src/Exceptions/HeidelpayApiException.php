@@ -39,7 +39,7 @@ class HeidelpayApiException extends \Exception
      * @param string $clientMessage
      * @param string $code
      */
-    public function __construct($merchantMessage = '', $clientMessage = '', $code = '')
+    public function __construct($merchantMessage = '', $clientMessage = '', $code = 'No error code provided')
     {
         $merchantMessage = empty($merchantMessage) ? static::MESSAGE : $merchantMessage;
         $this->clientMessage = empty($clientMessage) ? static::CLIENT_MESSAGE : $clientMessage;
@@ -53,5 +53,13 @@ class HeidelpayApiException extends \Exception
     public function getClientMessage(): string
     {
         return $this->clientMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMerchantMessage(): string
+    {
+        return $this->getMessage();
     }
 }

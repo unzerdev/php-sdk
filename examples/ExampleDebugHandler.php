@@ -1,6 +1,6 @@
 <?php
 /**
- * This trait adds the orderId property to a class.
+ * This custom debug handler will echo out debug messages.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -20,35 +20,20 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/traits
+ * @package  heidelpayPHP/test/integration
  */
-namespace heidelpayPHP\Traits;
+namespace heidelpayPHP\examples;
 
-trait HasOrderId
+use heidelpayPHP\Interfaces\DebugHandlerInterface;
+
+class ExampleDebugHandler implements DebugHandlerInterface
 {
-    /** @var string $orderId */
-    protected $orderId;
-
-    //<editor-fold desc="Getters/Setters">
-
     /**
-     * @return string|null
+     * {@inheritDoc}
      */
-    public function getOrderId()
+    public function log(string $message)
     {
-        return $this->orderId;
+        // ATTENTION: Uncomment following line to write debug messages to the error log of your web server.
+        //error_log($message);
     }
-
-    /**
-     * @param string|null $orderId
-     *
-     * @return $this
-     */
-    public function setOrderId($orderId): self
-    {
-        $this->orderId = $orderId;
-        return $this;
-    }
-
-    //</editor-fold>
 }
