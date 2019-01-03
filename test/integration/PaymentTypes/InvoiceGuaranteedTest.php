@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
@@ -72,7 +73,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
             100.0,
             'EUR',
             self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
+            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
         $this->assertNotNull($authorization);
         $this->assertNotEmpty($authorization->getId());
@@ -106,7 +107,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
             100.0,
             'EUR',
             self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
+            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
 
         $cancel = $authorization->cancel();
@@ -132,5 +133,29 @@ class InvoiceGuaranteedTest extends BasePaymentTest
         $fetchedInvoiceGuaranteed = $this->heidelpay->fetchPaymentType($invoiceGuaranteed->getId());
         $this->assertInstanceOf(InvoiceGuaranteed::class, $fetchedInvoiceGuaranteed);
         $this->assertEquals($invoiceGuaranteed->getId(), $fetchedInvoiceGuaranteed->getId());
+    }
+
+    /**
+     * Verify ivg will throw error if addresses do not match.
+     *
+     * @test
+     *
+     * @param InvoiceGuaranteed $invoiceGuaranteed
+     *
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     * @depends invoiceGuaranteedTypeShouldBeCreatable
+     */
+    public function ivgShouldThrowErrorIfAddressesDoNotMatch(InvoiceGuaranteed $invoiceGuaranteed)
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVG_ADDRESSES_DO_NOT_MATCH);
+
+        $invoiceGuaranteed->authorize(
+            100.0,
+            'EUR',
+            self::RETURN_URL,
+            $this->getMaximumCustomerInclShippingAddress()
+        );
     }
 }

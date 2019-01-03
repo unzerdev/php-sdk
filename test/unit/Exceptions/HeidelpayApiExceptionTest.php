@@ -43,8 +43,8 @@ class HeidelpayApiExceptionTest extends BaseUnitTest
     {
         $exception = new HeidelpayApiException();
         $this->assertEquals(HeidelpayApiException::CLIENT_MESSAGE, $exception->getClientMessage());
-        $this->assertEquals(HeidelpayApiException::MESSAGE, $exception->getMessage());
-        $this->assertEquals('', $exception->getCode());
+        $this->assertEquals(HeidelpayApiException::MESSAGE, $exception->getMerchantMessage());
+        $this->assertEquals('No error code provided', $exception->getCode());
     }
 
     /**
@@ -62,7 +62,7 @@ class HeidelpayApiExceptionTest extends BaseUnitTest
     public function heidelpayApiExceptionShouldReturnTheGivenData(array $testData, array $expected)
     {
         $exception = new HeidelpayApiException($testData['message'], $testData['client_message'], $testData['code']);
-        $this->assertEquals($expected['message'], $exception->getMessage());
+        $this->assertEquals($expected['message'], $exception->getMerchantMessage());
         $this->assertEquals($expected['client_message'], $exception->getClientMessage());
         $this->assertEquals($expected['code'], $exception->getCode());
     }

@@ -133,9 +133,33 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
             100.0,
             'EUR',
             self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
+            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
+    }
+
+    /**
+     * Verify ddg will throw error if addresses do not match.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function ddgShouldThrowErrorIfAddressesDoNotMatch()
+    {
+        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
+        $this->heidelpay->createPaymentType($directDebitGuaranteed);
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_DDG_ADDRESSES_DO_NOT_MATCH);
+
+        $directDebitGuaranteed->charge(
+            100.0,
+            'EUR',
+            self::RETURN_URL,
+            $this->getMaximumCustomerInclShippingAddress()
+        );
     }
 }

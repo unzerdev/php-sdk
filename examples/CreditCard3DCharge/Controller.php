@@ -29,6 +29,7 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
@@ -52,12 +53,14 @@ $paymentTypeId   = $_POST['resourceId'];
 try {
     //#######  2. Create a heidelpay object using your private key #####################################################
     $heidelpay = new Heidelpay('s-priv-2a10BF2Cq2YvAo6ALSGHc3X7F42oWAIp');
+    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     //#######  3. Create an authorization (aka reservation) ############################################################
-    $customer      = new Customer('Linda', 'Heideich');
-    $authorization = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
-    $_SESSION['PaymentId'] = $authorization->getPaymentId();
-    redirect($authorization->getRedirectUrl());
+    $customer              = new Customer('Linda', 'Heideich');
+    $charge                = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+    $_SESSION['PaymentId'] = $charge->getPaymentId();
+    $_SESSION['ShortId']   = $charge->getShortId();
+    redirect($charge->getRedirectUrl());
 } catch (HeidelpayApiException $e) {
     redirect(FAILURE_URL);
 }

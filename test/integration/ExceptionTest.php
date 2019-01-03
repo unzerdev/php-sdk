@@ -51,7 +51,7 @@ class ExceptionTest extends BasePaymentTest
             $this->assertInstanceOf(HeidelpayApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
             $this->assertNotEmpty($e->getClientMessage());
-            $this->assertNotEquals($e->getMessage(), $e->getClientMessage());
+            $this->assertNotEquals($e->getMerchantMessage(), $e->getClientMessage());
         }
     }
 }

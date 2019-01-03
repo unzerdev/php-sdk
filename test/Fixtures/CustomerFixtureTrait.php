@@ -56,7 +56,7 @@ trait CustomerFixtureTrait
             ->setEmail('peter.universum@universum-group.de')
             ->setMobile('+49172123456')
             ->setPhone('+4962216471100')
-            ->setBillingAddress($this->getAddress())
+            ->setBillingAddress($this->getBillingAddress())
             ->setParentResource($this->heidelpay);
     }
 
@@ -67,7 +67,7 @@ trait CustomerFixtureTrait
      */
     public function getMaximumCustomerInclShippingAddress(): Customer
     {
-        return $this->getMaximumCustomer()->setShippingAddress($this->getAddress());
+        return $this->getMaximumCustomer()->setShippingAddress($this->getShippingAddress());
     }
 
     /**
@@ -75,11 +75,27 @@ trait CustomerFixtureTrait
      *
      * @return Address
      */
-    public function getAddress(): Address
+    public function getBillingAddress(): Address
     {
         return (new Address())
             ->setName('Peter Universum')
             ->setStreet('Hugo-Junkers-Str. 5')
+            ->setZip('60386')
+            ->setCity('Frankfurt am Main')
+            ->setCountry('DE')
+            ->setState('DE-BO');
+    }
+
+    /**
+     * Create a test Address
+     *
+     * @return Address
+     */
+    public function getShippingAddress(): Address
+    {
+        return (new Address())
+            ->setName('Max Universum')
+            ->setStreet('Hugo-Junkers-Str. 4')
             ->setZip('60386')
             ->setCity('Frankfurt am Main')
             ->setCountry('DE')

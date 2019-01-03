@@ -29,6 +29,7 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 
@@ -47,6 +48,8 @@ if (!isset($_SESSION['PaymentId'])) {
 $paymentId = $_SESSION['PaymentId'];
 try {
     $heidelpay = new Heidelpay('s-priv-2a10BF2Cq2YvAo6ALSGHc3X7F42oWAIp');
+    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+
     $payment   = $heidelpay->fetchPayment($paymentId);
     if ($payment->isCompleted()) {
         redirect(SUCCESS_URL);
