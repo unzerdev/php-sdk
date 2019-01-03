@@ -141,20 +141,14 @@ class BasketTest extends BaseUnitTest
      */
     public function referenceIdShouldBeAutomaticallySetToTheArrayIndexIfItIsNotSet()
     {
-        $basket = new Basket();
-        $basket->setAmountTotal(1234);
-        $basket->setAmountTotalDiscount(3456);
-        $basket->setCurrencyCode('EUR');
-        $basket->setOrderId('myOrderId');
-
         $basketItem1 = new BasketItem();
-        $basketItem2 = new BasketItem();
-
         $this->assertNull($basketItem1->getBasketItemReferenceId());
+
+        $basketItem2 = new BasketItem();
         $this->assertNull($basketItem2->getBasketItemReferenceId());
 
+        $basket = new Basket();
         $basket->addBasketItem($basketItem1)->addBasketItem($basketItem2);
-
         $this->assertEquals('0', $basketItem1->getBasketItemReferenceId());
         $this->assertEquals('1', $basketItem2->getBasketItemReferenceId());
     }
