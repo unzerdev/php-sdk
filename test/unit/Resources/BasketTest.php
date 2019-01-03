@@ -118,8 +118,8 @@ class BasketTest extends BaseUnitTest
     {
         $response                = new \stdClass();
         $response->basketItems   = [];
-        $basketItem1                = new \stdClass();
-        $basketItem2                = new \stdClass();
+        $basketItem1             = new \stdClass();
+        $basketItem2             = new \stdClass();
         $response->basketItems[] = $basketItem1;
         $response->basketItems[] = $basketItem2;
 
