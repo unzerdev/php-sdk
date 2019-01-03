@@ -37,19 +37,19 @@ class BasketItem extends AbstractHeidelpayResource
     /** @var int $vat */
     protected $vat;
 
-    /** @var int $amountDiscount */
+    /** @var float $amountDiscount */
     protected $amountDiscount;
 
-    /** @var int $amountGross */
+    /** @var float $amountGross */
     protected $amountGross = 0.0;
 
-    /** @var int $amountGross */
+    /** @var float $amountVat */
     protected $amountVat;
 
-    /** @var int $amountPerUnit */
+    /** @var float $amountPerUnit */
     protected $amountPerUnit = 0.0;
 
-    /** @var int $amountNet */
+    /** @var float $amountNet */
     protected $amountNet = 0.0;
 
     /** @var string $unit */
@@ -200,38 +200,38 @@ class BasketItem extends AbstractHeidelpayResource
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getAmountPerUnit(): int
+    public function getAmountPerUnit(): float
     {
         return $this->amountPerUnit;
     }
 
     /**
-     * @param int $amountPerUnit
+     * @param float $amountPerUnit
      *
      * @return BasketItem
      */
-    public function setAmountPerUnit(int $amountPerUnit): BasketItem
+    public function setAmountPerUnit(float $amountPerUnit): BasketItem
     {
         $this->amountPerUnit = $amountPerUnit;
         return $this;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getAmountNet(): int
+    public function getAmountNet(): float
     {
         return $this->amountNet;
     }
 
     /**
-     * @param int $amountNet
+     * @param float $amountNet
      *
      * @return BasketItem
      */
-    public function setAmountNet(int $amountNet): BasketItem
+    public function setAmountNet(float $amountNet): BasketItem
     {
         $this->amountNet = $amountNet;
         return $this;
