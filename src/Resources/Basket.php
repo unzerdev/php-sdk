@@ -194,6 +194,8 @@ class Basket extends AbstractHeidelpayResource
     }
 
     /**
+     * Adds the given BasketItem to the Basket.
+     *
      * @param BasketItem $basketItem
      *
      * @return Basket
@@ -201,6 +203,9 @@ class Basket extends AbstractHeidelpayResource
     public function addBasketItem(BasketItem $basketItem): Basket
     {
         $this->basketItems[] = $basketItem;
+        if ($basketItem->getBasketItemReferenceId() === null) {
+            $basketItem->setBasketItemReferenceId($this->getKeyOfLastBasketItemAdded());
+        }
         return $this;
     }
 
@@ -235,6 +240,17 @@ class Basket extends AbstractHeidelpayResource
         $returnArray['basketItems'] = $basketItemArray;
 
         return $returnArray;
+    }
+
+    /**
+     * Returns the key of the last BasketItem in the Array.
+     *
+     * @return int|string|null
+     */
+    private function getKeyOfLastBasketItemAdded()
+    {
+        end($this->basketItems);
+        return key($this->basketItems);
     }
 
     /**
