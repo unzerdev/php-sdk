@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\integration;
 
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
@@ -43,8 +44,6 @@ class BasketTest extends BasePaymentTest
      * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
-     *
-     * @group skip
      */
     public function minBasketShouldBeCreatableAndFetchable()
     {
@@ -116,17 +115,61 @@ class BasketTest extends BasePaymentTest
 
         $fetchedBasket->setAmountTotal(4321);
         $fetchedBasket->setAmountTotalDiscount(5432);
-        $fetchedBasket->setCurrencyCode('USD');
         $fetchedBasket->setNote('This basket is updateable!');
         $this->heidelpay->updateBasket($fetchedBasket);
 
         $this->heidelpay->fetchBasket($basket);
         $this->assertEquals($orderId, $basket->getOrderId());
-        $this->assertEquals('USD', $basket->getCurrencyCode());
         $this->assertEquals(4321, $basket->getAmountTotal());
         $this->assertEquals(5432, $basket->getAmountTotalDiscount());
         $this->assertEquals('This basket is updateable!', $basket->getNote());
         $this->assertNotEquals($basket->getBasketItemByIndex(0)->expose(), $basketItem->expose());
+    }
+
+    /**
+     * Verify the basket can only be 'EUR'.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function basketShouldThrowErrorOnCreateIfCurrencyIsNotEUR()
+    {
+        $orderId = $this->generateOrderId();
+        $basket  = new Basket($orderId, 123.4, 'USD', []);
+        $basketItem = new BasketItem('myItem', 1234, 2345, 3456, 12);
+        $basket->addBasketItem($basketItem);
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_BASKET_CURRENCY_INVALID);
+
+        $this->heidelpay->createBasket($basket);
+    }
+
+    /**
+     * Verify the basket can only be 'EUR'.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     *
+     * @group skip
+     */
+    public function basketShouldThrowErrorOnUpdateIfCurrencyIsNotEUR()
+    {
+        $orderId = $this->generateOrderId();
+        $basket  = new Basket($orderId, 123.4, 'EUR', []);
+        $basketItem = new BasketItem('myItem', 1234, 2345, 3456, 12);
+        $basket->addBasketItem($basketItem);
+        $this->heidelpay->createBasket($basket);
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_BASKET_CURRENCY_INVALID);
+
+        $basket->setCurrencyCode('USD');
+        $this->heidelpay->updateBasket($basket);
     }
 
     /**
