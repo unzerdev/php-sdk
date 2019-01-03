@@ -164,7 +164,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     private function updateValues($object, \stdClass $response)
     {
         foreach ($response as $key => $value) {
-            $newValue = $value ?: null;
+            $newValue = $value;
+            if (!\is_string($value) || $value === '') {
+                $newValue = $value ?: null;
+            }
 
             // handle nested object
             if (\is_object($value)) {
