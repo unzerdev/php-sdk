@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the ideal payment type.
+ * This represents the iDEAL payment type.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -46,9 +46,9 @@ class Ideal extends BasePaymentType
     /**
      * @param string $bic
      *
-     * @return Ideal
+     * @return self
      */
-    public function setBic(string $bic): Ideal
+    public function setBic(string $bic): self
     {
         $this->bic = $bic;
         return $this;
