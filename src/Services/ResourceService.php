@@ -36,6 +36,7 @@ use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
@@ -392,6 +393,9 @@ class ResourceService
                 break;
             case IdStrings::PIS:
                 $paymentType = new PIS();
+                break;
+            case IdStrings::EPS:
+                $paymentType = new EPS();
                 break;
             default:
                 throw new \RuntimeException('Invalid payment type!');
