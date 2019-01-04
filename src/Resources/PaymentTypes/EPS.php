@@ -26,4 +26,30 @@ namespace heidelpayPHP\Resources\PaymentTypes;
 
 class EPS extends BasePaymentType
 {
+
+    /** @var string $bic */
+    protected $bic;
+
+    //<editor-fold desc="Getter/Setter">
+
+    /**
+     * @return string|null
+     */
+    public function getBic()
+    {
+        return $this->bic;
+    }
+
+    /**
+     * @param string $bic
+     *
+     * @return self
+     */
+    public function setBic(string $bic): self
+    {
+        $this->bic = $bic;
+        return $this;
+    }
+
+    //</editor-fold>
 }
