@@ -47,6 +47,13 @@ class EPSTest extends BasePaymentTest
      */
     public function epsShouldBeCreatable(): EPS
     {
+        // Without BIC
+        /** @var EPS $eps */
+        $eps = $this->heidelpay->createPaymentType(new EPS());
+        $this->assertInstanceOf(EPS::class, $eps);
+        $this->assertNotNull($eps->getId());
+
+        // With BIC
         /** @var EPS $eps */
         $eps = $this->heidelpay->createPaymentType((new EPS())->setBic(self::TEST_BIC));
         $this->assertInstanceOf(EPS::class, $eps);
