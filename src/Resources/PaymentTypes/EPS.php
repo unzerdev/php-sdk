@@ -24,8 +24,11 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
+use heidelpayPHP\Traits\CanDirectCharge;
+
 class EPS extends BasePaymentType
 {
+    use CanDirectCharge;
 
     /** @var string $bic */
     protected $bic;

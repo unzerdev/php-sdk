@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\test\BasePaymentTest;
@@ -31,7 +32,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 
 class EPSTest extends BasePaymentTest
 {
-    const TEST_BIC = 'GIBAATWGXXX';
+    const TEST_BIC = 'STZZATWWXXX';
 
     /**
      * Verify EPS payment type is creatable.
@@ -54,64 +55,64 @@ class EPSTest extends BasePaymentTest
         return $eps;
     }
 
-//    /**
-//     * Verify that eps is not authorizable.
-//     *
-//     * @test
-//     *
-//     * @param EPS $eps
-//     *
-//     * @throws HeidelpayApiException
-//     * @throws \RuntimeException
-//     * @depends epsShouldBeCreatable
-//     */
-//    public function epsShouldThrowExceptionOnAuthorize(EPS $eps)
-//    {
-//        $this->expectException(HeidelpayApiException::class);
-//        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
-//
-//        $this->heidelpay->authorize(1.0, 'EUR', $eps, self::RETURN_URL);
-//    }
-//
-//    /**
-//     * Verify that eps payment type is chargeable.
-//     *
-//     * @test
-//     * @depends epsShouldBeCreatable
-//     *
-//     * @param EPS $eps
-//     *
-//     * @throws HeidelpayApiException
-//     * @throws ExpectationFailedException
-//     * @throws \RuntimeException
-//     */
-//    public function epsShouldBeChargeable(EPS $eps)
-//    {
-//        $charge = $eps->charge(1.0, 'EUR', self::RETURN_URL);
-//        $this->assertNotNull($charge);
-//        $this->assertNotNull($charge->getId());
-//        $this->assertNotNull($charge->getRedirectUrl());
-//
-//        $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
-//        $this->assertEquals($charge->expose(), $fetchCharge->expose());
-//    }
-//
-//    /**
-//     * Verify eps payment type can be fetched.
-//     *
-//     * @test
-//     * @depends epsShouldBeCreatable
-//     *
-//     * @param EPS $eps
-//     *
-//     * @throws HeidelpayApiException
-//     * @throws ExpectationFailedException
-//     * @throws \RuntimeException
-//     */
-//    public function epsTypeCanBeFetched(EPS $eps)
-//    {
-//        $fetchedEPS = $this->heidelpay->fetchPaymentType($eps->getId());
-//        $this->assertInstanceOf(EPS::class, $fetchedEPS);
-//        $this->assertEquals($eps->getId(), $fetchedEPS->getId());
-//    }
+    /**
+     * Verify that eps is not authorizable.
+     *
+     * @test
+     *
+     * @param EPS $eps
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     * @depends epsShouldBeCreatable
+     */
+    public function epsShouldThrowExceptionOnAuthorize(EPS $eps)
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
+
+        $this->heidelpay->authorize(1.0, 'EUR', $eps, self::RETURN_URL);
+    }
+
+    /**
+     * Verify that eps payment type is chargeable.
+     *
+     * @test
+     * @depends epsShouldBeCreatable
+     *
+     * @param EPS $eps
+     *
+     * @throws HeidelpayApiException
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     */
+    public function epsShouldBeChargeable(EPS $eps)
+    {
+        $charge = $eps->charge(1.0, 'EUR', self::RETURN_URL);
+        $this->assertNotNull($charge);
+        $this->assertNotNull($charge->getId());
+        $this->assertNotNull($charge->getRedirectUrl());
+
+        $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
+        $this->assertEquals($charge->expose(), $fetchCharge->expose());
+    }
+
+    /**
+     * Verify eps payment type can be fetched.
+     *
+     * @test
+     * @depends epsShouldBeCreatable
+     *
+     * @param EPS $eps
+     *
+     * @throws HeidelpayApiException
+     * @throws ExpectationFailedException
+     * @throws \RuntimeException
+     */
+    public function epsTypeCanBeFetched(EPS $eps)
+    {
+        $fetchedEPS = $this->heidelpay->fetchPaymentType($eps->getId());
+        $this->assertInstanceOf(EPS::class, $fetchedEPS);
+        $this->assertEquals($eps->expose(), $fetchedEPS->expose());
+    }
 }
