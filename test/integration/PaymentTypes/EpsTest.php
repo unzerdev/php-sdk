@@ -31,7 +31,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 
 class EPSTest extends BasePaymentTest
 {
-    const TEST_BIC = 'RABONL2U';
+    const TEST_BIC = 'GIBAATWGXXX';
 
     /**
      * Verify EPS payment type is creatable.
