@@ -32,7 +32,7 @@ class BasketItem extends AbstractHeidelpayResource
     protected $basketItemReferenceId;
 
     /** @var int $quantity */
-    protected $quantity;
+    protected $quantity = 1;
 
     /** @var int $vat */
     protected $vat;

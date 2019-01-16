@@ -42,7 +42,7 @@ class BasketItemTest extends BaseUnitTest
     public function settersAndGettersShouldWork()
     {
         $basketItem = new BasketItem();
-        $this->assertEquals(0, $basketItem->getQuantity());
+        $this->assertEquals(1, $basketItem->getQuantity());
         $this->assertEquals(0, $basketItem->getAmountDiscount());
         $this->assertEquals(0, $basketItem->getAmountGross());
         $this->assertEquals(0, $basketItem->getAmountPerUnit());
