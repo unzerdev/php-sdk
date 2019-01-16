@@ -140,7 +140,7 @@ class BasketTest extends BasePaymentTest
         $orderId = $this->generateOrderId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 123.4, 234.5, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
