@@ -1,6 +1,6 @@
 <?php
 /**
- * This trait adds amount properties to a class.
+ * This class contains the amount properties which are maynly used by the Payment class.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *

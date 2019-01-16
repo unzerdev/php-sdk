@@ -26,7 +26,9 @@ namespace heidelpayPHP\Traits;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 
 trait CanDirectChargeWithCustomer
@@ -39,17 +41,37 @@ trait CanDirectChargeWithCustomer
      * @param string          $currency
      * @param string          $returnUrl
      * @param Customer|string $customer
-     * @param null            $orderId
+     * @param string|null     $orderId
+     * @param Metadata|null   $metadata
+     * @param Basket|null     $basket    The Basket object corresponding to the payment.
+     *                                   The Basket object will be created automatically if it does not exist
+     *                                   yet (i.e. has no id).
      *
      * @return Charge
      *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    public function charge($amount, $currency, $returnUrl, $customer, $orderId = null): Charge
-    {
+    public function charge(
+        $amount,
+        $currency,
+        $returnUrl,
+        $customer,
+        $orderId = null,
+        $metadata = null,
+        $basket = null
+    ): Charge {
         if ($this instanceof HeidelpayParentInterface) {
-            return $this->getHeidelpayObject()->charge($amount, $currency, $this, $returnUrl, $customer, $orderId);
+            return $this->getHeidelpayObject()->charge(
+                $amount,
+                $currency,
+                $this,
+                $returnUrl,
+                $customer,
+                $orderId,
+                $metadata,
+                $basket
+            );
         }
 
         throw new \RuntimeException(

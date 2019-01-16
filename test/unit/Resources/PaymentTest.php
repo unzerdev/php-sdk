@@ -28,6 +28,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Constants\PaymentState;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Amount;
 use heidelpayPHP\Resources\Metadata;
@@ -1624,6 +1625,67 @@ class PaymentTest extends BaseUnitTest
 
         $payment->setMetadata($metadata);
         $this->assertSame($heidelpay, $metadata->getParentResource());
+    }
+
+    /**
+     * Verify set Basket will call create if the given basket object does not exist yet.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function setBasketShouldCallCreateIfTheGivenBasketObjectDoesNotExistYet()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$heidelpay])->setMethods(['create'])->getMock();
+
+        /** @var ResourceService $resourceSrvMock */
+        $heidelpay->setResourceService($resourceSrvMock);
+
+        $basket = new Basket();
+        $resourceSrvMock->expects($this->once())->method('create')->with(
+            $this->callback(function ($object) use ($basket, $heidelpay) {
+                /** @var Basket $object */
+                return $object === $basket && $object->getParentResource() === $heidelpay;
+            })
+        );
+
+        $payment = new Payment($heidelpay);
+        $payment->setBasket($basket);
+    }
+
+    /**
+     * Verify updateResponseResources will fetch the basketId in response if it is set.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function updateResponseResourcesShouldFetchBasketIdIfItIsSetInResponse()
+    {
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()
+            ->setMethods(['fetchBasket'])->getMock();
+
+        $basket = new Basket();
+        $heidelpayMock->expects($this->once())->method('fetchBasket')->with('myResourcesBasketId')->willReturn($basket);
+
+        $payment = new Payment($heidelpayMock);
+        $response = new \stdClass();
+        $payment->handleResponse($response);
+        $this->assertNull($payment->getBasket());
+
+        $response->resources = new \stdClass();
+        $response->resources->basketId = 'myResourcesBasketId';
+        $payment->handleResponse($response);
     }
 
     //<editor-fold desc="Data Providers">
