@@ -58,7 +58,7 @@ class Basket extends AbstractHeidelpayResource
     public function __construct(
         string $orderId = '',
         float $amountTotal = 0.0,
-        string $currencyCode = '',
+        string $currencyCode = 'EUR',
         array $basketItems = []
     ) {
         $this->amountTotal  = $amountTotal;
