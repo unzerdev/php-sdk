@@ -112,10 +112,10 @@ class BasketTest extends BasePaymentTest
         $this->heidelpay->createBasket($basket);
 
         $fetchedBasket = $this->heidelpay->fetchBasket($basket->getId());
-
         $fetchedBasket->setAmountTotal(4321);
         $fetchedBasket->setAmountTotalDiscount(5432);
         $fetchedBasket->setNote('This basket is updateable!');
+        $fetchedBasket->getBasketItemByIndex(0)->setTitle('This item can also be updated!');
         $this->heidelpay->updateBasket($fetchedBasket);
 
         $this->heidelpay->fetchBasket($basket);

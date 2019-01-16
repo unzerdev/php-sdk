@@ -155,7 +155,7 @@ class BasePaymentTest extends TestCase
      */
     public function generateOrderId(): float
     {
-        return microtime(true);
+        return (string)microtime(true);
     }
 
     //</editor-fold>
