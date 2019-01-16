@@ -27,6 +27,7 @@ namespace heidelpayPHP\Services;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -131,6 +132,9 @@ class PaymentService
      * @param Customer|string|null   $customer
      * @param string|null            $orderId
      * @param Metadata|string|null   $metadata
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
+     *                                            The Basket object will be created automatically if it does not exist
+     *                                            yet (i.e. has no id).
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -144,10 +148,20 @@ class PaymentService
         $returnUrl,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
-        return $this->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata);
+        return $this->authorizeWithPayment(
+            $amount,
+            $currency,
+            $payment,
+            $returnUrl,
+            $customer,
+            $orderId,
+            $metadata,
+            $basket
+        );
     }
 
     /**
@@ -160,6 +174,9 @@ class PaymentService
      * @param Customer|string|null $customer
      * @param string|null          $orderId
      * @param Metadata|string|null $metadata
+     * @param Basket|null          $basket    The Basket object corresponding to the payment.
+     *                                        The Basket object will be created automatically if it does not exist
+     *                                        yet (i.e. has no id).
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -173,10 +190,11 @@ class PaymentService
         $returnUrl = null,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): Authorization {
         $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
-        $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata);
+        $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->resourceService->create($authorization);
         return $authorization;
     }
@@ -195,6 +213,9 @@ class PaymentService
      * @param Customer|string|null   $customer
      * @param string|null            $orderId
      * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
+     *                                            The Basket object will be created automatically if it does not exist
+     *                                            yet (i.e. has no id).
      *
      * @return Charge Resulting Charge object.
      *
@@ -208,11 +229,12 @@ class PaymentService
         $returnUrl,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
         $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId);
-        $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata);
+        $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->resourceService->create($charge);
 
         return $charge;

@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the customer resource.
+ * This represents the metadata resource.
  *
  * Copyright (C) 2018 Heidelpay GmbH
  *

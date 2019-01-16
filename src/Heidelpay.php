@@ -29,6 +29,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
@@ -49,7 +50,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.0.0.1';
+    const SDK_VERSION = '1.0.1.0';
 
     /** @var string $key */
     private $key;
@@ -377,6 +378,55 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
+    //<editor-fold desc="Basket resource">
+
+    /**
+     * Creates and returns the given basket resource.
+     *
+     * @param Basket $basket The basket to be created.
+     *
+     * @return Basket The created Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createBasket(Basket $basket): Basket
+    {
+        return $this->resourceService->createBasket($basket);
+    }
+
+    /**
+     * Fetches and returns the given Basket (by object or id).
+     *
+     * @param Basket|string $basket Basket object or id of basket to be fetched.
+     *
+     * @return Basket The fetched Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchBasket($basket): Basket
+    {
+        return $this->resourceService->fetchBasket($basket);
+    }
+
+    /**
+     * Update the a basket resource with the given basket object (id must be set).
+     *
+     * @param Basket $basket
+     *
+     * @return Basket The updated Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function updateBasket(Basket $basket): Basket
+    {
+        return $this->resourceService->updateBasket($basket);
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="PaymentType resource">
 
     /**
@@ -655,6 +705,9 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
      * @param string|null            $orderId     A custom order id which can be set by the merchant.
      * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
+     *                                            The Basket object will be created automatically if it does not exist
+     *                                            yet (i.e. has no id).
      *
      * @return Authorization The resulting object of the Authorization resource.
      *
@@ -668,7 +721,8 @@ class Heidelpay implements HeidelpayParentInterface
         $returnUrl,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): AbstractTransactionType {
         return $this->paymentService->authorize(
             $amount,
@@ -677,7 +731,8 @@ class Heidelpay implements HeidelpayParentInterface
             $returnUrl,
             $customer,
             $orderId,
-            $metadata
+            $metadata,
+            $basket
         );
     }
 
@@ -691,6 +746,9 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|string|null $customer  The Customer object or the id of the customer resource to reference.
      * @param string|null          $orderId   A custom order id which can be set by the merchant.
      * @param Metadata|null        $metadata  The Metadata object containing custom information for the payment.
+     * @param Basket|null          $basket    The Basket object corresponding to the payment.
+     *                                        The Basket object will be created automatically if it does not exist
+     *                                        yet (i.e. has no id).
      *
      * @return Authorization The resulting object of the Authorization resource.
      *
@@ -704,10 +762,11 @@ class Heidelpay implements HeidelpayParentInterface
         $returnUrl = null,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): AbstractTransactionType {
         return $this->paymentService
-            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata);
+            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata, $basket);
     }
 
     //</editor-fold>
@@ -724,6 +783,9 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
      * @param string|null            $orderId     A custom order id which can be set by the merchant.
      * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
+     *                                            The Basket object will be created automatically if it does not exist
+     *                                            yet (i.e. has no id).
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -737,7 +799,8 @@ class Heidelpay implements HeidelpayParentInterface
         $returnUrl,
         $customer = null,
         $orderId = null,
-        $metadata = null
+        $metadata = null,
+        $basket = null
     ): AbstractTransactionType {
         return $this->paymentService->charge(
             $amount,
@@ -746,7 +809,8 @@ class Heidelpay implements HeidelpayParentInterface
             $returnUrl,
             $customer,
             $orderId,
-            $metadata
+            $metadata,
+            $basket
         );
     }
 

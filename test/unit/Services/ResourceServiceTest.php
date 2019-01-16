@@ -29,6 +29,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
@@ -1081,6 +1082,122 @@ class ResourceServiceTest extends BaseUnitTest
 
         $response = $resourceSrv->send($resourceMock, HttpAdapterInterface::REQUEST_DELETE);
         $this->assertEquals('This is the response', $response->response);
+    }
+
+    /**
+     * Verify createBasket will set parentResource and call create with the given basket.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function createBasketShouldSetTheParentResourceAndCallCreateWithTheGivenBasket()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$heidelpay])
+            ->setMethods(['create'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create');
+
+        $basket = new Basket();
+        try {
+            $basket->getParentResource();
+            $this->assertTrue(false, 'This exception should have been thrown!');
+        } catch (\RuntimeException $e) {
+            $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
+        }
+
+        /** @var ResourceService $resourceSrvMock */
+        $this->assertSame($basket, $resourceSrvMock->createBasket($basket));
+        $this->assertSame($heidelpay, $basket->getParentResource());
+    }
+
+    /**
+     * Verify fetchBasket will create basket obj and call fetch with it if the id is given.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function fetchBasketShouldCreateBasketObjectWithGivenIdAndCallFetchWithIt()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$heidelpay])
+            ->setMethods(['fetch'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')->with(
+            $this->callback(function ($basket) use ($heidelpay) {
+                /** @var Basket $basket */
+                return $basket->getId() === 'myBasketId' && $basket->getParentResource() === $heidelpay;
+            })
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $basket = $resourceSrvMock->fetchBasket('myBasketId');
+
+        $this->assertEquals('myBasketId', $basket->getId());
+        $this->assertEquals($heidelpay, $basket->getParentResource());
+        $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
+    }
+
+    /**
+     * Verify fetchBasket will call fetch with the given basket obj.
+     *
+     * @test
+     *
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function fetchBasketShouldCallFetchWithTheGivenBasketObject()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$heidelpay])
+            ->setMethods(['fetch'])->getMock();
+
+        $basket = new Basket();
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($basket);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedBasket = $resourceSrvMock->fetchBasket($basket);
+
+        $this->assertSame($basket, $returnedBasket);
+        $this->assertEquals($heidelpay, $basket->getParentResource());
+        $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
+    }
+
+    /**
+     * Verify updateBasket calls update with the given basket and returns it.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function updateBasketShouldCallUpdateAndReturnTheGivenBasket()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$heidelpay])->setMethods(['update'])->getMock();
+
+        $basket = new Basket();
+        $resourceSrvMock->expects($this->once())->method('update')->with($basket);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedBasket = $resourceSrvMock->updateBasket($basket);
+
+        $this->assertSame($basket, $returnedBasket);
+        $this->assertEquals($heidelpay, $basket->getParentResource());
+        $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
     }
 
     //<editor-fold desc="Data Providers">
