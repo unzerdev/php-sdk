@@ -32,7 +32,7 @@ class BasketItem extends AbstractHeidelpayResource
     protected $basketItemReferenceId;
 
     /** @var int $quantity */
-    protected $quantity = 0;
+    protected $quantity;
 
     /** @var int $vat */
     protected $vat;
@@ -41,7 +41,7 @@ class BasketItem extends AbstractHeidelpayResource
     protected $amountDiscount;
 
     /** @var float $amountGross */
-    protected $amountGross = 0.0;
+    protected $amountGross;
 
     /** @var float $amountVat */
     protected $amountVat;
@@ -62,23 +62,20 @@ class BasketItem extends AbstractHeidelpayResource
      * BasketItem constructor.
      *
      * @param string $title
-     * @param float  $amountGross
      * @param float  $amountNet
      * @param float  $amountPerUnit
      * @param int    $quantity
      */
     public function __construct(
         string $title = '',
-        float $amountGross = 0.0,
         float $amountNet = 0.0,
         float $amountPerUnit = 0.0,
-        int $quantity = 0
+        int $quantity = 1
     ) {
-        $this->quantity      = $quantity;
-        $this->amountGross   = $amountGross;
-        $this->amountPerUnit = $amountPerUnit;
-        $this->amountNet     = $amountNet;
-        $this->title         = $title;
+        $this->title                 = $title;
+        $this->amountNet             = $amountNet;
+        $this->amountPerUnit         = $amountPerUnit;
+        $this->quantity              = $quantity;
 
         parent::__construct();
     }
@@ -162,9 +159,9 @@ class BasketItem extends AbstractHeidelpayResource
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmountGross(): float
+    public function getAmountGross()
     {
         return $this->amountGross;
     }
@@ -174,7 +171,7 @@ class BasketItem extends AbstractHeidelpayResource
      *
      * @return BasketItem
      */
-    public function setAmountGross(float $amountGross): BasketItem
+    public function setAmountGross($amountGross): BasketItem
     {
         $this->amountGross = $amountGross;
         return $this;

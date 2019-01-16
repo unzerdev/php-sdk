@@ -49,7 +49,7 @@ class BasketTest extends BasePaymentTest
         $orderId = microtime(true);
         $basket = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basket->addBasketItem(new BasketItem('myItem', 1234, 2345, 3456, 12));
+        $basket->addBasketItem(new BasketItem('myItem', 1234, 2345, 12));
         $this->assertEmpty($basket->getId());
 
         $this->heidelpay->createBasket($basket);
@@ -74,7 +74,7 @@ class BasketTest extends BasePaymentTest
     {
         $basket = new Basket($this->generateOrderId(), 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))
             ->setBasketItemReferenceId('refId')
             ->setAmountVat(1.24)
             ->setVat(19)
@@ -106,7 +106,7 @@ class BasketTest extends BasePaymentTest
         $orderId = $this->generateOrderId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
 
@@ -140,7 +140,7 @@ class BasketTest extends BasePaymentTest
         $orderId = $this->generateOrderId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
@@ -168,7 +168,7 @@ class BasketTest extends BasePaymentTest
         $orderId = $this->generateOrderId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
@@ -196,7 +196,7 @@ class BasketTest extends BasePaymentTest
         $orderId = $this->generateOrderId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
@@ -224,7 +224,7 @@ class BasketTest extends BasePaymentTest
         $orderId = $this->generateOrderId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 3456, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
