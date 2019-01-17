@@ -6,8 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.0.1.0][1.0.1.0]
 
 ### Added
+*   EPS payment type incl. example code.
 *   It is now possible to create, update and fetch a basket as well as referencing it by a authorization or charge.
-*   Extended facade to enable basket handling.
 *   Missing tests for metadata resource.
 
 ### Changed
