@@ -77,6 +77,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             </div>
         </div>
     </div>
+    <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <div class="field">
         <button id="submit-button" class="heidelpayUI" type="submit">Pay</button>
     </div>
@@ -107,14 +108,17 @@ require_once __DIR__ . '/../../../../autoload.php';
     let buttonDisabled = {};
     let testButton = document.getElementById("submit-button");
     testButton.disabled = true;
+    let $errorHolder = $('#error-holder');
 
     let eventHandlerCardInput = function(e) {
         if (e.success) {
             buttonDisabled[e.type] = true;
             testButton.disabled = false;
+            $errorHolder.html('')
         } else {
             buttonDisabled[e.type] = false;
             testButton.disabled = true;
+            $errorHolder.html(e.error)
         }
         testButton.disabled = !(buttonDisabled.number && buttonDisabled.expiry && buttonDisabled.cvc);
     };
@@ -140,7 +144,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 form.submit();
             })
             .catch(function(error) {
-                errorElement.textContent = error.message;
+                $errorHolder.html(error.message);
             })
     });
 </script>
