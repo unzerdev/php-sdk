@@ -47,7 +47,7 @@ if (!isset($_SESSION['PaymentId'])) {
 
 $paymentId = $_SESSION['PaymentId'];
 try {
-    $heidelpay = new Heidelpay('s-priv-2a10BF2Cq2YvAo6ALSGHc3X7F42oWAIp');
+    $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     $payment   = $heidelpay->fetchPayment($paymentId);
