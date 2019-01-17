@@ -27,9 +27,10 @@ Please refer to the following documentation for installation instructions and us
 *   Przelewy24
 *   SEPA direct debit (guaranteed)
 *   SOFORT
+*   EPS
 
 ## Support
-For any issues or questions please get in touch with our support.
+For any issues or questions please get in touch with our support team.
 
 ### Web page
 [https://dev.heidelpay.com/](https://dev.heidelpay.com/)
