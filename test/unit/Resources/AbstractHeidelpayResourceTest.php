@@ -35,6 +35,7 @@ use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
+use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -369,6 +370,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Payment' => [new Payment(), 'parent/resource/path/payments/'],
             'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card/'],
             'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal/'],
+            'EPS' => [new EPS(), 'parent/resource/path/types/eps/'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
             'SepaDirectDebitGuaranteed' => [
                 new SepaDirectDebitGuaranteed(''),

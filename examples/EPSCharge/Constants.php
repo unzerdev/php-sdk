@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the iDEAL payment type.
+ * This file defines the constants needed for the card example.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -20,39 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP/examples
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanDirectCharge;
+require_once __DIR__ . '/../Constants.php';
 
-class Ideal extends BasePaymentType
-{
-    use CanDirectCharge;
-
-    /** @var string $bic */
-    protected $bic;
-
-    //<editor-fold desc="Getter/Setter">
-
-    /**
-     * @return string|null
-     */
-    public function getBic()
-    {
-        return $this->bic;
-    }
-
-    /**
-     * @param string $bic
-     *
-     * @return self
-     */
-    public function setBic(string $bic): self
-    {
-        $this->bic = $bic;
-        return $this;
-    }
-
-    //</editor-fold>
-}
+define('EXAMPLE_PATH', __DIR__);
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'EPSCharge');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
+define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

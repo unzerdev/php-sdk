@@ -56,24 +56,65 @@ require_once __DIR__ . '/../../../autoload.php';
                     <div class="sub header">Choose the Payment Type you want to evaluate...</div>
                 </div>
             </h2>
-            <ul style="list-style: none;">
-                <li>
-                    <i class="credit card icon"></i>
-                    <a href="CreditCardAuthorization/">Credit Card - Authorization</a>
-                </li>
-                <li>
-                    <i class="credit card icon"></i>
-                    <a href="CreditCardCharge/">Credit Card - Charge</a>
-                </li>
-                <li>
-                    <i class="credit card icon"></i>
-                    <a href="CreditCard3DAuthorization/">Credit Card with 3D - Authorization</a>
-                </li>
-                <li>
-                    <i class="credit card icon"></i>
-                    <a href="CreditCard3DCharge/">Credit Card with 3D - Charge</a>
-                </li>
-            </ul>
+            <div class="ui cards">
+                <div class="card">
+                    <div class="content">
+                        <div class="header"><i class="credit card icon"></i> Credit Card</div>
+                        <div class="description">
+                            Authorization
+                        </div>
+                    </div>
+                    <div class="ui bottom attached button" onclick="location.href='CreditCardAuthorization/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header"><i class="credit card icon"></i> Credit Card</div>
+                        <div class="description">
+                            Charge
+                        </div>
+                    </div>
+                    <div class="ui bottom attached button" onclick="location.href='CreditCardCharge/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header"><i class="credit card outline icon"></i> Credit Card with 3D</div>
+                        <div class="description">
+                            Authorization
+                        </div>
+                    </div>
+                    <div class="ui bottom attached button" onclick="location.href='CreditCard3DAuthorization/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header"><i class="credit card outline icon"></i> Credit Card with 3D</div>
+                        <div class="description">
+                            Charge
+                        </div>
+                    </div>
+                    <div class="ui bottom attached button" onclick="location.href='CreditCard3DCharge/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            EPS
+                        </div>
+                        <div class="description">
+                            Charge
+                        </div>
+                    </div>
+                    <div class="ui bottom attached button" onclick="location.href='EPSCharge/';">
+                        Try
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 

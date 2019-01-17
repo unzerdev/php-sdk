@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the iDEAL payment type.
+ * This represents the EPS payment type.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -26,7 +26,7 @@ namespace heidelpayPHP\Resources\PaymentTypes;
 
 use heidelpayPHP\Traits\CanDirectCharge;
 
-class Ideal extends BasePaymentType
+class EPS extends BasePaymentType
 {
     use CanDirectCharge;
 
@@ -44,11 +44,11 @@ class Ideal extends BasePaymentType
     }
 
     /**
-     * @param string $bic
+     * @param string|null $bic
      *
      * @return self
      */
-    public function setBic(string $bic): self
+    public function setBic($bic): self
     {
         $this->bic = $bic;
         return $this;

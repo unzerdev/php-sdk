@@ -36,6 +36,7 @@ use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
@@ -1267,6 +1268,7 @@ class ResourceServiceTest extends BaseUnitTest
             'SepaDirectDebitGuaranteed sandbox' => [SepaDirectDebitGuaranteed::class, 's-ddg-12345678'],
             'Sofort sandbox' => [Sofort::class, 's-sft-12345678'],
             'PIS sandbox' => [PIS::class, 's-pis-12345678'],
+            'EPS sandbox' => [EPS::class, 's-eps-12345678'],
             'Card production' => [Card::class, 'p-crd-12345678'],
             'Giropay production' => [Giropay::class, 'p-gro-12345678'],
             'Ideal production' => [Ideal::class, 'p-idl-12345678'],
@@ -1278,7 +1280,7 @@ class ResourceServiceTest extends BaseUnitTest
             'SepaDirectDebit production' => [SepaDirectDebit::class, 'p-sdd-12345678'],
             'SepaDirectDebitGuaranteed production' => [SepaDirectDebitGuaranteed::class, 'p-ddg-12345678'],
             'Sofort production' => [Sofort::class, 'p-sft-12345678'],
-            'PIS production' => [PIS::class, 'p-pis-12345678']
+            'EPS production' => [EPS::class, 'p-eps-12345678']
         ];
     }
 

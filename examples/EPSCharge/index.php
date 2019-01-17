@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the credit card payment type.
+ * This file provides an example implementation of the EPS payment type.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -45,93 +45,32 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
-<h3>Example data without 3D secure:</h3>
-<ul>
-    <li>Number: 4111 1111 1111 1111</li>
-    <li>Expiry date: Date in the future</li>
-    <li>Cvc: 123</li>
-</ul>
-
-<h3>Example data with 3D secure:</h3>
-<ul>
-    <li>Number: 4444 3333 2222 1111</li>
-    <li>Expiry date: Date in the future</li>
-    <li>Cvc: 123</li>
-    <li>Secret: VISA123</li>
-</ul>
-
 <form id="payment-form" class="heidelpayUI form" novalidate>
-    <div class="field">
-        <div id="card-element-id-number" class="heidelpayInput">
-            <!-- Card number UI Element will be inserted here. -->
-        </div>
-    </div>
-    <div class="two fields">
-        <div class="field ten wide">
-            <div id="card-element-id-expiry" class="heidelpayInput">
-                <!-- Card expiry date UI Element will be inserted here. -->
-            </div>
-        </div>
-        <div class="field six wide">
-            <div id="card-element-id-cvc" class="heidelpayInput">
-                <!-- Card CVC UI Element will be inserted here. -->
-            </div>
-        </div>
-    </div>
+    <div id="example-eps" class="field"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <div class="field">
-        <button id="submit-button" class="heidelpayUI" type="submit">Pay</button>
-    </div>
+    <button class="heidelpayUI primary button fluid" type="submit">Pay</button>
 </form>
 
 <script>
     // Creating a heidelpay instance with your public key
-    let heidelpayInstance = new heidelpay('s-pub-2a10gsZJ2IeiiK80Wh68qrOzu4IZse6k');
+    let heidelpayInstance = new heidelpay('s-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');
 
-    // Creating a credit card instance
-    let Card = heidelpayInstance.Card();
+    // Creating an EPS instance
+    let EPS = heidelpayInstance.EPS();
 
     // Rendering input fields
-    Card.create('number', {
-        containerId: 'card-element-id-number',
-        onlyIframe: false
-    });
-    Card.create('expiry', {
-        containerId: 'card-element-id-expiry',
-        onlyIframe: false
-    });
-    Card.create('cvc', {
-        containerId: 'card-element-id-cvc',
-        onlyIframe: false
+    EPS.create('eps', {
+        containerId: 'example-eps'
     });
 
-    // General event handling
-    let buttonDisabled = {};
-    let testButton = document.getElementById("submit-button");
-    testButton.disabled = true;
     let $errorHolder = $('#error-holder');
-
-    let eventHandlerCardInput = function(e) {
-        if (e.success) {
-            buttonDisabled[e.type] = true;
-            testButton.disabled = false;
-            $errorHolder.html('')
-        } else {
-            buttonDisabled[e.type] = false;
-            testButton.disabled = true;
-            $errorHolder.html(e.error)
-        }
-        testButton.disabled = !(buttonDisabled.number && buttonDisabled.expiry && buttonDisabled.cvc);
-    };
-
-    Card.addEventListener('change', eventHandlerCardInput);
-
-    // Handling the form's submission
+    // Handling payment form's submission
     let form = document.getElementById('payment-form');
+    // Handle EPS form submission.
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a credit card resource
-        Card.createResource()
+        // Creating a EPS resource
+        EPS.createResource()
             .then(function(result) {
                 let hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');

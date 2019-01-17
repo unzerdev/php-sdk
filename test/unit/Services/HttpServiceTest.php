@@ -155,7 +155,7 @@ class HttpServiceTest extends BaseUnitTest
 
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
         $loggerMock->expects($this->exactly(3))->method('log')->withConsecutive(
-            ['Http GET-Request: https://api.heidelpay.com/v1/my/uri/123'],
+            ['GET: https://api.heidelpay.com/v1/my/uri/123'],
             ['Request: dummyResourceJsonSerialized'],
             ['Response: {"response":"myResponseString"}']
         );

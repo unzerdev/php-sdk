@@ -45,6 +45,7 @@ class IdStrings
     const SEPA_DIRECT_DEBIT = 'sdd';
     const SOFORT = 'sft';
     const PIS = 'pis';
+    const EPS = 'eps';
 
     // Resources
     const BASKET = 'bsk';

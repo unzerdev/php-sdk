@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the iDEAL payment type.
+ * This class defines unit tests to verify functionality of EPS payment type.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -20,39 +20,28 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP/test/unit
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanDirectCharge;
+use heidelpayPHP\Resources\PaymentTypes\EPS;
+use heidelpayPHP\test\BaseUnitTest;
 
-class Ideal extends BasePaymentType
+class EPSTest extends BaseUnitTest
 {
-    use CanDirectCharge;
-
-    /** @var string $bic */
-    protected $bic;
-
-    //<editor-fold desc="Getter/Setter">
-
     /**
-     * @return string|null
-     */
-    public function getBic()
-    {
-        return $this->bic;
-    }
-
-    /**
-     * @param string $bic
+     * Verify getters and setters work as expected.
      *
-     * @return self
+     * @test
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \PHPUnit\Framework\Exception
      */
-    public function setBic(string $bic): self
+    public function gettersAndSettersShouldWorkAsExpected()
     {
-        $this->bic = $bic;
-        return $this;
+        $eps = new EPS();
+        $this->assertNull($eps->getBic());
+        $eps->setBic('12345676XXX');
+        $this->assertEquals('12345676XXX', $eps->getBic());
     }
-
-    //</editor-fold>
 }
