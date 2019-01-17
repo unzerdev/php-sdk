@@ -28,6 +28,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
@@ -166,16 +167,18 @@ class BasketTest extends BasePaymentTest
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
         $orderId = $this->generateOrderId();
-        $basket  = new Basket($orderId, 123.4, 'EUR', []);
+        $basket  = new Basket($orderId, 123.4, 'EUR');
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $card->charge(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        $ddg = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
+        $this->heidelpay->createPaymentType($ddg);
+
+        $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge   = $ddg->charge(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
 
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
