@@ -27,12 +27,15 @@ namespace heidelpayPHP\test\unit\Resources;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\Keypair;
+use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
+use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -362,17 +365,23 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
     public function uriDataProvider(): array
     {
         return [
-            [new Customer(), 'parent/resource/path/customers/'],
-            [new Keypair(), 'parent/resource/path/keypair/'],
-            [new Payment(), 'parent/resource/path/payments/'],
-            [new Card('', '03/30'), 'parent/resource/path/types/card/'],
-            [new Ideal(), 'parent/resource/path/types/ideal/'],
-            [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
-            [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed/'],
-            [new Cancellation(), 'parent/resource/path/cancels/'],
-            [new Authorization(), 'parent/resource/path/authorize/'],
-            [new Shipment(), 'parent/resource/path/shipments/'],
-            [new Charge(), 'parent/resource/path/charges/']
+            'Customer' => [new Customer(), 'parent/resource/path/customers/'],
+            'Keypair' => [new Keypair(), 'parent/resource/path/keypair/'],
+            'Payment' => [new Payment(), 'parent/resource/path/payments/'],
+            'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card/'],
+            'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal/'],
+            'EPS' => [new EPS(), 'parent/resource/path/types/eps/'],
+            'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
+            'SepaDirectDebitGuaranteed' => [
+                new SepaDirectDebitGuaranteed(''),
+                'parent/resource/path/types/sepa-direct-debit-guaranteed/'
+            ],
+            'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels/'],
+            'Authorization' => [new Authorization(), 'parent/resource/path/authorize/'],
+            'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
+            'Charge' => [new Charge(), 'parent/resource/path/charges/'],
+            'Metadata' => [new Metadata(), 'parent/resource/path/metadata/'],
+            'Basket' => [new Basket(), 'parent/resource/path/baskets/']
         ];
     }
 

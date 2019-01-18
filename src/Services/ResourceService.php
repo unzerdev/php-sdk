@@ -30,12 +30,14 @@ use heidelpayPHP\Constants\IdStrings;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
@@ -314,6 +316,68 @@ class ResourceService
 
     //</editor-fold>
 
+
+
+    //<editor-fold desc="Basket resource">
+
+    /**
+     * Creates and returns the given basket resource.
+     *
+     * @param Basket $basket The basket to be created.
+     *
+     * @return Basket The created Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createBasket(Basket $basket): Basket
+    {
+        $basket->setParentResource($this->heidelpay);
+        $this->create($basket);
+        return $basket;
+    }
+
+    /**
+     * Fetches and returns the given Basket (by object or id).
+     *
+     * @param Basket|string $basket Basket object or id of basket to be fetched.
+     *
+     * @return Basket The fetched Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchBasket($basket): Basket
+    {
+        $basketObj = $basket;
+        if (\is_string($basket)) {
+            $basketObj = (new Basket())->setId($basket);
+        }
+        $basketObj->setParentResource($this->heidelpay);
+
+        $this->fetch($basketObj);
+        return $basketObj;
+    }
+
+    /**
+     * Update the a basket resource with the given basket object (id must be set).
+     *
+     * @param Basket $basket
+     *
+     * @return Basket The updated Basket object.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function updateBasket(Basket $basket): Basket
+    {
+        $basket->setParentResource($this->heidelpay);
+        $this->update($basket);
+        return $basket;
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="PaymentType resource">
 
     /**
@@ -392,6 +456,9 @@ class ResourceService
                 break;
             case IdStrings::PIS:
                 $paymentType = new PIS();
+                break;
+            case IdStrings::EPS:
+                $paymentType = new EPS();
                 break;
             default:
                 throw new \RuntimeException('Invalid payment type!');

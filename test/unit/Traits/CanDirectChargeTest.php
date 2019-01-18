@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\unit\Traits;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
@@ -70,13 +71,15 @@ class CanDirectChargeTest extends BaseUnitTest
             ->setMethods(['getHeidelpayObject'])->getMock();
 
         $charge = new Charge();
+        $metadata  = new Metadata();
         $customer = (new Customer())->setId('123');
-        $dummyMock->expects($this->exactly(3))->method('getHeidelpayObject')->willReturn($heidelpayMock);
-        $heidelpayMock->expects($this->exactly(3))->method('charge')
+        $dummyMock->expects($this->exactly(4))->method('getHeidelpayObject')->willReturn($heidelpayMock);
+        $heidelpayMock->expects($this->exactly(4))->method('charge')
             ->withConsecutive(
                 [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
-                [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId']
+                [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId'],
+                [1.4, 'MyCurrency4', $dummyMock, 'https://return.url4', $customer, 'orderId', $metadata]
             )->willReturn($charge);
 
 
@@ -86,6 +89,15 @@ class CanDirectChargeTest extends BaseUnitTest
         $returnedCharge = $dummyMock->charge(1.2, 'MyCurrency2', 'https://return.url2', $customer);
         $this->assertSame($charge, $returnedCharge);
         $returnedCharge = $dummyMock->charge(1.3, 'MyCurrency3', 'https://return.url3', $customer, 'orderId');
+        $this->assertSame($charge, $returnedCharge);
+        $returnedCharge = $dummyMock->charge(
+            1.4,
+            'MyCurrency4',
+            'https://return.url4',
+            $customer,
+            'orderId',
+            $metadata
+        );
         $this->assertSame($charge, $returnedCharge);
     }
 }

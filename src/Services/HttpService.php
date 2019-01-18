@@ -167,7 +167,7 @@ class HttpService
             $debugHandler = $heidelpayObj->getDebugHandler();
             if ($debugHandler instanceof DebugHandlerInterface) {
                 $resourceJson = $resource->jsonSerialize();
-                $debugHandler->log('Http ' . $httpMethod . '-Request: ' . $url);
+                $debugHandler->log($httpMethod . ': ' . $url);
                 $debugHandler->log('Request: ' . $resourceJson);
                 $debugHandler->log('Response: ' . json_encode(json_decode($response)));
             }

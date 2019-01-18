@@ -26,6 +26,7 @@
 namespace heidelpayPHP\test\unit;
 
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -199,11 +200,13 @@ class HeidelpayTest extends BaseUnitTest
     public function heidelpayShouldForwardResourceActionCallsToTheResourceServiceDP(): array
     {
         $customerId   = 'customerId';
+        $basketId     = 'basketId';
         $paymentId    = 'paymentId';
         $chargeId     = 'chargeId';
         $cancelId     = 'cancelId';
         $metadataId   = 'metaDataId';
         $customer     = new Customer();
+        $basket       = new Basket();
         $payment      = new Payment();
         $sofort       = new Sofort();
         $auth         = new Authorization();
@@ -238,6 +241,10 @@ class HeidelpayTest extends BaseUnitTest
             'updateCustomer'               => ['updateCustomer', [$customer], 'updateCustomer', [$customer]],
             'deleteCustomer'               => ['deleteCustomer', [$customer], 'deleteCustomer', [$customer]],
             'deleteCustomerStr'            => ['deleteCustomer', [$customerId], 'deleteCustomer', [$customerId]],
+            'createBasket'               => ['createBasket', [$basket], 'createBasket', [$basket]],
+            'fetchBasket'                => ['fetchBasket', [$basket], 'fetchBasket', [$basket]],
+            'fetchBasketStr'             => ['fetchBasket', [$basketId], 'fetchBasket', [$basketId]],
+            'updateBasket'               => ['updateBasket', [$basket], 'updateBasket', [$basket]],
             'fetchAuthorization'           => ['fetchAuthorization', [$payment], 'fetchAuthorization', [$payment]],
             'fetchAuthorizationStr'        => ['fetchAuthorization', [$paymentId], 'fetchAuthorization', [$paymentId]],
             'fetchChargeById'              => [
@@ -430,8 +437,7 @@ class HeidelpayTest extends BaseUnitTest
             ],
             'cancelCharge'                    => ['cancelCharge', [$charge, 1.234], 'cancelCharge', [$charge, 1.234]],
             'cancelChargeAlt'                 => ['cancelCharge', [$charge], 'cancelCharge', [$charge]],
-            'ship'                            => ['ship', [$payment], 'ship', [$payment]],
-            'shipStr'                         => ['ship', [$paymentId], 'ship', [$paymentId]]
+            'ship'                            => ['ship', [$payment], 'ship', [$payment]]
         ];
     }
 
