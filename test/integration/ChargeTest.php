@@ -76,4 +76,21 @@ class ChargeTest extends BasePaymentTest
         $this->assertNotEmpty($charge->getPayment()->getId());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
     }
+
+    /**
+     * Verify transaction status.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function chargeStatusIsSetCorrectly()
+    {
+        $charge = $this->createCharge();
+
+        $this->assertTrue($charge->isSuccess());
+        $this->assertFalse($charge->isPending());
+        $this->assertFalse($charge->isError());
+    }
 }
