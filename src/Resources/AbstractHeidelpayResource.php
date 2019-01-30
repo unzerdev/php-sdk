@@ -165,7 +165,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     {
         foreach ($response as $key => $value) {
             $newValue = $value;
-            if (!\is_string($value) || $value === '') {
+            if ($value !== false && (!\is_string($value) || $value === '')) {
                 $newValue = $value ?: null;
             }
 
