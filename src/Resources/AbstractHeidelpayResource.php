@@ -301,14 +301,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
                 if ($value === null) {
                     unset($properties[$property]);
-                } else {
-                    if ($value instanceof self) {
-                        $newValue = $value->expose();
-                    } else {
-                        $newValue = $value;
-                    }
-                    $properties[$property] = $newValue;
+                    continue;
                 }
+
+                $newValue = $value;
+                if ($value instanceof self) {
+                    $newValue = $value->expose();
+                }
+                $properties[$property] = $newValue;
             } catch (\ReflectionException $e) {
                 unset($properties[$property]);
             }
