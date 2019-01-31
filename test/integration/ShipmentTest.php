@@ -123,4 +123,30 @@ class ShipmentTest extends BasePaymentTest
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
     }
+
+    /**
+     * Verify transaction status.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function shippmentStatusIsSetCorrectly()
+    {
+        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $authorize = $this->heidelpay->authorize(
+            100.0,
+            'EUR',
+            $invoiceGuaranteed,
+            self::RETURN_URL,
+            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
+        );
+
+        $payment  = $authorize->getPayment();
+        $shipment = $this->heidelpay->ship($payment);
+        $this->assertTrue($shipment->isSuccess());
+        $this->assertFalse($shipment->isPending());
+        $this->assertFalse($shipment->isError());
+    }
 }

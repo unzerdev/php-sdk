@@ -143,7 +143,7 @@ class Metadata extends AbstractHeidelpayResource
         return $this->metadata[$name] ?? null;
     }
 
-    //</editor-fold>
+    //</editor-fold>>
 
     //<editor-fold desc="Overridable Methods">
 

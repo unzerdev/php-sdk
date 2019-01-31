@@ -54,6 +54,10 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $this->assertNull($transactionType->getDate());
         $this->assertNull($transactionType->getPaymentId());
 
+        $this->assertFalse($transactionType->isError());
+        $this->assertFalse($transactionType->isSuccess());
+        $this->assertFalse($transactionType->isPending());
+
         $transactionType->setPayment($payment);
         $this->assertNull($transactionType->getRedirectUrl());
 
@@ -61,11 +65,15 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $date = (new \DateTime('now'))->format('Y-m-d h:i:s');
         $transactionType->setPayment($payment);
         $transactionType->setDate($date);
+        $transactionType->setIsError(true)->setIsPending(true)->setIsSuccess(true);
 
         $this->assertSame($payment, $transactionType->getPayment());
         $this->assertEquals($date, $transactionType->getDate());
         $this->assertNull($transactionType->getExternalId());
         $this->assertEquals($payment->getId(), $transactionType->getPaymentId());
+        $this->assertTrue($transactionType->isSuccess());
+        $this->assertTrue($transactionType->isPending());
+        $this->assertTrue($transactionType->isError());
     }
 
     /**

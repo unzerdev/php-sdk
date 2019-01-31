@@ -26,6 +26,9 @@
 namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -139,5 +142,42 @@ class AuthorizationTest extends BasePaymentTest
     {
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPaymentId());
         $this->assertEquals($authorization->expose(), $fetchedAuthorization->expose());
+    }
+
+    /**
+     * Verify authorization has the expected states.
+     *
+     * @test
+     * @dataProvider authorizeHasExpectedStatesDP
+     *
+     * @param BasePaymentType|AbstractHeidelpayResource $paymentType
+     * @param bool                                      $isSuccess
+     * @param bool                                      $isPending
+     * @param bool                                      $isError
+     *
+     * @throws HeidelpayApiException
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \RuntimeException
+     */
+    public function authorizeHasExpectedStates(BasePaymentType $paymentType, $isSuccess, $isPending, $isError)
+    {
+        $paymentType = $this->heidelpay->createPaymentType($paymentType);
+        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
+        $this->assertEquals($isSuccess, $authorize->isSuccess());
+        $this->assertEquals($isPending, $authorize->isPending());
+        $this->assertEquals($isError, $authorize->isError());
+    }
+
+    /**
+     * @return array
+     *
+     * @throws \RuntimeException
+     */
+    public function authorizeHasExpectedStatesDP(): array
+    {
+        return [
+            'card' => [$this->createCardObject(), true, false, false],
+            'paypal' => [new Paypal(), false, true, false]
+        ];
     }
 }

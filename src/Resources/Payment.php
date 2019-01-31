@@ -44,18 +44,6 @@ class Payment extends AbstractHeidelpayResource
     use HasPaymentState;
     use HasOrderId;
 
-    /**
-     * @param null $parent
-     */
-    public function __construct($parent = null)
-    {
-        $this->amount = new Amount();
-        $this->metadata = new Metadata();
-
-        parent::__construct($parent);
-    }
-
-    //<editor-fold desc="Properties">
     /** @var string $redirectUrl */
     private $redirectUrl;
 
@@ -82,7 +70,17 @@ class Payment extends AbstractHeidelpayResource
 
     /** @var Basket $basket */
     private $basket;
-    //</editor-fold>
+
+    /**
+     * @param null $parent
+     */
+    public function __construct($parent = null)
+    {
+        $this->amount = new Amount();
+        $this->metadata = new Metadata();
+
+        parent::__construct($parent);
+    }
 
     //<editor-fold desc="Setters/Getters">
 
@@ -750,22 +748,16 @@ class Payment extends AbstractHeidelpayResource
             }
         }
 
-        if (isset($resources->typeId) && !empty($resources->typeId)) {
-            if (!$this->paymentType instanceof BasePaymentType) {
-                $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
-            }
+        if (isset($resources->typeId) && !empty($resources->typeId) && !$this->paymentType instanceof BasePaymentType) {
+            $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
         }
 
-        if (isset($resources->metadataId) && !empty($resources->metadataId)) {
-            if ($this->metadata->getId() === null) {
-                $this->metadata = $this->getHeidelpayObject()->fetchMetadata($resources->metadataId);
-            }
+        if (isset($resources->metadataId) && !empty($resources->metadataId) && $this->metadata->getId() === null) {
+            $this->metadata = $this->getHeidelpayObject()->fetchMetadata($resources->metadataId);
         }
 
-        if (isset($resources->basketId) && !empty($resources->basketId)) {
-            if (!$this->basket instanceof Basket) {
-                $this->basket = $this->getHeidelpayObject()->fetchBasket($resources->basketId);
-            }
+        if (isset($resources->basketId) && !empty($resources->basketId) && !$this->basket instanceof Basket) {
+            $this->basket = $this->getHeidelpayObject()->fetchBasket($resources->basketId);
         }
     }
 
