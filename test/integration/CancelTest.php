@@ -146,4 +146,22 @@ class CancelTest extends BasePaymentTest
         $this->assertNotNull($cancellation);
         $this->assertEquals($cancellation->expose(), $reversal->expose());
     }
+
+    /**
+     * Verify transaction status.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function cancelStatusIsSetCorrectly()
+    {
+        $charge = $this->createCharge();
+        $reversal = $charge->cancel();
+
+        $this->assertTrue($reversal->isSuccess());
+        $this->assertFalse($reversal->isPending());
+        $this->assertFalse($reversal->isError());
+    }
 }

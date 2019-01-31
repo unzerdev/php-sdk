@@ -25,6 +25,7 @@
 namespace heidelpayPHP\test\unit;
 
 use heidelpayPHP\Adapter\CurlAdapter;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
@@ -109,7 +110,7 @@ class HttpServiceTest extends BaseUnitTest
         $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
         $adapterMock->expects($this->once())->method('init')->with(
             'https://api.heidelpay.com/v1/my/uri/123',
-            'dummyResourceJsonSerialized',
+            '{"dummyResource": "JsonSerialized"}',
             'GET'
         );
         $adapterMock->expects($this->once())->method('setUserAgent')->with('HeidelpayPHP');
@@ -154,9 +155,11 @@ class HttpServiceTest extends BaseUnitTest
         $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
 
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
-        $loggerMock->expects($this->exactly(3))->method('log')->withConsecutive(
+        $loggerMock->expects($this->exactly(5))->method('log')->withConsecutive(
             ['GET: https://api.heidelpay.com/v1/my/uri/123'],
-            ['Request: dummyResourceJsonSerialized'],
+            ['Response: {"response":"myResponseString"}'],
+            ['POST: https://api.heidelpay.com/v1/my/uri/123'],
+            ['Request: {"dummyResource": "JsonSerialized"}'],
             ['Response: {"response":"myResponseString"}']
         );
 
@@ -166,7 +169,9 @@ class HttpServiceTest extends BaseUnitTest
 
         /** @var HttpService $httpServiceMock*/
         $response = $httpServiceMock->send('/my/uri/123', $resource);
+        $this->assertEquals('{"response":"myResponseString"}', $response);
 
+        $response = $httpServiceMock->send('/my/uri/123', $resource, HttpAdapterInterface::REQUEST_POST);
         $this->assertEquals('{"response":"myResponseString"}', $response);
     }
 

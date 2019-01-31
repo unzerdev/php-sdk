@@ -30,7 +30,7 @@ class DummyResource extends AbstractHeidelpayResource
 {
     public function jsonSerialize()
     {
-        return 'dummyResourceJsonSerialized';
+        return '{"dummyResource": "JsonSerialized"}';
     }
 
     public function getUri($appendId = true): string

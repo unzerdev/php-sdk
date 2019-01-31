@@ -48,6 +48,15 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /** @var string $shortId */
     private $shortId;
 
+    /** @var bool $isError */
+    private $isError = false;
+
+    /** @var bool $isSuccess */
+    private $isSuccess = false;
+
+    /** @var bool $isPending */
+    private $isPending = false;
+
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
@@ -159,6 +168,63 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     protected function setShortId(string $shortId): AbstractTransactionType
     {
         $this->shortId = $shortId;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isError(): bool
+    {
+        return $this->isError;
+    }
+
+    /**
+     * @param bool $isError
+     *
+     * @return AbstractTransactionType
+     */
+    public function setIsError(bool $isError): AbstractTransactionType
+    {
+        $this->isError = $isError;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        return $this->isSuccess;
+    }
+
+    /**
+     * @param bool $isSuccess
+     *
+     * @return AbstractTransactionType
+     */
+    public function setIsSuccess(bool $isSuccess): AbstractTransactionType
+    {
+        $this->isSuccess = $isSuccess;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPending(): bool
+    {
+        return $this->isPending;
+    }
+
+    /**
+     * @param bool $isPending
+     *
+     * @return AbstractTransactionType
+     */
+    public function setIsPending(bool $isPending): AbstractTransactionType
+    {
+        $this->isPending = $isPending;
         return $this;
     }
 
