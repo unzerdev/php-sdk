@@ -231,6 +231,8 @@ class PaymentServiceTest extends BaseUnitTest
             ->withConsecutive([$paymentObject, null], [$paymentObject, 1.234]);
 
         /** @var PaymentService $paymentSrv */
+        $paymentSrv->setResourceService(new ResourceService(new Heidelpay('s-priv-123')));
+
         $paymentSrv->chargeAuthorization($paymentObject);
         $paymentSrv->chargeAuthorization($paymentObject, 1.234);
     }
