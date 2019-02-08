@@ -31,6 +31,7 @@ class ApiResponseCodes
     const API_SUCCESS_CHARGED_AMOUNT_LOWER_THAN_EXPECTED    = 'API.100.550.341';
 
     const API_ERROR_GENERAL                                 = 'API.000.000.999';
+    const API_ERROR_PAYMENT_NOT_FOUND                       = 'API.310.100.003';
     const API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED       = 'API.320.000.004';
     const API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED          = 'API.330.000.004';
     const API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED            = 'API.360.000.004';

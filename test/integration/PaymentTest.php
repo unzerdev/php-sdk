@@ -43,7 +43,6 @@ class PaymentTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function paymentShouldBeFetchableById()
@@ -91,7 +90,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function paymentShouldBeFetchableWithCharges()
@@ -122,7 +120,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function partialChargeAfterAuthorization()
@@ -141,7 +138,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function fullCancelOnAuthorizeShouldThrowExceptionIfAlreadyCanceled()
@@ -186,7 +182,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function fullCancelOnChargeShouldBePossible()
@@ -204,7 +199,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function partialCancelShouldBePossible()
@@ -222,7 +216,6 @@ class PaymentTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function authorizationShouldBePossibleOnHeidelpayObject()
@@ -239,5 +232,20 @@ class PaymentTest extends BasePaymentTest
 
         $this->assertNotNull($authorizationUsingHeidelpay);
         $this->assertNotEmpty($authorizationUsingHeidelpay->getId());
+    }
+
+    /**
+     * Verify payment charge throws an error if the id does not belong to a payment.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function chargePaymentShouldThrowErrorOnNonPaymentId()
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
+        $this->heidelpay->chargePayment('s-crd-xlj0qhdiw40k');
     }
 }
