@@ -254,13 +254,7 @@ class PaymentService
      */
     public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
     {
-        $paymentObject = $payment;
-
-        if (\is_string($payment)) {
-            $paymentObject = $this->resourceService->fetchPayment($payment);
-        }
-
-        return $this->chargePayment($paymentObject, $amount);
+        return $this->chargePayment($this->resourceService->getPaymentResource($payment), $amount);
     }
 
     /**
@@ -275,7 +269,7 @@ class PaymentService
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
+    public function chargePayment($payment, $amount = null, $currency = null): AbstractTransactionType
     {
         $charge = new Charge($amount, $currency);
         $charge->setPayment($payment);
@@ -385,14 +379,8 @@ class PaymentService
      */
     public function ship($payment): AbstractHeidelpayResource
     {
-        $paymentObject = $payment;
-
-        if (\is_string($payment)) {
-            $paymentObject = $this->resourceService->fetchPayment($payment);
-        }
-
         $shipment = new Shipment();
-        $paymentObject->addShipment($shipment);
+        $this->resourceService->getPaymentResource($payment)->addShipment($shipment);
         $this->resourceService->create($shipment);
         return $shipment;
     }
