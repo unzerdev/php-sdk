@@ -211,14 +211,14 @@ class Payment extends AbstractHeidelpayResource
      */
     public function getChargeByIndex($index, $lazy = false)
     {
+        $resource = null;
         if (isset($this->getCharges()[$index])) {
             $resource = $this->getCharges()[$index];
             if (!$lazy) {
-                return $this->getResource($resource);
+                $resource = $this->getResource($resource);
             }
-            return $resource;
         }
-        return null;
+        return $resource;
     }
 
     /**
