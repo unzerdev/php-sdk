@@ -220,8 +220,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function authorizationShouldBePossibleOnHeidelpayObject()
     {
-        $card = $this->createCardObject();
-        $this->heidelpay->createPaymentType($card);
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
 
         $authorizationUsingHeidelpay = $this->heidelpay->authorize(
             100.0,
@@ -235,7 +234,7 @@ class PaymentTest extends BasePaymentTest
     }
 
     /**
-     * Verify payment charge throws an error if the id does not belong to a payment.
+     * Verify heidelpay payment charge throws an error if the id does not belong to a payment.
      *
      * @test
      *

@@ -34,7 +34,6 @@ use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\Services\DummyAdapter;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 
 class HttpServiceTest extends BaseUnitTest
@@ -45,7 +44,6 @@ class HttpServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function getAdapterShouldReturnDefaultAdapterIfNonHasBeenSet()
@@ -59,8 +57,6 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function getAdapterShouldReturnCustomAdapterIfItHasBeenSet()
@@ -93,7 +89,6 @@ class HttpServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -138,7 +133,6 @@ class HttpServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
