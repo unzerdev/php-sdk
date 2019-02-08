@@ -234,6 +234,23 @@ class PaymentTest extends BasePaymentTest
     }
 
     /**
+     * Verify heidelpay paymentC charge is possible using a paymentId.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function paymentChargeShouldBePossibleUsingPaymentId()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com');
+        $charge = $this->heidelpay->chargePayment($authorization->getPaymentId());
+
+        $this->assertInstanceOf(Charge::class, $charge);
+    }
+
+    /**
      * Verify heidelpay payment charge throws an error if the id does not belong to a payment.
      *
      * @test
