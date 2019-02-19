@@ -69,7 +69,6 @@ class CardTest extends BasePaymentTest
      * @return BasePaymentType
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function cardShouldBeCreatable(): BasePaymentType
@@ -163,7 +162,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -319,7 +317,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -435,7 +432,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -456,7 +452,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */

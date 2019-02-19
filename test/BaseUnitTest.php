@@ -26,7 +26,6 @@ namespace heidelpayPHP\test;
 
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 class BaseUnitTest extends TestCase
@@ -38,7 +37,6 @@ class BaseUnitTest extends TestCase
      *
      * @throws AssertionFailedError
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function assertIsEmptyArray($value)
     {

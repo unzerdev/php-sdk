@@ -834,18 +834,19 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Performs a Charge transaction for a specific Payment and returns the resulting Charge object.
      *
-     * @param Payment $payment  The Payment object to be charged.
-     * @param null    $amount   The amount to charge.
-     * @param null    $currency The Currency of the charged amount.
+     * @param Payment|string $payment  The Payment object to be charged.
+     * @param null           $amount   The amount to charge.
+     * @param null           $currency The Currency of the charged amount.
      *
      * @return Charge The resulting Charge object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
+    public function chargePayment($payment, $amount = null, $currency = null): AbstractTransactionType
     {
-        return $this->paymentService->chargePayment($payment, $amount, $currency);
+        $paymentObject = $this->resourceService->getPaymentResource($payment);
+        return $this->paymentService->chargePayment($paymentObject, $amount, $currency);
     }
 
     //</editor-fold>

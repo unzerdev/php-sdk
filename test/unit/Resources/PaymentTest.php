@@ -52,7 +52,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -231,8 +230,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -335,8 +332,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -415,7 +410,6 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -640,7 +634,6 @@ class PaymentTest extends BaseUnitTest
      * @param integer $state
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -662,7 +655,6 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -684,7 +676,6 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @throws \ReflectionException
@@ -740,7 +731,7 @@ class PaymentTest extends BaseUnitTest
     }
 
     /**
-     * Verify handleResponse updates paymenType.
+     * Verify handleResponse updates paymentType.
      *
      * @test
      *
@@ -1678,7 +1669,7 @@ class PaymentTest extends BaseUnitTest
         $basket = new Basket();
         $heidelpayMock->expects($this->once())->method('fetchBasket')->with('myResourcesBasketId')->willReturn($basket);
 
-        $payment = new Payment($heidelpayMock);
+        $payment  = new Payment($heidelpayMock);
         $response = new \stdClass();
         $payment->handleResponse($response);
         $this->assertNull($payment->getBasket());
@@ -1698,12 +1689,12 @@ class PaymentTest extends BaseUnitTest
     public function stateDataProvider(): array
     {
         return [
-            [PaymentState::STATE_PENDING],
-            [PaymentState::STATE_COMPLETED],
-            [PaymentState::STATE_CANCELED],
-            [PaymentState::STATE_PARTLY],
-            [PaymentState::STATE_PAYMENT_REVIEW],
-            [PaymentState::STATE_CHARGEBACK]
+            PaymentState::STATE_NAME_PENDING        => [PaymentState::STATE_PENDING],
+            PaymentState::STATE_NAME_COMPLETED      => [PaymentState::STATE_COMPLETED],
+            PaymentState::STATE_NAME_CANCELED       => [PaymentState::STATE_CANCELED],
+            PaymentState::STATE_NAME_PARTLY         => [PaymentState::STATE_PARTLY],
+            PaymentState::STATE_NAME_PAYMENT_REVIEW => [PaymentState::STATE_PAYMENT_REVIEW],
+            PaymentState::STATE_NAME_CHARGEBACK     => [PaymentState::STATE_CHARGEBACK]
         ];
     }
 

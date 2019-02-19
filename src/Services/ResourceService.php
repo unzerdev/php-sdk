@@ -232,6 +232,28 @@ class ResourceService
     //<editor-fold desc="Payment resource">
 
     /**
+     * Fetches the payment object if the id is given.
+     * Else it just returns the given payment argument.
+     * (!) It does not fetch or update a given payment object but returns it as-is. (!)
+     *
+     * @param $payment
+     *
+     * @return AbstractHeidelpayResource|Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function getPaymentResource($payment)
+    {
+        $paymentObject = $payment;
+
+        if (\is_string($payment)) {
+            $paymentObject = $this->fetchPayment($payment);
+        }
+        return $paymentObject;
+    }
+
+    /**
      * Fetch and return payment by given payment id.
      *
      * @param Payment|string $payment
