@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines unit tests to verify functionality of the key validator.
+ * This class defines unit tests to verify functionality of the private key validator.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *

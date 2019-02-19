@@ -234,7 +234,7 @@ class PaymentTest extends BasePaymentTest
     }
 
     /**
-     * Verify heidelpay paymentC charge is possible using a paymentId.
+     * Verify heidelpay payment charge is possible using a paymentId.
      *
      * @test
      *
