@@ -33,7 +33,7 @@ class PublicKeyValidatorTest extends BaseUnitTest
      * Verify validate method behaves as expected.
      *
      * @test
-     * @dataProvider validateShouldReturnTrueIfPrivateKeyHasCorrectFormatDP
+     * @dataProvider validateShouldReturnTrueIfPublicKeyHasCorrectFormatDP
      *
      * @param string $key
      * @param bool   $expectedResult
@@ -50,7 +50,7 @@ class PublicKeyValidatorTest extends BaseUnitTest
      *
      * @return array
      */
-    public function validateShouldReturnTrueIfPrivateKeyHasCorrectFormatDP(): array
+    public function validateShouldReturnTrueIfPublicKeyHasCorrectFormatDP(): array
     {
         return [
             'valid sandbox' => ['s-pub-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n', true],
