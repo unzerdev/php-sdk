@@ -24,19 +24,19 @@
  */
 namespace heidelpayPHP\Validators;
 
-class KeyValidator
+class PrivateKeyValidator
 {
     /**
-     * Returns true if the given key has a valid format.
+     * Returns true if the given private key has a valid format.
      *
-     * @param $key
+     * @param string $key
      *
      * @return bool
      */
     public static function validate($key): bool
     {
         $match = [];
-        preg_match('/^[sp]{1}-(priv)-[a-zA-Z0-9]+/', $key, $match);
+        preg_match('/^[sp]{1}-(priv|pub)-[a-zA-Z0-9]+/', $key, $match);
         return !(\count($match) < 2 || $match[1] !== 'priv');
     }
 }

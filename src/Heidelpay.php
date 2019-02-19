@@ -43,14 +43,14 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\Validators\KeyValidator;
+use heidelpayPHP\Validators\PrivateKeyValidator;
 
 class Heidelpay implements HeidelpayParentInterface
 {
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.0.2.0';
+    const SDK_VERSION = '1.1.0.0';
 
     /** @var string $key */
     private $key;
@@ -114,7 +114,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function setKey($key): Heidelpay
     {
-        if (!KeyValidator::validate($key)) {
+        if (!PrivateKeyValidator::validate($key)) {
             throw new \RuntimeException('Illegal key: Use a valid private key with this SDK!');
         }
 
