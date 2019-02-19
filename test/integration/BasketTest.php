@@ -99,8 +99,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function basketShouldBeUpdatateable()
     {
@@ -133,8 +131,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
@@ -161,8 +157,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
@@ -191,8 +185,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
@@ -219,8 +211,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
