@@ -1,6 +1,6 @@
 <?php
 /**
- * This provides validation functions concerning secret keys.
+ * This provides validation functions concerning public key.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -27,7 +27,7 @@ namespace heidelpayPHP\Validators;
 class PublicKeyValidator
 {
     /**
-     * Returns true if the given private key has a valid format.
+     * Returns true if the given public key has a valid format.
      *
      * @param string $key
      *

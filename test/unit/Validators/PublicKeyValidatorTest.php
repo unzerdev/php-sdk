@@ -40,7 +40,7 @@ class PublicKeyValidatorTest extends BaseUnitTest
      *
      * @throws \PHPUnit\Framework\Exception
      */
-    public function validateShouldReturnTrueIfPrivateKeyHasCorrectFormat($key, $expectedResult)
+    public function validateShouldReturnTrueIfPublicKeyHasCorrectFormat($key, $expectedResult)
     {
         $this->assertEquals($expectedResult, PublicKeyValidator::validate($key));
     }

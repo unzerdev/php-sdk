@@ -1,6 +1,6 @@
 <?php
 /**
- * This provides validation functions concerning secret keys.
+ * This provides validation functions concerning private key.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
