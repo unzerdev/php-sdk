@@ -24,7 +24,7 @@
  */
 namespace heidelpayPHP\Validators;
 
-class KeyValidator
+class PrivateKeyValidator
 {
     /**
      * Returns true if the given private key has a valid format.
@@ -33,36 +33,10 @@ class KeyValidator
      *
      * @return bool
      */
-    public static function validatePrivateKey($key): bool
-    {
-        return self::validate($key);
-    }
-
-    /**
-     * Returns true if the given public key has a valid format.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public static function validatePublicKey($key): bool
-    {
-        return self::validate($key, false);
-    }
-
-    /**
-     * Returns true if the given key is valid.
-     * If the flag $privateKey is set it will be checked to be private if not it is checked to be a valid public key.
-     *
-     * @param $key
-     * @param bool $privateKey
-     * @return bool
-     */
-    public static function validate($key, $privateKey = true): bool
+    public static function validate($key): bool
     {
         $match = [];
-        $keyType = $privateKey ? 'priv' : 'pub';
         preg_match('/^[sp]{1}-(priv|pub)-[a-zA-Z0-9]+/', $key, $match);
-        return !(\count($match) < 2 || $match[1] !== $keyType);
+        return !(\count($match) < 2 || $match[1] !== 'priv');
     }
 }
