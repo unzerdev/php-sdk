@@ -57,7 +57,6 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\DummyResource;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 
 class ResourceServiceTest extends BaseUnitTest
@@ -73,7 +72,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @param string $idString
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function getResourceIdFromUrlShouldIdentifyAndReturnTheIdStringFromAGivenString($expected, $uri, $idString)
@@ -134,7 +132,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -168,7 +165,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -202,7 +198,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -234,7 +229,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -266,7 +260,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -296,7 +289,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -530,7 +522,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -637,7 +628,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -672,7 +662,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -748,12 +737,11 @@ class ResourceServiceTest extends BaseUnitTest
     }
 
     /**
-     * Verify deleteCustomer cals fetchCustomer with id if the customer object is referenced by id.
+     * Verify deleteCustomer calls fetchCustomer with id if the customer object is referenced by id.
      *
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
@@ -1178,7 +1166,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws \ReflectionException
