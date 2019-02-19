@@ -114,7 +114,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function setKey($key): Heidelpay
     {
-        if (!KeyValidator::validate($key)) {
+        if (!KeyValidator::validatePrivateKey($key)) {
             throw new \RuntimeException('Illegal key: Use a valid private key with this SDK!');
         }
 
