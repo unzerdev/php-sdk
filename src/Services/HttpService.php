@@ -114,13 +114,21 @@ class HttpService
         $httpAdapter = $this->getAdapter();
         $httpAdapter->init($uri, $heidelpayResource->jsonSerialize(), $httpMethod);
         $httpAdapter->setUserAgent(Heidelpay::SDK_TYPE);
-        $httpAdapter->setHeaders(
-            [
-                'Authorization' => 'Basic ' . base64_encode($heidelpayResource->getHeidelpayObject()->getKey() . ':'),
-                'Content-Type'  => 'application/json',
-                'SDK-VERSION'   => Heidelpay::SDK_VERSION
-            ]
-        );
+
+        // Set HTTP-headers
+        $heidelpay = $heidelpayResource->getHeidelpayObject();
+        $locale = $heidelpay->getLocale();
+        $key         = $heidelpay->getKey();
+        $httpHeaders = [
+            'Authorization' => 'Basic ' . base64_encode($key . ':'),
+            'Content-Type'  => 'application/json',
+            'SDK-VERSION'   => Heidelpay::SDK_VERSION
+        ];
+        /** @noinspection IsEmptyFunctionUsageInspection */
+        if (!empty($locale)) {
+            $httpHeaders['Accept-Language'] = $locale;
+        }
+        $httpAdapter->setHeaders($httpHeaders);
     }
 
     /**

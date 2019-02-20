@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 *   Enabled chargePayment with payment id.
 *   Renamed KeyValidator class to PrivateKeyValidator.
+*   Enabled setting the language for client messages.
 
 ### Added
 *   Added PublicKeyValidator.

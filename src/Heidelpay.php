@@ -81,7 +81,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @throws \RuntimeException A \RuntimeException will be thrown if the key is not of type private.
      */
-    public function __construct($key, $locale = 'en_US')
+    public function __construct($key, $locale = null)
     {
         $this->setKey($key);
         $this->locale = $locale;
@@ -125,10 +125,10 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Returns the set customer locale.
      *
-     * @return string The locale of the customer.
-     *                Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
+     * @return string|null The locale of the customer.
+     *                     Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
      */
-    public function getLocale(): string
+    public function getLocale()
     {
         return $this->locale;
     }
