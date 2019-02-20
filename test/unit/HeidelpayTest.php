@@ -40,7 +40,6 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 
 class HeidelpayTest extends BaseUnitTest
@@ -51,7 +50,6 @@ class HeidelpayTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function constructorShouldInitPropertiesProperly()
@@ -61,7 +59,7 @@ class HeidelpayTest extends BaseUnitTest
         $this->assertInstanceOf(PaymentService::class, $heidelpay->getPaymentService());
         $this->assertSame($heidelpay, $heidelpay->getPaymentService()->getHeidelpay());
         $this->assertEquals('s-priv-1234', $heidelpay->getKey());
-        $this->assertEquals('en_US', $heidelpay->getLocale());
+        $this->assertEquals(null, $heidelpay->getLocale());
 
         $heidelpaySwiss = new Heidelpay('s-priv-1234', 'de_CH');
         $this->assertEquals('de_CH', $heidelpaySwiss->getLocale());

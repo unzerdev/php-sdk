@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 class BasePaymentTest extends TestCase
@@ -57,7 +58,7 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D, 'de_DE'))
+        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D))
             ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
     }
 
@@ -70,8 +71,7 @@ class BasePaymentTest extends TestCase
      * @param float   $expectedTotal
      * @param float   $expectedCanceled
      *
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
      */
     protected function assertAmounts(
         $payment,
