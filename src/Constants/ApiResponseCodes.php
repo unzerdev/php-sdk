@@ -48,6 +48,7 @@ class ApiResponseCodes
     const API_ERROR_CUSTOMER_ID_ALREADY_EXISTS              = 'API.410.200.010';
     const API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND               = 'API.500.100.100';
     const API_ERROR_INVALID_KEY                             = 'API.710.000.002';
+    const API_ERROR_INSUFFICIENT_PERMISSION                 = 'API.710.000.005';
     const API_ERROR_WRONG_AUTHENTICATION_METHOD             = 'API.710.000.007';
     const API_ERROR_FIELD_IS_MISSING                        = 'API.710.200.100';
 
