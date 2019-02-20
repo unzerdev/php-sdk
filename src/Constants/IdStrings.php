@@ -49,4 +49,5 @@ class IdStrings
 
     // Resources
     const BASKET = 'bsk';
+    const WEBHOOK = 'whk';
 }

@@ -68,4 +68,34 @@ class WebhookEvents
 
     // shipment events
     const SHIPMENT = 'shipment';
+
+    const ALLOWED_WEBHOOKS = [
+        self::ALL,
+        self::AUTHORIZE,
+        self::AUTHORIZE_SUCCEEDED,
+        self::AUTHORIZE_FAILED,
+        self::AUTHORIZE_PENDING,
+        self::AUTHORIZE_EXPIRED,
+        self::AUTHORIZE_CANCELED,
+        self::CHARGE,
+        self::CHARGE_SUCCEEDED,
+        self::CHARGE_FAILED,
+        self::CHARGE_PENDING,
+        self::CHARGE_EXPIRED,
+        self::CHARGE_CANCELED,
+        self::CHARGEBACK,
+        self::TYPES,
+        self::CUSTOMER,
+        self::CUSTOMER_CREATED,
+        self::CUSTOMER_DELETED,
+        self::CUSTOMER_UPDATED,
+        self::PAYMENT,
+        self::PAYMENT_PENDING,
+        self::PAYMENT_COMPLETED,
+        self::PAYMENT_CANCELED,
+        self::PAYMENT_PARTLY,
+        self::PAYMENT_PAYMENT_REVIEW,
+        self::PAYMENT_CHARGEBACK,
+        self::SHIPMENT
+    ];
 }
