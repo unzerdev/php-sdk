@@ -40,6 +40,7 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
@@ -688,6 +689,21 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     //</editor-fold>
+
+    /**
+     * Creates Webhook resource.
+     *
+     * @param Webhook $webhook
+     *
+     * @return Webhook
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createWebhook(Webhook $webhook): Webhook
+    {
+        return $this->resourceService->createWebhook($webhook);
+    }
 
     //</editor-fold>
 

@@ -29,12 +29,25 @@ use heidelpayPHP\Constants\WebhookEvents;
 class Webhook extends AbstractHeidelpayResource
 {
     /** @var string $url */
-    private $url;
+    protected $url;
 
-    /** @var array $event */
-    private $eventList = [];
+    /** @var array $eventList */
+    protected $eventList = [];
+
+    /**
+     * Webhook constructor.
+     *
+     * @param string $url
+     */
+    public function __construct(string $url)
+    {
+        $this->url = $url;
+
+        parent::__construct();
+    }
 
     //<editor-fold desc="Getters/Setters">
+
     /**
      * @return string
      */
@@ -69,8 +82,8 @@ class Webhook extends AbstractHeidelpayResource
      */
     public function addEvent(string $event): Webhook
     {
-        if (in_array($event, WebhookEvents::ALLOWED_WEBHOOKS, true)) {
-            $this->eventList[$event] = $event;
+        if (in_array($event, WebhookEvents::ALLOWED_WEBHOOKS, true) || !in_array($event, $this->eventList, true)) {
+            $this->eventList[] = $event;
         }
         return $this;
     }
@@ -82,9 +95,9 @@ class Webhook extends AbstractHeidelpayResource
      */
     public function removeEvent(string $event): Webhook
     {
-        unset($this->eventList[$event]);
         return $this;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Resource IF">
