@@ -24,13 +24,16 @@
  */
 namespace heidelpayPHP\test\integration;
 
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Constants\WebhookEvents;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\Exception;
 
 class WebhookTest extends BasePaymentTest
 {
+    //<editor-fold desc="Tests">
     /**
      * Verify Webhook resource can be registered and fetched.
      *
@@ -39,29 +42,104 @@ class WebhookTest extends BasePaymentTest
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
-    public function webhookResourceShouldBeCreatableAndFetchable()
+    public function webhookResourceCanBeRegisteredAndFetched(): Webhook
     {
-        $webhook = new Webhook('https://www.heidelpay.de');
-        $webhook->addEvent(WebhookEvents::ALL);
+        $url     = $this->generateUniqueUrl();
+        $webhook = new Webhook($url, WebhookEvents::ALL);
         $this->heidelpay->createWebhook($webhook);
         $this->assertNotNull($webhook->getId());
+
+        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $this->assertEquals($webhook->expose(), $fetchedWebhook->expose());
+
+        return $webhook;
     }
 
     /**
-     * Verify Webhook resource can be updated.
+     * Verify Webhook url can be updated.
      *
+     * @depends webhookResourceCanBeRegisteredAndFetched
      * @test
+     *
+     * @param Webhook $webhook
+     *
+     * @throws HeidelpayApiException
+     * @throws Exception
+     * @throws \RuntimeException
      */
-    public function webhookResourceShouldBeUpdateable()
+    public function webhookUrlShouldBeUpdateable(Webhook $webhook)
     {
+        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
+
+        $url = $this->generateUniqueUrl();
+        $webhook->setUrl($url);
+        $this->heidelpay->updateWebhook($webhook);
+
+        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $this->assertEquals($url, $fetchedWebhook->getUrl());
     }
 
     /**
-     * Verify Webhook resource can be updated.
+     * Verify Webhook event can be updated.
      *
+     * @depends webhookResourceCanBeRegisteredAndFetched
      * @test
+     *
+     * @param Webhook $webhook
+     *
+     * @throws HeidelpayApiException
+     * @throws Exception
+     * @throws \RuntimeException
+     *
+     * @group skip
      */
-    public function webhookResourceShouldBeDeletable()
+    public function webhookEventShouldBeUpdateable(Webhook $webhook)
     {
+        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
+
+        $webhook->setEvent(WebhookEvents::CUSTOMER);
+        $this->heidelpay->updateWebhook($webhook);
+
+        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $this->assertEquals(WebhookEvents::CUSTOMER, $fetchedWebhook->getEvent());
     }
+
+    /**
+     * Verify Webhook resource can be deleted.
+     *
+     * @depends webhookResourceCanBeRegisteredAndFetched
+     * @test
+     *
+     * @param Webhook $webhook
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function webhookResourceShouldBeDeletable(Webhook $webhook)
+    {
+        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
+
+        $this->assertNull($this->heidelpay->deleteWebhook($webhook));
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND);
+        $this->heidelpay->fetchWebhook($webhook->getId());
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+    /**
+     * Returns a unique url based on the current timestamp.
+     *
+     * @return string
+     */
+    private function generateUniqueUrl(): string
+    {
+        return 'https://www.heidelpay.de?test=' . str_replace([' ', '.'], '', microtime());
+    }
+    //</editor-fold>
 }

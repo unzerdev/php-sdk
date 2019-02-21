@@ -24,24 +24,24 @@
  */
 namespace heidelpayPHP\Resources;
 
-use heidelpayPHP\Constants\WebhookEvents;
-
 class Webhook extends AbstractHeidelpayResource
 {
     /** @var string $url */
     protected $url;
 
-    /** @var array $eventList */
-    protected $eventList = [];
+    /** @var string $event */
+    protected $event;
 
     /**
      * Webhook constructor.
      *
      * @param string $url
+     * @param string $event
      */
-    public function __construct(string $url)
+    public function __construct(string $url = '', string $event = '')
     {
         $this->url = $url;
+        $this->event = $event;
 
         parent::__construct();
     }
@@ -49,9 +49,9 @@ class Webhook extends AbstractHeidelpayResource
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUrl(): string
+    public function getUrl()
     {
         return $this->url;
     }
@@ -68,11 +68,11 @@ class Webhook extends AbstractHeidelpayResource
     }
 
     /**
-     * @return array
+     * @return string|null
      */
-    public function getEventList(): array
+    public function getEvent()
     {
-        return $this->eventList;
+        return $this->event;
     }
 
     /**
@@ -80,21 +80,9 @@ class Webhook extends AbstractHeidelpayResource
      *
      * @return Webhook
      */
-    public function addEvent(string $event): Webhook
+    public function setEvent(string $event): Webhook
     {
-        if (in_array($event, WebhookEvents::ALLOWED_WEBHOOKS, true) || !in_array($event, $this->eventList, true)) {
-            $this->eventList[] = $event;
-        }
-        return $this;
-    }
-
-    /**
-     * @param string $event
-     *
-     * @return Webhook
-     */
-    public function removeEvent(string $event): Webhook
-    {
+        $this->event = $event;
         return $this;
     }
 

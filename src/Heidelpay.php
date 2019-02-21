@@ -690,6 +690,8 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
+    //<editor-fold desc="Webhook resource">
+
     /**
      * Creates Webhook resource.
      *
@@ -704,6 +706,53 @@ class Heidelpay implements HeidelpayParentInterface
     {
         return $this->resourceService->createWebhook($webhook);
     }
+
+    /**
+     * Updates the given local Webhook object using the API.
+     * Retrieves a Webhook resource, if the webhook parameter is the webhook id.
+     *
+     * @param Webhook|string $webhook
+     *
+     * @return Webhook
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchWebhook($webhook): Webhook
+    {
+        return $this->resourceService->fetchWebhook($webhook);
+    }
+
+    /**
+     * Updates the Webhook resource of the api with the given object.
+     *
+     * @param Webhook $webhook
+     *
+     * @return Webhook
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function updateWebhook($webhook): Webhook
+    {
+        return $this->resourceService->updateWebhook($webhook);
+    }
+
+    /**
+     * Updates the given Webhook resource of the api with the given object.
+     *
+     * @param Webhook $webhook
+     *
+     * @return AbstractHeidelpayResource|Webhook|null
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function deleteWebhook($webhook)
+    {
+        return $this->resourceService->deleteWebhook($webhook);
+    }
+
+    //</editor-fold>
 
     //</editor-fold>
 
