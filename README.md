@@ -28,6 +28,7 @@ Please refer to the following documentation for installation instructions and us
 *   SEPA direct debit (guaranteed)
 *   SOFORT
 *   EPS
+*   PIS
 
 ## Support
 For any issues or questions please get in touch with our support team.
