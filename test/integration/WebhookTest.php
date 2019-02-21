@@ -34,6 +34,7 @@ use PHPUnit\Framework\Exception;
 class WebhookTest extends BasePaymentTest
 {
     //<editor-fold desc="Tests">
+
     /**
      * Verify Webhook resource can be registered and fetched.
      *
@@ -129,9 +130,11 @@ class WebhookTest extends BasePaymentTest
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND);
         $this->heidelpay->fetchWebhook($webhook->getId());
     }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
+
     /**
      * Returns a unique url based on the current timestamp.
      *
@@ -141,5 +144,6 @@ class WebhookTest extends BasePaymentTest
     {
         return 'https://www.heidelpay.de?test=' . str_replace([' ', '.'], '', microtime());
     }
+
     //</editor-fold>
 }

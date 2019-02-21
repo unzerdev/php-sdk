@@ -744,6 +744,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Webhook $webhook
      *
      * @return AbstractHeidelpayResource|Webhook|null
+     *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */

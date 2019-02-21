@@ -810,6 +810,7 @@ class ResourceService
      * @param Webhook|string $webhook
      *
      * @return Webhook|AbstractHeidelpayResource|null
+     *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
