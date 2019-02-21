@@ -131,6 +131,25 @@ class WebhookTest extends BasePaymentTest
         $this->heidelpay->fetchWebhook($webhook->getId());
     }
 
+    /**
+     * Verify webhook create will throw error when the event is already registered.
+     *
+     * @test
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function webhookCreateShouldThrowErrorWhenEventIsAlreadyRegistered()
+    {
+        $url     = $this->generateUniqueUrl();
+        $webhook = new Webhook($url, WebhookEvents::ALL);
+        $this->heidelpay->createWebhook($webhook);
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED);
+        $this->heidelpay->createWebhook($webhook);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">

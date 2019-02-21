@@ -757,6 +757,8 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
+    //</editor-fold>
+
     //<editor-fold desc="Transactions">
 
     //<editor-fold desc="Authorize transactions">
