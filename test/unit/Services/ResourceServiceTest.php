@@ -53,6 +53,7 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\HttpService;
+use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\DummyResource;
@@ -76,8 +77,7 @@ class ResourceServiceTest extends BaseUnitTest
      */
     public function getResourceIdFromUrlShouldIdentifyAndReturnTheIdStringFromAGivenString($expected, $uri, $idString)
     {
-        $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
-        $this->assertEquals($expected, $resourceService->getResourceIdFromUrl($uri, $idString));
+        $this->assertEquals($expected, IdService::getResourceIdFromUrl($uri, $idString));
     }
 
     /**
@@ -93,10 +93,9 @@ class ResourceServiceTest extends BaseUnitTest
      */
     public function getResourceIdFromUrlShouldThrowExceptionIfTheIdCanNotBeFound($uri, $idString)
     {
-        $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Id not found!');
-        $resourceService->getResourceIdFromUrl($uri, $idString);
+        IdService::getResourceIdFromUrl($uri, $idString);
     }
 
     /**

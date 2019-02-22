@@ -93,26 +93,6 @@ class ResourceService
     }
 
     /**
-     * @param string $url
-     * @param string $idString
-     *
-     * @return string
-     *
-     * @throws \RuntimeException
-     */
-    public function getResourceIdFromUrl($url, $idString): string
-    {
-        $matches = [];
-        preg_match('~\/([s|p]{1}-' . $idString . '-[\d]+)~', $url, $matches);
-
-        if (\count($matches) < 2) {
-            throw new \RuntimeException('Id not found!');
-        }
-
-        return $matches[1];
-    }
-
-    /**
      * Fetches the Resource if necessary.
      *
      * @param AbstractHeidelpayResource $resource

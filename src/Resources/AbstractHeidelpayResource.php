@@ -252,19 +252,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         $this->getResourceService()->fetch($resource);
     }
 
-    /**
-     * @param string $url
-     * @param string $idString
-     *
-     * @return string
-     *
-     * @throws \RuntimeException
-     */
-    protected function getResourceIdFromUrl($url, $idString): string
-    {
-        return $this->getResourceService()->getResourceIdFromUrl($url, $idString);
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="Serialization">

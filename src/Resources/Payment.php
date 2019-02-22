@@ -36,6 +36,7 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasPaymentState;
 
@@ -772,7 +773,7 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateAuthorizationTransaction($transaction)
     {
-        $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::AUTHORIZE);
+        $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::AUTHORIZE);
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
             $authorization = (new Authorization())->setPayment($this)->setId($transactionId);
@@ -792,7 +793,7 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateChargeTransaction($transaction)
     {
-        $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
+        $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
         $charge = $this->getCharge($transactionId, true);
         if (!$charge instanceof Charge) {
             $charge = (new Charge())->setPayment($this)->setId($transactionId);
@@ -812,7 +813,7 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateReversalTransaction($transaction)
     {
-        $transactionId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
+        $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
         $authorization = $this->getAuthorization(true);
         if (!$authorization instanceof Authorization) {
             throw new \RuntimeException('The Authorization object can not be found.');
@@ -837,8 +838,8 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateRefundTransaction($transaction)
     {
-        $refundId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
-        $chargeId = $this->getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
+        $refundId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
+        $chargeId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
 
         $charge = $this->getCharge($chargeId, true);
         if (!$charge instanceof Charge) {
@@ -864,7 +865,7 @@ class Payment extends AbstractHeidelpayResource
      */
     private function updateShipmentTransaction($transaction)
     {
-        $shipmentId = $this->getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
+        $shipmentId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
         $shipment = $this->getShipment($shipmentId, true);
         if (!$shipment instanceof Shipment) {
             $shipment = new Shipment(null, $shipmentId);
