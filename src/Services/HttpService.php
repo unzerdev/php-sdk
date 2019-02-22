@@ -82,7 +82,7 @@ class HttpService
     ): string {
         $url = Heidelpay::BASE_URL . Heidelpay::API_VERSION . $uri;
 
-        if (null === $resource) {
+        if (!$resource instanceof AbstractHeidelpayResource) {
             throw new \RuntimeException('Transfer object is empty!');
         }
 

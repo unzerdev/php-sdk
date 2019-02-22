@@ -114,7 +114,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * @param \DateTime $fetchedAt
      *
-     * @return $this
+     * @return self
      */
     public function setFetchedAt(\DateTime $fetchedAt): self
     {

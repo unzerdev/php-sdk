@@ -144,6 +144,7 @@ class ResourceService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
+     * @throws \Exception
      */
     public function create(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -170,6 +171,7 @@ class ResourceService
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
+     * @throws \Exception
      */
     public function update(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -338,8 +340,6 @@ class ResourceService
     }
 
     //</editor-fold>
-
-
 
     //<editor-fold desc="Basket resource">
 

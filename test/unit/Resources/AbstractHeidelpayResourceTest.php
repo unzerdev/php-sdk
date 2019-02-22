@@ -44,7 +44,6 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 
 class AbstractHeidelpayResourceTest extends BaseUnitTest
@@ -54,7 +53,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws \Exception
      */
@@ -111,7 +109,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function parentResourceAndHeidelpayGetterSetterShouldWork()
@@ -155,7 +152,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @param string                    $resourcePath
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
@@ -204,7 +200,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
+     * @throws \Exception
      */
     public function updateValuesShouldUpdateChildObjects()
     {
@@ -237,7 +233,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
+     * @throws \Exception
      */
     public function updateValuesShouldUpdateValuesFromProcessingInTheActualObject()
     {
@@ -307,7 +303,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function nullValuesShouldBeUnsetOnExpose()
     {
@@ -325,7 +320,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function idsOfLinkedResourcesShouldBeAddedOnExpose()
     {
@@ -342,8 +336,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * Verify null is returned as externalId if the class does not implement the getter any.
      *
      * @test
-     *
-     * @throws ExpectationFailedException
      */
     public function getExternalIdShouldReturnNullIfItIsNotImplementedInTheExtendingClass()
     {
