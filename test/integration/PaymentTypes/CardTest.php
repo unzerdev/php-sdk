@@ -33,7 +33,6 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class CardTest extends BasePaymentTest
 {
@@ -87,7 +86,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
      * @throws \RuntimeException
@@ -123,7 +121,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
      * @throws \RuntimeException
@@ -182,7 +179,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
      * @throws \RuntimeException
@@ -215,7 +211,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
      * @throws \RuntimeException
@@ -252,7 +247,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
      * @throws \RuntimeException
@@ -282,7 +276,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
      * @throws \RuntimeException
@@ -333,7 +326,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -359,7 +351,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -395,7 +386,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */

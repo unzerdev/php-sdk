@@ -29,7 +29,6 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class CancelAfterChargeTest extends BasePaymentTest
 {
@@ -40,7 +39,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      *
      * @return Charge
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
@@ -65,7 +63,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @param Charge $charge
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -83,7 +80,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -104,7 +100,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
@@ -135,7 +130,6 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException

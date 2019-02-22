@@ -31,7 +31,6 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class PISTest extends BasePaymentTest
 {
@@ -43,7 +42,6 @@ class PISTest extends BasePaymentTest
      * @return PIS
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -71,7 +69,6 @@ class PISTest extends BasePaymentTest
      * @return Charge
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends pisShouldBeCreatableAndFetchable

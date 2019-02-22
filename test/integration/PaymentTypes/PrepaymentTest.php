@@ -31,7 +31,6 @@ use heidelpayPHP\Resources\PaymentTypes\Prepayment;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class PrepaymentTest extends BasePaymentTest
 {
@@ -42,7 +41,6 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @test
      */
@@ -71,7 +69,6 @@ class PrepaymentTest extends BasePaymentTest
      * @return Authorization
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function prepaymentTypeShouldBeAuthorizable(Prepayment $prepayment): Authorization
@@ -137,7 +134,6 @@ class PrepaymentTest extends BasePaymentTest
      * @param Prepayment $prepayment
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function prepaymentAuthorizeCanBeCanceled(Prepayment $prepayment)
