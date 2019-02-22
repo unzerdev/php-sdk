@@ -133,6 +133,7 @@ class WebhookService
     //</editor-fold>
 
     //<editor-fold desc="Webhooks pseudo resource">
+
     /**
      * Fetches all registered webhook events and returns them in an array.
      *
@@ -160,5 +161,26 @@ class WebhookService
         $webhooks->setParentResource($this->heidelpay);
         $this->resourceService->delete($webhooks);
     }
+
+    /**
+     * Registers multiple Webhook events at once.
+     *
+     * @param string $url
+     * @param array  $events
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createWebhooks(string $url, array $events): array
+    {
+        $webhooks = new Webhooks($url, $events);
+        $webhooks->setParentResource($this->heidelpay);
+        $this->resourceService->create($webhooks);
+
+        return $webhooks->getWebhooks();
+    }
+
     //</editor-fold>
 }

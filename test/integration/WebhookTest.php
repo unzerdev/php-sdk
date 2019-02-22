@@ -185,11 +185,11 @@ class WebhookTest extends BasePaymentTest
         $this->heidelpay->createWebhook($webhook3);
 
         // --- Verify webhooks have been registered ---
-        $webhooks = $this->heidelpay->fetchAllWebhooks();
-        $this->assertCount(3, $webhooks);
-        $this->assertArraySubset([$webhook1], $webhooks);
-        $this->assertArraySubset([$webhook2], $webhooks);
-        $this->assertArraySubset([$webhook3], $webhooks);
+        $fetchedWebhooks = $this->heidelpay->fetchAllWebhooks();
+        $this->assertCount(3, $fetchedWebhooks);
+        $this->assertArraySubset([$webhook1], $fetchedWebhooks);
+        $this->assertArraySubset([$webhook2], $fetchedWebhooks);
+        $this->assertArraySubset([$webhook3], $fetchedWebhooks);
     }
 
     /**
@@ -215,7 +215,36 @@ class WebhookTest extends BasePaymentTest
         $this->assertCount(0, $webhooks);
     }
 
+    /**
+     * Verify setting multiple events at once.
+     *
+     * @test
+     * @depends allWebhooksShouldBeRemovableAtOnce
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function bulkSettingWebhookEventsShouldBePossible()
+    {
+        $webhookEvents   = [WebhookEvents::AUTHORIZE, WebhookEvents::CHARGE, WebhookEvents::SHIPMENT];
+        $url             = $this->generateUniqueUrl();
+        $registeredWebhooks = $this->heidelpay->registerMultipleWebhooks($url, $webhookEvents);
 
+        // check whether the webhooks have the correct url
+        $registeredEvents = [];
+        foreach ($registeredWebhooks as $webhook) {
+            /** @var Webhook $webhook */
+            if (in_array($webhook->getEvent(), $webhookEvents, true)) {
+                $this->assertEquals($url, $webhook->getUrl());
+            }
+            $registeredEvents[] = $webhook->getEvent();
+        }
+
+        // check whether all of the webhookEvents exist
+        sort($webhookEvents);
+        sort($registeredEvents);
+        $this->assertArraySubset($webhookEvents, $registeredEvents);
+    }
 
     //</editor-fold>
 

@@ -155,7 +155,9 @@ class ResourceService
             return $resource;
         }
 
-        $resource->setId($response->id);
+        if (isset($response->id)) {
+            $resource->setId($response->id);
+        }
 
         $resource->handleResponse($response, $method);
         return $resource;

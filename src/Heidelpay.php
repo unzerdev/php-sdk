@@ -748,30 +748,6 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Retrieves all registered webhooks and returns them in an array.
-     *
-     * @return array
-     *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     */
-    public function fetchAllWebhooks(): array
-    {
-        return $this->webhookService->fetchWebhooks();
-    }
-
-    /**
-     * Deletes all registered webhooks.
-     *
-     * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     */
-    public function deleteAllWebhooks()
-    {
-        $this->webhookService->deleteWebhooks();
-    }
-
-    /**
      * Updates the Webhook resource of the api with the given object.
      *
      * @param Webhook $webhook
@@ -799,6 +775,46 @@ class Heidelpay implements HeidelpayParentInterface
     public function deleteWebhook($webhook)
     {
         return $this->webhookService->deleteWebhook($webhook);
+    }
+
+    /**
+     * Retrieves all registered webhooks and returns them in an array.
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchAllWebhooks(): array
+    {
+        return $this->webhookService->fetchWebhooks();
+    }
+
+    /**
+     * Deletes all registered webhooks.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function deleteAllWebhooks()
+    {
+        $this->webhookService->deleteWebhooks();
+    }
+
+    /**
+     * Registers multiple Webhook events at once.
+     *
+     * @param string $url
+     * @param array  $events
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function registerMultipleWebhooks(string $url, array $events): array
+    {
+        return $this->webhookService->createWebhooks($url, $events);
     }
 
     //</editor-fold>
