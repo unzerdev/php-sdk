@@ -50,4 +50,7 @@ class IdStrings
     // Resources
     const BASKET = 'bsk';
     const WEBHOOK = 'whk';
+    const PAYMENT = 'pay';
+    const CUSTOMER = 'cst';
+    const METADATA = 'mtd';
 }
