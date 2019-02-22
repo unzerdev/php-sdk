@@ -44,6 +44,7 @@ use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\Validators\PrivateKeyValidator;
 
 class Heidelpay implements HeidelpayParentInterface
@@ -64,6 +65,9 @@ class Heidelpay implements HeidelpayParentInterface
 
     /** @var PaymentService $paymentService */
     private $paymentService;
+
+    /** @var WebhookService $webhookService */
+    private $webhookService;
 
     /** @var HttpService $httpService */
     private $httpService;
@@ -89,6 +93,7 @@ class Heidelpay implements HeidelpayParentInterface
 
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
+        $this->webhookService  = new WebhookService($this);
         $this->httpService = new HttpService();
     }
 
@@ -186,6 +191,25 @@ class Heidelpay implements HeidelpayParentInterface
     public function getPaymentService(): PaymentService
     {
         return $this->paymentService;
+    }
+
+    /**
+     * @return WebhookService
+     */
+    public function getWebhookService(): WebhookService
+    {
+        return $this->webhookService;
+    }
+
+    /**
+     * @param WebhookService $webhookService
+     *
+     * @return Heidelpay
+     */
+    public function setWebhookService(WebhookService $webhookService): Heidelpay
+    {
+        $this->webhookService = $webhookService;
+        return $this;
     }
 
     /**
@@ -721,6 +745,30 @@ class Heidelpay implements HeidelpayParentInterface
     public function fetchWebhook($webhook): Webhook
     {
         return $this->resourceService->fetchWebhook($webhook);
+    }
+
+    /**
+     * Retrieves all registered webhooks and returns them in an array.
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchAllWebhooks(): array
+    {
+        return $this->webhookService->fetchWebhooks();
+    }
+
+    /**
+     * Deletes all registered webhooks.
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function deleteAllWebhooks()
+    {
+        $this->webhookService->deleteWebhooks();
     }
 
     /**

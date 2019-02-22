@@ -33,7 +33,7 @@ use PHPUnit\Framework\Exception;
 
 class WebhookTest extends BasePaymentTest
 {
-    //<editor-fold desc="Tests">
+    //<editor-fold desc="Webhook tests">
 
     /**
      * Verify Webhook resource can be registered and fetched.
@@ -135,6 +135,7 @@ class WebhookTest extends BasePaymentTest
      * Verify webhook create will throw error when the event is already registered.
      *
      * @test
+     *
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
@@ -149,6 +150,72 @@ class WebhookTest extends BasePaymentTest
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED);
         $this->heidelpay->createWebhook($webhook);
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Webhooks test">
+
+    /**
+     * Verify fetching all registered webhooks will return an array of webhooks.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchWebhooksShouldReturnArrayOfRegisteredWebhooks()
+    {
+        // --- Prepare --> remove all existing webhooks
+        // start workaround - avoid error deleting non existing webhooks
+        $webhook = new Webhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
+        $this->heidelpay->createWebhook($webhook);
+        // end workaround - avoid error deleting non existing webhooks
+
+        $this->heidelpay->deleteAllWebhooks();
+        $webhooks = $this->heidelpay->fetchAllWebhooks();
+        $this->assertCount(0, $webhooks);
+
+        // --- Create some test webhooks ---
+        $webhook1 = new Webhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
+        $this->heidelpay->createWebhook($webhook1);
+        $webhook2 = new Webhook($this->generateUniqueUrl(), WebhookEvents::CHARGE);
+        $this->heidelpay->createWebhook($webhook2);
+        $webhook3 = new Webhook($this->generateUniqueUrl(), WebhookEvents::AUTHORIZE);
+        $this->heidelpay->createWebhook($webhook3);
+
+        // --- Verify webhooks have been registered ---
+        $webhooks = $this->heidelpay->fetchAllWebhooks();
+        $this->assertCount(3, $webhooks);
+        $this->assertArraySubset([$webhook1], $webhooks);
+        $this->assertArraySubset([$webhook2], $webhooks);
+        $this->assertArraySubset([$webhook3], $webhooks);
+    }
+
+    /**
+     * Verify all webhooks can be removed at once.
+     *
+     * @test
+     *
+     * @depends webhookResourceCanBeRegisteredAndFetched
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function allWebhooksShouldBeRemovableAtOnce()
+    {
+        // --- Verify webhooks have been registered ---
+        $webhooks = $this->heidelpay->fetchAllWebhooks();
+        $this->assertGreaterThan(0, count($webhooks));
+
+        // --- Verify all webhooks can be removed at once ---
+        $this->heidelpay->deleteAllWebhooks();
+        $webhooks = $this->heidelpay->fetchAllWebhooks();
+        $this->assertCount(0, $webhooks);
+    }
+
+
 
     //</editor-fold>
 
