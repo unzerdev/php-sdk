@@ -29,20 +29,54 @@ class IdService
     /**
      * @param string $url
      * @param string $idString
+     * @param bool   $onlyLast
      *
      * @return string
      *
      * @throws \RuntimeException
      */
-    public static function getResourceIdFromUrl($url, $idString): string
+    public static function getResourceIdFromUrl($url, $idString, $onlyLast = false): string
     {
         $matches = [];
-        preg_match('/\/?([s|p]{1}-' . $idString . '-[\d]+)$/', $url, $matches);
+        $pattern = '/\/([s|p]{1}-' . $idString . '-[\d]+)\/?' . ($onlyLast ? '$':'') . '/';
+        preg_match($pattern, $url, $matches);
 
         if (\count($matches) < 2) {
-            throw new \RuntimeException('Id not found!');
+            throw new \RuntimeException('Id for "' . $idString . '" not found in "' . $url . '"!');
         }
 
         return $matches[1];
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
+    public static function getLastResourceIdFromUrlString($url): string
+    {
+        return self::getResourceIdFromUrl($url, '([a-z]{3}|p24)', true);
+    }
+
+    /**
+     * @param $typeId
+     *
+     * @return string|null
+     */
+    public static function getResourceTypeFromIdString($typeId)
+    {
+        $paymentType  = null;
+        $typeIdString = null;
+
+        $typeIdParts = [];
+        preg_match('/^[sp]{1}-([a-z]{3}|p24)-\d*/', $typeId, $typeIdParts);
+
+        if (\count($typeIdParts) >= 2) {
+            $typeIdString = $typeIdParts[1];
+        }
+
+        return $typeIdString;
     }
 }

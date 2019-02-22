@@ -94,7 +94,6 @@ class ResourceServiceTest extends BaseUnitTest
     public function getResourceIdFromUrlShouldThrowExceptionIfTheIdCanNotBeFound($uri, $idString)
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Id not found!');
         IdService::getResourceIdFromUrl($uri, $idString);
     }
 

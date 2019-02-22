@@ -53,4 +53,20 @@ class IdStrings
     const PAYMENT = 'pay';
     const CUSTOMER = 'cst';
     const METADATA = 'mtd';
+    
+    const PAYMENT_TYPES = [
+        self::CARD,
+        self::GIROPAY,
+        self::IDEAL,
+        self::INVOICE,
+        self::INVOICE_GUARANTEED,
+        self::PAYPAL,
+        self::PREPAYMENT,
+        self::PRZELEWY24,
+        self::SEPA_DIRECT_DEBIT_GUARANTEED,
+        self::SEPA_DIRECT_DEBIT,
+        self::SOFORT,
+        self::PIS,
+        self::EPS
+    ];
 }

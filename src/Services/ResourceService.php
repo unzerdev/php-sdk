@@ -110,6 +110,61 @@ class ResourceService
         return $resource;
     }
 
+    /**
+     * @param $url
+     * @return AbstractHeidelpayResource
+     * @throws \RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function fetchResourceByUrl($url): AbstractHeidelpayResource
+    {
+        $resource = null;
+        $heidelpay    = $this->heidelpay;
+
+        $resourceId   = IdService::getLastResourceIdFromUrlString($url);
+        $resourceType = IdService::getResourceTypeFromIdString($resourceId);
+        switch (true) {
+            case $resourceType === IdStrings::AUTHORIZE:
+                $resource = $heidelpay->fetchAuthorization(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
+                break;
+            case $resourceType === IdStrings::CHARGE:
+                $resource = $heidelpay->fetchChargeById(
+                    IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT),
+                    $resourceId
+                );
+                break;
+            case $resourceType === IdStrings::SHIPMENT:
+                $resource = $heidelpay->fetchShipment(
+                    IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT),
+                    $resourceId
+                );
+                break;
+            case $resourceType === IdStrings::CANCEL:
+                throw new \RuntimeException('Refunds and reversals can not be fetched with this method at the moment.');
+                break;
+            case $resourceType === IdStrings::PAYMENT:
+                $resource = $heidelpay->fetchPaymentType($resourceId);
+                break;
+            case $resourceType === IdStrings::METADATA:
+                $resource = $heidelpay->fetchMetadata($resourceId);
+                break;
+            case $resourceType === IdStrings::CUSTOMER:
+                $resource = $heidelpay->fetchCustomer($resourceId);
+                break;
+            case $resourceType === IdStrings::BASKET:
+                $resource = $heidelpay->fetchBasket($resourceId);
+                break;
+            case in_array($resourceType, IdStrings::PAYMENT_TYPES, true):
+                $resource = $this->fetchPaymentType($resourceId);
+                break;
+            default:
+                throw new \RuntimeException('Invalid resource type!');
+                break;
+        }
+
+        return $resource;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="CRUD operations">
