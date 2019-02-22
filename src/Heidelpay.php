@@ -728,7 +728,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function createWebhook(Webhook $webhook): Webhook
     {
-        return $this->resourceService->createWebhook($webhook);
+        return $this->webhookService->createWebhook($webhook);
     }
 
     /**
@@ -744,7 +744,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function fetchWebhook($webhook): Webhook
     {
-        return $this->resourceService->fetchWebhook($webhook);
+        return $this->webhookService->fetchWebhook($webhook);
     }
 
     /**
@@ -783,7 +783,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function updateWebhook($webhook): Webhook
     {
-        return $this->resourceService->updateWebhook($webhook);
+        return $this->webhookService->updateWebhook($webhook);
     }
 
     /**
@@ -798,7 +798,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function deleteWebhook($webhook)
     {
-        return $this->resourceService->deleteWebhook($webhook);
+        return $this->webhookService->deleteWebhook($webhook);
     }
 
     //</editor-fold>

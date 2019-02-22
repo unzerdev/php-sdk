@@ -26,6 +26,8 @@ namespace heidelpayPHP\Services;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Resources\Webhooks;
 
 class WebhookService
@@ -47,6 +49,90 @@ class WebhookService
         $this->resourceService = $heidelpay->getResourceService();
     }
 
+    //<editor-fold desc="Webhook resource">
+
+    /**
+     * Creates Webhook resource
+     *
+     * @param Webhook $webhook
+     *
+     * @return Webhook
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function createWebhook(Webhook $webhook): Webhook
+    {
+        $webhook->setParentResource($this->heidelpay);
+        $this->resourceService->create($webhook);
+        return $webhook;
+    }
+
+    /**
+     * Updates the given local Webhook object using the API.
+     * Retrieves a Webhook resource, if the webhook parameter is the webhook id.
+     *
+     * @param Webhook|string $webhook
+     *
+     * @return Webhook
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchWebhook($webhook): Webhook
+    {
+        $webhookObject = $webhook;
+        if (\is_string($webhook)) {
+            $webhookObject = new Webhook();
+            $webhookObject->setId($webhook);
+        }
+
+        $webhookObject->setParentResource($this->heidelpay);
+        $this->resourceService->fetch($webhookObject);
+        return $webhookObject;
+    }
+
+    /**
+     * Updates the Webhook resource of the api with the given object.
+     *
+     * @param Webhook $webhook
+     *
+     * @return Webhook
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function updateWebhook($webhook): Webhook
+    {
+        $webhook->setParentResource($this->heidelpay);
+        $this->resourceService->update($webhook);
+        return $webhook;
+    }
+
+    /**
+     * Deletes the given Webhook resource.
+     *
+     * @param Webhook|string $webhook
+     *
+     * @return Webhook|AbstractHeidelpayResource|null
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function deleteWebhook($webhook)
+    {
+        $webhookObject = $webhook;
+
+        if (\is_string($webhook)) {
+            $webhookObject = $this->fetchWebhook($webhook);
+        }
+
+        return $this->resourceService->delete($webhookObject);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Webhooks pseudo resource">
     /**
      * Fetches all registered webhook events and returns them in an array.
      *
@@ -74,4 +160,5 @@ class WebhookService
         $webhooks->setParentResource($this->heidelpay);
         $this->resourceService->delete($webhooks);
     }
+    //</editor-fold>
 }
