@@ -414,17 +414,8 @@ class ResourceService
      */
     public function fetchPaymentType($typeId): AbstractHeidelpayResource
     {
-        $paymentType = null;
-        $typeIdString = null;
-
-        $typeIdParts = [];
-        preg_match('/^[sp]{1}-([a-z]{3}|p24)-[a-z0-9]*/', $typeId, $typeIdParts);
-
-        if (\count($typeIdParts) >= 2) {
-            $typeIdString = $typeIdParts[1];
-        }
-
-        switch ($typeIdString) {
+        $resourceType = IdService::getResourceTypeFromIdString($typeId);
+        switch ($resourceType) {
             case IdStrings::CARD:
                 $paymentType = new Card(null, null);
                 break;
