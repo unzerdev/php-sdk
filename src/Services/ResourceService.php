@@ -112,7 +112,9 @@ class ResourceService
 
     /**
      * @param $url
+     *
      * @return AbstractHeidelpayResource
+     *
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -143,7 +145,7 @@ class ResourceService
                 throw new \RuntimeException('Refunds and reversals can not be fetched with this method at the moment.');
                 break;
             case $resourceType === IdStrings::PAYMENT:
-                $resource = $heidelpay->fetchPaymentType($resourceId);
+                $resource = $heidelpay->fetchPayment($resourceId);
                 break;
             case $resourceType === IdStrings::METADATA:
                 $resource = $heidelpay->fetchMetadata($resourceId);

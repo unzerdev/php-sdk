@@ -38,7 +38,7 @@ class IdService
     public static function getResourceIdFromUrl($url, $idString, $onlyLast = false): string
     {
         $matches = [];
-        $pattern = '/\/([s|p]{1}-' . $idString . '-[\d]+)\/?' . ($onlyLast ? '$':'') . '/';
+        $pattern = '/\/([s|p]{1}-' . $idString . '-[a-z\d]+)\/?' . ($onlyLast ? '$':'') . '/';
         preg_match($pattern, $url, $matches);
 
         if (\count($matches) < 2) {

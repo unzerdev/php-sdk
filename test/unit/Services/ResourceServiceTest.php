@@ -1186,6 +1186,37 @@ class ResourceServiceTest extends BaseUnitTest
         $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
     }
 
+    /**
+     * Verify fetchResourceByUrl calls fetch for the desired resource.
+     *
+     * @test
+     * @dataProvider fetchResourceByUrlShouldFetchTheDesiredResourceDP
+     *
+     * @param string $expectedFetchMethod
+     * @param mixed  $expectedArguments
+     * @param string $resourceUrl
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchResourceByUrlShouldFetchTheDesiredResource(
+        $expectedFetchMethod,
+        $expectedArguments,
+        $resourceUrl
+    ) {
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(
+            [$expectedFetchMethod]
+        )->getMock();
+        $heidelpayMock->expects($this->once())->method($expectedFetchMethod)->with(...$expectedArguments);
+
+        /** @var Heidelpay $heidelpayMock */
+        $resourceService = new ResourceService($heidelpayMock);
+
+        $resourceService->fetchResourceByUrl($resourceUrl);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
@@ -1285,6 +1316,62 @@ class ResourceServiceTest extends BaseUnitTest
             ['myId'],
             [null],
             ['']
+        ];
+    }
+
+    /**
+     * Provides test data sets for fetchResourceByUrlShouldFetchTheDesiredResource.
+     *
+     * @return array
+     */
+    public function fetchResourceByUrlShouldFetchTheDesiredResourceDP(): array
+    {
+        return [
+            'Authorization' => [
+                'fetchAuthorization',
+                ['s-pay-100746'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100746/authorize/s-aut-1/'
+            ],
+            'Charge' => [
+                'fetchChargeById',
+                ['s-pay-100798', 's-chg-1'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100798/charges/s-chg-1/'
+            ],
+            'Shipment' => [
+                'fetchShipment',
+                ['s-pay-100801', 's-shp-1'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100801/shipments/s-shp-1/'
+            ],
+            'Refund' => [
+                'fetchRefundById',
+                ['s-pay-100801', 's-chg-1', 's-cnl-1'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100802/charges/s-chg-1/cancels/s-cnl-1/'
+            ],
+            'Reversal' => [
+                'fetchReversal',
+                ['s-pay-100803', 's-cnl-1'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100803/authorize/s-aut-1/cancels/s-cnl-1/'
+            ],
+            'Payment' => [
+                'fetchPayment',
+                ['s-pay-100801'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100801'
+            ],
+            'Metadata' => [
+                'fetchMetadata',
+                ['s-mtd-6glqv9axjpnc'],
+                'https://api.heidelpay.com/v1/metadata/s-mtd-6glqv9axjpnc/'
+            ],
+            'Customer' => [
+                'fetchCustomer',
+                ['s-cst-50c14d49e2fe'],
+                'https://api.heidelpay.com/v1/customers/s-cst-50c14d49e2fe'
+            ],
+            'Basket' => [
+                'fetchBasket',
+                ['s-bsk-1254'],
+                'https://api.heidelpay.com/v1/baskets/s-bsk-1254/'
+            ]
         ];
     }
 
