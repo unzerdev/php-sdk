@@ -27,6 +27,11 @@ namespace heidelpayPHP\Services;
 class IdService
 {
     /**
+     * Returns the id for the given resource type from the given Rest-URL string.
+     * Resource type is given as idString as defined in IdStrings constants.
+     * Only takes the id into account if it is at the end of the url string.
+     * Throws exception if the id can not be detected.
+     *
      * @param string $url
      * @param string $idString
      * @param bool   $onlyLast
@@ -46,6 +51,24 @@ class IdService
         }
 
         return $matches[1];
+    }
+
+    /**
+     * Behaves like getResourceIdFromUrl but does not throw exception but returns null if the id can not be detected.
+     *
+     * @param string $url
+     * @param string $idString
+     * @param bool   $onlyLast
+     *
+     * @return string|null
+     */
+    public static function getResourceIdOrNullFromUrl($url, $idString, $onlyLast = false)
+    {
+        try {
+            return self::getResourceIdFromUrl($url, $idString, $onlyLast);
+        } catch (\RuntimeException $e) {
+            return null;
+        }
     }
 
     /**

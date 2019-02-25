@@ -142,7 +142,13 @@ class ResourceService
                 );
                 break;
             case $resourceType === IdStrings::CANCEL:
-                throw new \RuntimeException('Refunds and reversals can not be fetched with this method at the moment.');
+                $paymentId  = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
+                $chargeId   = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
+                if ($chargeId !== null) {
+                    $resource = $heidelpay->fetchRefundById($paymentId, $chargeId, $resourceId);
+                    break;
+                }
+                $resource = $heidelpay->fetchReversal($paymentId, $resourceId);
                 break;
             case $resourceType === IdStrings::PAYMENT:
                 $resource = $heidelpay->fetchPayment($resourceId);

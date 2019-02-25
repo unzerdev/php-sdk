@@ -1195,6 +1195,7 @@ class ResourceServiceTest extends BaseUnitTest
      * @param string $expectedFetchMethod
      * @param mixed  $expectedArguments
      * @param string $resourceUrl
+     *
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
@@ -1215,6 +1216,32 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceService = new ResourceService($heidelpayMock);
 
         $resourceService->fetchResourceByUrl($resourceUrl);
+    }
+
+    /**
+     * Verify fetchResourceByUrl calls fetch for the desired resource.
+     *
+     * @test
+     * @dataProvider fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP
+     *
+     * @param $paymentTypeId
+     * @param string $resourceUrl
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \ReflectionException
+     * @throws \RuntimeException
+     */
+    public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentType($paymentTypeId, $resourceUrl)
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetchPaymentType'])->getMock();
+
+        $resourceSrvMock->expects($this->once())->method('fetchPaymentType')->with($paymentTypeId);
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchResourceByUrl($resourceUrl);
     }
 
     //<editor-fold desc="Data Providers">
@@ -1344,7 +1371,7 @@ class ResourceServiceTest extends BaseUnitTest
             ],
             'Refund' => [
                 'fetchRefundById',
-                ['s-pay-100801', 's-chg-1', 's-cnl-1'],
+                ['s-pay-100802', 's-chg-1', 's-cnl-1'],
                 'https://api.heidelpay.com/v1/payments/s-pay-100802/charges/s-chg-1/cancels/s-cnl-1/'
             ],
             'Reversal' => [
@@ -1371,6 +1398,69 @@ class ResourceServiceTest extends BaseUnitTest
                 'fetchBasket',
                 ['s-bsk-1254'],
                 'https://api.heidelpay.com/v1/baskets/s-bsk-1254/'
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentType.
+     *
+     * @return array
+     */
+    public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP(): array
+    {
+        return [
+            'CARD'                         => [
+                's-crd-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-crd-xen2ybcovn56/'
+            ],
+            'GIROPAY'                      => [
+                's-gro-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-gro-xen2ybcovn56/'
+            ],
+            'IDEAL'                        => [
+                's-idl-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-idl-xen2ybcovn56/'
+            ],
+            'INVOICE'                      => [
+                's-ivc-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-ivc-xen2ybcovn56/'
+            ],
+            'INVOICE_GUARANTEED'           => [
+                's-ivg-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-ivg-xen2ybcovn56/'
+            ],
+            'PAYPAL'                       => [
+                's-ppl-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-ppl-xen2ybcovn56/'
+            ],
+            'PREPAYMENT'                   => [
+                's-ppy-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-ppy-xen2ybcovn56/'
+            ],
+            'PRZELEWY24'                   => [
+                's-p24-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-p24-xen2ybcovn56/'
+            ],
+            'SEPA_DIRECT_DEBIT_GUARANTEED' => [
+                's-ddg-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-ddg-xen2ybcovn56/'
+            ],
+            'SEPA_DIRECT_DEBIT'            => [
+                's-sdd-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-sdd-xen2ybcovn56/'
+            ],
+            'SOFORT'                       => [
+                's-sft-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-sft-xen2ybcovn56/'
+            ],
+            'PIS'                          => [
+                's-pis-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-pis-xen2ybcovn56/'
+            ],
+            'EPS'                          => [
+                's-eps-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-eps-xen2ybcovn56/'
             ]
         ];
     }

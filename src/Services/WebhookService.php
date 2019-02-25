@@ -183,4 +183,30 @@ class WebhookService
     }
 
     //</editor-fold>
+
+    //<editor-fold desc="Event handling">
+
+    /**
+     * Fetches the resource corresponding to the given eventData.
+     *
+     * @param $postData
+     *
+     * @return AbstractHeidelpayResource|null
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function fetchResourceByWebhookEvent($postData)
+    {
+        $resourceObject = null;
+
+        $eventData = json_decode($postData);
+        if (isset($eventData->retrieveUrl)) {
+            $resourceObject = $this->heidelpay->getResourceService()->fetchResourceByUrl($postData->retrieveUrl);
+        }
+
+        return $resourceObject;
+    }
+
+    //</editor-fold>
 }
