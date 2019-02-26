@@ -171,19 +171,11 @@ class HttpService
     public function debugLog(AbstractHeidelpayResource $resource, $httpMethod, string $url, $response)
     {
         $heidelpayObj = $resource->getHeidelpayObject();
-        if ($heidelpayObj->isDebugMode()) {
-            $debugHandler = $heidelpayObj->getDebugHandler();
-            if ($debugHandler instanceof DebugHandlerInterface) {
-                $debugHandler->log($httpMethod . ': ' . $url);
-                if (in_array(
-                    $httpMethod,
-                    [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT],
-                    true
-                )) {
-                    $debugHandler->log('Request: ' . $resource->jsonSerialize());
-                }
-                $debugHandler->log('Response: ' . json_encode(json_decode($response)));
-            }
+        $heidelpayObj->debugLog($httpMethod . ': ' . $url);
+        $writingOperations = [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT];
+        if (in_array($httpMethod, $writingOperations, true)) {
+            $heidelpayObj->debugLog('Request: ' . $resource->jsonSerialize());
         }
+        $heidelpayObj->debugLog('Response: ' . json_encode(json_decode($response)));
     }
 }

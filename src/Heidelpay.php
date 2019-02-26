@@ -1079,4 +1079,23 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
     //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+
+    /**
+     * Writes the given string to the registered debug handler if debug mode is enabled.
+     *
+     * @param $message
+     */
+    public function debugLog($message)
+    {
+        if ($this->isDebugMode()) {
+            $debugHandler = $this->getDebugHandler();
+            if ($debugHandler instanceof DebugHandlerInterface) {
+                $debugHandler->log($message);
+            }
+        }
+    }
+
+    //</editor-fold>
 }
