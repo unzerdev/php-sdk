@@ -202,7 +202,14 @@ class WebhookService
 
         $eventData = json_decode($postData);
         if (isset($eventData->retrieveUrl)) {
-            $resourceObject = $this->heidelpay->getResourceService()->fetchResourceByUrl($postData->retrieveUrl);
+            $this->heidelpay->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
+            $resourceObject = $this->heidelpay
+                ->getResourceService()
+                ->fetchResourceByUrl($eventData->retrieveUrl);
+        }
+
+        if (!$resourceObject instanceof AbstractHeidelpayResource) {
+            throw new \RuntimeException('Error fetching resource!');
         }
 
         return $resourceObject;
