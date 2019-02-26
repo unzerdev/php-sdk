@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the 'Authorization' transaction example for Card.
+ * This is the controller for the Webhook reception tests.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -29,48 +29,23 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\Constants\WebhookEvents;
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Webhook;
 
-session_start();
-session_unset();
-
-function redirect($url)
-{
-    header('Location: ' . $url);
-    die();
-}
-
-if (!isset($_POST['resourceId'])) {
-    redirect(FAILURE_URL);
-}
-
-$paymentTypeId   = $_POST['resourceId'];
-
-//#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
 try {
     //#######  2. Create a heidelpay object using your private key #####################################################
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
-    $heidelpay->createWebhook(
-        new Webhook(
-            WEBHOOK_CONTROLLER_URL . '?test=' . str_replace([' ', '.'], '', microtime()),
-            WebhookEvents::ALL
-        )
-    );
 
-    //#######  3. Create an authorization (aka reservation) ############################################################
-    $customer            = new Customer('Linda', 'Heideich');
-    $authorization       = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customer);
-    $_SESSION['ShortId'] = $authorization->getShortId();
-    if ($authorization->getPayment()->isPending()) {
-        redirect(SUCCESS_URL);
-    }
+    // todo: Refactor and Remove
+    $postData = $_POST;
+    $heidelpay->debugLog('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>POST: ' . print_r($postData, 1));
+
+//    $postData = '{ "event":"types", "publicKey":"s-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa", "retrieveUrl":"https://api.heidelpay.com/v1/types/card/s-crd-88xu7qjboupc" }';
+//    $heidelpay->fetchResourceByWebhookEvent($postData);
+
 } catch (HeidelpayApiException $e) {
-    redirect(FAILURE_URL);
+//    redirect(FAILURE_URL);
 }
-redirect(FAILURE_URL);
+//redirect(FAILURE_URL);

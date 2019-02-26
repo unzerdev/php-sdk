@@ -28,7 +28,6 @@ use heidelpayPHP\Adapter\CurlAdapter;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 
 class HttpService

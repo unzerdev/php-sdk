@@ -163,6 +163,8 @@ class WebhookTest extends BasePaymentTest
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
+     *
+     * @grop skip
      */
     public function fetchWebhooksShouldReturnArrayOfRegisteredWebhooks()
     {
@@ -188,6 +190,8 @@ class WebhookTest extends BasePaymentTest
         $fetchedWebhooks = $this->heidelpay->fetchAllWebhooks();
         $this->assertCount(3, $fetchedWebhooks);
         $webhooksAsArrays = [];
+
+        // todo: refactor
         foreach ($fetchedWebhooks as $fetchedWebhook) {
             /** @var Webhook $fetchedWebhook */
             $webhooksAsArrays[] = $fetchedWebhook->expose();
