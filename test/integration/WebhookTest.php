@@ -257,13 +257,6 @@ class WebhookTest extends BasePaymentTest
 
     //</editor-fold>
 
-    /**
-     * @test
-     */
-    public function webhookEventsCanBeHandled()
-    {
-    }
-
     //<editor-fold desc="Helpers">
 
     /**
