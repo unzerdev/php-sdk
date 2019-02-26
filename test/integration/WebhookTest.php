@@ -187,9 +187,14 @@ class WebhookTest extends BasePaymentTest
         // --- Verify webhooks have been registered ---
         $fetchedWebhooks = $this->heidelpay->fetchAllWebhooks();
         $this->assertCount(3, $fetchedWebhooks);
-        $this->assertArraySubset([$webhook1], $fetchedWebhooks);
-        $this->assertArraySubset([$webhook2], $fetchedWebhooks);
-        $this->assertArraySubset([$webhook3], $fetchedWebhooks);
+        $webhooksAsArrays = [];
+        foreach ($fetchedWebhooks as $fetchedWebhook) {
+            /** @var Webhook $fetchedWebhook */
+            $webhooksAsArrays[] = $fetchedWebhook->expose();
+        }
+        $this->assertArraySubset([$webhook1->expose()], $webhooksAsArrays);
+        $this->assertArraySubset([$webhook2->expose()], $webhooksAsArrays);
+        $this->assertArraySubset([$webhook3->expose()], $webhooksAsArrays);
     }
 
     /**
@@ -247,6 +252,13 @@ class WebhookTest extends BasePaymentTest
     }
 
     //</editor-fold>
+
+    /**
+     * @test
+     */
+    public function webhookEventsCanBeHandled()
+    {
+    }
 
     //<editor-fold desc="Helpers">
 
