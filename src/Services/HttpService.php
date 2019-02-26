@@ -93,8 +93,11 @@ class HttpService
         $httpAdapter->close();
 
         // handle response
-        $this->debugLog($resource, $httpMethod, $url, $response);
-        $this->handleErrors($responseCode, $response);
+        try {
+            $this->handleErrors($responseCode, $response);
+        } finally {
+            $this->debugLog($resource, $httpMethod, $url, $response);
+        }
 
         return $response;
     }
