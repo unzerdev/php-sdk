@@ -190,7 +190,7 @@ class CardTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var Authorization $authorization */
-        $authorization = $card->authorize(1.0, 'EUR', self::RETURN_URL);
+        $authorization = $card->authorize(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
         $payment = $authorization->getPayment();
 
         // pre-check to verify changes due to fullCharge call

@@ -37,20 +37,22 @@ trait CanAuthorize
      * Authorize an amount with the given currency.
      * Throws HeidelpayApiException if the transaction could not be performed (e. g. increased risk etc.).
      *
-     * @param float                $amount
-     * @param string               $currency
-     * @param string               $returnUrl
+     * @param float $amount
+     * @param string $currency
+     * @param string $returnUrl
      * @param Customer|string|null $customer
-     * @param string|null          $orderId
+     * @param string|null $orderId
      * @param Metadata|string|null $metadata
-     * @param Basket|null          $basket    The Basket object corresponding to the payment.
+     * @param Basket|null $basket The Basket object corresponding to the payment.
      *                                        The Basket object will be created automatically if it does not exist
      *                                        yet (i.e. has no id).
+     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
+     *                                            optional and will be ignored if not applicable.
      *
      * @return Authorization
      *
-     * @throws \RuntimeException
      * @throws HeidelpayApiException
+     * @throws \RuntimeException
      */
     public function authorize(
         $amount,
@@ -59,7 +61,8 @@ trait CanAuthorize
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $card3ds = null
     ): Authorization {
         if ($this instanceof HeidelpayParentInterface) {
             return $this->getHeidelpayObject()->authorize(
@@ -70,7 +73,8 @@ trait CanAuthorize
                 $customer,
                 $orderId,
                 $metadata,
-                $basket
+                $basket,
+                $card3ds
             );
         }
 
