@@ -29,7 +29,6 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class CancelAfterAuthorizationTest extends BasePaymentTest
 {
@@ -39,7 +38,6 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -68,7 +66,6 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -93,7 +90,6 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -121,7 +117,6 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -164,7 +159,6 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
