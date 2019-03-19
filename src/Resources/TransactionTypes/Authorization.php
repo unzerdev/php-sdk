@@ -41,18 +41,6 @@ class Authorization extends AbstractTransactionType
     /** @var string $returnUrl */
     protected $returnUrl;
 
-    /** @var string $iban */
-    private $iban;
-
-    /** @var string bic */
-    private $bic;
-
-    /** @var string $holder */
-    private $holder;
-
-    /** @var string $descriptor */
-    private $descriptor;
-
     /**
      * Authorization constructor.
      *
@@ -125,94 +113,6 @@ class Authorization extends AbstractTransactionType
     public function setReturnUrl($returnUrl): self
     {
         $this->returnUrl = $returnUrl;
-        return $this;
-    }
-
-    /**
-     * Returns the IBAN of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getIban()
-    {
-        return $this->iban;
-    }
-
-    /**
-     * @param string $iban
-     *
-     * @return self
-     */
-    protected function setIban(string $iban): self
-    {
-        $this->iban = $iban;
-        return $this;
-    }
-
-    /**
-     * Returns the BIC of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getBic()
-    {
-        return $this->bic;
-    }
-
-    /**
-     * @param string $bic
-     *
-     * @return self
-     */
-    protected function setBic(string $bic): self
-    {
-        $this->bic = $bic;
-        return $this;
-    }
-
-    /**
-     * Returns the holder of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getHolder()
-    {
-        return $this->holder;
-    }
-
-    /**
-     * @param string $holder
-     *
-     * @return self
-     */
-    protected function setHolder(string $holder): self
-    {
-        $this->holder = $holder;
-        return $this;
-    }
-
-    /**
-     * Returns the Descriptor the customer needs to use when transferring the amount.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getDescriptor()
-    {
-        return $this->descriptor;
-    }
-
-    /**
-     * @param string $descriptor
-     *
-     * @return self
-     */
-    protected function setDescriptor(string $descriptor): self
-    {
-        $this->descriptor = $descriptor;
         return $this;
     }
 
