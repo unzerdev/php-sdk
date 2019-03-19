@@ -121,11 +121,11 @@ class Basket extends AbstractHeidelpayResource
     }
 
     /**
-     * @param float $amountTotalVat
+     * @param float|null $amountTotalVat
      *
      * @return Basket
      */
-    public function setAmountTotalVat(float $amountTotalVat): Basket
+    public function setAmountTotalVat($amountTotalVat): Basket
     {
         $this->amountTotalVat = $amountTotalVat;
         return $this;
