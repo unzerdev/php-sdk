@@ -35,6 +35,9 @@ class Basket extends AbstractHeidelpayResource
     /** @var float $amountTotalDiscount */
     protected $amountTotalDiscount;
 
+    /** @var float $amountTotalVat */
+    protected $amountTotalVat;
+
     /** @var string $currencyCode */
     protected $currencyCode;
 
@@ -106,6 +109,25 @@ class Basket extends AbstractHeidelpayResource
     public function setAmountTotalDiscount($amountTotalDiscount): Basket
     {
         $this->amountTotalDiscount = $amountTotalDiscount;
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getAmountTotalVat()
+    {
+        return $this->amountTotalVat;
+    }
+
+    /**
+     * @param float $amountTotalVat
+     *
+     * @return Basket
+     */
+    public function setAmountTotalVat(float $amountTotalVat): Basket
+    {
+        $this->amountTotalVat = $amountTotalVat;
         return $this;
     }
 

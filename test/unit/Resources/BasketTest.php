@@ -28,7 +28,6 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class BasketTest extends BaseUnitTest
 {
@@ -38,26 +37,28 @@ class BasketTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function gettersAndSettersShouldWorkProperly()
     {
         $basket = new Basket();
         $this->assertEquals(0, $basket->getAmountTotal());
         $this->assertEquals(0, $basket->getAmountTotalDiscount());
+        $this->assertEquals(0, $basket->getAmountTotalVat());
         $this->assertEquals('EUR', $basket->getCurrencyCode());
         $this->assertEquals('', $basket->getNote());
         $this->assertEquals('', $basket->getOrderId());
         $this->assertIsEmptyArray($basket->getBasketItems());
         $this->assertNull($basket->getBasketItemByIndex(1));
 
-        $basket->setAmountTotal(1234);
-        $basket->setAmountTotalDiscount(3456);
+        $basket->setAmountTotal(12.34);
+        $basket->setAmountTotalDiscount(34.56);
+        $basket->setAmountTotalVat(45.67);
         $basket->setCurrencyCode('USD');
         $basket->setNote('This is something I have to remember!');
         $basket->setOrderId('myOrderId');
-        $this->assertEquals(1234, $basket->getAmountTotal());
-        $this->assertEquals(3456, $basket->getAmountTotalDiscount());
+        $this->assertEquals(12.34, $basket->getAmountTotal());
+        $this->assertEquals(34.56, $basket->getAmountTotalDiscount());
+        $this->assertEquals(45.67, $basket->getAmountTotalVat());
         $this->assertEquals('USD', $basket->getCurrencyCode());
         $this->assertEquals('This is something I have to remember!', $basket->getNote());
         $this->assertEquals('myOrderId', $basket->getOrderId());
@@ -112,7 +113,6 @@ class BasketTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function handleResponseShouldCreateBasketItemObjectsForAllBasketItemsInResponse()
     {
@@ -136,7 +136,6 @@ class BasketTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws Exception
      */
     public function referenceIdShouldBeAutomaticallySetToTheArrayIndexIfItIsNotSet()
