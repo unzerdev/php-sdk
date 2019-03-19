@@ -217,6 +217,7 @@ class BasketTest extends BasePaymentTest
         $orderId = $this->generateOrderId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
+        $basket->setAmountTotalVat(10.9);
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
