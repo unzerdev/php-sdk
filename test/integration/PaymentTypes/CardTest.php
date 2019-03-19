@@ -132,7 +132,7 @@ class CardTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($card);
 
         /** @var Charge $charge */
-        $charge = $card->charge(1.0, 'EUR', self::RETURN_URL);
+        $charge = $card->charge(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
 
         // verify charge has been created
         $this->assertNotNull($charge->getId());

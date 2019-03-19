@@ -40,6 +40,9 @@ class Charge extends AbstractTransactionType
     /** @var string $returnUrl */
     protected $returnUrl;
 
+    /** @var bool $card3ds */
+    protected $card3ds;
+
     /**
      * Authorization constructor.
      *
@@ -112,6 +115,24 @@ class Charge extends AbstractTransactionType
     public function setReturnUrl($returnUrl): self
     {
         $this->returnUrl = $returnUrl;
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isCard3ds()
+    {
+        return $this->card3ds;
+    }
+
+    /**
+     * @param bool|null $card3ds
+     * @return Charge
+     */
+    public function setCard3ds($card3ds): Charge
+    {
+        $this->card3ds = $card3ds;
         return $this;
     }
 
