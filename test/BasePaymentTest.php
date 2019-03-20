@@ -130,7 +130,7 @@ class BasePaymentTest extends TestCase
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
-        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId);
+        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
         return $authorization;
     }
 
@@ -145,7 +145,7 @@ class BasePaymentTest extends TestCase
     public function createCharge(): Charge
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
+        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
     }
 
     /**

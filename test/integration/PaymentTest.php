@@ -241,7 +241,7 @@ class PaymentTest extends BasePaymentTest
     public function paymentChargeShouldBePossibleUsingPaymentId()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com');
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
         $charge = $this->heidelpay->chargePayment($authorization->getPaymentId());
 
         $this->assertInstanceOf(Charge::class, $charge);

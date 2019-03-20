@@ -215,7 +215,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL);
+        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
 
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -250,7 +250,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
@@ -278,7 +278,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
         $payment = $authorization->getPayment();
 
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -326,7 +326,7 @@ class CardTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
-        $charge = $card->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $card->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
         $payment = $charge->getPayment();
 
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
@@ -351,7 +351,7 @@ class CardTest extends BasePaymentTest
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
-        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
         $payment = $authorization->getPayment();
 
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -385,7 +385,7 @@ class CardTest extends BasePaymentTest
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
-        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
+        $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
         $payment = $authorization->getPayment();
 
         $payment->charge(10.0);
@@ -415,7 +415,7 @@ class CardTest extends BasePaymentTest
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $card->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $card->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
 
         $cancel = $charge->cancel();
         $this->assertNotNull($cancel);
@@ -434,7 +434,7 @@ class CardTest extends BasePaymentTest
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $card->authorize(100.0, 'EUR', self::RETURN_URL);
+        $authorize = $card->authorize(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
 
         $cancel = $authorize->cancel();
         $this->assertNotNull($cancel);
