@@ -28,7 +28,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
 
 class InvoiceGuaranteedTest extends BasePaymentTest
 {
@@ -39,8 +39,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @return InvoiceGuaranteed
      *
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -61,8 +60,6 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws AssertionFailedError
-     * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
@@ -95,8 +92,6 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws AssertionFailedError
-     * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
@@ -122,8 +117,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable

@@ -155,7 +155,8 @@ class AuthorizationTest extends BasePaymentTest
     public function authorizeHasExpectedStates(BasePaymentType $paymentType, $isSuccess, $isPending, $isError)
     {
         $paymentType = $this->heidelpay->createPaymentType($paymentType);
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
+        $authorize = $this->heidelpay
+            ->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null ,false);
         $this->assertEquals($isSuccess, $authorize->isSuccess());
         $this->assertEquals($isPending, $authorize->isPending());
         $this->assertEquals($isError, $authorize->isError());

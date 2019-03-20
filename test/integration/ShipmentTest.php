@@ -27,8 +27,6 @@ namespace heidelpayPHP\test\integration;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class ShipmentTest extends BasePaymentTest
 {
@@ -37,8 +35,6 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -69,8 +65,6 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -102,8 +96,6 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -132,7 +124,7 @@ class ShipmentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function shippmentStatusIsSetCorrectly()
+    public function shipmentStatusIsSetCorrectly()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
         $authorize = $this->heidelpay->authorize(

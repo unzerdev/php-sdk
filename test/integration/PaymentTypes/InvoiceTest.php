@@ -28,7 +28,6 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
 
 class InvoiceTest extends BasePaymentTest
 {
@@ -79,7 +78,6 @@ class InvoiceTest extends BasePaymentTest
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
