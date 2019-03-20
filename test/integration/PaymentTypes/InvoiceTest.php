@@ -100,7 +100,7 @@ class InvoiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify invoice authorize can not be canceled.
+     * Verify invoice charge can not be canceled.
      *
      * @test
      *
@@ -110,7 +110,7 @@ class InvoiceTest extends BasePaymentTest
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
-    public function verifyInvoiceAuthorizeCanBeCanceled(Invoice $invoice)
+    public function verifyInvoiceChargeCanBeCanceled(Invoice $invoice)
     {
         $charge = $invoice->charge(1.0, 'EUR', self::RETURN_URL);
         $cancellation = $charge->cancel();

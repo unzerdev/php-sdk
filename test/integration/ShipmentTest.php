@@ -41,17 +41,17 @@ class ShipmentTest extends BasePaymentTest
     public function shipmentShouldBeCreatableAndFetchable()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $authorize = $this->heidelpay->authorize(
+        $charge = $this->heidelpay->charge(
             100.0,
             'EUR',
             $invoiceGuaranteed,
             self::RETURN_URL,
             $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
-        $this->assertNotNull($authorize->getId());
-        $this->assertNotNull($authorize);
+        $this->assertNotNull($charge->getId());
+        $this->assertNotNull($charge);
 
-        $shipment = $this->heidelpay->ship($authorize->getPayment());
+        $shipment = $this->heidelpay->ship($charge->getPayment());
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
 

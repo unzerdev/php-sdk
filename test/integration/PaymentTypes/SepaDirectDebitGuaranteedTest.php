@@ -153,7 +153,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->heidelpay->createPaymentType($directDebitGuaranteed);
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_DDG_ADDRESSES_DO_NOT_MATCH);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
 
         $directDebitGuaranteed->charge(
             100.0,
