@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Added PublicKeyValidator.
 *   Basket field amountTotalVat.
+*   Added optional parameter card3ds to charge and authorize transactions to enable switching between 3ds and non-3ds.
 
 ### Fixed
 *   Several code style issues.

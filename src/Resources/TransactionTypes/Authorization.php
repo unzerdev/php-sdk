@@ -53,6 +53,9 @@ class Authorization extends AbstractTransactionType
     /** @var string $descriptor */
     private $descriptor;
 
+    /** @var bool $card3ds */
+    protected $card3ds;
+
     /**
      * Authorization constructor.
      *
@@ -213,6 +216,24 @@ class Authorization extends AbstractTransactionType
     protected function setDescriptor(string $descriptor): self
     {
         $this->descriptor = $descriptor;
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isCard3ds()
+    {
+        return $this->card3ds;
+    }
+
+    /**
+     * @param bool|null $card3ds
+     * @return Authorization
+     */
+    public function setCard3ds($card3ds): Authorization
+    {
+        $this->card3ds = $card3ds;
         return $this;
     }
 

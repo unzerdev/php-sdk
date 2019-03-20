@@ -32,7 +32,6 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class PaymentTest extends BasePaymentTest
 {
@@ -63,7 +62,6 @@ class PaymentTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function fullChargeShouldBePossibleOnPaymentObject()
@@ -160,7 +158,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function partialCancelOnAuthorizeShouldBePossible()
@@ -244,7 +241,7 @@ class PaymentTest extends BasePaymentTest
     public function paymentChargeShouldBePossibleUsingPaymentId()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com');
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
         $charge = $this->heidelpay->chargePayment($authorization->getPaymentId());
 
         $this->assertInstanceOf(Charge::class, $charge);

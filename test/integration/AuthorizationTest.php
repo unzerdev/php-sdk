@@ -31,7 +31,6 @@ use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class AuthorizationTest extends BasePaymentTest
 {
@@ -40,7 +39,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -59,7 +57,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -76,7 +73,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -103,7 +99,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @return Authorization
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -133,7 +128,6 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @param Authorization $authorization
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \PHPUnit\Framework\Exception
      * @throws \RuntimeException
@@ -156,13 +150,13 @@ class AuthorizationTest extends BasePaymentTest
      * @param bool                                      $isError
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\AssertionFailedError
      * @throws \RuntimeException
      */
     public function authorizeHasExpectedStates(BasePaymentType $paymentType, $isSuccess, $isPending, $isError)
     {
         $paymentType = $this->heidelpay->createPaymentType($paymentType);
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
+        $authorize = $this->heidelpay
+            ->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null ,false);
         $this->assertEquals($isSuccess, $authorize->isSuccess());
         $this->assertEquals($isPending, $authorize->isPending());
         $this->assertEquals($isError, $authorize->isError());
