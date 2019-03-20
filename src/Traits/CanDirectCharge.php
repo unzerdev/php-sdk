@@ -46,8 +46,8 @@ trait CanDirectCharge
      * @param Basket|null          $basket   The Basket object corresponding to the payment.
      *                                       The Basket object will be created automatically if it does not exist
      *                                       yet (i.e. has no id).
-     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
-     *                                            optional and will be ignored if not applicable.
+     * @param bool|null            $card3ds  Enables 3ds channel for credit cards if available. This parameter is
+     *                                       optional and will be ignored if not applicable.
      *
      * @return Charge
      *

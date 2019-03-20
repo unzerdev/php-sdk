@@ -33,7 +33,6 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 
 class ChargeTest extends BaseUnitTest
@@ -43,7 +42,6 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws Exception
      */
     public function gettersAndSettersShouldWorkProperly()
@@ -70,7 +68,6 @@ class ChargeTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -80,6 +77,10 @@ class ChargeTest extends BaseUnitTest
         $this->assertNull($charge->getAmount());
         $this->assertNull($charge->getCurrency());
         $this->assertNull($charge->getReturnUrl());
+        $this->assertNull($charge->getIban());
+        $this->assertNull($charge->getBic());
+        $this->assertNull($charge->getHolder());
+        $this->assertNull($charge->getDescriptor());
 
         $charge = new Charge(123.4, 'myCurrency', 'https://my-return-url.test');
         $this->assertEquals(123.4, $charge->getAmount());
@@ -90,11 +91,19 @@ class ChargeTest extends BaseUnitTest
         $testResponse->amount = '789.0';
         $testResponse->currency = 'TestCurrency';
         $testResponse->returnUrl = 'https://return-url.test';
+        $testResponse->Iban = 'DE89370400440532013000';
+        $testResponse->Bic = 'COBADEFFXXX';
+        $testResponse->Holder = 'Merchant Khang';
+        $testResponse->Descriptor = '4065.6865.6416';
 
         $charge->handleResponse($testResponse);
         $this->assertEquals(789.0, $charge->getAmount());
         $this->assertEquals('TestCurrency', $charge->getCurrency());
         $this->assertEquals('https://return-url.test', $charge->getReturnUrl());
+        $this->assertEquals('DE89370400440532013000', $charge->getIban());
+        $this->assertEquals('COBADEFFXXX', $charge->getBic());
+        $this->assertEquals('Merchant Khang', $charge->getHolder());
+        $this->assertEquals('4065.6865.6416', $charge->getDescriptor());
     }
 
     /**
@@ -118,7 +127,6 @@ class ChargeTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */

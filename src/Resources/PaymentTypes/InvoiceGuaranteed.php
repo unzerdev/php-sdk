@@ -24,9 +24,9 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
+use heidelpayPHP\Traits\CanDirectChargeWithCustomer;
 
 class InvoiceGuaranteed extends BasePaymentType
 {
-    use CanAuthorizeWithCustomer;
+    use CanDirectChargeWithCustomer;
 }

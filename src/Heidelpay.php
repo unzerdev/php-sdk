@@ -698,14 +698,14 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Performs an Authorization transaction and returns the resulting Authorization resource.
      *
-     * @param float $amount The amount to authorize.
-     * @param string $currency The currency of the amount.
+     * @param float                  $amount      The amount to authorize.
+     * @param string                 $currency    The currency of the amount.
      * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
-     * @param string $returnUrl The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null $customer The Customer object or the id of the customer resource to reference.
-     * @param string|null $orderId A custom order id which can be set by the merchant.
-     * @param Metadata|null $metadata The Metadata object containing custom information for the payment.
-     * @param Basket|null $basket The Basket object corresponding to the payment.
+     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId     A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
      *                                            The Basket object will be created automatically if it does not exist
      *                                            yet (i.e. has no id).
      * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
@@ -714,7 +714,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @return Authorization The resulting object of the Authorization resource.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws \RuntimeException A \RuntimeException is thrown when there is a error while using the SDK.
+     * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
     public function authorize(
         $amount,

@@ -24,11 +24,9 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
 
 class Prepayment extends BasePaymentType
 {
-    use CanAuthorize;
     use CanDirectCharge;
 }

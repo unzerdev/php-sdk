@@ -24,9 +24,9 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanAuthorize;
+use heidelpayPHP\Traits\CanDirectCharge;
 
 class Invoice extends BasePaymentType
 {
-    use CanAuthorize;
+    use CanDirectCharge;
 }
