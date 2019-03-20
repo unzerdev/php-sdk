@@ -124,7 +124,7 @@ class ShipmentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function shippmentStatusIsSetCorrectly()
+    public function shipmentStatusIsSetCorrectly()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
         $authorize = $this->heidelpay->authorize(
