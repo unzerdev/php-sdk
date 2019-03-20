@@ -61,43 +61,10 @@ require_once __DIR__ . '/../../../autoload.php';
                     <div class="content">
                         <div class="header"><i class="credit card icon"></i> Credit Card</div>
                         <div class="description">
-                            Authorization
+                            You can try authorize and charge transaction with or without 3Ds
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='CreditCardAuthorization/';">
-                        Try
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header"><i class="credit card icon"></i> Credit Card</div>
-                        <div class="description">
-                            Charge
-                        </div>
-                    </div>
-                    <div class="ui bottom attached button" onclick="location.href='CreditCardCharge/';">
-                        Try
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header"><i class="credit card outline icon"></i> Credit Card with 3D</div>
-                        <div class="description">
-                            Authorization
-                        </div>
-                    </div>
-                    <div class="ui bottom attached button" onclick="location.href='CreditCard3DAuthorization/';">
-                        Try
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header"><i class="credit card outline icon"></i> Credit Card with 3D</div>
-                        <div class="description">
-                            Charge
-                        </div>
-                    </div>
-                    <div class="ui bottom attached button" onclick="location.href='CreditCard3DCharge/';">
+                    <div class="ui bottom attached button" onclick="location.href='CreditCard/';">
                         Try
                     </div>
                 </div>

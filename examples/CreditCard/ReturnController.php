@@ -47,14 +47,21 @@ if (!isset($_SESSION['PaymentId'])) {
 
 $paymentId = $_SESSION['PaymentId'];
 try {
-    $heidelpay = new Heidelpay('s-priv-2a10BF2Cq2YvAo6ALSGHc3X7F42oWAIp');
+    $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $payment   = $heidelpay->fetchPayment($paymentId);
-    if ($payment->isCompleted()) {
+    if (
+        $heidelpay->fetchPayment($paymentId)->isCompleted()         // <<---- in case of charge
+        || $heidelpay->fetchPayment($paymentId)->isPending()        // <<---- in case of authorize
+    ) {
         redirect(SUCCESS_URL);
     }
+
 } catch (HeidelpayApiException $e) {
-    redirect(FAILURE_URL);
+    $_SESSION['merchantMessage'] = $e->getMerchantMessage();
+    $_SESSION['clientMessage'] = $e->getClientMessage();
+} catch (\RuntimeException $e) {
+    $_SESSION['merchantMessage'] = $e->getMessage();
 }
+$_SESSION['clientMessage'] = 'Something went wrong. Please try again later.';
 redirect(FAILURE_URL);
