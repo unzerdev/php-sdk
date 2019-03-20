@@ -156,7 +156,7 @@ class AuthorizationTest extends BasePaymentTest
     {
         $paymentType = $this->heidelpay->createPaymentType($paymentType);
         $authorize = $this->heidelpay
-            ->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null ,false);
+            ->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
         $this->assertEquals($isSuccess, $authorize->isSuccess());
         $this->assertEquals($isPending, $authorize->isPending());
         $this->assertEquals($isError, $authorize->isError());

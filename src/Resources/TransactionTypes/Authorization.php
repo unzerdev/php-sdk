@@ -129,6 +129,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param bool|null $card3ds
+     *
      * @return Authorization
      */
     public function setCard3ds($card3ds): Authorization

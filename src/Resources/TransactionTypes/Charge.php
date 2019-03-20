@@ -228,6 +228,7 @@ class Charge extends AbstractTransactionType
 
     /**
      * @param bool|null $card3ds
+     *
      * @return Charge
      */
     public function setCard3ds($card3ds): Charge
