@@ -32,7 +32,6 @@ use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
 
 class CardTest extends BasePaymentTest
 {
@@ -87,7 +86,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      */
     public function cardCanPerformAuthorizationAndCreatesPayment()
@@ -122,7 +120,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      */
     public function cardCanPerformChargeAndCreatesPaymentObject()
@@ -180,7 +177,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      */
     public function fullChargeAfterAuthorize()
@@ -212,7 +208,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      */
     public function partialChargeAfterAuthorization()
@@ -248,7 +243,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      */
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized()
@@ -277,7 +271,6 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      */
     public function partialAndFullChargeAfterAuthorization()
@@ -325,7 +318,6 @@ class CardTest extends BasePaymentTest
     /**
      * @test
      *
-     * @throws AssertionFailedError
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -350,7 +342,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -385,7 +376,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -418,7 +408,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -438,7 +427,6 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
