@@ -45,19 +45,22 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
-<h3>Example data without 3D secure:</h3>
+<h3>Example Data #1:</h3>
 <ul>
-    <li>Number: 4111 1111 1111 1111</li>
+    <lh><strong>VISA</strong></lh>
+    <li>Number: 4711100000000000</li>
     <li>Expiry date: Date in the future</li>
     <li>Cvc: 123</li>
+    <li>Secret: secret3</li>
 </ul>
 
-<h3>Example data with 3D secure:</h3>
+<h3>Example Data #2:</h3>
 <ul>
-    <li>Number: 4444 3333 2222 1111</li>
+    <lh><strong>Mastercard</strong></lh>
+    <li>Number: 5453010000059543</li>
     <li>Expiry date: Date in the future</li>
     <li>Cvc: 123</li>
-    <li>Secret: VISA123</li>
+    <li>Secret: secret3</li>
 </ul>
 
 <form id="payment-form" class="heidelpayUI form" novalidate>
