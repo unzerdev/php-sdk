@@ -40,7 +40,6 @@ class DummyHeidelpayResource extends AbstractHeidelpayResource
     public function __construct(Customer $customer)
     {
         $this->customer = $customer;
-        parent::__construct();
     }
 
     public function getLinkedResources(): array

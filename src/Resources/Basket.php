@@ -68,8 +68,6 @@ class Basket extends AbstractHeidelpayResource
         $this->currencyCode = $currencyCode;
         $this->orderId      = $orderId;
         $this->basketItems  = $basketItems;
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">

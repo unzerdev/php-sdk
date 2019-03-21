@@ -45,8 +45,6 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     public function __construct($iban)
     {
         $this->iban = $iban;
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">

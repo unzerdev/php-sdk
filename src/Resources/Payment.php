@@ -79,7 +79,7 @@ class Payment extends AbstractHeidelpayResource
         $this->amount = new Amount();
         $this->metadata = new Metadata();
 
-        parent::__construct($parent);
+        $this->setParentResource($parent);
     }
 
     //<editor-fold desc="Setters/Getters">

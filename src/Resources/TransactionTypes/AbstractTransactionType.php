@@ -69,7 +69,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     public function __construct()
     {
         $this->message = new Message();
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">

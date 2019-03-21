@@ -290,7 +290,8 @@ class ResourceService
      */
     public function fetchKeypair(): AbstractHeidelpayResource
     {
-        return $this->fetch(new Keypair($this->heidelpay));
+        $keyPair = (new Keypair())->setParentResource($this->heidelpay);
+        return $this->fetch($keyPair);
     }
 
     //</editor-fold>
@@ -328,7 +329,7 @@ class ResourceService
     {
         $metadataObject = $metadata;
         if (\is_string($metadata)) {
-            $metadataObject = new Metadata($this->heidelpay);
+            $metadataObject = (new Metadata())->setParentResource($this->heidelpay);
             $metadataObject->setId($metadata);
         }
 

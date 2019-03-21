@@ -42,16 +42,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /** @var \DateTime */
     private $fetchedAt;
 
-    /**
-     * @param HeidelpayParentInterface $parent
-     * @param string                   $resourceId
-     */
-    public function __construct($parent = null, $resourceId = null)
-    {
-        $this->parentResource = $parent;
-        $this->id = $resourceId;
-    }
-
     //<editor-fold desc="Getters/Setters">
 
     /**
