@@ -32,24 +32,6 @@ use PHPUnit\Framework\Exception;
 class MetadataTest extends BasePaymentTest
 {
     /**
-     * Verify Metadata is automatically generated and added to the heidelpay object.
-     *
-     * @test
-     *
-     * @throws Exception
-     * @throws ExpectationFailedException
-     * @throws \RuntimeException
-     */
-    public function heidelpayShouldAutomaticallyProvideAMetadataObject()
-    {
-        $metadata = new Metadata($this->heidelpay);
-
-        /** @noinspection UnnecessaryAssertionInspection */
-        $this->assertInstanceOf(Metadata::class, $metadata);
-        $this->assertSame($this->heidelpay, $metadata->getParentResource());
-    }
-
-    /**
      * Verify SDK-Data is initially set.
      *
      * @test
