@@ -77,7 +77,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             </div>
         </div>
     </div>
-    <div class="fields inline"
+    <div class="fields inline">
         <label for="3dsecure">Select this if you want to try out Card with 3Dsecure:</label>
         <div class="field">
             <div class="heidelpayUI checkbox">
