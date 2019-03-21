@@ -338,8 +338,6 @@ class ResourceService
 
     //</editor-fold>
 
-
-
     //<editor-fold desc="Basket resource">
 
     /**

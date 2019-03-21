@@ -28,7 +28,6 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
 
 class SetMetadataTest extends BasePaymentTest
 {
@@ -71,7 +70,6 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -94,7 +92,6 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -140,7 +137,6 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -160,7 +156,6 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */

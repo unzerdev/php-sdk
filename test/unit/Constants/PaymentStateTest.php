@@ -26,7 +26,6 @@ namespace heidelpayPHP\test\unit\Constants;
 
 use heidelpayPHP\Constants\PaymentState;
 use heidelpayPHP\test\BaseUnitTest;
-use PHPUnit\Framework\Exception;
 
 class PaymentStateTest extends BaseUnitTest
 {
@@ -67,7 +66,6 @@ class PaymentStateTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function mapCodeToNameShouldThrowAnExceptionIfTheCodeIsUnknown()
@@ -82,7 +80,6 @@ class PaymentStateTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function mapNameToCodeShouldThrowAnExceptionIfTheNameIsUnknown()

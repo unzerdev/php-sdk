@@ -155,7 +155,7 @@ class Basket extends AbstractHeidelpayResource
      */
     public function getItemCount(): int
     {
-        return count($this->basketItems);
+        return \count($this->basketItems);
     }
 
     /**

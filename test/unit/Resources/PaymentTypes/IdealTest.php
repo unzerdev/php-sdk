@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class IdealTest extends BaseUnitTest
 {
@@ -36,7 +35,6 @@ class IdealTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws Exception
      */
     public function bicShouldBeRW()

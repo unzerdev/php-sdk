@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\unit\Resources;
 use heidelpayPHP\Resources\EmbeddedResources\Amount;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class AmountTest extends BaseUnitTest
 {
@@ -36,8 +35,8 @@ class AmountTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws Exception
+     *
      */
     public function settersAndGettersShouldWork()
     {

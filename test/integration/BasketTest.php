@@ -30,8 +30,6 @@ use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 
 class BasketTest extends BasePaymentTest
 {
@@ -40,8 +38,6 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -66,8 +62,6 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */

@@ -49,7 +49,6 @@ class HeidelpayTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function constructorShouldInitPropertiesProperly()
@@ -127,8 +126,6 @@ class HeidelpayTest extends BaseUnitTest
      * @param string $serviceMethod
      * @param array  $serviceParams
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -161,8 +158,6 @@ class HeidelpayTest extends BaseUnitTest
      * @param string $serviceMethod
      * @param array  $serviceParams
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */

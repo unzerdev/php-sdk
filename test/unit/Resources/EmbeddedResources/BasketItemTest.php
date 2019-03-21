@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\unit\Resources;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class BasketItemTest extends BaseUnitTest
 {
@@ -35,9 +34,7 @@ class BasketItemTest extends BaseUnitTest
      * Verify setter and getter functionalities.
      *
      * @test
-     *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function settersAndGettersShouldWork()
     {

@@ -82,7 +82,7 @@ class HttpService
     ): string {
         $url = Heidelpay::BASE_URL . Heidelpay::API_VERSION . $uri;
 
-        if (null === $resource) {
+        if ($resource === null) {
             throw new \RuntimeException('Transfer object is empty!');
         }
 
@@ -148,7 +148,9 @@ class HttpService
 
         $responseArray = json_decode($response);
         if ($responseCode >= 400 || isset($responseArray->errors)) {
-            $merchantMessage = $customerMessage = $code = null;
+            $code            = null;
+            $customerMessage = $code;
+            $merchantMessage = $customerMessage;
             if (isset($responseArray->errors[0])) {
                 $errors = $responseArray->errors[0];
                 $merchantMessage = $errors->merchantMessage ?? '';
@@ -175,7 +177,7 @@ class HttpService
             $debugHandler = $heidelpayObj->getDebugHandler();
             if ($debugHandler instanceof DebugHandlerInterface) {
                 $debugHandler->log($httpMethod . ': ' . $url);
-                if (in_array(
+                if (\in_array(
                     $httpMethod,
                     [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT],
                     true
