@@ -54,7 +54,7 @@ class SetMetadataTest extends BasePaymentTest
         $this->heidelpay->createMetadata($metadata);
         $this->assertNotNull($metadata->getId());
 
-        $fetchedMetadata = (new Metadata($this->heidelpay))->setId($metadata->getId());
+        $fetchedMetadata = (new Metadata())->setParentResource($this->heidelpay)->setId($metadata->getId());
         $this->assertNull($fetchedMetadata->getShopType());
         $this->assertNull($fetchedMetadata->getShopVersion());
         $this->assertNull($fetchedMetadata->getMetadata('MyCustomData'));
