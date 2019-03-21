@@ -867,7 +867,7 @@ class Payment extends AbstractHeidelpayResource
         $shipmentId = $this->getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
         $shipment = $this->getShipment($shipmentId, true);
         if (!$shipment instanceof Shipment) {
-            $shipment = new Shipment(null, $shipmentId);
+            $shipment = (new Shipment())->setId($shipmentId);
             $this->addShipment($shipment);
         }
         $shipment->setAmount($transaction->amount);

@@ -122,7 +122,7 @@ class CancelAfterChargeTest extends BasePaymentTest
 
         $secondPayment = $this->heidelpay->fetchPayment($refund->getPayment()->getId());
         $this->assertNotNull($secondPayment);
-        $this->assertAmounts($secondPayment, 0, 100, 100, 10);
+        $this->assertAmounts($secondPayment, 0, 90, 100, 10);
         $this->assertTrue($secondPayment->isCompleted());
     }
 
@@ -152,7 +152,7 @@ class CancelAfterChargeTest extends BasePaymentTest
 
         $secondPayment = $refund->getPayment();
         $this->assertNotNull($secondPayment);
-        $this->assertAmounts($secondPayment, 0, 100, 100, 10);
+        $this->assertAmounts($secondPayment, 0, 90, 100, 10);
         $this->assertTrue($secondPayment->isCompleted());
     }
 }
