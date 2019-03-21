@@ -232,6 +232,28 @@ class ResourceService
     //<editor-fold desc="Payment resource">
 
     /**
+     * Fetches the payment object if the id is given.
+     * Else it just returns the given payment argument.
+     * (!) It does not fetch or update a given payment object but returns it as-is. (!)
+     *
+     * @param $payment
+     *
+     * @return AbstractHeidelpayResource|Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function getPaymentResource($payment)
+    {
+        $paymentObject = $payment;
+
+        if (\is_string($payment)) {
+            $paymentObject = $this->fetchPayment($payment);
+        }
+        return $paymentObject;
+    }
+
+    /**
      * Fetch and return payment by given payment id.
      *
      * @param Payment|string $payment
@@ -268,7 +290,8 @@ class ResourceService
      */
     public function fetchKeypair(): AbstractHeidelpayResource
     {
-        return $this->fetch(new Keypair($this->heidelpay));
+        $keyPair = (new Keypair())->setParentResource($this->heidelpay);
+        return $this->fetch($keyPair);
     }
 
     //</editor-fold>
@@ -306,7 +329,7 @@ class ResourceService
     {
         $metadataObject = $metadata;
         if (\is_string($metadata)) {
-            $metadataObject = new Metadata($this->heidelpay);
+            $metadataObject = (new Metadata())->setParentResource($this->heidelpay);
             $metadataObject->setId($metadata);
         }
 
@@ -315,8 +338,6 @@ class ResourceService
     }
 
     //</editor-fold>
-
-
 
     //<editor-fold desc="Basket resource">
 

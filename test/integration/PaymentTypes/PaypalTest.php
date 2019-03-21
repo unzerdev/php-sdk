@@ -28,8 +28,6 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class PaypalTest extends BasePaymentTest
 {
@@ -40,8 +38,6 @@ class PaypalTest extends BasePaymentTest
      *
      * @return BasePaymentType
      *
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -67,8 +63,6 @@ class PaypalTest extends BasePaymentTest
      *
      * @param Paypal $paypal
      *
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -91,8 +85,6 @@ class PaypalTest extends BasePaymentTest
      *
      * @param Paypal $paypal
      *
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */

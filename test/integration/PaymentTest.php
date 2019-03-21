@@ -31,8 +31,6 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class PaymentTest extends BasePaymentTest
 {
@@ -42,8 +40,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function paymentShouldBeFetchableById()
@@ -63,8 +59,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function fullChargeShouldBePossibleOnPaymentObject()
@@ -91,7 +85,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function paymentShouldBeFetchableWithCharges()
@@ -122,7 +115,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function partialChargeAfterAuthorization()
@@ -141,7 +133,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function fullCancelOnAuthorizeShouldThrowExceptionIfAlreadyCanceled()
@@ -164,7 +155,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function partialCancelOnAuthorizeShouldBePossible()
@@ -186,7 +176,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function fullCancelOnChargeShouldBePossible()
@@ -204,7 +193,6 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function partialCancelShouldBePossible()
@@ -221,14 +209,11 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function authorizationShouldBePossibleOnHeidelpayObject()
     {
-        $card = $this->createCardObject();
-        $this->heidelpay->createPaymentType($card);
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
 
         $authorizationUsingHeidelpay = $this->heidelpay->authorize(
             100.0,
@@ -239,5 +224,37 @@ class PaymentTest extends BasePaymentTest
 
         $this->assertNotNull($authorizationUsingHeidelpay);
         $this->assertNotEmpty($authorizationUsingHeidelpay->getId());
+    }
+
+    /**
+     * Verify heidelpay payment charge is possible using a paymentId.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function paymentChargeShouldBePossibleUsingPaymentId()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
+        $charge = $this->heidelpay->chargePayment($authorization->getPaymentId());
+
+        $this->assertInstanceOf(Charge::class, $charge);
+    }
+
+    /**
+     * Verify heidelpay payment charge throws an error if the id does not belong to a payment.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws \RuntimeException
+     */
+    public function chargePaymentShouldThrowErrorOnNonPaymentId()
+    {
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
+        $this->heidelpay->chargePayment('s-crd-xlj0qhdiw40k');
     }
 }

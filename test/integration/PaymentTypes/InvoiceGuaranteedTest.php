@@ -28,7 +28,6 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
 
 class InvoiceGuaranteedTest extends BasePaymentTest
 {
@@ -39,8 +38,6 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @return InvoiceGuaranteed
      *
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -61,56 +58,55 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws AssertionFailedError
-     * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
     public function verifyInvoiceGuaranteedShipment(InvoiceGuaranteed $invoiceGuaranteed)
     {
-        $authorization = $invoiceGuaranteed->authorize(
+        $charge = $invoiceGuaranteed->charge(
             100.0,
             'EUR',
             self::RETURN_URL,
             $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
-        $this->assertNotNull($authorization);
-        $this->assertNotEmpty($authorization->getId());
-        $this->assertNotEmpty($authorization->getIban());
-        $this->assertNotEmpty($authorization->getBic());
-        $this->assertNotEmpty($authorization->getHolder());
-        $this->assertNotEmpty($authorization->getDescriptor());
+        $this->assertNotNull($charge);
+        $this->assertNotEmpty($charge->getId());
+        $this->assertNotEmpty($charge->getIban());
+        $this->assertNotEmpty($charge->getBic());
+        $this->assertNotEmpty($charge->getHolder());
+        $this->assertNotEmpty($charge->getDescriptor());
 
 
-        $shipment = $this->heidelpay->ship($authorization->getPayment());
+        $shipment = $this->heidelpay->ship($charge->getPayment());
         $this->assertNotNull($shipment);
         $this->assertNotEmpty($shipment->getId());
     }
 
     /**
-     * Verify invoice guaranteed can be authorized.
+     * Verify invoice guaranteed can be charged.
      *
      * @test
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws AssertionFailedError
-     * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
-    public function verifyInvoiceGuaranteedCanBeAuthorized(InvoiceGuaranteed $invoiceGuaranteed)
+    public function verifyInvoiceGuaranteedCanBeCharged(InvoiceGuaranteed $invoiceGuaranteed)
     {
-        $authorization = $invoiceGuaranteed->authorize(
+        $charge = $invoiceGuaranteed->charge(
             100.0,
             'EUR',
             self::RETURN_URL,
             $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
+        $this->assertTrue($charge->isPending());
+        $this->assertFalse($charge->isError());
+        $this->assertFalse($charge->isSuccess());
 
-        $cancel = $authorization->cancel();
+        $cancel = $charge->cancel();
         $this->assertNotNull($cancel);
         $this->assertNotEmpty($cancel->getId());
     }
@@ -122,8 +118,6 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
@@ -149,9 +143,9 @@ class InvoiceGuaranteedTest extends BasePaymentTest
     public function ivgShouldThrowErrorIfAddressesDoNotMatch(InvoiceGuaranteed $invoiceGuaranteed)
     {
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVG_ADDRESSES_DO_NOT_MATCH);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
 
-        $invoiceGuaranteed->authorize(
+        $invoiceGuaranteed->charge(
             100.0,
             'EUR',
             self::RETURN_URL,

@@ -135,6 +135,8 @@ class PaymentService
      * @param Basket|null            $basket      The Basket object corresponding to the payment.
      *                                            The Basket object will be created automatically if it does not exist
      *                                            yet (i.e. has no id).
+     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
+     *                                            optional and will be ignored if not applicable.
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -149,7 +151,8 @@ class PaymentService
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $card3ds = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
         return $this->authorizeWithPayment(
@@ -160,7 +163,8 @@ class PaymentService
             $customer,
             $orderId,
             $metadata,
-            $basket
+            $basket,
+            $card3ds
         );
     }
 
@@ -177,6 +181,8 @@ class PaymentService
      * @param Basket|null          $basket    The Basket object corresponding to the payment.
      *                                        The Basket object will be created automatically if it does not exist
      *                                        yet (i.e. has no id).
+     * @param bool|null            $card3ds   Enables 3ds channel for credit cards if available. This parameter is
+     *                                        optional and will be ignored if not applicable.
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -191,9 +197,13 @@ class PaymentService
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $card3ds = null
     ): Authorization {
         $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
+        if ($card3ds !== null) {
+            $authorization->setCard3ds($card3ds);
+        }
         $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->resourceService->create($authorization);
         return $authorization;
@@ -216,6 +226,8 @@ class PaymentService
      * @param Basket|null            $basket      The Basket object corresponding to the payment.
      *                                            The Basket object will be created automatically if it does not exist
      *                                            yet (i.e. has no id).
+     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
+     *                                            optional and will be ignored if not applicable.
      *
      * @return Charge Resulting Charge object.
      *
@@ -230,10 +242,14 @@ class PaymentService
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $card3ds = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
         $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId);
+        if ($card3ds !== null) {
+            $charge->setCard3ds($card3ds);
+        }
         $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->resourceService->create($charge);
 
@@ -254,13 +270,7 @@ class PaymentService
      */
     public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
     {
-        $paymentObject = $payment;
-
-        if (\is_string($payment)) {
-            $paymentObject = $this->resourceService->fetchPayment($payment);
-        }
-
-        return $this->chargePayment($paymentObject, $amount);
+        return $this->chargePayment($this->resourceService->getPaymentResource($payment), $amount);
     }
 
     /**
@@ -275,7 +285,7 @@ class PaymentService
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
+    public function chargePayment($payment, $amount = null, $currency = null): AbstractTransactionType
     {
         $charge = new Charge($amount, $currency);
         $charge->setPayment($payment);
@@ -385,14 +395,8 @@ class PaymentService
      */
     public function ship($payment): AbstractHeidelpayResource
     {
-        $paymentObject = $payment;
-
-        if (\is_string($payment)) {
-            $paymentObject = $this->resourceService->fetchPayment($payment);
-        }
-
         $shipment = new Shipment();
-        $paymentObject->addShipment($shipment);
+        $this->resourceService->getPaymentResource($payment)->addShipment($shipment);
         $this->resourceService->create($shipment);
         return $shipment;
     }

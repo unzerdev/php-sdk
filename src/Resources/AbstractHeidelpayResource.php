@@ -42,16 +42,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /** @var \DateTime */
     private $fetchedAt;
 
-    /**
-     * @param HeidelpayParentInterface $parent
-     * @param string                   $resourceId
-     */
-    public function __construct($parent = null, $resourceId = null)
-    {
-        $this->parentResource = $parent;
-        $this->id = $resourceId;
-    }
-
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -60,7 +50,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     public function getId()
     {
         $resourceId = $this->id;
-        if (null === $resourceId) {
+        if ($resourceId === null) {
             $resourceId = $this->getExternalId();
         }
         return $resourceId;
@@ -174,7 +164,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                 $getter = 'get' . ucfirst($key);
                 if (\is_callable([$object, $getter])) {
                     $this->updateValues($object->$getter(), $newValue);
-                } elseif ('processing' === $key) {
+                } elseif ($key === 'processing') {
                     $this->updateValues($object, $newValue);
                 }
                 continue;
@@ -183,7 +173,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             // handle nested array
             if (\is_array($value)) {
                 $firstItem = reset($value);
-                if (is_object($firstItem)) {
+                if (\is_object($firstItem)) {
                     // Handled by the owning object since we do not know the type of the items here.
                     continue;
                 }
@@ -202,10 +192,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     public function setItemProperty($item, $key, $value)
     {
         $setter = 'set' . ucfirst($key);
-        if (!is_callable([$item, $setter])) {
+        if (!\is_callable([$item, $setter])) {
             $setter = 'add' . ucfirst($key);
         }
-        if (is_callable([$item, $setter])) {
+        if (\is_callable([$item, $setter])) {
             $item->$setter($value);
         }
     }
@@ -332,7 +322,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         //---------------------
 
         ksort($properties);
-        return count($properties) > 0 ? $properties : new \stdClass();
+        return \count($properties) > 0 ? $properties : new \stdClass();
     }
 
     //</editor-fold>

@@ -28,8 +28,6 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class InvoiceTest extends BasePaymentTest
 {
@@ -41,7 +39,6 @@ class InvoiceTest extends BasePaymentTest
      * @return Invoice
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function invoiceTypeShouldBeCreatable(): Invoice
@@ -55,7 +52,7 @@ class InvoiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify invoice is not chargeable.
+     * Verify invoice is not authorizable.
      *
      * @test
      *
@@ -65,12 +62,12 @@ class InvoiceTest extends BasePaymentTest
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
-    public function verifyInvoiceIsNotChargeable(Invoice $invoice)
+    public function verifyInvoiceIsNotAuthorizable(Invoice $invoice)
     {
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->charge(1.0, 'EUR', $invoice, self::RETURN_URL);
+        $this->heidelpay->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
     }
 
     /**
@@ -81,22 +78,20 @@ class InvoiceTest extends BasePaymentTest
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceIsNotShippable(Invoice $invoice)
     {
-        $authorize = $invoice->authorize(1.0, 'EUR', self::RETURN_URL);
-        $this->assertNotNull($authorize);
-        $this->assertNotEmpty($authorize->getId());
-        $this->assertNotEmpty($authorize->getIban());
-        $this->assertNotEmpty($authorize->getBic());
-        $this->assertNotEmpty($authorize->getHolder());
-        $this->assertNotEmpty($authorize->getDescriptor());
+        $charge = $invoice->charge(1.0, 'EUR', self::RETURN_URL);
+        $this->assertNotNull($charge);
+        $this->assertNotEmpty($charge->getId());
+        $this->assertNotEmpty($charge->getIban());
+        $this->assertNotEmpty($charge->getBic());
+        $this->assertNotEmpty($charge->getHolder());
+        $this->assertNotEmpty($charge->getDescriptor());
 
-        $payment = $authorize->getPayment();
+        $payment = $charge->getPayment();
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
@@ -105,22 +100,20 @@ class InvoiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify invoice authorize can not be canceled.
+     * Verify invoice charge can not be canceled.
      *
      * @test
      *
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
-    public function verifyInvoiceAuthorizeCanBeCanceled(Invoice $invoice)
+    public function verifyInvoiceChargeCanBeCanceled(Invoice $invoice)
     {
-        $authorize = $invoice->authorize(1.0, 'EUR', self::RETURN_URL);
-        $cancellation = $authorize->cancel();
+        $charge = $invoice->charge(1.0, 'EUR', self::RETURN_URL);
+        $cancellation = $charge->cancel();
         $this->assertNotNull($cancellation);
         $this->assertNotNull($cancellation->getId());#
     }
@@ -133,7 +126,6 @@ class InvoiceTest extends BasePaymentTest
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */

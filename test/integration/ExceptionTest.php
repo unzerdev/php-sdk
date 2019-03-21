@@ -29,29 +29,44 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class ExceptionTest extends BasePaymentTest
 {
     /**
      * Verify that the HeidelpayApiException holds a special message for for the client.
+     * Verify that there are different messages for different languages.
      *
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function apiExceptionShouldHoldClientMessage()
     {
         $giropay = $this->heidelpay->createPaymentType(new Giropay());
+        $firstClientMessage = $secondClientMessage = '';
+
         try {
             $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
         } catch (HeidelpayApiException $e) {
             $this->assertInstanceOf(HeidelpayApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
-            $this->assertNotEmpty($e->getClientMessage());
-            $this->assertNotEquals($e->getMerchantMessage(), $e->getClientMessage());
+            $firstClientMessage = $e->getClientMessage();
+            $this->assertNotEmpty($firstClientMessage);
+            $this->assertNotEquals($e->getMerchantMessage(), $firstClientMessage);
         }
+
+        try {
+            $this->heidelpay->setLocale('de_DE');
+            $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+        } catch (HeidelpayApiException $e) {
+            $this->assertInstanceOf(HeidelpayApiException::class, $e);
+            $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
+            $secondClientMessage = $e->getClientMessage();
+            $this->assertNotEmpty($secondClientMessage);
+            $this->assertNotEquals($e->getMerchantMessage(), $secondClientMessage);
+        }
+
+        $this->assertNotEquals($firstClientMessage, $secondClientMessage);
     }
 }

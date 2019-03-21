@@ -31,14 +31,14 @@ class ApiResponseCodes
     const API_SUCCESS_CHARGED_AMOUNT_LOWER_THAN_EXPECTED    = 'API.100.550.341';
 
     const API_ERROR_GENERAL                                 = 'API.000.000.999';
+    const API_ERROR_PAYMENT_NOT_FOUND                       = 'API.310.100.003';
     const API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED       = 'API.320.000.004';
     const API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED          = 'API.330.000.004';
     const API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED            = 'API.360.000.004';
     const API_ERROR_CUSTOMER_ID_REQUIRED                    = 'API.320.100.008';
     const API_ERROR_RESOURCE_DOES_NOT_BELONG_TO_MERCHANT    = 'API.320.200.145';
     const API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED     = 'API.330.100.007';
-    const API_ERROR_IVG_ADDRESSES_DO_NOT_MATCH              = 'API.320.100.106';
-    const API_ERROR_DDG_ADDRESSES_DO_NOT_MATCH              = 'API.330.100.106';
+    const API_ERROR_ADDRESSES_DO_NOT_MATCH                  = 'API.330.100.106';
     const API_ERROR_CURRENCY_IS_NOT_SUPPORTED               = 'API.330.100.202';
     const API_ERROR_AUTHORIZE_ALREADY_CANCELLED             = 'API.340.100.014';
     const API_ERROR_CHARGE_ALREADY_CHARGED_BACK             = 'API.340.100.015';
@@ -47,6 +47,7 @@ class ApiResponseCodes
     const API_ERROR_CUSTOMER_ID_ALREADY_EXISTS              = 'API.410.200.010';
     const API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND               = 'API.500.100.100';
     const API_ERROR_INVALID_KEY                             = 'API.710.000.002';
+    const API_ERROR_INSUFFICIENT_PERMISSION                 = 'API.710.000.005';
     const API_ERROR_WRONG_AUTHENTICATION_METHOD             = 'API.710.000.007';
     const API_ERROR_FIELD_IS_MISSING                        = 'API.710.200.100';
 

@@ -30,7 +30,6 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class SepaDirectDebitTest extends BasePaymentTest
 {
@@ -40,7 +39,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
@@ -66,7 +64,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @return SepaDirectDebit
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function sepaDirectDebitShouldBeCreatable(): SepaDirectDebit
@@ -117,7 +114,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @depends sepaDirectDebitShouldBeCreatable
      */
@@ -137,7 +133,6 @@ class SepaDirectDebitTest extends BasePaymentTest
      *
      * @param Charge $charge
      *
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @depends directDebitShouldBeChargeable

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the card example.
+ * This provides validation functions concerning public key.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -20,12 +20,23 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP/validators
  */
+namespace heidelpayPHP\Validators;
 
-require_once __DIR__ . '/../Constants.php';
-
-define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCard3DAuthorization');
-define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
-define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');
+class PublicKeyValidator
+{
+    /**
+     * Returns true if the given public key has a valid format.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public static function validate($key): bool
+    {
+        $match = [];
+        preg_match('/^[sp]{1}-(priv|pub)-[a-zA-Z0-9]+/', $key, $match);
+        return !(\count($match) < 2 || $match[1] !== 'pub');
+    }
+}

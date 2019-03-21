@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 class BasePaymentTest extends TestCase
@@ -47,8 +48,8 @@ class BasePaymentTest extends TestCase
     // in which case the merchant has to embed our iFrame via JS (UIComponents).
     const PRIVATE_KEY_SAQ_D = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
     const PUBLIC_KEY_SAQ_D  = 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa';
-    const PRIVATE_KEY_SAQ_A = 's-priv-2a10an6aJK0Jg7sMdpu9gK7ih8pCccze';
-    const PUBLIC_KEY_SAQ_A  = 's-pub-2a10nxkuA4lC7bIRtz2hKcFGeHhlkr2e';
+    const PRIVATE_KEY_SAQ_A = 's-priv-2a10Fms2uloMzEvPs84trtEkGuv7reSG';
+    const PUBLIC_KEY_SAQ_A  = 's-pub-2a10YMoLIZ82Dg5eWFrKWRrbkuoQ2OzN';
 
     /**
      * {@inheritDoc}
@@ -57,7 +58,7 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D, 'de_DE'))
+        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D))
             ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
     }
 
@@ -70,8 +71,7 @@ class BasePaymentTest extends TestCase
      * @param float   $expectedTotal
      * @param float   $expectedCanceled
      *
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws Exception
      */
     protected function assertAmounts(
         $payment,
@@ -130,7 +130,7 @@ class BasePaymentTest extends TestCase
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
-        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId);
+        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
         return $authorization;
     }
 
@@ -145,7 +145,7 @@ class BasePaymentTest extends TestCase
     public function createCharge(): Charge
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
+        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
     }
 
     /**

@@ -33,9 +33,6 @@ use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\Services\DummyAdapter;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
-use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\MockObject\RuntimeException;
 
 class HttpServiceTest extends BaseUnitTest
 {
@@ -44,8 +41,6 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function getAdapterShouldReturnDefaultAdapterIfNonHasBeenSet()
@@ -59,8 +54,6 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function getAdapterShouldReturnCustomAdapterIfItHasBeenSet()
@@ -75,7 +68,6 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -92,10 +84,7 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -137,10 +126,7 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -180,9 +166,7 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -214,9 +198,7 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @param string $responseCode
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -246,8 +228,6 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */

@@ -43,14 +43,14 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\Validators\KeyValidator;
+use heidelpayPHP\Validators\PrivateKeyValidator;
 
 class Heidelpay implements HeidelpayParentInterface
 {
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.0.2.0';
+    const SDK_VERSION = '1.1.0.0';
 
     /** @var string $key */
     private $key;
@@ -81,7 +81,7 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @throws \RuntimeException A \RuntimeException will be thrown if the key is not of type private.
      */
-    public function __construct($key, $locale = 'en_US')
+    public function __construct($key, $locale = null)
     {
         $this->setKey($key);
         $this->locale = $locale;
@@ -114,7 +114,7 @@ class Heidelpay implements HeidelpayParentInterface
      */
     public function setKey($key): Heidelpay
     {
-        if (!KeyValidator::validate($key)) {
+        if (!PrivateKeyValidator::validate($key)) {
             throw new \RuntimeException('Illegal key: Use a valid private key with this SDK!');
         }
 
@@ -125,10 +125,10 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Returns the set customer locale.
      *
-     * @return string The locale of the customer.
-     *                Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
+     * @return string|null The locale of the customer.
+     *                     Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
      */
-    public function getLocale(): string
+    public function getLocale()
     {
         return $this->locale;
     }
@@ -708,6 +708,8 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Basket|null            $basket      The Basket object corresponding to the payment.
      *                                            The Basket object will be created automatically if it does not exist
      *                                            yet (i.e. has no id).
+     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
+     *                                            optional and will be ignored if not applicable.
      *
      * @return Authorization The resulting object of the Authorization resource.
      *
@@ -722,7 +724,8 @@ class Heidelpay implements HeidelpayParentInterface
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $card3ds = null
     ): AbstractTransactionType {
         return $this->paymentService->authorize(
             $amount,
@@ -732,7 +735,8 @@ class Heidelpay implements HeidelpayParentInterface
             $customer,
             $orderId,
             $metadata,
-            $basket
+            $basket,
+            $card3ds
         );
     }
 
@@ -786,6 +790,8 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Basket|null            $basket      The Basket object corresponding to the payment.
      *                                            The Basket object will be created automatically if it does not exist
      *                                            yet (i.e. has no id).
+     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
+     *                                            optional and will be ignored if not applicable.
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -800,7 +806,8 @@ class Heidelpay implements HeidelpayParentInterface
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $card3ds = null
     ): AbstractTransactionType {
         return $this->paymentService->charge(
             $amount,
@@ -810,7 +817,8 @@ class Heidelpay implements HeidelpayParentInterface
             $customer,
             $orderId,
             $metadata,
-            $basket
+            $basket,
+            $card3ds
         );
     }
 
@@ -834,18 +842,19 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Performs a Charge transaction for a specific Payment and returns the resulting Charge object.
      *
-     * @param Payment $payment  The Payment object to be charged.
-     * @param null    $amount   The amount to charge.
-     * @param null    $currency The Currency of the charged amount.
+     * @param Payment|string $payment  The Payment object to be charged.
+     * @param null           $amount   The amount to charge.
+     * @param null           $currency The Currency of the charged amount.
      *
      * @return Charge The resulting Charge object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws \RuntimeException     A \RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function chargePayment(Payment $payment, $amount = null, $currency = null): AbstractTransactionType
+    public function chargePayment($payment, $amount = null, $currency = null): AbstractTransactionType
     {
-        return $this->paymentService->chargePayment($payment, $amount, $currency);
+        $paymentObject = $this->resourceService->getPaymentResource($payment);
+        return $this->paymentService->chargePayment($paymentObject, $amount, $currency);
     }
 
     //</editor-fold>

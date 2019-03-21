@@ -30,8 +30,6 @@ use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 
 class BasketTest extends BasePaymentTest
 {
@@ -40,8 +38,6 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -66,8 +62,6 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -99,8 +93,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function basketShouldBeUpdatateable()
     {
@@ -133,8 +125,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
@@ -161,8 +151,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
@@ -191,8 +179,6 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
@@ -219,14 +205,13 @@ class BasketTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
-     *
-     * @group skip
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
         $orderId = $this->generateOrderId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
+        $basket->setAmountTotalVat(10.9);
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());

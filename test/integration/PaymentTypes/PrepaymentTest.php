@@ -28,10 +28,8 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\PaymentTypes\Prepayment;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class PrepaymentTest extends BasePaymentTest
 {
@@ -41,8 +39,6 @@ class PrepaymentTest extends BasePaymentTest
      * @return Prepayment
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @test
      */
@@ -68,23 +64,22 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @param Prepayment $prepayment
      *
-     * @return Authorization
+     * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
-    public function prepaymentTypeShouldBeAuthorizable(Prepayment $prepayment): Authorization
+    public function prepaymentTypeShouldBeChargeable(Prepayment $prepayment): Charge
     {
-        $authorization = $prepayment->authorize(100.0, 'EUR', self::RETURN_URL);
-        $this->assertNotNull($authorization);
-        $this->assertNotNull($authorization->getId());
-        $this->assertNotEmpty($authorization->getIban());
-        $this->assertNotEmpty($authorization->getBic());
-        $this->assertNotEmpty($authorization->getHolder());
-        $this->assertNotEmpty($authorization->getDescriptor());
+        $charge = $prepayment->charge(100.0, 'EUR', self::RETURN_URL);
+        $this->assertNotNull($charge);
+        $this->assertNotNull($charge->getId());
+        $this->assertNotEmpty($charge->getIban());
+        $this->assertNotEmpty($charge->getBic());
+        $this->assertNotEmpty($charge->getHolder());
+        $this->assertNotEmpty($charge->getDescriptor());
 
-        return $authorization;
+        return $charge;
     }
 
     /**
@@ -99,12 +94,12 @@ class PrepaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function prepaymentTypeShouldNotBeChargeable(Prepayment $prepayment)
+    public function prepaymentTypeShouldNotBeAuthorizable(Prepayment $prepayment)
     {
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $prepayment->charge(100.0, 'EUR', self::RETURN_URL);
+        $this->heidelpay->authorize(100.0, 'EUR', $prepayment, self::RETURN_URL);
     }
 
     /**
@@ -112,19 +107,19 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @depends prepaymentTypeShouldBeAuthorizable
+     * @depends prepaymentTypeShouldBeChargeable
      *
-     * @param Authorization $authorization
+     * @param Charge $charge
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function prepaymentTypeShouldNotBeShippable(Authorization $authorization)
+    public function prepaymentTypeShouldNotBeShippable(Charge $charge)
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
-        $this->heidelpay->ship($authorization->getPayment());
+        $this->heidelpay->ship($charge->getPayment());
     }
 
     /**
@@ -137,14 +132,17 @@ class PrepaymentTest extends BasePaymentTest
      * @param Prepayment $prepayment
      *
      * @throws HeidelpayApiException
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
-    public function prepaymentAuthorizeCanBeCanceled(Prepayment $prepayment)
+    public function prepaymentChargeCanBeCanceled(Prepayment $prepayment)
     {
-        $authorization = $prepayment->authorize(100.0, 'EUR', self::RETURN_URL);
-        $cancellation = $authorization->cancel();
+        $charge = $prepayment->charge(100.0, 'EUR', self::RETURN_URL);
+        $this->assertTrue($charge->isPending());
+        $this->assertFalse($charge->isSuccess());
+        $this->assertFalse($charge->isError());
+        $cancellation = $charge->cancel();
         $this->assertNotNull($cancellation);
         $this->assertNotNull($cancellation->getId());
+        $this->heidelpay->fetchCharge($charge);
     }
 }

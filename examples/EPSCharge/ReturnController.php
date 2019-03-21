@@ -55,6 +55,8 @@ try {
         redirect(SUCCESS_URL);
     }
 } catch (HeidelpayApiException $e) {
+    $_SESSION['merchantMessage'] = $e->getMerchantMessage();
+    $_SESSION['clientMessage'] = $e->getClientMessage();
     redirect(FAILURE_URL);
 }
 redirect(FAILURE_URL);
