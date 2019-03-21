@@ -333,7 +333,7 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isCompleted());
 
         $payment->cancel();
-        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 100.0);
+        $this->assertAmounts($payment, 0.0, 0.0, 100.0, 100.0);
         $this->assertTrue($payment->isCanceled());
     }
 
@@ -367,7 +367,7 @@ class CardTest extends BasePaymentTest
 
         $cancellation = $payment->cancel();
         $this->assertNotEmpty($cancellation);
-        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 100.0);
+        $this->assertAmounts($payment, 0.0, 0.0, 100.0, 100.0);
         $this->assertTrue($payment->isCanceled());
     }
 
@@ -396,7 +396,7 @@ class CardTest extends BasePaymentTest
         $this->assertTrue($payment->isPartlyPaid());
 
         $charge->cancel();
-        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 10.0);
+        $this->assertAmounts($payment, 80.0, 10.0, 100.0, 10.0);
         $this->assertTrue($payment->isPartlyPaid());
 
         $payment->cancel();

@@ -5,11 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.0.0][1.1.0.0]
 
+###### !!! This update contains breaking changes and you will most certainly have to update your implementation !!!
+
 ### Changed
 *   Enabled chargePayment with payment id.
 *   Renamed KeyValidator class to PrivateKeyValidator.
 *   Enabled setting the language for client messages.
 *   Merged examples into and added error messages to the failure page.
+*   Changed tests to meet updates in payment amount calculation within the payment API.
 
 ### Added
 *   Basic PublicKeyValidator which makes sure the key has the correct format.
