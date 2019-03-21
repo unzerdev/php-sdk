@@ -34,6 +34,7 @@ class BasketItemTest extends BaseUnitTest
      * Verify setter and getter functionalities.
      *
      * @test
+     *
      * @throws Exception
      */
     public function settersAndGettersShouldWork()
