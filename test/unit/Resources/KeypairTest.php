@@ -26,8 +26,6 @@ namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\test\BaseUnitTest;
-use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class KeypairTest extends BaseUnitTest
 {
@@ -36,8 +34,6 @@ class KeypairTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function anAuthorizationShouldBeUpdatedThroughResponseHandling()

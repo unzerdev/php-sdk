@@ -45,8 +45,6 @@ class Card extends BasePaymentType
     {
         $this->setNumber($number);
         $this->setExpiryDate($expiryDate);
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Properties">

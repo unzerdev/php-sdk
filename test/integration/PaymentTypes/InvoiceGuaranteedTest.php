@@ -28,7 +28,6 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 
 class InvoiceGuaranteedTest extends BasePaymentTest
 {
@@ -39,7 +38,6 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @return InvoiceGuaranteed
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -120,7 +118,6 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable

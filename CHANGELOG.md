@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.0.0][1.1.0.0]
 
-###### !!! This update contains breaking changes and you will most certainly have to update your implementation !!!
+###### This update contains breaking changes and you will most certainly have to update your implementation
 
 ### Changed
 *   Enabled chargePayment with payment id.
@@ -19,6 +19,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Basket field amountTotalVat.
 *   Optional parameter card3ds to charge and authorize transactions to enable switching between 3ds and non-3ds.
 *   Transaction message property holding the last code and message from the api.
+
+### Removed
+*   Constructor from AbstractHeidelpayResource.
 
 ### Fixed
 *   Several code style issues.

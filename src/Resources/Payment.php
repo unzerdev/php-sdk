@@ -79,7 +79,7 @@ class Payment extends AbstractHeidelpayResource
         $this->amount = new Amount();
         $this->metadata = new Metadata();
 
-        parent::__construct($parent);
+        $this->setParentResource($parent);
     }
 
     //<editor-fold desc="Setters/Getters">
@@ -741,10 +741,10 @@ class Payment extends AbstractHeidelpayResource
         }
 
         if (isset($resources->customerId) && !empty($resources->customerId)) {
-            if (!$this->customer instanceof Customer) {
-                $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
-            } else {
+            if ($this->customer instanceof Customer) {
                 $this->getResource($this->customer);
+            } else {
+                $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
             }
         }
 

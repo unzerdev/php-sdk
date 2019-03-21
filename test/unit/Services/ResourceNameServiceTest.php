@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\unit;
 use heidelpayPHP\Services\ResourceNameService;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class ResourceNameServiceTest extends BaseUnitTest
 {
@@ -41,7 +40,6 @@ class ResourceNameServiceTest extends BaseUnitTest
      * @param string $expected
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function shouldReturnTheCorrectShortName($className, $expected)
     {

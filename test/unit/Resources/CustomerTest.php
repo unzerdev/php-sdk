@@ -29,7 +29,6 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class CustomerTest extends BaseUnitTest
 {
@@ -38,7 +37,6 @@ class CustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws \Exception
      */
@@ -84,7 +82,6 @@ class CustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function settersAndGettersOfBillingAddressShouldWork()
@@ -121,7 +118,6 @@ class CustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function settersAndGettersOfShippingAddressShouldWork()
@@ -158,7 +154,6 @@ class CustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws Exception
      */
     public function salutationShouldOnlyTakeTheAllowedValues()

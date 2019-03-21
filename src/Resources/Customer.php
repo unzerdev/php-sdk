@@ -74,8 +74,6 @@ class Customer extends AbstractHeidelpayResource
         $this->lastname = $lastname;
         $this->billingAddress = new Address();
         $this->shippingAddress = new Address();
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">

@@ -34,7 +34,6 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\MockObject\RuntimeException;
 
 class AuthorizationTest extends BaseUnitTest
 {
@@ -68,7 +67,6 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -141,9 +139,7 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -175,7 +171,6 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @param float|null $value
      *
-     * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -193,9 +188,7 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */

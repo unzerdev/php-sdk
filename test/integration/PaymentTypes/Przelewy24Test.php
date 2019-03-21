@@ -30,8 +30,6 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class Przelewy24Test extends BasePaymentTest
 {
@@ -43,8 +41,6 @@ class Przelewy24Test extends BasePaymentTest
      * @return BasePaymentType
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function przelewy24ShouldBeCreatableAndFetchable(): BasePaymentType
@@ -70,8 +66,6 @@ class Przelewy24Test extends BasePaymentTest
      * @param Przelewy24 $przelewy24
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24)

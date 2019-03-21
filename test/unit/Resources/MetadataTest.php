@@ -28,35 +28,15 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class MetadataTest extends BasePaymentTest
 {
-    /**
-     * Verify Metadata is automatically generated and added to the heidelpay object.
-     *
-     * @test
-     *
-     * @throws Exception
-     * @throws ExpectationFailedException
-     * @throws \RuntimeException
-     */
-    public function heidelpayShouldAutomaticallyProvideAMetadataObject()
-    {
-        $metadata = new Metadata($this->heidelpay);
-
-        /** @noinspection UnnecessaryAssertionInspection */
-        $this->assertInstanceOf(Metadata::class, $metadata);
-        $this->assertSame($this->heidelpay, $metadata->getParentResource());
-    }
-
     /**
      * Verify SDK-Data is initially set.
      *
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function metadataShouldSetSDKDataAutomatically()
     {
@@ -71,7 +51,6 @@ class MetadataTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function metaDataShouldAllowForCustomDataToBeSet()
     {
@@ -88,7 +67,6 @@ class MetadataTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function metadataShouldNotAllowForMagicAccessToSdkAndShopData()
     {
@@ -115,7 +93,6 @@ class MetadataTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function exposeShouldGatherAllDefinedDataInTheAnArray()
     {
@@ -146,7 +123,6 @@ class MetadataTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function handleResponseShouldUpdateMetadata()
     {

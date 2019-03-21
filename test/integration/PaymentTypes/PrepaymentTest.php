@@ -30,7 +30,6 @@ use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\PaymentTypes\Prepayment;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
 
 class PrepaymentTest extends BasePaymentTest
 {
@@ -40,7 +39,6 @@ class PrepaymentTest extends BasePaymentTest
      * @return Prepayment
      *
      * @throws HeidelpayApiException
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @test
      */

@@ -76,8 +76,6 @@ class BasketItem extends AbstractHeidelpayResource
         $this->amountNet             = $amountNet;
         $this->amountPerUnit         = $amountPerUnit;
         $this->quantity              = $quantity;
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">

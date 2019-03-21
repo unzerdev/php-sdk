@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class CancellationTest extends BaseUnitTest
 {
@@ -36,7 +35,6 @@ class CancellationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws Exception
      */
     public function gettersAndSettersShouldWorkProperly()

@@ -30,7 +30,6 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
-use PHPUnit\Framework\Exception;
 
 class CanDirectChargeWithCustomerTest extends BaseUnitTest
 {
@@ -39,7 +38,6 @@ class CanDirectChargeWithCustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -58,7 +56,6 @@ class CanDirectChargeWithCustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws \ReflectionException
      * @throws HeidelpayApiException
