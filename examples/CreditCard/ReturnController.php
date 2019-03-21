@@ -32,6 +32,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
 
 function redirect($url)
 {
@@ -50,11 +51,19 @@ try {
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
+    $payment = $heidelpay->fetchPayment($paymentId);
     if (
-        $heidelpay->fetchPayment($paymentId)->isCompleted()         // <<---- in case of charge
-        || $heidelpay->fetchPayment($paymentId)->isPending()        // <<---- in case of authorize
+        $payment->isCompleted()         // <<---- in case of charge
+        || $payment->isPending()        // <<---- in case of authorize
     ) {
         redirect(SUCCESS_URL);
+    }
+
+    if ($payment->isCanceled()) {
+        $authorize = $payment->getAuthorization();
+        if ($authorize instanceof Authorization && $authorize->isError()) {
+            $_SESSION['merchantMessage'] = $authorize->getMessage()->getCustomer();
+        }
     }
 
 } catch (HeidelpayApiException $e) {
