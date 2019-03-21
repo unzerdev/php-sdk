@@ -251,6 +251,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
     /**
      * @param Message $message
+     *
      * @return AbstractTransactionType
      */
     public function setMessage(Message $message): AbstractTransactionType
