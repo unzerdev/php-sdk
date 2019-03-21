@@ -9,11 +9,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Enabled chargePayment with payment id.
 *   Renamed KeyValidator class to PrivateKeyValidator.
 *   Enabled setting the language for client messages.
+*   Merged examples into and added error messages to the failure page.
 
 ### Added
-*   Added PublicKeyValidator.
+*   Basic PublicKeyValidator which makes sure the key has the correct format.
 *   Basket field amountTotalVat.
-*   Added optional parameter card3ds to charge and authorize transactions to enable switching between 3ds and non-3ds.
+*   Optional parameter card3ds to charge and authorize transactions to enable switching between 3ds and non-3ds.
+*   Transaction message property holding the last code and message from the api.
 
 ### Fixed
 *   Several code style issues.

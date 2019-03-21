@@ -61,6 +61,35 @@ require_once __DIR__ . '/../../../../autoload.php';
 </ul>
 
 <form id="payment-form" class="heidelpayUI form" novalidate>
+    <!-- This is just for the example - Start -->
+    <div class="fields inline">
+        <label for="transaction_type">Chose the transaction type you want to test:</label>
+        <div class="field">
+            <div class="heidelpayUI radio checkbox">
+                <input type="radio" name="transaction_type" value="authorize" checked="">
+                <label>Authorize</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="heidelpayUI radio checkbox">
+                <input type="radio" name="transaction_type" value="charge">
+                <label>Charge</label>
+            </div>
+        </div>
+    </div>
+    <div class="fields inline">
+        <label for="3dsecure">Select this if you want to try out Card with 3Dsecure:</label>
+        <div class="field">
+            <div class="heidelpayUI checkbox">
+                <input type="hidden" name="3dsecure" value="0">
+                <input type="checkbox" name="3dsecure" value="1">
+                <label>Enable 3Ds</label>
+            </div>
+        </div>
+    </div>
+    <!-- This is just for the example - End -->
+
+
     <div class="field">
         <div id="card-element-id-number" class="heidelpayInput">
             <!-- Card number UI Element will be inserted here. -->
@@ -86,7 +115,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <script>
     // Creating a heidelpay instance with your public key
-    let heidelpayInstance = new heidelpay('s-pub-2a10gsZJ2IeiiK80Wh68qrOzu4IZse6k');
+    let heidelpayInstance = new heidelpay('s-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');
 
     // Creating a credit card instance
     let Card = heidelpayInstance.Card();
