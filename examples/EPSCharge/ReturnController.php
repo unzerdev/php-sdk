@@ -33,6 +33,8 @@ use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 
+$clientMessage = 'Something went wrong. Please try again later.';
+
 function redirect($url)
 {
     header('Location: ' . $url);
@@ -45,18 +47,30 @@ if (!isset($_SESSION['PaymentId'])) {
     redirect(FAILURE_URL);
 }
 
+// Retrieve the paymentId you remembered within the Controller
 $paymentId = $_SESSION['PaymentId'];
+
+//  Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
+    // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
+    // Redirect to success if the payment has been successfully completed.
     $payment   = $heidelpay->fetchPayment($paymentId);
     if ($payment->isCompleted()) {
         redirect(SUCCESS_URL);
     }
+
+    // Check the result message of the charge to find out what went wrong.
+    $charge = $payment->getChargeByIndex(0);
+    $merchantMessage = $charge->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
-    $_SESSION['merchantMessage'] = $e->getMerchantMessage();
-    $_SESSION['clientMessage'] = $e->getClientMessage();
-    redirect(FAILURE_URL);
+    $merchantMessage = $e->getMerchantMessage();
+    $clientMessage = $e->getClientMessage();
+} catch (\RuntimeException $e) {
+    $merchantMessage = $e->getMessage();
 }
+$_SESSION['merchantMessage'] = $merchantMessage;
+$_SESSION['clientMessage']   = $clientMessage;
 redirect(FAILURE_URL);
