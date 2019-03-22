@@ -54,11 +54,6 @@ require_once __DIR__ . '/../../../../autoload.php';
     <li>TAN: 1111</li>
 </ul>
 
-<strong>&Auml;rztebank</strong>
-<ul>
-    <li>Follow all steps shown on screen without entering any data.</li>
-</ul>
-
 <form id="payment-form" class="heidelpayUI form" novalidate>
     <div id="example-eps" class="field"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
