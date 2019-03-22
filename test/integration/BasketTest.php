@@ -28,7 +28,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
 
 class BasketTest extends BasePaymentTest
@@ -162,11 +162,11 @@ class BasketTest extends BasePaymentTest
         $this->heidelpay->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
-        $ddg = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
-        $this->heidelpay->createPaymentType($ddg);
+        $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setBic('COBADEFFXXX');
+        $this->heidelpay->createPaymentType($sdd);
 
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge   = $ddg->charge(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+        $charge   = $sdd->charge(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
 
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
