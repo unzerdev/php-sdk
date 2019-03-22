@@ -1,8 +1,9 @@
 <?php
 /**
- * This is the controller for the 'Authorization' transaction example for Card.
+ * This is the controller for the EPS example.
+ * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,36 +35,53 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 
+$clientMessage = 'Something went wrong. Please try again later.';
+
 session_start();
 session_unset();
 
-function redirect($url)
+$clientMessage = 'Something went wrong. Please try again later.';
+$merchantMessage = 'Something went wrong. Please try again later.';
+
+function redirect($url, $merchantMessage = '', $clientMessage = '')
 {
+    $_SESSION['merchantMessage'] = $merchantMessage;
+    $_SESSION['clientMessage']   = $clientMessage;
     header('Location: ' . $url);
     die();
 }
 
+// You will need the id of the payment type created in the frontend (index.php)
 if (!isset($_POST['resourceId'])) {
-    redirect(FAILURE_URL);
+    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
-
 $paymentTypeId   = $_POST['resourceId'];
 
-//#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
+// Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
-    //#######  2. Create a heidelpay object using your private key #####################################################
+    // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    //#######  3. Create a charge ######################################################################################
+    // Create a charge to get the redirectUrl.
     $customer            = new Customer('Linda', 'Heideich');
     $charge              = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+
+    // You'll need to remember the paymentId for later in the ReturnController
     $_SESSION['PaymentId'] = $charge->getPaymentId();
     $_SESSION['ShortId']   = $charge->getShortId();
-    redirect($charge->getRedirectUrl());
+
+    // Redirect to the EPS page of the selected bank
+    if (!$charge->isError() && $charge->getRedirectUrl() !== null) {
+        redirect($charge->getRedirectUrl());
+    }
+
+    // Check the result message of the charge to find out what went wrong.
+    $merchantMessage = $charge->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
-    $_SESSION['merchantMessage'] = $e->getMerchantMessage();
-    $_SESSION['clientMessage'] = $e->getClientMessage();
-    redirect(FAILURE_URL);
+    $merchantMessage = $e->getMerchantMessage();
+    $clientMessage = $e->getClientMessage();
+} catch (\RuntimeException $e) {
+    $merchantMessage = $e->getMessage();
 }
-redirect(FAILURE_URL);
+redirect(FAILURE_URL, $merchantMessage, $clientMessage);

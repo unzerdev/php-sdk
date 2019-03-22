@@ -36,6 +36,8 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
+use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -342,7 +344,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
     //<editor-fold desc="Data Providers">
 
     /**
-     * Data provider for getUriShouldReturnResourcePath.
+     * Data provider for getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet.
      *
      * @return array
      *
@@ -361,6 +363,10 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'SepaDirectDebitGuaranteed' => [
                 new SepaDirectDebitGuaranteed(''),
                 'parent/resource/path/types/sepa-direct-debit-guaranteed/'
+            ],
+            'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice/'],
+            'InvoiceGuaranteed' => [
+                new InvoiceGuaranteed(),                'parent/resource/path/types/invoice-guaranteed/'
             ],
             'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels/'],
             'Authorization' => [new Authorization(), 'parent/resource/path/authorize/'],
