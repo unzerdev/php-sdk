@@ -1,8 +1,9 @@
 <?php
 /**
- * This is the controller for the 'Authorization' transaction example for Card.
+ * This is the controller for the EPS example.
+ * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,25 +40,30 @@ $clientMessage = 'Something went wrong. Please try again later.';
 session_start();
 session_unset();
 
-function redirect($url)
+$clientMessage = 'Something went wrong. Please try again later.';
+$merchantMessage = 'Something went wrong. Please try again later.';
+
+function redirect($url, $merchantMessage = '', $clientMessage = '')
 {
+    $_SESSION['merchantMessage'] = $merchantMessage;
+    $_SESSION['clientMessage']   = $clientMessage;
     header('Location: ' . $url);
     die();
 }
 
+// You will need the id of the payment type created in the frontend (index.php)
 if (!isset($_POST['resourceId'])) {
-    redirect(FAILURE_URL);
+    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
-
 $paymentTypeId   = $_POST['resourceId'];
 
-//  Catch API errors, write the message to your log and show the ClientMessage to the client.
+// Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Create a charge to get the redirectUrl
+    // Create a charge to get the redirectUrl.
     $customer            = new Customer('Linda', 'Heideich');
     $charge              = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
 
@@ -78,6 +84,4 @@ try {
 } catch (\RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
-$_SESSION['merchantMessage'] = $merchantMessage;
-$_SESSION['clientMessage']   = $clientMessage;
-redirect(FAILURE_URL);
+redirect(FAILURE_URL, $merchantMessage, $clientMessage);

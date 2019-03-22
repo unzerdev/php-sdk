@@ -1,8 +1,9 @@
 <?php
 /**
- * This is the controller for the 'Authorization' transaction example for Card.
+ * This is the controller for the Card example.
+ * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,48 +38,59 @@ use heidelpayPHP\Resources\Customer;
 session_start();
 session_unset();
 
-function redirect($url)
+$clientMessage = 'Something went wrong. Please try again later.';
+$merchantMessage = 'Something went wrong. Please try again later.';
+
+function redirect($url, $merchantMessage = '', $clientMessage = '')
 {
+    $_SESSION['merchantMessage'] = $merchantMessage;
+    $_SESSION['clientMessage']   = $clientMessage;
     header('Location: ' . $url);
     die();
 }
 
+// You will need the id of the payment type created in the frontend (index.php)
 if (!isset($_POST['resourceId'])) {
-    redirect(FAILURE_URL);
+    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
-
 $paymentTypeId   = $_POST['resourceId'];
+
+// These lines are just for this example
 $transactionType = $_POST['transaction_type'] ?? 'authorize';
 $use3Ds          = isset($_POST['3dsecure']) && ($_POST['3dsecure'] === '1');
 
-//#######  1. Catch API and SDK errors, write the message to your log and show the ClientMessage to the client. ########
+// Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
-    //#######  2. Create a heidelpay object using your private key #####################################################
+    // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    //#######  3. Create an authorization (aka reservation) ############################################################
-    $customer            = new Customer('Linda', 'Heideich');
-
+    // Create a charge/authorize transaction
+    // The 3D secured flag can be used to switch between 3ds and non-3ds.
+    // If your merchant is only configured for one of those you can omit the flag.
+    $customer     = new Customer('Linda', 'Heideich');
     $transaction = $transactionType === 'charge' ?
         $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds) :
         $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
 
+    // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
     $_SESSION['ShortId'] = $transaction->getShortId();
 
+    // Redirect to the 3ds page or to success depending on the state of the transaction
     $payment = $transaction->getPayment();
     if ($transaction->getRedirectUrl() === null && $transaction->isSuccess()) {
         redirect(SUCCESS_URL);
     } elseif ($transaction->getRedirectUrl() !== null && $transaction->isPending()) {
         redirect($transaction->getRedirectUrl());
     }
-    $_SESSION['merchantMessage'] = 'Something went wrong!';
+
+    // Check the result message of the transaction to find out what went wrong.
+    $merchantMessage = $transaction->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
-    $_SESSION['merchantMessage'] = $e->getMerchantMessage();
-    $_SESSION['clientMessage'] = $e->getClientMessage();
+    $merchantMessage = $e->getMerchantMessage();
+    $clientMessage = $e->getClientMessage();
 } catch (\RuntimeException $e) {
-    $_SESSION['merchantMessage'] = $e->getMessage();
+    $merchantMessage = $e->getMessage();
 }
-$_SESSION['clientMessage'] = 'Something went wrong. Please try again.';
-redirect(FAILURE_URL);
+redirect(FAILURE_URL, $merchantMessage, $clientMessage);

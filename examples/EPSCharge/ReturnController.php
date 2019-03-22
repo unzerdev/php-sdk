@@ -1,6 +1,7 @@
 <?php
 /**
- * This is the controller for the 'Authorization' transaction example for Card.
+ * This is the return controller for the EPS example.
+ * It is called when the client is redirected back to the shop from the EPS page of the selected bank.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -34,23 +35,25 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 
 $clientMessage = 'Something went wrong. Please try again later.';
+$merchantMessage = 'Something went wrong. Please try again later.';
 
-function redirect($url)
+function redirect($url, $merchantMessage = '', $clientMessage = '')
 {
+    $_SESSION['merchantMessage'] = $merchantMessage;
+    $_SESSION['clientMessage']   = $clientMessage;
     header('Location: ' . $url);
     die();
 }
 
 session_start();
 
-if (!isset($_SESSION['PaymentId'])) {
-    redirect(FAILURE_URL);
-}
-
 // Retrieve the paymentId you remembered within the Controller
+if (!isset($_SESSION['PaymentId'])) {
+    redirect(FAILURE_URL, 'The payment id is missing.', $clientMessage);
+}
 $paymentId = $_SESSION['PaymentId'];
 
-//  Catch API errors, write the message to your log and show the ClientMessage to the client.
+// Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
@@ -71,6 +74,5 @@ try {
 } catch (\RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
-$_SESSION['merchantMessage'] = $merchantMessage;
-$_SESSION['clientMessage']   = $clientMessage;
-redirect(FAILURE_URL);
+redirect(FAILURE_URL, $merchantMessage, $clientMessage);
+
