@@ -8,20 +8,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ###### This update contains breaking changes and you will most certainly have to update your implementation
 
 ### Changed
+*   Payment types `Prepayment`, `Invoice` and `Invoice guaranteed` can no longer perform the authorize transaction but only direct charge.
 *   Enabled chargePayment with payment id.
-*   Renamed KeyValidator class to PrivateKeyValidator.
+*   Renamed `KeyValidator` class to `PrivateKeyValidator`.
 *   Enabled setting the language for client messages.
 *   Merged examples into and added error messages to the failure page.
 *   Changed tests to meet updates in payment amount calculation within the payment API.
 
 ### Added
-*   Basic PublicKeyValidator which makes sure the key has the correct format.
-*   Basket field amountTotalVat.
+*   Basic `PublicKeyValidator` which makes sure the key has the correct format.
+*   Basket field `amountTotalVat`.
 *   Optional parameter card3ds to charge and authorize transactions to enable switching between 3ds and non-3ds.
 *   Transaction message property holding the last code and message from the api.
 
 ### Removed
-*   Constructor from AbstractHeidelpayResource.
+*   Constructor from `AbstractHeidelpayResource`.
 
 ### Fixed
 *   Several code style issues.
