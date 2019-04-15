@@ -49,30 +49,32 @@ class PaymentState
      *
      * @throws \RuntimeException A \RuntimeException is thrown when the $stateCode is unknown.
      */
-    public static function mapStateCodeToName($stateCode)
+    public static function mapStateCodeToName($stateCode): string
     {
         switch ($stateCode) {
             case self::STATE_PENDING:
-                return self::STATE_NAME_PENDING;
+                $stateName =  self::STATE_NAME_PENDING;
                 break;
             case self::STATE_COMPLETED:
-                return self::STATE_NAME_COMPLETED;
+                $stateName =  self::STATE_NAME_COMPLETED;
                 break;
             case self::STATE_CANCELED:
-                return self::STATE_NAME_CANCELED;
+                $stateName =  self::STATE_NAME_CANCELED;
                 break;
             case self::STATE_PARTLY:
-                return self::STATE_NAME_PARTLY;
+                $stateName =  self::STATE_NAME_PARTLY;
                 break;
             case self::STATE_PAYMENT_REVIEW:
-                return self::STATE_NAME_PAYMENT_REVIEW;
+                $stateName =  self::STATE_NAME_PAYMENT_REVIEW;
                 break;
             case self::STATE_CHARGEBACK:
-                return self::STATE_NAME_CHARGEBACK;
+                $stateName =  self::STATE_NAME_CHARGEBACK;
                 break;
             default:
                 throw new \RuntimeException('Unknown payment state #' . $stateCode);
         }
+
+        return $stateName;
     }
 
     /**
@@ -84,29 +86,31 @@ class PaymentState
      *
      * @throws \RuntimeException A \RuntimeException is thrown when the $stateName is unknown.
      */
-    public static function mapStateNameToCode($stateName)
+    public static function mapStateNameToCode($stateName): int
     {
         switch ($stateName) {
             case self::STATE_NAME_PENDING:
-                return self::STATE_PENDING;
+                $stateCode = self::STATE_PENDING;
                 break;
             case self::STATE_NAME_COMPLETED:
-                return self::STATE_COMPLETED;
+                $stateCode = self::STATE_COMPLETED;
                 break;
             case self::STATE_NAME_CANCELED:
-                return self::STATE_CANCELED;
+                $stateCode = self::STATE_CANCELED;
                 break;
             case self::STATE_NAME_PARTLY:
-                return self::STATE_PARTLY;
+                $stateCode = self::STATE_PARTLY;
                 break;
             case self::STATE_NAME_PAYMENT_REVIEW:
-                return self::STATE_PAYMENT_REVIEW;
+                $stateCode = self::STATE_PAYMENT_REVIEW;
                 break;
             case self::STATE_NAME_CHARGEBACK:
-                return self::STATE_CHARGEBACK;
+                $stateCode = self::STATE_CHARGEBACK;
                 break;
             default:
                 throw new \RuntimeException('Unknown payment state ' . $stateName);
         }
+
+        return $stateCode;
     }
 }

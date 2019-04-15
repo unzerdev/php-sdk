@@ -57,8 +57,6 @@ use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\DummyResource;
-use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\MockObject\RuntimeException;
 
 class ResourceServiceTest extends BaseUnitTest
 {
@@ -72,7 +70,6 @@ class ResourceServiceTest extends BaseUnitTest
      * @param string $uri
      * @param string $idString
      *
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function getResourceIdFromUrlShouldIdentifyAndReturnTheIdStringFromAGivenString($expected, $uri, $idString)
@@ -106,9 +103,7 @@ class ResourceServiceTest extends BaseUnitTest
      * @param $resource
      * @param $timesFetchIsCalled
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -129,9 +124,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -162,9 +155,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -195,9 +186,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -226,9 +215,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -257,9 +244,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -286,9 +271,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -319,9 +302,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws \Exception
@@ -356,9 +337,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -380,9 +359,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -407,9 +384,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -432,8 +407,6 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -495,9 +468,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @param string $typeId
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -519,9 +490,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -548,8 +517,6 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -595,8 +562,6 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -625,9 +590,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -659,9 +622,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -690,9 +651,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -715,9 +674,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -739,9 +696,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -763,9 +718,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -790,9 +743,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -817,9 +768,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -844,9 +793,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -872,9 +819,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -900,9 +845,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -930,9 +873,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -959,9 +900,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -982,9 +921,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1005,9 +942,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1163,9 +1098,7 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1287,7 +1220,7 @@ class ResourceServiceTest extends BaseUnitTest
             'fetchedAt is null, Id is null' => [new Customer(), 0],
             'fetchedAt is null, id is set' => [(new Customer())->setId('testId'), 1],
             'fetchedAt is set, id is null' => [(new Customer())->setFetchedAt(new \DateTime('now')), 0],
-            'fetchedAt is set, id is set' => [(new Customer())->setFetchedAt(new \DateTime('now'))->setId('testId'), 0],
+            'fetchedAt is set, id is set' => [(new Customer())->setFetchedAt(new \DateTime('now'))->setId('testId'), 0]
         ];
     }
 

@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\unit\Exceptions;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class HeidelpayApiExceptionTest extends BaseUnitTest
 {
@@ -37,7 +36,6 @@ class HeidelpayApiExceptionTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function heidelpayApiExceptionShouldReturnDefaultDataWhenNoneIsSet()
     {
@@ -57,7 +55,6 @@ class HeidelpayApiExceptionTest extends BaseUnitTest
      * @param array $testData
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function heidelpayApiExceptionShouldReturnTheGivenData(array $testData, array $expected)
     {

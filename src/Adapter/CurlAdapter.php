@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpComposerExtensionStubsInspection */
 /**
  * This is a wrapper for the default http adapter (CURL).
  *

@@ -1,7 +1,7 @@
 <?php
 /**
- * This is the return controller for the EPS example.
- * It is called when the client is redirected back to the shop from the EPS page of the selected bank.
+ * This is the return controller for the Card example.
+ * It is called when the client is redirected back to the shop from the 3ds page.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -33,6 +33,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
+
+session_start();
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
@@ -44,8 +47,6 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     header('Location: ' . $url);
     die();
 }
-
-session_start();
 
 // Retrieve the paymentId you remembered within the Controller
 if (!isset($_SESSION['PaymentId'])) {
@@ -59,15 +60,23 @@ try {
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Redirect to success if the payment has been successfully completed.
-    $payment   = $heidelpay->fetchPayment($paymentId);
-    if ($payment->isCompleted()) {
+    // Redirect to success if the payment has been successfully completed or is still in handled.
+    $payment = $heidelpay->fetchPayment($paymentId);
+    if (
+        $payment->isCompleted()         // <<---- in case of charge
+        || $payment->isPending()        // <<---- in case of authorize
+    ) {
         redirect(SUCCESS_URL);
     }
 
-    // Check the result message of the charge to find out what went wrong.
-    $charge = $payment->getChargeByIndex(0);
-    $merchantMessage = $charge->getMessage()->getCustomer();
+    // Check the result message of the transaction to find out what went wrong.
+    $transaction = $payment->getAuthorization();
+    if ($transaction instanceof Authorization) {
+        $merchantMessage = $transaction->getMessage()->getCustomer();
+    } else {
+        $transaction = $payment->getChargeByIndex(0);
+        $merchantMessage = $transaction->getMessage()->getCustomer();
+    }
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
@@ -75,4 +84,3 @@ try {
     $merchantMessage = $e->getMessage();
 }
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);
-

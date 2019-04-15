@@ -30,6 +30,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
+use RuntimeException;
 
 class WebhookTest extends BasePaymentTest
 {
@@ -40,7 +41,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function webhookResourceCanBeRegisteredAndFetched(): Webhook
@@ -66,7 +67,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws Exception
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function webhookUrlShouldBeUpdateable(Webhook $webhook)
     {
@@ -91,7 +92,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws Exception
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @group skip
      */
@@ -117,7 +118,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function webhookResourceShouldBeDeletable(Webhook $webhook)
     {
@@ -138,7 +139,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function webhookCreateShouldThrowErrorWhenEventIsAlreadyRegistered()
     {
@@ -162,7 +163,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @grop skip
      */
@@ -210,7 +211,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function allWebhooksShouldBeRemovableAtOnce()
     {
@@ -231,7 +232,7 @@ class WebhookTest extends BasePaymentTest
      * @depends allWebhooksShouldBeRemovableAtOnce
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function bulkSettingWebhookEventsShouldBePossible()
     {

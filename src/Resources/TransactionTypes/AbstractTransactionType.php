@@ -27,6 +27,7 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\EmbeddedResources\Message;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\HasOrderId;
@@ -57,7 +58,18 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /** @var bool $isPending */
     private $isPending = false;
 
+    /** @var Message $message */
+    private $message;
+
     //</editor-fold>
+
+    /**
+     * AbstractTransactionType constructor.
+     */
+    public function __construct()
+    {
+        $this->message = new Message();
+    }
 
     //<editor-fold desc="Getters/Setters">
 
@@ -228,6 +240,25 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         return $this;
     }
 
+    /**
+     * @return Message
+     */
+    public function getMessage(): Message
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param Message $message
+     *
+     * @return AbstractTransactionType
+     */
+    public function setMessage(Message $message): AbstractTransactionType
+    {
+        $this->message = $message;
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
@@ -254,6 +285,10 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
             $this->fetchPayment();
+        }
+
+        if (isset($response->message)) {
+            $this->message->handleResponse($response->message);
         }
     }
 

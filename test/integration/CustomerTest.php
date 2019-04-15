@@ -43,7 +43,6 @@ class CustomerTest extends BasePaymentTest
      * @return Customer
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\AssertionFailedError
      * @throws \RuntimeException
      */
     public function minCustomerCanBeCreatedAndFetched(): Customer
@@ -71,7 +70,6 @@ class CustomerTest extends BasePaymentTest
      * @return Customer
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\AssertionFailedError
      * @throws \RuntimeException
      */
     public function maxCustomerCanBeCreatedAndFetched(): Customer

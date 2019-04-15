@@ -50,8 +50,6 @@ class Webhooks extends AbstractHeidelpayResource
     {
         $this->url = $url;
         $this->eventList = $eventList;
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">

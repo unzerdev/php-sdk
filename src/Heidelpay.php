@@ -52,7 +52,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.1.0.0';
+    const SDK_VERSION = '1.1.1.0';
 
     /** @var string $key */
     private $key;
@@ -853,6 +853,8 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Basket|null            $basket      The Basket object corresponding to the payment.
      *                                            The Basket object will be created automatically if it does not exist
      *                                            yet (i.e. has no id).
+     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
+     *                                            optional and will be ignored if not applicable.
      *
      * @return Authorization The resulting object of the Authorization resource.
      *
@@ -867,7 +869,8 @@ class Heidelpay implements HeidelpayParentInterface
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $card3ds = null
     ): AbstractTransactionType {
         return $this->paymentService->authorize(
             $amount,
@@ -877,7 +880,8 @@ class Heidelpay implements HeidelpayParentInterface
             $customer,
             $orderId,
             $metadata,
-            $basket
+            $basket,
+            $card3ds
         );
     }
 
@@ -931,6 +935,8 @@ class Heidelpay implements HeidelpayParentInterface
      * @param Basket|null            $basket      The Basket object corresponding to the payment.
      *                                            The Basket object will be created automatically if it does not exist
      *                                            yet (i.e. has no id).
+     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
+     *                                            optional and will be ignored if not applicable.
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -945,7 +951,8 @@ class Heidelpay implements HeidelpayParentInterface
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $card3ds = null
     ): AbstractTransactionType {
         return $this->paymentService->charge(
             $amount,
@@ -955,7 +962,8 @@ class Heidelpay implements HeidelpayParentInterface
             $customer,
             $orderId,
             $metadata,
-            $basket
+            $basket,
+            $card3ds
         );
     }
 

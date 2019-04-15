@@ -30,8 +30,6 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 
 class SofortTest extends BasePaymentTest
 {
@@ -42,7 +40,6 @@ class SofortTest extends BasePaymentTest
      *
      * @return Sofort
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -69,7 +66,6 @@ class SofortTest extends BasePaymentTest
      *
      * @return Charge
      *
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      * @depends sofortShouldBeCreatableAndFetchable

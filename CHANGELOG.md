@@ -3,16 +3,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.1.0][1.1.1.0]
+
+### Added
+*   Added Webhook resource.
+
 ## [1.1.0.0][1.1.0.0]
+
+###### This update contains breaking changes and you will most certainly have to update your implementation
 
 ### Changed
 *   Enabled chargePayment with payment id.
 *   Renamed KeyValidator class to PrivateKeyValidator.
 *   Enabled setting the language for client messages.
+*   Merged examples into and added error messages to the failure page.
+*   Changed tests to meet updates in payment amount calculation within the payment API.
 
 ### Added
-*   Added PublicKeyValidator.
-*   Added Webhook resource.
+*   Basic PublicKeyValidator which makes sure the key has the correct format.
+*   Basket field amountTotalVat.
+*   Optional parameter card3ds to charge and authorize transactions to enable switching between 3ds and non-3ds.
+*   Transaction message property holding the last code and message from the api.
+
+### Removed
+*   Constructor from AbstractHeidelpayResource.
 
 ### Fixed
 *   Several code style issues.
@@ -117,3 +131,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.0.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.0.1..1.0.1.0
 [1.0.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.1.0..1.0.2.0
 [1.1.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.2.0..1.1.0.0
+[1.1.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.0.0..1.1.1.0

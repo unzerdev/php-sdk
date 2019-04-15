@@ -32,6 +32,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>
@@ -45,6 +46,14 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
+<h3>Example data:</h3>
+<strong>Erste Bank Sparkasse</strong>
+<ul>
+    <li>Username: 108256743</li>
+    <li>Password: npydemo</li>
+    <li>TAN: 1111</li>
+</ul>
+
 <form id="payment-form" class="heidelpayUI form" novalidate>
     <div id="example-eps" class="field"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>

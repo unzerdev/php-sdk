@@ -40,9 +40,7 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
-use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 
 class PaymentTest extends BaseUnitTest
@@ -76,8 +74,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -104,8 +100,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -130,9 +124,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -164,7 +155,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws \ReflectionException
      * @throws HeidelpayApiException
@@ -197,7 +187,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws \ReflectionException
      * @throws HeidelpayApiException
@@ -279,8 +268,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -305,8 +292,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -356,8 +341,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -382,8 +365,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -409,9 +390,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -465,9 +444,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -485,9 +462,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -510,9 +485,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -542,9 +515,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -573,9 +543,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -633,7 +601,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @param integer $state
      *
-     * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -654,7 +621,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -675,7 +641,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @throws \ReflectionException
@@ -705,7 +670,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @throws \ReflectionException
@@ -735,7 +699,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @throws \ReflectionException
@@ -763,7 +726,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      * @throws \ReflectionException
@@ -1018,7 +980,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -1116,7 +1077,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -1209,9 +1169,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1237,9 +1195,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1265,8 +1221,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1294,8 +1248,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1321,8 +1273,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
@@ -1347,9 +1297,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1401,8 +1349,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1436,9 +1382,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1466,9 +1410,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1499,8 +1441,6 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1535,9 +1475,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1566,9 +1504,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1623,9 +1559,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -1655,9 +1589,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */

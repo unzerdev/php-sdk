@@ -41,17 +41,8 @@ class Authorization extends AbstractTransactionType
     /** @var string $returnUrl */
     protected $returnUrl;
 
-    /** @var string $iban */
-    private $iban;
-
-    /** @var string bic */
-    private $bic;
-
-    /** @var string $holder */
-    private $holder;
-
-    /** @var string $descriptor */
-    private $descriptor;
+    /** @var bool $card3ds */
+    protected $card3ds;
 
     /**
      * Authorization constructor.
@@ -129,90 +120,21 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * Returns the IBAN of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
+     * @return bool|null
      */
-    public function getIban()
+    public function isCard3ds()
     {
-        return $this->iban;
+        return $this->card3ds;
     }
 
     /**
-     * @param string $iban
+     * @param bool|null $card3ds
      *
-     * @return self
+     * @return Authorization
      */
-    protected function setIban(string $iban): self
+    public function setCard3ds($card3ds): Authorization
     {
-        $this->iban = $iban;
-        return $this;
-    }
-
-    /**
-     * Returns the BIC of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getBic()
-    {
-        return $this->bic;
-    }
-
-    /**
-     * @param string $bic
-     *
-     * @return self
-     */
-    protected function setBic(string $bic): self
-    {
-        $this->bic = $bic;
-        return $this;
-    }
-
-    /**
-     * Returns the holder of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getHolder()
-    {
-        return $this->holder;
-    }
-
-    /**
-     * @param string $holder
-     *
-     * @return self
-     */
-    protected function setHolder(string $holder): self
-    {
-        $this->holder = $holder;
-        return $this;
-    }
-
-    /**
-     * Returns the Descriptor the customer needs to use when transferring the amount.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getDescriptor()
-    {
-        return $this->descriptor;
-    }
-
-    /**
-     * @param string $descriptor
-     *
-     * @return self
-     */
-    protected function setDescriptor(string $descriptor): self
-    {
-        $this->descriptor = $descriptor;
+        $this->card3ds = $card3ds;
         return $this;
     }
 

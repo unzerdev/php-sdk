@@ -35,6 +35,9 @@ class Basket extends AbstractHeidelpayResource
     /** @var float $amountTotalDiscount */
     protected $amountTotalDiscount;
 
+    /** @var float $amountTotalVat */
+    protected $amountTotalVat;
+
     /** @var string $currencyCode */
     protected $currencyCode;
 
@@ -65,8 +68,6 @@ class Basket extends AbstractHeidelpayResource
         $this->currencyCode = $currencyCode;
         $this->orderId      = $orderId;
         $this->basketItems  = $basketItems;
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -110,6 +111,25 @@ class Basket extends AbstractHeidelpayResource
     }
 
     /**
+     * @return float|null
+     */
+    public function getAmountTotalVat()
+    {
+        return $this->amountTotalVat;
+    }
+
+    /**
+     * @param float|null $amountTotalVat
+     *
+     * @return Basket
+     */
+    public function setAmountTotalVat($amountTotalVat): Basket
+    {
+        $this->amountTotalVat = $amountTotalVat;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getCurrencyCode(): string
@@ -133,7 +153,7 @@ class Basket extends AbstractHeidelpayResource
      */
     public function getItemCount(): int
     {
-        return count($this->basketItems);
+        return \count($this->basketItems);
     }
 
     /**

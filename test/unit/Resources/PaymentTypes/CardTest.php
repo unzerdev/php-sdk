@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 
 class CardTest extends BaseUnitTest
 {
@@ -92,8 +91,6 @@ class CardTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function constructorShouldSetParameters()
@@ -115,8 +112,6 @@ class CardTest extends BaseUnitTest
      * @param string $testData
      * @param string $expected
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      */
     public function expiryDateShouldBeExtendedToLongVersion($testData, $expected)
@@ -133,7 +128,6 @@ class CardTest extends BaseUnitTest
      *
      * @param string $testData
      *
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function yearOfExpiryDateShouldBeExtendedToLongVersion($testData)
@@ -167,7 +161,6 @@ class CardTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function verifyCvcCanBeSetAndChanged()
     {
@@ -184,7 +177,6 @@ class CardTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function verifyHolderCanBeSetAndChanged()
     {
@@ -201,7 +193,6 @@ class CardTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      */
     public function verifyCardCanBeUpdated()
     {

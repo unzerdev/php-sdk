@@ -32,7 +32,6 @@ use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
 
 class AbstractTransactionTypeTest extends BaseUnitTest
@@ -42,8 +41,6 @@ class AbstractTransactionTypeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
-     * @throws Exception
      * @throws \Exception
      */
     public function theGettersAndSettersShouldWorkProperly()
@@ -102,8 +99,6 @@ class AbstractTransactionTypeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -140,9 +135,7 @@ class AbstractTransactionTypeTest extends BaseUnitTest
      * @param string  $method
      * @param integer $timesCalled
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -195,7 +188,7 @@ class AbstractTransactionTypeTest extends BaseUnitTest
             HttpAdapterInterface::REQUEST_GET => [HttpAdapterInterface::REQUEST_GET, 0],
             HttpAdapterInterface::REQUEST_POST => [HttpAdapterInterface::REQUEST_POST, 1],
             HttpAdapterInterface::REQUEST_PUT => [HttpAdapterInterface::REQUEST_PUT, 1],
-            HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, 1],
+            HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, 1]
         ];
     }
 

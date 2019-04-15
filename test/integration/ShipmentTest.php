@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\integration;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
 
 class ShipmentTest extends BasePaymentTest
 {
@@ -36,24 +35,23 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
     public function shipmentShouldBeCreatableAndFetchable()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $authorize = $this->heidelpay->authorize(
+        $charge = $this->heidelpay->charge(
             100.0,
             'EUR',
             $invoiceGuaranteed,
             self::RETURN_URL,
             $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
-        $this->assertNotNull($authorize->getId());
-        $this->assertNotNull($authorize);
+        $this->assertNotNull($charge->getId());
+        $this->assertNotNull($charge);
 
-        $shipment = $this->heidelpay->ship($authorize->getPayment());
+        $shipment = $this->heidelpay->ship($charge->getPayment());
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
 
@@ -67,14 +65,13 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws AssertionFailedError
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
     public function shipmentCanBeCalledOnThePaymentObject()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $authorize = $this->heidelpay->authorize(
+        $charge = $this->heidelpay->charge(
             100.0,
             'EUR',
             $invoiceGuaranteed,
@@ -82,7 +79,7 @@ class ShipmentTest extends BasePaymentTest
             $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
 
-        $payment  = $authorize->getPayment();
+        $payment  = $charge->getPayment();
         $shipment = $payment->ship();
         $this->assertNotNull($shipment);
         $this->assertNotEmpty($shipment->getId());
@@ -105,7 +102,7 @@ class ShipmentTest extends BasePaymentTest
     public function shipmentShouldBePossibleWithPaymentObject()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $authorize = $this->heidelpay->authorize(
+        $charge = $this->heidelpay->charge(
             100.0,
             'EUR',
             $invoiceGuaranteed,
@@ -113,7 +110,7 @@ class ShipmentTest extends BasePaymentTest
             $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
 
-        $payment  = $authorize->getPayment();
+        $payment  = $charge->getPayment();
         $shipment = $this->heidelpay->ship($payment);
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
@@ -127,10 +124,10 @@ class ShipmentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function shippmentStatusIsSetCorrectly()
+    public function shipmentStatusIsSetCorrectly()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $authorize = $this->heidelpay->authorize(
+        $charge = $this->heidelpay->charge(
             100.0,
             'EUR',
             $invoiceGuaranteed,
@@ -138,7 +135,7 @@ class ShipmentTest extends BasePaymentTest
             $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
         );
 
-        $payment  = $authorize->getPayment();
+        $payment  = $charge->getPayment();
         $shipment = $this->heidelpay->ship($payment);
         $this->assertTrue($shipment->isSuccess());
         $this->assertFalse($shipment->isPending());

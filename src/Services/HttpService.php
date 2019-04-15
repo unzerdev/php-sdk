@@ -150,7 +150,9 @@ class HttpService
 
         $responseArray = json_decode($response);
         if ($responseCode >= 400 || isset($responseArray->errors)) {
-            $merchantMessage = $customerMessage = $code = null;
+            $code            = null;
+            $customerMessage = $code;
+            $merchantMessage = $customerMessage;
             if (isset($responseArray->errors[0])) {
                 $errors = $responseArray->errors[0];
                 $merchantMessage = $errors->merchantMessage ?? '';

@@ -36,6 +36,8 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
+use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -44,7 +46,6 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\MockObject\RuntimeException;
 
 class AbstractHeidelpayResourceTest extends BaseUnitTest
 {
@@ -74,7 +75,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      */
     public function getParentResourceShouldThrowExceptionIfItIsNotSet()
@@ -91,7 +91,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws \RuntimeException
      * @throws \ReflectionException
      */
@@ -151,8 +150,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @param AbstractHeidelpayResource $resource
      * @param string                    $resourcePath
      *
-     * @throws Exception
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -200,7 +197,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws \Exception
      */
     public function updateValuesShouldUpdateChildObjects()
     {
@@ -233,7 +229,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws \Exception
      */
     public function updateValuesShouldUpdateValuesFromProcessingInTheActualObject()
     {
@@ -336,6 +331,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * Verify null is returned as externalId if the class does not implement the getter any.
      *
      * @test
+     *
      */
     public function getExternalIdShouldReturnNullIfItIsNotImplementedInTheExtendingClass()
     {
@@ -348,7 +344,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
     //<editor-fold desc="Data Providers">
 
     /**
-     * Data provider for getUriShouldReturnResourcePath.
+     * Data provider for getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet.
      *
      * @return array
      *
@@ -367,6 +363,10 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'SepaDirectDebitGuaranteed' => [
                 new SepaDirectDebitGuaranteed(''),
                 'parent/resource/path/types/sepa-direct-debit-guaranteed/'
+            ],
+            'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice/'],
+            'InvoiceGuaranteed' => [
+                new InvoiceGuaranteed(),                'parent/resource/path/types/invoice-guaranteed/'
             ],
             'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels/'],
             'Authorization' => [new Authorization(), 'parent/resource/path/authorize/'],

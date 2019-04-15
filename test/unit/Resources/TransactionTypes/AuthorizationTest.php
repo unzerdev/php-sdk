@@ -34,8 +34,6 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\MockObject\RuntimeException;
 
 class AuthorizationTest extends BaseUnitTest
 {
@@ -44,7 +42,6 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws ExpectationFailedException
      * @throws Exception
      */
     public function gettersAndSettersShouldWorkProperly()
@@ -70,8 +67,6 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -81,10 +76,6 @@ class AuthorizationTest extends BaseUnitTest
         $this->assertNull($authorization->getAmount());
         $this->assertNull($authorization->getCurrency());
         $this->assertNull($authorization->getReturnUrl());
-        $this->assertNull($authorization->getIban());
-        $this->assertNull($authorization->getBic());
-        $this->assertNull($authorization->getHolder());
-        $this->assertNull($authorization->getDescriptor());
 
         $authorization = new Authorization(123.4, 'myCurrency', 'https://my-return-url.test');
         $this->assertEquals(123.4, $authorization->getAmount());
@@ -95,19 +86,11 @@ class AuthorizationTest extends BaseUnitTest
         $testResponse->amount = '789.0';
         $testResponse->currency = 'TestCurrency';
         $testResponse->returnUrl = 'https://return-url.test';
-        $testResponse->Iban = 'DE89370400440532013000';
-        $testResponse->Bic = 'COBADEFFXXX';
-        $testResponse->Holder = 'Merchant Khang';
-        $testResponse->Descriptor = '4065.6865.6416';
 
         $authorization->handleResponse($testResponse);
         $this->assertEquals(789.0, $authorization->getAmount());
         $this->assertEquals('TestCurrency', $authorization->getCurrency());
         $this->assertEquals('https://return-url.test', $authorization->getReturnUrl());
-        $this->assertEquals('DE89370400440532013000', $authorization->getIban());
-        $this->assertEquals('COBADEFFXXX', $authorization->getBic());
-        $this->assertEquals('Merchant Khang', $authorization->getHolder());
-        $this->assertEquals('4065.6865.6416', $authorization->getDescriptor());
     }
 
     /**
@@ -131,7 +114,6 @@ class AuthorizationTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws ExpectationFailedException
      * @throws \RuntimeException
      * @throws HeidelpayApiException
      */
@@ -157,9 +139,7 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
@@ -191,7 +171,6 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @param float|null $value
      *
-     * @throws Exception
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
@@ -209,9 +188,7 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws Exception
      * @throws HeidelpayApiException
-     * @throws RuntimeException
      * @throws \ReflectionException
      * @throws \RuntimeException
      */
