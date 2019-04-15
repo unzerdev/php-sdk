@@ -29,6 +29,8 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Resources\Webhooks;
+use function is_string;
+use RuntimeException;
 
 class WebhookService
 {
@@ -59,7 +61,7 @@ class WebhookService
      * @return Webhook
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function createWebhook(Webhook $webhook): Webhook
     {
@@ -77,12 +79,12 @@ class WebhookService
      * @return Webhook
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function fetchWebhook($webhook): Webhook
     {
         $webhookObject = $webhook;
-        if (\is_string($webhook)) {
+        if (is_string($webhook)) {
             $webhookObject = new Webhook();
             $webhookObject->setId($webhook);
         }
@@ -100,7 +102,7 @@ class WebhookService
      * @return Webhook
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function updateWebhook($webhook): Webhook
     {
@@ -117,13 +119,13 @@ class WebhookService
      * @return Webhook|AbstractHeidelpayResource|null
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function deleteWebhook($webhook)
     {
         $webhookObject = $webhook;
 
-        if (\is_string($webhook)) {
+        if (is_string($webhook)) {
             $webhookObject = $this->fetchWebhook($webhook);
         }
 
@@ -138,7 +140,7 @@ class WebhookService
      * Fetches all registered webhook events and returns them in an array.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function fetchWebhooks(): array
     {
@@ -153,7 +155,7 @@ class WebhookService
      * Deletes all registered webhooks.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function deleteWebhooks()
     {
@@ -171,7 +173,7 @@ class WebhookService
      * @return array
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function createWebhooks(string $url, array $events): array
     {
@@ -194,7 +196,7 @@ class WebhookService
      * @return AbstractHeidelpayResource|null
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function fetchResourceByWebhookEvent($postData)
     {
@@ -209,7 +211,7 @@ class WebhookService
         }
 
         if (!$resourceObject instanceof AbstractHeidelpayResource) {
-            throw new \RuntimeException('Error fetching resource!');
+            throw new RuntimeException('Error fetching resource!');
         }
 
         return $resourceObject;

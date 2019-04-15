@@ -62,7 +62,7 @@ class ResourceNameService
     {
         $kebapCaseString = preg_replace_callback(
             '/([A-Z][a-z]{1})+/',
-            function ($str) {
+            static function ($str) {
                 return '-' . strtolower($str[0]);
             },
             lcfirst($str)

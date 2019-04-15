@@ -29,6 +29,7 @@ use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use RuntimeException;
 
 class HttpService
 {
@@ -41,7 +42,7 @@ class HttpService
      *
      * @return HttpAdapterInterface
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getAdapter(): HttpAdapterInterface
     {
@@ -71,7 +72,7 @@ class HttpService
      *
      * @return string
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function send(
@@ -82,7 +83,7 @@ class HttpService
         $url = Heidelpay::BASE_URL . Heidelpay::API_VERSION . $uri;
 
         if (!$resource instanceof AbstractHeidelpayResource) {
-            throw new \RuntimeException('Transfer object is empty!');
+            throw new RuntimeException('Transfer object is empty!');
         }
 
         // perform request
@@ -109,7 +110,7 @@ class HttpService
      * @param AbstractHeidelpayResource $heidelpayResource
      * @param $httpMethod
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function initRequest($uri, AbstractHeidelpayResource $heidelpayResource, $httpMethod)
     {
@@ -140,7 +141,7 @@ class HttpService
      * @param string      $responseCode
      * @param string|null $response
      *
-     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
+     * @throws HeidelpayApiException
      */
     private function handleErrors($responseCode, $response)
     {
@@ -170,7 +171,7 @@ class HttpService
      * @param string                    $url
      * @param string|null               $response
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function debugLog(AbstractHeidelpayResource $resource, $httpMethod, string $url, $response)
     {

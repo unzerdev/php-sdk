@@ -25,6 +25,9 @@
  */
 namespace heidelpayPHP\Adapter;
 
+use function extension_loaded;
+use RuntimeException;
+
 class CurlAdapter implements HttpAdapterInterface
 {
     private $request;
@@ -32,12 +35,12 @@ class CurlAdapter implements HttpAdapterInterface
     /**
      * CurlAdapter constructor.
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function __construct()
     {
-        if (!\extension_loaded('curl')) {
-            throw new \RuntimeException('Connection error php-curl not installed');
+        if (!extension_loaded('curl')) {
+            throw new RuntimeException('Connection error php-curl not installed');
         }
     }
 
@@ -92,7 +95,7 @@ class CurlAdapter implements HttpAdapterInterface
      */
     public function setHeaders(array $headers)
     {
-        array_walk($headers, function (&$value, $key) {
+        array_walk($headers, static function (&$value, $key) {
             $value = $key . ': ' . $value;
         });
 

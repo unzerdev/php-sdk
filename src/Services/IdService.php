@@ -24,6 +24,9 @@
  */
 namespace heidelpayPHP\Services;
 
+use function count;
+use RuntimeException;
+
 class IdService
 {
     /**
@@ -38,7 +41,7 @@ class IdService
      *
      * @return string
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public static function getResourceIdFromUrl($url, $idString, $onlyLast = false): string
     {
@@ -46,8 +49,8 @@ class IdService
         $pattern = '/\/([s|p]{1}-' . $idString . '-[a-z\d]+)\/?' . ($onlyLast ? '$':'') . '/';
         preg_match($pattern, $url, $matches);
 
-        if (\count($matches) < 2) {
-            throw new \RuntimeException('Id for "' . $idString . '" not found in "' . $url . '"!');
+        if (count($matches) < 2) {
+            throw new RuntimeException('Id for "' . $idString . '" not found in "' . $url . '"!');
         }
 
         return $matches[1];
@@ -66,7 +69,7 @@ class IdService
     {
         try {
             return self::getResourceIdFromUrl($url, $idString, $onlyLast);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             return null;
         }
     }
@@ -76,7 +79,7 @@ class IdService
      *
      * @return string
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public static function getLastResourceIdFromUrlString($url): string
     {
@@ -96,7 +99,7 @@ class IdService
         $typeIdParts = [];
         preg_match('/^[sp]{1}-([a-z]{3}|p24)-\d*/', $typeId, $typeIdParts);
 
-        if (\count($typeIdParts) >= 2) {
+        if (count($typeIdParts) >= 2) {
             $typeIdString = $typeIdParts[1];
         }
 
