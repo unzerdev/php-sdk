@@ -256,6 +256,29 @@ class WebhookTest extends BasePaymentTest
         $this->assertArraySubset($webhookEvents, $registeredEvents);
     }
 
+    /**
+     * Verify setting one events with bulk setting.
+     *
+     * @test
+     * @depends allWebhooksShouldBeRemovableAtOnce
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function bulkSettingOnlyOneWebhookBePossible()
+    {
+        $url                = $this->generateUniqueUrl();
+        $registeredWebhooks = $this->heidelpay->registerMultipleWebhooks($url, [WebhookEvents::AUTHORIZE]);
+
+        $this->assertCount(1, $registeredWebhooks);
+
+        /** @var Webhook $webhook */
+        $webhook = $registeredWebhooks[0];
+
+        $this->assertEquals(WebhookEvents::AUTHORIZE, $webhook->getEvent());
+        $this->assertEquals($url, $webhook->getUrl());
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">

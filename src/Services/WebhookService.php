@@ -148,7 +148,7 @@ class WebhookService
         $webhooks->setParentResource($this->heidelpay);
         $this->resourceService->fetch($webhooks);
 
-        return $webhooks->getWebhooks();
+        return $webhooks->getWebhookList();
     }
 
     /**
@@ -181,7 +181,7 @@ class WebhookService
         $webhooks->setParentResource($this->heidelpay);
         $this->resourceService->create($webhooks);
 
-        return $webhooks->getWebhooks();
+        return $webhooks->getWebhookList();
     }
 
     //</editor-fold>

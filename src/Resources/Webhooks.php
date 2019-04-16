@@ -97,7 +97,7 @@ class Webhooks extends AbstractHeidelpayResource
     /**
      * @return array
      */
-    public function getWebhooks(): array
+    public function getWebhookList(): array
     {
         return $this->webhooks;
     }
@@ -125,17 +125,34 @@ class Webhooks extends AbstractHeidelpayResource
     {
         parent::handleResponse($response, $method);
 
+        // there are multiple events in the response
         if (isset($response->events)) {
-            $registeredWebhooks = [];
-
-            foreach ($response->events as $event) {
-                $webhook = new Webhook();
-                $webhook->setParentResource($this->getHeidelpayObject());
-                $webhook->handleResponse($event, $method);
-                $registeredWebhooks[] = $webhook;
-            }
-
-            $this->webhooks = $registeredWebhooks;
+            $this->handleRegisteredWebhooks($response->events);
         }
+
+        // it is only one event in the response
+        if (isset($response->event)) {
+            $this->handleRegisteredWebhooks([$response]);
+        }
+    }
+
+    /**
+     * Handles the given event array
+     *
+     * @param array $responseArray
+     * @throws \RuntimeException
+     */
+    private function handleRegisteredWebhooks(array $responseArray = [])
+    {
+        $registeredWebhooks = [];
+
+        foreach ($responseArray as $event) {
+            $webhook = new Webhook();
+            $webhook->setParentResource($this->getHeidelpayObject());
+            $webhook->handleResponse($event);
+            $registeredWebhooks[] = $webhook;
+        }
+
+        $this->webhooks = $registeredWebhooks;
     }
 }
