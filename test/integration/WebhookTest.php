@@ -236,8 +236,8 @@ class WebhookTest extends BasePaymentTest
      */
     public function bulkSettingWebhookEventsShouldBePossible()
     {
-        $webhookEvents   = [WebhookEvents::AUTHORIZE, WebhookEvents::CHARGE, WebhookEvents::SHIPMENT];
-        $url             = $this->generateUniqueUrl();
+        $webhookEvents      = [WebhookEvents::AUTHORIZE, WebhookEvents::CHARGE, WebhookEvents::SHIPMENT];
+        $url                = $this->generateUniqueUrl();
         $registeredWebhooks = $this->heidelpay->registerMultipleWebhooks($url, $webhookEvents);
 
         // check whether the webhooks have the correct url

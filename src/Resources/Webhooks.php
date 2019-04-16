@@ -28,6 +28,8 @@ namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\WebhookEvents;
+use RuntimeException;
+use stdClass;
 
 class Webhooks extends AbstractHeidelpayResource
 {
@@ -116,12 +118,12 @@ class Webhooks extends AbstractHeidelpayResource
     //</editor-fold>
 
     /**
-     * @param \stdClass $response
-     * @param string    $method
+     * @param stdClass $response
+     * @param string   $method
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         parent::handleResponse($response, $method);
 
@@ -140,7 +142,7 @@ class Webhooks extends AbstractHeidelpayResource
      * Handles the given event array
      *
      * @param array $responseArray
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function handleRegisteredWebhooks(array $responseArray = [])
     {
