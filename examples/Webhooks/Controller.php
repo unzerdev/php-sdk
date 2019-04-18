@@ -35,7 +35,7 @@ use heidelpayPHP\Heidelpay;
 
 try {
     //#######  2. Create a heidelpay object using your private key #####################################################
-    $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
+    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     $resource = $heidelpay->fetchResourceFromEvent();
