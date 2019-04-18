@@ -41,7 +41,7 @@ try {
 
     $heidelpay->deleteAllWebhooks();
 
-    $webhooks = $heidelpay->registerMultipleWebhooks(CONTROLLER_URL, [WebhookEvents::AUTHORIZE]);
+    $webhooks = $heidelpay->registerMultipleWebhooks(CONTROLLER_URL, [WebhookEvents::ALL]);
 
     echo 'Events registered: <br>';
     foreach ($webhooks as $webhook) {
