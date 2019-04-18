@@ -38,14 +38,10 @@ try {
     $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // todo: Refactor and Remove
-    $postData = $_POST;
-    $heidelpay->debugLog('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>POST: ' . print_r($postData, 1));
-
-//    $postData = '{ "event":"types", "publicKey":"s-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa", "retrieveUrl":"https://api.heidelpay.com/v1/types/card/s-crd-88xu7qjboupc" }';
-//    $heidelpay->fetchResourceByWebhookEvent($postData);
-
+    $resource = $heidelpay->fetchResourceFromEvent();
+    $heidelpay->debugLog('Fetched resource from Event: ' . $resource->jsonSerialize());
 } catch (HeidelpayApiException $e) {
-//    redirect(FAILURE_URL);
+    $heidelpay->debugLog('Event: ' . $e->getMessage());
+} catch (RuntimeException $e) {
+    $heidelpay->debugLog('Error: ' . $e->getMessage());
 }
-//redirect(FAILURE_URL);
