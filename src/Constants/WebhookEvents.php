@@ -58,7 +58,6 @@ class WebhookEvents
     const CUSTOMER_UPDATED = 'customer.updated';
 
     // payment events
-    const PAYMENT = 'payment';
     const PAYMENT_PENDING = 'payment.pending';
     const PAYMENT_COMPLETED = 'payment.completed';
     const PAYMENT_CANCELED = 'payment.canceled';
