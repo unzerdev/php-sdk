@@ -84,7 +84,7 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card">
                     <div class="content">
                         <div class="header">
-                            Webhooks
+                            Register Webhooks
                         </div>
                     </div>
                     <div class="ui bottom attached button" onclick="location.href='Webhooks/';">
