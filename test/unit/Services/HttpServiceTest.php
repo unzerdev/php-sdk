@@ -138,15 +138,16 @@ class HttpServiceTest extends BaseUnitTest
             ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
         )->getMock();
         $adapterMock->method('execute')->willReturn('{"response":"myResponseString"}');
+        $adapterMock->method('getResponseCode')->willReturnOnConsecutiveCalls('200', '201');
         $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
 
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
         $loggerMock->expects($this->exactly(5))->method('log')->withConsecutive(
             ['GET: https://api.heidelpay.com/v1/my/uri/123'],
-            ['Response: {"response":"myResponseString"}'],
+            ['Response: (200) {"response":"myResponseString"}'],
             ['POST: https://api.heidelpay.com/v1/my/uri/123'],
             ['Request: {"dummyResource": "JsonSerialized"}'],
-            ['Response: {"response":"myResponseString"}']
+            ['Response: (201) {"response":"myResponseString"}']
         );
 
         /** @var DebugHandlerInterface $loggerMock */

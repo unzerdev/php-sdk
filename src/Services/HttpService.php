@@ -85,9 +85,11 @@ class HttpService
         if (!$resource instanceof AbstractHeidelpayResource) {
             throw new RuntimeException('Transfer object is empty!');
         }
+        $heidelpayObj = $resource->getHeidelpayObject();
 
         // perform request
-        $this->initRequest($url, $resource, $httpMethod);
+        $payload = $resource->jsonSerialize();
+        $this->initRequest($heidelpayObj, $url, $payload, $httpMethod);
         $httpAdapter  = $this->getAdapter();
         $response     = $httpAdapter->execute();
         $responseCode = $httpAdapter->getResponseCode();
@@ -97,7 +99,7 @@ class HttpService
         try {
             $this->handleErrors($responseCode, $response);
         } finally {
-            $this->debugLog($resource, $httpMethod, $url, $response);
+            $this->debugLog($heidelpayObj, $payload, $responseCode, $httpMethod, $url, $response);
         }
 
         return $response;
@@ -106,21 +108,21 @@ class HttpService
     /**
      * Initializes and returns the http request object.
      *
-     * @param $uri
-     * @param AbstractHeidelpayResource $heidelpayResource
-     * @param $httpMethod
+     * @param Heidelpay $heidelpay
+     * @param string    $uri
+     * @param string    $payload
+     * @param string    $httpMethod
      *
      * @throws RuntimeException
      */
-    private function initRequest($uri, AbstractHeidelpayResource $heidelpayResource, $httpMethod)
+    private function initRequest(Heidelpay $heidelpay, $uri, $payload, $httpMethod)
     {
         $httpAdapter = $this->getAdapter();
-        $httpAdapter->init($uri, $heidelpayResource->jsonSerialize(), $httpMethod);
+        $httpAdapter->init($uri, $payload, $httpMethod);
         $httpAdapter->setUserAgent(Heidelpay::SDK_TYPE);
 
         // Set HTTP-headers
-        $heidelpay = $heidelpayResource->getHeidelpayObject();
-        $locale = $heidelpay->getLocale();
+        $locale      = $heidelpay->getLocale();
         $key         = $heidelpay->getKey();
         $httpHeaders = [
             'Authorization' => 'Basic ' . base64_encode($key . ':'),
@@ -166,21 +168,20 @@ class HttpService
     }
 
     /**
-     * @param AbstractHeidelpayResource $resource
-     * @param string                    $httpMethod
-     * @param string                    $url
-     * @param string|null               $response
-     *
-     * @throws RuntimeException
+     * @param Heidelpay   $heidelpayObj
+     * @param string      $payload
+     * @param int         $responseCode
+     * @param string      $httpMethod
+     * @param string      $url
+     * @param string|null $response
      */
-    public function debugLog(AbstractHeidelpayResource $resource, $httpMethod, string $url, $response)
+    public function debugLog(Heidelpay $heidelpayObj, $payload, $responseCode, $httpMethod, string $url, $response)
     {
-        $heidelpayObj = $resource->getHeidelpayObject();
         $heidelpayObj->debugLog($httpMethod . ': ' . $url);
         $writingOperations = [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT];
         if (in_array($httpMethod, $writingOperations, true)) {
-            $heidelpayObj->debugLog('Request: ' . $resource->jsonSerialize());
+            $heidelpayObj->debugLog('Request: ' . $payload);
         }
-        $heidelpayObj->debugLog('Response: ' . json_encode(json_decode($response)));
+        $heidelpayObj->debugLog('Response: (' . $responseCode . ') ' . json_encode(json_decode($response)));
     }
 }
