@@ -86,6 +86,9 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="header">
                             Register Webhooks
                         </div>
+                        <div class="description">
+                            Enable a log output in ExampleDebugHandler to see the events coming in.
+                        </div>
                     </div>
                     <div class="ui bottom attached button" onclick="location.href='Webhooks/';">
                         Try
