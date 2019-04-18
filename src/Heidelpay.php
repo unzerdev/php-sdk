@@ -84,7 +84,7 @@ class Heidelpay implements HeidelpayParentInterface
      * @param string $key    The private key your received from your heidelpay contact person.
      * @param string $locale The locale of the customer defining defining the translation.
      *
-     * @throws \RuntimeException A \RuntimeException will be thrown if the key is not of type private.
+     * @throws RuntimeException A \RuntimeException will be thrown if the key is not of type private.
      */
     public function __construct($key, $locale = null)
     {
@@ -820,16 +820,14 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Fetches a resource object based on the given event data.
      *
-     * @param $data
-     *
      * @return AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
      * @throws \RuntimeException
      */
-    public function fetchResourceByWebhookEvent($data): AbstractHeidelpayResource
+    public function fetchResourceFromEvent(): AbstractHeidelpayResource
     {
-        return $this->webhookService->fetchResourceByWebhookEvent($data);
+        return $this->webhookService->fetchResourceByWebhookEvent();
     }
 
     //</editor-fold>

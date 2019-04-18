@@ -191,19 +191,22 @@ class WebhookService
     /**
      * Fetches the resource corresponding to the given eventData.
      *
-     * @param $postData
-     *
      * @return AbstractHeidelpayResource|null
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchResourceByWebhookEvent($postData)
+    public function fetchResourceByWebhookEvent()
     {
         $resourceObject = null;
+        $postData = file_get_contents('php://input');
+        $eventData = json_decode($postData, false);
 
-        $eventData = json_decode($postData);
-        if (isset($eventData->retrieveUrl)) {
+        $eventPublicKey = $eventData->publicKey ?? null;
+        $retrieveUrl = $eventData->retrieveUrl ?? null;
+        $publicKey = $this->heidelpay->fetchKeypair()->getPublicKey();
+
+        if ($eventPublicKey === $publicKey && !empty($retrieveUrl)) {
             $this->heidelpay->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
             $resourceObject = $this->heidelpay
                 ->getResourceService()
