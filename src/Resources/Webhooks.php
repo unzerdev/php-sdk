@@ -142,6 +142,7 @@ class Webhooks extends AbstractHeidelpayResource
      * Handles the given event array
      *
      * @param array $responseArray
+     *
      * @throws RuntimeException
      */
     private function handleRegisteredWebhooks(array $responseArray = [])
