@@ -40,7 +40,7 @@ try {
     $resource = $heidelpay->fetchResourceFromEvent();
     $heidelpay->debugLog('Fetched resource from Event: ' . $resource->jsonSerialize());
 } catch (HeidelpayApiException $e) {
-    $heidelpay->debugLog('Event: ' . $e->getMessage());
+    $heidelpay->debugLog('Error: ' . $e->getMessage());
 } catch (RuntimeException $e) {
     $heidelpay->debugLog('Error: ' . $e->getMessage());
 }
