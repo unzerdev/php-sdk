@@ -80,7 +80,6 @@ function printInfo($title, $text)
         <i class="envelope outline icon"></i>
         <div class="content">
             Webhook registration
-<!--            <div class="sub header">The following Webhook events </div>-->
         </div>
     </h2>
 
