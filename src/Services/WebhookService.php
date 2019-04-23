@@ -203,12 +203,9 @@ class WebhookService
         $resourceObject = null;
         $postData = file_get_contents('php://input');
         $eventData = json_decode($postData, false);
-
-        $eventPublicKey = $eventData->publicKey ?? null;
         $retrieveUrl = $eventData->retrieveUrl ?? null;
-        $publicKey = $this->heidelpay->fetchKeypair()->getPublicKey();
 
-        if ($eventPublicKey === $publicKey && !empty($retrieveUrl)) {
+        if (!empty($retrieveUrl)) {
             $this->heidelpay->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
             $resourceObject = $this->heidelpay
                 ->getResourceService()
