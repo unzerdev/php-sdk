@@ -119,6 +119,8 @@ function printInfo($title, $text)
                 );
             }
 
+            printInfo('You are ready to trigger events', 'Now Perform payments <a href="..">>> HERE <<</a> to trigger events!');
+
         } catch (HeidelpayApiException $e) {
             printError($e->getMessage());
             $heidelpay->debugLog('Error: ' . $e->getMessage());
@@ -127,8 +129,6 @@ function printInfo($title, $text)
             $heidelpay->debugLog('Error: ' . $e->getMessage());
         }
     ?>
-
 </div>
 </body>
-
 </html>
