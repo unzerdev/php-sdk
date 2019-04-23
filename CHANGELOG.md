@@ -6,7 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.1.1.0][1.1.1.0]
 
 ### Added
-*   Added Webhook resource.
+*   Added Webhook(s) functionality: Resource, tests, example.
+*   Extended ResourceService with method to fetch a resource by its url.
+*   Added method to fetch resource by received event.
+*   Added log method to write to custom debuglog to heidelpay facade.
+*   Added IdService to fetch ids and types from id strings.
+
+### Changed
+*   Applied several micro optimizations.
+*   Added response code to rest call logs.
+*   Adapted integration tests to new api version.
 
 ## [1.1.0.0][1.1.0.0]
 
