@@ -49,7 +49,6 @@ class CancelAfterChargeTest extends BasePaymentTest
         $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
 
         $chargeArray = $charge->expose();
-        unset($chargeArray['card3ds']);
         $this->assertEquals($chargeArray, $fetchedCharge->expose());
 
         return $charge;
