@@ -88,7 +88,6 @@ class WebhookEvents
         self::CUSTOMER_CREATED,
         self::CUSTOMER_DELETED,
         self::CUSTOMER_UPDATED,
-        self::PAYMENT,
         self::PAYMENT_PENDING,
         self::PAYMENT_COMPLETED,
         self::PAYMENT_CANCELED,
