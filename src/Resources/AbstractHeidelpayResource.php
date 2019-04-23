@@ -24,12 +24,22 @@
  */
 namespace heidelpayPHP\Resources;
 
+use function count;
+use DateTime;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Services\ResourceNameService;
 use heidelpayPHP\Services\ResourceService;
+use function is_array;
+use function is_callable;
+use function is_object;
+use function is_string;
+use ReflectionException;
+use ReflectionProperty;
+use RuntimeException;
+use stdClass;
 
 abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 {
@@ -39,7 +49,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /** @var HeidelpayParentInterface */
     private $parentResource;
 
-    /** @var \DateTime */
+    /** @var DateTime */
     private $fetchedAt;
 
     //<editor-fold desc="Getters/Setters">
@@ -83,18 +93,18 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * @return HeidelpayParentInterface
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getParentResource(): HeidelpayParentInterface
     {
         if (!$this->parentResource instanceof HeidelpayParentInterface) {
-            throw new \RuntimeException('Parent resource reference is not set!');
+            throw new RuntimeException('Parent resource reference is not set!');
         }
         return $this->parentResource;
     }
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     public function getFetchedAt()
     {
@@ -102,11 +112,11 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * @param \DateTime $fetchedAt
+     * @param DateTime $fetchedAt
      *
      * @return self
      */
-    public function setFetchedAt(\DateTime $fetchedAt): self
+    public function setFetchedAt(DateTime $fetchedAt): self
     {
         $this->fetchedAt = $fetchedAt;
         return $this;
@@ -131,7 +141,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * {@inheritDoc}
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getUri($appendId = true): string
     {
@@ -149,20 +159,20 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * This method updates the properties of the resource.
      *
      * @param $object
-     * @param \stdClass $response
+     * @param stdClass $response
      */
-    private function updateValues($object, \stdClass $response)
+    private function updateValues($object, stdClass $response)
     {
         foreach ($response as $key => $value) {
             $newValue = $value;
-            if ($value !== false && (!\is_string($value) || $value === '')) {
+            if ($value !== false && (!is_string($value) || $value === '')) {
                 $newValue = $value ?: null;
             }
 
             // handle nested object
-            if (\is_object($value)) {
+            if (is_object($value)) {
                 $getter = 'get' . ucfirst($key);
-                if (\is_callable([$object, $getter])) {
+                if (is_callable([$object, $getter])) {
                     $this->updateValues($object->$getter(), $newValue);
                 } elseif ($key === 'processing') {
                     $this->updateValues($object, $newValue);
@@ -171,9 +181,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             }
 
             // handle nested array
-            if (\is_array($value)) {
+            if (is_array($value)) {
                 $firstItem = reset($value);
-                if (\is_object($firstItem)) {
+                if (is_object($firstItem)) {
                     // Handled by the owning object since we do not know the type of the items here.
                     continue;
                 }
@@ -192,10 +202,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     public function setItemProperty($item, $key, $value)
     {
         $setter = 'set' . ucfirst($key);
-        if (!\is_callable([$item, $setter])) {
+        if (!is_callable([$item, $setter])) {
             $setter = 'add' . ucfirst($key);
         }
-        if (\is_callable([$item, $setter])) {
+        if (is_callable([$item, $setter])) {
             $item->$setter($value);
         }
     }
@@ -207,7 +217,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * @return ResourceService
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function getResourceService(): ResourceService
     {
@@ -222,7 +232,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @return AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -235,7 +245,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param AbstractHeidelpayResource $resource
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function fetchResource(AbstractHeidelpayResource $resource)
     {
@@ -262,7 +272,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * Creates an array containing all properties to be exposed to the heidelpay api as resource parameters.
      *
-     * @return array|\stdClass
+     * @return array|stdClass
      */
     public function expose()
     {
@@ -270,7 +280,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         $properties = get_object_vars($this);
         foreach ($properties as $property => $value) {
             try {
-                $reflection = new \ReflectionProperty(static::class, $property);
+                $reflection = new ReflectionProperty(static::class, $property);
                 if (($property === 'id' && empty($value)) || !$reflection->isProtected()) {
                     unset($properties[$property]);
                     continue;
@@ -286,7 +296,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                     $newValue = $value->expose();
                 }
                 $properties[$property] = $newValue;
-            } catch (\ReflectionException $e) {
+            } catch (ReflectionException $e) {
                 unset($properties[$property]);
             }
         }
@@ -302,14 +312,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
         }
 
-        if (\count($resources) > 0) {
+        if (count($resources) > 0) {
             ksort($resources);
             $properties['resources'] = $resources;
         }
         //---------------------
 
         ksort($properties);
-        return \count($properties) > 0 ? $properties : new \stdClass();
+        return count($properties) > 0 ? $properties : new stdClass();
     }
 
     //</editor-fold>
@@ -342,10 +352,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * This method is called to handle the response from a crud command.
      * Override it to handle the data correctly.
      *
-     * @param \stdClass $response
-     * @param string    $method
+     * @param stdClass $response
+     * @param string   $method
      */
-    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         $this->updateValues($this, $response);
     }

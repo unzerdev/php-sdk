@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test;
 
+use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
@@ -32,6 +33,7 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class BasePaymentTest extends TestCase
 {
@@ -54,7 +56,7 @@ class BasePaymentTest extends TestCase
     /**
      * {@inheritDoc}
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function setUp()
     {
@@ -109,7 +111,7 @@ class BasePaymentTest extends TestCase
      *
      * @return Card
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function createCardObject(): Card
     {
@@ -123,8 +125,8 @@ class BasePaymentTest extends TestCase
      *
      * @return Authorization
      *
-     * @throws \RuntimeException
-     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
      */
     public function createAuthorization(): Authorization
     {
@@ -139,8 +141,8 @@ class BasePaymentTest extends TestCase
      *
      * @return Charge
      *
-     * @throws \RuntimeException
-     * @throws \heidelpayPHP\Exceptions\HeidelpayApiException
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
      */
     public function createCharge(): Charge
     {
