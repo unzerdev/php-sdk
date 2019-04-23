@@ -28,6 +28,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class CancelAfterChargeTest extends BasePaymentTest
 {
@@ -39,7 +40,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeShouldBeFetchable(): Charge
     {
@@ -62,7 +63,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      *
      * @param Charge $charge
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function chargeShouldBeFullyRefundable(Charge $charge)
@@ -78,7 +79,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function chargeShouldBeFullyRefundableWithId()
@@ -98,7 +99,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeShouldBePartlyRefundableWithId()
     {
@@ -126,7 +127,7 @@ class CancelAfterChargeTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeShouldBePartlyRefundable()
     {

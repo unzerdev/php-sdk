@@ -24,8 +24,10 @@
  */
 namespace heidelpayPHP\Resources;
 
+use function count;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
+use stdClass;
 
 class Basket extends AbstractHeidelpayResource
 {
@@ -153,7 +155,7 @@ class Basket extends AbstractHeidelpayResource
      */
     public function getItemCount(): int
     {
-        return \count($this->basketItems);
+        return count($this->basketItems);
     }
 
     /**
@@ -284,7 +286,7 @@ class Basket extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         parent::handleResponse($response, $method);
 

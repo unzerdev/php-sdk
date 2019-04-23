@@ -24,7 +24,9 @@
  */
 namespace heidelpayPHP\Exceptions;
 
-class HeidelpayApiException extends \Exception
+use Exception;
+
+class HeidelpayApiException extends Exception
 {
     const MESSAGE = 'The payment api returned an error!';
     const CLIENT_MESSAGE = 'The payment api returned an error!';

@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\Validators;
 
+use function count;
+
 class PublicKeyValidator
 {
     /**
@@ -37,6 +39,6 @@ class PublicKeyValidator
     {
         $match = [];
         preg_match('/^[sp]{1}-(priv|pub)-[a-zA-Z0-9]+/', $key, $match);
-        return !(\count($match) < 2 || $match[1] !== 'pub');
+        return !(count($match) < 2 || $match[1] !== 'pub');
     }
 }

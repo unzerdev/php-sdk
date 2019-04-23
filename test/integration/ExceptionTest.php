@@ -29,6 +29,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class ExceptionTest extends BasePaymentTest
 {
@@ -39,7 +40,7 @@ class ExceptionTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function apiExceptionShouldHoldClientMessage()
     {

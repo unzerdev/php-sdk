@@ -40,7 +40,8 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\MockObject\RuntimeException;
+use ReflectionException;
+use RuntimeException;
 
 class HeidelpayTest extends BaseUnitTest
 {
@@ -49,7 +50,7 @@ class HeidelpayTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function constructorShouldInitPropertiesProperly()
     {
@@ -72,7 +73,7 @@ class HeidelpayTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function gettersAndSettersShouldWorkProperly()
     {
@@ -83,7 +84,7 @@ class HeidelpayTest extends BaseUnitTest
         try {
             $heidelpay->setKey('söiodufhreoöhf');
             $this->assertTrue(false, 'This exception should have been thrown');
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->assertEquals('Illegal key: Use a valid private key with this SDK!', $e->getMessage());
         }
 
@@ -126,8 +127,8 @@ class HeidelpayTest extends BaseUnitTest
      * @param string $serviceMethod
      * @param array  $serviceParams
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function heidelpayShouldForwardResourceActionCallsToTheResourceService(
         $heidelpayMethod,
@@ -158,8 +159,8 @@ class HeidelpayTest extends BaseUnitTest
      * @param string $serviceMethod
      * @param array  $serviceParams
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function heidelpayShouldForwardPaymentActionCallsToThePaymentService(
         $heidelpayMethod,
@@ -188,7 +189,7 @@ class HeidelpayTest extends BaseUnitTest
      *
      * @throws Exception
      * @throws RuntimeException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function heidelpayShouldForwardResourceActionCallsToTheResourceServiceDP(): array
     {

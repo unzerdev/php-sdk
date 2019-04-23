@@ -41,7 +41,9 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\MockObject\RuntimeException;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class PaymentTest extends BaseUnitTest
 {
@@ -50,7 +52,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function gettersAndSettersShouldWorkProperly()
@@ -74,8 +76,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function getAuthorizationShouldFetchAuthorizeIfNotLazyAndAuthIsNotNull()
@@ -100,8 +102,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function getAuthorizationShouldNotFetchAuthorizeIfNotLazyAndAuthIsNull()
@@ -125,7 +127,7 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargesShouldBeHandledProperly()
     {
@@ -155,8 +157,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function getChargeByIdShouldFetchChargeIfItExistsAndLazyLoadingIsOff()
@@ -187,8 +189,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function getChargeShouldFetchChargeIfItExistsAndLazyLoadingIsOff()
@@ -220,7 +222,7 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getChargeMethodsShouldReturnNullIfTheChargeIdUnknown()
     {
@@ -245,7 +247,7 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setCustomerShouldDoNothingIfTheCustomerIsEmpty()
     {
@@ -268,8 +270,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function setCustomerShouldFetchCustomerIfItIsPassedAsIdString()
@@ -292,8 +294,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function setCustomerShouldCreateCustomerIfItIsPassedAsObjectWithoutId()
@@ -318,7 +320,7 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setPaymentTypeShouldDoNothingIfThePaymentTypeIsEmpty()
     {
@@ -341,8 +343,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function setPaymentTypeShouldFetchResourceIfItIsPassedAsIdString()
@@ -365,8 +367,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function setPaymentTypeShouldCreateResourceIfItIsPassedAsObjectWithoutId()
@@ -391,8 +393,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function getCancellationsShouldCollectAllCancellationsOfCorrespondingTransactions()
     {
@@ -445,8 +447,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function getCancellationShouldCallGetCancellationsAndReturnNullIfNoCancellationExists()
     {
@@ -463,8 +465,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function getCancellationShouldReturnCancellationIfItExists()
     {
@@ -486,8 +488,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function getCancellationShouldReturnCancellationIfItExistsAndFetchItIfNotLazy()
     {
@@ -516,7 +518,7 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function shipmentsShouldBeHandledProperly()
     {
@@ -544,8 +546,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function getShipmentByIdShouldReturnShipmentIfItExistsAndFetchItIfNotLazy()
     {
@@ -575,7 +577,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @throws Exception
      * @throws RuntimeException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getAndSetCurrencyShouldPropagateToTheAmountObject()
     {
@@ -602,15 +604,15 @@ class PaymentTest extends BaseUnitTest
      * @param integer $state
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function handleResponseShouldUpdateStateId($state)
     {
         $payment = new Payment();
         $this->assertEquals(PaymentState::STATE_PENDING, $payment->getState());
 
-        $response = new \stdClass();
-        $response->state = new \stdClass();
+        $response = new stdClass();
+        $response->state = new stdClass();
         $response->state->id = $state;
         $payment->handleResponse($response);
         $this->assertEquals($state, $payment->getState());
@@ -622,15 +624,15 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function handleResponseShouldUpdatePaymentId()
     {
         $payment = (new Payment())->setId('MyPaymentId');
         $this->assertEquals('MyPaymentId', $payment->getId());
 
-        $response = new \stdClass();
-        $response->resources = new \stdClass();
+        $response = new stdClass();
+        $response->resources = new stdClass();
         $response->resources->paymentId = 'MyNewPaymentId';
         $payment->handleResponse($response);
         $this->assertEquals('MyNewPaymentId', $payment->getId());
@@ -642,8 +644,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function handleResponseShouldFetchCustomerIfItIsNotSet()
     {
@@ -659,8 +661,8 @@ class PaymentTest extends BaseUnitTest
 
         $this->assertNull($payment->getCustomer());
 
-        $response = new \stdClass();
-        $response->resources = new \stdClass();
+        $response = new stdClass();
+        $response->resources = new stdClass();
         $response->resources->customerId = 'MyNewCustomerId';
         $payment->handleResponse($response);
     }
@@ -671,8 +673,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function handleResponseShouldFetchAndUpdateCustomerIfItIsAlreadySet()
     {
@@ -688,8 +690,8 @@ class PaymentTest extends BaseUnitTest
         $payment->setParentResource($heidelpayObj);
         $payment->setCustomer($customer);
 
-        $response = new \stdClass();
-        $response->resources = new \stdClass();
+        $response = new stdClass();
+        $response->resources = new stdClass();
         $response->resources->customerId = 'customerId';
         $payment->handleResponse($response);
     }
@@ -700,8 +702,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function handleResponseShouldFetchAndUpdatePaymentTypeIfTheIdIsSet()
     {
@@ -715,8 +717,8 @@ class PaymentTest extends BaseUnitTest
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment->setParentResource($heidelpayObj);
 
-        $response = new \stdClass();
-        $response->resources = new \stdClass();
+        $response = new stdClass();
+        $response->resources = new stdClass();
         $response->resources->typeId = 'PaymentTypeId';
         $payment->handleResponse($response);
     }
@@ -727,8 +729,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function handleResponseShouldFetchAndUpdateMetadataIfTheIdIsSet()
     {
@@ -742,8 +744,8 @@ class PaymentTest extends BaseUnitTest
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment->setParentResource($heidelpayObj);
 
-        $response = new \stdClass();
-        $response->resources = new \stdClass();
+        $response = new stdClass();
+        $response->resources = new stdClass();
         $response->resources->metadataId = 'MetadataId';
         $payment->handleResponse($response);
     }
@@ -753,7 +755,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldUpdateChargeTransactions()
@@ -764,7 +766,7 @@ class PaymentTest extends BaseUnitTest
         $this->assertIsEmptyArray($payment->getCancellations());
         $this->assertNull($payment->getAuthorization());
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [];
         $payment->handleResponse($response);
 
@@ -779,7 +781,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldUpdateAuthorizationFromResponse()
@@ -792,12 +794,12 @@ class PaymentTest extends BaseUnitTest
 
         $payment->setAuthorization($authorization);
 
-        $authorizationData = new \stdClass();
+        $authorizationData = new stdClass();
         $authorizationData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1';
         $authorizationData->amount = '10.321';
         $authorizationData->type = 'authorize';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$authorizationData];
         $payment->handleResponse($response);
 
@@ -811,7 +813,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldAddAuthorizationFromResponse()
@@ -820,12 +822,12 @@ class PaymentTest extends BaseUnitTest
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
         $this->assertNull($payment->getAuthorization());
 
-        $authorizationData = new \stdClass();
+        $authorizationData = new stdClass();
         $authorizationData->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1';
         $authorizationData->amount = '10.123';
         $authorizationData->type = 'authorize';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$authorizationData];
         $payment->handleResponse($response);
 
@@ -842,7 +844,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldUpdateChargeFromResponseIfItExists()
@@ -856,12 +858,12 @@ class PaymentTest extends BaseUnitTest
 
         $payment->addCharge($charge1)->addCharge($charge2);
 
-        $chargeData = new \stdClass();
+        $chargeData = new stdClass();
         $chargeData->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-2';
         $chargeData->amount = '11.111';
         $chargeData->type = 'charge';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$chargeData];
         $payment->handleResponse($response);
 
@@ -876,7 +878,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldAddChargeFromResponseIfItDoesNotExists()
@@ -889,12 +891,12 @@ class PaymentTest extends BaseUnitTest
         $this->assertCount(1, $payment->getCharges());
         $this->assertNull($payment->getCharge('s-chg-2'));
 
-        $chargeData = new \stdClass();
+        $chargeData = new stdClass();
         $chargeData->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-2';
         $chargeData->amount = '11.111';
         $chargeData->type = 'charge';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$chargeData];
         $payment->handleResponse($response);
 
@@ -909,7 +911,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldUpdateReversalFromResponseIfItExists()
@@ -923,12 +925,12 @@ class PaymentTest extends BaseUnitTest
         $this->assertEquals(2.98, $reversal2->getAmount());
         $authorize->addCancellation($reversal1)->addCancellation($reversal2);
 
-        $cancellation = new \stdClass();
+        $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
         $cancellation->amount = '11.111';
         $cancellation->type = 'cancel-authorize';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$cancellation];
         $payment->handleResponse($response);
 
@@ -944,7 +946,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldAddReversalFromResponseIfItDoesNotExists()
@@ -959,12 +961,12 @@ class PaymentTest extends BaseUnitTest
         $this->assertCount(1, $authorize->getCancellations());
 
 
-        $cancellation = new \stdClass();
+        $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
         $cancellation->amount = '11.111';
         $cancellation->type = 'cancel-authorize';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$cancellation];
         $payment->handleResponse($response);
 
@@ -980,7 +982,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldThrowExceptionIfAnAuthorizeToAReversalDoesNotExist()
@@ -988,15 +990,15 @@ class PaymentTest extends BaseUnitTest
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
 
-        $cancellation = new \stdClass();
+        $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
         $cancellation->amount = '11.111';
         $cancellation->type = 'cancel-authorize';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$cancellation];
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The Authorization object can not be found.');
         $payment->handleResponse($response);
     }
@@ -1006,7 +1008,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldUpdateRefundsFromResponseIfItExists()
@@ -1020,12 +1022,12 @@ class PaymentTest extends BaseUnitTest
         $this->assertEquals(2.98, $refund2->getAmount());
         $charge->addCancellation($refund1)->addCancellation($refund2);
 
-        $cancellation = new \stdClass();
+        $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-1/cancel/s-cnl-2';
         $cancellation->amount = '11.111';
         $cancellation->type = 'cancel-charge';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$cancellation];
         $payment->handleResponse($response);
 
@@ -1041,7 +1043,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldAddRefundFromResponseIfItDoesNotExists()
@@ -1056,12 +1058,12 @@ class PaymentTest extends BaseUnitTest
         $this->assertCount(1, $charge->getCancellations());
 
 
-        $cancellation = new \stdClass();
+        $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-1/cancel/s-cnl-2';
         $cancellation->amount = '11.111';
         $cancellation->type = 'cancel-charge';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$cancellation];
         $payment->handleResponse($response);
 
@@ -1077,7 +1079,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldThrowExceptionIfAChargeToARefundDoesNotExist()
@@ -1085,15 +1087,15 @@ class PaymentTest extends BaseUnitTest
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
 
-        $cancellation = new \stdClass();
+        $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-1/cancel/s-cnl-2';
         $cancellation->amount = '11.111';
         $cancellation->type = 'cancel-charge';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$cancellation];
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The Charge object can not be found.');
         $payment->handleResponse($response);
     }
@@ -1103,7 +1105,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldUpdateShipmentFromResponseIfItExists()
@@ -1114,12 +1116,12 @@ class PaymentTest extends BaseUnitTest
         $this->assertEquals('1.23', $shipment->getAmount());
         $payment->addShipment($shipment);
 
-        $cancellation = new \stdClass();
+        $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/shipment/s-shp-1';
         $cancellation->amount = '11.111';
         $cancellation->type = 'shipment';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$cancellation];
         $payment->handleResponse($response);
 
@@ -1134,7 +1136,7 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldAddShipmentFromResponseIfItDoesNotExists()
@@ -1144,12 +1146,12 @@ class PaymentTest extends BaseUnitTest
         $this->assertNull($payment->getShipment('s-shp-1'));
         $this->assertCount(0, $payment->getShipments());
 
-        $cancellation = new \stdClass();
+        $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/shipment/s-shp-1';
         $cancellation->amount = '11.111';
         $cancellation->type = 'shipment';
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->transactions = [$cancellation];
         $payment->handleResponse($response);
 
@@ -1170,8 +1172,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelShouldCallCancelAllChargesAndCancelAuthorizationAndReturnFirstChargeCancellationObject()
     {
@@ -1196,8 +1198,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelShouldReturnAuthorizationCancellationObjectIfNoChargeCancellationsExist()
     {
@@ -1221,8 +1223,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelShouldThrowFirstChargeAlreadyCancelledExceptionIfNoCancellationTookPlace()
     {
@@ -1248,8 +1250,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelShouldThrowAuthAlreadyCancelledExceptionIfNoCancellationTookPlaceAndNoChargeExceptionExists()
     {
@@ -1273,8 +1275,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function cancelShouldThrowExceptionIfNoTransactionExistsToBeCancelled()
@@ -1284,7 +1286,7 @@ class PaymentTest extends BaseUnitTest
         $paymentMock->expects($this->once())->method('cancelAllCharges')->willReturn([[], []]);
         $paymentMock->expects($this->once())->method('cancelAuthorization')->willReturn([[], []]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('This Payment could not be cancelled.');
 
         /** @var Payment $paymentMock */
@@ -1298,8 +1300,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelAllChargesShouldCallCancelOnAllChargesAndReturnCancelsAndExceptions()
     {
@@ -1349,8 +1351,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelAllChargesShouldThrowChargeCancelExceptionsOtherThanAlreadyCharged()
     {
@@ -1383,8 +1385,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnCancels()
     {
@@ -1411,8 +1413,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnExceptions()
     {
@@ -1441,8 +1443,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelAllChargesShouldThrowAuthorizationCancelExceptionsOtherThanAlreadyCharged()
     {
@@ -1476,8 +1478,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function chargeMethodShouldPropagateToHeidelpayChargePaymentMethod()
     {
@@ -1505,8 +1507,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function shipMethodShouldPropagateToHeidelpayChargePaymentMethod()
     {
@@ -1526,8 +1528,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function setMetaDataShouldSetParentResourceAndCreateMetaDataObject()
@@ -1545,8 +1547,8 @@ class PaymentTest extends BaseUnitTest
         try {
             $metadata->getParentResource();
             $this->assertTrue(false, 'This exception should have been thrown!');
-        } catch (\RuntimeException $e) {
-            $this->assertInstanceOf(\RuntimeException::class, $e);
+        } catch (RuntimeException $e) {
+            $this->assertInstanceOf(RuntimeException::class, $e);
             $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
         }
 
@@ -1560,8 +1562,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function setBasketShouldCallCreateIfTheGivenBasketObjectDoesNotExistYet()
     {
@@ -1574,10 +1576,11 @@ class PaymentTest extends BaseUnitTest
 
         $basket = new Basket();
         $resourceSrvMock->expects($this->once())->method('create')->with(
-            $this->callback(function ($object) use ($basket, $heidelpay) {
-                /** @var Basket $object */
-                return $object === $basket && $object->getParentResource() === $heidelpay;
-            })
+            $this->callback(
+                static function ($object) use ($basket, $heidelpay) {
+                    /** @var Basket $object */
+                    return $object === $basket && $object->getParentResource() === $heidelpay;
+                })
         );
 
         $payment = new Payment($heidelpay);
@@ -1590,8 +1593,8 @@ class PaymentTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function updateResponseResourcesShouldFetchBasketIdIfItIsSetInResponse()
     {
@@ -1602,11 +1605,11 @@ class PaymentTest extends BaseUnitTest
         $heidelpayMock->expects($this->once())->method('fetchBasket')->with('myResourcesBasketId')->willReturn($basket);
 
         $payment  = new Payment($heidelpayMock);
-        $response = new \stdClass();
+        $response = new stdClass();
         $payment->handleResponse($response);
         $this->assertNull($payment->getBasket());
 
-        $response->resources = new \stdClass();
+        $response->resources = new stdClass();
         $response->resources->basketId = 'myResourcesBasketId';
         $payment->handleResponse($response);
     }

@@ -28,6 +28,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class ChargeTest extends BasePaymentTest
 {
@@ -36,7 +37,7 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function chargeShouldWorkWithTypeId()
@@ -57,7 +58,7 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function chargeShouldWorkWithTypeObject()
@@ -77,7 +78,7 @@ class ChargeTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeStatusIsSetCorrectly()
     {

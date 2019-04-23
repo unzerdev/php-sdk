@@ -2,7 +2,7 @@
 /**
  * This class represents a group of Webhooks.
  * It is a pseudo resource used to manage bulk operations on webhooks.
- * It will never receive an id friom the API.
+ * It will never receive an id from the API.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *

@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\unit\Constants;
 
 use heidelpayPHP\Constants\PaymentState;
 use heidelpayPHP\test\BaseUnitTest;
+use RuntimeException;
 
 class PaymentStateTest extends BaseUnitTest
 {
@@ -38,7 +39,7 @@ class PaymentStateTest extends BaseUnitTest
      * @param integer $code
      * @param string  $name
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function shouldMapCodeToName($code, $name)
     {
@@ -54,7 +55,7 @@ class PaymentStateTest extends BaseUnitTest
      * @param integer $code
      * @param string  $name
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function shouldMapNameToCode($name, $code)
     {
@@ -66,11 +67,11 @@ class PaymentStateTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function mapCodeToNameShouldThrowAnExceptionIfTheCodeIsUnknown()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         PaymentState::mapStateCodeToName(6);
     }
@@ -80,11 +81,11 @@ class PaymentStateTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function mapNameToCodeShouldThrowAnExceptionIfTheNameIsUnknown()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         PaymentState::mapStateNameToCode('unknown');
     }

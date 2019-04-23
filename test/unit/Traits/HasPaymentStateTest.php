@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\unit\Traits;
 
 use heidelpayPHP\Constants\PaymentState;
 use heidelpayPHP\test\BaseUnitTest;
+use RuntimeException;
 
 class HasPaymentStateTest extends BaseUnitTest
 {
@@ -35,7 +36,7 @@ class HasPaymentStateTest extends BaseUnitTest
      * @test
      * @dataProvider gettersAndSettersShouldWorkProperlyDP
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @param mixed $state
      * @param mixed $stateName

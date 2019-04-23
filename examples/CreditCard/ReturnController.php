@@ -80,7 +80,7 @@ try {
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
-} catch (\RuntimeException $e) {
+} catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);

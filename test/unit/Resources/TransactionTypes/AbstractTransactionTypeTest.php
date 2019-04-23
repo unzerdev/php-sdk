@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
+use DateTime;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
@@ -32,7 +33,9 @@ use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\MockObject\RuntimeException;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class AbstractTransactionTypeTest extends BaseUnitTest
 {
@@ -59,7 +62,7 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $this->assertNull($transactionType->getRedirectUrl());
 
         $payment->setId('MyPaymentId');
-        $date = (new \DateTime('now'))->format('Y-m-d h:i:s');
+        $date = (new DateTime('now'))->format('Y-m-d h:i:s');
         $transactionType->setPayment($payment);
         $transactionType->setDate($date);
         $transactionType->setIsError(true)->setIsPending(true)->setIsSuccess(true);
@@ -79,7 +82,7 @@ class AbstractTransactionTypeTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws RuntimeException
      */
     public function getRedirectUrlShouldCallPaymentGetRedirectUrl()
@@ -99,7 +102,7 @@ class AbstractTransactionTypeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function handleResponseShouldUpdateValuesOfAbstractTransaction()
@@ -111,11 +114,11 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $this->assertNull($transactionType->getRedirectUrl());
         $this->assertEquals('myPaymentId', $transactionType->getPaymentId());
 
-        $testResponse = new \stdClass();
+        $testResponse = new stdClass();
         $testResponse->uniqueId = 'myUniqueId';
         $testResponse->shortId = 'myShortId';
         $testResponse->redirectUrl = 'myRedirectUrl';
-        $testResources = new \stdClass();
+        $testResources = new stdClass();
         $testResources->paymentId = 'myNewPaymentId';
         $testResponse->resources = $testResources;
         $transactionType->handleResponse($testResponse);
@@ -136,8 +139,8 @@ class AbstractTransactionTypeTest extends BaseUnitTest
      * @param integer $timesCalled
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function updatePaymentShouldOnlyBeCalledOnNotRequests($method, $timesCalled)
     {
@@ -146,16 +149,16 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $transactionTypeMock->expects($this->exactly($timesCalled))->method('fetchPayment');
 
         /** @var AbstractTransactionType $transactionTypeMock */
-        $transactionTypeMock->handleResponse(new \stdClass(), $method);
+        $transactionTypeMock->handleResponse(new stdClass(), $method);
     }
 
     /**
-     * Verify payment object is fetched on fetchPayment call using the Heidelpays resource service object.
+     * Verify payment object is fetched on fetchPayment call using the heidelpays resource service object.
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function fetchPaymentShouldFetchPaymentObject()
