@@ -26,6 +26,9 @@ namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Heidelpay;
+use function in_array;
+use function is_callable;
+use stdClass;
 
 class Metadata extends AbstractHeidelpayResource
 {
@@ -124,7 +127,7 @@ class Metadata extends AbstractHeidelpayResource
      */
     public function addMetadata($name, $value): Metadata
     {
-        if (!\in_array(strtolower($name), ['sdkversion', 'sdktype', 'shoptype', 'shopversion'])) {
+        if (!in_array(strtolower($name), ['sdkversion', 'sdktype', 'shoptype', 'shopversion'])) {
             $this->metadata[$name] = $value;
         }
 
@@ -160,13 +163,13 @@ class Metadata extends AbstractHeidelpayResource
      * Add custom properties (i. e. properties without setter) to the metadata array.
      * {@inheritDoc}
      */
-    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         parent::handleResponse($response, $method);
 
         foreach ($response as $key => $value) {
             $setter = 'set' . ucfirst($key);
-            if (!\is_callable([$this, $setter])) {
+            if (!is_callable([$this, $setter])) {
                 $this->addMetadata($key, $value);
             }
         }
