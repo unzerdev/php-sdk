@@ -250,7 +250,7 @@ class WebhookTest extends BasePaymentTest
     }
 
     /**
-     * Verify setting one events with bulk setting.
+     * Verify setting one event with bulk setting.
      *
      * @test
      * @depends allWebhooksShouldBeRemovableAtOnce
@@ -258,7 +258,7 @@ class WebhookTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function bulkSettingOnlyOneWebhookBePossible()
+    public function bulkSettingOnlyOneWebhookShouldBePossible()
     {
         $url                = $this->generateUniqueUrl();
         $registeredWebhooks = $this->heidelpay->registerMultipleWebhooks($url, [WebhookEvents::AUTHORIZE]);
