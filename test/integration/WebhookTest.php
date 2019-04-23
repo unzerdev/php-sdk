@@ -47,8 +47,7 @@ class WebhookTest extends BasePaymentTest
     public function webhookResourceCanBeRegisteredAndFetched(): Webhook
     {
         $url     = $this->generateUniqueUrl();
-        $webhook = new Webhook($url, WebhookEvents::ALL);
-        $this->heidelpay->createWebhook($webhook);
+        $webhook = $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
         $this->assertNotNull($webhook->getId());
 
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
@@ -133,7 +132,7 @@ class WebhookTest extends BasePaymentTest
     }
 
     /**
-     * Verify webhook create will throw error when the event is already registered.
+     * Verify webhook create will throw error when the event is already registered for the given URL.
      *
      * @test
      *
@@ -144,12 +143,11 @@ class WebhookTest extends BasePaymentTest
     public function webhookCreateShouldThrowErrorWhenEventIsAlreadyRegistered()
     {
         $url     = $this->generateUniqueUrl();
-        $webhook = new Webhook($url, WebhookEvents::ALL);
-        $this->heidelpay->createWebhook($webhook);
+        $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED);
-        $this->heidelpay->createWebhook($webhook);
+        $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
     }
 
     //</editor-fold>
@@ -171,8 +169,7 @@ class WebhookTest extends BasePaymentTest
     {
         // --- Prepare --> remove all existing webhooks
         // start workaround - avoid error deleting non existing webhooks
-        $webhook = new Webhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
-        $this->heidelpay->createWebhook($webhook);
+        $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
         // end workaround - avoid error deleting non existing webhooks
 
         $this->heidelpay->deleteAllWebhooks();
@@ -180,19 +177,15 @@ class WebhookTest extends BasePaymentTest
         $this->assertCount(0, $webhooks);
 
         // --- Create some test webhooks ---
-        $webhook1 = new Webhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
-        $this->heidelpay->createWebhook($webhook1);
-        $webhook2 = new Webhook($this->generateUniqueUrl(), WebhookEvents::CHARGE);
-        $this->heidelpay->createWebhook($webhook2);
-        $webhook3 = new Webhook($this->generateUniqueUrl(), WebhookEvents::AUTHORIZE);
-        $this->heidelpay->createWebhook($webhook3);
+        $webhook1 = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
+        $webhook2 = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::CHARGE);
+        $webhook3 = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::AUTHORIZE);
 
         // --- Verify webhooks have been registered ---
         $fetchedWebhooks = $this->heidelpay->fetchAllWebhooks();
         $this->assertCount(3, $fetchedWebhooks);
-        $webhooksAsArrays = [];
 
-        // todo: refactor
+        $webhooksAsArrays = [];
         foreach ($fetchedWebhooks as $fetchedWebhook) {
             /** @var Webhook $fetchedWebhook */
             $webhooksAsArrays[] = $fetchedWebhook->expose();

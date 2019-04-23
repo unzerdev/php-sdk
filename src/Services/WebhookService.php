@@ -56,15 +56,17 @@ class WebhookService
     /**
      * Creates Webhook resource
      *
-     * @param Webhook $webhook
+     * @param string $url   The url the registered webhook event should be send to.
+     * @param string $event The event to be registered.
      *
      * @return Webhook
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function createWebhook(Webhook $webhook): Webhook
+    public function createWebhook(string $url, string $event): Webhook
     {
+        $webhook = new Webhook($url, $event);
         $webhook->setParentResource($this->heidelpay);
         $this->resourceService->create($webhook);
         return $webhook;
@@ -167,8 +169,8 @@ class WebhookService
     /**
      * Registers multiple Webhook events at once.
      *
-     * @param string $url
-     * @param array  $events
+     * @param string $url    The url the registered webhook events should be send to.
+     * @param array  $events The events to be registered.
      *
      * @return array
      *

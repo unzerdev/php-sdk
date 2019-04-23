@@ -720,16 +720,17 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Creates Webhook resource.
      *
-     * @param Webhook $webhook
+     * @param string $url   The url the registered webhook event should be send to.
+     * @param string $event The event to be registered.
      *
      * @return Webhook
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function createWebhook(Webhook $webhook): Webhook
+    public function createWebhook(string $url, string $event): Webhook
     {
-        return $this->webhookService->createWebhook($webhook);
+        return $this->webhookService->createWebhook($url, $event);
     }
 
     /**
@@ -805,8 +806,8 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Registers multiple Webhook events at once.
      *
-     * @param string $url
-     * @param array  $events
+     * @param string $url    The url the registered webhook events should be send to.
+     * @param array  $events The events to be registered.
      *
      * @return array
      *
