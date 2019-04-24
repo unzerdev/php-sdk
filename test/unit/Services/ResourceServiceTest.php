@@ -36,6 +36,7 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
@@ -1260,6 +1261,7 @@ class ResourceServiceTest extends BaseUnitTest
             'Sofort sandbox' => [Sofort::class, 's-sft-12345678'],
             'PIS sandbox' => [PIS::class, 's-pis-12345678'],
             'EPS sandbox' => [EPS::class, 's-eps-12345678'],
+            'Alipay sandbox' => [Alipay::class, 's-ali-12345678'],
             'Card production' => [Card::class, 'p-crd-12345678'],
             'Giropay production' => [Giropay::class, 'p-gro-12345678'],
             'Ideal production' => [Ideal::class, 'p-idl-12345678'],
@@ -1271,7 +1273,8 @@ class ResourceServiceTest extends BaseUnitTest
             'SepaDirectDebit production' => [SepaDirectDebit::class, 'p-sdd-12345678'],
             'SepaDirectDebitGuaranteed production' => [SepaDirectDebitGuaranteed::class, 'p-ddg-12345678'],
             'Sofort production' => [Sofort::class, 'p-sft-12345678'],
-            'EPS production' => [EPS::class, 'p-eps-12345678']
+            'EPS production' => [EPS::class, 'p-eps-12345678'],
+            'Alipay production' => [Alipay::class, 'p-ali-12345678']
         ];
     }
 
@@ -1364,51 +1367,55 @@ class ResourceServiceTest extends BaseUnitTest
             ],
             'GIROPAY'                      => [
                 's-gro-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-gro-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/giropay/s-gro-xen2ybcovn56/'
             ],
             'IDEAL'                        => [
                 's-idl-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-idl-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/ideal/s-idl-xen2ybcovn56/'
             ],
             'INVOICE'                      => [
                 's-ivc-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-ivc-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/invoice/s-ivc-xen2ybcovn56/'
             ],
             'INVOICE_GUARANTEED'           => [
                 's-ivg-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-ivg-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/invoice-guaranteed/s-ivg-xen2ybcovn56/'
             ],
             'PAYPAL'                       => [
                 's-ppl-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-ppl-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/paypal/s-ppl-xen2ybcovn56/'
             ],
             'PREPAYMENT'                   => [
                 's-ppy-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-ppy-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/prepayment/s-ppy-xen2ybcovn56/'
             ],
             'PRZELEWY24'                   => [
                 's-p24-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-p24-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/przelewy24/s-p24-xen2ybcovn56/'
             ],
             'SEPA_DIRECT_DEBIT_GUARANTEED' => [
                 's-ddg-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-ddg-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'
             ],
             'SEPA_DIRECT_DEBIT'            => [
                 's-sdd-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-sdd-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/direct-debit/s-sdd-xen2ybcovn56/'
             ],
             'SOFORT'                       => [
                 's-sft-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-sft-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/sofort/s-sft-xen2ybcovn56/'
             ],
             'PIS'                          => [
                 's-pis-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-pis-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/pis/s-pis-xen2ybcovn56/'
             ],
             'EPS'                          => [
                 's-eps-xen2ybcovn56',
-                'https://api.heidelpay.com/v1/types/card/s-eps-xen2ybcovn56/'
+                'https://api.heidelpay.com/v1/types/eps/s-eps-xen2ybcovn56/'
+            ],
+            'Alipay'                          => [
+                's-ali-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/alipay/s-ali-xen2ybcovn56/'
             ]
         ];
     }
