@@ -27,6 +27,7 @@ namespace heidelpayPHP\Resources\PaymentTypes;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
 use heidelpayPHP\Validators\ExpiryDateValidator;
+use RuntimeException;
 
 class Card extends BasePaymentType
 {
@@ -39,7 +40,7 @@ class Card extends BasePaymentType
      * @param string $number
      * @param string $expiryDate
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function __construct($number, $expiryDate)
     {
@@ -99,7 +100,7 @@ class Card extends BasePaymentType
      *
      * @return Card
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setExpiryDate($expiryDate): Card
     {
@@ -109,7 +110,7 @@ class Card extends BasePaymentType
         }
 
         if (!ExpiryDateValidator::validate($expiryDate)) {
-            throw new \RuntimeException('Invalid expiry date!');
+            throw new RuntimeException('Invalid expiry date!');
         }
         $expiryDateParts = explode('/', $expiryDate);
         $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));

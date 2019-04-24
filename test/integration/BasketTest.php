@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class BasketTest extends BasePaymentTest
 {
@@ -38,7 +39,7 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function minBasketShouldBeCreatableAndFetchable()
@@ -62,7 +63,7 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function maxBasketShouldBeCreatableAndFetchableWorkAround()
@@ -92,7 +93,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function basketShouldBeUpdatateable()
     {
@@ -124,7 +125,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
@@ -150,7 +151,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
@@ -178,7 +179,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
@@ -204,7 +205,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {

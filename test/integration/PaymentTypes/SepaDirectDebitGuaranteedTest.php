@@ -29,6 +29,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class SepaDirectDebitGuaranteedTest extends BasePaymentTest
 {
@@ -38,7 +39,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -66,7 +67,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @return SepaDirectDebitGuaranteed
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
@@ -100,7 +101,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
     public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitGuaranteed $directDebitGuaranteed)
@@ -117,7 +118,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function directDebitGuaranteedShouldAllowCharge()
     {
@@ -140,7 +141,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function ddgShouldThrowErrorIfAddressesDoNotMatch()
     {

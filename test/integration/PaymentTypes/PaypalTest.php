@@ -28,6 +28,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class PaypalTest extends BasePaymentTest
 {
@@ -38,7 +39,7 @@ class PaypalTest extends BasePaymentTest
      *
      * @return BasePaymentType
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function paypalShouldBeCreatableAndFetchable(): BasePaymentType
@@ -63,7 +64,7 @@ class PaypalTest extends BasePaymentTest
      *
      * @param Paypal $paypal
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function paypalShouldBeAuthorizable(Paypal $paypal)
@@ -85,7 +86,7 @@ class PaypalTest extends BasePaymentTest
      *
      * @param Paypal $paypal
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function paypalShouldBeChargeable(Paypal $paypal)

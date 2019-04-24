@@ -29,6 +29,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\PIS;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class PISTest extends BasePaymentTest
 {
@@ -39,7 +40,7 @@ class PISTest extends BasePaymentTest
      *
      * @return PIS
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function pisShouldBeCreatableAndFetchable(): PIS
@@ -65,7 +66,7 @@ class PISTest extends BasePaymentTest
      *
      * @return Charge
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      * @depends pisShouldBeCreatableAndFetchable
      */
@@ -85,7 +86,7 @@ class PISTest extends BasePaymentTest
      *
      * @param PIS $pis
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      * @depends pisShouldBeCreatableAndFetchable
      */

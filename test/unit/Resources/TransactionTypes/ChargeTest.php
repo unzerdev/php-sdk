@@ -33,6 +33,9 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class ChargeTest extends BaseUnitTest
 {
@@ -66,7 +69,7 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function aChargeShouldBeUpdatedThroughResponseHandling()
@@ -85,7 +88,7 @@ class ChargeTest extends BaseUnitTest
         $this->assertEquals('myCurrency', $charge->getCurrency());
         $this->assertEquals('https://my-return-url.test', $charge->getReturnUrl());
 
-        $testResponse = new \stdClass();
+        $testResponse = new stdClass();
         $testResponse->amount = '789.0';
         $testResponse->currency = 'TestCurrency';
         $testResponse->returnUrl = 'https://return-url.test';
@@ -109,11 +112,11 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payment type is missing!');
 
         (new Charge())->getLinkedResources();
@@ -124,7 +127,7 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToCharge()
@@ -150,8 +153,8 @@ class ChargeTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelShouldCallCancelChargeOnHeidelpayObject()
     {

@@ -26,6 +26,7 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Traits\HasCancellations;
+use RuntimeException;
 
 class Charge extends AbstractTransactionType
 {
@@ -260,7 +261,7 @@ class Charge extends AbstractTransactionType
      *
      * @return Cancellation
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function cancel($amount = null): Cancellation

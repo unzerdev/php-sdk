@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.1.0][1.1.1.0]
+
+### Added
+*   Added Webhook(s) functionality: Resource, tests, example.
+*   Extended ResourceService with method to fetch a resource by its url.
+*   Added method to fetch resource by received event.
+*   Added log method to write to custom debuglog to heidelpay facade.
+*   Added IdService to fetch ids and types from id strings.
+
+### Changed
+*   Applied several micro optimizations.
+*   Added response code to rest call logs.
+*   Adapted integration tests to new api version.
+
 ## [1.1.0.0][1.1.0.0]
 
 ###### This update contains breaking changes and you will most certainly have to update your implementation
@@ -127,3 +141,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.0.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.0.1..1.0.1.0
 [1.0.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.1.0..1.0.2.0
 [1.1.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.2.0..1.1.0.0
+[1.1.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.0.0..1.1.1.0

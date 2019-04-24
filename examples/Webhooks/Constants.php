@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the card example.
+ * This file defines the constants needed for the Webhooks example.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -23,14 +23,8 @@
  * @package  heidelpayPHP/examples
  */
 
-require_once __DIR__ . '/_enableExamples.php';
-if (defined('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES') && HEIDELPAY_PHP_PAYMENT_API_EXAMPLES !== true) {
-    exit();
-}
+require_once __DIR__ . '/../Constants.php';
 
-const EXAMPLE_BASE_FOLDER = HEIDELPAY_PHP_PAYMENT_API_URL . HEIDELPAY_PHP_PAYMENT_API_FOLDER;
-define('SUCCESS_URL', EXAMPLE_BASE_FOLDER . 'Success.php');
-define('FAILURE_URL', EXAMPLE_BASE_FOLDER . 'Failure.php');
-define('WEBHOOK_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'Webhooks/WebhookController.php');
-define('DEFAULT_PRIVATE_KEY', 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
-define('DEFAULT_PUBLIC_KEY', 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');
+define('EXAMPLE_PATH', __DIR__);
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'Webhooks');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');

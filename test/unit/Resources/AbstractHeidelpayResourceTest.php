@@ -46,6 +46,9 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class AbstractHeidelpayResourceTest extends BaseUnitTest
 {
@@ -54,7 +57,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws \Exception
      */
     public function settersAndGettersShouldWork()
@@ -75,13 +78,13 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getParentResourceShouldThrowExceptionIfItIsNotSet()
     {
         $customer = new Customer();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Parent resource reference is not set!');
         $customer->getParentResource();
     }
@@ -91,8 +94,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function getHeidelpayObjectShouldCallGetParentResourceOnce()
     {
@@ -108,7 +111,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function parentResourceAndHeidelpayGetterSetterShouldWork()
     {
@@ -124,8 +127,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function getUriWillCallGetUriOnItsParentResource()
     {
@@ -150,8 +153,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @param AbstractHeidelpayResource $resource
      * @param string                    $resourcePath
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractHeidelpayResource$resource, $resourcePath)
     {
@@ -170,8 +173,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function getUriWillAddExternalIdToTheUriIfTheIdIsNotSetButAppendIdIs()
     {
@@ -208,7 +211,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             ->setZip('69115')
             ->setStreet('Musterstrasse 15');
 
-        $testResponse                 = new \stdClass();
+        $testResponse                 = new stdClass();
         $testResponse->billingAddress = json_decode($address->jsonSerialize());
 
         /** @var Customer $customer */
@@ -232,8 +235,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function updateValuesShouldUpdateValuesFromProcessingInTheActualObject()
     {
-        $testResponse             = new \stdClass();
-        $processing               = new \stdClass();
+        $testResponse             = new stdClass();
+        $processing               = new stdClass();
         $processing->customerId   = 'processingCustomerId';
         $processing->firstname    = 'processingFirstName';
         $processing->lastname     = 'processingLastName';
@@ -256,7 +259,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function jsonSerializeShouldTranslateResourceIntoJson()
     {
@@ -348,7 +351,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @return array
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function uriDataProvider(): array
     {

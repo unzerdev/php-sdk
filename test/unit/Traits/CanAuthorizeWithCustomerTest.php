@@ -30,6 +30,8 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\test\BaseUnitTest;
+use ReflectionException;
+use RuntimeException;
 
 class CanAuthorizeWithCustomerTest extends BaseUnitTest
 {
@@ -38,14 +40,14 @@ class CanAuthorizeWithCustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizeShouldThrowExceptionIfTheClassDoesNotImplementParentInterface()
     {
         $dummy = new TraitDummyWithCustomerWithoutParentIF();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('TraitDummyWithCustomerWithoutParentIF');
 
         $dummy->authorize(1.0, 'MyCurrency', 'https://return.url', new Customer());
@@ -56,8 +58,8 @@ class CanAuthorizeWithCustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function authorizeShouldPropagateAuthorizeToHeidelpay()

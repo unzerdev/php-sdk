@@ -31,6 +31,8 @@ use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\Exception;
+use RuntimeException;
 
 class AuthorizationTest extends BasePaymentTest
 {
@@ -39,7 +41,7 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizeWithTypeId()
@@ -58,7 +60,7 @@ class AuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizeWithType()
     {
@@ -74,7 +76,7 @@ class AuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizationProducesPaymentAndCustomer()
     {
@@ -100,7 +102,7 @@ class AuthorizationTest extends BasePaymentTest
      * @return Authorization
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizationWithCustomerId(): Authorization
     {
@@ -129,8 +131,8 @@ class AuthorizationTest extends BasePaymentTest
      * @param Authorization $authorization
      *
      * @throws HeidelpayApiException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \RuntimeException
+     * @throws Exception
+     * @throws RuntimeException
      */
     public function authorizationCanBeFetched(Authorization $authorization)
     {
@@ -150,7 +152,7 @@ class AuthorizationTest extends BasePaymentTest
      * @param bool                                      $isError
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizeHasExpectedStates(BasePaymentType $paymentType, $isSuccess, $isPending, $isError)
     {
@@ -165,7 +167,7 @@ class AuthorizationTest extends BasePaymentTest
     /**
      * @return array
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizeHasExpectedStatesDP(): array
     {
