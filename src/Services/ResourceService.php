@@ -37,6 +37,7 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
@@ -523,6 +524,9 @@ class ResourceService
                 break;
             case IdStrings::EPS:
                 $paymentType = new EPS();
+                break;
+            case IdStrings::ALIPAY:
+                $paymentType = new Alipay();
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');

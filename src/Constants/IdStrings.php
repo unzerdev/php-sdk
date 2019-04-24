@@ -46,6 +46,7 @@ class IdStrings
     const SOFORT = 'sft';
     const PIS = 'pis';
     const EPS = 'eps';
+    const ALIPAY = 'ali';
 
     // Resources
     const BASKET = 'bsk';

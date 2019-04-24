@@ -29,6 +29,7 @@ Please refer to the following documentation for installation instructions and us
 *   SOFORT
 *   EPS
 *   PIS
+*   Alipay
 
 ## Support
 For any issues or questions please get in touch with our support team.
