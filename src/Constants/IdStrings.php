@@ -68,6 +68,7 @@ class IdStrings
         self::SEPA_DIRECT_DEBIT,
         self::SOFORT,
         self::PIS,
-        self::EPS
+        self::EPS,
+        self::ALIPAY
     ];
 }
