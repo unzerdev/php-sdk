@@ -84,6 +84,19 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card">
                     <div class="content">
                         <div class="header">
+                            Alipay
+                        </div>
+                        <div class="description">
+                            Charge
+                        </div>
+                    </div>
+                    <div class="ui bottom attached button" onclick="location.href='Alipay/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
                             Register Webhooks
                         </div>
                         <div class="description">
