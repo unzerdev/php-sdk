@@ -52,6 +52,7 @@ use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\PaymentTypes\Wechatpay;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -527,6 +528,9 @@ class ResourceService
                 break;
             case IdStrings::ALIPAY:
                 $paymentType = new Alipay();
+                break;
+            case IdStrings::WECHATPAY:
+                $paymentType = new Wechatpay();
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');

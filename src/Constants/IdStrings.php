@@ -47,6 +47,7 @@ class IdStrings
     const PIS = 'pis';
     const EPS = 'eps';
     const ALIPAY = 'ali';
+    const WECHATPAY = 'wcp';
 
     // Resources
     const BASKET = 'bsk';
