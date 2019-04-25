@@ -97,6 +97,19 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card">
                     <div class="content">
                         <div class="header">
+                            WeChat Pay
+                        </div>
+                        <div class="description">
+                            Charge
+                        </div>
+                    </div>
+                    <div class="ui bottom attached button" onclick="location.href='WeChatPay/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
                             Register Webhooks
                         </div>
                         <div class="description">
