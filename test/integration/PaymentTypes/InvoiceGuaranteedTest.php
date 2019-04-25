@@ -28,6 +28,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class InvoiceGuaranteedTest extends BasePaymentTest
 {
@@ -38,7 +39,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @return InvoiceGuaranteed
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function invoiceGuaranteedTypeShouldBeCreatable(): InvoiceGuaranteed
@@ -58,7 +59,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
@@ -90,7 +91,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
@@ -118,7 +119,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
@@ -136,7 +137,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @param InvoiceGuaranteed $invoiceGuaranteed
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */

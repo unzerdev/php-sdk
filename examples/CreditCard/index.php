@@ -118,7 +118,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <script>
     // Creating a heidelpay instance with your public key
-    let heidelpayInstance = new heidelpay('s-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');
+    let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
     // Creating a credit card instance
     let Card = heidelpayInstance.Card();

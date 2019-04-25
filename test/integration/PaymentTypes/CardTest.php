@@ -32,6 +32,7 @@ use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class CardTest extends BasePaymentTest
 {
@@ -44,7 +45,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
     {
@@ -64,7 +65,7 @@ class CardTest extends BasePaymentTest
      * @return BasePaymentType
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cardShouldBeCreatable(): BasePaymentType
     {
@@ -86,7 +87,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cardCanPerformAuthorizationAndCreatesPayment()
     {
@@ -120,7 +121,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cardCanPerformChargeAndCreatesPaymentObject()
     {
@@ -154,7 +155,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cardCanBeFetched()
     {
@@ -177,7 +178,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function fullChargeAfterAuthorize()
     {
@@ -208,7 +209,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function partialChargeAfterAuthorization()
     {
@@ -243,7 +244,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized()
     {
@@ -271,7 +272,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function partialAndFullChargeAfterAuthorization()
     {
@@ -301,7 +302,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizationShouldBeFetchable()
     {
@@ -319,7 +320,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function fullCancelAfterCharge()
     {
@@ -343,7 +344,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function fullCancelOnFullyChargedPayment()
     {
@@ -377,7 +378,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function fullCancelOnPartlyPaidAuthWithCanceledCharges()
     {
@@ -409,7 +410,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cardChargeCanBeCanceled()
     {
@@ -428,7 +429,7 @@ class CardTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cardAuthorizeCanBeCanceled()
     {

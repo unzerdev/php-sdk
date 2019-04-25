@@ -28,6 +28,8 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BaseUnitTest;
+use ReflectionException;
+use RuntimeException;
 
 class HasCancellationsTest extends BaseUnitTest
 {
@@ -36,7 +38,7 @@ class HasCancellationsTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function hasCancellationGettersAndSettersShouldWorkProperly()
@@ -72,11 +74,11 @@ class HasCancellationsTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
-    public function getCancellationShouldCallgetResourceIfItIsNotLazyLoaded()
+    public function getCancellationShouldCallGetResourceIfItIsNotLazyLoaded()
     {
         $cancel = (new Cancellation())->setId('myCancelId');
         $authorizeMock = $this->getMockBuilder(Authorization::class)->setMethods(['getResource'])->getMock();

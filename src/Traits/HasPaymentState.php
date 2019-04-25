@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Traits;
 
 use heidelpayPHP\Constants\PaymentState;
+use RuntimeException;
 
 trait HasPaymentState
 {
@@ -112,7 +113,7 @@ trait HasPaymentState
      *
      * @return string The name of the current payment state.
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getStateName(): string
     {

@@ -28,6 +28,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class EPSTest extends BasePaymentTest
 {
@@ -41,7 +42,7 @@ class EPSTest extends BasePaymentTest
      * @return EPS
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function epsShouldBeCreatable(): EPS
     {
@@ -68,7 +69,7 @@ class EPSTest extends BasePaymentTest
      * @param EPS $eps
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends epsShouldBeCreatable
      */
     public function epsShouldThrowExceptionOnAuthorize(EPS $eps)
@@ -88,7 +89,7 @@ class EPSTest extends BasePaymentTest
      * @param EPS $eps
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function epsShouldBeChargeable(EPS $eps)
     {
@@ -112,7 +113,7 @@ class EPSTest extends BasePaymentTest
      * @param EPS $eps
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function epsTypeCanBeFetched(EPS $eps)
     {

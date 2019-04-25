@@ -27,6 +27,7 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Traits\HasCancellations;
+use RuntimeException;
 
 class Authorization extends AbstractTransactionType
 {
@@ -159,7 +160,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return Cancellation
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function cancel($amount = null): Cancellation
@@ -175,13 +176,13 @@ class Authorization extends AbstractTransactionType
      * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function charge($amount = null): Charge
     {
         $payment = $this->getPayment();
         if (!$payment instanceof Payment) {
-            throw new \RuntimeException('Payment object is missing. Try fetching the object first!');
+            throw new RuntimeException('Payment object is missing. Try fetching the object first!');
         }
         return $this->getHeidelpayObject()->chargeAuthorization($payment, $amount);
     }

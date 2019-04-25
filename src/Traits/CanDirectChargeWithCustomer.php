@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use RuntimeException;
 
 trait CanDirectChargeWithCustomer
 {
@@ -49,7 +50,7 @@ trait CanDirectChargeWithCustomer
      *
      * @return Charge
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function charge(
@@ -74,7 +75,7 @@ trait CanDirectChargeWithCustomer
             );
         }
 
-        throw new \RuntimeException(
+        throw new RuntimeException(
             self::class . ' must implement HeidelpayParentInterface to enable ' . __METHOD__ . ' transaction.'
         );
     }

@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Interfaces;
 
 use heidelpayPHP\Heidelpay;
+use RuntimeException;
 
 interface HeidelpayParentInterface
 {
@@ -33,7 +34,7 @@ interface HeidelpayParentInterface
      *
      * @return Heidelpay
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getHeidelpayObject(): Heidelpay;
 

@@ -28,6 +28,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use RuntimeException;
 
 trait HasCancellations
 {
@@ -76,7 +77,7 @@ trait HasCancellations
      * @param boolean $lazy
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return mixed
      */

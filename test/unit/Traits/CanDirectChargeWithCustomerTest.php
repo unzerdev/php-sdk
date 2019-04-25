@@ -30,6 +30,8 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
+use ReflectionException;
+use RuntimeException;
 
 class CanDirectChargeWithCustomerTest extends BaseUnitTest
 {
@@ -38,14 +40,14 @@ class CanDirectChargeWithCustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function directChargeShouldThrowExceptionIfTheClassDoesNotImplementParentInterface()
     {
         $dummy = new TraitDummyWithCustomerWithoutParentIF();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('TraitDummyWithCustomerWithoutParentIF');
 
         $dummy->charge(1.0, 'MyCurrency', 'https://return.url', new Customer());
@@ -56,8 +58,8 @@ class CanDirectChargeWithCustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function directChargeShouldPropagateToHeidelpay()

@@ -26,6 +26,7 @@ namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use function in_array;
 
 class Customer extends AbstractHeidelpayResource
 {
@@ -132,7 +133,7 @@ class Customer extends AbstractHeidelpayResource
     public function setSalutation($salutation): Customer
     {
         $allowedSalutations = [Salutations::MR, Salutations::MRS, Salutations::UNKNOWN];
-        $this->salutation = \in_array($salutation, $allowedSalutations, true) ? $salutation : Salutations::UNKNOWN;
+        $this->salutation = in_array($salutation, $allowedSalutations, true) ? $salutation : Salutations::UNKNOWN;
         return $this;
     }
 
