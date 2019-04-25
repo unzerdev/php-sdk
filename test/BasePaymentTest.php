@@ -62,6 +62,15 @@ class BasePaymentTest extends TestCase
     {
         $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY_SAQ_D))
             ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
+        $this->childSetup();
+    }
+
+    /**
+     * Override this in the child test class to perform custom setup tasks e.g. setting a different Key.
+     */
+    protected function childSetup()
+    {
+        // do nothing here
     }
 
     //<editor-fold desc="Custom asserts">
