@@ -107,20 +107,20 @@ class HirePurchaseDirectDebit extends BasePaymentType
         $monthlyRate,
         $lastRate
     ) {
-        $this->iban = $iban;
-        $this->bic = $bic;
-        $this->accountHolder = $accountHolder;
-        $this->amountOfRates = $amountOfRates;
-        $this->dayOfPurchase = $dayOfPurchase;
-        $this->totalPurchaseAmount = $totalPurchaseAmount;
-        $this->totalInterestAmount = $totalInterestAmount;
-        $this->totalAmount = $totalAmount;
+        $this->iban                  = $iban;
+        $this->bic                   = $bic;
+        $this->accountHolder         = $accountHolder;
+        $this->amountOfRates         = $amountOfRates;
+        $this->dayOfPurchase         = $dayOfPurchase;
+        $this->totalPurchaseAmount   = $totalPurchaseAmount;
+        $this->totalInterestAmount   = $totalInterestAmount;
+        $this->totalAmount           = $totalAmount;
         $this->effectiveInterestRate = $effectiveInterestRate;
-        $this->nominalInterestRate = $nominalInterestRate;
-        $this->feeFirstRate = $feeFirstRate;
-        $this->feePerRate = $feePerRate;
-        $this->monthlyRate = $monthlyRate;
-        $this->lastRate = $lastRate;
+        $this->nominalInterestRate   = $nominalInterestRate;
+        $this->feeFirstRate          = $feeFirstRate;
+        $this->feePerRate            = $feePerRate;
+        $this->monthlyRate           = $monthlyRate;
+        $this->lastRate              = $lastRate;
     }
 
     //<editor-fold desc="Getters/Setters">
