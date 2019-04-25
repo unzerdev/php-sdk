@@ -51,6 +51,7 @@ use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\PaymentTypes\Wechatpay;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -1262,6 +1263,7 @@ class ResourceServiceTest extends BaseUnitTest
             'PIS sandbox' => [PIS::class, 's-pis-12345678'],
             'EPS sandbox' => [EPS::class, 's-eps-12345678'],
             'Alipay sandbox' => [Alipay::class, 's-ali-12345678'],
+            'Wechatpay sandbox' => [Wechatpay::class, 's-wcp-12345678'],
             'Card production' => [Card::class, 'p-crd-12345678'],
             'Giropay production' => [Giropay::class, 'p-gro-12345678'],
             'Ideal production' => [Ideal::class, 'p-idl-12345678'],
@@ -1274,7 +1276,8 @@ class ResourceServiceTest extends BaseUnitTest
             'SepaDirectDebitGuaranteed production' => [SepaDirectDebitGuaranteed::class, 'p-ddg-12345678'],
             'Sofort production' => [Sofort::class, 'p-sft-12345678'],
             'EPS production' => [EPS::class, 'p-eps-12345678'],
-            'Alipay production' => [Alipay::class, 'p-ali-12345678']
+            'Alipay production' => [Alipay::class, 'p-ali-12345678'],
+            'Wechatpay production' => [Wechatpay::class, 'p-wcp-12345678']
         ];
     }
 
