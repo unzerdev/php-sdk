@@ -48,7 +48,6 @@ class IdStrings
     const EPS = 'eps';
     const ALIPAY = 'ali';
     const WECHATPAY = 'wcp';
-    const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
 
     // Resources
     const BASKET = 'bsk';

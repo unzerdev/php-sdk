@@ -42,7 +42,6 @@ use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
@@ -532,9 +531,6 @@ class ResourceService
                 break;
             case IdStrings::WECHATPAY:
                 $paymentType = new Wechatpay();
-                break;
-            case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
-                $paymentType = new HirePurchaseDirectDebit(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');
