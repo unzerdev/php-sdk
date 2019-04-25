@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Added log method to write to custom debuglog to heidelpay facade.
 *   Added IdService to fetch ids and types from id strings.
 *   Added Alipay payment type.
+*   Added WeChat Pay payment type.
 
 ### Changed
 *   Applied several micro optimizations.

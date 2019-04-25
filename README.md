@@ -30,6 +30,7 @@ Please refer to the following documentation for installation instructions and us
 *   EPS
 *   PIS
 *   Alipay
+*   WeChat Pay
 
 ## Support
 For any issues or questions please get in touch with our support team.
