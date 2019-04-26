@@ -1066,17 +1066,18 @@ class Heidelpay implements HeidelpayParentInterface
      * Performs a Cancellation transaction and returns the resulting Cancellation object.
      * Performs a full cancel if the parameter amount is null.
      *
-     * @param Charge     $charge The Charge object to create the Cancellation for.
-     * @param float|null $amount The amount to be canceled.
+     * @param Charge      $charge     The Charge object to create the Cancellation for.
+     * @param float|null  $amount     The amount to be canceled.
+     * @param string|null $reasonCode
      *
      * @return Cancellation The resulting Cancellation object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
+    public function cancelCharge(Charge $charge, $amount = null, string $reasonCode = null): AbstractTransactionType
     {
-        return $this->paymentService->cancelCharge($charge, $amount);
+        return $this->paymentService->cancelCharge($charge, $amount, $reasonCode);
     }
 
     //</editor-fold>

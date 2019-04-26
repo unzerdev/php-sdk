@@ -24,10 +24,15 @@
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
+use heidelpayPHP\Constants\CancelReasonCodes;
+
 class Cancellation extends AbstractTransactionType
 {
     /** @var float $amount */
     protected $amount;
+
+    /** @var string $reasonCode */
+    protected $reasonCode;
 
     /**
      * Authorization constructor.
@@ -67,6 +72,27 @@ class Cancellation extends AbstractTransactionType
     public function setAmount($amount): Cancellation
     {
         $this->amount = $amount;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReasonCode(): string
+    {
+        return $this->reasonCode;
+    }
+
+    /**
+     * @param string|null $reasonCode
+     *
+     * @return Cancellation
+     */
+    public function setReasonCode($reasonCode): Cancellation
+    {
+        if (in_array($reasonCode, array_merge(CancelReasonCodes::REASON_CODE_ARRAY, [null]), true)) {
+            $this->reasonCode = $reasonCode;
+        }
         return $this;
     }
 

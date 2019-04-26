@@ -48,6 +48,7 @@ class IdStrings
     const EPS = 'eps';
     const ALIPAY = 'ali';
     const WECHATPAY = 'wcp';
+    const INVOICE_FACTORING = 'ivf';
 
     // Resources
     const BASKET = 'bsk';

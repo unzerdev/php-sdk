@@ -118,7 +118,7 @@ class PrepaymentTest extends BasePaymentTest
     public function prepaymentTypeShouldNotBeShippable(Charge $charge)
     {
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVC_DOES_NOT_ALLOW_SHIPPING);
 
         $this->heidelpay->ship($charge->getPayment());
     }

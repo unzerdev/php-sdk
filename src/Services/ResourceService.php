@@ -44,6 +44,7 @@ use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\PIS;
@@ -531,6 +532,9 @@ class ResourceService
                 break;
             case IdStrings::WECHATPAY:
                 $paymentType = new Wechatpay();
+                break;
+            case IdStrings::INVOICE_FACTORING:
+                $paymentType = new InvoiceFactoring();
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');
