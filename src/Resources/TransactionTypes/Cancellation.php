@@ -76,9 +76,9 @@ class Cancellation extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getReasonCode(): string
+    public function getReasonCode()
     {
         return $this->reasonCode;
     }
