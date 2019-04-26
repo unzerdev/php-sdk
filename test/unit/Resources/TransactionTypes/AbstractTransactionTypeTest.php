@@ -130,10 +130,16 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $testResources = new stdClass();
         $testResources->paymentId = 'myNewPaymentId';
         $testResponse->resources = $testResources;
+        $message = new stdClass();
+        $message->code = 'myCode';
+        $message->customer = 'Customer message';
+        $testResponse->message = $message;
         $transactionType->handleResponse($testResponse);
 
         $this->assertEquals('myUniqueId', $transactionType->getUniqueId());
         $this->assertEquals('myShortId', $transactionType->getShortId());
+        $this->assertEquals('myCode', $transactionType->getMessage()->getCode());
+        $this->assertEquals('Customer message', $transactionType->getMessage()->getCustomer());
         $this->assertEquals('myRedirectUrl', $payment->getRedirectUrl());
         $this->assertEquals('myNewPaymentId', $payment->getId());
     }
