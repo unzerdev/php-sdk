@@ -53,16 +53,21 @@ class AuthorizationTest extends BaseUnitTest
         $this->assertNull($authorization->getAmount());
         $this->assertNull($authorization->getCurrency());
         $this->assertNull($authorization->getReturnUrl());
+        $this->assertNull($authorization->isCard3ds());
 
         $authorization = new Authorization(123.4, 'myCurrency', 'https://my-return-url.test');
+        $authorization->setCard3ds(true);
         $this->assertEquals(123.4, $authorization->getAmount());
         $this->assertEquals('myCurrency', $authorization->getCurrency());
         $this->assertEquals('https://my-return-url.test', $authorization->getReturnUrl());
+        $this->assertTrue($authorization->isCard3ds());
 
         $authorization->setAmount(567.8)->setCurrency('myNewCurrency')->setReturnUrl('https://another-return-url.test');
+        $authorization->setCard3ds(false);
         $this->assertEquals(567.8, $authorization->getAmount());
         $this->assertEquals('myNewCurrency', $authorization->getCurrency());
         $this->assertEquals('https://another-return-url.test', $authorization->getReturnUrl());
+        $this->assertFalse($authorization->isCard3ds());
     }
 
     /**
