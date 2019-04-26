@@ -58,6 +58,10 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $this->assertFalse($transactionType->isSuccess());
         $this->assertFalse($transactionType->isPending());
 
+        $message = $transactionType->getMessage();
+        $this->assertEmpty($message->getCode());
+        $this->assertEmpty($message->getCustomer());
+
         $transactionType->setPayment($payment);
         $this->assertNull($transactionType->getRedirectUrl());
 
@@ -66,6 +70,7 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $transactionType->setPayment($payment);
         $transactionType->setDate($date);
         $transactionType->setIsError(true)->setIsPending(true)->setIsSuccess(true);
+        $transactionType->getMessage()->setCode('1234')->setCustomer('This ist the customer message!');
 
         $this->assertSame($payment, $transactionType->getPayment());
         $this->assertEquals($date, $transactionType->getDate());
@@ -74,6 +79,10 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $this->assertTrue($transactionType->isSuccess());
         $this->assertTrue($transactionType->isPending());
         $this->assertTrue($transactionType->isError());
+
+        $message = $transactionType->getMessage();
+        $this->assertSame('1234', $message->getCode());
+        $this->assertSame('This ist the customer message!', $message->getCustomer());
     }
 
     /**
