@@ -229,6 +229,7 @@ class PaymentService
      *                                            yet (i.e. has no id).
      * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
      *                                            optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId   The external id of the invoice.
      *
      * @return Charge Resulting Charge object.
      *
@@ -244,10 +245,11 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
-        $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId)->setInvoiceId($invoiceId);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
         }

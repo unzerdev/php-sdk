@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Adapted integration tests to new api version.
 *   Added parameter reasonCode to cancel method.
 *   Update of ApiResponseCodes.
+*   Add optional property invoiceId to charge transaction.
 
 ## [1.1.0.0][1.1.0.0]
 

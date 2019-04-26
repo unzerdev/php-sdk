@@ -937,6 +937,7 @@ class Heidelpay implements HeidelpayParentInterface
      *                                            yet (i.e. has no id).
      * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
      *                                            optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId   The external id of the invoice.
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -952,7 +953,8 @@ class Heidelpay implements HeidelpayParentInterface
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null
     ): AbstractTransactionType {
         return $this->paymentService->charge(
             $amount,
@@ -963,7 +965,8 @@ class Heidelpay implements HeidelpayParentInterface
             $orderId,
             $metadata,
             $basket,
-            $card3ds
+            $card3ds,
+            $invoiceId
         );
     }
 

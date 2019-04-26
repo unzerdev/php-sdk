@@ -26,11 +26,13 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Traits\HasCancellations;
+use heidelpayPHP\Traits\HasInvoiceId;
 use RuntimeException;
 
 class Charge extends AbstractTransactionType
 {
     use HasCancellations;
+    use HasInvoiceId;
 
     /** @var float $amount */
     protected $amount;
