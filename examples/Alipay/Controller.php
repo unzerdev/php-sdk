@@ -35,8 +35,6 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 
-$clientMessage = 'Something went wrong. Please try again later.';
-
 session_start();
 session_unset();
 
