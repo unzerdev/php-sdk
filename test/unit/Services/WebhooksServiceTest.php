@@ -89,4 +89,59 @@ class WebhooksServiceTest extends BaseUnitTest
 
         $webhookService->createWebhook('myUrlString', 'TestEvent');
     }
+
+    /**
+     * Verify fetch webhook calls resource service with the given webhook object.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function fetchWebhookShouldCallResourceServiceWithTheGivenWebhookObject()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $webhookService = new WebhookService($heidelpay);
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetch'])->getMock();
+        /** @var ResourceService $resourceServiceMock */
+        $webhookService->setResourceService($resourceServiceMock);
+        $resourceServiceMock->expects($this->once())->method('fetch')->with($this->callback(
+            static function ($param) use ($heidelpay) {
+                return $param instanceof Webhook && $param->getHeidelpayObject() === $heidelpay;
+            }
+        ));
+
+        $webhook = new Webhook();
+        $webhookService->fetchWebhook($webhook);
+    }
+
+    /**
+     * Verify fetch webhook calls resource service with a new webhook object with the given id.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function fetchWebhookShouldCallResourceServiceWithANewWebhookObjectWithTheGivenId()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $webhookService = new WebhookService($heidelpay);
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetch'])->getMock();
+        /** @var ResourceService $resourceServiceMock */
+        $webhookService->setResourceService($resourceServiceMock);
+        $resourceServiceMock->expects($this->once())->method('fetch')->with($this->callback(
+            static function ($param) use ($heidelpay) {
+                return $param instanceof Webhook &&
+                       $param->getHeidelpayObject() === $heidelpay &&
+                       $param->getId() === 'WebhookId';
+            }
+        ));
+
+        $webhookService->fetchWebhook('WebhookId');
+    }
 }
