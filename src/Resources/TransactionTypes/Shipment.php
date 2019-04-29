@@ -35,9 +35,9 @@ class Shipment extends AbstractTransactionType
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmount(): float
+    public function getAmount()
     {
         return $this->amount;
     }
