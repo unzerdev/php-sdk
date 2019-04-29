@@ -1090,16 +1090,17 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Performs a Shipment transaction and returns the resulting Shipment object.
      *
-     * @param Payment|string $payment The Payment object the the id of the Payment to ship.
+     * @param Payment|string $payment   The Payment object the the id of the Payment to ship.
+     * @param string|null    $invoiceId
      *
      * @return Shipment The resulting Shipment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function ship($payment): AbstractHeidelpayResource
+    public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
     {
-        return $this->paymentService->ship($payment);
+        return $this->paymentService->ship($payment, $invoiceId);
     }
 
     //</editor-fold>

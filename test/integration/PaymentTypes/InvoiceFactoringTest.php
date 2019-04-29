@@ -181,6 +181,62 @@ class InvoiceFactoringTest extends BasePaymentTest
     }
 
     /**
+     * Verify Invoice Factoring shipment with invoice id.
+     *
+     * @test
+     *
+     * @param Charge $charge
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @depends invoiceFactoringShouldBeChargeable
+     */
+    public function verifyInvoiceFactoringShipmentWithInvoiceId(Charge $charge)
+    {
+        $payment   = $charge->getPayment();
+        $invoiceId = substr(str_replace(['0.',' '], '', microtime(false)), 0, 16);
+        $shipment  = $this->heidelpay->ship($payment, $invoiceId);
+        $this->assertNotNull($shipment->getId());
+        $this->assertEquals($invoiceId, $shipment->getInvoiceId());
+    }
+
+    /**
+     * Verify Invoice Factoring shipment with pre set invoide id
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function verifyInvoiceFactoringShipmentWithPreSetInvoiceId()
+    {
+        /** @var InvoiceFactoring $invoiceFactoring */
+        $invoiceFactoring = $this->heidelpay->createPaymentType(new InvoiceFactoring());
+
+        $customer = $this->getMaximumCustomer();
+        $customer->setShippingAddress($customer->getBillingAddress());
+
+        $basket = $this->createBasket();
+        $invoiceId = substr(str_replace(['0.',' '], '', microtime(false)), 0, 16);
+        $charge = $invoiceFactoring->charge(
+            100.0,
+            'EUR',
+            self::RETURN_URL,
+            $customer,
+            $basket->getOrderId(),
+            null,
+            $basket,
+            null,
+            $invoiceId
+        );
+
+        $payment   = $charge->getPayment();
+        $shipment  = $this->heidelpay->ship($payment);
+        $this->assertNotNull($shipment->getId());
+        $this->assertEquals($invoiceId, $shipment->getInvoiceId());
+    }
+
+    /**
      * Verify Invoice Factoring charge can canceled.
      *
      * @test

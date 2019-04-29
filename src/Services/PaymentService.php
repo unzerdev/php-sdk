@@ -392,15 +392,17 @@ class PaymentService
      * Creates a Shipment transaction for the given Payment object.
      *
      * @param Payment|string $payment
+     * @param string|null    $invoiceId
      *
      * @return Shipment Resulting Shipment object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function ship($payment): AbstractHeidelpayResource
+    public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
     {
         $shipment = new Shipment();
+        $shipment->setInvoiceId($invoiceId);
         $this->resourceService->getPaymentResource($payment)->addShipment($shipment);
         $this->resourceService->create($shipment);
         return $shipment;
