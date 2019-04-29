@@ -188,9 +188,10 @@ class WebhookService
      */
     public function fetchWebhooks(): array
     {
+        /** @var Webhooks $webhooks */
         $webhooks = new Webhooks();
         $webhooks->setParentResource($this->heidelpay);
-        $this->resourceService->fetch($webhooks);
+        $webhooks = $this->resourceService->fetch($webhooks);
 
         return $webhooks->getWebhookList();
     }

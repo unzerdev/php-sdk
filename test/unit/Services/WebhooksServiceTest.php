@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\unit\Services;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Webhook;
+use heidelpayPHP\Resources\Webhooks;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\test\BaseUnitTest;
@@ -236,5 +237,39 @@ class WebhooksServiceTest extends BaseUnitTest
         ));
 
         $webhookServiceMock->deleteWebhook('WebhookId');
+    }
+
+    /**
+     * Verify fetch webhooks calls resource service.
+     * In order to be able to verify getWebhookList of the webhooks object is called we needed to return a mocked
+     * webhooks object as the fetch method is called.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function fetchWebhooksShouldCallResourceService()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $webhookService = new WebhookService($heidelpay);
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetch'])->getMock();
+        /** @var ResourceService $resourceServiceMock */
+        $webhookService->setResourceService($resourceServiceMock);
+
+        $webhooksMock = $this->getMockBuilder(Webhooks::class)->disableOriginalConstructor()
+            ->setMethods(['getWebhookList'])->getMock();
+        $webhookArray = ['webhook1', 'webhook2'];
+        $webhooksMock->expects($this->once())->method('getWebhookList')->willReturn($webhookArray);
+
+        $resourceServiceMock->expects($this->once())->method('fetch')->with($this->callback(
+            static function ($param) use ($heidelpay) {
+                return $param instanceof Webhooks && $param->getHeidelpayObject() === $heidelpay;
+            }
+        ))->willReturn($webhooksMock);
+
+        $this->assertSame($webhookArray, $webhookService->fetchWebhooks());
     }
 }
