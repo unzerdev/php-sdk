@@ -110,6 +110,19 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card">
                     <div class="content">
                         <div class="header">
+                            Invoice Factoring
+                        </div>
+                        <div class="description">
+                            Charge
+                        </div>
+                    </div>
+                    <div class="ui bottom attached button" onclick="location.href='InvoiceFactoring/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
                             Register Webhooks
                         </div>
                         <div class="description">
