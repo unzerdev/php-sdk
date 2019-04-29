@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\unit\Services;
 
+use heidelpayPHP\Constants\WebhookEvents;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Webhook;
@@ -143,5 +144,35 @@ class WebhooksServiceTest extends BaseUnitTest
         ));
 
         $webhookService->fetchWebhook('WebhookId');
+    }
+
+    /**
+     * Verify update webhook calls resource service with the given webhook object.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function updateWebhookShouldCallResourceServiceWithTheGivenWebhookObject()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $webhookService = new WebhookService($heidelpay);
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['update'])->getMock();
+        /** @var ResourceService $resourceServiceMock */
+        $webhookService->setResourceService($resourceServiceMock);
+        $resourceServiceMock->expects($this->once())->method('update')->with($this->callback(
+            static function ($param) use ($heidelpay) {
+                return $param instanceof Webhook &&
+                    $param->getUrl() === 'myUrlString' &&
+                    $param->getEvent() === 'TestEvent' &&
+                    $param->getHeidelpayObject() === $heidelpay;
+            }
+        ));
+
+        $webhook = new Webhook('myUrlString', 'TestEvent');
+        $webhookService->updateWebhook($webhook);
     }
 }
