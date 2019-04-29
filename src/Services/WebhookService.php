@@ -51,6 +51,48 @@ class WebhookService
         $this->resourceService = $heidelpay->getResourceService();
     }
 
+    //<editor-fold desc="Getters/Setters">
+
+    /**
+     * @return Heidelpay
+     */
+    public function getHeidelpay(): Heidelpay
+    {
+        return $this->heidelpay;
+    }
+
+    /**
+     * @param Heidelpay $heidelpay
+     *
+     * @return WebhookService
+     */
+    public function setHeidelpay(Heidelpay $heidelpay): WebhookService
+    {
+        $this->heidelpay = $heidelpay;
+        return $this;
+    }
+
+    /**
+     * @return ResourceService
+     */
+    public function getResourceService(): ResourceService
+    {
+        return $this->resourceService;
+    }
+
+    /**
+     * @param ResourceService $resourceService
+     *
+     * @return WebhookService
+     */
+    public function setResourceService(ResourceService $resourceService): WebhookService
+    {
+        $this->resourceService = $resourceService;
+        return $this;
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="Webhook resource">
 
     /**
