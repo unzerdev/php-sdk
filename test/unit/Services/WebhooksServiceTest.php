@@ -24,7 +24,6 @@
  */
 namespace heidelpayPHP\test\unit\Services;
 
-use heidelpayPHP\Constants\WebhookEvents;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Webhook;
@@ -174,5 +173,68 @@ class WebhooksServiceTest extends BaseUnitTest
 
         $webhook = new Webhook('myUrlString', 'TestEvent');
         $webhookService->updateWebhook($webhook);
+    }
+
+    /**
+     * Verify delete webhook calls resource service with the given webhook object.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function deleteWebhookShouldCallResourceServiceWithTheGivenWebhookObject()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $webhookService = new WebhookService($heidelpay);
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['delete'])->getMock();
+        /** @var ResourceService $resourceServiceMock */
+        $webhookService->setResourceService($resourceServiceMock);
+        $resourceServiceMock->expects($this->once())->method('delete')->with($this->callback(
+            static function ($param) {
+                return $param instanceof Webhook &&
+                    $param->getUrl() === 'myUrlString' &&
+                    $param->getEvent() === 'TestEvent';
+            }
+        ));
+
+        $webhook = new Webhook('myUrlString', 'TestEvent');
+        $webhookService->deleteWebhook($webhook);
+    }
+
+    /**
+     * Verify delete webhook calls resource service with the given webhook object.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function deleteWebhookShouldCallResourceServiceFetchingAndDeletingTheWebhookWithTheGivenId()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $webhookServiceMock = $this->getMockBuilder(WebhookService::class)->setConstructorArgs([$heidelpay])
+            ->setMethods(['fetchWebhook'])->getMock();
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetch', 'delete'])->getMock();
+        /**
+         * @var ResourceService $resourceServiceMock
+         * @var WebhookService  $webhookServiceMock
+         */
+        $webhookServiceMock->setResourceService($resourceServiceMock);
+
+        $webhook = new Webhook('WebhookId', 'TestEvent');
+        $webhookServiceMock->expects($this->once())->method('fetchWebhook')->with('WebhookId')
+            ->willReturn($webhook);
+        $resourceServiceMock->expects($this->once())->method('delete')->with($this->callback(
+            static function ($param) use ($webhook) {
+                return $param === $webhook;
+            }
+        ));
+
+        $webhookServiceMock->deleteWebhook('WebhookId');
     }
 }
