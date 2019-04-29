@@ -69,7 +69,7 @@ class Basket extends AbstractHeidelpayResource
         $this->amountTotal  = $amountTotal;
         $this->currencyCode = $currencyCode;
         $this->orderId      = $orderId;
-        $this->basketItems  = $basketItems;
+        $this->setBasketItems($basketItems);
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -211,7 +211,12 @@ class Basket extends AbstractHeidelpayResource
      */
     public function setBasketItems(array $basketItems): Basket
     {
-        $this->basketItems = $basketItems;
+        $this->basketItems = [];
+
+        foreach ($basketItems as $basketItem) {
+            $this->addBasketItem($basketItem);
+        }
+
         return $this;
     }
 

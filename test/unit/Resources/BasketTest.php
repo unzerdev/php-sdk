@@ -28,6 +28,9 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class BasketTest extends BaseUnitTest
 {
@@ -37,6 +40,7 @@ class BasketTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
+     * @throws RuntimeException
      */
     public function gettersAndSettersShouldWorkProperly()
     {
@@ -90,8 +94,8 @@ class BasketTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws \PHPUnit\Framework\MockObject\RuntimeException
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function exposeShouldCallExposeOnAllAttachedBasketItems()
     {
@@ -116,10 +120,10 @@ class BasketTest extends BaseUnitTest
      */
     public function handleResponseShouldCreateBasketItemObjectsForAllBasketItemsInResponse()
     {
-        $response                = new \stdClass();
+        $response                = new stdClass();
         $response->basketItems   = [];
-        $basketItem1             = new \stdClass();
-        $basketItem2             = new \stdClass();
+        $basketItem1             = new stdClass();
+        $basketItem2             = new stdClass();
         $response->basketItems[] = $basketItem1;
         $response->basketItems[] = $basketItem2;
 
@@ -137,6 +141,7 @@ class BasketTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
+     * @throws RuntimeException
      */
     public function referenceIdShouldBeAutomaticallySetToTheArrayIndexIfItIsNotSet()
     {
@@ -150,5 +155,17 @@ class BasketTest extends BaseUnitTest
         $basket->addBasketItem($basketItem1)->addBasketItem($basketItem2);
         $this->assertEquals('0', $basketItem1->getBasketItemReferenceId());
         $this->assertEquals('1', $basketItem2->getBasketItemReferenceId());
+
+        $basketItem3 = new BasketItem();
+        $this->assertNull($basketItem3->getBasketItemReferenceId());
+
+        $basketItem4 = new BasketItem();
+        $this->assertNull($basketItem4->getBasketItemReferenceId());
+
+        $basket2 = new Basket('myOrderId', 123.0, 'EUR', [$basketItem3, $basketItem4]);
+        $this->assertSame($basket2->getBasketItemByIndex(0), $basketItem3);
+        $this->assertSame($basket2->getBasketItemByIndex(1), $basketItem4);
+        $this->assertEquals('0', $basketItem3->getBasketItemReferenceId());
+        $this->assertEquals('1', $basketItem4->getBasketItemReferenceId());
     }
 }
