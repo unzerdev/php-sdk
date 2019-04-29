@@ -95,7 +95,7 @@ class InvoiceTest extends BasePaymentTest
         $payment = $charge->getPayment();
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVC_DOES_NOT_ALLOW_SHIPPING);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
         $this->heidelpay->ship($payment);
     }

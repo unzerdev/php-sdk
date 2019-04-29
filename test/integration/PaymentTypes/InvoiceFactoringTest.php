@@ -170,12 +170,12 @@ class InvoiceFactoringTest extends BasePaymentTest
      * @throws Exception
      * @depends invoiceFactoringShouldBeChargeable
      */
-    public function verifyInvoiceIsNotShippable(Charge $charge)
+    public function verifyInvoiceFactoringIsNotShippableWoInvoiceId(Charge $charge)
     {
         $payment = $charge->getPayment();
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVF_DOES_NOT_ALLOW_SHIPPING);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_SHIPPING_REQUIRES_INVOICE_ID);
 
         $this->heidelpay->ship($payment);
     }
