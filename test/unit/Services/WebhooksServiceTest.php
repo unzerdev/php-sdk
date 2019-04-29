@@ -272,4 +272,30 @@ class WebhooksServiceTest extends BaseUnitTest
 
         $this->assertSame($webhookArray, $webhookService->fetchWebhooks());
     }
+
+    /**
+     * Verify delete webhooks calls resource service with a new webhooks object.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function deleteWebhooksShouldCallResourceServiceWithANewWebhooksObject()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $webhookService = new WebhookService($heidelpay);
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['delete'])->getMock();
+        /** @var ResourceService $resourceServiceMock */
+        $webhookService->setResourceService($resourceServiceMock);
+        $resourceServiceMock->expects($this->once())->method('delete')->with($this->callback(
+            static function ($param) use ($heidelpay) {
+                return $param instanceof Webhooks && $param->getHeidelpayObject() === $heidelpay;
+            }
+        ));
+
+        $webhookService->deleteWebhooks();
+    }
 }
