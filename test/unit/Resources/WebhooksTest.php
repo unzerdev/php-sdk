@@ -88,14 +88,14 @@ class WebhooksTest extends BaseUnitTest
     }
 
     /**
-     * Verify response handling.
+     * Verify response handling for more then one event in a webhooks request.
      *
      * @test
      *
      * @throws Exception
      * @throws RuntimeException
      */
-    public function responseHandlingShouldBehaveAsExpected()
+    public function responseHandlingForEventsShouldBehaveAsExpected()
     {
         $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE]);
         $webhooks->setParentResource(new Heidelpay('s-priv-123'));
@@ -132,6 +132,39 @@ class WebhooksTest extends BaseUnitTest
         $this->assertEquals(
             ['event' => 'authorize', 'id' => 's-whk-1085', 'url' => 'https://dev.heidelpay.com'],
             $webhookB->expose()
+        );
+    }
+
+    /**
+     * Verify response handling of one event in a webhooks request.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     */
+    public function responseHandlingForOneEventShouldBehaveAsExpected()
+    {
+        $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE]);
+        $webhooks->setParentResource(new Heidelpay('s-priv-123'));
+        $this->assertEquals('https://dev.heidelpay.com', $webhooks->getUrl());
+        $this->assertEquals([WebhookEvents::CHARGE], $webhooks->getEventList());
+
+        $response = new stdClass();
+        $response->id = 's-whk-1085';
+        $response->url = 'https://docs.heidelpay.de';
+        $response->event = 'authorize';
+
+        $webhooks->handleResponse($response);
+        $webhookList = $webhooks->getWebhookList();
+        $this->assertCount(1, $webhookList);
+
+        /** @var Webhook $webhook*/
+        list($webhook) = $webhookList;
+        $this->assertInstanceOf(Webhook::class, $webhook);
+        $this->assertEquals(
+            ['event' => 'authorize', 'id' => 's-whk-1085', 'url' => 'https://docs.heidelpay.de'],
+            $webhook->expose()
         );
     }
 }
