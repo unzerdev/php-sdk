@@ -1,6 +1,6 @@
 <?php
 /**
- * This trait adds the invoiceId property to a class.
+ * This class defines a dummy implementing HasInvoiceId traits.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -20,35 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/traits
+ * @package  heidelpayPHP/test/unit
  */
-namespace heidelpayPHP\Traits;
+namespace heidelpayPHP\test\unit\Traits;
 
-trait HasInvoiceId
+use heidelpayPHP\Traits\HasInvoiceId;
+
+class TraitDummyHasInvoiceId
 {
-    /** @var string $invoiceId */
-    protected $invoiceId;
-
-    //<editor-fold desc="Getters/Setters">
-
-    /**
-     * @return string|null
-     */
-    public function getInvoiceId()
-    {
-        return $this->invoiceId;
-    }
-
-    /**
-     * @param string|null $invoiceId
-     *
-     * @return self
-     */
-    public function setInvoiceId($invoiceId): self
-    {
-        $this->invoiceId = $invoiceId;
-        return $this;
-    }
-
-    //</editor-fold>
+    use HasInvoiceId;
 }

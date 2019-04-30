@@ -64,10 +64,8 @@ class CanAuthorizeTest extends BaseUnitTest
      */
     public function authorizeShouldPropagateAuthorizeToHeidelpay()
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['authorize'])
-            ->disableOriginalConstructor()->getMock();
-        $dummyMock     = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)
-            ->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
+        $dummyMock     = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
 
         $authorize = new Authorization();
         $customer  = (new Customer())->setId('123');
@@ -89,14 +87,7 @@ class CanAuthorizeTest extends BaseUnitTest
         $this->assertSame($authorize, $returnedAuthorize);
         $returnedAuthorize = $dummyMock->authorize(1.3, 'MyCurrency3', 'https://return.url3', $customer, 'orderId');
         $this->assertSame($authorize, $returnedAuthorize);
-        $returnedAuthorize = $dummyMock->authorize(
-            1.4,
-            'MyCurrency3',
-            'https://return.url3',
-            $customer,
-            'orderId',
-            $metadata
-        );
+        $returnedAuthorize = $dummyMock->authorize(1.4, 'MyCurrency3', 'https://return.url3', $customer, 'orderId', $metadata);
         $this->assertSame($authorize, $returnedAuthorize);
     }
 }

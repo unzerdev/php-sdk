@@ -64,10 +64,8 @@ class CanDirectChargeWithCustomerTest extends BaseUnitTest
      */
     public function directChargeShouldPropagateToHeidelpay()
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['charge'])
-            ->disableOriginalConstructor()->getMock();
-        $dummyMock = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)
-            ->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
+        $dummyMock = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
 
         $charge = new Charge();
         $metadata  = new Metadata();
@@ -86,14 +84,7 @@ class CanDirectChargeWithCustomerTest extends BaseUnitTest
         $this->assertSame($charge, $returnedCharge);
         $returnedCharge = $dummyMock->charge(1.3, 'MyCurrency3', 'https://return.url3', $customer, 'orderId');
         $this->assertSame($charge, $returnedCharge);
-        $returnedCharge = $dummyMock->charge(
-            1.4,
-            'MyCurrency4',
-            'https://return.url4',
-            $customer,
-            'orderId',
-            $metadata
-        );
+        $returnedCharge = $dummyMock->charge(1.4, 'MyCurrency4', 'https://return.url4', $customer, 'orderId', $metadata);
         $this->assertSame($charge, $returnedCharge);
     }
 }
