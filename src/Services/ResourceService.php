@@ -121,12 +121,12 @@ class ResourceService
     /**
      * @param $url
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractHeidelpayResource|null
      *
      * @throws RuntimeException
      * @throws HeidelpayApiException
      */
-    public function fetchResourceByUrl($url): AbstractHeidelpayResource
+    public function fetchResourceByUrl($url)
     {
         $resource = null;
         $heidelpay    = $this->heidelpay;
@@ -174,7 +174,6 @@ class ResourceService
                 $resource = $this->fetchPaymentType($resourceId);
                 break;
             default:
-                throw new RuntimeException('Invalid resource type!');
                 break;
         }
 

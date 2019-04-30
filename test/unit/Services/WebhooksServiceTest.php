@@ -31,11 +31,16 @@ use heidelpayPHP\Resources\Webhooks;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\unit\DummyResource;
+use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
+use stdClass;
 
 class WebhooksServiceTest extends BaseUnitTest
 {
+    //<editor-fold desc="General">
+
     /**
      * Verify setters and getters work properly.
      *
@@ -61,6 +66,8 @@ class WebhooksServiceTest extends BaseUnitTest
         $this->assertSame($heidelpay2, $webhookService->getHeidelpay());
         $this->assertNotSame($heidelpay2->getResourceService(), $webhookService->getResourceService());
     }
+
+    //</editor-fold>
 
     //<editor-fold desc="Webhook">
 
@@ -339,6 +346,105 @@ class WebhooksServiceTest extends BaseUnitTest
             $webhookList,
             $webhookService->createWebhooks('myUrlString', ['TestEvent1', 'TestEvent2'])
         );
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Event handling">
+
+    /**
+     * Verify exception is thrown if the retrieveURL is empty.
+     *
+     * @test
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws Exception
+     * @throws HeidelpayApiException
+     */
+    public function fetchResourceByEventWithEmptyRetrieveUrlShouldThrowException()
+    {
+        // override readInputStreamTo provide custom retrieveURL
+        $webhookService = $this->getMockBuilder(WebhookService::class)
+            ->setConstructorArgs([new Heidelpay('s-priv-1234')])->setMethods(['readInputStream'])->getMock();
+        $webhookService->expects($this->once())->method('readInputStream')->willReturn('{}');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Error fetching resource!');
+
+        /** @var WebhookService $webhookService */
+        $webhookService->fetchResourceByWebhookEvent();
+    }
+
+    /**
+     * Verify exception is thrown if the retrieveURL is empty.
+     *
+     * @test
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws Exception
+     * @throws HeidelpayApiException
+     */
+    public function fetchResourceByEventShouldThrowExceptionIfResourceObjectCanNotBeRetrieved()
+    {
+        // override readInputStreamTo provide custom retrieveURL
+        $webhookService = $this->getMockBuilder(WebhookService::class)
+            ->setConstructorArgs([new Heidelpay('s-priv-1234')])->setMethods(['readInputStream'])->getMock();
+        $webhookService->expects($this->once())->method('readInputStream')
+            ->willReturn('{"retrieveUrl": "/my/url"}');
+
+        // inject resource service mock into webhook service
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetchResourceByUrl'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchResourceByUrl')->willReturn(null);
+        /**
+         * @var ResourceService $resourceServiceMock
+         * @var WebhookService  $webhookService
+         */
+        $webhookService->setResourceService($resourceServiceMock);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Error fetching resource!');
+
+        $webhookService->fetchResourceByWebhookEvent();
+    }
+
+    /**
+     * Verify fetch resource by event.
+     *
+     * @test
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws Exception
+     * @throws HeidelpayApiException
+     */
+    public function fetchResourceByEventShouldGetResourceServiceWithRetrieveUrl()
+    {
+        // setup received event
+        $retrieveUrl            = 'https://test/url';
+        $eventData              = new stdClass();
+        $eventData->retrieveUrl = $retrieveUrl;
+        $receivedJson    = json_encode($eventData);
+
+        // override readInputStream to provide custom retrieveUrl in receivedJson
+        $webhookService = $this->getMockBuilder(WebhookService::class)->setConstructorArgs([new Heidelpay('s-priv-1234')])->setMethods(['readInputStream'])->getMock();
+        $webhookService->expects($this->once())->method('readInputStream')->willReturn($receivedJson);
+
+        // inject resource service mock into webhook service to verify fetchResourceByUrl is called with the received url
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchResourceByUrl'])->getMock();
+        $dummyResource       = new DummyResource();
+        $resourceServiceMock->expects($this->once())->method('fetchResourceByUrl')->with($retrieveUrl)->willReturn($dummyResource);
+        /**
+         * @var ResourceService $resourceServiceMock
+         * @var WebhookService  $webhookService
+         */
+        $webhookService->setResourceService($resourceServiceMock);
+
+        // trigger test and verify the resource fetched from resourceService is returned
+        /** @var WebhookService $webhookService */
+        $this->assertSame($dummyResource, $webhookService->fetchResourceByWebhookEvent());
     }
 
     //</editor-fold>

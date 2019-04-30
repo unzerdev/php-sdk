@@ -245,15 +245,13 @@ class WebhookService
     public function fetchResourceByWebhookEvent()
     {
         $resourceObject = null;
-        $postData = file_get_contents('php://input');
+        $postData = $this->readInputStream();
         $eventData = json_decode($postData, false);
         $retrieveUrl = $eventData->retrieveUrl ?? null;
 
         if (!empty($retrieveUrl)) {
             $this->heidelpay->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
-            $resourceObject = $this->heidelpay
-                ->getResourceService()
-                ->fetchResourceByUrl($eventData->retrieveUrl);
+            $resourceObject = $this->resourceService->fetchResourceByUrl($retrieveUrl);
         }
 
         if (!$resourceObject instanceof AbstractHeidelpayResource) {
@@ -261,6 +259,16 @@ class WebhookService
         }
 
         return $resourceObject;
+    }
+
+    /**
+     * Read and return the input stream.
+     *
+     * @return false|string
+     */
+    public function readInputStream()
+    {
+        return file_get_contents('php://input');
     }
 
     //</editor-fold>
