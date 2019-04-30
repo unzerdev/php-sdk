@@ -43,6 +43,7 @@ use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\PIS;
@@ -61,8 +62,6 @@ use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\DummyResource;
-use InvalidArgumentException;
-use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
@@ -1266,6 +1265,7 @@ class ResourceServiceTest extends BaseUnitTest
             'EPS sandbox' => [EPS::class, 's-eps-12345678'],
             'Alipay sandbox' => [Alipay::class, 's-ali-12345678'],
             'Wechatpay sandbox' => [Wechatpay::class, 's-wcp-12345678'],
+            'Invoice factoring sandbox' => [InvoiceFactoring::class, 's-ivf-12345678'],
             'Card production' => [Card::class, 'p-crd-12345678'],
             'Giropay production' => [Giropay::class, 'p-gro-12345678'],
             'Ideal production' => [Ideal::class, 'p-idl-12345678'],
@@ -1279,7 +1279,8 @@ class ResourceServiceTest extends BaseUnitTest
             'Sofort production' => [Sofort::class, 'p-sft-12345678'],
             'EPS production' => [EPS::class, 'p-eps-12345678'],
             'Alipay production' => [Alipay::class, 'p-ali-12345678'],
-            'Wechatpay production' => [Wechatpay::class, 'p-wcp-12345678']
+            'Wechatpay production' => [Wechatpay::class, 'p-wcp-12345678'],
+            'Invoice factoring production' => [InvoiceFactoring::class, 'p-ivf-12345678']
         ];
     }
 
