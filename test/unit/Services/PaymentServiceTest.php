@@ -187,22 +187,26 @@ class PaymentServiceTest extends BaseUnitTest
      *
      * @test
      *
+     * @param $card3ds
+     *
      * @throws HeidelpayApiException
      * @throws ReflectionException
      * @throws RuntimeException
+     * @dataProvider card3dsDataProvider
      */
-    public function chargeShouldCreateAPaymentAndCallCreateOnResourceServiceWithPayment()
+    public function chargeShouldCreateAPaymentAndCallCreateOnResourceServiceWithPayment($card3ds)
     {
         $customer = (new Customer())->setId('myCustomerId');
         $heidelpay = new Heidelpay('s-priv-123');
         $paymentType = (new Sofort())->setId('myPaymentTypeId');
         $metadata = (new Metadata())->setId('myMetadataId');
+        $basket = (new Basket())->setId('myBasketId');
 
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
-                static function ($charge) use ($customer, $paymentType) {
+                static function ($charge) use ($customer, $paymentType, $basket, $card3ds) {
                     /** @var Charge $charge */
                     $newPayment = $charge->getPayment();
                     return $charge instanceof Charge &&
@@ -210,9 +214,11 @@ class PaymentServiceTest extends BaseUnitTest
                         $charge->getCurrency() === 'myTestCurrency' &&
                         $charge->getOrderId() === 'myOrderId' &&
                         $charge->getReturnUrl() === 'myTestUrl' &&
+                        $charge->isCard3ds() === $card3ds &&
                         $newPayment instanceof Payment &&
                         $newPayment->getCustomer() === $customer &&
                         $newPayment->getPaymentType() === $paymentType &&
+                        $newPayment->getBasket() === $basket &&
                         in_array($charge, $newPayment->getCharges(), true);
                 }
             )
@@ -220,8 +226,17 @@ class PaymentServiceTest extends BaseUnitTest
 
         /** @var ResourceService $resourceSrvMock */
         $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
-        $returnedCharge =
-            $paymentSrv->charge(1.234, 'myTestCurrency', $paymentType, 'myTestUrl', $customer, 'myOrderId', $metadata);
+        $returnedCharge = $paymentSrv->charge(
+            1.234,
+            'myTestCurrency',
+            $paymentType,
+            'myTestUrl',
+            $customer,
+            'myOrderId',
+            $metadata,
+            $basket,
+            $card3ds
+        );
         $this->assertSame($paymentType, $returnedCharge->getPayment()->getPaymentType());
     }
 
