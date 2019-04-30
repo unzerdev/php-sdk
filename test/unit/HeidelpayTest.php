@@ -34,9 +34,11 @@ use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
@@ -57,6 +59,7 @@ class HeidelpayTest extends BaseUnitTest
         $heidelpay = new Heidelpay('s-priv-1234');
         $this->assertInstanceOf(ResourceService::class, $heidelpay->getResourceService());
         $this->assertInstanceOf(PaymentService::class, $heidelpay->getPaymentService());
+        $this->assertInstanceOf(WebhookService::class, $heidelpay->getWebhookService());
         $this->assertSame($heidelpay, $heidelpay->getPaymentService()->getHeidelpay());
         $this->assertEquals('s-priv-1234', $heidelpay->getKey());
         $this->assertEquals(null, $heidelpay->getLocale());
@@ -101,6 +104,10 @@ class HeidelpayTest extends BaseUnitTest
         $paymentSrv = new PaymentService($heidelpay);
         $heidelpay->setPaymentService($paymentSrv);
         $this->assertSame($paymentSrv, $heidelpay->getPaymentService());
+
+        $webhookSrv = new WebhookService($heidelpay);
+        $heidelpay->setWebhookService($webhookSrv);
+        $this->assertSame($webhookSrv, $heidelpay->getWebhookService());
 
         $this->assertFalse($heidelpay->isDebugMode());
         $heidelpay->setDebugMode(true);
@@ -176,6 +183,38 @@ class HeidelpayTest extends BaseUnitTest
 
         /** @var PaymentService $paymentSrvMock */
         $heidelpay->setPaymentService($paymentSrvMock);
+
+        $heidelpay->$heidelpayMethod(...$heidelpayParams);
+    }
+
+    /**
+     * Verify heidelpay propagates webhook actions to the webhook service.
+     *
+     * @test
+     * @dataProvider heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP
+     *
+     * @param string $heidelpayMethod
+     * @param array  $heidelpayParams
+     * @param string $serviceMethod
+     * @param array  $serviceParams
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function heidelpayShouldForwardWebhookActionCallsToTheWebhookService(
+        $heidelpayMethod,
+        array $heidelpayParams,
+        $serviceMethod,
+        array $serviceParams
+    ) {
+        $webhookSrvMock = $this->getMockBuilder(WebhookService::class)->disableOriginalConstructor()
+            ->setMethods([$serviceMethod])->getMock();
+
+        $webhookSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
+        $heidelpay = new Heidelpay('s-priv-234');
+
+        /** @var WebhookService $webhookSrvMock */
+        $heidelpay->setWebhookService($webhookSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
@@ -432,6 +471,32 @@ class HeidelpayTest extends BaseUnitTest
             'cancelCharge'                    => ['cancelCharge', [$charge, 1.234], 'cancelCharge', [$charge, 1.234]],
             'cancelChargeAlt'                 => ['cancelCharge', [$charge], 'cancelCharge', [$charge]],
             'ship'                            => ['ship', [$payment], 'ship', [$payment]]
+        ];
+    }
+
+    /**
+     * Provide test data for heidelpayShouldForwardWebhookActionCallsToTheWebhookService.
+     *
+     * @return array
+     */
+    public function heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP(): array
+    {
+        $url           = 'https://dev.heidelpay.com';
+        $webhookId     = 'webhookId';
+        $webhook     = new Webhook();
+        $event = ['event1', 'event2'];
+
+        return [
+            'createWebhook'=> [ 'createWebhook', [$url, 'event'], 'createWebhook', [$url, 'event'] ],
+            'fetchWebhook'=> [ 'fetchWebhook', [$webhookId], 'fetchWebhook', [$webhookId] ],
+            'fetchWebhook by object'=> [ 'fetchWebhook', [$webhook], 'fetchWebhook', [$webhook] ],
+            'updateWebhook'=> [ 'updateWebhook', [$webhook], 'updateWebhook', [$webhook] ],
+            'deleteWebhook'=> [ 'deleteWebhook', [$webhookId], 'deleteWebhook', [$webhookId] ],
+            'deleteWebhook by object'=> [ 'deleteWebhook', [$webhook], 'deleteWebhook', [$webhook] ],
+            'fetchAllWebhooks'=> [ 'fetchAllWebhooks', [], 'fetchWebhooks', [] ],
+            'deleteAllWebhooks'=> [ 'deleteAllWebhooks', [], 'deleteWebhooks', [] ],
+            'registerMultipleWebhooks'=> ['registerMultipleWebhooks', [$url, $event], 'createWebhooks', [$url, $event] ],
+            'fetchResourceFromEvent'=> ['fetchResourceFromEvent', [], 'fetchResourceByWebhookEvent', [] ]
         ];
     }
 

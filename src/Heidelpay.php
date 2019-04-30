@@ -767,7 +767,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Updates the given Webhook resource of the api with the given object.
      *
-     * @param Webhook $webhook
+     * @param Webhook|string $webhook
      *
      * @return AbstractHeidelpayResource|Webhook|null
      *

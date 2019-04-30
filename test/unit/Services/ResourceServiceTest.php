@@ -1390,7 +1390,6 @@ class ResourceServiceTest extends BaseUnitTest
      */
     public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP(): array
     {
-
         return [
             'CARD'                         => [
                 's-crd-xen2ybcovn56',

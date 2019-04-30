@@ -237,12 +237,12 @@ class WebhookService
     /**
      * Fetches the resource corresponding to the given eventData.
      *
-     * @return AbstractHeidelpayResource|null
+     * @return AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchResourceByWebhookEvent()
+    public function fetchResourceByWebhookEvent(): AbstractHeidelpayResource
     {
         $resourceObject = null;
         $postData = $this->readInputStream();
