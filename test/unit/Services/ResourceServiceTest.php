@@ -1195,6 +1195,30 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceSrvMock->fetchResourceByUrl($resourceUrl);
     }
 
+    /**
+     * Verify does not call fetchResourceByUrl and returns null if the resource type is unknown.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchResourceByUrlForAPaymentTypeShouldReturnNullIfTheTypeIsUnknown()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetchPaymentType'])->getMock();
+
+        $resourceSrvMock->expects($this->never())->method('fetchPaymentType');
+
+        /** @var ResourceService $resourceSrvMock */
+        $this->assertNull(
+            $resourceSrvMock->fetchResourceByUrl('https://api.heidelpay.com/v1/types/card/s-unknown-xen2ybcovn56/')
+        );
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
