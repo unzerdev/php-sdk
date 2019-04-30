@@ -1568,8 +1568,7 @@ class PaymentTest extends BaseUnitTest
     public function setBasketShouldCallCreateIfTheGivenBasketObjectDoesNotExistYet()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)
-            ->setConstructorArgs([$heidelpay])->setMethods(['create'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['create'])->getMock();
 
         /** @var ResourceService $resourceSrvMock */
         $heidelpay->setResourceService($resourceSrvMock);
@@ -1585,6 +1584,34 @@ class PaymentTest extends BaseUnitTest
 
         $payment = new Payment($heidelpay);
         $payment->setBasket($basket);
+    }
+
+    /**
+     * Verify setBasket won't call resource service when the basket is null.
+     *
+     * @test
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function setBasketWontCallResourceServiceWhenBasketIsNull()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['create'])->getMock();
+
+        /** @var ResourceService $resourceSrvMock */
+        $heidelpay->setResourceService($resourceSrvMock);
+        $resourceSrvMock->expects($this->once())->method('create');
+
+        // set basket first to prove the setter works both times
+        $basket = new Basket();
+        $payment = new Payment($heidelpay);
+        $payment->setBasket($basket);
+        $this->assertSame($basket, $payment->getBasket());
+
+        $payment->setBasket(null);
+        $this->assertNull($payment->getBasket());
     }
 
     /**
