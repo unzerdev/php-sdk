@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\unit\Services;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -43,6 +44,8 @@ use RuntimeException;
 
 class PaymentServiceTest extends BaseUnitTest
 {
+    //<editor-fold desc="General">
+
     /**
      * Verify setters and getters work properly.
      *
@@ -68,6 +71,10 @@ class PaymentServiceTest extends BaseUnitTest
         $this->assertSame($heidelpay2, $paymentService->getHeidelpay());
         $this->assertNotSame($heidelpay2->getResourceService(), $paymentService->getResourceService());
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Authorize">
 
     /**
      * Verify authorize method calls authorize with payment.
@@ -116,14 +123,18 @@ class PaymentServiceTest extends BaseUnitTest
      *
      * @test
      *
+     * @param $card3ds
+     *
+     * @throws HeidelpayApiException
      * @throws ReflectionException
      * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @dataProvider card3dsDataProvider
      */
-    public function authorizeWithPaymentShouldCallCreateOnResourceServiceWithANewAuthorization()
+    public function authorizeWithPaymentShouldCallCreateOnResourceServiceWithANewAuthorization($card3ds)
     {
         $customer = (new Customer())->setId('myCustomerId');
         $metadata = (new Metadata())->setId('myMetadataId');
+        $basket = (new Basket())->setId('myBasketId');
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
 
@@ -131,7 +142,7 @@ class PaymentServiceTest extends BaseUnitTest
             ->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
-                static function ($authorize) use ($customer, $payment, $metadata) {
+                static function ($authorize) use ($customer, $payment, $metadata, $basket, $card3ds) {
                     /** @var Authorization $authorize */
                     $newPayment = $authorize->getPayment();
                     return $authorize instanceof Authorization &&
@@ -139,10 +150,12 @@ class PaymentServiceTest extends BaseUnitTest
                            $authorize->getCurrency() === 'myTestCurrency' &&
                            $authorize->getOrderId() === 'myOrderId' &&
                            $authorize->getReturnUrl() === 'myTestUrl' &&
+                           $authorize->isCard3ds() === $card3ds &&
                            $newPayment instanceof Payment &&
                            $newPayment === $payment &&
                            $newPayment->getMetadata() === $metadata &&
                            $newPayment->getCustomer() === $customer &&
+                           $newPayment->getBasket() === $basket &&
                            $newPayment->getAuthorization() === $authorize;
                 }
             )
@@ -158,10 +171,16 @@ class PaymentServiceTest extends BaseUnitTest
                 'myTestUrl',
                 $customer,
                 'myOrderId',
-                $metadata
+                $metadata,
+                $basket,
+                $card3ds
             );
         $this->assertSame($payment->getAuthorization(), $returnedAuth);
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Charge">
 
     /**
      * Verify charge method calls create with a charge object on resource service.
@@ -293,6 +312,10 @@ class PaymentServiceTest extends BaseUnitTest
         $returnedCharge = $paymentSrv->chargePayment($payment, 1.234, 'myTestCurrency');
         $this->assertArraySubset([$returnedCharge], $payment->getCharges());
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Cancel">
 
     /**
      * Verify cancelAuthorization will create a cancellation object and call create on ResourceService with it.
@@ -436,6 +459,10 @@ class PaymentServiceTest extends BaseUnitTest
         $paymentSrv->cancelCharge($charge, 12.22);
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Shipment">
+
     /**
      * Verify ship method will create a new Shipment, add it to the given payment object and call create on
      * ResourceService with the shipment object.
@@ -473,4 +500,22 @@ class PaymentServiceTest extends BaseUnitTest
         $this->assertInstanceOf(Shipment::class, $paymentSrv->ship('myPaymentId'));
         $this->assertCount(2, $payment->getShipments());
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="DataProviders">
+
+    /**
+     * @return array
+     */
+    public function card3dsDataProvider(): array
+    {
+        return [
+            'default' => [null],
+            'non 3ds' => [false],
+            '3ds' => [true],
+        ];
+    }
+
+    //</editor-fold>
 }
