@@ -767,7 +767,7 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Updates the given Webhook resource of the api with the given object.
      *
-     * @param Webhook $webhook
+     * @param Webhook|string $webhook
      *
      * @return AbstractHeidelpayResource|Webhook|null
      *
@@ -937,6 +937,7 @@ class Heidelpay implements HeidelpayParentInterface
      *                                            yet (i.e. has no id).
      * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
      *                                            optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId   The external id of the invoice.
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -952,7 +953,8 @@ class Heidelpay implements HeidelpayParentInterface
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null
     ): AbstractTransactionType {
         return $this->paymentService->charge(
             $amount,
@@ -963,7 +965,8 @@ class Heidelpay implements HeidelpayParentInterface
             $orderId,
             $metadata,
             $basket,
-            $card3ds
+            $card3ds,
+            $invoiceId
         );
     }
 
@@ -1066,17 +1069,18 @@ class Heidelpay implements HeidelpayParentInterface
      * Performs a Cancellation transaction and returns the resulting Cancellation object.
      * Performs a full cancel if the parameter amount is null.
      *
-     * @param Charge     $charge The Charge object to create the Cancellation for.
-     * @param float|null $amount The amount to be canceled.
+     * @param Charge      $charge     The Charge object to create the Cancellation for.
+     * @param float|null  $amount     The amount to be canceled.
+     * @param string|null $reasonCode
      *
      * @return Cancellation The resulting Cancellation object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
+    public function cancelCharge(Charge $charge, $amount = null, string $reasonCode = null): AbstractTransactionType
     {
-        return $this->paymentService->cancelCharge($charge, $amount);
+        return $this->paymentService->cancelCharge($charge, $amount, $reasonCode);
     }
 
     //</editor-fold>
@@ -1086,16 +1090,17 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Performs a Shipment transaction and returns the resulting Shipment object.
      *
-     * @param Payment|string $payment The Payment object the the id of the Payment to ship.
+     * @param Payment|string $payment   The Payment object the the id of the Payment to ship.
+     * @param string|null    $invoiceId
      *
      * @return Shipment The resulting Shipment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function ship($payment): AbstractHeidelpayResource
+    public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
     {
-        return $this->paymentService->ship($payment);
+        return $this->paymentService->ship($payment, $invoiceId);
     }
 
     //</editor-fold>

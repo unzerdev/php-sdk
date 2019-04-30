@@ -96,7 +96,7 @@ class EPSTest extends BasePaymentTest
         $charge = $eps->charge(1.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
-        $this->assertNotNull($charge->getRedirectUrl());
+        $this->assertNotEmpty($charge->getRedirectUrl());
 
         $this->assertTrue($charge->getPayment()->isPending());
 

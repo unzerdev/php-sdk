@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
+use DateTime;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
@@ -33,6 +34,7 @@ use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
@@ -44,6 +46,7 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
@@ -69,8 +72,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $customer->setId('CustomerId-123');
         $this->assertEquals('CustomerId-123', $customer->getId());
 
-        $customer->setFetchedAt(new \DateTime('2018-12-03'));
-        $this->assertEquals(new \DateTime('2018-12-03'), $customer->getFetchedAt());
+        $customer->setFetchedAt(new DateTime('2018-12-03'));
+        $this->assertEquals(new DateTime('2018-12-03'), $customer->getFetchedAt());
     }
 
     /**
@@ -362,6 +365,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card/'],
             'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal/'],
             'EPS' => [new EPS(), 'parent/resource/path/types/eps/'],
+            'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay/'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
             'SepaDirectDebitGuaranteed' => [
                 new SepaDirectDebitGuaranteed(''),
@@ -376,7 +380,9 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
             'Charge' => [new Charge(), 'parent/resource/path/charges/'],
             'Metadata' => [new Metadata(), 'parent/resource/path/metadata/'],
-            'Basket' => [new Basket(), 'parent/resource/path/baskets/']
+            'Basket' => [new Basket(), 'parent/resource/path/baskets/'],
+            'Webhook' => [new Webhook(), 'parent/resource/path/webhooks/'],
+            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/']
         ];
     }
 

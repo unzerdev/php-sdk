@@ -37,12 +37,14 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\PIS;
@@ -51,6 +53,7 @@ use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\PaymentTypes\Wechatpay;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -118,12 +121,12 @@ class ResourceService
     /**
      * @param $url
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractHeidelpayResource|null
      *
      * @throws RuntimeException
      * @throws HeidelpayApiException
      */
-    public function fetchResourceByUrl($url): AbstractHeidelpayResource
+    public function fetchResourceByUrl($url)
     {
         $resource = null;
         $heidelpay    = $this->heidelpay;
@@ -171,7 +174,6 @@ class ResourceService
                 $resource = $this->fetchPaymentType($resourceId);
                 break;
             default:
-                throw new RuntimeException('Invalid resource type!');
                 break;
         }
 
@@ -523,6 +525,15 @@ class ResourceService
                 break;
             case IdStrings::EPS:
                 $paymentType = new EPS();
+                break;
+            case IdStrings::ALIPAY:
+                $paymentType = new Alipay();
+                break;
+            case IdStrings::WECHATPAY:
+                $paymentType = new Wechatpay();
+                break;
+            case IdStrings::INVOICE_FACTORING:
+                $paymentType = new InvoiceFactoring();
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');

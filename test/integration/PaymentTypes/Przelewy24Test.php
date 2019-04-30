@@ -74,6 +74,7 @@ class Przelewy24Test extends BasePaymentTest
         $charge = $przelewy24->charge(100.0, 'PLN', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
+        $this->assertNotEmpty($charge->getRedirectUrl());
 
         $payment = $charge->getPayment();
         $this->assertNotNull($payment);

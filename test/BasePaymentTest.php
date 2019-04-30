@@ -26,6 +26,8 @@ namespace heidelpayPHP\test;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Basket;
+use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -34,6 +36,7 @@ use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use function strlen;
 
 class BasePaymentTest extends TestCase
 {
@@ -94,6 +97,25 @@ class BasePaymentTest extends TestCase
     //<editor-fold desc="Helpers">
 
     /**
+     * Creates a Basket resource and returns it.
+     *
+     * @return Basket
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function createBasket(): Basket
+    {
+        $orderId = $this->generateOrderId();
+        $basket = new Basket($orderId, 123.4, 'EUR');
+        $basket->setNote('This basket is creatable!');
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
+        $basket->addBasketItem($basketItem);
+        $this->heidelpay->createBasket($basket);
+        return $basket;
+    }
+
+    /**
      * Mask a credit card number.
      *
      * @param $number
@@ -103,7 +125,7 @@ class BasePaymentTest extends TestCase
      */
     protected function maskNumber($number, $maskSymbol = '*'): string
     {
-        return substr($number, 0, 6) . str_repeat($maskSymbol, \strlen($number) - 10) . substr($number, -4);
+        return substr($number, 0, 6) . str_repeat($maskSymbol, strlen($number) - 10) . substr($number, -4);
     }
 
     /**

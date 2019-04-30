@@ -4,7 +4,7 @@
  * It is a pseudo resource used to manage bulk operations on webhooks.
  * It will never receive an id from the API.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,17 +102,6 @@ class Webhooks extends AbstractHeidelpayResource
     public function getWebhookList(): array
     {
         return $this->webhooks;
-    }
-
-    /**
-     * @param array $webhooks
-     *
-     * @return Webhooks
-     */
-    public function setWebhooks(array $webhooks): Webhooks
-    {
-        $this->webhooks = $webhooks;
-        return $this;
     }
 
     //</editor-fold>

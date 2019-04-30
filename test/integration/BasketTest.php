@@ -155,12 +155,7 @@ class BasketTest extends BasePaymentTest
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
-        $orderId = $this->generateOrderId();
-        $basket  = new Basket($orderId, 123.4, 'EUR');
-        $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
-        $basket->addBasketItem($basketItem);
-        $this->heidelpay->createBasket($basket);
+        $basket  = $this->createBasket();
         $this->assertNotEmpty($basket->getId());
 
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setBic('COBADEFFXXX');

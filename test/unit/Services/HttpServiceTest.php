@@ -124,6 +124,38 @@ class HttpServiceTest extends BaseUnitTest
     }
 
     /**
+     * Verify 'Accept-Language' header only set when a locale is defined in the heidelpay object.
+     *
+     * @test
+     * @dataProvider languageShouldOnlyBeSetIfSpecificallyDefinedDP
+     *
+     * @param $locale
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function languageShouldOnlyBeSetIfSpecificallyDefined($locale)
+    {
+        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['setHeaders', 'execute'])->getMock();
+        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
+
+        $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey', $locale));
+
+        $adapterMock->expects($this->once())->method('setHeaders')->with(
+            $this->callback(
+                static function ($headers) use ($locale) {
+                    return $locale === ($headers['Accept-Language'] ?? null);
+                })
+        );
+        $adapterMock->method('execute')->willReturn('myResponseString');
+
+        /** @var HttpService $httpServiceMock*/
+        $httpServiceMock->send('/my/uri/123', $resource);
+    }
+
+    /**
      * Verify debugLog logs to debug handler if debug mode and a handler are set.
      *
      * @test
@@ -311,6 +343,18 @@ class HttpServiceTest extends BaseUnitTest
             '500' => ['500'],
             '600' => ['600'],
             '1000' => ['1000']
+        ];
+    }
+
+    /**
+     * Returns test data for method public function languageShouldOnlyBeSetIfSpecificallyDefined.
+     */
+    public function languageShouldOnlyBeSetIfSpecificallyDefinedDP(): array
+    {
+        return [
+            'de-DE' => ['de-DE'],
+            'en-US' => ['en-US'],
+            'null' => [null]
         ];
     }
 

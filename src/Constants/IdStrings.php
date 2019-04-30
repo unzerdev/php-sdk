@@ -46,6 +46,9 @@ class IdStrings
     const SOFORT = 'sft';
     const PIS = 'pis';
     const EPS = 'eps';
+    const ALIPAY = 'ali';
+    const WECHATPAY = 'wcp';
+    const INVOICE_FACTORING = 'ivf';
 
     // Resources
     const BASKET = 'bsk';
@@ -67,6 +70,9 @@ class IdStrings
         self::SEPA_DIRECT_DEBIT,
         self::SOFORT,
         self::PIS,
-        self::EPS
+        self::EPS,
+        self::ALIPAY,
+        self::WECHATPAY,
+        self::INVOICE_FACTORING
     ];
 }

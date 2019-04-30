@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\Validators\PrivateKeyValidator;
+use PHPUnit\Framework\Exception;
 
 class PrivateKeyValidatorTest extends BaseUnitTest
 {
@@ -38,7 +39,7 @@ class PrivateKeyValidatorTest extends BaseUnitTest
      * @param string $key
      * @param bool   $expectedResult
      *
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      */
     public function validateShouldReturnTrueIfPrivateKeyHasCorrectFormat($key, $expectedResult)
     {

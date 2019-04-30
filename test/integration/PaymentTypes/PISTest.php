@@ -75,6 +75,7 @@ class PISTest extends BasePaymentTest
         $charge = $pis->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
+        $this->assertNotEmpty($charge->getRedirectUrl());
 
         return $charge;
     }

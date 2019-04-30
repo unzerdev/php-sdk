@@ -77,13 +77,11 @@ class IdService
     /**
      * @param string $url
      *
-     * @return string
-     *
-     * @throws RuntimeException
+     * @return string|null
      */
-    public static function getLastResourceIdFromUrlString($url): string
+    public static function getLastResourceIdFromUrlString($url)
     {
-        return self::getResourceIdFromUrl($url, '([a-z]{3}|p24)', true);
+        return self::getResourceIdOrNullFromUrl($url, '([a-z]{3}|p24)', true);
     }
 
     /**

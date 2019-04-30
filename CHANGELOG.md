@@ -11,11 +11,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Added method to fetch resource by received event.
 *   Added log method to write to custom debuglog to heidelpay facade.
 *   Added IdService to fetch ids and types from id strings.
+*   Added Alipay payment type and example.
+*   Added WeChat Pay payment type and example.
+*   Added Invoice Factoring payment type and example.
 
 ### Changed
 *   Applied several micro optimizations.
 *   Added response code to rest call logs.
 *   Adapted integration tests to new api version.
+*   Added parameter reasonCode to cancel method.
+*   Update of ApiResponseCodes.
+*   Add optional property invoiceId to charge transaction.
+
+### Fixed
+*   Refactor setting basket items in basket resource to avoid problem with missing basket item reference id.
 
 ## [1.1.0.0][1.1.0.0]
 

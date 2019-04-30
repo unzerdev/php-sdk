@@ -2,7 +2,7 @@
 /**
  * This service provides for all methods to manage webhooks/events.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,48 @@ class WebhookService
         $this->heidelpay = $heidelpay;
         $this->resourceService = $heidelpay->getResourceService();
     }
+
+    //<editor-fold desc="Getters/Setters">
+
+    /**
+     * @return Heidelpay
+     */
+    public function getHeidelpay(): Heidelpay
+    {
+        return $this->heidelpay;
+    }
+
+    /**
+     * @param Heidelpay $heidelpay
+     *
+     * @return WebhookService
+     */
+    public function setHeidelpay(Heidelpay $heidelpay): WebhookService
+    {
+        $this->heidelpay = $heidelpay;
+        return $this;
+    }
+
+    /**
+     * @return ResourceService
+     */
+    public function getResourceService(): ResourceService
+    {
+        return $this->resourceService;
+    }
+
+    /**
+     * @param ResourceService $resourceService
+     *
+     * @return WebhookService
+     */
+    public function setResourceService(ResourceService $resourceService): WebhookService
+    {
+        $this->resourceService = $resourceService;
+        return $this;
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc="Webhook resource">
 
@@ -146,9 +188,10 @@ class WebhookService
      */
     public function fetchWebhooks(): array
     {
+        /** @var Webhooks $webhooks */
         $webhooks = new Webhooks();
         $webhooks->setParentResource($this->heidelpay);
-        $this->resourceService->fetch($webhooks);
+        $webhooks = $this->resourceService->fetch($webhooks);
 
         return $webhooks->getWebhookList();
     }
@@ -179,9 +222,10 @@ class WebhookService
      */
     public function createWebhooks(string $url, array $events): array
     {
+        /** @var Webhooks $webhooks */
         $webhooks = new Webhooks($url, $events);
         $webhooks->setParentResource($this->heidelpay);
-        $this->resourceService->create($webhooks);
+        $webhooks = $this->resourceService->create($webhooks);
 
         return $webhooks->getWebhookList();
     }
@@ -193,23 +237,21 @@ class WebhookService
     /**
      * Fetches the resource corresponding to the given eventData.
      *
-     * @return AbstractHeidelpayResource|null
+     * @return AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchResourceByWebhookEvent()
+    public function fetchResourceByWebhookEvent(): AbstractHeidelpayResource
     {
         $resourceObject = null;
-        $postData = file_get_contents('php://input');
+        $postData = $this->readInputStream();
         $eventData = json_decode($postData, false);
         $retrieveUrl = $eventData->retrieveUrl ?? null;
 
         if (!empty($retrieveUrl)) {
             $this->heidelpay->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
-            $resourceObject = $this->heidelpay
-                ->getResourceService()
-                ->fetchResourceByUrl($eventData->retrieveUrl);
+            $resourceObject = $this->resourceService->fetchResourceByUrl($retrieveUrl);
         }
 
         if (!$resourceObject instanceof AbstractHeidelpayResource) {
@@ -217,6 +259,16 @@ class WebhookService
         }
 
         return $resourceObject;
+    }
+
+    /**
+     * Read and return the input stream.
+     *
+     * @return false|string
+     */
+    public function readInputStream()
+    {
+        return file_get_contents('php://input');
     }
 
     //</editor-fold>
