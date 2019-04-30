@@ -62,6 +62,8 @@ class WebhooksServiceTest extends BaseUnitTest
         $this->assertNotSame($heidelpay2->getResourceService(), $webhookService->getResourceService());
     }
 
+    //<editor-fold desc="Webhook">
+
     /**
      * Verify create webhook calls resource service with webhook object.
      *
@@ -239,6 +241,10 @@ class WebhooksServiceTest extends BaseUnitTest
         $webhookServiceMock->deleteWebhook('WebhookId');
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Webhooks">
+
     /**
      * Verify fetch webhooks calls resource service.
      * In order to be able to verify getWebhookList of the webhooks object is called we needed to return a mocked
@@ -298,4 +304,42 @@ class WebhooksServiceTest extends BaseUnitTest
 
         $webhookService->deleteWebhooks();
     }
+
+    /**
+     * Verify create webhooks calls resource service with webhooks object.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     */
+    public function createWebhooksShouldCallResourceServiceWithNewWebhooksObject()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $webhookService = new WebhookService($heidelpay);
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
+        /** @var ResourceService $resourceServiceMock */
+        $webhookService->setResourceService($resourceServiceMock);
+
+        $webhooksMock = $this->getMockBuilder(Webhooks::class)->setMethods(['getWebhookList'])->getMock();
+        $webhookList = ['ListItem1', 'ListItem2'];
+        $webhooksMock->expects($this->once())->method('getWebhookList')->willReturn($webhookList);
+        $resourceServiceMock->expects($this->once())->method('create')->with($this->callback(
+            static function ($param) use ($heidelpay) {
+                return $param instanceof Webhooks &&
+                    $param->getUrl() === 'myUrlString' &&
+                    $param->getEventList() === ['TestEvent1', 'TestEvent2'] &&
+                    $param->getHeidelpayObject() === $heidelpay;
+            }
+        ))->willReturn($webhooksMock);
+
+        $this->assertEquals(
+            $webhookList,
+            $webhookService->createWebhooks('myUrlString', ['TestEvent1', 'TestEvent2'])
+        );
+    }
+
+    //</editor-fold>
 }

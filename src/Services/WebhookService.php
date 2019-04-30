@@ -222,9 +222,10 @@ class WebhookService
      */
     public function createWebhooks(string $url, array $events): array
     {
+        /** @var Webhooks $webhooks */
         $webhooks = new Webhooks($url, $events);
         $webhooks->setParentResource($this->heidelpay);
-        $this->resourceService->create($webhooks);
+        $webhooks = $this->resourceService->create($webhooks);
 
         return $webhooks->getWebhookList();
     }
