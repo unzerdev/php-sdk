@@ -61,6 +61,8 @@ use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\DummyResource;
+use InvalidArgumentException;
+use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
@@ -1363,6 +1365,7 @@ class ResourceServiceTest extends BaseUnitTest
      */
     public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP(): array
     {
+
         return [
             'CARD'                         => [
                 's-crd-xen2ybcovn56',
@@ -1416,13 +1419,17 @@ class ResourceServiceTest extends BaseUnitTest
                 's-eps-xen2ybcovn56',
                 'https://api.heidelpay.com/v1/types/eps/s-eps-xen2ybcovn56/'
             ],
-            'ALIPAY'                          => [
+            'ALIPAY'                       => [
                 's-ali-xen2ybcovn56',
                 'https://api.heidelpay.com/v1/types/alipay/s-ali-xen2ybcovn56/'
             ],
-            'WECHATPAY'                          => [
+            'WECHATPAY'                    => [
                 's-wcp-xen2ybcovn56',
                 'https://api.heidelpay.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'
+            ],
+            'INVOICE_FACTORING'            => [
+                's-ivf-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'
             ]
         ];
     }
