@@ -71,6 +71,8 @@ class IdStrings
         self::SOFORT,
         self::PIS,
         self::EPS,
-        self::ALIPAY
+        self::ALIPAY,
+        self::WECHATPAY,
+        self::INVOICE_FACTORING
     ];
 }

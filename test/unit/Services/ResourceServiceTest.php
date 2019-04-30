@@ -1416,9 +1416,13 @@ class ResourceServiceTest extends BaseUnitTest
                 's-eps-xen2ybcovn56',
                 'https://api.heidelpay.com/v1/types/eps/s-eps-xen2ybcovn56/'
             ],
-            'Alipay'                          => [
+            'ALIPAY'                          => [
                 's-ali-xen2ybcovn56',
                 'https://api.heidelpay.com/v1/types/alipay/s-ali-xen2ybcovn56/'
+            ],
+            'WECHATPAY'                          => [
+                's-wcp-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'
             ]
         ];
     }
