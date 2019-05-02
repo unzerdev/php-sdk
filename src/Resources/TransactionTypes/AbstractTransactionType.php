@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
+use DateTime;
+use Exception;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
@@ -31,6 +33,8 @@ use heidelpayPHP\Resources\EmbeddedResources\Message;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\HasOrderId;
+use RuntimeException;
+use stdClass;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {
@@ -40,7 +44,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /** @var Payment $payment */
     private $payment;
 
-    /** @var \DateTime $date */
+    /** @var DateTime $date */
     private $date;
 
     /** @var string $uniqueId */
@@ -137,11 +141,11 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      *
      * @return $this
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setDate(string $date): self
     {
-        $this->date = new \DateTime($date);
+        $this->date = new DateTime($date);
         return $this;
     }
 
@@ -248,17 +252,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         return $this->message;
     }
 
-    /**
-     * @param Message $message
-     *
-     * @return AbstractTransactionType
-     */
-    public function setMessage(Message $message): AbstractTransactionType
-    {
-        $this->message = $message;
-        return $this;
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
@@ -267,9 +260,9 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * {@inheritDoc}
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    public function handleResponse(\stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         parent::handleResponse($response, $method);
 
@@ -295,7 +288,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getLinkedResources(): array
     {
@@ -303,7 +296,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         $payment = $this->getPayment();
         $paymentType = $payment ? $payment->getPaymentType() : null;
         if (!$paymentType instanceof BasePaymentType) {
-            throw new \RuntimeException('Payment type is missing!');
+            throw new RuntimeException('Payment type is missing!');
         }
 
         return [
@@ -320,7 +313,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * Updates the referenced payment object if it exists and if this is not the payment object itself.
      * This is called from the crud methods to update the payments state whenever anything happens.
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function fetchPayment()

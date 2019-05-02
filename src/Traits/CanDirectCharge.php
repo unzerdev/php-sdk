@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use RuntimeException;
 
 trait CanDirectCharge
 {
@@ -43,16 +44,17 @@ trait CanDirectCharge
      * @param Customer|string|null $customer
      * @param string|null          $orderId
      * @param Metadata|string|null $metadata
-     * @param Basket|null          $basket   The Basket object corresponding to the payment.
-     *                                       The Basket object will be created automatically if it does not exist
-     *                                       yet (i.e. has no id).
-     * @param bool|null            $card3ds  Enables 3ds channel for credit cards if available. This parameter is
-     *                                       optional and will be ignored if not applicable.
+     * @param Basket|null          $basket    The Basket object corresponding to the payment.
+     *                                        The Basket object will be created automatically if it does not exist
+     *                                        yet (i.e. has no id).
+     * @param bool|null            $card3ds   Enables 3ds channel for credit cards if available. This parameter is
+     *                                        optional and will be ignored if not applicable.
+     * @param string|null          $invoiceId The external id of the invoice.
      *
      * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function charge(
         $amount,
@@ -62,7 +64,8 @@ trait CanDirectCharge
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null
     ): Charge {
         if ($this instanceof HeidelpayParentInterface) {
             return $this->getHeidelpayObject()->charge(
@@ -74,11 +77,12 @@ trait CanDirectCharge
                 $orderId,
                 $metadata,
                 $basket,
-                $card3ds
+                $card3ds,
+                $invoiceId
             );
         }
 
-        throw new \RuntimeException(
+        throw new RuntimeException(
             self::class . ' must implement HeidelpayParentInterface to enable ' . __METHOD__ . ' transaction.'
         );
     }

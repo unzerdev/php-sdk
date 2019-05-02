@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use RuntimeException;
 
 class CardTest extends BaseUnitTest
 {
@@ -79,7 +80,7 @@ class CardTest extends BaseUnitTest
     /**
      * {@inheritDoc}
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function setUp()
     {
@@ -91,7 +92,7 @@ class CardTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function constructorShouldSetParameters()
     {
@@ -112,7 +113,7 @@ class CardTest extends BaseUnitTest
      * @param string $testData
      * @param string $expected
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function expiryDateShouldBeExtendedToLongVersion($testData, $expected)
     {
@@ -128,11 +129,11 @@ class CardTest extends BaseUnitTest
      *
      * @param string $testData
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function yearOfExpiryDateShouldBeExtendedToLongVersion($testData)
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->card->setExpiryDate($testData);
     }
 
@@ -143,7 +144,7 @@ class CardTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function verifySettingExpiryDateNullChangesNothing()
     {

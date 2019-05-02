@@ -33,6 +33,9 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class ChargeTest extends BaseUnitTest
 {
@@ -49,16 +52,21 @@ class ChargeTest extends BaseUnitTest
         $this->assertNull($charge->getAmount());
         $this->assertNull($charge->getCurrency());
         $this->assertNull($charge->getReturnUrl());
+        $this->assertNull($charge->isCard3ds());
 
         $charge = new Charge(123.4, 'myCurrency', 'https://my-return-url.test');
+        $charge->setCard3ds(true);
         $this->assertEquals(123.4, $charge->getAmount());
         $this->assertEquals('myCurrency', $charge->getCurrency());
         $this->assertEquals('https://my-return-url.test', $charge->getReturnUrl());
+        $this->assertTrue($charge->isCard3ds());
 
         $charge->setAmount(567.8)->setCurrency('myNewCurrency')->setReturnUrl('https://another-return-url.test');
+        $charge->setCard3ds(false);
         $this->assertEquals(567.8, $charge->getAmount());
         $this->assertEquals('myNewCurrency', $charge->getCurrency());
         $this->assertEquals('https://another-return-url.test', $charge->getReturnUrl());
+        $this->assertFalse($charge->isCard3ds());
     }
 
     /**
@@ -66,7 +74,7 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function aChargeShouldBeUpdatedThroughResponseHandling()
@@ -85,7 +93,7 @@ class ChargeTest extends BaseUnitTest
         $this->assertEquals('myCurrency', $charge->getCurrency());
         $this->assertEquals('https://my-return-url.test', $charge->getReturnUrl());
 
-        $testResponse = new \stdClass();
+        $testResponse = new stdClass();
         $testResponse->amount = '789.0';
         $testResponse->currency = 'TestCurrency';
         $testResponse->returnUrl = 'https://return-url.test';
@@ -109,11 +117,11 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payment type is missing!');
 
         (new Charge())->getLinkedResources();
@@ -124,7 +132,7 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToCharge()
@@ -150,8 +158,8 @@ class ChargeTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelShouldCallCancelChargeOnHeidelpayObject()
     {

@@ -30,6 +30,8 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\test\BaseUnitTest;
+use ReflectionException;
+use RuntimeException;
 
 class CanAuthorizeTest extends BaseUnitTest
 {
@@ -38,14 +40,14 @@ class CanAuthorizeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizeShouldThrowExceptionIfTheClassDoesNotImplementParentInterface()
     {
         $dummy = new TraitDummyWithoutCustomerWithoutParentIF();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('TraitDummyWithoutCustomerWithoutParentIF');
 
         $dummy->authorize(1.0, 'MyCurrency', 'https://return.url');
@@ -56,16 +58,14 @@ class CanAuthorizeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function authorizeShouldPropagateAuthorizeToHeidelpay()
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['authorize'])
-            ->disableOriginalConstructor()->getMock();
-        $dummyMock     = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)
-            ->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
+        $dummyMock     = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
 
         $authorize = new Authorization();
         $customer  = (new Customer())->setId('123');
@@ -87,14 +87,7 @@ class CanAuthorizeTest extends BaseUnitTest
         $this->assertSame($authorize, $returnedAuthorize);
         $returnedAuthorize = $dummyMock->authorize(1.3, 'MyCurrency3', 'https://return.url3', $customer, 'orderId');
         $this->assertSame($authorize, $returnedAuthorize);
-        $returnedAuthorize = $dummyMock->authorize(
-            1.4,
-            'MyCurrency3',
-            'https://return.url3',
-            $customer,
-            'orderId',
-            $metadata
-        );
+        $returnedAuthorize = $dummyMock->authorize(1.4, 'MyCurrency3', 'https://return.url3', $customer, 'orderId', $metadata);
         $this->assertSame($authorize, $returnedAuthorize);
     }
 }

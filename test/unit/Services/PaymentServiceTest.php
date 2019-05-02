@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\unit\Services;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -37,15 +38,20 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
+use function in_array;
+use ReflectionException;
+use RuntimeException;
 
 class PaymentServiceTest extends BaseUnitTest
 {
+    //<editor-fold desc="General">
+
     /**
      * Verify setters and getters work properly.
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function gettersAndSettersShouldWorkProperly()
     {
@@ -66,13 +72,17 @@ class PaymentServiceTest extends BaseUnitTest
         $this->assertNotSame($heidelpay2->getResourceService(), $paymentService->getResourceService());
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Authorize">
+
     /**
      * Verify authorize method calls authorize with payment.
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizeShouldCreatePaymentAndCallAuthorizeWithPayment()
@@ -113,14 +123,18 @@ class PaymentServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @param $card3ds
+     *
      * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @dataProvider card3dsDataProvider
      */
-    public function authorizeWithPaymentShouldCallCreateOnResourceServiceWithANewAuthorization()
+    public function authorizeWithPaymentShouldCallCreateOnResourceServiceWithANewAuthorization($card3ds)
     {
         $customer = (new Customer())->setId('myCustomerId');
         $metadata = (new Metadata())->setId('myMetadataId');
+        $basket = (new Basket())->setId('myBasketId');
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
 
@@ -128,7 +142,7 @@ class PaymentServiceTest extends BaseUnitTest
             ->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
-                function ($authorize) use ($customer, $payment, $metadata) {
+                static function ($authorize) use ($customer, $payment, $metadata, $basket, $card3ds) {
                     /** @var Authorization $authorize */
                     $newPayment = $authorize->getPayment();
                     return $authorize instanceof Authorization &&
@@ -136,10 +150,12 @@ class PaymentServiceTest extends BaseUnitTest
                            $authorize->getCurrency() === 'myTestCurrency' &&
                            $authorize->getOrderId() === 'myOrderId' &&
                            $authorize->getReturnUrl() === 'myTestUrl' &&
+                           $authorize->isCard3ds() === $card3ds &&
                            $newPayment instanceof Payment &&
                            $newPayment === $payment &&
                            $newPayment->getMetadata() === $metadata &&
                            $newPayment->getCustomer() === $customer &&
+                           $newPayment->getBasket() === $basket &&
                            $newPayment->getAuthorization() === $authorize;
                 }
             )
@@ -155,32 +171,42 @@ class PaymentServiceTest extends BaseUnitTest
                 'myTestUrl',
                 $customer,
                 'myOrderId',
-                $metadata
+                $metadata,
+                $basket,
+                $card3ds
             );
         $this->assertSame($payment->getAuthorization(), $returnedAuth);
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Charge">
 
     /**
      * Verify charge method calls create with a charge object on resource service.
      *
      * @test
      *
+     * @param $card3ds
+     *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @dataProvider card3dsDataProvider
      */
-    public function chargeShouldCreateAPaymentAndCallCreateOnResourceServiceWithPayment()
+    public function chargeShouldCreateAPaymentAndCallCreateOnResourceServiceWithPayment($card3ds)
     {
         $customer = (new Customer())->setId('myCustomerId');
         $heidelpay = new Heidelpay('s-priv-123');
         $paymentType = (new Sofort())->setId('myPaymentTypeId');
         $metadata = (new Metadata())->setId('myMetadataId');
+        $basket = (new Basket())->setId('myBasketId');
 
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
-                function ($charge) use ($customer, $paymentType) {
+                static function ($charge) use ($customer, $paymentType, $basket, $card3ds) {
                     /** @var Charge $charge */
                     $newPayment = $charge->getPayment();
                     return $charge instanceof Charge &&
@@ -188,18 +214,29 @@ class PaymentServiceTest extends BaseUnitTest
                         $charge->getCurrency() === 'myTestCurrency' &&
                         $charge->getOrderId() === 'myOrderId' &&
                         $charge->getReturnUrl() === 'myTestUrl' &&
+                        $charge->isCard3ds() === $card3ds &&
                         $newPayment instanceof Payment &&
                         $newPayment->getCustomer() === $customer &&
                         $newPayment->getPaymentType() === $paymentType &&
-                        \in_array($charge, $newPayment->getCharges(), true);
+                        $newPayment->getBasket() === $basket &&
+                        in_array($charge, $newPayment->getCharges(), true);
                 }
             )
         );
 
         /** @var ResourceService $resourceSrvMock */
         $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
-        $returnedCharge =
-            $paymentSrv->charge(1.234, 'myTestCurrency', $paymentType, 'myTestUrl', $customer, 'myOrderId', $metadata);
+        $returnedCharge = $paymentSrv->charge(
+            1.234,
+            'myTestCurrency',
+            $paymentType,
+            'myTestUrl',
+            $customer,
+            'myOrderId',
+            $metadata,
+            $basket,
+            $card3ds
+        );
         $this->assertSame($paymentType, $returnedCharge->getPayment()->getPaymentType());
     }
 
@@ -208,9 +245,9 @@ class PaymentServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function chargeAuthorizationShouldCallChargePaymentWithTheGivenPaymentObject()
     {
@@ -232,9 +269,9 @@ class PaymentServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function chargeAuthorizationShouldCallFetchPaymentIfThePaymentIsPassedAsIdString()
     {
@@ -260,8 +297,8 @@ class PaymentServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function chargePaymentShouldCallCreateOnResourceServiceWithNewCharge()
     {
@@ -272,7 +309,7 @@ class PaymentServiceTest extends BaseUnitTest
             ->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
-                function ($charge) use ($payment) {
+                static function ($charge) use ($payment) {
                     /** @var Charge $charge */
                     $newPayment = $charge->getPayment();
                     return $charge instanceof Charge &&
@@ -280,7 +317,7 @@ class PaymentServiceTest extends BaseUnitTest
                         $charge->getCurrency() === 'myTestCurrency' &&
                         $newPayment instanceof Payment &&
                         $newPayment === $payment &&
-                        \in_array($charge, $newPayment->getCharges(), true);
+                        in_array($charge, $newPayment->getCharges(), true);
                 }
             )
         );
@@ -291,14 +328,18 @@ class PaymentServiceTest extends BaseUnitTest
         $this->assertArraySubset([$returnedCharge], $payment->getCharges());
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Cancel">
+
     /**
      * Verify cancelAuthorization will create a cancellation object and call create on ResourceService with it.
      *
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelAuthorizationShouldCallCreateOnResourceServiceWithNewCancellation()
     {
@@ -310,14 +351,14 @@ class PaymentServiceTest extends BaseUnitTest
             ->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
-                function ($cancellation) use ($authorization, $payment) {
+                static function ($cancellation) use ($authorization, $payment) {
                     /** @var Cancellation $cancellation */
                     $newPayment = $cancellation->getPayment();
                     return $cancellation instanceof Cancellation &&
                         $cancellation->getAmount() === 12.122 &&
                         $newPayment instanceof Payment &&
                         $newPayment === $payment &&
-                        \in_array($cancellation, $authorization->getCancellations(), true);
+                        in_array($cancellation, $authorization->getCancellations(), true);
                 }
             )
         );
@@ -334,8 +375,8 @@ class PaymentServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelAuthorizationByPaymentShouldCallCancelAuthorization()
     {
@@ -369,8 +410,8 @@ class PaymentServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelChargeByIdShouldFetchChargeAndPropagateToCancelCharge()
     {
@@ -404,8 +445,8 @@ class PaymentServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function cancelChargeShouldCreateCancellationAndCallsCreate()
@@ -419,7 +460,7 @@ class PaymentServiceTest extends BaseUnitTest
             ->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
-                function ($cancellation) use ($payment, $charge) {
+                static function ($cancellation) use ($payment, $charge) {
                     return $cancellation instanceof Cancellation &&
                            $cancellation->getAmount() === 12.22 &&
                            $cancellation->getPayment() === $payment &&
@@ -433,14 +474,18 @@ class PaymentServiceTest extends BaseUnitTest
         $paymentSrv->cancelCharge($charge, 12.22);
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Shipment">
+
     /**
      * Verify ship method will create a new Shipment, add it to the given payment object and call create on
      * ResourceService with the shipment object.
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function shipShouldCreateShipmentAndCallCreateOnResourceServiceWithIt()
@@ -453,7 +498,7 @@ class PaymentServiceTest extends BaseUnitTest
             ->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->exactly(2))->method('create')->with(
             $this->callback(
-                function ($shipment) use ($payment) {
+                static function ($shipment) use ($payment) {
                     return $shipment instanceof Shipment &&
                         $shipment->getPayment() === $payment &&
                         $shipment->getParentResource() === $payment;
@@ -470,4 +515,22 @@ class PaymentServiceTest extends BaseUnitTest
         $this->assertInstanceOf(Shipment::class, $paymentSrv->ship('myPaymentId'));
         $this->assertCount(2, $payment->getShipments());
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="DataProviders">
+
+    /**
+     * @return array
+     */
+    public function card3dsDataProvider(): array
+    {
+        return [
+            'default' => [null],
+            'non 3ds' => [false],
+            '3ds' => [true],
+        ];
+    }
+
+    //</editor-fold>
 }

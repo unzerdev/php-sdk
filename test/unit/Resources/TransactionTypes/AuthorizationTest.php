@@ -34,6 +34,9 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class AuthorizationTest extends BaseUnitTest
 {
@@ -50,16 +53,21 @@ class AuthorizationTest extends BaseUnitTest
         $this->assertNull($authorization->getAmount());
         $this->assertNull($authorization->getCurrency());
         $this->assertNull($authorization->getReturnUrl());
+        $this->assertNull($authorization->isCard3ds());
 
         $authorization = new Authorization(123.4, 'myCurrency', 'https://my-return-url.test');
+        $authorization->setCard3ds(true);
         $this->assertEquals(123.4, $authorization->getAmount());
         $this->assertEquals('myCurrency', $authorization->getCurrency());
         $this->assertEquals('https://my-return-url.test', $authorization->getReturnUrl());
+        $this->assertTrue($authorization->isCard3ds());
 
         $authorization->setAmount(567.8)->setCurrency('myNewCurrency')->setReturnUrl('https://another-return-url.test');
+        $authorization->setCard3ds(false);
         $this->assertEquals(567.8, $authorization->getAmount());
         $this->assertEquals('myNewCurrency', $authorization->getCurrency());
         $this->assertEquals('https://another-return-url.test', $authorization->getReturnUrl());
+        $this->assertFalse($authorization->isCard3ds());
     }
 
     /**
@@ -67,7 +75,7 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function anAuthorizationShouldBeUpdatedThroughResponseHandling()
@@ -82,7 +90,7 @@ class AuthorizationTest extends BaseUnitTest
         $this->assertEquals('myCurrency', $authorization->getCurrency());
         $this->assertEquals('https://my-return-url.test', $authorization->getReturnUrl());
 
-        $testResponse = new \stdClass();
+        $testResponse = new stdClass();
         $testResponse->amount = '789.0';
         $testResponse->currency = 'TestCurrency';
         $testResponse->returnUrl = 'https://return-url.test';
@@ -98,11 +106,11 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payment type is missing!');
 
         (new Authorization())->getLinkedResources();
@@ -114,7 +122,7 @@ class AuthorizationTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToAuthorization()
@@ -140,8 +148,8 @@ class AuthorizationTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function cancelShouldCallCancelAuthorizationOnHeidelpayObject()
     {
@@ -172,11 +180,11 @@ class AuthorizationTest extends BaseUnitTest
      * @param float|null $value
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeShouldThrowExceptionIfPaymentIsNotSet($value)
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payment object is missing. Try fetching the object first!');
 
         $authorization =  new Authorization();
@@ -189,8 +197,8 @@ class AuthorizationTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function chargeShouldCallChargeAuthorizationOnHeidelpayObject()
     {

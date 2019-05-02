@@ -28,6 +28,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class CancelAfterAuthorizationTest extends BasePaymentTest
 {
@@ -36,7 +37,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function fullCancelOnAuthorization()
@@ -64,7 +65,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function partCancelOnPayment()
     {
@@ -87,7 +88,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function partCancelOnAuthorize()
     {
@@ -113,7 +114,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function anAuthorizationsFullReversalShallBeFetchable()
     {
@@ -154,7 +155,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function anAuthorizationsReversalsShouldBeFetchable()
     {

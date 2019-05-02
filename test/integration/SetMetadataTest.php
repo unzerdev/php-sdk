@@ -28,6 +28,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class SetMetadataTest extends BasePaymentTest
 {
@@ -36,7 +37,7 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function metadataShouldBeCreatableAndFetchableWithTheApi()
@@ -70,7 +71,7 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizeShouldCreateMetadata()
@@ -92,7 +93,7 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function chargeShouldCreateMetadata()
@@ -115,7 +116,7 @@ class SetMetadataTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function paymentShouldFetchMetadataResourceOnFetch()
     {
@@ -137,7 +138,7 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizeShouldCreateMetadataEvenIfItHasNotBeenSet()
@@ -156,7 +157,7 @@ class SetMetadataTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function chargeShouldCreateMetadataEvenIfItHasNotBeenSet()

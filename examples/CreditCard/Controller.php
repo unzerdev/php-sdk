@@ -62,16 +62,18 @@ $use3Ds          = isset($_POST['3dsecure']) && ($_POST['3dsecure'] === '1');
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
-    $heidelpay = new Heidelpay('s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
+    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge/authorize transaction
     // The 3D secured flag can be used to switch between 3ds and non-3ds.
     // If your merchant is only configured for one of those you can omit the flag.
     $customer     = new Customer('Linda', 'Heideich');
-    $transaction = $transactionType === 'charge' ?
-        $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds) :
-        $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+    if ($transactionType === 'charge') {
+        $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+    } else {
+        $transaction = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+    }
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
@@ -90,7 +92,7 @@ try {
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
-} catch (\RuntimeException $e) {
+} catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);

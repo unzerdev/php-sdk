@@ -1,6 +1,6 @@
 <?php
 /**
- * This class contains the amount properties which are maynly used by the Payment class.
+ * This class contains the amount properties which are mainly used by the payment class.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *

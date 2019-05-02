@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\integration;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class ShipmentTest extends BasePaymentTest
 {
@@ -35,7 +36,7 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function shipmentShouldBeCreatableAndFetchable()
@@ -65,7 +66,7 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function shipmentCanBeCalledOnThePaymentObject()
@@ -96,7 +97,7 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function shipmentShouldBePossibleWithPaymentObject()
@@ -122,7 +123,7 @@ class ShipmentTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function shipmentStatusIsSetCorrectly()
     {

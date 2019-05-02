@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\integration;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class KeyTest extends BasePaymentTest
 {
@@ -38,7 +39,7 @@ class KeyTest extends BasePaymentTest
      *
      * @param string $key
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function validKeysShouldBeExcepted($key)
     {
@@ -54,11 +55,11 @@ class KeyTest extends BasePaymentTest
      *
      * @param string $key
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function invalidKeysShouldResultInException($key)
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         new Heidelpay($key);
     }
 
@@ -67,7 +68,7 @@ class KeyTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function keypairShouldReturnExpectedValues()

@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\Constants;
 
+use RuntimeException;
+
 class PaymentState
 {
     const STATE_PENDING = 0;
@@ -47,7 +49,7 @@ class PaymentState
      *
      * @return string The name of the code.
      *
-     * @throws \RuntimeException A \RuntimeException is thrown when the $stateCode is unknown.
+     * @throws RuntimeException A RuntimeException is thrown when the $stateCode is unknown.
      */
     public static function mapStateCodeToName($stateCode): string
     {
@@ -71,7 +73,7 @@ class PaymentState
                 $stateName =  self::STATE_NAME_CHARGEBACK;
                 break;
             default:
-                throw new \RuntimeException('Unknown payment state #' . $stateCode);
+                throw new RuntimeException('Unknown payment state #' . $stateCode);
         }
 
         return $stateName;
@@ -84,7 +86,7 @@ class PaymentState
      *
      * @return int The code of the payment state.
      *
-     * @throws \RuntimeException A \RuntimeException is thrown when the $stateName is unknown.
+     * @throws RuntimeException A RuntimeException is thrown when the $stateName is unknown.
      */
     public static function mapStateNameToCode($stateName): int
     {
@@ -108,7 +110,7 @@ class PaymentState
                 $stateCode = self::STATE_CHARGEBACK;
                 break;
             default:
-                throw new \RuntimeException('Unknown payment state ' . $stateName);
+                throw new RuntimeException('Unknown payment state ' . $stateName);
         }
 
         return $stateCode;

@@ -30,6 +30,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class SepaDirectDebitTest extends BasePaymentTest
 {
@@ -39,7 +40,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -64,7 +65,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @return SepaDirectDebit
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function sepaDirectDebitShouldBeCreatable(): SepaDirectDebit
     {
@@ -95,7 +96,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @param SepaDirectDebit $directDebit
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function authorizeShouldThrowException(SepaDirectDebit $directDebit)
@@ -114,7 +115,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends sepaDirectDebitShouldBeCreatable
      */
     public function directDebitShouldBeChargeable(SepaDirectDebit $directDebit): Charge
@@ -134,7 +135,7 @@ class SepaDirectDebitTest extends BasePaymentTest
      * @param Charge $charge
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends directDebitShouldBeChargeable
      */
     public function directDebitChargeShouldBeRefundable(Charge $charge)

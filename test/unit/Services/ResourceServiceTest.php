@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\test\unit\Services;
 
+use DateTime;
+use Exception;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
@@ -34,12 +36,14 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\PIS;
@@ -48,14 +52,19 @@ use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
+use heidelpayPHP\Resources\PaymentTypes\Wechatpay;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\HttpService;
+use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\DummyResource;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class ResourceServiceTest extends BaseUnitTest
 {
@@ -69,12 +78,11 @@ class ResourceServiceTest extends BaseUnitTest
      * @param string $uri
      * @param string $idString
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getResourceIdFromUrlShouldIdentifyAndReturnTheIdStringFromAGivenString($expected, $uri, $idString)
     {
-        $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
-        $this->assertEquals($expected, $resourceService->getResourceIdFromUrl($uri, $idString));
+        $this->assertEquals($expected, IdService::getResourceIdFromUrl($uri, $idString));
     }
 
     /**
@@ -83,17 +91,15 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      * @dataProvider failingUrlIdStringProvider
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @param mixed $uri
      * @param mixed $idString
      */
     public function getResourceIdFromUrlShouldThrowExceptionIfTheIdCanNotBeFound($uri, $idString)
     {
-        $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Id not found!');
-        $resourceService->getResourceIdFromUrl($uri, $idString);
+        $this->expectException(RuntimeException::class);
+        IdService::getResourceIdFromUrl($uri, $idString);
     }
 
     /**
@@ -106,8 +112,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @param $timesFetchIsCalled
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function getResourceShouldFetchIfTheResourcesIdIsSetAndItHasNotBeenFetchedBefore(
         $resource,
@@ -127,12 +133,12 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function createShouldCallSendAndThenHandleResponseWithTheResponseData()
     {
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->id = 'myTestId';
 
         $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
@@ -158,12 +164,12 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function createShouldNotHandleResponseWithError()
     {
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->isError = true;
         $response->id = 'myId';
 
@@ -189,12 +195,12 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function updateShouldCallSendAndThenHandleResponseWithTheResponseData()
     {
-        $response = new \stdClass();
+        $response = new stdClass();
 
         $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         $testResource->expects($this->once())->method('handleResponse')
@@ -218,12 +224,12 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function updateShouldNotHandleResponseWithError()
     {
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->isError = true;
 
         $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
@@ -247,12 +253,12 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function deleteShouldCallSendAndThenSetTheResourceNull()
     {
-        $response = new \stdClass();
+        $response = new stdClass();
 
         $testResource = $this->getMockBuilder(Customer::class)->getMock();
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
@@ -274,12 +280,12 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function deleteShouldNotDeleteObjectOnResponseWithError()
     {
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->isError = true;
 
         $testResource = $this->getMockBuilder(Customer::class)->getMock();
@@ -305,13 +311,13 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
-     * @throws \Exception
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws Exception
      */
     public function fetchShouldCallSendWithGetUpdateFetchedAtAndCallHandleResponse()
     {
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->test = '234';
         $resourceMock = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         $resourceMock->expects($this->once())->method('handleResponse')->with($response);
@@ -329,7 +335,7 @@ class ResourceServiceTest extends BaseUnitTest
         $this->assertNull($resourceMock->getFetchedAt());
         $resourceSrvMock->fetch($resourceMock);
 
-        $now = (new \DateTime('now'))->getTimestamp();
+        $now = (new DateTime('now'))->getTimestamp();
         $then = $resourceMock->getFetchedAt()->getTimestamp();
         $this->assertTrue(($now - $then) < 60);
     }
@@ -340,8 +346,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchPaymentShouldCallFetchWithTheGivenPaymentObject()
     {
@@ -362,8 +368,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchPaymentCalledWithIdShouldCreatePaymentObjectWithIdAndCallFetch()
     {
@@ -371,11 +377,12 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
             ->setConstructorArgs([$heidelpay])->getMock();
         $resourceSrvMock->expects($this->once())->method('fetch')
-            ->with($this->callback(function ($payment) use ($heidelpay) {
-                return $payment instanceof Payment &&
+            ->with($this->callback(
+                static function ($payment) use ($heidelpay) {
+                    return $payment instanceof Payment &&
                     $payment->getId() === 'testPaymentId' &&
                     $payment->getHeidelpayObject() === $heidelpay;
-            }));
+                }));
 
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchPayment('testPaymentId');
@@ -387,8 +394,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchKeypairShouldCallFetchWithAKeypairObject()
     {
@@ -396,9 +403,10 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
             ->setConstructorArgs([$heidelpay])->getMock();
         $resourceSrvMock->expects($this->once())->method('fetch')
-            ->with($this->callback(function ($keypair) use ($heidelpay) {
-                return $keypair instanceof Keypair && $keypair->getHeidelpayObject() === $heidelpay;
-            }));
+            ->with($this->callback(
+                static function ($keypair) use ($heidelpay) {
+                    return $keypair instanceof Keypair && $keypair->getHeidelpayObject() === $heidelpay;
+                }));
 
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchKeypair();
@@ -409,8 +417,8 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function createPaymentTypeShouldSetHeidelpayObjectAndCallCreate()
@@ -421,9 +429,10 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
             ->setConstructorArgs([$heidelpay])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')
-            ->with($this->callback(function ($type) use ($heidelpay, $paymentType) {
-                return $type === $paymentType && $type->getHeidelpayObject() === $heidelpay;
-            }));
+            ->with($this->callback(
+                static function ($type) use ($heidelpay, $paymentType) {
+                    return $type === $paymentType && $type->getHeidelpayObject() === $heidelpay;
+                }));
 
         /** @var ResourceService $resourceSrvMock */
         $returnedType = $resourceSrvMock->createPaymentType($paymentType);
@@ -440,8 +449,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @param string $typeClass
      * @param string $typeId
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function fetchPaymentTypeShouldFetchCorrectPaymentInstanceDependingOnId($typeClass, $typeId)
@@ -451,12 +460,13 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
             ->setConstructorArgs([$heidelpay])->getMock();
         $resourceSrvMock->expects($this->once())->method('fetch')
-            ->with($this->callback(function ($type) use ($heidelpay, $typeClass, $typeId) {
-                /** @var BasePaymentType $type */
-                return $type instanceof $typeClass &&
+            ->with($this->callback(
+                static function ($type) use ($heidelpay, $typeClass, $typeId) {
+                    /** @var BasePaymentType $type */
+                    return $type instanceof $typeClass &&
                     $type->getHeidelpayObject() === $heidelpay &&
                     $type->getId() === $typeId;
-            }));
+                }));
 
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchPaymentType($typeId);
@@ -471,8 +481,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @param string $typeId
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchPaymentTypeShouldThrowExceptionOnInvalidTypeId($typeId)
     {
@@ -480,7 +490,7 @@ class ResourceServiceTest extends BaseUnitTest
             ->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->never())->method('fetch');
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid payment type!');
 
         /** @var ResourceService $resourceSrvMock */
@@ -493,8 +503,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function createCustomerShouldCallCreateWithCustomerObjectAndSetHeidelpayReference()
     {
@@ -504,9 +514,10 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
             ->setConstructorArgs([$heidelpay])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')
-            ->with($this->callback(function ($resource) use ($heidelpay, $customer) {
-                return $resource === $customer && $resource->getHeidelpayObject() === $heidelpay;
-            }));
+            ->with($this->callback(
+                static function ($resource) use ($heidelpay, $customer) {
+                    return $resource === $customer && $resource->getHeidelpayObject() === $heidelpay;
+                }));
 
         /** @var ResourceService $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->createCustomer($customer);
@@ -519,8 +530,8 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function createOrUpdateCustomerShouldFetchAndUpdateCustomerIfItAlreadyExists()
@@ -537,19 +548,21 @@ class ResourceServiceTest extends BaseUnitTest
             new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS)
         );
         $resourceSrvMock->expects($this->once())->method('fetchCustomer')
-            ->with($this->callback(function ($customerToFetch) use ($customer) {
-                /** @var Customer $customerToFetch */
-                return $customerToFetch !== $customer &&
+            ->with($this->callback(
+                static function ($customerToFetch) use ($customer) {
+                    /** @var Customer $customerToFetch */
+                    return $customerToFetch !== $customer &&
                        $customerToFetch->getId() === $customer->getId() &&
                        $customerToFetch->getCustomerId() === $customer->getCustomerId();
-            }))->willReturn($fetchedCustomer);
+                }))->willReturn($fetchedCustomer);
         $resourceSrvMock->expects($this->once())->method('updateCustomer')
-            ->with($this->callback(function ($customerToUpdate) use ($customer) {
-                /** @var Customer $customerToUpdate */
-                return $customerToUpdate === $customer &&
+            ->with($this->callback(
+                static function ($customerToUpdate) use ($customer) {
+                    /** @var Customer $customerToUpdate */
+                    return $customerToUpdate === $customer &&
                        $customerToUpdate->getId() === $customer->getId() &&
                        $customerToUpdate->getEmail() === 'customer@email.de';
-            }));
+                }));
 
         /** @var ResourceService $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->createOrUpdateCustomer($customer);
@@ -564,8 +577,8 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function createOrUpdateCustomerShouldThrowTheExceptionIfItIsNotCustomerIdAlreadyExists()
@@ -593,8 +606,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchCustomerShouldCallFetchWithTheGivenCustomerAndSetHeidelpayReference()
     {
@@ -608,8 +621,8 @@ class ResourceServiceTest extends BaseUnitTest
         try {
             $customer->getHeidelpayObject();
             $this->assertTrue(false, 'This exception should have been thrown!');
-        } catch (\RuntimeException $e) {
-            $this->assertInstanceOf(\RuntimeException::class, $e);
+        } catch (RuntimeException $e) {
+            $this->assertInstanceOf(RuntimeException::class, $e);
             $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
         }
 
@@ -625,8 +638,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchCustomerShouldCallFetchWithNewCustomerObject()
     {
@@ -635,11 +648,12 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])
             ->setConstructorArgs([$heidelpay])->getMock();
         $resourceSrvMock->expects($this->once())->method('fetch')->with(
-            $this->callback(function ($param) use ($heidelpay) {
-                return $param instanceof Customer &&
+            $this->callback(
+                static function ($param) use ($heidelpay) {
+                    return $param instanceof Customer &&
                        $param->getId() === 'myCustomerId' &&
                        $param->getHeidelpayObject() === $heidelpay;
-            })
+                })
         );
 
         /** @var ResourceService $resourceSrvMock */
@@ -654,8 +668,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function updateCustomerShouldCallUpdateWithCustomerObject()
     {
@@ -677,8 +691,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function deleteCustomerShouldCallDeleteWithTheGivenCustomer()
     {
@@ -699,8 +713,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function deleteCustomerShouldFetchCustomerByIdIfTheIdIsGiven()
     {
@@ -721,8 +735,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchAuthorizationShouldFetchPaymentAndReturnItsAuthorization()
     {
@@ -746,8 +760,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchChargeByIdShouldFetchPaymentAndReturnTheChargeOfThePayment()
     {
@@ -771,8 +785,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchReversalByAuthorizationShouldFetchAuthorizeAndReturnTheReversalFromIt()
     {
@@ -796,8 +810,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchReversalShouldFetchPaymentAndReturnDesiredReversalFromIt()
     {
@@ -822,8 +836,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchRefundByIdShouldFetchChargeByIdAndThenFetchTheDesiredRefundFromIt()
     {
@@ -848,8 +862,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchRefundShouldGetAndFetchDesiredChargeCancellation()
     {
@@ -876,8 +890,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchShipmentShouldFetchPaymentAndReturnTheDesiredShipmentFromIt()
     {
@@ -903,8 +917,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchMetadataShouldCallFetchWithTheGivenMetadataObject()
     {
@@ -924,8 +938,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function createMetadataShouldCallCreateWithTheGivenMetadataObject()
     {
@@ -945,8 +959,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function fetchMetadataShouldCallFetchWithANewMetadataObjectWithTheGivenId()
     {
@@ -954,9 +968,10 @@ class ResourceServiceTest extends BaseUnitTest
             ->disableOriginalConstructor()->getMock();
 
         $resourceSrvMock->expects($this->once())->method('fetch')->with(
-            $this->callback(function ($metadata) {
-                return $metadata instanceof Metadata && $metadata->getId() === 's-mtd-1234';
-            })
+            $this->callback(
+                static function ($metadata) {
+                    return $metadata instanceof Metadata && $metadata->getId() === 's-mtd-1234';
+                })
         );
 
         /** @var ResourceService $resourceSrvMock */
@@ -968,8 +983,8 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function sendShouldCallSendOnHttpService()
@@ -1013,8 +1028,8 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function createBasketShouldSetTheParentResourceAndCallCreateWithTheGivenBasket()
@@ -1029,7 +1044,7 @@ class ResourceServiceTest extends BaseUnitTest
         try {
             $basket->getParentResource();
             $this->assertTrue(false, 'This exception should have been thrown!');
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
         }
 
@@ -1043,8 +1058,8 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function fetchBasketShouldCreateBasketObjectWithGivenIdAndCallFetchWithIt()
@@ -1054,10 +1069,11 @@ class ResourceServiceTest extends BaseUnitTest
             ->setConstructorArgs([$heidelpay])
             ->setMethods(['fetch'])->getMock();
         $resourceSrvMock->expects($this->once())->method('fetch')->with(
-            $this->callback(function ($basket) use ($heidelpay) {
-                /** @var Basket $basket */
-                return $basket->getId() === 'myBasketId' && $basket->getParentResource() === $heidelpay;
-            })
+            $this->callback(
+                static function ($basket) use ($heidelpay) {
+                    /** @var Basket $basket */
+                    return $basket->getId() === 'myBasketId' && $basket->getParentResource() === $heidelpay;
+                })
         );
 
         /** @var ResourceService $resourceSrvMock */
@@ -1073,8 +1089,8 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws HeidelpayApiException
      */
     public function fetchBasketShouldCallFetchWithTheGivenBasketObject()
@@ -1101,8 +1117,8 @@ class ResourceServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function updateBasketShouldCallUpdateAndReturnTheGivenBasket()
     {
@@ -1119,6 +1135,88 @@ class ResourceServiceTest extends BaseUnitTest
         $this->assertSame($basket, $returnedBasket);
         $this->assertEquals($heidelpay, $basket->getParentResource());
         $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
+    }
+
+    /**
+     * Verify fetchResourceByUrl calls fetch for the desired resource.
+     *
+     * @test
+     * @dataProvider fetchResourceByUrlShouldFetchTheDesiredResourceDP
+     *
+     * @param string $expectedFetchMethod
+     * @param mixed  $expectedArguments
+     * @param string $resourceUrl
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchResourceByUrlShouldFetchTheDesiredResource(
+        $expectedFetchMethod,
+        $expectedArguments,
+        $resourceUrl
+    ) {
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(
+            [$expectedFetchMethod]
+        )->getMock();
+        $heidelpayMock->expects($this->once())->method($expectedFetchMethod)->with(...$expectedArguments);
+
+        /** @var Heidelpay $heidelpayMock */
+        $resourceService = new ResourceService($heidelpayMock);
+
+        $resourceService->fetchResourceByUrl($resourceUrl);
+    }
+
+    /**
+     * Verify fetchResourceByUrl calls fetch for the desired resource.
+     *
+     * @test
+     * @dataProvider fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP
+     *
+     * @param $paymentTypeId
+     * @param string $resourceUrl
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentType($paymentTypeId, $resourceUrl)
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetchPaymentType'])->getMock();
+
+        $resourceSrvMock->expects($this->once())->method('fetchPaymentType')->with($paymentTypeId);
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchResourceByUrl($resourceUrl);
+    }
+
+    /**
+     * Verify does not call fetchResourceByUrl and returns null if the resource type is unknown.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchResourceByUrlForAPaymentTypeShouldReturnNullIfTheTypeIsUnknown()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetchPaymentType'])->getMock();
+
+        $resourceSrvMock->expects($this->never())->method('fetchPaymentType');
+
+        /** @var ResourceService $resourceSrvMock */
+        $this->assertNull(
+            $resourceSrvMock->fetchResourceByUrl('https://api.heidelpay.com/v1/types/card/s-unknown-xen2ybcovn56/')
+        );
     }
 
     //<editor-fold desc="Data Providers">
@@ -1156,15 +1254,15 @@ class ResourceServiceTest extends BaseUnitTest
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getResourceFetchCallDataProvider(): array
     {
         return [
             'fetchedAt is null, Id is null' => [new Customer(), 0],
             'fetchedAt is null, id is set' => [(new Customer())->setId('testId'), 1],
-            'fetchedAt is set, id is null' => [(new Customer())->setFetchedAt(new \DateTime('now')), 0],
-            'fetchedAt is set, id is set' => [(new Customer())->setFetchedAt(new \DateTime('now'))->setId('testId'), 0]
+            'fetchedAt is set, id is null' => [(new Customer())->setFetchedAt(new DateTime('now')), 0],
+            'fetchedAt is set, id is set' => [(new Customer())->setFetchedAt(new DateTime('now'))->setId('testId'), 0]
         ];
     }
 
@@ -1189,6 +1287,9 @@ class ResourceServiceTest extends BaseUnitTest
             'Sofort sandbox' => [Sofort::class, 's-sft-12345678'],
             'PIS sandbox' => [PIS::class, 's-pis-12345678'],
             'EPS sandbox' => [EPS::class, 's-eps-12345678'],
+            'Alipay sandbox' => [Alipay::class, 's-ali-12345678'],
+            'Wechatpay sandbox' => [Wechatpay::class, 's-wcp-12345678'],
+            'Invoice factoring sandbox' => [InvoiceFactoring::class, 's-ivf-12345678'],
             'Card production' => [Card::class, 'p-crd-12345678'],
             'Giropay production' => [Giropay::class, 'p-gro-12345678'],
             'Ideal production' => [Ideal::class, 'p-idl-12345678'],
@@ -1200,7 +1301,10 @@ class ResourceServiceTest extends BaseUnitTest
             'SepaDirectDebit production' => [SepaDirectDebit::class, 'p-sdd-12345678'],
             'SepaDirectDebitGuaranteed production' => [SepaDirectDebitGuaranteed::class, 'p-ddg-12345678'],
             'Sofort production' => [Sofort::class, 'p-sft-12345678'],
-            'EPS production' => [EPS::class, 'p-eps-12345678']
+            'EPS production' => [EPS::class, 'p-eps-12345678'],
+            'Alipay production' => [Alipay::class, 'p-ali-12345678'],
+            'Wechatpay production' => [Wechatpay::class, 'p-wcp-12345678'],
+            'Invoice factoring production' => [InvoiceFactoring::class, 'p-ivf-12345678']
         ];
     }
 
@@ -1220,6 +1324,137 @@ class ResourceServiceTest extends BaseUnitTest
             ['myId'],
             [null],
             ['']
+        ];
+    }
+
+    /**
+     * Provides test data sets for fetchResourceByUrlShouldFetchTheDesiredResource.
+     *
+     * @return array
+     */
+    public function fetchResourceByUrlShouldFetchTheDesiredResourceDP(): array
+    {
+        return [
+            'Authorization' => [
+                'fetchAuthorization',
+                ['s-pay-100746'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100746/authorize/s-aut-1/'
+            ],
+            'Charge' => [
+                'fetchChargeById',
+                ['s-pay-100798', 's-chg-1'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100798/charges/s-chg-1/'
+            ],
+            'Shipment' => [
+                'fetchShipment',
+                ['s-pay-100801', 's-shp-1'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100801/shipments/s-shp-1/'
+            ],
+            'Refund' => [
+                'fetchRefundById',
+                ['s-pay-100802', 's-chg-1', 's-cnl-1'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100802/charges/s-chg-1/cancels/s-cnl-1/'
+            ],
+            'Reversal' => [
+                'fetchReversal',
+                ['s-pay-100803', 's-cnl-1'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100803/authorize/s-aut-1/cancels/s-cnl-1/'
+            ],
+            'Payment' => [
+                'fetchPayment',
+                ['s-pay-100801'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100801'
+            ],
+            'Metadata' => [
+                'fetchMetadata',
+                ['s-mtd-6glqv9axjpnc'],
+                'https://api.heidelpay.com/v1/metadata/s-mtd-6glqv9axjpnc/'
+            ],
+            'Customer' => [
+                'fetchCustomer',
+                ['s-cst-50c14d49e2fe'],
+                'https://api.heidelpay.com/v1/customers/s-cst-50c14d49e2fe'
+            ],
+            'Basket' => [
+                'fetchBasket',
+                ['s-bsk-1254'],
+                'https://api.heidelpay.com/v1/baskets/s-bsk-1254/'
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentType.
+     *
+     * @return array
+     */
+    public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP(): array
+    {
+        return [
+            'CARD'                         => [
+                's-crd-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/card/s-crd-xen2ybcovn56/'
+            ],
+            'GIROPAY'                      => [
+                's-gro-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/giropay/s-gro-xen2ybcovn56/'
+            ],
+            'IDEAL'                        => [
+                's-idl-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/ideal/s-idl-xen2ybcovn56/'
+            ],
+            'INVOICE'                      => [
+                's-ivc-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/invoice/s-ivc-xen2ybcovn56/'
+            ],
+            'INVOICE_GUARANTEED'           => [
+                's-ivg-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/invoice-guaranteed/s-ivg-xen2ybcovn56/'
+            ],
+            'PAYPAL'                       => [
+                's-ppl-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/paypal/s-ppl-xen2ybcovn56/'
+            ],
+            'PREPAYMENT'                   => [
+                's-ppy-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/prepayment/s-ppy-xen2ybcovn56/'
+            ],
+            'PRZELEWY24'                   => [
+                's-p24-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/przelewy24/s-p24-xen2ybcovn56/'
+            ],
+            'SEPA_DIRECT_DEBIT_GUARANTEED' => [
+                's-ddg-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'
+            ],
+            'SEPA_DIRECT_DEBIT'            => [
+                's-sdd-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/direct-debit/s-sdd-xen2ybcovn56/'
+            ],
+            'SOFORT'                       => [
+                's-sft-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/sofort/s-sft-xen2ybcovn56/'
+            ],
+            'PIS'                          => [
+                's-pis-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/pis/s-pis-xen2ybcovn56/'
+            ],
+            'EPS'                          => [
+                's-eps-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/eps/s-eps-xen2ybcovn56/'
+            ],
+            'ALIPAY'                       => [
+                's-ali-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/alipay/s-ali-xen2ybcovn56/'
+            ],
+            'WECHATPAY'                    => [
+                's-wcp-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'
+            ],
+            'INVOICE_FACTORING'            => [
+                's-ivf-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'
+            ]
         ];
     }
 

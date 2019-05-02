@@ -26,10 +26,13 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Traits\HasCancellations;
+use heidelpayPHP\Traits\HasInvoiceId;
+use RuntimeException;
 
 class Charge extends AbstractTransactionType
 {
     use HasCancellations;
+    use HasInvoiceId;
 
     /** @var float $amount */
     protected $amount;
@@ -256,15 +259,16 @@ class Charge extends AbstractTransactionType
      * Returns the last cancellation object if charge is already canceled.
      * Creates and returns new cancellation object otherwise.
      *
-     * @param float $amount
+     * @param float       $amount
+     * @param string|null $reasonCode
      *
      * @return Cancellation
      *
-     * @throws \RuntimeException
      * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
-    public function cancel($amount = null): Cancellation
+    public function cancel($amount = null, string $reasonCode = null): Cancellation
     {
-        return $this->getHeidelpayObject()->cancelCharge($this, $amount);
+        return $this->getHeidelpayObject()->cancelCharge($this, $amount, $reasonCode);
     }
 }

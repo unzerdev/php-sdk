@@ -37,6 +37,7 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use RuntimeException;
 
 class PaymentService
 {
@@ -109,7 +110,7 @@ class PaymentService
      * @return Payment The resulting Payment object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function createPayment($paymentType): AbstractHeidelpayResource
     {
@@ -141,7 +142,7 @@ class PaymentService
      * @return Authorization Resulting Authorization object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorize(
         $amount,
@@ -187,7 +188,7 @@ class PaymentService
      * @return Authorization Resulting Authorization object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizeWithPayment(
         $amount,
@@ -228,11 +229,12 @@ class PaymentService
      *                                            yet (i.e. has no id).
      * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
      *                                            optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId   The external id of the invoice.
      *
      * @return Charge Resulting Charge object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function charge(
         $amount,
@@ -243,10 +245,11 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
-        $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId)->setInvoiceId($invoiceId);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
         }
@@ -266,7 +269,7 @@ class PaymentService
      * @return Charge Resulting Charge object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
     {
@@ -283,7 +286,7 @@ class PaymentService
      * @return Charge Resulting Charge object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargePayment($payment, $amount = null, $currency = null): AbstractTransactionType
     {
@@ -307,7 +310,7 @@ class PaymentService
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
     {
@@ -328,7 +331,7 @@ class PaymentService
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType
     {
@@ -350,7 +353,7 @@ class PaymentService
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cancelChargeById($payment, $chargeId, $amount = null): AbstractTransactionType
     {
@@ -363,15 +366,17 @@ class PaymentService
      *
      * @param Charge $charge
      * @param $amount
+     * @param string|null $reasonCode
      *
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
+    public function cancelCharge(Charge $charge, $amount = null, string $reasonCode = null): AbstractTransactionType
     {
         $cancellation = new Cancellation($amount);
+        $cancellation->setReasonCode($reasonCode);
         $cancellation->setPayment($charge->getPayment());
         $charge->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
@@ -387,15 +392,17 @@ class PaymentService
      * Creates a Shipment transaction for the given Payment object.
      *
      * @param Payment|string $payment
+     * @param string|null    $invoiceId
      *
      * @return Shipment Resulting Shipment object.
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    public function ship($payment): AbstractHeidelpayResource
+    public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
     {
         $shipment = new Shipment();
+        $shipment->setInvoiceId($invoiceId);
         $this->resourceService->getPaymentResource($payment)->addShipment($shipment);
         $this->resourceService->create($shipment);
         return $shipment;

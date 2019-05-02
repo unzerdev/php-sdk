@@ -33,6 +33,8 @@ use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\Services\DummyAdapter;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
+use ReflectionException;
+use RuntimeException;
 
 class HttpServiceTest extends BaseUnitTest
 {
@@ -41,7 +43,7 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getAdapterShouldReturnDefaultAdapterIfNonHasBeenSet()
     {
@@ -54,7 +56,7 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getAdapterShouldReturnCustomAdapterIfItHasBeenSet()
     {
@@ -68,13 +70,13 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function sendShouldThrowExceptionIfResourceIsNotSet()
     {
         $httpService = new HttpService();
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Transfer object is empty!');
         $httpService->send();
     }
@@ -85,8 +87,8 @@ class HttpServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function sendShouldInitAndSendRequest()
     {
@@ -122,13 +124,45 @@ class HttpServiceTest extends BaseUnitTest
     }
 
     /**
+     * Verify 'Accept-Language' header only set when a locale is defined in the heidelpay object.
+     *
+     * @test
+     * @dataProvider languageShouldOnlyBeSetIfSpecificallyDefinedDP
+     *
+     * @param $locale
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function languageShouldOnlyBeSetIfSpecificallyDefined($locale)
+    {
+        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['setHeaders', 'execute'])->getMock();
+        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
+
+        $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey', $locale));
+
+        $adapterMock->expects($this->once())->method('setHeaders')->with(
+            $this->callback(
+                static function ($headers) use ($locale) {
+                    return $locale === ($headers['Accept-Language'] ?? null);
+                })
+        );
+        $adapterMock->method('execute')->willReturn('myResponseString');
+
+        /** @var HttpService $httpServiceMock*/
+        $httpServiceMock->send('/my/uri/123', $resource);
+    }
+
+    /**
      * Verify debugLog logs to debug handler if debug mode and a handler are set.
      *
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function sendShouldLogDebugMessagesIfDebugModeAndHandlerAreSet()
     {
@@ -138,15 +172,16 @@ class HttpServiceTest extends BaseUnitTest
             ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
         )->getMock();
         $adapterMock->method('execute')->willReturn('{"response":"myResponseString"}');
+        $adapterMock->method('getResponseCode')->willReturnOnConsecutiveCalls('200', '201');
         $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
 
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
         $loggerMock->expects($this->exactly(5))->method('log')->withConsecutive(
             ['GET: https://api.heidelpay.com/v1/my/uri/123'],
-            ['Response: {"response":"myResponseString"}'],
+            ['Response: (200) {"response":"myResponseString"}'],
             ['POST: https://api.heidelpay.com/v1/my/uri/123'],
             ['Request: {"dummyResource": "JsonSerialized"}'],
-            ['Response: {"response":"myResponseString"}']
+            ['Response: (201) {"response":"myResponseString"}']
         );
 
         /** @var DebugHandlerInterface $loggerMock */
@@ -167,8 +202,8 @@ class HttpServiceTest extends BaseUnitTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function handleErrorsShouldThrowExceptionIfResponseIsEmpty()
     {
@@ -199,8 +234,8 @@ class HttpServiceTest extends BaseUnitTest
      * @param string $responseCode
      *
      * @throws HeidelpayApiException
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function handleErrorsShouldThrowExceptionIfResponseCodeIsGoE400($responseCode)
     {
@@ -228,8 +263,8 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function handleErrorsShouldThrowExceptionIfResponseContainsErrorField()
     {
@@ -308,6 +343,18 @@ class HttpServiceTest extends BaseUnitTest
             '500' => ['500'],
             '600' => ['600'],
             '1000' => ['1000']
+        ];
+    }
+
+    /**
+     * Returns test data for method public function languageShouldOnlyBeSetIfSpecificallyDefined.
+     */
+    public function languageShouldOnlyBeSetIfSpecificallyDefinedDP(): array
+    {
+        return [
+            'de-DE' => ['de-DE'],
+            'en-US' => ['en-US'],
+            'null' => [null]
         ];
     }
 

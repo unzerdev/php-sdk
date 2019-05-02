@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use RuntimeException;
 
 trait CanAuthorize
 {
@@ -52,7 +53,7 @@ trait CanAuthorize
      * @return Authorization
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorize(
         $amount,
@@ -78,7 +79,7 @@ trait CanAuthorize
             );
         }
 
-        throw new \RuntimeException(
+        throw new RuntimeException(
             self::class . ' must implement HeidelpayParentInterface to enable ' . __METHOD__ . ' transaction.'
         );
     }

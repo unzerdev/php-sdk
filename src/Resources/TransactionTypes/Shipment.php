@@ -24,17 +24,21 @@
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
+use heidelpayPHP\Traits\HasInvoiceId;
+
 class Shipment extends AbstractTransactionType
 {
+    use HasInvoiceId;
+
     /** @var float $amount */
     protected $amount;
 
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmount(): float
+    public function getAmount()
     {
         return $this->amount;
     }

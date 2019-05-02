@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class BasketTest extends BasePaymentTest
 {
@@ -38,7 +39,7 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function minBasketShouldBeCreatableAndFetchable()
@@ -62,7 +63,7 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function maxBasketShouldBeCreatableAndFetchableWorkAround()
@@ -92,7 +93,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function basketShouldBeUpdatateable()
     {
@@ -124,7 +125,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
@@ -150,16 +151,11 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
-        $orderId = $this->generateOrderId();
-        $basket  = new Basket($orderId, 123.4, 'EUR');
-        $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
-        $basket->addBasketItem($basketItem);
-        $this->heidelpay->createBasket($basket);
+        $basket  = $this->createBasket();
         $this->assertNotEmpty($basket->getId());
 
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setBic('COBADEFFXXX');
@@ -178,7 +174,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
@@ -204,7 +200,7 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {

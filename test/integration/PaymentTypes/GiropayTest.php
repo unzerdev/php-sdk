@@ -28,6 +28,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class GiropayTest extends BasePaymentTest
 {
@@ -37,7 +38,7 @@ class GiropayTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function giroPayShouldBeCreatable()
     {
@@ -54,7 +55,7 @@ class GiropayTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function giroPayShouldThrowExceptionOnAuthorize()
     {
@@ -71,7 +72,7 @@ class GiropayTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function giroPayShouldBeChargeable()
     {
@@ -80,7 +81,7 @@ class GiropayTest extends BasePaymentTest
         $charge = $giropay->charge(1.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
-        $this->assertNotNull($charge->getRedirectUrl());
+        $this->assertNotEmpty($charge->getRedirectUrl());
 
         $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertEquals($charge->expose(), $fetchCharge->expose());
@@ -92,7 +93,7 @@ class GiropayTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function giroPayCanBeFetched()
     {

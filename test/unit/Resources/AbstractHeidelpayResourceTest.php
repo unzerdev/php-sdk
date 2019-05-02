@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
+use DateTime;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
@@ -33,6 +34,7 @@ use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
@@ -44,8 +46,12 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use ReflectionException;
+use RuntimeException;
+use stdClass;
 
 class AbstractHeidelpayResourceTest extends BaseUnitTest
 {
@@ -54,7 +60,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws \Exception
      */
     public function settersAndGettersShouldWork()
@@ -66,8 +72,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $customer->setId('CustomerId-123');
         $this->assertEquals('CustomerId-123', $customer->getId());
 
-        $customer->setFetchedAt(new \DateTime('2018-12-03'));
-        $this->assertEquals(new \DateTime('2018-12-03'), $customer->getFetchedAt());
+        $customer->setFetchedAt(new DateTime('2018-12-03'));
+        $this->assertEquals(new DateTime('2018-12-03'), $customer->getFetchedAt());
     }
 
     /**
@@ -75,13 +81,13 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getParentResourceShouldThrowExceptionIfItIsNotSet()
     {
         $customer = new Customer();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Parent resource reference is not set!');
         $customer->getParentResource();
     }
@@ -91,8 +97,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function getHeidelpayObjectShouldCallGetParentResourceOnce()
     {
@@ -108,7 +114,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function parentResourceAndHeidelpayGetterSetterShouldWork()
     {
@@ -124,8 +130,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function getUriWillCallGetUriOnItsParentResource()
     {
@@ -150,8 +156,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @param AbstractHeidelpayResource $resource
      * @param string                    $resourcePath
      *
-     * @throws \ReflectionException
-     * @throws \RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
      */
     public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractHeidelpayResource$resource, $resourcePath)
     {
@@ -170,8 +176,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function getUriWillAddExternalIdToTheUriIfTheIdIsNotSetButAppendIdIs()
     {
@@ -208,7 +214,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             ->setZip('69115')
             ->setStreet('Musterstrasse 15');
 
-        $testResponse                 = new \stdClass();
+        $testResponse                 = new stdClass();
         $testResponse->billingAddress = json_decode($address->jsonSerialize());
 
         /** @var Customer $customer */
@@ -232,8 +238,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function updateValuesShouldUpdateValuesFromProcessingInTheActualObject()
     {
-        $testResponse             = new \stdClass();
-        $processing               = new \stdClass();
+        $testResponse             = new stdClass();
+        $processing               = new stdClass();
         $processing->customerId   = 'processingCustomerId';
         $processing->firstname    = 'processingFirstName';
         $processing->lastname     = 'processingLastName';
@@ -256,7 +262,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function jsonSerializeShouldTranslateResourceIntoJson()
     {
@@ -348,7 +354,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      *
      * @return array
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function uriDataProvider(): array
     {
@@ -359,6 +365,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card/'],
             'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal/'],
             'EPS' => [new EPS(), 'parent/resource/path/types/eps/'],
+            'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay/'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
             'SepaDirectDebitGuaranteed' => [
                 new SepaDirectDebitGuaranteed(''),
@@ -373,7 +380,9 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
             'Charge' => [new Charge(), 'parent/resource/path/charges/'],
             'Metadata' => [new Metadata(), 'parent/resource/path/metadata/'],
-            'Basket' => [new Basket(), 'parent/resource/path/baskets/']
+            'Basket' => [new Basket(), 'parent/resource/path/baskets/'],
+            'Webhook' => [new Webhook(), 'parent/resource/path/webhooks/'],
+            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/']
         ];
     }
 

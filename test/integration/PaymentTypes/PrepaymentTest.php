@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\PaymentTypes\Prepayment;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class PrepaymentTest extends BasePaymentTest
 {
@@ -39,7 +40,7 @@ class PrepaymentTest extends BasePaymentTest
      * @return Prepayment
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @test
      */
     public function prepaymentShouldBeCreatableAndFetchable(): AbstractHeidelpayResource
@@ -67,7 +68,7 @@ class PrepaymentTest extends BasePaymentTest
      * @return Charge
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function prepaymentTypeShouldBeChargeable(Prepayment $prepayment): Charge
     {
@@ -92,7 +93,7 @@ class PrepaymentTest extends BasePaymentTest
      * @param Prepayment $prepayment
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function prepaymentTypeShouldNotBeAuthorizable(Prepayment $prepayment)
     {
@@ -112,7 +113,7 @@ class PrepaymentTest extends BasePaymentTest
      * @param Charge $charge
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function prepaymentTypeShouldNotBeShippable(Charge $charge)
     {
@@ -132,7 +133,7 @@ class PrepaymentTest extends BasePaymentTest
      * @param Prepayment $prepayment
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function prepaymentChargeCanBeCanceled(Prepayment $prepayment)
     {

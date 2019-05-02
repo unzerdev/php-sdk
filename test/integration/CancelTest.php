@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class CancelTest extends BasePaymentTest
 {
@@ -34,7 +35,7 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function reversalShouldBeFetchableViaHeidelpayObject()
@@ -52,7 +53,7 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function reversalShouldBeFetchableViaPaymentObject()
@@ -70,7 +71,7 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function refundShouldBeFetchableViaHeidelpayObject()
@@ -89,7 +90,7 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function refundShouldBeFetchableViaPaymentObject()
@@ -107,7 +108,7 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizationCancellationsShouldBeFetchableViaPaymentObject()
@@ -126,7 +127,7 @@ class CancelTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function chargeCancellationsShouldBeFetchableViaPaymentObject()
@@ -146,7 +147,7 @@ class CancelTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function cancelStatusIsSetCorrectly()
     {

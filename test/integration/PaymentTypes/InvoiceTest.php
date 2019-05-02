@@ -28,6 +28,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class InvoiceTest extends BasePaymentTest
 {
@@ -39,7 +40,7 @@ class InvoiceTest extends BasePaymentTest
      * @return Invoice
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function invoiceTypeShouldBeCreatable(): Invoice
     {
@@ -59,7 +60,7 @@ class InvoiceTest extends BasePaymentTest
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceIsNotAuthorizable(Invoice $invoice)
@@ -78,7 +79,7 @@ class InvoiceTest extends BasePaymentTest
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceIsNotShippable(Invoice $invoice)
@@ -100,14 +101,14 @@ class InvoiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify invoice charge can not be canceled.
+     * Verify invoice charge can be canceled.
      *
      * @test
      *
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function verifyInvoiceChargeCanBeCanceled(Invoice $invoice)
@@ -126,7 +127,7 @@ class InvoiceTest extends BasePaymentTest
      * @param Invoice $invoice
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends invoiceTypeShouldBeCreatable
      */
     public function invoiceTypeCanBeFetched(Invoice $invoice)

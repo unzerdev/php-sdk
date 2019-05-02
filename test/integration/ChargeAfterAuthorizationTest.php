@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class ChargeAfterAuthorizationTest extends BasePaymentTest
 {
@@ -34,7 +35,7 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizationShouldBeFullyChargeable()
@@ -57,7 +58,7 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizationShouldBeFullyChargeableViaHeidelpayObject()
@@ -80,7 +81,7 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws HeidelpayApiException
      */
     public function authorizationShouldBePartlyChargeable()

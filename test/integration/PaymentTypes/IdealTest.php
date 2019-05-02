@@ -28,6 +28,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\test\BasePaymentTest;
+use RuntimeException;
 
 class IdealTest extends BasePaymentTest
 {
@@ -39,7 +40,7 @@ class IdealTest extends BasePaymentTest
      * @return Ideal
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function idealShouldBeCreatable(): Ideal
     {
@@ -59,7 +60,7 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @depends idealShouldBeCreatable
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal)
@@ -79,14 +80,14 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function idealShouldBeChargeable(Ideal $ideal)
     {
         $charge = $ideal->charge(1.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
-        $this->assertNotNull($charge->getRedirectUrl());
+        $this->assertNotEmpty($charge->getRedirectUrl());
 
         $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertEquals($charge->expose(), $fetchCharge->expose());
@@ -101,7 +102,7 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function idealTypeCanBeFetched(Ideal $ideal)
     {

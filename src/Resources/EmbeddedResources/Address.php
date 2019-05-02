@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Resources\EmbeddedResources;
 
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use stdClass;
 
 class Address extends AbstractHeidelpayResource
 {
@@ -165,7 +166,7 @@ class Address extends AbstractHeidelpayResource
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
-    public function expose(): \stdClass
+    public function expose(): stdClass
     {
         return json_decode(json_encode(parent::expose(), JSON_FORCE_OBJECT));
     }
