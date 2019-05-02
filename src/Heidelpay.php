@@ -1091,7 +1091,7 @@ class Heidelpay implements HeidelpayParentInterface
      * Performs a Shipment transaction and returns the resulting Shipment object.
      *
      * @param Payment|string $payment   The Payment object the the id of the Payment to ship.
-     * @param string|null    $invoiceId
+     * @param string|null    $invoiceId The id of the invoice in the shop.
      *
      * @return Shipment The resulting Shipment object.
      *
