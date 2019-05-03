@@ -56,12 +56,12 @@ require_once __DIR__ . '/../../../autoload.php';
                     <div class="sub header">Choose the Payment Type you want to evaluate ...</div>
                 </div>
             </h2>
-            <div class="ui cards">
+            <div class="ui four cards">
                 <div class="card olive">
                     <div class="content">
                         <div class="header"><i class="credit card icon"></i> Credit Card</div>
                         <div class="description">
-                            You can try authorize and charge transaction with or without 3Ds
+                            You can try authorize and charge transaction with or without 3Ds.
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='CreditCard/';">
@@ -144,7 +144,7 @@ require_once __DIR__ . '/../../../autoload.php';
                     <div class="sub header">Enable or disable webhooks ...</div>
                 </div>
             </h2>
-            <div class="ui cards">
+            <div class="ui two cards">
                 <div class="card">
                     <div class="content">
                         <div class="header">
