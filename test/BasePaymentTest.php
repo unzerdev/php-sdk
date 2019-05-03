@@ -53,8 +53,8 @@ class BasePaymentTest extends TestCase
     // in which case the merchant has to embed our iFrame via JS (UIComponents).
     const PRIVATE_KEY_SAQ_D = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
     const PUBLIC_KEY_SAQ_D  = 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa';
-    const PRIVATE_KEY_SAQ_A = 's-priv-2a10Fms2uloMzEvPs84trtEkGuv7reSG';
-    const PUBLIC_KEY_SAQ_A  = 's-pub-2a10YMoLIZ82Dg5eWFrKWRrbkuoQ2OzN';
+    const PRIVATE_KEY_SAQ_A = 's-priv-2a1095rIVXy4IrNFXG6yQiguSAqNjciC';
+    const PUBLIC_KEY_SAQ_A  = 's-pub-2a10xITCUtmO2FlTP8RKB3OhdnKI4RmU';
 
     /**
      * {@inheritDoc}
