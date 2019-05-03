@@ -53,7 +53,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'https://api.heidelpay.com/';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.1.1.0';
+    const SDK_VERSION = '1.1.2.0';
 
     /** @var string $key */
     private $key;
