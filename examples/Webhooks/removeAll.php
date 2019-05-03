@@ -110,6 +110,8 @@ function printInfo($title, $text)
             printError($e->getMessage());
             $heidelpay->debugLog('Error: ' . $e->getMessage());
         }
+
+        printInfo('Back to the payment selection', 'Now Perform payments <a href="..">>> HERE <<</a> to trigger events!');
     ?>
 </div>
 </body>
