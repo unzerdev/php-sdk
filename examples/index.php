@@ -103,7 +103,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='WeChatPay/';">
+                    <div class="ui bottom attached button" onclick="location.href='Wechatpay/';">
                         Try
                     </div>
                 </div>
