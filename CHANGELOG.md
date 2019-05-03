@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Added example for invoice guaranteed payment type.
+*   Added example for PayPal payment type.
 *   Added example for the deletion of all webhooks.
 
 ### Fixed
