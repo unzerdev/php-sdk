@@ -57,18 +57,18 @@ require_once __DIR__ . '/../../../autoload.php';
                 </div>
             </h2>
             <div class="ui cards">
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header"><i class="credit card icon"></i> Credit Card</div>
                         <div class="description">
                             You can try authorize and charge transaction with or without 3Ds
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='CreditCard/';">
+                    <div class="ui bottom attached green button" onclick="location.href='CreditCard/';">
                         Try
                     </div>
                 </div>
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header">
                             EPS
@@ -77,11 +77,11 @@ require_once __DIR__ . '/../../../autoload.php';
                             Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='EPSCharge/';">
+                    <div class="ui bottom attached green button" onclick="location.href='EPSCharge/';">
                         Try
                     </div>
                 </div>
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header">
                             Alipay
@@ -90,11 +90,11 @@ require_once __DIR__ . '/../../../autoload.php';
                             Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='Alipay/';">
+                    <div class="ui bottom attached green button" onclick="location.href='Alipay/';">
                         Try
                     </div>
                 </div>
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header">
                             WeChat Pay
@@ -103,11 +103,11 @@ require_once __DIR__ . '/../../../autoload.php';
                             Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='Wechatpay/';">
+                    <div class="ui bottom attached green button" onclick="location.href='Wechatpay/';">
                         Try
                     </div>
                 </div>
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header">
                             Invoice guaranteed
@@ -116,11 +116,11 @@ require_once __DIR__ . '/../../../autoload.php';
                             Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='InvoiceGuaranteed/';">
+                    <div class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
                         Try
                     </div>
                 </div>
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header">
                             Invoice Factoring
@@ -129,7 +129,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='InvoiceFactoring/';">
+                    <div class="ui bottom attached green button" onclick="location.href='InvoiceFactoring/';">
                         Try
                     </div>
                 </div>
@@ -142,7 +142,20 @@ require_once __DIR__ . '/../../../autoload.php';
                             Enable a log output in ExampleDebugHandler to see the events coming in.
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='Webhooks/';">
+                    <div class="ui bottom attached blue button" onclick="location.href='Webhooks/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            Delete all Webhooks
+                        </div>
+                        <div class="description">
+                            Delete all Webhooks corresponding to this key pair.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached blue button" onclick="location.href='Webhooks/removeAll.php';">
                         Try
                     </div>
                 </div>
