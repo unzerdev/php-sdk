@@ -78,7 +78,7 @@ try {
     $basketItem = new BasketItem('Hat', 10.0, 10.0, 1);
     $basket = new Basket($orderId, 10.0, 'EUR', [$basketItem]);
 
-    $transaction = $invoiceFactoring->charge(12.99, 'EUR', RETURN_CONTROLLER_URL, $customer, $orderId, null, $basket);
+    $transaction = $invoiceFactoring->charge(12.99, 'EUR', CONTROLLER_URL, $customer, $orderId, null, $basket);
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
