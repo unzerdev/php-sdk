@@ -7,12 +7,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Added example for invoice guaranteed payment type.
+*   Added example for the deletion of all webhooks.
 
 ### Fixed
 *   Added missing parameter `invoiceId` to `payment::ship` method.
 
 ### Change
 *   Change key pair for SAQ-A integration test.
+*   Refactored implementation examples.
 
 ## [1.1.1.0][1.1.1.0]
 
