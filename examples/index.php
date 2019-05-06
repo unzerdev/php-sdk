@@ -74,7 +74,6 @@ require_once __DIR__ . '/../../../autoload.php';
                             EPS
                         </div>
                         <div class="description">
-                            Charge
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='EPSCharge/';">
@@ -87,7 +86,6 @@ require_once __DIR__ . '/../../../autoload.php';
                             Alipay
                         </div>
                         <div class="description">
-                            Charge
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='Alipay/';">
@@ -100,7 +98,6 @@ require_once __DIR__ . '/../../../autoload.php';
                             WeChat Pay
                         </div>
                         <div class="description">
-                            Charge
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='Wechatpay/';">
@@ -113,7 +110,8 @@ require_once __DIR__ . '/../../../autoload.php';
                             Invoice guaranteed
                         </div>
                         <div class="description">
-                            Charge
+                            This example adds the necessary customer data within the checkout form.
+                            Please refer to the example of <i>Invoice Factoring</i> if you don't want to add the customer via payment form.
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
@@ -126,10 +124,24 @@ require_once __DIR__ . '/../../../autoload.php';
                             Invoice Factoring
                         </div>
                         <div class="description">
-                            Charge
+                            This example adds the necessary customer data within the php controller.
+                            Please refer to the example of <i>Invoice guaranteed</i> if you want to add the customer data withing the payment form.
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='InvoiceFactoring/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            PayPal
+                        </div>
+                        <div class="description">
+                            You can try authorize and direct charge.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='PayPal/';">
                         Try
                     </div>
                 </div>

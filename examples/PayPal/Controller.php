@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the alipay example.
+ * This is the controller for the PayPal example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2019 heidelpay GmbH
@@ -55,26 +55,32 @@ if (!isset($_POST['resourceId'])) {
 }
 $paymentTypeId   = $_POST['resourceId'];
 
+$transactionType = $_POST['transaction_type'] ?? 'authorize';
+
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Create a charge to get the redirectUrl.
-    $charge              = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+    // Create a charge/authorize transaction to get the redirectUrl.
+    if ($transactionType === 'charge') {
+        $transaction = $heidelpay->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+    } else {
+        $transaction = $heidelpay->authorize(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+    }
 
     // You'll need to remember the paymentId for later in the ReturnController
-    $_SESSION['PaymentId'] = $charge->getPaymentId();
-    $_SESSION['ShortId']   = $charge->getShortId();
+    $_SESSION['PaymentId'] = $transaction->getPaymentId();
+    $_SESSION['ShortId']   = $transaction->getShortId();
 
-    // Redirect to the Alipay page
-    if (!$charge->isError() && $charge->getRedirectUrl() !== null) {
-        redirect($charge->getRedirectUrl());
+    // Redirect to the PayPal page
+    if (!$transaction->isError() && $transaction->getRedirectUrl() !== null) {
+        redirect($transaction->getRedirectUrl());
     }
 
     // Check the result message of the charge to find out what went wrong.
-    $merchantMessage = $charge->getMessage()->getCustomer();
+    $merchantMessage = $transaction->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();

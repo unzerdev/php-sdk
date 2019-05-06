@@ -1,7 +1,7 @@
 <?php
 /**
- * This is the controller for the alipay example.
- * It is called when the pay button on the index page is clicked.
+ * This is the return controller for the PayPal example.
+ * It is called when the client is redirected back to the shop from the PayPal page of the selected bank.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -33,10 +33,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
-
-session_start();
-session_unset();
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
@@ -49,11 +46,13 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
-// You will need the id of the payment type created in the frontend (index.php)
-if (!isset($_POST['resourceId'])) {
-    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
+session_start();
+
+// Retrieve the paymentId you remembered within the Controller
+if (!isset($_SESSION['PaymentId'])) {
+    redirect(FAILURE_URL, 'The payment id is missing.', $clientMessage);
 }
-$paymentTypeId   = $_POST['resourceId'];
+$paymentId = $_SESSION['PaymentId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -61,20 +60,18 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Create a charge to get the redirectUrl.
-    $charge              = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
-
-    // You'll need to remember the paymentId for later in the ReturnController
-    $_SESSION['PaymentId'] = $charge->getPaymentId();
-    $_SESSION['ShortId']   = $charge->getShortId();
-
-    // Redirect to the Alipay page
-    if (!$charge->isError() && $charge->getRedirectUrl() !== null) {
-        redirect($charge->getRedirectUrl());
+    // Redirect to success if the payment has been successfully completed.
+    $payment   = $heidelpay->fetchPayment($paymentId);
+    if ($payment->isCompleted() || $payment->isPending()) {
+        redirect(SUCCESS_URL);
     }
 
-    // Check the result message of the charge to find out what went wrong.
-    $merchantMessage = $charge->getMessage()->getCustomer();
+    // Check the result message of the transaction to find out what went wrong.
+    $transaction = $payment->getAuthorization();
+    if (!$transaction instanceof Authorization) {
+        $transaction = $payment->getChargeByIndex(0);
+    }
+    $merchantMessage = $transaction->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
@@ -82,3 +79,4 @@ try {
     $merchantMessage = $e->getMessage();
 }
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);
+
