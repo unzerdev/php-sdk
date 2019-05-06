@@ -139,7 +139,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             PayPal
                         </div>
                         <div class="description">
-                            Charge
+                            You can try authorize and direct charge.
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='PayPal/';">

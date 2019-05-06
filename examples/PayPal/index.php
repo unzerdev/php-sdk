@@ -50,10 +50,28 @@ require_once __DIR__ . '/../../../../autoload.php';
 <ul>
     <li>Username: paypal-customer@heidelpay.de</li>
     <li>Password: heidelpay</li>
-    <lb><strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com">here</a>.</lb>
+    <lb><strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com" target="_blank">here</a>.</lb>
 </ul>
 
 <form id="payment-form" class="heidelpayUI form" novalidate>
+    <!-- This is just for the example - Start -->
+    <div class="fields inline">
+        <label for="transaction_type">Chose the transaction type you want to test:</label>
+        <div class="field">
+            <div class="heidelpayUI radio checkbox">
+                <input type="radio" name="transaction_type" value="authorize" checked="">
+                <label>Authorize</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="heidelpayUI radio checkbox">
+                <input type="radio" name="transaction_type" value="charge">
+                <label>Charge</label>
+            </div>
+        </div>
+    </div>
+    <!-- This is just for the example - End -->
+
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button class="heidelpayUI primary button fluid" type="submit">Pay</button>
 </form>

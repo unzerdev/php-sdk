@@ -33,6 +33,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\TransactionTypes\Authorization;
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
@@ -61,13 +62,18 @@ try {
 
     // Redirect to success if the payment has been successfully completed.
     $payment   = $heidelpay->fetchPayment($paymentId);
-    if ($payment->isCompleted()) {
+    if ($payment->isCompleted() || $payment->isPending()) {
         redirect(SUCCESS_URL);
     }
 
-    // Check the result message of the charge to find out what went wrong.
-    $charge = $payment->getChargeByIndex(0);
-    $merchantMessage = $charge->getMessage()->getCustomer();
+    // Check the result message of the transaction to find out what went wrong.
+    $transaction = $payment->getAuthorization();
+    if ($transaction instanceof Authorization) {
+        $merchantMessage = $transaction->getMessage()->getCustomer();
+    } else {
+        $transaction = $payment->getChargeByIndex(0);
+        $merchantMessage = $transaction->getMessage()->getCustomer();
+    }
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
