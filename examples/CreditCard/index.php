@@ -114,7 +114,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <div class="field">
-        <button id="submit-button" class="heidelpayUI" type="submit">Pay</button>
+        <button id="submit-button" class="heidelpayUI primary button fluid" type="submit">Pay</button>
     </div>
 </form>
 

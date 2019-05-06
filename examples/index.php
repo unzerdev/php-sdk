@@ -59,7 +59,7 @@ require_once __DIR__ . '/../../../autoload.php';
             <div class="ui four cards">
                 <div class="card olive">
                     <div class="content">
-                        <div class="header"><i class="credit card icon"></i> Credit Card</div>
+                        <div class="header">Credit Card</div>
                         <div class="description">
                             You can try authorize and charge transaction with or without 3Ds.
                         </div>
