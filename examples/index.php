@@ -145,6 +145,18 @@ require_once __DIR__ . '/../../../autoload.php';
                         Try
                     </div>
                 </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            SEPA direct debit guaranteed
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
+                        Try
+                    </div>
+                </div>
             </div>
         </div>
 
