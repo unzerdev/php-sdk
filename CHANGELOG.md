@@ -3,13 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [XXXX][XXXX]
+## [1.1.1.1][1.1.1.1]
+
+### Added
+*   Added example for invoice guaranteed payment type.
+*   Added example for the deletion of all webhooks.
 
 ### Fixed
 *   Added missing parameter `invoiceId` to `payment::ship` method.
 
 ### Change
 *   Change key pair for SAQ-A integration test.
+*   Refactored implementation examples.
 
 ## [1.1.1.0][1.1.1.0]
 
@@ -159,3 +164,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.0.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.1.0..1.0.2.0
 [1.1.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.2.0..1.1.0.0
 [1.1.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.0.0..1.1.1.0
+[1.1.1.1]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.1.0..1.1.1.1
