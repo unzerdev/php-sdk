@@ -46,13 +46,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
-<h3>Example data:</h3>
-<strong>Erste Bank Sparkasse</strong>
-<ul>
-    <li>Username: 108256743</li>
-    <li>Password: npydemo</li>
-    <li>TAN: 1111</li>
-</ul>
 
 <p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
@@ -63,21 +56,17 @@ require_once __DIR__ . '/../../../../autoload.php';
 </form>
 
 <script>
-    // Creating a heidelpay instance with your public key
+    // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Creating an EPS instance
+    // Create an EPS instance and render the EPS form
     let EPS = heidelpayInstance.EPS();
-
-    // Rendering input fields
     EPS.create('eps', {
         containerId: 'example-eps'
     });
 
-    let $errorHolder = $('#error-holder');
-    // Handling payment form's submission
+    // Handling payment form submission
     let form = document.getElementById('payment-form');
-    // Handle EPS form submission.
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         // Creating a EPS resource
@@ -95,7 +84,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 form.submit();
             })
             .catch(function(error) {
-                $errorHolder.html(error.message);
+                $('#error-holder').html(error.message)
             })
     });
 </script>

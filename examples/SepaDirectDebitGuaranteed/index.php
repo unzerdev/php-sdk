@@ -55,28 +55,26 @@ require_once __DIR__ . '/../../../../autoload.php';
     <div id="customer" class="field">
         <!-- The customer form UI element will be inserted here -->
     </div>
-    <div class="field">
-        <button class="heidelpayUI primary button fluid" type="submit">Pay</button>
-    </div>
+    <div class="field" id="error-holder" style="color: #9f3a38"></div>
+    <button class="heidelpayUI primary button fluid" type="submit">Pay</button>
 </form>
 
 <script>
-    // Creating a heidelpay instance with your public key
+    // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Creating a SEPA Direct Debit Guaranteed instance
+    // Create a SEPA Direct Debit Guaranteed instance and render the form
     let sepaDirectDebitGuaranteed = heidelpayInstance.SepaDirectDebitGuaranteed();
-
-    // Rendering the input field
     sepaDirectDebitGuaranteed.create('sepa-direct-debit-guaranteed', {
         containerId: 'sepa-guaranteed-IBAN'
     });
-    // Creating a customer instance
+
+    // Creat a customer instance and render the form
     let Customer = heidelpayInstance.Customer();
-    // Rendering the customer form
     Customer.create({
         containerId: 'customer'
     });
+
     // Handle payment form submission.
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
@@ -106,7 +104,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 form.submit();
             })
             .catch(function(error) {
-                $('#error-holder').html(error.customerMessage || error.message || 'Error')
+                $('#error-holder').html(error.message)
             })
     });
 </script>
