@@ -63,6 +63,8 @@ require_once __DIR__ . '/../../../../autoload.php';
     <li>Secret: secret3</li>
 </ul>
 
+<p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
+
 <form id="payment-form" class="heidelpayUI form" novalidate>
     <!-- This is just for the example - Start -->
     <div class="fields inline">
