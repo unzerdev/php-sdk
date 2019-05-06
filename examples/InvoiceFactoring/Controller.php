@@ -80,11 +80,10 @@ try {
 
     $transaction = $invoiceFactoring->charge(12.99, 'EUR', CONTROLLER_URL, $customer, $orderId, null, $basket);
 
-    // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
-    $_SESSION['PaymentId'] = $transaction->getPaymentId();
+    // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();
 
-    // Redirect to the 3ds page or to success depending on the state of the transaction
+    // Redirect to the success or failure page depending on the state of the transaction
     $payment = $transaction->getPayment();
     if ($transaction->isSuccess()) {
         redirect(SUCCESS_URL);

@@ -75,8 +75,7 @@ try {
 
     $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customerId, $orderId, null, $basket);
 
-    // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
-    $_SESSION['PaymentId'] = $transaction->getPaymentId();
+    // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();
 
     // Redirect to the success or failure depending on the state of the transaction
