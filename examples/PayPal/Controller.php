@@ -74,7 +74,7 @@ try {
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
     $_SESSION['ShortId']   = $transaction->getShortId();
 
-    // Redirect to the Alipay page of the selected bank
+    // Redirect to the PayPal page
     if (!$transaction->isError() && $transaction->getRedirectUrl() !== null) {
         redirect($transaction->getRedirectUrl());
     }

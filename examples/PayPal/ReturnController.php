@@ -68,12 +68,10 @@ try {
 
     // Check the result message of the transaction to find out what went wrong.
     $transaction = $payment->getAuthorization();
-    if ($transaction instanceof Authorization) {
-        $merchantMessage = $transaction->getMessage()->getCustomer();
-    } else {
+    if (!$transaction instanceof Authorization) {
         $transaction = $payment->getChargeByIndex(0);
-        $merchantMessage = $transaction->getMessage()->getCustomer();
     }
+    $merchantMessage = $transaction->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
