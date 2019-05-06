@@ -69,7 +69,7 @@ try {
 
     $orderId = str_replace(['0.', ' '], '', microtime(false));
 
-    // A Basket is mandatory for Invoice Factoring payment type
+    // A Basket is mandatory for SEPA direct debit guaranteed payment type
     $basketItem = new BasketItem('Hat', 10.0, 10.0, 1);
     $basket = new Basket($orderId, 10.0, 'EUR', [$basketItem]);
 
@@ -79,7 +79,7 @@ try {
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
     $_SESSION['ShortId'] = $transaction->getShortId();
 
-    // Redirect to the 3ds page or to success depending on the state of the transaction
+    // Redirect to the success or failure depending on the state of the transaction
     $payment = $transaction->getPayment();
     if ($transaction->isSuccess()) {
         redirect(SUCCESS_URL);
