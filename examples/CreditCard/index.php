@@ -135,7 +135,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     });
 
     // General event handling
-    let buttonDisabled = {};
+    let formFieldValid = {};
     let payButton = document.getElementById("submit-button");
     let $errorHolder = $('#error-holder');
 
@@ -144,15 +144,13 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     let eventHandlerCardInput = function(e) {
         if (e.success) {
-            buttonDisabled[e.type] = true;
-            payButton.disabled = false;
+            formFieldValid[e.type] = true;
             $errorHolder.html('')
         } else {
-            buttonDisabled[e.type] = false;
-            payButton.disabled = true;
+            formFieldValid[e.type] = false;
             $errorHolder.html(e.error)
         }
-        payButton.disabled = !(buttonDisabled.number && buttonDisabled.expiry && buttonDisabled.cvc);
+        payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc);
     };
 
     Card.addEventListener('change', eventHandlerCardInput);
