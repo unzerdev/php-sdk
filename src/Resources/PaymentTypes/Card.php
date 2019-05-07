@@ -61,6 +61,9 @@ class Card extends BasePaymentType
     /** @var string $holder */
     protected $holder = '';
 
+    /** @var bool $card3ds */
+    protected $card3ds;
+
     /** @var string $brand */
     private $brand = '';
 
@@ -157,6 +160,24 @@ class Card extends BasePaymentType
     }
 
     /**
+     * @return bool|null
+     */
+    public function get3ds()
+    {
+        return $this->card3ds;
+    }
+
+    /**
+     * @param bool|null $card3ds
+     * @return Card
+     */
+    public function set3ds($card3ds): Card
+    {
+        $this->card3ds = $card3ds;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getBrand(): string
@@ -179,4 +200,19 @@ class Card extends BasePaymentType
     }
 
     //</editor-fold>
+
+    /**
+     * Rename internal property names to external property names.
+     *
+     * {@inheritDoc}
+     */
+    public function expose()
+    {
+        $exposeArray = parent::expose();
+        if (isset($exposeArray['card3ds'])) {
+            $exposeArray['3ds'] = $exposeArray['card3ds'];
+            unset($exposeArray['card3ds']);
+        }
+        return $exposeArray;
+    }
 }
