@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the Invoice guaranteed payment type.
+ * This file provides an example implementation of the SEPA direct debit guaranteed payment type.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -49,7 +49,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 <p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form">
-    <div id="example-invoice-guaranteed"></div>
+    <div id="sepa-guaranteed-IBAN" class="field">
+        <!-- The IBAN field UI Element will be inserted here -->
+    </div>
     <div id="customer" class="field">
         <!-- The customer form UI element will be inserted here -->
     </div>
@@ -61,10 +63,13 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Create an Invoice Guaranteed instance
-    let InvoiceGuaranteed = heidelpayInstance.InvoiceGuaranteed();
+    // Create a SEPA Direct Debit Guaranteed instance and render the form
+    let sepaDirectDebitGuaranteed = heidelpayInstance.SepaDirectDebitGuaranteed();
+    sepaDirectDebitGuaranteed.create('sepa-direct-debit-guaranteed', {
+        containerId: 'sepa-guaranteed-IBAN'
+    });
 
-    // Create a customer instance and render the customer form
+    // Creat a customer instance and render the form
     let Customer = heidelpayInstance.Customer();
     Customer.create({
         containerId: 'customer'
@@ -74,9 +79,9 @@ require_once __DIR__ . '/../../../../autoload.php';
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        let InvoiceGuaranteedPromise = InvoiceGuaranteed.createResource();
+        let sepaDirectDebitGuaranteedPromise = sepaDirectDebitGuaranteed.createResource();
         let customerPromise = Customer.createCustomer();
-        Promise.all([InvoiceGuaranteedPromise, customerPromise])
+        Promise.all([sepaDirectDebitGuaranteedPromise, customerPromise])
             .then(function(values) {
                 let paymentType = values[0];
                 let customer = values[1];
@@ -99,7 +104,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 form.submit();
             })
             .catch(function(error) {
-                $('#error-holder').html(error.customerMessage || error.message || 'Error')
+                $('#error-holder').html(error.message)
             })
     });
 </script>

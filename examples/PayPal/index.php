@@ -75,20 +75,18 @@ require_once __DIR__ . '/../../../../autoload.php';
     <!-- This is just for the example - End -->
 
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button class="heidelpayUI primary button fluid" type="submit">Pay</button>
+    <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
 <script>
-    // Creating a heidelpay instance with your public key
+    // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Creating an Paypal instance
+    // Create an Paypal instance
     let Paypal = heidelpayInstance.Paypal();
 
-    let $errorHolder = $('#error-holder');
-    // Handling payment form's submission
+    // Handle payment form submission
     let form = document.getElementById('payment-form');
-    // Handle Paypal form submission.
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         // Creating a Paypal resource
@@ -106,7 +104,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 form.submit();
             })
             .catch(function(error) {
-                $errorHolder.html(error.message);
+                $('#error-holder').html(error.message)
             })
     });
 </script>

@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the Invoice Factoring example.
+ * This is the controller for the SEPA direct debit guaranteed example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2019 heidelpay GmbH
@@ -38,6 +38,7 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 
 session_start();
 session_unset();
@@ -53,37 +54,31 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
+// You will need the id of the payment type created in the frontend (index.php)
+if (!isset($_POST['paymentTypeId'], $_POST['customerId'])) {
+    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
+}
+$paymentTypeId   = $_POST['paymentTypeId'];
+$customerId  = $_POST['customerId'];
+
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    /** @var InvoiceFactoring $invoiceFactoring */
-    $invoiceFactoring = $heidelpay->createPaymentType(new InvoiceFactoring());
-
-    // A customer with matching addresses is mandatory for Invoice Factoring payment type
-    $customer = new Customer('Linda', 'Heideich');
-    $address  = new Address();
-    $address->setName('Linda Heideich')
-        ->setStreet('Vangerowstr. 18')
-        ->setCity('Heidelberg')
-        ->setZip('69155')
-        ->setCountry('DE');
-    $customer->setBirthDate('2000-02-12')->setBillingAddress($address)->setShippingAddress($address);
-
     $orderId = str_replace(['0.', ' '], '', microtime(false));
 
-    // A Basket is mandatory for Invoice Factoring payment type
+    // A Basket is mandatory for SEPA direct debit guaranteed payment type
     $basketItem = new BasketItem('Hat', 10.0, 10.0, 1);
     $basket = new Basket($orderId, 10.0, 'EUR', [$basketItem]);
 
-    $transaction = $invoiceFactoring->charge(12.99, 'EUR', CONTROLLER_URL, $customer, $orderId, null, $basket);
+    $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customerId, $orderId, null, $basket);
 
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();
 
-    // Redirect to the success or failure page depending on the state of the transaction
+    // Redirect to the success or failure depending on the state of the transaction
     $payment = $transaction->getPayment();
     if ($transaction->isSuccess()) {
         redirect(SUCCESS_URL);

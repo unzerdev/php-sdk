@@ -94,7 +94,6 @@ require_once __DIR__ . '/../../../../autoload.php';
     </div>
     <!-- This is just for the example - End -->
 
-
     <div class="field">
         <div id="card-element-id-number" class="heidelpayInput">
             <!-- Card number UI Element will be inserted here. -->
@@ -113,19 +112,15 @@ require_once __DIR__ . '/../../../../autoload.php';
         </div>
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <div class="field">
-        <button id="submit-button" class="heidelpayUI" type="submit">Pay</button>
-    </div>
+    <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
 <script>
-    // Creating a heidelpay instance with your public key
+    // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Creating a credit card instance
+    // Create a credit card instance and render the input fields
     let Card = heidelpayInstance.Card();
-
-    // Rendering input fields
     Card.create('number', {
         containerId: 'card-element-id-number',
         onlyIframe: false
@@ -140,27 +135,27 @@ require_once __DIR__ . '/../../../../autoload.php';
     });
 
     // General event handling
-    let buttonDisabled = {};
-    let testButton = document.getElementById("submit-button");
-    testButton.disabled = true;
+    let formFieldValid = {};
+    let payButton = document.getElementById("submit-button");
     let $errorHolder = $('#error-holder');
+
+    // Enable pay button initially
+    payButton.disabled = true;
 
     let eventHandlerCardInput = function(e) {
         if (e.success) {
-            buttonDisabled[e.type] = true;
-            testButton.disabled = false;
+            formFieldValid[e.type] = true;
             $errorHolder.html('')
         } else {
-            buttonDisabled[e.type] = false;
-            testButton.disabled = true;
+            formFieldValid[e.type] = false;
             $errorHolder.html(e.error)
         }
-        testButton.disabled = !(buttonDisabled.number && buttonDisabled.expiry && buttonDisabled.cvc);
+        payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc);
     };
 
     Card.addEventListener('change', eventHandlerCardInput);
 
-    // Handling the form's submission
+    // Handling the form submission
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();

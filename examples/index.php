@@ -59,7 +59,7 @@ require_once __DIR__ . '/../../../autoload.php';
             <div class="ui four cards">
                 <div class="card olive">
                     <div class="content">
-                        <div class="header"><i class="credit card icon"></i> Credit Card</div>
+                        <div class="header">Credit Card</div>
                         <div class="description">
                             You can try authorize and charge transaction with or without 3Ds.
                         </div>
@@ -142,6 +142,18 @@ require_once __DIR__ . '/../../../autoload.php';
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='PayPal/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            SEPA direct debit guaranteed
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
                         Try
                     </div>
                 </div>
