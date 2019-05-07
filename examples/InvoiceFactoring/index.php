@@ -47,7 +47,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <body style="margin: 70px 70px 0;">
 
 <form id="payment-form" action="<?php echo CONTROLLER_URL; ?>" class="heidelpayUI form" novalidate>
-    <button class="heidelpayUI primary button fluid" type="submit">Pay</button>
+    <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
 </body>

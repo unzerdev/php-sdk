@@ -52,7 +52,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <form id="payment-form" class="heidelpayUI form" novalidate>
     <div id="example-eps" class="field"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button class="heidelpayUI primary button fluid" type="submit">Pay</button>
+    <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
 <script>
