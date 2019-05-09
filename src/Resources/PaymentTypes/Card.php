@@ -169,6 +169,7 @@ class Card extends BasePaymentType
 
     /**
      * @param bool|null $card3ds
+     *
      * @return Card
      */
     public function set3ds($card3ds): Card

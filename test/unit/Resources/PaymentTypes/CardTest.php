@@ -194,6 +194,7 @@ class CardTest extends BaseUnitTest
      * Verify card3ds flag.
      *
      * @test
+     *
      * @throws AssertionFailedError
      */
     public function card3dsFlagShouldBeSettableInCardResource()
