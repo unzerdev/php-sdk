@@ -160,8 +160,6 @@ class WebhookTest extends BasePaymentTest
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
-     *
-     * @grop skip
      */
     public function fetchWebhooksShouldReturnArrayOfRegisteredWebhooks()
     {
