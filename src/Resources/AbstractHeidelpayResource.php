@@ -210,6 +210,31 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         }
     }
 
+    /**
+     * Returns true if the given property should be skipped.
+     *
+     * @param $property
+     * @param $value
+     * @return bool
+     */
+    private function propertyShouldBeSkipped($property, $value): bool
+    {
+        $skipProperty = false;
+
+        try {
+            $reflection = new ReflectionProperty(static::class, $property);
+            if ($value === null ||                          // do not send properties that are set to null
+                ($property === 'id' && empty($value)) ||    // do not send id property if it is empty
+                !$reflection->isProtected()) {              // only send protected properties
+                $skipProperty = true;
+            }
+        } catch (ReflectionException $e) {
+            $skipProperty = true;
+        }
+
+        return $skipProperty;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Resource service facade">
@@ -279,26 +304,16 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         // Add resources properties
         $properties = get_object_vars($this);
         foreach ($properties as $property => $value) {
-            try {
-                $reflection = new ReflectionProperty(static::class, $property);
-                if (($property === 'id' && empty($value)) || !$reflection->isProtected()) {
-                    unset($properties[$property]);
-                    continue;
-                }
-
-                if ($value === null) {
-                    unset($properties[$property]);
-                    continue;
-                }
-
-                $newValue = $value;
-                if ($value instanceof self) {
-                    $newValue = $value->expose();
-                }
-                $properties[$property] = $newValue;
-            } catch (ReflectionException $e) {
+            if ($this->propertyShouldBeSkipped($property, $value)) {
                 unset($properties[$property]);
+                continue;
             }
+
+            // expose child objects if possible
+            if ($value instanceof self) {
+                $value = $value->expose();
+            }
+            $properties[$property] = $value;
         }
         //---------------------
 
