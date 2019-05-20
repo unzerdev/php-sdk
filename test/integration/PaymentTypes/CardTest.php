@@ -90,7 +90,7 @@ class CardTest extends BasePaymentTest
      * @throws RuntimeException
      * @throws HeidelpayApiException
      *
-     * @skip
+     * @group skip
      */
     public function cardWith3dsFlagShouldSetItAlsoInTransactions()
     {
