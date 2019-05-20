@@ -282,6 +282,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @param $webhooksArray
      * @param Webhook $webhook
+     *
      * @return bool
      */
     private function arrayContainsWebhook($webhooksArray, Webhook $webhook): bool
