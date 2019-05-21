@@ -161,7 +161,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param $object
      * @param stdClass $response
      */
-    private function updateValues($object, stdClass $response)
+    private static function updateValues($object, stdClass $response)
     {
         foreach ($response as $key => $value) {
             $newValue = $value;
@@ -173,9 +173,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             if (is_object($value)) {
                 $getter = 'get' . ucfirst($key);
                 if (is_callable([$object, $getter])) {
-                    $this->updateValues($object->$getter(), $newValue);
+                    self::updateValues($object->$getter(), $newValue);
                 } elseif ($key === 'processing') {
-                    $this->updateValues($object, $newValue);
+                    self::updateValues($object, $newValue);
                 }
                 continue;
             }
@@ -190,7 +190,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             }
 
             // handle basic types
-            $this->setItemProperty($object, $key, $newValue);
+            self::setItemProperty($object, $key, $newValue);
         }
     }
 
@@ -199,7 +199,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param $key
      * @param $value
      */
-    public function setItemProperty($item, $key, $value)
+    private static function setItemProperty($item, $key, $value)
     {
         $setter = 'set' . ucfirst($key);
         if (!is_callable([$item, $setter])) {
@@ -217,7 +217,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param $value
      * @return bool
      */
-    private function propertyShouldBeSkipped($property, $value): bool
+    private static function propertyShouldBeSkipped($property, $value): bool
     {
         $skipProperty = false;
 
@@ -304,7 +304,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         // Add resources properties
         $properties = get_object_vars($this);
         foreach ($properties as $property => $value) {
-            if ($this->propertyShouldBeSkipped($property, $value)) {
+            if (self::propertyShouldBeSkipped($property, $value)) {
                 unset($properties[$property]);
                 continue;
             }
@@ -372,7 +372,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
-        $this->updateValues($this, $response);
+        self::updateValues($this, $response);
     }
 
     /**
