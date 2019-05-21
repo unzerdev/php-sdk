@@ -258,4 +258,43 @@ class PaymentTest extends BasePaymentTest
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
         $this->heidelpay->chargePayment('s-crd-xlj0qhdiw40k');
     }
+
+    /**
+     * Verify an Exception is thrown if the orderId already exists.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function apiShouldReturnErrorIfOrderIdAlreadyExists()
+    {
+        $orderId = str_replace(' ', '', microtime());
+
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $this->assertNotEmpty($authorization);
+
+        $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ORDER_ID_ALREADY_IN_USE);
+        $this->heidelpay->authorize(101.00, 'EUR', $card2, 'http://heidelpay.com', null, $orderId, null, null, false);
+    }
+
+    /**
+     * Verify a payment is fetched by orderId if the id is not set.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     */
+    public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet()
+    {
+        $orderId = str_replace(' ', '', microtime());
+        $payment = (new Payment())->setOrderId($orderId)->setParentResource($this->heidelpay);
+
+        $lastElement      = explode('/', rtrim($payment->getUri(), '/'));
+        $this->assertEquals($orderId, end($lastElement));
+    }
 }

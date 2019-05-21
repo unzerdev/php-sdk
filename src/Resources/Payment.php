@@ -570,6 +570,14 @@ class Payment extends AbstractHeidelpayResource
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getExternalId()
+    {
+        return $this->getOrderId();
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Transactions">
