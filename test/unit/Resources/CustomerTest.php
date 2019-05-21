@@ -25,11 +25,14 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Constants\Salutations;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use ReflectionException;
 use RuntimeException;
 
 class CustomerTest extends BaseUnitTest
@@ -183,5 +186,31 @@ class CustomerTest extends BaseUnitTest
         $customer = (new Customer())->setParentResource(new Heidelpay('s-priv-123'))->setCustomerId($customerId);
         $lastElement      = explode('/', rtrim($customer->getUri(), '/'));
         $this->assertEquals($customerId, end($lastElement));
+    }
+
+    /**
+     * Verify fetchCustomerByExtCustomerId method will create a customer object set its customerId and call fetch with it.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchCustomerByOrderIdShouldCreateCustomerObjectWithCustomerIdAndCallFetch()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')
+            ->with($this->callback(
+                static function ($customer) use ($heidelpay) {
+                    return $customer instanceof Customer &&
+                        $customer->getCustomerId() === 'myCustomerId' &&
+                        $customer->getId() === 'myCustomerId' &&
+                        $customer->getHeidelpayObject() === $heidelpay;
+                }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchCustomerByExtCustomerId('myCustomerId');
     }
 }

@@ -554,6 +554,21 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Retrieves a Customer resource, by the given external customer id.
+     *
+     * @param string $customerId The external customer id to fetch the customer object by.
+     *
+     * @return Customer The retrieved Customer object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchCustomerByExtCustomerId($customerId): AbstractHeidelpayResource
+    {
+        return $this->resourceService->fetchCustomerByExtCustomerId($customerId);
+    }
+
+    /**
      * Updates the remote Customer resource using the changes of the given local Customer object.
      *
      * @param Customer $customer The local Customer object used to update the remote resource via API.

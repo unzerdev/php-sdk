@@ -267,6 +267,7 @@ class HeidelpayTest extends BaseUnitTest
             'createCustomer'               => ['createCustomer', [$customer], 'createCustomer', [$customer]],
             'createOrUpdateCustomer'       => ['createOrUpdateCustomer', [$customer], 'createOrUpdateCustomer', [$customer]],
             'fetchCustomer'                => ['fetchCustomer', [$customer], 'fetchCustomer', [$customer]],
+            'fetchCustomerByExtCustomerId' => ['fetchCustomerByExtCustomerId', [$customerId], 'fetchCustomerByExtCustomerId', [$customerId]],
             'fetchCustomerStr'             => ['fetchCustomer', [$customerId], 'fetchCustomer', [$customerId]],
             'updateCustomer'               => ['updateCustomer', [$customer], 'updateCustomer', [$customer]],
             'deleteCustomer'               => ['deleteCustomer', [$customer], 'deleteCustomer', [$customer]],

@@ -632,6 +632,23 @@ class ResourceService
     }
 
     /**
+     * Fetch and return Customer object from API by the given external customer id.
+     *
+     * @param string $customerId
+     *
+     * @return Customer
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchCustomerByExtCustomerId($customerId): Customer
+    {
+        $customerObject = (new Customer())->setCustomerId($customerId);
+        $this->fetch($customerObject->setParentResource($this->heidelpay));
+        return $customerObject;
+    }
+
+    /**
      * Update and return a Customer object via API.
      *
      * @param Customer $customer
