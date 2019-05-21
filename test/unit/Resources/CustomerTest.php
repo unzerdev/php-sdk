@@ -25,10 +25,12 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Constants\Salutations;
+use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use RuntimeException;
 
 class CustomerTest extends BaseUnitTest
 {
@@ -166,5 +168,20 @@ class CustomerTest extends BaseUnitTest
         $this->assertEquals(Salutations::MR, $customer->getSalutation());
         $customer->setSalutation('MySalutation');
         $this->assertEquals(Salutations::UNKNOWN, $customer->getSalutation());
+    }
+
+    /**
+     * Verify a Customer is fetched by customerId if the id is not set.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     */
+    public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet()
+    {
+        $customerId = str_replace(' ', '', microtime());
+        $customer = (new Customer())->setParentResource(new Heidelpay('s-priv-123'))->setCustomerId($customerId);
+        $lastElement      = explode('/', rtrim($customer->getUri(), '/'));
+        $this->assertEquals($customerId, end($lastElement));
     }
 }
