@@ -215,6 +215,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @param $property
      * @param $value
+     *
      * @return bool
      */
     private static function propertyShouldBeSkipped($property, $value): bool
