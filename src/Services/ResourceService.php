@@ -315,10 +315,9 @@ class ResourceService
      * @return Payment
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchPayment($payment): AbstractHeidelpayResource
+    public function fetchPayment($payment): Payment
     {
         $paymentObject = $payment;
         if (is_string($payment)) {
@@ -326,6 +325,23 @@ class ResourceService
             $paymentObject->setId($payment);
         }
 
+        $this->fetch($paymentObject);
+        return $paymentObject;
+    }
+
+    /**
+     * Fetch and return payment by given order id.
+     *
+     * @param string $orderId
+     *
+     * @return Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchPaymentByOrderId($orderId): Payment
+    {
+        $paymentObject = (new Payment($this->heidelpay))->setOrderId($orderId);
         $this->fetch($paymentObject);
         return $paymentObject;
     }

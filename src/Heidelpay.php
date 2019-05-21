@@ -346,9 +346,24 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function fetchPayment($payment): AbstractHeidelpayResource
+    public function fetchPayment($payment): Payment
     {
         return $this->resourceService->fetchPayment($payment);
+    }
+
+    /**
+     * Fetches a payment object using its orderId.
+     *
+     * @param string $orderId The orderId set during authorize or charge.
+     *
+     * @return Payment Returns the updated payment object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchPaymentByOrderId($orderId): Payment
+    {
+        return $this->resourceService->fetchPaymentByOrderId($orderId);
     }
 
     //</editor-fold>

@@ -1641,6 +1641,21 @@ class PaymentTest extends BaseUnitTest
         $payment->handleResponse($response);
     }
 
+    /**
+     * Verify a payment is fetched by orderId if the id is not set.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     */
+    public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet()
+    {
+        $orderId = str_replace(' ', '', microtime());
+        $payment = (new Payment())->setOrderId($orderId)->setParentResource(new Heidelpay('s-priv-123'));
+        $lastElement      = explode('/', rtrim($payment->getUri(), '/'));
+        $this->assertEquals($orderId, end($lastElement));
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**

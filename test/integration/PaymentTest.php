@@ -47,7 +47,7 @@ class PaymentTest extends BasePaymentTest
     {
         $authorize = $this->createAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorize->getPayment()->getId());
-        $this->assertInstanceOf(Payment::class, $payment);
+        $this->assertNotNull(Payment::class, $payment);
         $this->assertNotEmpty($payment->getId());
         $this->assertInstanceOf(Authorization::class, $payment->getAuthorization());
         $this->assertNotEmpty($payment->getAuthorization()->getId());
@@ -288,13 +288,17 @@ class PaymentTest extends BasePaymentTest
      * @test
      *
      * @throws RuntimeException
+     * @throws HeidelpayApiException
      */
     public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet()
     {
         $orderId = str_replace(' ', '', microtime());
-        $payment = (new Payment())->setOrderId($orderId)->setParentResource($this->heidelpay);
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $payment = $authorization->getPayment();
+        $fetchedPayment = $this->heidelpay->fetchPaymentByOrderId($orderId);
 
-        $lastElement      = explode('/', rtrim($payment->getUri(), '/'));
-        $this->assertEquals($orderId, end($lastElement));
+        $this->assertNotSame($payment, $fetchedPayment);
+        $this->assertEquals($payment->expose(), $fetchedPayment->expose());
     }
 }
