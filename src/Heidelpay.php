@@ -346,9 +346,24 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function fetchPayment($payment): AbstractHeidelpayResource
+    public function fetchPayment($payment): Payment
     {
         return $this->resourceService->fetchPayment($payment);
+    }
+
+    /**
+     * Fetches a payment object using its orderId.
+     *
+     * @param string $orderId The orderId set during authorize or charge.
+     *
+     * @return Payment Returns the updated payment object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchPaymentByOrderId($orderId): Payment
+    {
+        return $this->resourceService->fetchPaymentByOrderId($orderId);
     }
 
     //</editor-fold>
@@ -536,6 +551,21 @@ class Heidelpay implements HeidelpayParentInterface
     public function fetchCustomer($customer): AbstractHeidelpayResource
     {
         return $this->resourceService->fetchCustomer($customer);
+    }
+
+    /**
+     * Retrieves a Customer resource, by the given external customer id.
+     *
+     * @param string $customerId The external customer id to fetch the customer object by.
+     *
+     * @return Customer The retrieved Customer object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchCustomerByExtCustomerId($customerId): AbstractHeidelpayResource
+    {
+        return $this->resourceService->fetchCustomerByExtCustomerId($customerId);
     }
 
     /**

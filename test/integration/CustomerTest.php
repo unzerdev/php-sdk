@@ -305,21 +305,6 @@ class CustomerTest extends BasePaymentTest
     }
 
     /**
-     * Verify a Customer is fetched by customerId if the id is not set.
-     *
-     * @test
-     *
-     * @throws RuntimeException
-     */
-    public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet()
-    {
-        $customerId = str_replace(' ', '', microtime());
-        $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
-        $lastElement      = explode('/', rtrim($customer->getUri(), '/'));
-        $this->assertEquals($customerId, end($lastElement));
-    }
-
-    /**
      * Verify a Customer is fetched and updated when its customerId already exist.
      *
      * @test
