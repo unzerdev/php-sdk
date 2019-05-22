@@ -26,6 +26,8 @@ namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\test\BaseUnitTest;
+use RuntimeException;
+use stdClass;
 
 class KeypairTest extends BaseUnitTest
 {
@@ -34,7 +36,7 @@ class KeypairTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function anAuthorizationShouldBeUpdatedThroughResponseHandling()
     {
@@ -59,7 +61,7 @@ class KeypairTest extends BaseUnitTest
             'giropay'
         ];
 
-        $testResponse = new \stdClass();
+        $testResponse = new stdClass();
         $testResponse->publicKey = 's-pub-1234';
         $testResponse->privateKey = 's-priv-4321';
         $testResponse->availablePaymentTypes = $paymentTypes;

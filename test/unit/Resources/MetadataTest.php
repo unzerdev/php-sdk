@@ -28,6 +28,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
+use stdClass;
 
 class MetadataTest extends BasePaymentTest
 {
@@ -141,7 +142,7 @@ class MetadataTest extends BasePaymentTest
         $this->assertEquals('some information', $metaData->getMetadata('additionalData'));
         $this->assertNull($metaData->getMetadata('extraData'));
 
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->id = 'newId';
         $response->sdkType = 'newSdkType';
         $response->sdkVersion = 'newSdkVersion';
