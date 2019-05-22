@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Added 3ds flag to card payment type.
 
+### Changed
+*   Enabled fetching the payment via orderId if its id is not set.
+
 ## [1.1.1.1][1.1.1.1]
 
 ### Added
