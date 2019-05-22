@@ -3,11 +3,6 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [X.X.X.X][X.X.X.X]
-
-### Changed
-*   Enabled fetching the payment via orderId if its id is not set.
-
 ## [1.1.1.1][1.1.1.1]
 
 ### Added
@@ -19,9 +14,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Fixed
 *   Added missing parameter `invoiceId` to `payment::ship` method.
 
-### Change
+### Changed
 *   Change key pair for SAQ-A integration test.
 *   Refactored implementation examples.
+*   Enabled fetching the payment via orderId if its id is not set.
 
 ## [1.1.1.0][1.1.1.0]
 
