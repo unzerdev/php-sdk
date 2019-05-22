@@ -7,13 +7,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Added 3ds flag to card payment type.
-
-### Changed
-*   Enabled fetching the payment via orderId if its id is not set.
-
-## [1.1.1.1][1.1.1.1]
-
-### Added
 *   Added example for invoice guaranteed payment type.
 *   Added example for PayPal payment type.
 *   Added example for the sepa direct debit guaranteed payment type.
@@ -22,9 +15,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Fixed
 *   Added missing parameter `invoiceId` to `payment::ship` method.
 
-### Change
+### Changed
 *   Change key pair for SAQ-A integration test.
 *   Refactored implementation examples.
+*   Enabled fetching the payment via orderId if its id is not set.
 
 ## [1.1.1.0][1.1.1.0]
 
@@ -174,5 +168,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.0.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.1.0..1.0.2.0
 [1.1.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.2.0..1.1.0.0
 [1.1.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.0.0..1.1.1.0
-[1.1.1.1]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.1.0..1.1.1.1
-[1.1.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.1.1..1.1.2.0
+[1.1.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.1.0..1.1.2.0
