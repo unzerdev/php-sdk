@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Change key pair for SAQ-A integration test.
 *   Refactored implementation examples.
 *   Enabled fetching the payment via orderId if its id is not set.
+*   Adapt to small API changes.
 
 ## [1.1.1.0][1.1.1.0]
 
