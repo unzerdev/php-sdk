@@ -46,6 +46,8 @@ class CardTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
+     *
+     * @group skip
      */
     public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
     {
@@ -76,9 +78,29 @@ class CardTest extends BasePaymentTest
 
         $this->assertInstanceOf(Card::class, $card);
         $this->assertNotNull($card->getId());
+        $this->assertNotNull($card->get3ds());
         $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
 
         return $card;
+    }
+
+    /**
+     * Verify card creation with 3ds flag set will provide the flag in transactions.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function cardWith3dsFlagShouldSetItAlsoInTransactions()
+    {
+        /** @var Card $card */
+        $card = $this->createCardObject()->set3ds(false);
+        $card = $this->heidelpay->createPaymentType($card);
+        $this->assertFalse($card->get3ds());
+
+        $charge = $card->charge(12.34, 'EUR', 'https://docs.heidelpay.com');
+        $this->assertFalse($charge->isCard3ds());
     }
 
     /**

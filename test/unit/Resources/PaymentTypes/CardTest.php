@@ -26,8 +26,10 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\test\BaseUnitTest;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
+use stdClass;
 
 class CardTest extends BaseUnitTest
 {
@@ -189,6 +191,22 @@ class CardTest extends BaseUnitTest
     }
 
     /**
+     * Verify card3ds flag.
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     */
+    public function card3dsFlagShouldBeSettableInCardResource()
+    {
+        $this->assertNull($this->card->get3ds());
+        $this->card->set3ds(true);
+        $this->assertTrue($this->card->get3ds());
+        $this->card->set3ds(false);
+        $this->assertFalse($this->card->get3ds());
+    }
+
+    /**
      * Verify setting brand.
      *
      * @test
@@ -197,7 +215,7 @@ class CardTest extends BaseUnitTest
      */
     public function verifyCardCanBeUpdated()
     {
-        $testResponse = new \stdClass();
+        $testResponse = new stdClass();
         $testResponse->id = self::TEST_ID;
         $testResponse->number = self::TEST_NUMBER;
         $testResponse->brand = self::TEST_BRAND;

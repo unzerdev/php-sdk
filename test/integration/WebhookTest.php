@@ -82,7 +82,7 @@ class WebhookTest extends BasePaymentTest
     }
 
     /**
-     * Verify Webhook event can be updated.
+     * Verify Webhook event can not be updated.
      *
      * @depends webhookResourceCanBeRegisteredAndFetched
      * @test
@@ -92,10 +92,8 @@ class WebhookTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws RuntimeException
-     *
-     * @group skip
      */
-    public function webhookEventShouldBeUpdateable(Webhook $webhook)
+    public function webhookEventShouldNotBeUpdateable(Webhook $webhook)
     {
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
@@ -104,7 +102,7 @@ class WebhookTest extends BasePaymentTest
         $this->heidelpay->updateWebhook($webhook);
 
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
-        $this->assertEquals(WebhookEvents::CUSTOMER, $fetchedWebhook->getEvent());
+        $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
     }
 
     /**
@@ -162,8 +160,6 @@ class WebhookTest extends BasePaymentTest
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
-     *
-     * @grop skip
      */
     public function fetchWebhooksShouldReturnArrayOfRegisteredWebhooks()
     {
@@ -185,14 +181,9 @@ class WebhookTest extends BasePaymentTest
         $fetchedWebhooks = $this->heidelpay->fetchAllWebhooks();
         $this->assertCount(3, $fetchedWebhooks);
 
-        $webhooksAsArrays = [];
-        foreach ($fetchedWebhooks as $fetchedWebhook) {
-            /** @var Webhook $fetchedWebhook */
-            $webhooksAsArrays[] = $fetchedWebhook->expose();
-        }
-        $this->assertArraySubset([$webhook1->expose()], $webhooksAsArrays);
-        $this->assertArraySubset([$webhook2->expose()], $webhooksAsArrays);
-        $this->assertArraySubset([$webhook3->expose()], $webhooksAsArrays);
+        $this->assertTrue($this->arrayContainsWebhook($fetchedWebhooks, $webhook1));
+        $this->assertTrue($this->arrayContainsWebhook($fetchedWebhooks, $webhook2));
+        $this->assertTrue($this->arrayContainsWebhook($fetchedWebhooks, $webhook3));
     }
 
     /**
@@ -284,6 +275,27 @@ class WebhookTest extends BasePaymentTest
     private function generateUniqueUrl(): string
     {
         return 'https://www.heidelpay.de?test=' . str_replace([' ', '.'], '', microtime());
+    }
+
+    /**
+     * Returns true if the given Webhook exists in the given array.
+     *
+     * @param $webhooksArray
+     * @param Webhook $webhook
+     *
+     * @return bool
+     */
+    private function arrayContainsWebhook($webhooksArray, Webhook $webhook): bool
+    {
+        $arrayContainsWebhook = false;
+        foreach ($webhooksArray as $webhookFromArray) {
+            /** @var Webhook $webhookFromArray */
+            if ($webhookFromArray->expose() === $webhook->expose()) {
+                $arrayContainsWebhook = true;
+                break;
+            }
+        }
+        return $arrayContainsWebhook;
     }
 
     //</editor-fold>
