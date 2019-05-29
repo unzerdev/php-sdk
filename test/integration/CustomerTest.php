@@ -114,7 +114,7 @@ class CustomerTest extends BasePaymentTest
         $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
         $this->heidelpay->createCustomer($customer);
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getCustomerId());
+        $fetchedCustomer = $this->heidelpay->fetchCustomerByExtCustomerId($customer->getCustomerId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
     }
 
