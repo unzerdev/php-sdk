@@ -49,7 +49,7 @@ class BasketTest extends BasePaymentTest
         $basket->setNote('This basket is creatable!');
         $basketItem = new BasketItem('myItem', 1234, 2345, 12);
         $basket->addBasketItem($basketItem);
-        $basketItem = new BasketItem('title');
+        $basketItem = (new BasketItem('title'))->setAmountPerUnit(0.0);
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
