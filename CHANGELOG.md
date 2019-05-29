@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.1.2.0][1.1.2.0]
+## [1.2.0.0][1.2.0.0]
 
 ### Added
 *   Added 3ds flag to card payment type.
@@ -14,11 +14,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Fixed
 *   Added missing parameter `invoiceId` to `payment::ship` method.
+*   A problem which resulted in an error when the property BasketItem::AmountPerUnit is set to 0.0.
 
 ### Changed
-*   Change key pair for SAQ-A integration test.
 *   Refactored implementation examples.
 *   Enabled fetching the payment via orderId if its id is not set.
+*   Changed the default values of Basket and BasketItem.
+*   Refactored updating resource properties.
 *   Adapt to small API changes.
 
 ## [1.1.1.0][1.1.1.0]
@@ -170,3 +172,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.1.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.2.0..1.1.0.0
 [1.1.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.0.0..1.1.1.0
 [1.1.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.1.0..1.1.2.0
+[1.2.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.1.0..1.2.0.0
