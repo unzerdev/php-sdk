@@ -47,7 +47,10 @@ class BasketTest extends BasePaymentTest
         $orderId = microtime(true);
         $basket = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basket->addBasketItem(new BasketItem('myItem', 1234, 2345, 12));
+        $basketItem = new BasketItem('myItem', 1234, 2345, 12);
+        $basket->addBasketItem($basketItem);
+        $basketItem = new BasketItem('title');
+        $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
         $this->heidelpay->createBasket($basket);
