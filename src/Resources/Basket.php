@@ -231,7 +231,7 @@ class Basket extends AbstractHeidelpayResource
     {
         $this->basketItems[] = $basketItem;
         if ($basketItem->getBasketItemReferenceId() === null) {
-            $basketItem->setBasketItemReferenceId($this->getKeyOfLastBasketItemAdded());
+            $basketItem->setBasketItemReferenceId((string)$this->getKeyOfLastBasketItemAdded());
         }
         return $this;
     }
