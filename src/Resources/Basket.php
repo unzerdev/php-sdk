@@ -35,10 +35,10 @@ class Basket extends AbstractHeidelpayResource
     protected $amountTotal = 0.0;
 
     /** @var float $amountTotalDiscount */
-    protected $amountTotalDiscount;
+    protected $amountTotalDiscount = 0.0;
 
     /** @var float $amountTotalVat */
-    protected $amountTotalVat;
+    protected $amountTotalVat = 0.0;
 
     /** @var string $currencyCode */
     protected $currencyCode;
@@ -75,9 +75,9 @@ class Basket extends AbstractHeidelpayResource
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return float|null
+     * @return float
      */
-    public function getAmountTotal()
+    public function getAmountTotal(): float
     {
         return $this->amountTotal;
     }
@@ -94,38 +94,38 @@ class Basket extends AbstractHeidelpayResource
     }
 
     /**
-     * @return float|null
+     * @return float
      */
-    public function getAmountTotalDiscount()
+    public function getAmountTotalDiscount(): float
     {
         return $this->amountTotalDiscount;
     }
 
     /**
-     * @param float|null $amountTotalDiscount
+     * @param float $amountTotalDiscount
      *
      * @return Basket
      */
-    public function setAmountTotalDiscount($amountTotalDiscount): Basket
+    public function setAmountTotalDiscount(float $amountTotalDiscount): Basket
     {
         $this->amountTotalDiscount = $amountTotalDiscount;
         return $this;
     }
 
     /**
-     * @return float|null
+     * @return float
      */
-    public function getAmountTotalVat()
+    public function getAmountTotalVat(): float
     {
         return $this->amountTotalVat;
     }
 
     /**
-     * @param float|null $amountTotalVat
+     * @param float $amountTotalVat
      *
      * @return Basket
      */
-    public function setAmountTotalVat($amountTotalVat): Basket
+    public function setAmountTotalVat(float $amountTotalVat): Basket
     {
         $this->amountTotalVat = $amountTotalVat;
         return $this;
@@ -231,7 +231,7 @@ class Basket extends AbstractHeidelpayResource
     {
         $this->basketItems[] = $basketItem;
         if ($basketItem->getBasketItemReferenceId() === null) {
-            $basketItem->setBasketItemReferenceId($this->getKeyOfLastBasketItemAdded());
+            $basketItem->setBasketItemReferenceId((string)$this->getKeyOfLastBasketItemAdded());
         }
         return $this;
     }

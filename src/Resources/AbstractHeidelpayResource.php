@@ -35,7 +35,6 @@ use heidelpayPHP\Services\ResourceService;
 use function is_array;
 use function is_callable;
 use function is_object;
-use function is_string;
 use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
@@ -164,10 +163,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     private static function updateValues($object, stdClass $response)
     {
         foreach ($response as $key => $value) {
-            $newValue = $value;
-            if ($value !== false && (!is_string($value) || $value === '')) {
-                $newValue = $value ?: null;
-            }
+            // set empty string to null (workaround)
+            $newValue = $value === '' ? null : $value;
 
             // handle nested object
             if (is_object($value)) {
