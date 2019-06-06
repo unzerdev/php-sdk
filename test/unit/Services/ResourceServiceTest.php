@@ -389,6 +389,32 @@ class ResourceServiceTest extends BaseUnitTest
     }
 
     /**
+     * Verify fetchPaymentByOrderId method will create a payment object set its orderId and call fetch with it.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchPaymentByOrderIdShouldCreatePaymentObjectWithOrderIdAndCallFetch()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')
+            ->with($this->callback(
+                static function ($payment) use ($heidelpay) {
+                    return $payment instanceof Payment &&
+                    $payment->getOrderId() === 'myOrderId' &&
+                    $payment->getId() === 'myOrderId' &&
+                    $payment->getHeidelpayObject() === $heidelpay;
+                }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchPaymentByOrderId('myOrderId');
+    }
+
+    /**
      * Verify fetchKeypair will call fetch with a Keypair object.
      *
      * @test

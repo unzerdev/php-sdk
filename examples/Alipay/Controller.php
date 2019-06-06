@@ -68,7 +68,7 @@ try {
     $_SESSION['PaymentId'] = $charge->getPaymentId();
     $_SESSION['ShortId']   = $charge->getShortId();
 
-    // Redirect to the Alipay page of the selected bank
+    // Redirect to the Alipay page
     if (!$charge->isError() && $charge->getRedirectUrl() !== null) {
         redirect($charge->getRedirectUrl());
     }

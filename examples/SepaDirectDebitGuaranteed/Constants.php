@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the WeChatPay example.
+ * This file defines the constants needed for the SEPA direct debit guaranteed example.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -26,6 +26,5 @@
 require_once __DIR__ . '/../Constants.php';
 
 define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'Wechatpay');
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'SepaDirectDebitGuaranteed');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
-define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

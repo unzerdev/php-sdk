@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the Invoice Factoring example.
+ * This is the controller for the PayPal example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2019 heidelpay GmbH
@@ -33,11 +33,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
 
 session_start();
 session_unset();
@@ -53,43 +49,37 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
+// You will need the id of the payment type created in the frontend (index.php)
+if (!isset($_POST['resourceId'])) {
+    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
+}
+$paymentTypeId   = $_POST['resourceId'];
+
+$transactionType = $_POST['transaction_type'] ?? 'authorize';
+
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    /** @var InvoiceFactoring $invoiceFactoring */
-    $invoiceFactoring = $heidelpay->createPaymentType(new InvoiceFactoring());
-
-    // A customer with matching addresses is mandatory for Invoice Factoring payment type
-    $customer = new Customer('Linda', 'Heideich');
-    $address  = new Address();
-    $address->setName('Linda Heideich')
-        ->setStreet('Vangerowstr. 18')
-        ->setCity('Heidelberg')
-        ->setZip('69155')
-        ->setCountry('DE');
-    $customer->setBirthDate('2000-02-12')->setBillingAddress($address)->setShippingAddress($address);
-
-    $orderId = str_replace(['0.', ' '], '', microtime(false));
-
-    // A Basket is mandatory for Invoice Factoring payment type
-    $basketItem = new BasketItem('Hat', 10.0, 10.0, 1);
-    $basket = new Basket($orderId, 10.0, 'EUR', [$basketItem]);
-
-    $transaction = $invoiceFactoring->charge(12.99, 'EUR', CONTROLLER_URL, $customer, $orderId, null, $basket);
-
-    // You'll need to remember the shortId to show it on the success or failure page
-    $_SESSION['ShortId'] = $transaction->getShortId();
-
-    // Redirect to the success or failure page depending on the state of the transaction
-    $payment = $transaction->getPayment();
-    if ($transaction->isSuccess()) {
-        redirect(SUCCESS_URL);
+    // Create a charge/authorize transaction to get the redirectUrl.
+    if ($transactionType === 'charge') {
+        $transaction = $heidelpay->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+    } else {
+        $transaction = $heidelpay->authorize(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
     }
 
-    // Check the result message of the transaction to find out what went wrong.
+    // You'll need to remember the paymentId for later in the ReturnController
+    $_SESSION['PaymentId'] = $transaction->getPaymentId();
+    $_SESSION['ShortId']   = $transaction->getShortId();
+
+    // Redirect to the PayPal page
+    if (!$transaction->isError() && $transaction->getRedirectUrl() !== null) {
+        redirect($transaction->getRedirectUrl());
+    }
+
+    // Check the result message of the charge to find out what went wrong.
     $merchantMessage = $transaction->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();

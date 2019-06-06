@@ -570,6 +570,14 @@ class Payment extends AbstractHeidelpayResource
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getExternalId()
+    {
+        return $this->getOrderId();
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Transactions">
@@ -625,7 +633,13 @@ class Payment extends AbstractHeidelpayResource
             try {
                 $cancels[] = $charge->cancel();
             } catch (HeidelpayApiException $e) {
-                if (ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK !== $e->getCode()) {
+                if (!in_array($e->getCode(),
+                              [
+                                  ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK,
+                                  ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED
+                              ],
+                      true
+                )) {
                     throw $e;
                 }
                 $exceptions[] = $e;
@@ -680,14 +694,16 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Performs a Shipment transaction on this Payment.
      *
+     * @param string|null $invoiceId The id of the invoice in the shop.
+     *
      * @return AbstractHeidelpayResource|Shipment The resulting Shipment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function ship()
+    public function ship($invoiceId = null)
     {
-        return $this->getHeidelpayObject()->ship($this);
+        return $this->getHeidelpayObject()->ship($this, $invoiceId);
     }
 
     //</editor-fold>

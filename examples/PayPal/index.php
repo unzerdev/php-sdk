@@ -1,8 +1,8 @@
 <?php
 /**
- * This file provides an example implementation of the credit card payment type.
+ * This file provides an example implementation of the PayPal payment type.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>
@@ -45,22 +46,11 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
-<h3>Example Data #1:</h3>
+<h3>Example data:</h3>
 <ul>
-    <lh><strong>VISA</strong></lh>
-    <li>Number: 4711100000000000</li>
-    <li>Expiry date: Date in the future</li>
-    <li>Cvc: 123</li>
-    <li>Secret: secret3</li>
-</ul>
-
-<h3>Example Data #2:</h3>
-<ul>
-    <lh><strong>Mastercard</strong></lh>
-    <li>Number: 5453010000059543</li>
-    <li>Expiry date: Date in the future</li>
-    <li>Cvc: 123</li>
-    <li>Secret: secret3</li>
+    <li>Username: paypal-customer@heidelpay.de</li>
+    <li>Password: heidelpay</li>
+    <lb><strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com" target="_blank">here</a>.</lb>
 </ul>
 
 <p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
@@ -82,35 +72,8 @@ require_once __DIR__ . '/../../../../autoload.php';
             </div>
         </div>
     </div>
-    <div class="fields inline">
-        <label for="3dsecure">Select this if you want to try out Card with 3Dsecure:</label>
-        <div class="field">
-            <div class="heidelpayUI checkbox">
-                <input type="hidden" name="3dsecure" value="0">
-                <input type="checkbox" name="3dsecure" value="1">
-                <label>Enable 3Ds</label>
-            </div>
-        </div>
-    </div>
     <!-- This is just for the example - End -->
 
-    <div class="field">
-        <div id="card-element-id-number" class="heidelpayInput">
-            <!-- Card number UI Element will be inserted here. -->
-        </div>
-    </div>
-    <div class="two fields">
-        <div class="field ten wide">
-            <div id="card-element-id-expiry" class="heidelpayInput">
-                <!-- Card expiry date UI Element will be inserted here. -->
-            </div>
-        </div>
-        <div class="field six wide">
-            <div id="card-element-id-cvc" class="heidelpayInput">
-                <!-- Card CVC UI Element will be inserted here. -->
-            </div>
-        </div>
-    </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
@@ -119,48 +82,15 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Create a credit card instance and render the input fields
-    let Card = heidelpayInstance.Card();
-    Card.create('number', {
-        containerId: 'card-element-id-number',
-        onlyIframe: false
-    });
-    Card.create('expiry', {
-        containerId: 'card-element-id-expiry',
-        onlyIframe: false
-    });
-    Card.create('cvc', {
-        containerId: 'card-element-id-cvc',
-        onlyIframe: false
-    });
+    // Create an Paypal instance
+    let Paypal = heidelpayInstance.Paypal();
 
-    // General event handling
-    let formFieldValid = {};
-    let payButton = document.getElementById("submit-button");
-    let $errorHolder = $('#error-holder');
-
-    // Enable pay button initially
-    payButton.disabled = true;
-
-    let eventHandlerCardInput = function(e) {
-        if (e.success) {
-            formFieldValid[e.type] = true;
-            $errorHolder.html('')
-        } else {
-            formFieldValid[e.type] = false;
-            $errorHolder.html(e.error)
-        }
-        payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc);
-    };
-
-    Card.addEventListener('change', eventHandlerCardInput);
-
-    // Handling the form submission
+    // Handle payment form submission
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a credit card resource
-        Card.createResource()
+        // Creating a Paypal resource
+        Paypal.createResource()
             .then(function(result) {
                 let hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');
@@ -174,7 +104,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 form.submit();
             })
             .catch(function(error) {
-                $errorHolder.html(error.message);
+                $('#error-holder').html(error.message)
             })
     });
 </script>

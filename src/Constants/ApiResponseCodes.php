@@ -37,6 +37,7 @@ class ApiResponseCodes
     const API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED                = 'API.360.000.004';
     const API_ERROR_SHIPPING_REQUIRES_INVOICE_ID                = 'API.360.100.025';
     const API_ERROR_CUSTOMER_ID_REQUIRED                        = 'API.320.100.008';
+    const API_ERROR_ORDER_ID_ALREADY_IN_USE                     = 'API.320.200.138';
     const API_ERROR_RESOURCE_DOES_NOT_BELONG_TO_MERCHANT        = 'API.320.200.145';
     const API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED         = 'API.330.100.007';
     const API_ERROR_IVF_REQUIRES_CUSTOMER                       = 'API.330.100.008';

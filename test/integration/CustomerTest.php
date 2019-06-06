@@ -103,6 +103,22 @@ class CustomerTest extends BasePaymentTest
     }
 
     /**
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @depends maxCustomerCanBeCreatedAndFetched
+     * @test
+     */
+    public function customerCanBeFetchedByCustomerId()
+    {
+        $customerId = str_replace([' ', '.'], '', microtime());
+        $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
+        $this->heidelpay->createCustomer($customer);
+
+        $fetchedCustomer = $this->heidelpay->fetchCustomerByExtCustomerId($customer->getCustomerId());
+        $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
+    }
+
+    /**
      * @param Customer $customer
      *
      * @throws HeidelpayApiException
@@ -305,21 +321,6 @@ class CustomerTest extends BasePaymentTest
     }
 
     /**
-     * Verify a Customer is fetched by customerId if the id is not set.
-     *
-     * @test
-     *
-     * @throws RuntimeException
-     */
-    public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet()
-    {
-        $customerId = str_replace(' ', '', microtime());
-        $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
-        $lastElement      = explode('/', rtrim($customer->getUri(), '/'));
-        $this->assertEquals($customerId, end($lastElement));
-    }
-
-    /**
      * Verify a Customer is fetched and updated when its customerId already exist.
      *
      * @test
@@ -331,11 +332,10 @@ class CustomerTest extends BasePaymentTest
     {
         $customerId = str_replace(' ', '', microtime());
 
-        $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
-
         try {
             // fetch non-existing customer by customerId
-            $this->heidelpay->fetchCustomer($customer);
+            $this->heidelpay->fetchCustomerByExtCustomerId($customerId);
+            $this->assertTrue(false, 'Exception should be thrown here.');
         } catch (HeidelpayApiException $e) {
             $this->assertEquals($e->getCode(), ApiResponseCodes::API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND);
         }

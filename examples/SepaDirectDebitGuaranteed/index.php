@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the WeChatPay payment type.
+ * This file provides an example implementation of the SEPA direct debit guaranteed payment type.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -32,7 +32,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>
@@ -46,16 +45,17 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
-<h3>Example data:</h3>
-<ul>
-    <li>Username: keychain</li>
-    <li>Password: 123</li>
-</ul>
 
 <p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form" class="heidelpayUI form" novalidate>
-    <div class="field" id="error-holder" style="color: #9f3a38"> </div>
+<form id="payment-form">
+    <div id="sepa-guaranteed-IBAN" class="field">
+        <!-- The IBAN field UI Element will be inserted here -->
+    </div>
+    <div id="customer" class="field">
+        <!-- The customer form UI element will be inserted here -->
+    </div>
+    <div class="field" id="error-holder" style="color: #9f3a38"></div>
     <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
@@ -63,21 +63,40 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Create a Wechatpay instance
-    let Wechatpay = heidelpayInstance.Wechatpay();
+    // Create a SEPA Direct Debit Guaranteed instance and render the form
+    let sepaDirectDebitGuaranteed = heidelpayInstance.SepaDirectDebitGuaranteed();
+    sepaDirectDebitGuaranteed.create('sepa-direct-debit-guaranteed', {
+        containerId: 'sepa-guaranteed-IBAN'
+    });
 
-    // Handle payment form submission
+    // Creat a customer instance and render the form
+    let Customer = heidelpayInstance.Customer();
+    Customer.create({
+        containerId: 'customer'
+    });
+
+    // Handle payment form submission.
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a Wechatpay resource
-        Wechatpay.createResource()
-            .then(function(result) {
-                let hiddenInput = document.createElement('input');
-                hiddenInput.setAttribute('type', 'hidden');
-                hiddenInput.setAttribute('name', 'resourceId');
-                hiddenInput.setAttribute('value', result.id);
-                form.appendChild(hiddenInput);
+        let sepaDirectDebitGuaranteedPromise = sepaDirectDebitGuaranteed.createResource();
+        let customerPromise = Customer.createCustomer();
+        Promise.all([sepaDirectDebitGuaranteedPromise, customerPromise])
+            .then(function(values) {
+                let paymentType = values[0];
+                let customer = values[1];
+                let hiddenInputPaymentTypeId = document.createElement('input');
+                hiddenInputPaymentTypeId.setAttribute('type', 'hidden');
+                hiddenInputPaymentTypeId.setAttribute('name', 'paymentTypeId');
+                hiddenInputPaymentTypeId.setAttribute('value', paymentType.id);
+                form.appendChild(hiddenInputPaymentTypeId);
+
+                let hiddenInputCustomerId = document.createElement('input');
+                hiddenInputCustomerId.setAttribute('type', 'hidden');
+                hiddenInputCustomerId.setAttribute('name', 'customerId');
+                hiddenInputCustomerId.setAttribute('value', customer.id);
+                form.appendChild(hiddenInputCustomerId);
+
                 form.setAttribute('method', 'POST');
                 form.setAttribute('action', '<?php echo CONTROLLER_URL; ?>');
 
@@ -89,5 +108,6 @@ require_once __DIR__ . '/../../../../autoload.php';
             })
     });
 </script>
+
 </body>
 </html>
