@@ -147,4 +147,20 @@ class CancelAfterChargeTest extends BasePaymentTest
         $this->assertAmounts($secondPayment, 0, 90, 100, 10);
         $this->assertTrue($secondPayment->isCompleted());
     }
+
+    /**
+     * Verify payment reference can be set in cancel charge transaction aka refund.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function cancelShouldAcceptPaymentReferenceParameter()
+    {
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $charge = $this->heidelpay->charge(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $cancel = $charge->cancel(null, null, 'myPaymentReference');
+        $this->assertEquals('myPaymentReference', $cancel->getPaymentReference());
+    }
 }
