@@ -370,17 +370,24 @@ class PaymentService
      * @param Charge $charge
      * @param $amount
      * @param string|null $reasonCode
+     * @param string|null $paymentReference A reference string for the payment.
      *
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function cancelCharge(Charge $charge, $amount = null, string $reasonCode = null): AbstractTransactionType
-    {
+    public function cancelCharge(
+        Charge $charge,
+        $amount = null,
+        string $reasonCode = null,
+        string $paymentReference = null
+    ): AbstractTransactionType {
         $cancellation = new Cancellation($amount);
-        $cancellation->setReasonCode($reasonCode);
-        $cancellation->setPayment($charge->getPayment());
+        $cancellation
+            ->setReasonCode($reasonCode)
+            ->setPayment($charge->getPayment())
+            ->setPaymentReference($paymentReference);
         $charge->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
 

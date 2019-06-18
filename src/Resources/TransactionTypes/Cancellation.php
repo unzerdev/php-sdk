@@ -34,6 +34,9 @@ class Cancellation extends AbstractTransactionType
     /** @var string $reasonCode */
     protected $reasonCode;
 
+    /** @var string $paymentReference */
+    protected $paymentReference;
+
     /**
      * Authorization constructor.
      *
@@ -93,6 +96,25 @@ class Cancellation extends AbstractTransactionType
         if (in_array($reasonCode, array_merge(CancelReasonCodes::REASON_CODE_ARRAY, [null]), true)) {
             $this->reasonCode = $reasonCode;
         }
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPaymentReference()
+    {
+        return $this->paymentReference;
+    }
+
+    /**
+     * @param string|null $paymentReference
+     *
+     * @return Cancellation
+     */
+    public function setPaymentReference($paymentReference): Cancellation
+    {
+        $this->paymentReference = $paymentReference;
         return $this;
     }
 
