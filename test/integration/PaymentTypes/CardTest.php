@@ -78,7 +78,6 @@ class CardTest extends BasePaymentTest
 
         $this->assertInstanceOf(Card::class, $card);
         $this->assertNotNull($card->getId());
-        $this->assertNotNull($card->get3ds());
         $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
 
         return $card;
