@@ -955,19 +955,20 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Performs a Charge transaction and returns the resulting Charge resource.
      *
-     * @param float                  $amount      The amount to charge.
-     * @param string                 $currency    The currency of the amount.
-     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
-     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
-     * @param string|null            $orderId     A custom order id which can be set by the merchant.
-     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
-     * @param Basket|null            $basket      The Basket object corresponding to the payment.
-     *                                            The Basket object will be created automatically if it does not exist
-     *                                            yet (i.e. has no id).
-     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
-     *                                            optional and will be ignored if not applicable.
-     * @param string|null            $invoiceId   The external id of the invoice.
+     * @param float                  $amount           The amount to charge.
+     * @param string                 $currency         The currency of the amount.
+     * @param string|BasePaymentType $paymentType      The PaymentType object or the id of the PaymentType to use.
+     * @param string                 $returnUrl        The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer         The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId          A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata         The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket           The Basket object corresponding to the payment.
+     *                                                 The Basket object will be created automatically if it does not exist
+     *                                                 yet (i.e. has no id).
+     * @param bool|null              $card3ds          Enables 3ds channel for credit cards if available. This parameter is
+     *                                                 optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId        The external id of the invoice.
+     * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -984,7 +985,8 @@ class Heidelpay implements HeidelpayParentInterface
         $metadata = null,
         $basket = null,
         $card3ds = null,
-        $invoiceId = null
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
         return $this->paymentService->charge(
             $amount,
@@ -996,7 +998,8 @@ class Heidelpay implements HeidelpayParentInterface
             $metadata,
             $basket,
             $card3ds,
-            $invoiceId
+            $invoiceId,
+            $paymentReference
         );
     }
 

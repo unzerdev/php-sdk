@@ -55,6 +55,9 @@ class Charge extends AbstractTransactionType
     /** @var string $descriptor */
     private $descriptor;
 
+    /** @var string $paymentReference */
+    protected $paymentReference;
+
     /** @var bool $card3ds */
     protected $card3ds;
 
@@ -218,6 +221,25 @@ class Charge extends AbstractTransactionType
     protected function setDescriptor(string $descriptor): self
     {
         $this->descriptor = $descriptor;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPaymentReference()
+    {
+        return $this->paymentReference;
+    }
+
+    /**
+     * @param string|null $paymentReference
+     *
+     * @return Charge
+     */
+    public function setPaymentReference($paymentReference): Charge
+    {
+        $this->paymentReference = $paymentReference;
         return $this;
     }
 

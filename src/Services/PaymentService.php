@@ -223,13 +223,14 @@ class PaymentService
      * @param string                 $returnUrl
      * @param Customer|string|null   $customer
      * @param string|null            $orderId
-     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
-     * @param Basket|null            $basket      The Basket object corresponding to the payment.
-     *                                            The Basket object will be created automatically if it does not exist
-     *                                            yet (i.e. has no id).
-     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
-     *                                            optional and will be ignored if not applicable.
-     * @param string|null            $invoiceId   The external id of the invoice.
+     * @param Metadata|null          $metadata         The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket           The Basket object corresponding to the payment.
+     *                                                 The Basket object will be created automatically if it does not exist
+     *                                                 yet (i.e. has no id).
+     * @param bool|null              $card3ds          Enables 3ds channel for credit cards if available. This parameter is
+     *                                                 optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId        The external id of the invoice.
+     * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Charge Resulting Charge object.
      *
@@ -246,10 +247,12 @@ class PaymentService
         $metadata = null,
         $basket = null,
         $card3ds = null,
-        $invoiceId = null
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
-        $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId)->setInvoiceId($invoiceId);
+        $charge = new Charge($amount, $currency, $returnUrl);
+        $charge->setOrderId($orderId)->setInvoiceId($invoiceId)->setPaymentReference($paymentReference);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
         }
