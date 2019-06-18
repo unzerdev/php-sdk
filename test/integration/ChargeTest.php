@@ -177,17 +177,6 @@ class ChargeTest extends BasePaymentTest
         $this->assertEquals($paymentReference, $charge->getPaymentReference());
 
         $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPaymentId(), $charge->getId());
-        $fetchedPayment = $fetchedCharge->getPayment();
-
-        $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());
-        $this->assertEquals($charge->getAmount(), $fetchedCharge->getAmount());
-        $this->assertEquals($charge->getCurrency(), $fetchedCharge->getCurrency());
-        $this->assertEquals($charge->getReturnUrl(), $fetchedCharge->getReturnUrl());
-        $this->assertEquals($payment->getCustomer()->expose(), $fetchedPayment->getCustomer()->expose());
-        $this->assertEquals($charge->getOrderId(), $fetchedCharge->getOrderId());
-        $this->assertEquals($payment->getMetadata()->expose(), $fetchedPayment->getMetadata()->expose());
-        $this->assertEquals($payment->getBasket()->expose(), $fetchedPayment->getBasket()->expose());
-        $this->assertEquals($charge->getInvoiceId(), $fetchedCharge->getInvoiceId());
-        $this->assertEquals($charge->getPaymentReference(), $fetchedCharge->getPaymentReference());
+        $this->assertEquals($charge->expose(), $fetchedCharge->expose());
     }
 }
