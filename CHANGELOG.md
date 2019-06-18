@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Added property `paymentReference` to charge and refund transaction.
 
+### Changed
+*   Adapted tests to new api behavior.
+
 ## [1.1.2.0][1.1.2.0]
 
 ### Added
