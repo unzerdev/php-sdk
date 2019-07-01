@@ -15,6 +15,10 @@ matrix:
       env: deps=no
     - php: 7.2
       env: deps=high
+    - php: 7.3
+      env: deps=no
+    - php: 7.3
+      env: deps=high
 cache:
   directories:
     - $HOME/.composer/cache
