@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Enabled switching MGW environment (Prod, Staging, Dev) via environment variable.
+*   Added PHP 7.3 support.
 
 ### Changed
 *   Updated unit tests.
@@ -18,7 +19,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Added property `paymentReference` to charge and refund transaction.
-*   PHP 7.3 support.
 
 ### Changed
 *   Adapted tests to new api behavior.
