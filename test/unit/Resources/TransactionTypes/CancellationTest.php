@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
+use heidelpayPHP\Constants\CancelReasonCodes;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
@@ -41,11 +42,29 @@ class CancellationTest extends BaseUnitTest
     {
         $cancellation = new Cancellation();
         $this->assertNull($cancellation->getAmount());
+        $this->assertEmpty($cancellation->getReasonCode());
+        $this->assertEmpty($cancellation->getPaymentReference());
 
         $cancellation = new Cancellation(123.4);
         $this->assertEquals(123.4, $cancellation->getAmount());
+        $this->assertEmpty($cancellation->getReasonCode());
 
         $cancellation->setAmount(567.8);
         $this->assertEquals(567.8, $cancellation->getAmount());
+
+        $cancellation->setPaymentReference('my Payment Reference');
+        $this->assertEquals('my Payment Reference', $cancellation->getPaymentReference());
+
+        $cancellation->setReasonCode(CancelReasonCodes::REASON_CODE_CANCEL);
+        $this->assertEquals(CancelReasonCodes::REASON_CODE_CANCEL, $cancellation->getReasonCode());
+
+        $cancellation->setReasonCode(CancelReasonCodes::REASON_CODE_CREDIT);
+        $this->assertEquals(CancelReasonCodes::REASON_CODE_CREDIT, $cancellation->getReasonCode());
+
+        $cancellation->setReasonCode(CancelReasonCodes::REASON_CODE_RETURN);
+        $this->assertEquals(CancelReasonCodes::REASON_CODE_RETURN, $cancellation->getReasonCode());
+
+        $cancellation->setReasonCode(null);
+        $this->assertNull($cancellation->getReasonCode());
     }
 }

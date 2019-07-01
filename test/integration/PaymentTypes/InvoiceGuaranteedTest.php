@@ -85,7 +85,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
     }
 
     /**
-     * Verify invoice guaranteed can be charged.
+     * Verify invoice guaranteed can be charged and cancelled.
      *
      * @test
      *
@@ -95,7 +95,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
-    public function verifyInvoiceGuaranteedCanBeCharged(InvoiceGuaranteed $invoiceGuaranteed)
+    public function verifyInvoiceGuaranteedCanBeChargedAndCancelled(InvoiceGuaranteed $invoiceGuaranteed)
     {
         $charge = $invoiceGuaranteed->charge(
             100.0,

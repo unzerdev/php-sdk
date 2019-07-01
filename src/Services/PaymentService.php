@@ -223,12 +223,14 @@ class PaymentService
      * @param string                 $returnUrl
      * @param Customer|string|null   $customer
      * @param string|null            $orderId
-     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
-     * @param Basket|null            $basket      The Basket object corresponding to the payment.
-     *                                            The Basket object will be created automatically if it does not exist
-     *                                            yet (i.e. has no id).
-     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
-     *                                            optional and will be ignored if not applicable.
+     * @param Metadata|null          $metadata         The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket           The Basket object corresponding to the payment.
+     *                                                 The Basket object will be created automatically if it does not exist
+     *                                                 yet (i.e. has no id).
+     * @param bool|null              $card3ds          Enables 3ds channel for credit cards if available. This parameter is
+     *                                                 optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId        The external id of the invoice.
+     * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Charge Resulting Charge object.
      *
@@ -244,10 +246,13 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
-        $charge = (new Charge($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $charge = new Charge($amount, $currency, $returnUrl);
+        $charge->setOrderId($orderId)->setInvoiceId($invoiceId)->setPaymentReference($paymentReference);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
         }
@@ -364,16 +369,25 @@ class PaymentService
      *
      * @param Charge $charge
      * @param $amount
+     * @param string|null $reasonCode
+     * @param string|null $paymentReference A reference string for the payment.
      *
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function cancelCharge(Charge $charge, $amount = null): AbstractTransactionType
-    {
+    public function cancelCharge(
+        Charge $charge,
+        $amount = null,
+        string $reasonCode = null,
+        string $paymentReference = null
+    ): AbstractTransactionType {
         $cancellation = new Cancellation($amount);
-        $cancellation->setPayment($charge->getPayment());
+        $cancellation
+            ->setReasonCode($reasonCode)
+            ->setPayment($charge->getPayment())
+            ->setPaymentReference($paymentReference);
         $charge->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
 
@@ -388,15 +402,17 @@ class PaymentService
      * Creates a Shipment transaction for the given Payment object.
      *
      * @param Payment|string $payment
+     * @param string|null    $invoiceId
      *
      * @return Shipment Resulting Shipment object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function ship($payment): AbstractHeidelpayResource
+    public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
     {
         $shipment = new Shipment();
+        $shipment->setInvoiceId($invoiceId);
         $this->resourceService->getPaymentResource($payment)->addShipment($shipment);
         $this->resourceService->create($shipment);
         return $shipment;

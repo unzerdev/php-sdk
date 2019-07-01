@@ -101,7 +101,7 @@ class InvoiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify invoice charge can not be canceled.
+     * Verify invoice charge can be canceled.
      *
      * @test
      *

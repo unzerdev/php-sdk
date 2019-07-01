@@ -3,6 +3,46 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.4.0][1.1.4.0]
+
+### Fixed
+*   Fixed examples.
+
+### Added
+*   Enabled switching MGW environment (Prod, Staging, Dev) via environment variable.
+*   Added PHP 7.3 support.
+
+### Changed
+*   Updated unit tests.
+
+## [1.1.3.0][1.1.3.0]
+
+### Added
+*   Added property `paymentReference` to charge and refund transaction.
+
+### Changed
+*   Adapted tests to new api behavior.
+
+## [1.1.2.0][1.1.2.0]
+
+### Added
+*   Added 3ds flag to card payment type.
+*   Added example for invoice guaranteed payment type.
+*   Added example for PayPal payment type.
+*   Added example for the sepa direct debit guaranteed payment type.
+*   Added example for the deletion of all webhooks.
+
+### Fixed
+*   Added missing parameter `invoiceId` to `payment::ship` method.
+*   A problem which resulted in an error when the property BasketItem::AmountPerUnit is set to 0.0.
+
+### Changed
+*   Refactored implementation examples.
+*   Enabled fetching the payment via orderId if its id is not set.
+*   Changed the default values of Basket and BasketItem.
+*   Refactored updating resource properties.
+*   Adapt to small API changes.
+
 ## [1.1.1.0][1.1.1.0]
 
 ### Added
@@ -11,13 +51,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Added method to fetch resource by received event.
 *   Added log method to write to custom debuglog to heidelpay facade.
 *   Added IdService to fetch ids and types from id strings.
-*   Added Alipay payment type.
-*   Added WeChat Pay payment type.
+*   Added Alipay payment type and example.
+*   Added WeChat Pay payment type and example.
+*   Added Invoice Factoring payment type and example.
 
 ### Changed
 *   Applied several micro optimizations.
 *   Added response code to rest call logs.
 *   Adapted integration tests to new api version.
+*   Added parameter reasonCode to cancel method.
+*   Update of ApiResponseCodes.
+*   Add optional property invoiceId to charge transaction.
+
+### Fixed
+*   Refactor setting basket items in basket resource to avoid problem with missing basket item reference id.
 
 ## [1.1.0.0][1.1.0.0]
 
@@ -144,3 +191,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.0.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.1.0..1.0.2.0
 [1.1.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.0.2.0..1.1.0.0
 [1.1.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.0.0..1.1.1.0
+[1.1.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.1.0..1.1.2.0
+[1.1.3.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.2.0..1.1.3.0
+[1.1.4.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.3.0..1.1.4.0

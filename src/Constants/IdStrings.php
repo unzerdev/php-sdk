@@ -48,6 +48,7 @@ class IdStrings
     const EPS = 'eps';
     const ALIPAY = 'ali';
     const WECHATPAY = 'wcp';
+    const INVOICE_FACTORING = 'ivf';
     const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
 
     // Resources
@@ -71,6 +72,9 @@ class IdStrings
         self::SOFORT,
         self::PIS,
         self::EPS,
-        self::ALIPAY
+        self::ALIPAY,
+        self::WECHATPAY,
+        self::INVOICE_FACTORING,
+        self::HIRE_PURCHASE_DIRECT_DEBIT
     ];
 }

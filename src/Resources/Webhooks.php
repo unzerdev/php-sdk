@@ -104,17 +104,6 @@ class Webhooks extends AbstractHeidelpayResource
         return $this->webhooks;
     }
 
-    /**
-     * @param array $webhooks
-     *
-     * @return Webhooks
-     */
-    public function setWebhooks(array $webhooks): Webhooks
-    {
-        $this->webhooks = $webhooks;
-        return $this;
-    }
-
     //</editor-fold>
 
     /**

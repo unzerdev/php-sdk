@@ -47,7 +47,7 @@ class PaymentTest extends BasePaymentTest
     {
         $authorize = $this->createAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorize->getPayment()->getId());
-        $this->assertInstanceOf(Payment::class, $payment);
+        $this->assertNotNull(Payment::class, $payment);
         $this->assertNotEmpty($payment->getId());
         $this->assertInstanceOf(Authorization::class, $payment->getAuthorization());
         $this->assertNotEmpty($payment->getAuthorization()->getId());
@@ -257,5 +257,48 @@ class PaymentTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
         $this->heidelpay->chargePayment('s-crd-xlj0qhdiw40k');
+    }
+
+    /**
+     * Verify an Exception is thrown if the orderId already exists.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function apiShouldReturnErrorIfOrderIdAlreadyExists()
+    {
+        $orderId = str_replace(' ', '', microtime());
+
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $this->assertNotEmpty($authorization);
+
+        $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ORDER_ID_ALREADY_IN_USE);
+        $this->heidelpay->authorize(101.00, 'EUR', $card2, 'http://heidelpay.com', null, $orderId, null, null, false);
+    }
+
+    /**
+     * Verify a payment is fetched by orderId if the id is not set.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet()
+    {
+        $orderId = str_replace(' ', '', microtime());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $payment = $authorization->getPayment();
+        $fetchedPayment = $this->heidelpay->fetchPaymentByOrderId($orderId);
+
+        $this->assertNotSame($payment, $fetchedPayment);
+        $this->assertEquals($payment->expose(), $fetchedPayment->expose());
     }
 }

@@ -35,8 +35,6 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 
-$clientMessage = 'Something went wrong. Please try again later.';
-
 session_start();
 session_unset();
 
@@ -70,7 +68,7 @@ try {
     $_SESSION['PaymentId'] = $charge->getPaymentId();
     $_SESSION['ShortId']   = $charge->getShortId();
 
-    // Redirect to the Alipay page of the selected bank
+    // Redirect to the Alipay page
     if (!$charge->isError() && $charge->getRedirectUrl() !== null) {
         redirect($charge->getRedirectUrl());
     }

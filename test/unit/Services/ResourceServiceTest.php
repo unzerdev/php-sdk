@@ -43,6 +43,7 @@ use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\PIS;
@@ -385,6 +386,32 @@ class ResourceServiceTest extends BaseUnitTest
 
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchPayment('testPaymentId');
+    }
+
+    /**
+     * Verify fetchPaymentByOrderId method will create a payment object set its orderId and call fetch with it.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchPaymentByOrderIdShouldCreatePaymentObjectWithOrderIdAndCallFetch()
+    {
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetch')
+            ->with($this->callback(
+                static function ($payment) use ($heidelpay) {
+                    return $payment instanceof Payment &&
+                    $payment->getOrderId() === 'myOrderId' &&
+                    $payment->getId() === 'myOrderId' &&
+                    $payment->getHeidelpayObject() === $heidelpay;
+                }));
+
+        /** @var ResourceService $resourceSrvMock */
+        $resourceSrvMock->fetchPaymentByOrderId('myOrderId');
     }
 
     /**
@@ -1194,6 +1221,30 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceSrvMock->fetchResourceByUrl($resourceUrl);
     }
 
+    /**
+     * Verify does not call fetchResourceByUrl and returns null if the resource type is unknown.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchResourceByUrlForAPaymentTypeShouldReturnNullIfTheTypeIsUnknown()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
+            ->setMethods(['fetchPaymentType'])->getMock();
+
+        $resourceSrvMock->expects($this->never())->method('fetchPaymentType');
+
+        /** @var ResourceService $resourceSrvMock */
+        $this->assertNull(
+            $resourceSrvMock->fetchResourceByUrl('https://api.heidelpay.com/v1/types/card/s-unknown-xen2ybcovn56/')
+        );
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
@@ -1264,6 +1315,7 @@ class ResourceServiceTest extends BaseUnitTest
             'EPS sandbox' => [EPS::class, 's-eps-12345678'],
             'Alipay sandbox' => [Alipay::class, 's-ali-12345678'],
             'Wechatpay sandbox' => [Wechatpay::class, 's-wcp-12345678'],
+            'Invoice factoring sandbox' => [InvoiceFactoring::class, 's-ivf-12345678'],
             'Card production' => [Card::class, 'p-crd-12345678'],
             'Giropay production' => [Giropay::class, 'p-gro-12345678'],
             'Ideal production' => [Ideal::class, 'p-idl-12345678'],
@@ -1277,7 +1329,8 @@ class ResourceServiceTest extends BaseUnitTest
             'Sofort production' => [Sofort::class, 'p-sft-12345678'],
             'EPS production' => [EPS::class, 'p-eps-12345678'],
             'Alipay production' => [Alipay::class, 'p-ali-12345678'],
-            'Wechatpay production' => [Wechatpay::class, 'p-wcp-12345678']
+            'Wechatpay production' => [Wechatpay::class, 'p-wcp-12345678'],
+            'Invoice factoring production' => [InvoiceFactoring::class, 'p-ivf-12345678']
         ];
     }
 
@@ -1416,9 +1469,17 @@ class ResourceServiceTest extends BaseUnitTest
                 's-eps-xen2ybcovn56',
                 'https://api.heidelpay.com/v1/types/eps/s-eps-xen2ybcovn56/'
             ],
-            'Alipay'                          => [
+            'ALIPAY'                       => [
                 's-ali-xen2ybcovn56',
                 'https://api.heidelpay.com/v1/types/alipay/s-ali-xen2ybcovn56/'
+            ],
+            'WECHATPAY'                    => [
+                's-wcp-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'
+            ],
+            'INVOICE_FACTORING'            => [
+                's-ivf-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'
             ]
         ];
     }

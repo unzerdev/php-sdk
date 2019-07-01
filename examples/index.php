@@ -53,60 +53,122 @@ require_once __DIR__ . '/../../../autoload.php';
                 <i class="shopping cart icon"></i>
                 <div class="content">
                     Payment Implentation Examples
-                    <div class="sub header">Choose the Payment Type you want to evaluate...</div>
+                    <div class="sub header">Choose the Payment Type you want to evaluate ...</div>
                 </div>
             </h2>
-            <div class="ui cards">
-                <div class="card">
+            <div class="ui four cards">
+                <div class="card olive">
                     <div class="content">
-                        <div class="header"><i class="credit card icon"></i> Credit Card</div>
+                        <div class="header">Credit Card</div>
                         <div class="description">
-                            You can try authorize and charge transaction with or without 3Ds
+                            You can try authorize and charge transaction with or without 3Ds.
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='CreditCard/';">
+                    <div class="ui bottom attached green button" onclick="location.href='CreditCard/';">
                         Try
                     </div>
                 </div>
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header">
                             EPS
                         </div>
                         <div class="description">
-                            Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='EPSCharge/';">
+                    <div class="ui bottom attached green button" onclick="location.href='EPSCharge/';">
                         Try
                     </div>
                 </div>
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header">
                             Alipay
                         </div>
                         <div class="description">
-                            Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='Alipay/';">
+                    <div class="ui bottom attached green button" onclick="location.href='Alipay/';">
                         Try
                     </div>
                 </div>
-                <div class="card">
+                <div class="card olive">
                     <div class="content">
                         <div class="header">
                             WeChat Pay
                         </div>
                         <div class="description">
-                            Charge
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='WeChatPay/';">
+                    <div class="ui bottom attached green button" onclick="location.href='Wechatpay/';">
                         Try
                     </div>
                 </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Invoice guaranteed
+                        </div>
+                        <div class="description">
+                            This example adds the necessary customer data within the checkout form.
+                            Please refer to the example of <i>Invoice Factoring</i> if you don't want to add the customer via payment form.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Invoice Factoring
+                        </div>
+                        <div class="description">
+                            This example adds the necessary customer data within the php controller.
+                            Please refer to the example of <i>Invoice guaranteed</i> if you want to add the customer data withing the payment form.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='InvoiceFactoring/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            PayPal
+                        </div>
+                        <div class="description">
+                            You can try authorize and direct charge.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='PayPal/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            SEPA direct debit guaranteed
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
+                        Try
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui container segment">
+            <h2 class="ui header">
+                <i class="bolt icon"></i>
+                <div class="content">
+                    Webhook Implentation Examples
+                    <div class="sub header">Enable or disable webhooks ...</div>
+                </div>
+            </h2>
+            <div class="ui two cards">
                 <div class="card">
                     <div class="content">
                         <div class="header">
@@ -116,7 +178,20 @@ require_once __DIR__ . '/../../../autoload.php';
                             Enable a log output in ExampleDebugHandler to see the events coming in.
                         </div>
                     </div>
-                    <div class="ui bottom attached button" onclick="location.href='Webhooks/';">
+                    <div class="ui bottom attached blue button" onclick="location.href='Webhooks/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            Delete all Webhooks
+                        </div>
+                        <div class="description">
+                            Delete all Webhooks corresponding to this key pair.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached blue button" onclick="location.href='Webhooks/removeAll.php';">
                         Try
                     </div>
                 </div>

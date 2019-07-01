@@ -252,17 +252,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         return $this->message;
     }
 
-    /**
-     * @param Message $message
-     *
-     * @return AbstractTransactionType
-     */
-    public function setMessage(Message $message): AbstractTransactionType
-    {
-        $this->message = $message;
-        return $this;
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">

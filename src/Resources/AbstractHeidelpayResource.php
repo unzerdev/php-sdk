@@ -35,7 +35,6 @@ use heidelpayPHP\Services\ResourceService;
 use function is_array;
 use function is_callable;
 use function is_object;
-use function is_string;
 use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
@@ -161,21 +160,19 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param $object
      * @param stdClass $response
      */
-    private function updateValues($object, stdClass $response)
+    private static function updateValues($object, stdClass $response)
     {
         foreach ($response as $key => $value) {
-            $newValue = $value;
-            if ($value !== false && (!is_string($value) || $value === '')) {
-                $newValue = $value ?: null;
-            }
+            // set empty string to null (workaround)
+            $newValue = $value === '' ? null : $value;
 
             // handle nested object
             if (is_object($value)) {
                 $getter = 'get' . ucfirst($key);
                 if (is_callable([$object, $getter])) {
-                    $this->updateValues($object->$getter(), $newValue);
+                    self::updateValues($object->$getter(), $newValue);
                 } elseif ($key === 'processing') {
-                    $this->updateValues($object, $newValue);
+                    self::updateValues($object, $newValue);
                 }
                 continue;
             }
@@ -190,7 +187,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             }
 
             // handle basic types
-            $this->setItemProperty($object, $key, $newValue);
+            self::setItemProperty($object, $key, $newValue);
         }
     }
 
@@ -199,7 +196,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param $key
      * @param $value
      */
-    public function setItemProperty($item, $key, $value)
+    private static function setItemProperty($item, $key, $value)
     {
         $setter = 'set' . ucfirst($key);
         if (!is_callable([$item, $setter])) {
@@ -208,6 +205,32 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         if (is_callable([$item, $setter])) {
             $item->$setter($value);
         }
+    }
+
+    /**
+     * Returns true if the given property should be skipped.
+     *
+     * @param $property
+     * @param $value
+     *
+     * @return bool
+     */
+    private static function propertyShouldBeSkipped($property, $value): bool
+    {
+        $skipProperty = false;
+
+        try {
+            $reflection = new ReflectionProperty(static::class, $property);
+            if ($value === null ||                          // do not send properties that are set to null
+                ($property === 'id' && empty($value)) ||    // do not send id property if it is empty
+                !$reflection->isProtected()) {              // only send protected properties
+                $skipProperty = true;
+            }
+        } catch (ReflectionException $e) {
+            $skipProperty = true;
+        }
+
+        return $skipProperty;
     }
 
     //</editor-fold>
@@ -279,26 +302,16 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         // Add resources properties
         $properties = get_object_vars($this);
         foreach ($properties as $property => $value) {
-            try {
-                $reflection = new ReflectionProperty(static::class, $property);
-                if (($property === 'id' && empty($value)) || !$reflection->isProtected()) {
-                    unset($properties[$property]);
-                    continue;
-                }
-
-                if ($value === null) {
-                    unset($properties[$property]);
-                    continue;
-                }
-
-                $newValue = $value;
-                if ($value instanceof self) {
-                    $newValue = $value->expose();
-                }
-                $properties[$property] = $newValue;
-            } catch (ReflectionException $e) {
+            if (self::propertyShouldBeSkipped($property, $value)) {
                 unset($properties[$property]);
+                continue;
             }
+
+            // expose child objects if possible
+            if ($value instanceof self) {
+                $value = $value->expose();
+            }
+            $properties[$property] = $value;
         }
         //---------------------
 
@@ -357,7 +370,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
-        $this->updateValues($this, $response);
+        self::updateValues($this, $response);
     }
 
     /**

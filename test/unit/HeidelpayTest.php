@@ -34,9 +34,11 @@ use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
@@ -57,6 +59,7 @@ class HeidelpayTest extends BaseUnitTest
         $heidelpay = new Heidelpay('s-priv-1234');
         $this->assertInstanceOf(ResourceService::class, $heidelpay->getResourceService());
         $this->assertInstanceOf(PaymentService::class, $heidelpay->getPaymentService());
+        $this->assertInstanceOf(WebhookService::class, $heidelpay->getWebhookService());
         $this->assertSame($heidelpay, $heidelpay->getPaymentService()->getHeidelpay());
         $this->assertEquals('s-priv-1234', $heidelpay->getKey());
         $this->assertEquals(null, $heidelpay->getLocale());
@@ -101,6 +104,10 @@ class HeidelpayTest extends BaseUnitTest
         $paymentSrv = new PaymentService($heidelpay);
         $heidelpay->setPaymentService($paymentSrv);
         $this->assertSame($paymentSrv, $heidelpay->getPaymentService());
+
+        $webhookSrv = new WebhookService($heidelpay);
+        $heidelpay->setWebhookService($webhookSrv);
+        $this->assertSame($webhookSrv, $heidelpay->getWebhookService());
 
         $this->assertFalse($heidelpay->isDebugMode());
         $heidelpay->setDebugMode(true);
@@ -180,7 +187,39 @@ class HeidelpayTest extends BaseUnitTest
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
 
-    //<editor-fold desc="DataProvider">
+    /**
+     * Verify heidelpay propagates webhook actions to the webhook service.
+     *
+     * @test
+     * @dataProvider heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP
+     *
+     * @param string $heidelpayMethod
+     * @param array  $heidelpayParams
+     * @param string $serviceMethod
+     * @param array  $serviceParams
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function heidelpayShouldForwardWebhookActionCallsToTheWebhookService(
+        $heidelpayMethod,
+        array $heidelpayParams,
+        $serviceMethod,
+        array $serviceParams
+    ) {
+        $webhookSrvMock = $this->getMockBuilder(WebhookService::class)->disableOriginalConstructor()
+            ->setMethods([$serviceMethod])->getMock();
+
+        $webhookSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
+        $heidelpay = new Heidelpay('s-priv-234');
+
+        /** @var WebhookService $webhookSrvMock */
+        $heidelpay->setWebhookService($webhookSrvMock);
+
+        $heidelpay->$heidelpayMethod(...$heidelpayParams);
+    }
+
+    //<editor-fold desc="DataProviders">
 
     /**
      * Provide test data for heidelpayShouldForwardResourceActionCallsToTheResourceService.
@@ -199,6 +238,7 @@ class HeidelpayTest extends BaseUnitTest
         $chargeId     = 'chargeId';
         $cancelId     = 'cancelId';
         $metadataId   = 'metaDataId';
+        $orderId      = 'orderId';
         $customer     = new Customer();
         $basket       = new Basket();
         $payment      = new Payment();
@@ -216,6 +256,7 @@ class HeidelpayTest extends BaseUnitTest
             'getResource'                  => ['getResource', [$customer], 'getResource', [$customer]],
             'fetchResource'                => ['fetchResource', [$customer], 'fetch', [$customer]],
             'fetchPayment'                 => ['fetchPayment', [$payment], 'fetchPayment', [$payment]],
+            'fetchPaymentByOrderId'        => ['fetchPaymentByOrderId', [$orderId], 'fetchPaymentByOrderId', [$orderId]],
             'fetchPaymentStr'              => ['fetchPayment', [$paymentId], 'fetchPayment', [$paymentId]],
             'fetchKeypair'                 => ['fetchKeypair', [], 'fetchKeypair', []],
             'createMetadata'               => ['createMetadata', [$metadata], 'createMetadata', [$metadata]],
@@ -224,67 +265,28 @@ class HeidelpayTest extends BaseUnitTest
             'createPaymentType'            => ['createPaymentType', [$sofort], 'createPaymentType', [$sofort]],
             'fetchPaymentType'             => ['fetchPaymentType', [$sofort], 'fetchPaymentType', [$sofort]],
             'createCustomer'               => ['createCustomer', [$customer], 'createCustomer', [$customer]],
-            'createOrUpdateCustomer'       => [
-                'createOrUpdateCustomer',
-                [$customer],
-                'createOrUpdateCustomer',
-                [$customer]
-            ],
+            'createOrUpdateCustomer'       => ['createOrUpdateCustomer', [$customer], 'createOrUpdateCustomer', [$customer]],
             'fetchCustomer'                => ['fetchCustomer', [$customer], 'fetchCustomer', [$customer]],
+            'fetchCustomerByExtCustomerId' => ['fetchCustomerByExtCustomerId', [$customerId], 'fetchCustomerByExtCustomerId', [$customerId]],
             'fetchCustomerStr'             => ['fetchCustomer', [$customerId], 'fetchCustomer', [$customerId]],
             'updateCustomer'               => ['updateCustomer', [$customer], 'updateCustomer', [$customer]],
             'deleteCustomer'               => ['deleteCustomer', [$customer], 'deleteCustomer', [$customer]],
             'deleteCustomerStr'            => ['deleteCustomer', [$customerId], 'deleteCustomer', [$customerId]],
-            'createBasket'               => ['createBasket', [$basket], 'createBasket', [$basket]],
-            'fetchBasket'                => ['fetchBasket', [$basket], 'fetchBasket', [$basket]],
-            'fetchBasketStr'             => ['fetchBasket', [$basketId], 'fetchBasket', [$basketId]],
-            'updateBasket'               => ['updateBasket', [$basket], 'updateBasket', [$basket]],
+            'createBasket'                 => ['createBasket', [$basket], 'createBasket', [$basket]],
+            'fetchBasket'                  => ['fetchBasket', [$basket], 'fetchBasket', [$basket]],
+            'fetchBasketStr'               => ['fetchBasket', [$basketId], 'fetchBasket', [$basketId]],
+            'updateBasket'                 => ['updateBasket', [$basket], 'updateBasket', [$basket]],
             'fetchAuthorization'           => ['fetchAuthorization', [$payment], 'fetchAuthorization', [$payment]],
             'fetchAuthorizationStr'        => ['fetchAuthorization', [$paymentId], 'fetchAuthorization', [$paymentId]],
-            'fetchChargeById'              => [
-                'fetchChargeById',
-                [$paymentId, $chargeId],
-                'fetchChargeById',
-                [$paymentId, $chargeId]
-            ],
+            'fetchChargeById'              => ['fetchChargeById', [$paymentId, $chargeId], 'fetchChargeById', [$paymentId, $chargeId]],
             'fetchCharge'                  => ['fetchCharge', [$charge], 'fetch', [$charge]],
-            'fetchReversalByAuthorization' => [
-                'fetchReversalByAuthorization',
-                [$auth, $cancelId],
-                'fetchReversalByAuthorization',
-                [$auth, $cancelId]
-            ],
-            'fetchReversal'                => [
-                'fetchReversal',
-                [$payment, $cancelId],
-                'fetchReversal',
-                [$payment, $cancelId]
-            ],
-            'fetchReversalStr'             => [
-                'fetchReversal',
-                [$paymentId, $cancelId],
-                'fetchReversal',
-                [$paymentId, $cancelId]
-            ],
-            'fetchRefundById'              => [
-                'fetchRefundById',
-                [$payment, $chargeId, $cancelId],
-                'fetchRefundById',
-                [$payment, $chargeId, $cancelId]
-            ],
-            'fetchRefundByIdStr'           => [
-                'fetchRefundById',
-                [$paymentId, $chargeId, $cancelId],
-                'fetchRefundById',
-                [$paymentId, $chargeId, $cancelId]
-            ],
+            'fetchReversalByAuthorization' => ['fetchReversalByAuthorization', [$auth, $cancelId], 'fetchReversalByAuthorization', [$auth, $cancelId]],
+            'fetchReversal'                => ['fetchReversal', [$payment, $cancelId], 'fetchReversal', [$payment, $cancelId]],
+            'fetchReversalStr'             => ['fetchReversal', [$paymentId, $cancelId], 'fetchReversal', [$paymentId, $cancelId]],
+            'fetchRefundById'              => ['fetchRefundById', [$payment, $chargeId, $cancelId], 'fetchRefundById', [$payment, $chargeId, $cancelId]],
+            'fetchRefundByIdStr'           => ['fetchRefundById', [$paymentId, $chargeId, $cancelId], 'fetchRefundById', [$paymentId, $chargeId, $cancelId]],
             'fetchRefund'                  => ['fetchRefund', [$chargeMock, $cancelId], 'fetch', [$cancellation]],
-            'fetchShipment'                => [
-                'fetchShipment',
-                [$payment, 'shipId'],
-                'fetchShipment',
-                [$payment, 'shipId']
-            ]
+            'fetchShipment'                => ['fetchShipment', [$payment, 'shipId'], 'fetchShipment', [$payment, 'shipId']]
         ];
     }
 
@@ -309,129 +311,55 @@ class HeidelpayTest extends BaseUnitTest
         $charge        = new Charge();
 
         return [
-            'authorize'                       => [
-                'authorize',
-                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata],
-                'authorize',
-                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]
-            ],
-            'authorizeAlt'                    => [
-                'authorize',
-                [234.1, 'DZD', $sofort, $url],
-                'authorize',
-                [234.1, 'DZD', $sofort, $url]
-            ],
-            'authorizeStr'                    => [
-                'authorize',
-                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId],
-                'authorize',
-                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]
-            ],
-            'authorizeWithPayment'            => [
-                'authorizeWithPayment',
-                [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata],
-                'authorizeWithPayment',
-                [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata]
-            ],
-            'authorizeWithPaymentStr'         => [
-                'authorizeWithPayment',
-                [34.12, 'DKK', $payment, $url, $customerId, $orderId],
-                'authorizeWithPayment',
-                [34.12, 'DKK', $payment, $url, $customerId, $orderId]
-            ],
-            'charge'                          => [
-                'charge',
-                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata],
-                'charge',
-                [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]
-            ],
-            'chargeAlt'                       => [
-                'charge',
-                [234.1, 'DZD', $sofort, $url],
-                'charge',
-                [234.1, 'DZD', $sofort, $url]
-            ],
-            'chargeStr'                       => [
-                'charge',
-                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId],
-                'charge',
-                [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]
-            ],
-            'chargeAuthorization'             => [
-                'chargeAuthorization',
-                [$payment, 1.234],
-                'chargeAuthorization',
-                [$payment, 1.234]
-            ],
-            'chargeAuthorizationAlt'          => [
-                'chargeAuthorization',
-                [$paymentId],
-                'chargeAuthorization',
-                [$paymentId, null]
-            ],
-            'chargeAuthorizationStr'          => [
-                'chargeAuthorization',
-                [$paymentId, 2.345],
-                'chargeAuthorization',
-                [$paymentId, 2.345]
-            ],
-            'chargePayment'                   => [
-                'chargePayment',
-                [$payment, 1.234, 'ALL'],
-                'chargePayment',
-                [$payment, 1.234, 'ALL']
-            ],
-            'chargePaymentAlt'                => [
-                'chargePayment',
-                [$payment],
-                'chargePayment',
-                [$payment]
-            ],
-            'cancelAuthorization'             => [
-                'cancelAuthorization',
-                [$authorization, 1.234],
-                'cancelAuthorization',
-                [$authorization, 1.234]
-            ],
-            'cancelAuthorizationAlt'          => [
-                'cancelAuthorization',
-                [$authorization],
-                'cancelAuthorization',
-                [$authorization]
-            ],
-            'cancelAuthorizationByPayment'    => [
-                'cancelAuthorizationByPayment',
-                [$payment, 1.234],
-                'cancelAuthorizationByPayment',
-                [$payment, 1.234]
-            ],
-            'cancelAuthorizationByPaymentAlt' => [
-                'cancelAuthorizationByPayment',
-                [$payment],
-                'cancelAuthorizationByPayment',
-                [$payment]
-            ],
-            'cancelAuthorizationByPaymentStr' => [
-                'cancelAuthorizationByPayment',
-                [$paymentId, 234.5],
-                'cancelAuthorizationByPayment',
-                [$paymentId, 234.5]
-            ],
-            'cancelChargeById'                => [
-                'cancelChargeById',
-                [$paymentId, $chargeId, 1.234],
-                'cancelChargeById',
-                [$paymentId, $chargeId, 1.234]
-            ],
-            'cancelChargeByIdAlt'             => [
-                'cancelChargeById',
-                [$paymentId, $chargeId],
-                'cancelChargeById',
-                [$paymentId, $chargeId]
-            ],
-            'cancelCharge'                    => ['cancelCharge', [$charge, 1.234], 'cancelCharge', [$charge, 1.234]],
-            'cancelChargeAlt'                 => ['cancelCharge', [$charge], 'cancelCharge', [$charge]],
-            'ship'                            => ['ship', [$payment], 'ship', [$payment]]
+            'auth'                   => ['authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata], 'authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]],
+            'authAlt'                => ['authorize', [234.1, 'DZD', $sofort, $url], 'authorize', [234.1, 'DZD', $sofort, $url]],
+            'authStr'                => ['authorize', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId], 'authorize', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]],
+            'authWithPayment'        => ['authorizeWithPayment', [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata], 'authorizeWithPayment', [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata]],
+            'authWithPaymentStr'     => ['authorizeWithPayment', [34.12, 'DKK', $payment, $url, $customerId, $orderId], 'authorizeWithPayment', [34.12, 'DKK', $payment, $url, $customerId, $orderId]],
+            'charge'                 => ['charge', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata], 'charge', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]],
+            'chargeAlt'              => ['charge', [234.1, 'DZD', $sofort, $url], 'charge', [234.1, 'DZD', $sofort, $url]],
+            'chargeStr'              => ['charge', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId], 'charge', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]],
+            'chargeAuth'             => ['chargeAuthorization', [$payment, 1.234], 'chargeAuthorization', [$payment, 1.234]],
+            'chargeAuthAlt'          => ['chargeAuthorization', [$paymentId], 'chargeAuthorization', [$paymentId, null]],
+            'chargeAuthStr'          => ['chargeAuthorization', [$paymentId, 2.345], 'chargeAuthorization', [$paymentId, 2.345]],
+            'chargePayment'          => ['chargePayment', [$payment, 1.234, 'ALL'], 'chargePayment', [$payment, 1.234, 'ALL']],
+            'chargePaymentAlt'       => ['chargePayment', [$payment], 'chargePayment', [$payment]],
+            'cancelAuth'             => ['cancelAuthorization', [$authorization, 1.234], 'cancelAuthorization', [$authorization, 1.234]],
+            'cancelAuthAlt'          => ['cancelAuthorization', [$authorization], 'cancelAuthorization', [$authorization]],
+            'cancelAuthByPayment'    => ['cancelAuthorizationByPayment', [$payment, 1.234], 'cancelAuthorizationByPayment', [$payment, 1.234]],
+            'cancelAuthByPaymentAlt' => ['cancelAuthorizationByPayment', [$payment], 'cancelAuthorizationByPayment', [$payment]],
+            'cancelAuthByPaymentStr' => ['cancelAuthorizationByPayment', [$paymentId, 234.5], 'cancelAuthorizationByPayment', [$paymentId, 234.5]],
+            'cancelChargeById'       => ['cancelChargeById', [$paymentId, $chargeId, 1.234], 'cancelChargeById', [$paymentId, $chargeId, 1.234]],
+            'cancelChargeByIdAlt'    => ['cancelChargeById', [$paymentId, $chargeId], 'cancelChargeById', [$paymentId, $chargeId]],
+            'cancelCharge'           => ['cancelCharge', [$charge, 1.234], 'cancelCharge', [$charge, 1.234]],
+            'cancelChargeAlt'        => ['cancelCharge', [$charge], 'cancelCharge', [$charge]],
+            'ship'                   => ['ship', [$payment], 'ship', [$payment]]
+        ];
+    }
+
+    /**
+     * Provide test data for heidelpayShouldForwardWebhookActionCallsToTheWebhookService.
+     *
+     * @return array
+     */
+    public function heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP(): array
+    {
+        $url           = 'https://dev.heidelpay.com';
+        $webhookId     = 'webhookId';
+        $webhook     = new Webhook();
+        $event = ['event1', 'event2'];
+
+        return [
+            'createWebhook'=> [ 'createWebhook', [$url, 'event'], 'createWebhook', [$url, 'event'] ],
+            'fetchWebhook'=> [ 'fetchWebhook', [$webhookId], 'fetchWebhook', [$webhookId] ],
+            'fetchWebhook by object'=> [ 'fetchWebhook', [$webhook], 'fetchWebhook', [$webhook] ],
+            'updateWebhook'=> [ 'updateWebhook', [$webhook], 'updateWebhook', [$webhook] ],
+            'deleteWebhook'=> [ 'deleteWebhook', [$webhookId], 'deleteWebhook', [$webhookId] ],
+            'deleteWebhook by object'=> [ 'deleteWebhook', [$webhook], 'deleteWebhook', [$webhook] ],
+            'fetchAllWebhooks'=> [ 'fetchAllWebhooks', [], 'fetchWebhooks', [] ],
+            'deleteAllWebhooks'=> [ 'deleteAllWebhooks', [], 'deleteWebhooks', [] ],
+            'registerMultipleWebhooks'=> ['registerMultipleWebhooks', [$url, $event], 'createWebhooks', [$url, $event] ],
+            'fetchResourceFromEvent'=> ['fetchResourceFromEvent', [], 'fetchResourceByWebhookEvent', [] ]
         ];
     }
 

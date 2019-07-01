@@ -26,11 +26,13 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Traits\HasCancellations;
+use heidelpayPHP\Traits\HasInvoiceId;
 use RuntimeException;
 
 class Charge extends AbstractTransactionType
 {
     use HasCancellations;
+    use HasInvoiceId;
 
     /** @var float $amount */
     protected $amount;
@@ -52,6 +54,9 @@ class Charge extends AbstractTransactionType
 
     /** @var string $descriptor */
     private $descriptor;
+
+    /** @var string $paymentReference */
+    protected $paymentReference;
 
     /** @var bool $card3ds */
     protected $card3ds;
@@ -220,6 +225,25 @@ class Charge extends AbstractTransactionType
     }
 
     /**
+     * @return string|null
+     */
+    public function getPaymentReference()
+    {
+        return $this->paymentReference;
+    }
+
+    /**
+     * @param string|null $paymentReference
+     *
+     * @return Charge
+     */
+    public function setPaymentReference($paymentReference): Charge
+    {
+        $this->paymentReference = $paymentReference;
+        return $this;
+    }
+
+    /**
      * @return bool|null
      */
     public function isCard3ds()
@@ -257,15 +281,17 @@ class Charge extends AbstractTransactionType
      * Returns the last cancellation object if charge is already canceled.
      * Creates and returns new cancellation object otherwise.
      *
-     * @param float $amount
+     * @param float|null  $amount
+     * @param string|null $reasonCode
+     * @param string|null $paymentReference
      *
      * @return Cancellation
      *
-     * @throws RuntimeException
      * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
-    public function cancel($amount = null): Cancellation
+    public function cancel($amount = null, string $reasonCode = null, string $paymentReference = null): Cancellation
     {
-        return $this->getHeidelpayObject()->cancelCharge($this, $amount);
+        return $this->getHeidelpayObject()->cancelCharge($this, $amount, $reasonCode, $paymentReference);
     }
 }

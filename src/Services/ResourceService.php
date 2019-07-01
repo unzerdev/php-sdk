@@ -45,6 +45,7 @@ use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
+use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\PIS;
@@ -121,12 +122,12 @@ class ResourceService
     /**
      * @param $url
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractHeidelpayResource|null
      *
      * @throws RuntimeException
      * @throws HeidelpayApiException
      */
-    public function fetchResourceByUrl($url): AbstractHeidelpayResource
+    public function fetchResourceByUrl($url)
     {
         $resource = null;
         $heidelpay    = $this->heidelpay;
@@ -174,7 +175,6 @@ class ResourceService
                 $resource = $this->fetchPaymentType($resourceId);
                 break;
             default:
-                throw new RuntimeException('Invalid resource type!');
                 break;
         }
 
@@ -316,10 +316,9 @@ class ResourceService
      * @return Payment
      *
      * @throws HeidelpayApiException
-     * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchPayment($payment): AbstractHeidelpayResource
+    public function fetchPayment($payment): Payment
     {
         $paymentObject = $payment;
         if (is_string($payment)) {
@@ -327,6 +326,23 @@ class ResourceService
             $paymentObject->setId($payment);
         }
 
+        $this->fetch($paymentObject);
+        return $paymentObject;
+    }
+
+    /**
+     * Fetch and return payment by given order id.
+     *
+     * @param string $orderId
+     *
+     * @return Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchPaymentByOrderId($orderId): Payment
+    {
+        $paymentObject = (new Payment($this->heidelpay))->setOrderId($orderId);
         $this->fetch($paymentObject);
         return $paymentObject;
     }
@@ -533,6 +549,9 @@ class ResourceService
             case IdStrings::WECHATPAY:
                 $paymentType = new Wechatpay();
                 break;
+            case IdStrings::INVOICE_FACTORING:
+                $paymentType = new InvoiceFactoring();
+                break;
             case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
                 $paymentType = new HirePurchaseDirectDebit(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
                 break;
@@ -612,6 +631,23 @@ class ResourceService
             $customerObject = (new Customer())->setId($customer);
         }
 
+        $this->fetch($customerObject->setParentResource($this->heidelpay));
+        return $customerObject;
+    }
+
+    /**
+     * Fetch and return Customer object from API by the given external customer id.
+     *
+     * @param string $customerId
+     *
+     * @return Customer
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchCustomerByExtCustomerId($customerId): Customer
+    {
+        $customerObject = (new Customer())->setCustomerId($customerId);
         $this->fetch($customerObject->setParentResource($this->heidelpay));
         return $customerObject;
     }

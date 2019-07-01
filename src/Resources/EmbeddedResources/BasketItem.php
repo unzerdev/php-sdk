@@ -34,17 +34,17 @@ class BasketItem extends AbstractHeidelpayResource
     /** @var int $quantity */
     protected $quantity = 1;
 
-    /** @var int $vat */
-    protected $vat;
+    /** @var float $vat */
+    protected $vat = 0.0;
 
     /** @var float $amountDiscount */
-    protected $amountDiscount;
+    protected $amountDiscount = 0.0;
 
     /** @var float $amountGross */
-    protected $amountGross;
+    protected $amountGross = 0.0;
 
     /** @var float $amountVat */
-    protected $amountVat;
+    protected $amountVat = 0.0;
 
     /** @var float $amountPerUnit */
     protected $amountPerUnit = 0.0;
@@ -119,47 +119,47 @@ class BasketItem extends AbstractHeidelpayResource
     }
 
     /**
-     * @return int|null
+     * @return float
      */
-    public function getVat()
+    public function getVat(): float
     {
         return $this->vat;
     }
 
     /**
-     * @param int|null $vat
+     * @param float $vat
      *
      * @return BasketItem
      */
-    public function setVat($vat): BasketItem
+    public function setVat(float $vat): BasketItem
     {
         $this->vat = $vat;
         return $this;
     }
 
     /**
-     * @return float|null
+     * @return float
      */
-    public function getAmountDiscount()
+    public function getAmountDiscount(): float
     {
         return $this->amountDiscount;
     }
 
     /**
-     * @param float|null $amountDiscount
+     * @param float $amountDiscount
      *
      * @return BasketItem
      */
-    public function setAmountDiscount($amountDiscount): BasketItem
+    public function setAmountDiscount(float $amountDiscount): BasketItem
     {
         $this->amountDiscount = $amountDiscount;
         return $this;
     }
 
     /**
-     * @return float|null
+     * @return float
      */
-    public function getAmountGross()
+    public function getAmountGross(): float
     {
         return $this->amountGross;
     }
@@ -169,26 +169,26 @@ class BasketItem extends AbstractHeidelpayResource
      *
      * @return BasketItem
      */
-    public function setAmountGross($amountGross): BasketItem
+    public function setAmountGross(float $amountGross): BasketItem
     {
         $this->amountGross = $amountGross;
         return $this;
     }
 
     /**
-     * @return float|null
+     * @return float
      */
-    public function getAmountVat()
+    public function getAmountVat(): float
     {
         return $this->amountVat;
     }
 
     /**
-     * @param float|null $amountVat
+     * @param float $amountVat
      *
      * @return BasketItem
      */
-    public function setAmountVat($amountVat): BasketItem
+    public function setAmountVat(float $amountVat): BasketItem
     {
         $this->amountVat = $amountVat;
         return $this;
