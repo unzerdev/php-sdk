@@ -43,6 +43,7 @@ class CancellationTest extends BaseUnitTest
         $cancellation = new Cancellation();
         $this->assertNull($cancellation->getAmount());
         $this->assertEmpty($cancellation->getReasonCode());
+        $this->assertEmpty($cancellation->getPaymentReference());
 
         $cancellation = new Cancellation(123.4);
         $this->assertEquals(123.4, $cancellation->getAmount());
@@ -50,6 +51,9 @@ class CancellationTest extends BaseUnitTest
 
         $cancellation->setAmount(567.8);
         $this->assertEquals(567.8, $cancellation->getAmount());
+
+        $cancellation->setPaymentReference('my Payment Reference');
+        $this->assertEquals('my Payment Reference', $cancellation->getPaymentReference());
 
         $cancellation->setReasonCode(CancelReasonCodes::REASON_CODE_CANCEL);
         $this->assertEquals(CancelReasonCodes::REASON_CODE_CANCEL, $cancellation->getReasonCode());

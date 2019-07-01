@@ -68,6 +68,20 @@ class HttpServiceTest extends BaseUnitTest
     }
 
     /**
+     * Verify an environment service can be injected.
+     *
+     * @test
+     */
+    public function environmentServiceShouldBeInjectable()
+    {
+        $envService = new EnvironmentService();
+        $httpService = new HttpService();
+        $this->assertNotSame($envService, $httpService->getEnvironmentService());
+        $httpService->setEnvironmentService($envService);
+        $this->assertSame($envService, $httpService->getEnvironmentService());
+    }
+
+    /**
      * Verify send will throw exception if resource is null.
      *
      * @test

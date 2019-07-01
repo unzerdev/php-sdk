@@ -53,20 +53,25 @@ class ChargeTest extends BaseUnitTest
         $this->assertNull($charge->getCurrency());
         $this->assertNull($charge->getReturnUrl());
         $this->assertNull($charge->isCard3ds());
+        $this->assertEmpty($charge->getPaymentReference());
 
         $charge = new Charge(123.4, 'myCurrency', 'https://my-return-url.test');
         $charge->setCard3ds(true);
+        $charge->setPaymentReference('my Payment Reference');
         $this->assertEquals(123.4, $charge->getAmount());
         $this->assertEquals('myCurrency', $charge->getCurrency());
         $this->assertEquals('https://my-return-url.test', $charge->getReturnUrl());
         $this->assertTrue($charge->isCard3ds());
+        $this->assertEquals('my Payment Reference', $charge->getPaymentReference());
 
         $charge->setAmount(567.8)->setCurrency('myNewCurrency')->setReturnUrl('https://another-return-url.test');
         $charge->setCard3ds(false);
+        $charge->setPaymentReference('another Payment Reference');
         $this->assertEquals(567.8, $charge->getAmount());
         $this->assertEquals('myNewCurrency', $charge->getCurrency());
         $this->assertEquals('https://another-return-url.test', $charge->getReturnUrl());
         $this->assertFalse($charge->isCard3ds());
+        $this->assertEquals('another Payment Reference', $charge->getPaymentReference());
     }
 
     /**
