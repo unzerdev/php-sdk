@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Enabled switching MGW environment (Prod, Staging, Dev) via environment variable.
 
+### Changed
+*   Updated unit tests.
+
 ## [1.1.3.0][1.1.3.0]
 
 ### Added
