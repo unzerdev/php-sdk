@@ -50,10 +50,10 @@ use RuntimeException;
 
 class Heidelpay implements HeidelpayParentInterface
 {
-    const BASE_URL = 'https://api.heidelpay.com/';
+    const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.1.3.0';
+    const SDK_VERSION = '1.1.4.0';
 
     /** @var string $key */
     private $key;
