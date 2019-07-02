@@ -42,8 +42,8 @@ class HirePurchaseDirectDebit extends BasePaymentType
     /** @var string $orderDate */
     protected $orderDate;
 
-    /** @var int $amountOfRates */
-    protected $amountOfRates;
+    /** @var int $numberOfRates */
+    protected $numberOfRates;
 
     /** @var string $dayOfPurchase */
     protected $dayOfPurchase;
@@ -79,7 +79,7 @@ class HirePurchaseDirectDebit extends BasePaymentType
      * @param string $iban
      * @param string $bic
      * @param string $accountHolder
-     * @param int    $amountOfRates
+     * @param int    $numberOfRates
      * @param string $dayOfPurchase
      * @param float  $totalPurchaseAmount
      * @param float  $totalInterestAmount
@@ -95,7 +95,7 @@ class HirePurchaseDirectDebit extends BasePaymentType
         $iban,
         $bic,
         $accountHolder,
-        $amountOfRates,
+        $numberOfRates,
         $dayOfPurchase,
         $totalPurchaseAmount,
         $totalInterestAmount,
@@ -110,7 +110,7 @@ class HirePurchaseDirectDebit extends BasePaymentType
         $this->iban                  = $iban;
         $this->bic                   = $bic;
         $this->accountHolder         = $accountHolder;
-        $this->amountOfRates         = $amountOfRates;
+        $this->numberOfRates         = $numberOfRates;
         $this->dayOfPurchase         = $dayOfPurchase;
         $this->totalPurchaseAmount   = $totalPurchaseAmount;
         $this->totalInterestAmount   = $totalInterestAmount;
@@ -204,19 +204,19 @@ class HirePurchaseDirectDebit extends BasePaymentType
     /**
      * @return int
      */
-    public function getAmountOfRates(): int
+    public function getNumberOfRates(): int
     {
-        return $this->amountOfRates;
+        return $this->numberOfRates;
     }
 
     /**
-     * @param int $amountOfRates
+     * @param int $numberOfRates
      *
      * @return HirePurchaseDirectDebit
      */
-    public function setAmountOfRates(int $amountOfRates): HirePurchaseDirectDebit
+    public function setNumberOfRates(int $numberOfRates): HirePurchaseDirectDebit
     {
-        $this->amountOfRates = $amountOfRates;
+        $this->numberOfRates = $numberOfRates;
         return $this;
     }
 
