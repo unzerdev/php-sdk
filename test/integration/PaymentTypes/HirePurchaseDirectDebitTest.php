@@ -28,22 +28,12 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
 {
-    /**
-     * {@inheritDoc}
-     *
-     * @throws RuntimeException
-     */
-    protected function childSetup()
-    {
-        // Hire purchase direct debit needs a different key
-        $this->heidelpay->setKey('s-priv-2a10BF2Cq2YvAo6ALSGHc3X7F42oWAIp');
-    }
-
     /**
      * Verify hire purchase direct debit can be created with mandatory fields only.
      *
@@ -54,6 +44,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      */
     public function hirePurchaseDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
+        /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
         $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
 
         $hirePurchaseDirectDebit = $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
@@ -135,9 +126,11 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      */
     public function hirePurchaseDirectDebitShouldAllowCharge()
     {
+        /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
         $hirePurchaseDirectDebit = (new HirePurchaseDirectDebit('DE89370400440532013000'))->setBic('COBADEFFXXX');
         $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
 
+        /** @var Charge $charge */
         $charge = $hirePurchaseDirectDebit->charge(
             100.0,
             'EUR',
@@ -156,21 +149,21 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function hddShouldThrowErrorIfAddressesDoNotMatch()
-    {
-        $hirePurchaseDirectDebit = (new HirePurchaseDirectDebit('DE89370400440532013000', ));
-        $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
-
-        $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
-
-        $hirePurchaseDirectDebit->charge(
-            100.0,
-            'EUR',
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
-        );
-    }
+//    public function hddShouldThrowErrorIfAddressesDoNotMatch()
+//    {
+//        $hirePurchaseDirectDebit = (new HirePurchaseDirectDebit('DE89370400440532013000', ));
+//        $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
+//
+//        $this->expectException(HeidelpayApiException::class);
+//        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
+//
+//        $hirePurchaseDirectDebit->charge(
+//            100.0,
+//            'EUR',
+//            self::RETURN_URL,
+//            $this->getMaximumCustomerInclShippingAddress()
+//        );
+//    }
 
     //<editor-fold desc="Helper">
 
@@ -185,16 +178,16 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
             'JASDFKJLKJD',
             'Khang Vu',
             3,
-            '2019-04-25',
-            200,
-            0.97,
-            200.97,
-            5.99,
-            2.9550,
+            '2019-04-18',
+            500,
+            3.68,
+            503.68,
+            4.5,
+            1.11,
             0,
             0,
-            66.9,
-            67.17
+            167.9,
+            167.88
         );
         return $hirePurchaseDirectDebit;
     }
