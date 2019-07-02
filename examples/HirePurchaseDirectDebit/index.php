@@ -52,6 +52,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     <div id="example-hire-purchase">
         <!-- The Hire Purchase field UI Element will be inserted here -->
     </div>
+    <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button id="continue-button" class="heidelpayUI primary button fluid" type="submit" style="display: none" disabled>
         Continue
     </button>
@@ -107,10 +108,18 @@ require_once __DIR__ . '/../../../../autoload.php';
         event.preventDefault();
         HirePurchase.createResource()
             .then(function(data) {
-                // Success
+                let hiddenInput = document.createElement('input');
+                hiddenInput.setAttribute('type', 'hidden');
+                hiddenInput.setAttribute('name', 'resourceId');
+                hiddenInput.setAttribute('value', data.id);
+                form.appendChild(hiddenInput);
+                form.setAttribute('method', 'POST');
+                form.setAttribute('action', '<?php echo CONTROLLER_URL; ?>');
+
+                form.submit();
             })
             .catch(function(error) {
-                // Error
+                $('#error-holder').html(error.message)
             });
     });
 </script>
