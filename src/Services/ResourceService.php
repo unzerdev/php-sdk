@@ -301,9 +301,14 @@ class ResourceService
      */
     public function createRecurring($paymentType, $returnUrl): Recurring
     {
+        $paymentTypeObject = $paymentType;
+        if (is_string($paymentType)) {
+            $paymentTypeObject = $this->fetchPaymentType($paymentType);
+        }
+
         // make sure recurring is allowed for the given payment type.
-        if (in_array(CanRecur::class, class_uses($paymentType), true)) {
-            $recurring = new Recurring($paymentType->getId(), $returnUrl);
+        if (in_array(CanRecur::class, class_uses($paymentTypeObject), true)) {
+            $recurring = new Recurring($paymentTypeObject->getId(), $returnUrl);
             $recurring->setParentResource($this->heidelpay);
             $this->create($recurring);
             return $recurring;
