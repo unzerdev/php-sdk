@@ -101,6 +101,7 @@ class Recurring extends AbstractHeidelpayResource
 
     /**
      * @param string $redirectUrl
+     *
      * @return Recurring
      */
     public function setRedirectUrl(string $redirectUrl): Recurring
@@ -125,5 +126,4 @@ class Recurring extends AbstractHeidelpayResource
     }
 
     //</editor-fold>
-
 }
