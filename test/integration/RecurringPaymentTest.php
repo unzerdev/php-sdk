@@ -50,12 +50,6 @@ class RecurringPaymentTest extends BasePaymentTest
         $resource->activateRecurring(self::RETURN_URL);
     }
 
-    // credit card recurring can be sent
-    // dd recurring can be sent
-    // paypal recurring can be sent
-
-    // fetching a paymentType will also fetch linked recurring
-
     /**
      * Verify card can activate recurring payments.
      *
