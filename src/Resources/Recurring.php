@@ -25,10 +25,12 @@
 namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Traits\HasStates;
+use heidelpayPHP\Traits\HasUniqueAndShortId;
 
 class Recurring extends AbstractHeidelpayResource
 {
     use HasStates;
+    use HasUniqueAndShortId;
 
     /** @var string $returnUrl */
     protected $returnUrl;

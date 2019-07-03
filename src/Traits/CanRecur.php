@@ -57,7 +57,7 @@ trait CanRecur
     /**
      * @return bool
      */
-    public function getRecurring(): bool
+    public function isRecurring(): bool
     {
         return $this->recurring;
     }
