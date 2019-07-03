@@ -196,14 +196,23 @@ class CardTest extends BaseUnitTest
      * @test
      *
      * @throws AssertionFailedError
+     * @throws Exception
      */
     public function card3dsFlagShouldBeSettableInCardResource()
     {
         $this->assertNull($this->card->get3ds());
+        $this->assertArrayNotHasKey('3ds', $this->card->expose());
+        $this->assertArrayNotHasKey('card3ds', $this->card->expose());
+
         $this->card->set3ds(true);
         $this->assertTrue($this->card->get3ds());
+        $this->assertTrue($this->card->expose()['3ds']);
+        $this->assertArrayNotHasKey('card3ds', $this->card->expose());
+
         $this->card->set3ds(false);
         $this->assertFalse($this->card->get3ds());
+        $this->assertFalse($this->card->expose()['3ds']);
+        $this->assertArrayNotHasKey('card3ds', $this->card->expose());
     }
 
     /**
