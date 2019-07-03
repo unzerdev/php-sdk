@@ -59,7 +59,7 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\Traits\CanActivateRecurring;
+use heidelpayPHP\Traits\CanRecur;
 use function is_string;
 use RuntimeException;
 use stdClass;
@@ -302,7 +302,7 @@ class ResourceService
     public function createRecurring($paymentType, $returnUrl): Recurring
     {
         // make sure recurring is allowed for the given payment type.
-        if (in_array(CanActivateRecurring::class, class_uses($paymentType), true)) {
+        if (in_array(CanRecur::class, class_uses($paymentType), true)) {
             $recurring = new Recurring($paymentType->getId(), $returnUrl);
             $recurring->setParentResource($this->heidelpay);
             $this->create($recurring);

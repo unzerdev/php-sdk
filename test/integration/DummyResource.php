@@ -24,9 +24,9 @@
  */
 namespace heidelpayPHP\test\integration;
 
-use heidelpayPHP\Traits\CanActivateRecurring;
+use heidelpayPHP\Traits\CanRecur;
 
 class DummyResource
 {
-    use CanActivateRecurring;
+    use CanRecur;
 }

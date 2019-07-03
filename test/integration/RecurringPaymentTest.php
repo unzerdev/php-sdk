@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
@@ -68,6 +69,26 @@ class RecurringPaymentTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $recurring = $card->activateRecurring('https://dev.heidelpay.com');
+
+        $this->assertTrue($recurring->isPending());
+        $this->assertFalse($recurring->isSuccess());
+        $this->assertFalse($recurring->isError());
+        $this->assertNotEmpty($recurring->getReturnUrl());
+    }
+
+    /**
+     * Verify paypal can activate recurring payments.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function paypalShouldBeAbleToActivateRecurringPayments()
+    {
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $recurring = $paypal->activateRecurring('https://dev.heidelpay.com');
 
         $this->assertTrue($recurring->isPending());
         $this->assertFalse($recurring->isSuccess());

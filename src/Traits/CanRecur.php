@@ -29,7 +29,7 @@ use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Recurring;
 use RuntimeException;
 
-trait CanActivateRecurring
+trait CanRecur
 {
     /** @var bool $recurring */
     private $recurring;
