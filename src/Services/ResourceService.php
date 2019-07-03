@@ -54,10 +54,12 @@ use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\PaymentTypes\Wechatpay;
+use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Traits\CanActivateRecurring;
 use function is_string;
 use RuntimeException;
 use stdClass;
@@ -279,6 +281,35 @@ class ResourceService
         $resource->setFetchedAt(new DateTime('now'));
         $resource->handleResponse($response, $method);
         return $resource;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Recurring">
+
+    /**
+     * Activate recurring payment for the given payment type (if possible).
+     *
+     * @param string|BasePaymentType $paymentType The payment to activate recurring payment for.
+     * @param string                 $returnUrl   The URL to which the customer gets redirected in case of a 3ds
+     *                                            transaction
+     *
+     * @return Recurring
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function createRecurring($paymentType, $returnUrl): Recurring
+    {
+        // make sure recurring is allowed for the given payment type.
+        if (in_array(CanActivateRecurring::class, class_uses($paymentType), true)) {
+            $recurring = new Recurring($paymentType->getId(), $returnUrl);
+            $recurring->setParentResource($this->heidelpay);
+            $this->create($recurring);
+            return $recurring;
+        }
+
+        throw new RuntimeException('Recurring is not available for the given payment type.');
     }
 
     //</editor-fold>
