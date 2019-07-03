@@ -63,15 +63,15 @@ try {
 
     // Redirect to success if the payment has been successfully completed or is still in handled.
     $paymentType = $heidelpay->fetchPaymentType($paymentTypeId);
+
+    if ($paymentType instanceof Card && $paymentType->isRecurring()) {
+        redirect(SUCCESS_URL);
+    }
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
-}
-
-if ($paymentType instanceof Card && $paymentType->isRecurring()) {
-    redirect(SUCCESS_URL);
 }
 
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);
