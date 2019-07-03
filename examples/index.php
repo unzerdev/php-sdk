@@ -70,6 +70,17 @@ require_once __DIR__ . '/../../../autoload.php';
                 </div>
                 <div class="card olive">
                     <div class="content">
+                        <div class="header">Credit Card Registration</div>
+                        <div class="description">
+                            You can set a credit card type to recurring in order to register it and charge later as well as implement recurring payments.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='CreditCardRegister/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
                         <div class="header">
                             EPS
                         </div>
