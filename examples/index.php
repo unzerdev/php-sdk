@@ -75,7 +75,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             You can set a credit card type to recurring in order to register it and charge later as well as implement recurring payments.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='CreditCardRegister/';">
+                    <div class="ui bottom attached green button" onclick="location.href='CreditCardRecurring/';">
                         Try
                     </div>
                 </div>
