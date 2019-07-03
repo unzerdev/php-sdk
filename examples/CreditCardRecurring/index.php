@@ -66,19 +66,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 <p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form" class="heidelpayUI form" novalidate>
-    <!-- This is just for the example - Start -->
-    <div class="fields inline">
-        <label for="3dsecure">Select this if you want to try out Card with 3Dsecure:</label>
-        <div class="field">
-            <div class="heidelpayUI checkbox">
-                <input type="hidden" name="3dsecure" value="0">
-                <input type="checkbox" name="3dsecure" value="1">
-                <label>Enable 3Ds</label>
-            </div>
-        </div>
-    </div>
-    <!-- This is just for the example - End -->
-
     <div class="field">
         <div id="card-element-id-number" class="heidelpayInput">
             <!-- Card number UI Element will be inserted here. -->

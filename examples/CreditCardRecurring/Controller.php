@@ -28,12 +28,12 @@
 require_once __DIR__ . '/Constants.php';
 
 /** Require the composer autoloader file */
+/** @noinspection PhpIncludeInspection */
 require_once __DIR__ . '/../../../../autoload.php';
 
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
 
 session_start();
 session_unset();
@@ -55,19 +55,12 @@ if (!isset($_POST['resourceId'])) {
 }
 $paymentTypeId   = $_POST['resourceId'];
 
-// These lines are just for this example
-$use3Ds          = isset($_POST['3dsecure']) && ($_POST['3dsecure'] === '1');
-
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Create a charge/authorize transaction
-    // The 3D secured flag can be used to switch between 3ds and non-3ds.
-    // If your merchant is only configured for one of those you can omit the flag.
-//    $customer     = new Customer('Linda', 'Heideich');
     $recurring = $heidelpay->activateRecurringPayment($paymentTypeId, RETURN_CONTROLLER_URL);
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
