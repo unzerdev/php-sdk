@@ -35,6 +35,9 @@ class Recurring extends AbstractHeidelpayResource
     /** @var string $returnUrl */
     protected $returnUrl;
 
+    /** @var string $redirectUrl */
+    protected $redirectUrl;
+
     /** @var string $paymentTypeId */
     private $paymentTypeId;
 
@@ -85,6 +88,24 @@ class Recurring extends AbstractHeidelpayResource
     public function setPaymentTypeId(string $paymentTypeId): Recurring
     {
         $this->paymentTypeId = $paymentTypeId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectUrl(): string
+    {
+        return $this->redirectUrl;
+    }
+
+    /**
+     * @param string $redirectUrl
+     * @return Recurring
+     */
+    public function setRedirectUrl(string $redirectUrl): Recurring
+    {
+        $this->redirectUrl = $redirectUrl;
         return $this;
     }
 
