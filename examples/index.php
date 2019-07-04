@@ -59,23 +59,23 @@ require_once __DIR__ . '/../../../autoload.php';
             <div class="ui four cards">
                 <div class="card olive">
                     <div class="content">
-                        <div class="header">Credit Card</div>
+                        <div class="header">Card</div>
                         <div class="description">
                             You can try authorize and charge transaction with or without 3Ds.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='CreditCard/';">
+                    <div class="ui bottom attached green button" onclick="location.href='Card/';">
                         Try
                     </div>
                 </div>
                 <div class="card olive">
                     <div class="content">
-                        <div class="header">Credit Card Registration</div>
+                        <div class="header">Card Recurring</div>
                         <div class="description">
-                            You can set a credit card type to recurring in order to register it and charge later as well as implement recurring payments.
+                            You can set a Card type to recurring in order to register it and charge later as well as implement recurring payments.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='CreditCardRecurring/';">
+                    <div class="ui bottom attached green button" onclick="location.href='CardRecurring/';">
                         Try
                     </div>
                 </div>

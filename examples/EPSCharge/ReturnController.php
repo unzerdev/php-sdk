@@ -1,7 +1,7 @@
 <?php
 /**
  * This is the return controller for the EPS example.
- * It is called when the client is redirected back to the shop from the EPS page of the selected bank.
+ * It is called when the client is redirected back to the shop from the external page.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *

@@ -1,7 +1,7 @@
 <?php
 /**
- * This is the return controller for the Alipay example.
- * It is called when the client is redirected back to the shop from the Alipay page of the selected bank.
+ * This is the return controller for the WeChat Pay example.
+ * It is called when the client is redirected back to the shop from the external page.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
