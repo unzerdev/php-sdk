@@ -29,10 +29,12 @@ use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
+use heidelpayPHP\Services\EnvironmentService;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\Services\DummyAdapter;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
+use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 
@@ -327,6 +329,44 @@ class HttpServiceTest extends BaseUnitTest
         }
     }
 
+    /**
+     * Verify environment switches when environment variable defines mgw environment.
+     *
+     * @test
+     *
+     * @dataProvider environmentUrlSwitchesWithEnvironmentVariableDP
+     *
+     * @param $environment
+     * @param $apiUrl
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws Exception
+     */
+    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl)
+    {
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close'])->getMock();
+        $adapterMock->expects($this->once())->method('init')->with($apiUrl, self::anything(), self::anything());
+        $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
+        $adapterMock->method('execute')->willReturn('myResponseString');
+        $adapterMock->method('getResponseCode')->willReturn('myResponseCode');
+
+        $envSrvMock = $this->getMockBuilder(EnvironmentService::class)->setMethods(['getMgwEnvironment'])->getMock();
+        $envSrvMock->method('getMgwEnvironment')->willReturn($environment);
+
+        /**
+         * @var CurlAdapter        $adapterMock
+         * @var EnvironmentService $envSrvMock
+         */
+        $httpService = (new HttpService())->setHttpAdapter($adapterMock)->setEnvironmentService($envSrvMock);
+
+        /** @var HttpService $httpServiceMock*/
+        $response = $httpService->send('', $resource);
+
+        $this->assertEquals('myResponseString', $response);
+    }
+
     //<editor-fold desc="DataProviders">
 
     /**
@@ -355,6 +395,20 @@ class HttpServiceTest extends BaseUnitTest
             'de-DE' => ['de-DE'],
             'en-US' => ['en-US'],
             'null' => [null]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function environmentUrlSwitchesWithEnvironmentVariableDP(): array
+    {
+        return [
+            'Dev' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, 'https://dev-api.heidelpay.com/v1'],
+            'Prod' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, 'https://api.heidelpay.com/v1'],
+            'Stg' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, 'https://stg-api.heidelpay.com/v1'],
+            'else' => ['something else', 'https://api.heidelpay.com/v1'],
+            'undefined' => [false, 'https://api.heidelpay.com/v1']
         ];
     }
 

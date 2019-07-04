@@ -81,9 +81,9 @@ try {
 
     // Redirect to the 3ds page or to success depending on the state of the transaction
     $payment = $transaction->getPayment();
-    if ($transaction->getRedirectUrl() === null && $transaction->isSuccess()) {
+    if (empty($transaction->getRedirectUrl()) && $transaction->isSuccess()) {
         redirect(SUCCESS_URL);
-    } elseif ($transaction->getRedirectUrl() !== null && $transaction->isPending()) {
+    } elseif (!empty($transaction->getRedirectUrl()) && $transaction->isPending()) {
         redirect($transaction->getRedirectUrl());
     }
 
