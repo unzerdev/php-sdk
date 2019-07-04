@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Enabled switching MGW environment (Prod, Staging, Dev) via environment variable.
 *   Added PHP 7.3 support.
+*   Add recurring payment for PayPal and Card payment type.
 
 ### Changed
 *   Updated unit tests.
