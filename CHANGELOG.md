@@ -6,10 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.1.4.0][1.1.4.0]
 
 ### Fixed
-*   Fixed examples.
+*   Fixed existing examples.
 
 ### Added
 *   Enabled switching MGW environment (Prod, Staging, Dev) via environment variable.
+*   Examples for iDeal and Sofort.
 
 ### Changed
 *   Updated unit tests.
