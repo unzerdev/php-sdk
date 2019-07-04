@@ -99,7 +99,7 @@ class ResourceService
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri          = $resource->getUri($appendId);
         $responseJson = $resource->getHeidelpayObject()->getHttpService()->send($uri, $resource, $httpMethod);
-        return json_decode($responseJson);
+        return json_decode($responseJson, false);
     }
 
     /**
