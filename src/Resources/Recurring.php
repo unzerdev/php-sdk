@@ -22,10 +22,16 @@
  *
  * @package  heidelpayPHP/resources
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace heidelpayPHP\Resources;
 
-class Recurring extends AbstractTransactionType
+use heidelpayPHP\Traits\HasStates;
+use heidelpayPHP\Traits\HasUniqueAndShortId;
+
+class Recurring extends AbstractHeidelpayResource
 {
+    use HasStates;
+    use HasUniqueAndShortId;
+
     /** @var string $returnUrl */
     protected $returnUrl;
 
@@ -43,8 +49,6 @@ class Recurring extends AbstractTransactionType
     {
         $this->returnUrl     = $returnUrl;
         $this->paymentTypeId = $paymentType;
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">

@@ -26,7 +26,7 @@ namespace heidelpayPHP\Traits;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\TransactionTypes\Recurring;
+use heidelpayPHP\Resources\Recurring;
 use RuntimeException;
 
 trait CanRecur
