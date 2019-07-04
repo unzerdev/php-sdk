@@ -27,8 +27,8 @@ namespace heidelpayPHP\Services;
 class EnvironmentService
 {
     const ENV_VAR_NAME_ENVIRONMENT = 'HEIDELPAY_MGW_ENV';
-    const ENV_VAR_VALUE_STAGING_ENVIRONMENT = 'STAGING';
-    const ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT = 'DEVELOPMENT';
+    const ENV_VAR_VALUE_STAGING_ENVIRONMENT = 'STG';
+    const ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT = 'DEV';
     const ENV_VAR_VALUE_PROD_ENVIRONMENT = 'PROD';
 
     public function getMgwEnvironment()
