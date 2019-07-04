@@ -63,12 +63,8 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Create a charge/authorize transaction to get the redirectUrl.
-    if ($transactionType === 'charge') {
-        $transaction = $heidelpay->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
-    } else {
-        $transaction = $heidelpay->authorize(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
-    }
+    // Create a charge transaction to get the redirectUrl.
+    $transaction = $heidelpay->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
 
     // You'll need to remember the paymentId for later in the ReturnController
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
