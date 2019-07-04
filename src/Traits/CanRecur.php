@@ -32,7 +32,7 @@ use RuntimeException;
 trait CanRecur
 {
     /** @var bool $recurring */
-    private $recurring;
+    private $recurring = false;
 
     /**
      * Activates recurring payment for the payment type.

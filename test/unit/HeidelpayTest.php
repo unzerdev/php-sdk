@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
@@ -232,22 +233,24 @@ class HeidelpayTest extends BaseUnitTest
      */
     public function heidelpayShouldForwardResourceActionCallsToTheResourceServiceDP(): array
     {
-        $customerId   = 'customerId';
-        $basketId     = 'basketId';
-        $paymentId    = 'paymentId';
-        $chargeId     = 'chargeId';
-        $cancelId     = 'cancelId';
-        $metadataId   = 'metaDataId';
-        $orderId      = 'orderId';
-        $customer     = new Customer();
-        $basket       = new Basket();
-        $payment      = new Payment();
-        $sofort       = new Sofort();
-        $auth         = new Authorization();
-        $charge       = new Charge();
-        $metadata     = new Metadata();
-        $cancellation = new Cancellation();
-        $chargeMock   = $this->getMockBuilder(Charge::class)->setMethods(['getCancellation'])->getMock();
+        $customerId     = 'customerId';
+        $basketId       = 'basketId';
+        $paymentId      = 'paymentId';
+        $chargeId       = 'chargeId';
+        $cancelId       = 'cancelId';
+        $metadataId     = 'metaDataId';
+        $orderId        = 'orderId';
+        $paymentTypeId  = 'paymentId';
+        $customer       = new Customer();
+        $basket         = new Basket();
+        $payment        = new Payment();
+        $sofort         = new Sofort();
+        $card           = new Card('', '03/33');
+        $auth           = new Authorization();
+        $charge         = new Charge();
+        $metadata       = new Metadata();
+        $cancellation   = new Cancellation();
+        $chargeMock     = $this->getMockBuilder(Charge::class)->setMethods(['getCancellation'])->getMock();
         $chargeMock->expects($this->once())->method('getCancellation')->with($cancelId, true)->willReturn(
             $cancellation
         );
@@ -286,7 +289,9 @@ class HeidelpayTest extends BaseUnitTest
             'fetchRefundById'              => ['fetchRefundById', [$payment, $chargeId, $cancelId], 'fetchRefundById', [$payment, $chargeId, $cancelId]],
             'fetchRefundByIdStr'           => ['fetchRefundById', [$paymentId, $chargeId, $cancelId], 'fetchRefundById', [$paymentId, $chargeId, $cancelId]],
             'fetchRefund'                  => ['fetchRefund', [$chargeMock, $cancelId], 'fetch', [$cancellation]],
-            'fetchShipment'                => ['fetchShipment', [$payment, 'shipId'], 'fetchShipment', [$payment, 'shipId']]
+            'fetchShipment'                => ['fetchShipment', [$payment, 'shipId'], 'fetchShipment', [$payment, 'shipId']],
+            'activateRecurring'            => ['activateRecurringPayment', [$card, 'returnUrl'], 'createRecurring', [$card, 'returnUrl']],
+            'activateRecurringWithId'      => ['activateRecurringPayment', [$paymentTypeId, 'returnUrl'], 'createRecurring', [$paymentTypeId, 'returnUrl']]
         ];
     }
 
@@ -344,10 +349,10 @@ class HeidelpayTest extends BaseUnitTest
      */
     public function heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP(): array
     {
-        $url           = 'https://dev.heidelpay.com';
-        $webhookId     = 'webhookId';
-        $webhook     = new Webhook();
-        $event = ['event1', 'event2'];
+        $url       = 'https://dev.heidelpay.com';
+        $webhookId = 'webhookId';
+        $webhook   = new Webhook();
+        $event     = ['event1', 'event2'];
 
         return [
             'createWebhook'=> [ 'createWebhook', [$url, 'event'], 'createWebhook', [$url, 'event'] ],
