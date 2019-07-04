@@ -39,6 +39,7 @@ class CanRecurTest extends BaseUnitTest
      * Verify setters and getters.
      *
      * @test
+     *
      * @throws AssertionFailedError
      */
     public function gettersAndSettersShouldWorkProperly()

@@ -30,4 +30,9 @@ use heidelpayPHP\Traits\CanRecur;
 class TraitDummyCanRecur extends AbstractHeidelpayResource
 {
     use CanRecur;
+
+    public function getId()
+    {
+        return 'myId';
+    }
 }
