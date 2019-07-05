@@ -50,6 +50,7 @@ class BasketItemTest extends BaseUnitTest
         $this->assertEquals('', $basketItem->getBasketItemReferenceId());
         $this->assertEquals('', $basketItem->getUnit());
         $this->assertEquals('', $basketItem->getTitle());
+        $this->assertEquals('', $basketItem->getSubTitle());
         $this->assertNull($basketItem->getImageUrl());
 
         $basketItem->setQuantity(2);
@@ -62,6 +63,7 @@ class BasketItemTest extends BaseUnitTest
         $basketItem->setBasketItemReferenceId('myRefId');
         $basketItem->setUnit('myUnit');
         $basketItem->setTitle('myTitle');
+        $basketItem->setSubTitle('mySubTitle');
         $basketItem->setImageUrl('https://my.image.url');
 
         $this->assertEquals(2, $basketItem->getQuantity());
@@ -74,6 +76,7 @@ class BasketItemTest extends BaseUnitTest
         $this->assertEquals('myRefId', $basketItem->getBasketItemReferenceId());
         $this->assertEquals('myUnit', $basketItem->getUnit());
         $this->assertEquals('myTitle', $basketItem->getTitle());
+        $this->assertEquals('mySubTitle', $basketItem->getSubTitle());
         $this->assertEquals('https://my.image.url', $basketItem->getImageUrl());
     }
 }
