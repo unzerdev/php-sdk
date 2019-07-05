@@ -83,17 +83,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         /** @var HirePurchaseDirectDebit $fetchedHirePurchaseDirectDebit */
         $fetchedHirePurchaseDirectDebit = $this->heidelpay->fetchPaymentType($hirePurchaseDirectDebit->getId());
         $this->assertInstanceOf(HirePurchaseDirectDebit::class, $fetchedHirePurchaseDirectDebit);
-
         $this->assertEquals($hirePurchaseDirectDebit->expose(), $fetchedHirePurchaseDirectDebit->expose());
-
-//        $this->assertEquals($hirePurchaseDirectDebit->getId(), $fetchedHirePurchaseDirectDebit->getId());
-//        $this->assertEquals($hirePurchaseDirectDebit->getAccountHolder(), $fetchedHirePurchaseDirectDebit->getAccountHolder());
-//        $this->assertEquals($hirePurchaseDirectDebit->getBic(), $fetchedHirePurchaseDirectDebit->getBic());
-//        $this->assertEquals(
-//            $this->maskNumber($hirePurchaseDirectDebit->getIban()),
-//            $fetchedHirePurchaseDirectDebit->getIban()
-//        );
-
         return $fetchedHirePurchaseDirectDebit;
     }
 

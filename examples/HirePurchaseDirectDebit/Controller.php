@@ -55,11 +55,10 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 }
 
 // You will need the id of the payment type created in the frontend (index.php)
-if (!isset($_POST['paymentTypeId'], $_POST['customerId'])) {
+if (!isset($_POST['paymentTypeId'])) {
     redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
-$customerId  = $_POST['customerId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -67,13 +66,20 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
+    // Use the quote or order id from your shop
     $orderId = str_replace(['0.', ' '], '', microtime(false));
+
+    // A customer with matching addresses is mandatory for Invoice Factoring payment type
+    $customer = new Customer('Linda', 'Heideich');
+    $address  = new Address();
+    $address->setName('Linda Heideich')->setStreet('Vangerowstr. 18')->setCity('Heidelberg')->setZip('69155')->setCountry('DE');
+    $customer->setBirthDate('2000-02-12')->setBillingAddress($address)->setShippingAddress($address);
 
     // A Basket is mandatory for SEPA direct debit guaranteed payment type
     $basketItem = new BasketItem('Hat', 10.0, 10.0, 1);
     $basket = new Basket($orderId, 10.0, 'EUR', [$basketItem]);
 
-    $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customerId, $orderId, null, $basket);
+    $transaction = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customer, $orderId, null, $basket);
 
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();

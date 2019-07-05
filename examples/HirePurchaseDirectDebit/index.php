@@ -103,14 +103,14 @@ require_once __DIR__ . '/../../../../autoload.php';
     });
 
     // Handling the form's submission.
-    let form = document.getElementById('hire-purchase-form');
+    let form = document.getElementById('payment-form-hirepurchase');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         HirePurchase.createResource()
             .then(function(data) {
                 let hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');
-                hiddenInput.setAttribute('name', 'resourceId');
+                hiddenInput.setAttribute('name', 'paymentTypeId');
                 hiddenInput.setAttribute('value', data.id);
                 form.appendChild(hiddenInput);
                 form.setAttribute('method', 'POST');
