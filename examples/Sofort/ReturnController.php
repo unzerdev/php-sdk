@@ -1,9 +1,9 @@
 <?php
 /**
- * This is the return controller for the EPS example.
+ * This is the return controller for the Sofort example.
  * It is called when the client is redirected back to the shop from the external page.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,14 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\TransactionTypes\Charge;
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
@@ -61,13 +63,16 @@ try {
 
     // Redirect to success if the payment has been successfully completed.
     $payment   = $heidelpay->fetchPayment($paymentId);
-    if ($payment->isCompleted()) {
+    if ($payment->isCompleted() || $payment->isPending()) {
         redirect(SUCCESS_URL);
     }
 
-    // Check the result message of the charge to find out what went wrong.
-    $charge = $payment->getChargeByIndex(0);
-    $merchantMessage = $charge->getMessage()->getCustomer();
+    // Check the result message of the transaction to find out what went wrong.
+    $transaction = $payment->getChargeByIndex(0);
+    if (!$transaction instanceof Charge) {
+        $transaction = $payment->getChargeByIndex(0);
+    }
+    $merchantMessage = $transaction->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();

@@ -5,15 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.4.0][1.1.4.0]
 
-### Fixed
-*   Fixed examples.
-
 ### Added
 *   Enabled switching MGW environment (Prod, Staging, Dev) via environment variable.
 *   Added PHP 7.3 support.
+*   Add recurring payment for PayPal and Card payment type incl. examples.
+*   Examples for iDeal and Sofort.
 
 ### Changed
 *   Updated unit tests.
+*   Refactored examples.
+*   Allow to pass the event payload manually to `Heidelpay::fetchResourceFromEvent`.
+*   Add properties `imageUrl` and `subTitle` to `BasketItem` resource.
 
 ## [1.1.3.0][1.1.3.0]
 

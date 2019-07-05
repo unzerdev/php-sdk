@@ -1,8 +1,8 @@
 <?php
 /**
- * This service provides for functionalities concerning the mgw environment.
+ * This file defines the constants needed for the card example.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2018 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/services
+ * @package  heidelpayPHP/examples
  */
-namespace heidelpayPHP\Services;
 
-class EnvironmentService
-{
-    const ENV_VAR_NAME_ENVIRONMENT = 'HEIDELPAY_MGW_ENV';
-    const ENV_VAR_VALUE_STAGING_ENVIRONMENT = 'STG';
-    const ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT = 'DEV';
-    const ENV_VAR_VALUE_PROD_ENVIRONMENT = 'PROD';
+require_once __DIR__ . '/../Constants.php';
 
-    public function getMgwEnvironment()
-    {
-        return getenv(self::ENV_VAR_NAME_ENVIRONMENT);
-    }
-}
+define('EXAMPLE_PATH', __DIR__);
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CardRecurring');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
+define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

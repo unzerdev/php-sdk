@@ -1,9 +1,9 @@
 <?php
 /**
- * This is the return controller for the EPS example.
- * It is called when the client is redirected back to the shop from the external page.
+ * This is the controller for the iDeal example.
+ * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,19 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Customer;
+
+$clientMessage = 'Something went wrong. Please try again later.';
+
+session_start();
+session_unset();
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
@@ -45,13 +52,11 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
-session_start();
-
-// Retrieve the paymentId you remembered within the Controller
-if (!isset($_SESSION['PaymentId'])) {
-    redirect(FAILURE_URL, 'The payment id is missing.', $clientMessage);
+// You will need the id of the payment type created in the frontend (index.php)
+if (!isset($_POST['resourceId'])) {
+    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
-$paymentId = $_SESSION['PaymentId'];
+$paymentTypeId   = $_POST['resourceId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -59,14 +64,20 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Redirect to success if the payment has been successfully completed.
-    $payment   = $heidelpay->fetchPayment($paymentId);
-    if ($payment->isCompleted()) {
-        redirect(SUCCESS_URL);
+    // Create a charge to get the redirectUrl.
+    $customer            = new Customer('Linda', 'Heideich');
+    $charge              = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+
+    // You'll need to remember the paymentId for later in the ReturnController
+    $_SESSION['PaymentId'] = $charge->getPaymentId();
+    $_SESSION['ShortId']   = $charge->getShortId();
+
+    // Redirect to the iDeal page of the selected bank
+    if (!$charge->isError() && $charge->getRedirectUrl() !== null) {
+        redirect($charge->getRedirectUrl());
     }
 
     // Check the result message of the charge to find out what went wrong.
-    $charge = $payment->getChargeByIndex(0);
     $merchantMessage = $charge->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
@@ -75,4 +86,3 @@ try {
     $merchantMessage = $e->getMessage();
 }
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);
-

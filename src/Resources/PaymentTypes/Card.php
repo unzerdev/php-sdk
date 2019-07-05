@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
+use heidelpayPHP\Traits\CanRecur;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
 use heidelpayPHP\Validators\ExpiryDateValidator;
@@ -33,6 +34,7 @@ class Card extends BasePaymentType
 {
     use CanDirectCharge;
     use CanAuthorize;
+    use CanRecur;
 
     /**
      * Card constructor.

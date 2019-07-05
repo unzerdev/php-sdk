@@ -19,11 +19,11 @@ Please refer to the following documentation for installation instructions and us
 *   [Debugging](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-debugging)
 
 ## Supported payment types
-*   Card (credit card and debit card)
+*   Card (credit card and debit card) + Recurring
 *   Giropay
 *   iDEAL
 *   Invoice (guaranteed)
-*   PayPal
+*   PayPal + Recurring
 *   Prepayment
 *   Przelewy24
 *   SEPA direct debit (guaranteed)

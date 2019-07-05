@@ -52,8 +52,11 @@ class ApiResponseCodes
     const API_ERROR_CUSTOMER_DOES_NOT_EXIST                     = 'API.410.100.100';
     const API_ERROR_CUSTOMER_ID_ALREADY_EXISTS                  = 'API.410.200.010';
     const API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND                   = 'API.500.100.100';
+    const API_ERROR_RECURRING_PAYMENT_NOT_SUPPORTED             = 'API.500.550.004';
     const API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED            = 'API.510.310.009';
     const API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND                    = 'API.510.310.008';
+    const API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL               = 'API.600.630.004';
+    const API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION         = 'API.600.630.005';
     const API_ERROR_INVALID_KEY                                 = 'API.710.000.002';
     const API_ERROR_INSUFFICIENT_PERMISSION                     = 'API.710.000.005';
     const API_ERROR_WRONG_AUTHENTICATION_METHOD                 = 'API.710.000.007';

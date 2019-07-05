@@ -26,6 +26,7 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
@@ -37,7 +38,7 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $resource = $heidelpay->fetchResourceFromEvent();
+    $resource = $heidelpay->fetchResourceFromEvent(file_get_contents('php://input'));
     $heidelpay->debugLog('Fetched resource from Event: ' . $resource->jsonSerialize());
 } catch (HeidelpayApiException $e) {
     $heidelpay->debugLog('Error: ' . $e->getMessage());
