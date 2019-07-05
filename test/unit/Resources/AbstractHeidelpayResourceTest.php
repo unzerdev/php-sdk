@@ -42,6 +42,7 @@ use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -382,7 +383,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Metadata' => [new Metadata(), 'parent/resource/path/metadata/'],
             'Basket' => [new Basket(), 'parent/resource/path/baskets/'],
             'Webhook' => [new Webhook(), 'parent/resource/path/webhooks/'],
-            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/']
+            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/'],
+            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring/']
         ];
     }
 

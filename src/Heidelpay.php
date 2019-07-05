@@ -334,6 +334,26 @@ class Heidelpay implements HeidelpayParentInterface
         return $this->resourceService->fetch($resource);
     }
 
+    //<editor-fold desc="Recurring">
+
+    /**
+     * Activate recurring payment for the given payment type (if possible).
+     *
+     * @param string|BasePaymentType $paymentType The payment to activate recurring payment for.
+     * @param string                 $returnUrl   The URL to which the customer gets redirected in case of a 3ds transaction
+     *
+     * @return mixed
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function activateRecurringPayment($paymentType, $returnUrl)
+    {
+        return $this->resourceService->createRecurring($paymentType, $returnUrl);
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="Payment resource">
 
     /**

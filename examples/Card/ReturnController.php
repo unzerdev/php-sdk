@@ -1,7 +1,7 @@
 <?php
 /**
  * This is the return controller for the Card example.
- * It is called when the client is redirected back to the shop from the 3ds page.
+ * It is called when the client is redirected back to the shop from the external page.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
