@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 *   Updated unit tests.
 *   Refactored examples.
+*   Allow to pass the event payload manually to `Heidelpay::fetchResourceFromEvent`.
 
 ## [1.1.3.0][1.1.3.0]
 
