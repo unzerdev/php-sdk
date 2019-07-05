@@ -58,6 +58,9 @@ class BasketItem extends AbstractHeidelpayResource
     /** @var string $title */
     protected $title = '';
 
+    /** @var string|null $imageUrl */
+    protected $imageUrl;
+
     /**
      * BasketItem constructor.
      *
@@ -267,6 +270,25 @@ class BasketItem extends AbstractHeidelpayResource
     public function setTitle(string $title): BasketItem
     {
         $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImageUrl()
+    {
+        return $this->imageUrl;
+    }
+
+    /**
+     * @param string|null $imageUrl
+     *
+     * @return BasketItem
+     */
+    public function setImageUrl($imageUrl): BasketItem
+    {
+        $this->imageUrl = $imageUrl;
         return $this;
     }
 
