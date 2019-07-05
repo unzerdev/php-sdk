@@ -305,6 +305,7 @@ class BasketItem extends AbstractHeidelpayResource
 
     /**
      * @param string|null $subTitle
+     *
      * @return BasketItem
      */
     public function setSubTitle($subTitle): BasketItem

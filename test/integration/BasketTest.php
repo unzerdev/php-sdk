@@ -105,6 +105,7 @@ class BasketTest extends BasePaymentTest
      * @param $expectException
      * @param $imageUrl
      * @param null $exceptionCode
+     *
      * @throws AssertionFailedError
      * @throws Exception
      * @throws RuntimeException
@@ -276,5 +277,6 @@ class BasketTest extends BasePaymentTest
             'invalid not available' => [true, 'https://files.readme.io/does-not-exist.jpg', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL]
         ];
     }
+
     //</editor-fold>
 }
