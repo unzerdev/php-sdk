@@ -67,7 +67,7 @@ trait CanRecur
      *
      * @return self
      */
-    public function setRecurring($active): self
+    protected function setRecurring(bool $active): self
     {
         $this->recurring = $active;
         return $this;

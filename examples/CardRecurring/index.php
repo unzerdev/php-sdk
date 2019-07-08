@@ -1,8 +1,8 @@
 <?php
 /**
- * This file provides an example implementation of the Card payment type.
+ * This file provides an example implementation of the Card recurring payment type.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,13 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>
