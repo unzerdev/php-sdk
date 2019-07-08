@@ -31,8 +31,26 @@ class EnvironmentService
     const ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT = 'DEV';
     const ENV_VAR_VALUE_PROD_ENVIRONMENT = 'PROD';
 
-    public function getMgwEnvironment()
+    const ENV_VAR_NAME_DISABLE_TEST_LOGGING = 'HEIDELPAY_MGW_DISABLE_TEST_LOGGING';
+
+    /**
+     * Returns the MGW environment set via environment variable or PROD es default.
+     *
+     * @return string
+     */
+    public function getMgwEnvironment(): string
     {
-        return getenv(self::ENV_VAR_NAME_ENVIRONMENT);
+        return $_SERVER[self::ENV_VAR_NAME_ENVIRONMENT] ?? self::ENV_VAR_VALUE_PROD_ENVIRONMENT;
+    }
+
+    /**
+     * Returns false if the logging in tests is deactivated by environment variable.
+     *
+     * @return bool
+     */
+    public static function isTestLoggingActive(): bool
+    {
+        $testLoggingDisabled = strtolower($_SERVER[self::ENV_VAR_NAME_DISABLE_TEST_LOGGING] ?? 'false');
+        return in_array($testLoggingDisabled, ['false', '0'], true);
     }
 }
