@@ -105,10 +105,10 @@ class ChargeTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
-        $orderId = $this->generateOrderId();
+        $orderId = $this->generateRandomId();
         $metadata = new Metadata();
         $basket = $this->createBasket();
-        $invoiceId = $this->generateOrderId();
+        $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
 
         $charge = $card->charge(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
@@ -156,10 +156,10 @@ class ChargeTest extends BasePaymentTest
         $ivg = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
-        $orderId = $this->generateOrderId();
+        $orderId = $this->generateRandomId();
         $metadata = new Metadata();
         $basket = $this->createBasket();
-        $invoiceId = $this->generateOrderId();
+        $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
 
         $charge = $ivg->charge(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, null, $invoiceId, $paymentReference);

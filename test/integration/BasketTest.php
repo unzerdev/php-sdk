@@ -71,7 +71,7 @@ class BasketTest extends BasePaymentTest
      */
     public function maxBasketShouldBeCreatableAndFetchableWorkAround()
     {
-        $basket = new Basket($this->generateOrderId(), 123.4, 'EUR', []);
+        $basket = new Basket($this->generateRandomId(), 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))
             ->setBasketItemReferenceId('refId')
@@ -100,7 +100,7 @@ class BasketTest extends BasePaymentTest
      */
     public function basketShouldBeUpdatateable()
     {
-        $orderId = $this->generateOrderId();
+        $orderId = $this->generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
@@ -132,7 +132,7 @@ class BasketTest extends BasePaymentTest
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
-        $orderId = $this->generateOrderId();
+        $orderId = $this->generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 123.4, 234.5, 12))->setBasketItemReferenceId('refId');
@@ -181,7 +181,7 @@ class BasketTest extends BasePaymentTest
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
-        $orderId = $this->generateOrderId();
+        $orderId = $this->generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
@@ -207,7 +207,7 @@ class BasketTest extends BasePaymentTest
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
-        $orderId = $this->generateOrderId();
+        $orderId = $this->generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basket->setAmountTotalVat(10.9);

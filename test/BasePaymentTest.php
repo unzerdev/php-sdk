@@ -106,7 +106,7 @@ class BasePaymentTest extends TestCase
      */
     public function createBasket(): Basket
     {
-        $orderId = $this->generateOrderId();
+        $orderId = $this->generateRandomId();
         $basket = new Basket($orderId, 123.4, 'EUR');
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
@@ -177,7 +177,7 @@ class BasePaymentTest extends TestCase
      *
      * @return float
      */
-    public function generateOrderId(): float
+    public function generateRandomId(): float
     {
         return (string)microtime(true);
     }

@@ -79,7 +79,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
         $this->assertNotEmpty($charge->getDescriptor());
 
 
-        $shipment = $this->heidelpay->ship($charge->getPayment(), $this->generateOrderId());
+        $shipment = $this->heidelpay->ship($charge->getPayment(), $this->generateRandomId());
         $this->assertNotNull($shipment);
         $this->assertNotEmpty($shipment->getId());
     }

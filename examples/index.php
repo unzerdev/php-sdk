@@ -26,12 +26,13 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../autoload.php';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>
@@ -51,10 +52,10 @@ require_once __DIR__ . '/../../../autoload.php';
         <div class="ui container segment">
             <h2 class="ui header">
                 <i class="shopping cart icon"></i>
-                <div class="content">
+                <span class="content">
                     Payment Implentation Examples
-                    <div class="sub header">Choose the Payment Type you want to evaluate ...</div>
-                </div>
+                    <span class="sub header">Choose the Payment Type you want to evaluate ...</span>
+                </span>
             </h2>
             <div class="ui four cards">
                 <div class="card olive">
@@ -88,6 +89,18 @@ require_once __DIR__ . '/../../../autoload.php';
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='EPSCharge/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            iDeal
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='IDeal/';">
                         Try
                     </div>
                 </div>
@@ -159,6 +172,18 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            Sofort
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='Sofort/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             PayPal Recurring
                         </div>
                         <div class="description">
@@ -187,10 +212,10 @@ require_once __DIR__ . '/../../../autoload.php';
         <div class="ui container segment">
             <h2 class="ui header">
                 <i class="bolt icon"></i>
-                <div class="content">
+                <span class="content">
                     Webhook Implentation Examples
-                    <div class="sub header">Enable or disable webhooks ...</div>
-                </div>
+                    <span class="sub header">Enable or disable webhooks ...</span>
+                </span>
             </h2>
             <div class="ui two cards">
                 <div class="card">
