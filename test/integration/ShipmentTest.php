@@ -52,7 +52,7 @@ class ShipmentTest extends BasePaymentTest
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge);
 
-        $shipment = $this->heidelpay->ship($charge->getPayment());
+        $shipment = $this->heidelpay->ship($charge->getPayment(), $this->generateRandomId());
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
 
@@ -81,7 +81,7 @@ class ShipmentTest extends BasePaymentTest
         );
 
         $payment  = $charge->getPayment();
-        $shipment = $payment->ship();
+        $shipment = $payment->ship($this->generateRandomId());
         $this->assertNotNull($shipment);
         $this->assertNotEmpty($shipment->getId());
         $this->assertNotEmpty($shipment->getUniqueId());
@@ -112,7 +112,7 @@ class ShipmentTest extends BasePaymentTest
         );
 
         $payment  = $charge->getPayment();
-        $shipment = $this->heidelpay->ship($payment);
+        $shipment = $this->heidelpay->ship($payment, $this->generateRandomId());
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
     }
@@ -137,7 +137,7 @@ class ShipmentTest extends BasePaymentTest
         );
 
         $payment  = $charge->getPayment();
-        $shipment = $this->heidelpay->ship($payment);
+        $shipment = $this->heidelpay->ship($payment, $this->generateRandomId());
         $this->assertTrue($shipment->isSuccess());
         $this->assertFalse($shipment->isPending());
         $this->assertFalse($shipment->isError());

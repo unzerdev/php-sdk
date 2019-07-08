@@ -1,8 +1,8 @@
 <?php
 /**
- * This custom debug handler will echo out debug messages.
+ * This file defines the constants needed for the Sofort example.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration
+ * @package  heidelpayPHP/examples
  */
-namespace heidelpayPHP\test;
 
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
-use heidelpayPHP\Services\EnvironmentService;
+require_once __DIR__ . '/../Constants.php';
 
-class TestDebugHandler implements DebugHandlerInterface
-{
-    /**
-     * {@inheritDoc}
-     */
-    public function log(string $message)
-    {
-        if (EnvironmentService::isTestLoggingActive()) {
-            echo 'heidelpay debug message: ' . $message . "\n";
-        }
-    }
-}
+define('EXAMPLE_PATH', __DIR__);
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'Sofort');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
+define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');
