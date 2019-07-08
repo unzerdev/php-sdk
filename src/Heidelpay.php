@@ -872,14 +872,16 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Fetches a resource object based on the given event data.
      *
+     * @param string|null $eventJson
+     *
      * @return AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchResourceFromEvent(): AbstractHeidelpayResource
+    public function fetchResourceFromEvent($eventJson = null): AbstractHeidelpayResource
     {
-        return $this->webhookService->fetchResourceByWebhookEvent();
+        return $this->webhookService->fetchResourceByWebhookEvent($eventJson);
     }
 
     //</editor-fold>
