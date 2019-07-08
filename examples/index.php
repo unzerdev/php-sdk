@@ -26,12 +26,13 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../autoload.php';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>
@@ -51,20 +52,31 @@ require_once __DIR__ . '/../../../autoload.php';
         <div class="ui container segment">
             <h2 class="ui header">
                 <i class="shopping cart icon"></i>
-                <div class="content">
+                <span class="content">
                     Payment Implentation Examples
-                    <div class="sub header">Choose the Payment Type you want to evaluate ...</div>
-                </div>
+                    <span class="sub header">Choose the Payment Type you want to evaluate ...</span>
+                </span>
             </h2>
             <div class="ui four cards">
                 <div class="card olive">
                     <div class="content">
-                        <div class="header">Credit Card</div>
+                        <div class="header">Card</div>
                         <div class="description">
                             You can try authorize and charge transaction with or without 3Ds.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='CreditCard/';">
+                    <div class="ui bottom attached green button" onclick="location.href='Card/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">Card Recurring</div>
+                        <div class="description">
+                            You can set a Card type to recurring in order to register it and charge later as well as implement recurring payments.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='CardRecurring/';">
                         Try
                     </div>
                 </div>
@@ -172,6 +184,19 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            PayPal Recurring
+                        </div>
+                        <div class="description">
+                            You can set a Pay Pal type to recurring in order to register it and charge later as well as implement recurring payments.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='PayPalRecurring/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             SEPA direct debit guaranteed
                         </div>
                         <div class="description">
@@ -187,10 +212,10 @@ require_once __DIR__ . '/../../../autoload.php';
         <div class="ui container segment">
             <h2 class="ui header">
                 <i class="bolt icon"></i>
-                <div class="content">
+                <span class="content">
                     Webhook Implentation Examples
-                    <div class="sub header">Enable or disable webhooks ...</div>
-                </div>
+                    <span class="sub header">Enable or disable webhooks ...</span>
+                </span>
             </h2>
             <div class="ui two cards">
                 <div class="card">

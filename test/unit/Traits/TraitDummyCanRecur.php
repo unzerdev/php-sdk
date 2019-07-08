@@ -1,8 +1,8 @@
 <?php
 /**
- * This represents the Paypal payment type.
+ * This class defines a dummy implementing CanRecur trait.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,19 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP/test/unit
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace heidelpayPHP\test\unit\Traits;
 
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Traits\CanRecur;
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
 
-class Paypal extends BasePaymentType
+class TraitDummyCanRecur extends AbstractHeidelpayResource
 {
-    use CanAuthorize;
-    use CanDirectCharge;
     use CanRecur;
+
+    public function getId()
+    {
+        return 'myId';
+    }
 }

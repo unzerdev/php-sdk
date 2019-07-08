@@ -53,6 +53,7 @@ use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\PaymentTypes\Wechatpay;
+use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -62,6 +63,7 @@ use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use heidelpayPHP\test\unit\DummyResource;
+use heidelpayPHP\test\unit\Traits\TraitDummyCanRecur;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
@@ -1243,6 +1245,79 @@ class ResourceServiceTest extends BaseUnitTest
         $this->assertNull(
             $resourceSrvMock->fetchResourceByUrl('https://api.heidelpay.com/v1/types/card/s-unknown-xen2ybcovn56/')
         );
+    }
+
+    /**
+     * Verify createRecurring calls fetch for the payment type if it is given the id.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function createRecurringShouldFetchThePaymentTypeById()
+    {
+        $paymentType = new TraitDummyCanRecur();
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType', 'create'])->getMock();
+        $resourceServiceMock->expects(self::once())->method('fetchPaymentType')->with('typeId')->willReturn($paymentType);
+        $resourceServiceMock->expects(self::once())->method('create')->with(
+            $this::callback(static function ($data) {
+                return $data instanceof Recurring &&
+                       $data->getReturnUrl() === 'returnUrl' &&
+                       $data->getPaymentTypeId() === 'myId';
+            }));
+
+        /** @var ResourceService $resourceServiceMock */
+        $resourceServiceMock->createRecurring('typeId', 'returnUrl');
+    }
+
+    /**
+     * Verify createRecurring does not call fetch for the payment type if it is given the object itself.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function createRecurringShouldNotFetchThePaymentTypeByObject()
+    {
+        $paymentType = new TraitDummyCanRecur();
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType', 'create'])->getMock();
+        $resourceServiceMock->expects(self::never())->method('fetchPaymentType');
+        $resourceServiceMock->expects(self::once())->method('create')->with(
+            $this::callback(static function ($data) {
+                return $data instanceof Recurring &&
+                       $data->getReturnUrl() === 'returnUrl' &&
+                       $data->getPaymentTypeId() === 'myId';
+            }));
+
+        /** @var ResourceService $resourceServiceMock */
+        $resourceServiceMock->createRecurring($paymentType, 'returnUrl');
+    }
+
+    /**
+     * Verify createRecurring throws exception if it is called with a payment type which does not support recurring payment.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\Exception
+     */
+    public function createRecurringShouldThrowExceptionWhenRecurringPaymentIsNotSupportedByType()
+    {
+        $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
+
+        $this->expectException(RuntimeException::class);
+        $resourceService->createRecurring(new Sofort(), 'returnUrl');
     }
 
     //<editor-fold desc="Data Providers">

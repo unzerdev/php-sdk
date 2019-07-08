@@ -1,8 +1,8 @@
 <?php
 /**
- * This file defines the constants needed for the card example.
+ * This class defines a dummy implementing CanRecur trait.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP/test/unit
  */
+namespace heidelpayPHP\test\unit\Traits;
 
-require_once __DIR__ . '/../Constants.php';
+use heidelpayPHP\Traits\CanRecur;
 
-define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCard');
-define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
-define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');
+class TraitDummyCanRecurNonResource
+{
+    use CanRecur;
+}

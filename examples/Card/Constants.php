@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the Paypal payment type.
+ * This file defines the constants needed for the card example.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -20,17 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP/examples
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanRecur;
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
+require_once __DIR__ . '/../Constants.php';
 
-class Paypal extends BasePaymentType
-{
-    use CanAuthorize;
-    use CanDirectCharge;
-    use CanRecur;
-}
+define('EXAMPLE_PATH', __DIR__);
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'Card');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
+define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

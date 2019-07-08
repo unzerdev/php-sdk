@@ -1,8 +1,8 @@
 <?php
 /**
- * This file provides an example implementation of the credit card payment type.
+ * This file provides an example implementation of the Card recurring payment type.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,13 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>
@@ -66,34 +67,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 <p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form" class="heidelpayUI form" novalidate>
-    <!-- This is just for the example - Start -->
-    <div class="fields inline">
-        <label for="transaction_type">Chose the transaction type you want to test:</label>
-        <div class="field">
-            <div class="heidelpayUI radio checkbox">
-                <input type="radio" name="transaction_type" value="authorize" checked="">
-                <label>Authorize</label>
-            </div>
-        </div>
-        <div class="field">
-            <div class="heidelpayUI radio checkbox">
-                <input type="radio" name="transaction_type" value="charge">
-                <label>Charge</label>
-            </div>
-        </div>
-    </div>
-    <div class="fields inline">
-        <label for="3dsecure">Select this if you want to try out Card with 3Dsecure:</label>
-        <div class="field">
-            <div class="heidelpayUI checkbox">
-                <input type="hidden" name="3dsecure" value="0">
-                <input type="checkbox" name="3dsecure" value="1">
-                <label>Enable 3Ds</label>
-            </div>
-        </div>
-    </div>
-    <!-- This is just for the example - End -->
-
     <div class="field">
         <div id="card-element-id-number" class="heidelpayInput">
             <!-- Card number UI Element will be inserted here. -->
@@ -119,7 +92,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Create a credit card instance and render the input fields
+    // Create a Card instance and render the input fields
     let Card = heidelpayInstance.Card();
     Card.create('number', {
         containerId: 'card-element-id-number',
@@ -159,7 +132,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a credit card resource
+        // Creating a Card resource
         Card.createResource()
             .then(function(result) {
                 let hiddenInput = document.createElement('input');

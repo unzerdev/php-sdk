@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the Paypal payment type.
+ * This class defines a dummy resource used for unit tests.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -20,17 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP/test/unit
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Traits\CanRecur;
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
 
-class Paypal extends BasePaymentType
+class DummyResource
 {
-    use CanAuthorize;
-    use CanDirectCharge;
     use CanRecur;
 }
