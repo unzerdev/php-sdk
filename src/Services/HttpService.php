@@ -33,8 +33,16 @@ use RuntimeException;
 
 class HttpService
 {
+    const URL_PART_STAGING_ENVIRONMENT = 'stg';
+    const URL_PART_DEVELOPMENT_ENVIRONMENT = 'dev';
+
     /** @var HttpAdapterInterface $httpAdapter */
     private $httpAdapter;
+
+    /** @var EnvironmentService $environmentService */
+    private $environmentService;
+
+    //<editor-fold desc="Getters/Setters">
 
     /**
      * Returns the currently set HttpAdapter.
@@ -64,6 +72,30 @@ class HttpService
     }
 
     /**
+     * @return EnvironmentService
+     */
+    public function getEnvironmentService(): EnvironmentService
+    {
+        if (!$this->environmentService instanceof EnvironmentService) {
+            $this->environmentService =  new EnvironmentService();
+        }
+        return $this->environmentService;
+    }
+
+    /**
+     * @param EnvironmentService $environmentService
+     *
+     * @return HttpService
+     */
+    public function setEnvironmentService(EnvironmentService $environmentService): HttpService
+    {
+        $this->environmentService = $environmentService;
+        return $this;
+    }
+
+    //</editor-fold>
+
+    /**
      * send post request to payment server
      *
      * @param $uri string url of the target system
@@ -80,14 +112,13 @@ class HttpService
         AbstractHeidelpayResource $resource = null,
         $httpMethod = HttpAdapterInterface::REQUEST_GET
     ): string {
-        $url = Heidelpay::BASE_URL . Heidelpay::API_VERSION . $uri;
-
         if (!$resource instanceof AbstractHeidelpayResource) {
             throw new RuntimeException('Transfer object is empty!');
         }
         $heidelpayObj = $resource->getHeidelpayObject();
 
         // perform request
+        $url = $this->getEnvironmentUrl($uri);
         $payload = $resource->jsonSerialize();
         $this->initRequest($heidelpayObj, $url, $payload, $httpMethod);
         $httpAdapter  = $this->getAdapter();
@@ -183,5 +214,29 @@ class HttpService
             $heidelpayObj->debugLog('Request: ' . $payload);
         }
         $heidelpayObj->debugLog('Response: (' . $responseCode . ') ' . json_encode(json_decode($response)));
+    }
+
+    /**
+     * Returns the environment url.
+     *
+     * @param $uri
+     *
+     * @return string
+     */
+    private function getEnvironmentUrl($uri): string
+    {
+        $envUrl = [];
+        switch ($this->getEnvironmentService()->getMgwEnvironment()) {
+            case EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT:
+                $envUrl[] = self::URL_PART_STAGING_ENVIRONMENT;
+                break;
+            case EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT:
+                $envUrl[] = self::URL_PART_DEVELOPMENT_ENVIRONMENT;
+                break;
+            default:
+                break;
+        }
+        $envUrl[] = Heidelpay::BASE_URL;
+        return 'https://' . implode('-', $envUrl) . '/' . Heidelpay::API_VERSION . $uri;
     }
 }

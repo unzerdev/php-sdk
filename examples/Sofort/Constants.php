@@ -1,8 +1,8 @@
 <?php
 /**
- * This file defines the constants needed for the card example.
+ * This file defines the constants needed for the Sofort example.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,6 @@
 require_once __DIR__ . '/../Constants.php';
 
 define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CreditCard');
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'Sofort');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
 define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

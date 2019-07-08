@@ -4,6 +4,7 @@
 [![PHP 7.0](https://img.shields.io/badge/php-7.0-blue.svg)](http://www.php.net)
 [![PHP 7.1](https://img.shields.io/badge/php-7.1-blue.svg)](http://www.php.net)
 [![PHP 7.2](https://img.shields.io/badge/php-7.2-blue.svg)](http://www.php.net)
+[![PHP 7.3](https://img.shields.io/badge/php-7.3-blue.svg)](http://www.php.net)
 
 ![Logo](https://dev.heidelpay.com/devHeidelpay_400_180.jpg)
 
@@ -18,11 +19,11 @@ Please refer to the following documentation for installation instructions and us
 *   [Debugging](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-debugging)
 
 ## Supported payment types
-*   Card (credit card and debit card)
+*   Card (credit card and debit card) + Recurring
 *   Giropay
 *   iDEAL
 *   Invoice (guaranteed)
-*   PayPal
+*   PayPal + Recurring
 *   Prepayment
 *   Przelewy24
 *   SEPA direct debit (guaranteed)

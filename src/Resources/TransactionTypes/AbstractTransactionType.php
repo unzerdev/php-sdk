@@ -33,34 +33,24 @@ use heidelpayPHP\Resources\EmbeddedResources\Message;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\HasOrderId;
+use heidelpayPHP\Traits\HasStates;
+use heidelpayPHP\Traits\HasUniqueAndShortId;
 use RuntimeException;
 use stdClass;
 
 abstract class AbstractTransactionType extends AbstractHeidelpayResource
 {
     use HasOrderId;
+    use HasStates;
+    use HasUniqueAndShortId;
 
     //<editor-fold desc="Properties">
+
     /** @var Payment $payment */
     private $payment;
 
     /** @var DateTime $date */
     private $date;
-
-    /** @var string $uniqueId */
-    private $uniqueId;
-
-    /** @var string $shortId */
-    private $shortId;
-
-    /** @var bool $isError */
-    private $isError = false;
-
-    /** @var bool $isSuccess */
-    private $isSuccess = false;
-
-    /** @var bool $isPending */
-    private $isPending = false;
 
     /** @var Message $message */
     private $message;
@@ -146,101 +136,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     public function setDate(string $date): self
     {
         $this->date = new DateTime($date);
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUniqueId()
-    {
-        return $this->uniqueId;
-    }
-
-    /**
-     * @param string $uniqueId
-     *
-     * @return $this
-     */
-    protected function setUniqueId(string $uniqueId): self
-    {
-        $this->uniqueId = $uniqueId;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getShortId()
-    {
-        return $this->shortId;
-    }
-
-    /**
-     * @param string $shortId
-     *
-     * @return AbstractTransactionType
-     */
-    protected function setShortId(string $shortId): AbstractTransactionType
-    {
-        $this->shortId = $shortId;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isError(): bool
-    {
-        return $this->isError;
-    }
-
-    /**
-     * @param bool $isError
-     *
-     * @return AbstractTransactionType
-     */
-    public function setIsError(bool $isError): AbstractTransactionType
-    {
-        $this->isError = $isError;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSuccess(): bool
-    {
-        return $this->isSuccess;
-    }
-
-    /**
-     * @param bool $isSuccess
-     *
-     * @return AbstractTransactionType
-     */
-    public function setIsSuccess(bool $isSuccess): AbstractTransactionType
-    {
-        $this->isSuccess = $isSuccess;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPending(): bool
-    {
-        return $this->isPending;
-    }
-
-    /**
-     * @param bool $isPending
-     *
-     * @return AbstractTransactionType
-     */
-    public function setIsPending(bool $isPending): AbstractTransactionType
-    {
-        $this->isPending = $isPending;
         return $this;
     }
 
