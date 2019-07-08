@@ -26,6 +26,7 @@
 namespace heidelpayPHP\Adapter;
 
 use function extension_loaded;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
 use RuntimeException;
 
 class CurlAdapter implements HttpAdapterInterface
@@ -71,7 +72,21 @@ class CurlAdapter implements HttpAdapterInterface
      */
     public function execute()
     {
-        return curl_exec($this->request);
+        $response = curl_exec($this->request);
+        $error    = curl_errno($this->request);
+
+        switch ($error) {
+            case 0:
+                return $response;
+                break;
+            case CURLE_OPERATION_TIMEDOUT:
+                $errorMessage = 'Timeout: The Payment API seems to be not available at the moment!';
+                break;
+            default:
+                $errorMessage = 'An error occurred sending the request.';
+                break;
+        }
+        throw new HeidelpayApiException($errorMessage);
     }
 
     /**
