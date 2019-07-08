@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the Card example.
+ * This is the controller for the Card recurring example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2019 heidelpay GmbH
