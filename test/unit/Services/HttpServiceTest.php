@@ -346,10 +346,7 @@ class HttpServiceTest extends BaseUnitTest
      */
     public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl)
     {
-        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter', 'getEnvironmentService'])->getMock();
-
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close'])->getMock();
-        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
         $adapterMock->expects($this->once())->method('init')->with($apiUrl, self::anything(), self::anything());
         $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
         $adapterMock->method('execute')->willReturn('myResponseString');
@@ -358,11 +355,14 @@ class HttpServiceTest extends BaseUnitTest
         $envSrvMock = $this->getMockBuilder(EnvironmentService::class)->setMethods(['getMgwEnvironment'])->getMock();
         $envSrvMock->method('getMgwEnvironment')->willReturn($environment);
 
-        /** @var EnvironmentService $envSrvMock */
-        $httpServiceMock->method('getEnvironmentService')->willReturn($envSrvMock);
+        /**
+         * @var CurlAdapter        $adapterMock
+         * @var EnvironmentService $envSrvMock
+         */
+        $httpService = (new HttpService())->setHttpAdapter($adapterMock)->setEnvironmentService($envSrvMock);
 
         /** @var HttpService $httpServiceMock*/
-        $response = $httpServiceMock->send('', $resource);
+        $response = $httpService->send('', $resource);
 
         $this->assertEquals('myResponseString', $response);
     }

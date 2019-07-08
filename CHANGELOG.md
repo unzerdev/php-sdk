@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Fixed examples.
 
 ### Added
-*   Enabled switching MGW environment via environment variable.
+*   Enabled switching MGW environment (Prod, Staging, Dev) via environment variable.
 
 ## [1.1.3.0][1.1.3.0]
 
