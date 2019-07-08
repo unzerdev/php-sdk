@@ -25,6 +25,7 @@
 namespace heidelpayPHP\test;
 
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
+use heidelpayPHP\Services\EnvironmentService;
 
 class TestDebugHandler implements DebugHandlerInterface
 {
@@ -33,10 +34,8 @@ class TestDebugHandler implements DebugHandlerInterface
      */
     public function log(string $message)
     {
-        if (getenv('DISABLE_TEST_DEBUG_LOG')) {
-            return;
+        if (EnvironmentService::isTestLoggingActive()) {
+            echo 'heidelpay debug message: ' . $message . "\n";
         }
-
-        echo 'heidelpay debug message: ' . $message . "\n";
     }
 }
