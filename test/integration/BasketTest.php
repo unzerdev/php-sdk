@@ -24,12 +24,15 @@
  */
 namespace heidelpayPHP\test\integration;
 
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
 use RuntimeException;
 
 class BasketTest extends BasePaymentTest
@@ -78,7 +81,9 @@ class BasketTest extends BasePaymentTest
             ->setAmountVat(1.24)
             ->setVat(19)
             ->setUnit('ert')
-            ->setAmountDiscount(1234.9);
+            ->setAmountDiscount(1234.9)
+            ->setImageUrl('https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.jpg')
+            ->setSubTitle('This is some subtitle for this item');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
@@ -88,6 +93,39 @@ class BasketTest extends BasePaymentTest
         $fetchedBasket = $this->heidelpay->fetchBasket($basket->getId());
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
         $this->assertEquals('This basket is creatable!', $basket->getNote());
+    }
+
+    /**
+     * Verify basketItem with invalid imageUrl will return an error.
+     *
+     * @test
+     *
+     * @dataProvider basketItemWithInvalidUrlWillThrowAnErrorDP
+     *
+     * @param $expectException
+     * @param $imageUrl
+     * @param null $exceptionCode
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws RuntimeException
+     */
+    public function basketItemWithInvalidUrlWillThrowAnError($expectException, $imageUrl, $exceptionCode = null)
+    {
+        $basket = new Basket($this->generateRandomId(), 123.4, 'EUR', []);
+        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setImageUrl($imageUrl);
+        $basket->addBasketItem($basketItem);
+
+        try {
+            $this->heidelpay->createBasket($basket);
+            $this->assertFalse(
+                $expectException,
+                'Failed asserting that exception of type "heidelpayPHP\Exceptions\HeidelpayApiException" is thrown.'
+            );
+        } catch (HeidelpayApiException $e) {
+            $this->assertTrue($expectException);
+            $this->assertEquals($exceptionCode, $e->getCode());
+        }
     }
 
     /**
@@ -223,4 +261,22 @@ class BasketTest extends BasePaymentTest
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
     }
+
+    //<editor-fold desc="Data Providers">
+
+    /**
+     * @return array
+     */
+    public function basketItemWithInvalidUrlWillThrowAnErrorDP(): array
+    {
+        return [
+            'valid ' => [false, 'https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.jpg'],
+            'valid null' => [false, null],
+            'invalid empty' => [true, '', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL],
+            'invalid no image' => [true, 'https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.exe', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION],
+            'invalid not available' => [true, 'https://files.readme.io/does-not-exist.jpg', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL]
+        ];
+    }
+
+    //</editor-fold>
 }
