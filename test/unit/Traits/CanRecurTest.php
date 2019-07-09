@@ -32,6 +32,7 @@ use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
+use stdClass;
 
 class CanRecurTest extends BaseUnitTest
 {
@@ -46,7 +47,9 @@ class CanRecurTest extends BaseUnitTest
     {
         $dummy = new TraitDummyCanRecur();
         $this->assertFalse($dummy->isRecurring());
-        $dummy->setRecurring(true);
+        $response = new stdClass();
+        $response->recurring = true;
+        $dummy->handleResponse($response);
         $this->assertTrue($dummy->isRecurring());
     }
 
