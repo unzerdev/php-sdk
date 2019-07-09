@@ -26,12 +26,13 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>
@@ -66,7 +67,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     HirePurchase.create({
         containerId: 'example-hire-purchase', // required
-        amount: 500, // required
+        amount: 100.19, // required
         currency: 'EUR', // required
         effectiveInterest: 4.5, // required
         orderDate: '2019-04-18', // optional

@@ -201,7 +201,12 @@ class PaymentService
         $basket = null,
         $card3ds = null
     ): Authorization {
-        $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $basePaymentType = $payment->getPaymentType();
+
+        /** @var Authorization $authorization */
+        $authorization = (new Authorization($amount, $currency, $returnUrl))
+            ->setOrderId($orderId)
+            ->setSpecialParams($basePaymentType !== null ? $basePaymentType->getTransactionParams() : []);
         if ($card3ds !== null) {
             $authorization->setCard3ds($card3ds);
         }
@@ -251,8 +256,13 @@ class PaymentService
         $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
-        $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setOrderId($orderId)->setInvoiceId($invoiceId)->setPaymentReference($paymentReference);
+
+        /** @var Charge $charge */
+        $charge = (new Charge($amount, $currency, $returnUrl))
+            ->setOrderId($orderId)
+            ->setInvoiceId($invoiceId)
+            ->setPaymentReference($paymentReference)
+            ->setSpecialParams($paymentType->getTransactionParams() ?? []);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
         }

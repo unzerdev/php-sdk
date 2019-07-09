@@ -28,8 +28,8 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\Exception;
 use RuntimeException;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
@@ -66,12 +66,10 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      *
      * @test
      *
-     * @return HirePurchaseDirectDebit
-     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function hirePurchaseDirectDebitShouldBeCreatable(): HirePurchaseDirectDebit
+    public function hirePurchaseDirectDebitShouldBeCreatable()
     {
         /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
         $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
@@ -84,51 +82,63 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $fetchedHirePurchaseDirectDebit = $this->heidelpay->fetchPaymentType($hirePurchaseDirectDebit->getId());
         $this->assertInstanceOf(HirePurchaseDirectDebit::class, $fetchedHirePurchaseDirectDebit);
         $this->assertEquals($hirePurchaseDirectDebit->expose(), $fetchedHirePurchaseDirectDebit->expose());
-        return $fetchedHirePurchaseDirectDebit;
     }
 
     /**
-     * Verify authorization is not allowed for hire purchase direct debit.
-     *
-     * @test
-     *
-     * @param HirePurchaseDirectDebit $hirePurchaseDirectDebit
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @depends hirePurchaseDirectDebitShouldBeCreatable
-     */
-    public function hirePurchaseDirectDebitShouldProhibitAuthorization(HirePurchaseDirectDebit $hirePurchaseDirectDebit)
-    {
-        $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
-
-        $this->heidelpay->authorize(1.0, 'EUR', $hirePurchaseDirectDebit, self::RETURN_URL);
-    }
-
-    /**
-     * Verify direct debit guaranteed can be charged.
+     * Verify charge is not allowed for hire purchase direct debit.
      *
      * @test
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
+     * @throws Exception
      */
-    public function hirePurchaseDirectDebitShouldAllowCharge()
+    public function hirePurchaseDirectDebitShouldProhibitCharge()
     {
         /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
-        $hirePurchaseDirectDebit = (new HirePurchaseDirectDebit('DE89370400440532013000'))->setBic('COBADEFFXXX');
-        $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
+        $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
+        $hirePurchaseDirectDebit->setOrderDate('2011-04-12');
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
 
-        /** @var Charge $charge */
-        $charge = $hirePurchaseDirectDebit->charge(
-            100.0,
+        $this->heidelpay->charge(
+            100.38,
             'EUR',
+            $hirePurchaseDirectDebit,
             self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
+            $this->getMaximumCustomer(),
+            null,
+            null,
+            $this->createBasket()
+            );
+    }
+
+    /**
+     * Verify Hire Purchase direct debit can be authorized.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function hirePurchaseDirectDebitShouldAllowAuthorize()
+    {
+        /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
+        $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
+        $hirePurchaseDirectDebit->setOrderDate('2011-04-12');
+
+        $authorize = $this->heidelpay->authorize(
+            100.19,
+            'EUR',
+            $hirePurchaseDirectDebit,
+            self::RETURN_URL,
+            $this->getMaximumCustomer(),
+            null,
+            null,
+            $this->createBasket()
         );
-        $this->assertNotNull($charge);
-        $this->assertNotNull($charge->getId());
+
+        $this->assertNotEmpty($authorize->getId());
     }
 
     /**
@@ -169,15 +179,15 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
             'Khang Vu',
             3,
             '2019-04-18',
-            500,
-            3.68,
-            503.68,
+            100.19,
+            0.74,
+            100.93,
             4.5,
             1.11,
             0,
             0,
-            167.9,
-            167.88
+            33.65,
+            33.63
         );
         return $hirePurchaseDirectDebit;
     }

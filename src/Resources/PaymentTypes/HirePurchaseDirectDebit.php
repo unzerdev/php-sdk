@@ -411,4 +411,18 @@ class HirePurchaseDirectDebit extends BasePaymentType
     }
 
     //</editor-fold>
+
+    //<editor-fold desc="Overridable Methods">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTransactionParams(): array
+    {
+        return [
+            'effectiveInterestRate' => $this->getEffectiveInterestRate()
+        ];
+    }
+
+    //</editor-fold>
 }

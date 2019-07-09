@@ -27,6 +27,7 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
@@ -37,8 +38,7 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 
 session_start();
 session_unset();
@@ -56,11 +56,12 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 
 // You will need the id of the payment type created in the frontend (index.php)
 if (!isset($_POST['paymentTypeId'])) {
-    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
+    redirect(FAILURE_URL, 'Payment type id is missing!', $clientMessage);
 }
 $paymentTypeId   = $_POST['paymentTypeId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
+/** @noinspection BadExceptionsProcessingInspection */
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
@@ -69,29 +70,50 @@ try {
     // Use the quote or order id from your shop
     $orderId = str_replace(['0.', ' '], '', microtime(false));
 
+    /** @var HirePurchaseDirectDebit $paymentType */
+    $paymentType = $heidelpay->fetchPaymentType($paymentTypeId);
+
     // A customer with matching addresses is mandatory for Invoice Factoring payment type
-    $customer = new Customer('Linda', 'Heideich');
-    $address  = new Address();
-    $address->setName('Linda Heideich')->setStreet('Vangerowstr. 18')->setCity('Heidelberg')->setZip('69155')->setCountry('DE');
-    $customer->setBirthDate('2000-02-12')->setBillingAddress($address)->setShippingAddress($address);
+    $address  = (new Address())
+        ->setName('Linda Heideich')
+        ->setStreet('Vangerowstr. 18')
+        ->setCity('Heidelberg')
+        ->setZip('69155')
+        ->setCountry('DE');
+    $customer = (new Customer('Linda', 'Heideich'))
+        ->setBirthDate('2000-02-12')
+        ->setBillingAddress($address)
+        ->setShippingAddress($address)
+        ->setEmail('linda.heideich@test.de');
 
     // A Basket is mandatory for SEPA direct debit guaranteed payment type
-    $basketItem = new BasketItem('Hat', 10.0, 10.0, 1);
-    $basket = new Basket($orderId, 10.0, 'EUR', [$basketItem]);
+    $basketItem = (new BasketItem('Hat', 10.0, 10.0, 1))
+        ->setAmountNet(10.0)
+        ->setAmountGross(10.19)
+        ->setAmountVat(0.19);
+    $basket = (new Basket($orderId, 100.00, 'EUR', [$basketItem]))
+        ->setAmountTotalVat(0.19);
 
-    $transaction = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customer, $orderId, null, $basket);
+    $authorize = $heidelpay->authorize(
+        $paymentType->getTotalPurchaseAmount(),
+        'EUR',
+        $paymentType,
+        CONTROLLER_URL,
+        $customer,
+        $orderId,
+        null,
+        $basket);
 
     // You'll need to remember the shortId to show it on the success or failure page
-    $_SESSION['ShortId'] = $transaction->getShortId();
+    $_SESSION['ShortId'] = $authorize->getShortId();
 
     // Redirect to the success or failure depending on the state of the transaction
-    $payment = $transaction->getPayment();
-    if ($transaction->isSuccess()) {
+    if ($authorize->isSuccess()) {
         redirect(SUCCESS_URL);
     }
 
     // Check the result message of the transaction to find out what went wrong.
-    $merchantMessage = $transaction->getMessage()->getCustomer();
+    $merchantMessage = $authorize->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
