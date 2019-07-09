@@ -53,7 +53,7 @@ require_once __DIR__ . '/../../../autoload.php';
             <h2 class="ui header">
                 <i class="shopping cart icon"></i>
                 <span class="content">
-                    Payment Implentation Examples
+                    Payment Implementation Examples
                     <span class="sub header">Choose the Payment Type you want to evaluate ...</span>
                 </span>
             </h2>
@@ -225,7 +225,7 @@ require_once __DIR__ . '/../../../autoload.php';
             <h2 class="ui header">
                 <i class="bolt icon"></i>
                 <span class="content">
-                    Webhook Implentation Examples
+                    Webhook Implementation Examples
                     <span class="sub header">Enable or disable webhooks ...</span>
                 </span>
             </h2>

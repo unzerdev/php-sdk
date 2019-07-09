@@ -252,7 +252,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                 !$reflection->isProtected()) {              // only send protected properties
                 $skipProperty = true;
             }
-        } catch (ReflectionException $e) {
+        } /** @noinspection BadExceptionsProcessingInspection */
+        catch (ReflectionException $e) {
             $skipProperty = true;
         }
 
