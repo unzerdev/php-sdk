@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  http://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *

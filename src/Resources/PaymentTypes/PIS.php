@@ -15,7 +15,7 @@
  * limitations under the License.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  http://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
