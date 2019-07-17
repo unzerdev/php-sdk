@@ -33,7 +33,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 
 $clientMessage = 'Something went wrong. Please try again later.';
 
@@ -64,8 +64,8 @@ try {
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge to get the redirectUrl.
-    $customer            = new Customer('Linda', 'Heideich');
-    $charge              = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+    $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
+    $charge   = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
 
     // You'll need to remember the paymentId for later in the ReturnController
     $_SESSION['PaymentId'] = $charge->getPaymentId();

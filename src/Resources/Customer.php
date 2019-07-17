@@ -2,7 +2,7 @@
 /**
  * This represents the customer resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,8 @@ class Customer extends AbstractHeidelpayResource
      *
      * @param string|null $firstname
      * @param string|null $lastname
+     *
+     * @deprecated since Version 1.1.5.0 use CustomerFactory::createCustomer(...) in the future.
      */
     public function __construct(string $firstname = null, string $lastname = null)
     {

@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Fixed
 *   Links to documentation page.
 
+### Added
+*   `Customer` objects can now be created via `CustomerFactory`.
+
+### Change
+*   Add deprecation notice for `Customer::__construct()` which is replaced by the `CustomerFactory`.
+
 ## [1.1.4.0][1.1.4.0]
 
 ### Added

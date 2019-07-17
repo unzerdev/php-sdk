@@ -34,7 +34,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 
 session_start();
 session_unset();
@@ -69,7 +69,7 @@ try {
     // Create a charge/authorize transaction
     // The 3D secured flag can be used to switch between 3ds and non-3ds.
     // If your merchant is only configured for one of those you can omit the flag.
-    $customer     = new Customer('Linda', 'Heideich');
+    $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
     if ($transactionType === 'charge') {
         $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
     } else {

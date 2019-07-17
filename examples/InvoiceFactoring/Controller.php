@@ -34,7 +34,7 @@ use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
@@ -63,9 +63,9 @@ try {
     $invoiceFactoring = $heidelpay->createPaymentType(new InvoiceFactoring());
 
     // A customer with matching addresses is mandatory for Invoice Factoring payment type
-    $customer = new Customer('Linda', 'Heideich');
+    $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
     $address  = new Address();
-    $address->setName('Linda Heideich')
+    $address->setName('Max Mustermann')
         ->setStreet('Vangerowstr. 18')
         ->setCity('Heidelberg')
         ->setZip('69155')

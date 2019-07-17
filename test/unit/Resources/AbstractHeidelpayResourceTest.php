@@ -30,6 +30,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
@@ -247,7 +248,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $testResponse->processing = $processing;
 
         /** @var Customer $customer */
-        $customer = (new Customer())->setCustomerId('customerId')->setFirstname('firstName')->setLastname('lastName');
+        $customer = CustomerFactory::createCustomer('firstName', 'lastName')->setCustomerId('customerId');
         $this->assertEquals('customerId', $customer->getCustomerId());
         $this->assertEquals('firstName', $customer->getFirstname());
         $this->assertEquals('lastName', $customer->getLastname());
@@ -325,7 +326,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function idsOfLinkedResourcesShouldBeAddedOnExpose()
     {
-        $customer = new Customer('Max', ' Mustermann');
+        $customer = CustomerFactory::createCustomer('Max', ' Mustermann');
         $customer->setId('MyTestId');
         $dummy      = new DummyHeidelpayResource($customer);
         $dummyArray = $dummy->expose();
@@ -342,7 +343,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function getExternalIdShouldReturnNullIfItIsNotImplementedInTheExtendingClass()
     {
-        $customer = new Customer('Max', ' Mustermann');
+        $customer = CustomerFactory::createCustomer('Max', ' Mustermann');
         $customer->setId('MyTestId');
         $dummy = new DummyHeidelPayResource($customer);
         $this->assertNull($dummy->getExternalId());

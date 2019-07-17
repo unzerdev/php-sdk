@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\Fixtures;
 
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 
 trait CustomerFixtureTrait
@@ -37,7 +38,7 @@ trait CustomerFixtureTrait
      */
     public function getMinimalCustomer(): Customer
     {
-        return new Customer('Max', 'Mustermann');
+        return CustomerFactory::createCustomer('Max', 'Mustermann');
     }
 
     /**
@@ -47,9 +48,7 @@ trait CustomerFixtureTrait
      */
     public function getMaximumCustomer(): Customer
     {
-        return (new Customer())
-            ->setFirstname('Peter')
-            ->setLastname('Universum')
+        return CustomerFactory::createCustomer('Peter', 'Universum')
             ->setSalutation(Salutations::MR)
             ->setCompany('heidelpay GmbH')
             ->setBirthDate('1989-12-24')

@@ -26,7 +26,7 @@ namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -129,7 +129,7 @@ class AuthorizationTest extends BaseUnitTest
     {
         $heidelpayObj    = new Heidelpay('s-priv-123345');
         $paymentType     = (new Sofort())->setId('123');
-        $customer        = (new Customer('Max', 'Mustermann'))->setId('123');
+        $customer        = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment         = new Payment();
         $payment->setParentResource($heidelpayObj)->setPaymentType($paymentType)->setCustomer($customer);
 

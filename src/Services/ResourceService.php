@@ -636,7 +636,7 @@ class ResourceService
             }
 
             // fetch Customer resource by customerId
-            $fetchedCustomer = $this->fetchCustomer((new Customer())->setCustomerId($customer->getCustomerId()));
+            $fetchedCustomer = $this->fetchCustomerByExtCustomerId($customer->getCustomerId());
 
             // update the existing customer with the data of the new customer
             $this->updateCustomer($customer->setId($fetchedCustomer->getId()));
