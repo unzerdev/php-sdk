@@ -26,6 +26,7 @@ namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
 use function in_array;
 
 class Customer extends AbstractHeidelpayResource
@@ -63,6 +64,9 @@ class Customer extends AbstractHeidelpayResource
     /** @var string $customerId */
     protected $customerId;
 
+    /** @var CompanyInfo $companyInfo */
+    protected $companyInfo;
+
     /**
      * Customer constructor.
      *
@@ -77,6 +81,7 @@ class Customer extends AbstractHeidelpayResource
         $this->lastname = $lastname;
         $this->billingAddress = new Address();
         $this->shippingAddress = new Address();
+        $this->companyInfo = new CompanyInfo();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -288,6 +293,25 @@ class Customer extends AbstractHeidelpayResource
     public function setCustomerId($customerId): Customer
     {
         $this->customerId = $customerId;
+        return $this;
+    }
+
+    /**
+     * @return CompanyInfo
+     */
+    public function getCompanyInfo(): CompanyInfo
+    {
+        return $this->companyInfo;
+    }
+
+    /**
+     * @param CompanyInfo $companyInfo
+     *
+     * @return Customer
+     */
+    public function setCompanyInfo(CompanyInfo $companyInfo): Customer
+    {
+        $this->companyInfo = $companyInfo;
         return $this;
     }
 
