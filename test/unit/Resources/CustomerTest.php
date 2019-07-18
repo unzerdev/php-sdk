@@ -24,11 +24,15 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
+use DateTime;
+use heidelpayPHP\Constants\CompanyCommercialSectorItems;
+use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
@@ -42,7 +46,7 @@ class CustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws \Exception
      */
     public function settersAndGettersShouldWork()
@@ -66,8 +70,8 @@ class CustomerTest extends BaseUnitTest
         $customer->setLastname('Universum');
         $this->assertEquals('Universum', $customer->getLastname());
 
-        $customer->setBirthDate(new \DateTime('1982-11-25'));
-        $this->assertEquals(new \DateTime('1982-11-25'), $customer->getBirthDate());
+        $customer->setBirthDate(new DateTime('1982-11-25'));
+        $this->assertEquals(new DateTime('1982-11-25'), $customer->getBirthDate());
 
         $customer->setPhone('1234567890');
         $this->assertEquals('1234567890', $customer->getPhone());
@@ -87,7 +91,7 @@ class CustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function settersAndGettersOfBillingAddressShouldWork()
     {
@@ -123,7 +127,7 @@ class CustomerTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function settersAndGettersOfShippingAddressShouldWork()
     {
@@ -152,6 +156,38 @@ class CustomerTest extends BaseUnitTest
         $this->assertEquals('shipping_city', $shippingAddress->getCity());
         $this->assertEquals('shipping_zip', $shippingAddress->getZip());
         $this->assertEquals('shipping_street', $shippingAddress->getStreet());
+    }
+
+    /**
+     * Verify getters and setters of CompanyInfo
+     *
+     * @test
+     * @throws Exception
+     */
+    public function gettersAndSettersOfCompanyInfoShouldWork()
+    {
+        $companyInfo = new CompanyInfo();
+        $this->assertEquals(CompanyCommercialSectorItems::OTHER, $companyInfo->getCommercialSector());
+        $this->assertNull($companyInfo->getCommercialRegisterNumber());
+        $this->assertNull($companyInfo->getFunction());
+        $this->assertNull($companyInfo->getRegistrationType());
+
+        $companyInfo->setCommercialSector(CompanyCommercialSectorItems::ACCOMMODATION);
+        $this->assertSame(CompanyCommercialSectorItems::ACCOMMODATION, $companyInfo->getCommercialSector());
+
+        $companyInfo->setFunction('OWNER');
+        $this->assertSame('OWNER', $companyInfo->getFunction());
+
+        $companyInfo->setCommercialRegisterNumber('1234567890');
+        $this->assertSame('1234567890', $companyInfo->getCommercialRegisterNumber());
+
+        $companyInfo->setRegistrationType(CompanyRegistrationTypes::REGISTRATION_TYPE_REGISTERED);
+        $this->assertSame(CompanyRegistrationTypes::REGISTRATION_TYPE_REGISTERED, $companyInfo->getRegistrationType());
+
+        $customer = new Customer();
+        $this->assertNull($customer->getCompanyInfo());
+        $customer->setCompanyInfo($companyInfo);
+        $this->assertSame($companyInfo, $customer->getCompanyInfo());
     }
 
     /**

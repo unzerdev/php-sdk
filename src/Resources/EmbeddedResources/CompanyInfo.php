@@ -36,7 +36,7 @@ class CompanyInfo extends AbstractHeidelpayResource
     /** @var string|null $commercialRegisterNumber */
     protected $commercialRegisterNumber;
 
-    /** @var string $function */
+    /** @var string|null $function */
     protected $function;
 
     /** @var string $commercialSector */
@@ -45,19 +45,19 @@ class CompanyInfo extends AbstractHeidelpayResource
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRegistrationType(): string
+    public function getRegistrationType()
     {
         return $this->registrationType;
     }
 
     /**
-     * @param string $registrationType
+     * @param string|null $registrationType
      *
      * @return CompanyInfo
      */
-    public function setRegistrationType(string $registrationType): CompanyInfo
+    public function setRegistrationType($registrationType): CompanyInfo
     {
         $this->registrationType = $this->removeRestrictedSymbols($registrationType);
         return $this;
@@ -84,19 +84,19 @@ class CompanyInfo extends AbstractHeidelpayResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFunction(): string
+    public function getFunction()
     {
         return $this->function;
     }
 
     /**
-     * @param string $function
+     * @param string|null $function
      *
      * @return CompanyInfo
      */
-    public function setFunction(string $function): CompanyInfo
+    public function setFunction($function): CompanyInfo
     {
         $this->function = $this->removeRestrictedSymbols($function);
         return $this;

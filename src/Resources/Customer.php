@@ -298,9 +298,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return CompanyInfo
+     * @return CompanyInfo|null
      */
-    public function getCompanyInfo(): CompanyInfo
+    public function getCompanyInfo()
     {
         return $this->companyInfo;
     }
