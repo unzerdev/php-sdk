@@ -24,10 +24,12 @@
  */
 namespace heidelpayPHP\Resources;
 
+use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
 use function in_array;
+use stdClass;
 
 class Customer extends AbstractHeidelpayResource
 {
@@ -81,7 +83,6 @@ class Customer extends AbstractHeidelpayResource
         $this->lastname = $lastname;
         $this->billingAddress = new Address();
         $this->shippingAddress = new Address();
-        $this->companyInfo = new CompanyInfo();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -337,6 +338,18 @@ class Customer extends AbstractHeidelpayResource
     public function getExternalId()
     {
         return $this->getCustomerId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        if (isset($response->companyInfo) && $this->companyInfo === null) {
+            $this->companyInfo = new CompanyInfo();
+        }
+
+        parent::handleResponse($response, $method);
     }
 
     //</editor-fold>

@@ -102,6 +102,31 @@ trait CustomerFixtureTrait
     }
 
     /**
+     * Creates a registered B2B customer object
+     *
+     * @return Customer
+     */
+    public function getMinimalRegisteredB2bCustomer(): Customer
+    {
+        return CustomerFactory::createRegisteredB2bCustomer($this->getBillingAddress(), '123456789', 'heidelpay GmbH');
+    }
+
+    /**
+     * Creates a registered B2B customer object
+     *
+     * @return Customer
+     */
+    public function getMaximalRegisteredB2bCustomer(): Customer
+    {
+        return $this->getMinimalRegisteredB2bCustomer()
+            ->setShippingAddress($this->getShippingAddress())
+            ->setSalutation(Salutations::MR)
+            ->setMobile('+49172123456')
+            ->setPhone('+4962216471100')
+            ->setBillingAddress($this->getBillingAddress());
+    }
+
+    /**
      * Create a test Address
      *
      * @return Address

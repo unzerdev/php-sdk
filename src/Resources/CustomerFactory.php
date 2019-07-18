@@ -73,6 +73,7 @@ class CustomerFactory
             ->setRegistrationType(CompanyRegistrationTypes::REGISTRATION_TYPE_NOT_REGISTERED)
             ->setFunction('OWNER')
             ->setCommercialSector($commercialSector);
+
         return (new Customer())
             ->setFirstname($firstname)
             ->setLastname($lastname)
@@ -80,6 +81,33 @@ class CustomerFactory
             ->setBillingAddress($billingAddress)
             ->setEmail($email)
             ->setCompany($company)
+            ->setCompanyInfo($companyInfo);
+    }
+
+    /**
+     * @param Address $billingAddress           The billing address is mandatory for the registered B2B customer.
+     * @param string  $commercialRegisterNumber The billing address is mandatory for the registered B2B customer.
+     * @param string  $company                  The company name is mandatory for the registered B2B customer.
+     * @param string  $commercialSector         The commercial sector is not mandatory for the registered B2B customer.
+     *                                          Please refer to CompanyCommercialSectorItems.
+     *
+     * @return Customer
+     */
+    public static function createRegisteredB2bCustomer(
+        Address $billingAddress,
+        string $commercialRegisterNumber,
+        string $company,
+        string $commercialSector = CompanyCommercialSectorItems::OTHER
+    ): Customer {
+        $companyInfo = (new CompanyInfo())
+            ->setRegistrationType(CompanyRegistrationTypes::REGISTRATION_TYPE_REGISTERED)
+            ->setFunction('OWNER')
+            ->setCommercialRegisterNumber($commercialRegisterNumber)
+            ->setCommercialSector($commercialSector);
+
+        return (new Customer())
+            ->setCompany($company)
+            ->setBillingAddress($billingAddress)
             ->setCompanyInfo($companyInfo);
     }
 }
