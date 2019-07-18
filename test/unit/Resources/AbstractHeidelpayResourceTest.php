@@ -25,6 +25,8 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use DateTime;
+use heidelpayPHP\Constants\CompanyCommercialSectorItems;
+use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
@@ -32,6 +34,7 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -216,12 +219,20 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             ->setZip('69115')
             ->setStreet('Musterstrasse 15');
 
+        $info = (new CompanyInfo())
+            ->setRegistrationType(CompanyRegistrationTypes::REGISTRATION_TYPE_NOT_REGISTERED)
+            ->setCommercialRegisterNumber('0987654321')
+            ->setFunction('CEO')
+            ->setCommercialSector(CompanyCommercialSectorItems::AIR_TRANSPORT);
+
         $testResponse                 = new stdClass();
-        $testResponse->billingAddress = json_decode($address->jsonSerialize());
+        $testResponse->billingAddress = json_decode($address->jsonSerialize(), false);
+        $testResponse->companyInfo    = json_decode($info->jsonSerialize(), false);
 
         /** @var Customer $customer */
         $customer = new Customer();
         $customer->handleResponse($testResponse);
+
         $billingAddress = $customer->getBillingAddress();
         $this->assertEquals('DE-BW', $billingAddress->getState());
         $this->assertEquals('DE', $billingAddress->getCountry());
@@ -229,6 +240,12 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $this->assertEquals('Heidelberg', $billingAddress->getCity());
         $this->assertEquals('69115', $billingAddress->getZip());
         $this->assertEquals('Musterstrasse 15', $billingAddress->getStreet());
+
+        $companyInfo = $customer->getCompanyInfo();
+        $this->assertEquals(CompanyRegistrationTypes::REGISTRATION_TYPE_NOT_REGISTERED, $companyInfo->getRegistrationType());
+        $this->assertEquals('0987654321', $companyInfo->getCommercialRegisterNumber());
+        $this->assertEquals('CEO', $companyInfo->getFunction());
+        $this->assertEquals(CompanyCommercialSectorItems::AIR_TRANSPORT, $companyInfo->getCommercialSector());
     }
 
     /**
