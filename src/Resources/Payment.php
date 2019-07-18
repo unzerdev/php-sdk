@@ -35,6 +35,7 @@ use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Traits\HasOrderId;
@@ -53,6 +54,9 @@ class Payment extends AbstractHeidelpayResource
 
     /** @var Authorization $authorization */
     private $authorization;
+
+    /** @var Payout $payout */
+    private $payout;
 
     /** @var array $shipments */
     private $shipments = [];
@@ -144,6 +148,42 @@ class Payment extends AbstractHeidelpayResource
     {
         $authorize->setPayment($this);
         $this->authorization = $authorize;
+        return $this;
+    }
+
+    /**
+     * Retrieves the Payout object of this payment.
+     * Fetches the Payout if it has not been fetched before and the lazy flag is not set.
+     * Returns null if the Payout does not exist.
+     *
+     * @param bool $lazy Enables lazy loading if set to true which results in the object not being updated via
+     *                   API and possibly containing just the meta data known from the Payment object response.
+     *
+     * @return Payout|AbstractHeidelpayResource|null The Payout object if it exists.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function getPayout($lazy = false)
+    {
+        $payout = $this->payout;
+        if (!$lazy && $payout !== null) {
+            return $this->getResource($payout);
+        }
+        return $payout;
+    }
+
+    /**
+     * Sets the Payout object.
+     *
+     * @param Payout $payout The Payout object to be stored in the payment.
+     *
+     * @return Payment This Payment object.
+     */
+    public function setPayout(Payout $payout): Payment
+    {
+        $payout->setPayment($this);
+        $this->payout = $payout;
         return $this;
     }
 
