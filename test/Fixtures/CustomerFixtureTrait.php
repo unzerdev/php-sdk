@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\Fixtures;
 
+use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\CustomerFactory;
@@ -82,7 +83,8 @@ trait CustomerFixtureTrait
             '2001-12-12',
             $this->getBillingAddress(),
             'test@test.de',
-            'heidelpay GmbH'
+            'heidelpay GmbH',
+            CompanyCommercialSectorItems::WAREHOUSING_AND_SUPPORT_ACTIVITIES_FOR_TRANSPORTATION
         );
     }
 
