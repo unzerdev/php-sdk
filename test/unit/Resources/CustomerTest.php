@@ -162,6 +162,7 @@ class CustomerTest extends BaseUnitTest
      * Verify getters and setters of CompanyInfo
      *
      * @test
+     *
      * @throws Exception
      */
     public function gettersAndSettersOfCompanyInfoShouldWork()
