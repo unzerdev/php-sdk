@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://docs.heidelpay.com/heidelpay-php-payment-api/
+ * @link  https://docs.heidelpay.com/heidelpay-php-payment-api/
  *
  * @author  Simon Gabriel <simon.gabriel@heidelpay.com>
  *
