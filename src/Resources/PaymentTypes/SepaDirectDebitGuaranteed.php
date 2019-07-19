@@ -25,10 +25,12 @@
 namespace heidelpayPHP\Resources\PaymentTypes;
 
 use heidelpayPHP\Traits\CanDirectChargeWithCustomer;
+use heidelpayPHP\Traits\CanPayoutWithCustomer;
 
 class SepaDirectDebitGuaranteed extends BasePaymentType
 {
     use CanDirectChargeWithCustomer;
+    use CanPayoutWithCustomer;
 
     /** @var string $iban */
     protected $iban;
