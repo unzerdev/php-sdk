@@ -27,13 +27,14 @@ namespace heidelpayPHP\test\integration\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
 class PayoutTest extends BasePaymentTest
 {
     /**
-     * Verify payout can be performed using the id of a payment type.
+     * Verify payout can be performed for card payment type.
      *
      * @test
      *
@@ -48,8 +49,46 @@ class PayoutTest extends BasePaymentTest
         $this->assertNotEmpty($payout->getId());
         $this->assertNotEmpty($payout->getUniqueId());
         $this->assertNotEmpty($payout->getShortId());
-        $this->assertInstanceOf(Payment::class, $payout->getPayment());
-        $this->assertNotEmpty($payout->getPayment()->getId());
+
+        $payment = $payout->getPayment();
+        $this->assertInstanceOf(Payment::class, $payment);
+        $this->assertNotEmpty($payment->getId());
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
+        $amount = $payment->getAmount();
+
+        $this->assertEquals(-100, $amount->getTotal());
+        $this->assertEquals(0, $amount->getCharged());
+        $this->assertEquals(0, $amount->getCanceled());
+        $this->assertEquals(0, $amount->getRemaining());
     }
+
+    /**
+     * Verify payout can be performed for sepa direct debit payment type.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function payoutCanBeCalledForSepaDirectDebitType()
+    {
+        $sepa = new SepaDirectDebit('DE89370400440532013000');
+        $this->heidelpay->createPaymentType($sepa);
+        $payout = $sepa->payout(100.0, 'EUR', self::RETURN_URL);
+        $this->assertNotEmpty($payout->getId());
+        $this->assertNotEmpty($payout->getUniqueId());
+        $this->assertNotEmpty($payout->getShortId());
+
+        $payment = $payout->getPayment();
+        $this->assertInstanceOf(Payment::class, $payment);
+        $this->assertNotEmpty($payment->getId());
+        $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
+        $amount = $payment->getAmount();
+
+        $this->assertEquals(-100, $amount->getTotal());
+        $this->assertEquals(0, $amount->getCharged());
+        $this->assertEquals(0, $amount->getCanceled());
+        $this->assertEquals(0, $amount->getRemaining());
+    }
+    
 }
