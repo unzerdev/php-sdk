@@ -766,6 +766,27 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
+    //<editor-fold desc="Payout resource">
+
+    /**
+     * Retrieves an Payout resource via the API using the corresponding Payment.
+     * The Payout resource can not be fetched using its id since they are unique only within the Payment.
+     * A Payment can have zero or one Payouts.
+     *
+     * @param Payment|string $payment The Payment object or the id of a Payment object whose Payout to fetch.
+     *
+     * @return Payout The Payout object of the given Payment.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchPayout($payment): AbstractHeidelpayResource
+    {
+        return $this->resourceService->fetchPayout($payment);
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="Webhook resource">
 
     /**

@@ -26,13 +26,13 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 
 class Payout extends AbstractTransactionType
 {
-    /** @var float $amount */
+    /** @var float|null $amount */
     protected $amount;
 
-    /** @var string $currency */
+    /** @var string|null $currency */
     protected $currency;
 
-    /** @var string $returnUrl */
+    /** @var string|null $returnUrl */
     protected $returnUrl;
 
     /**
@@ -92,19 +92,19 @@ class Payout extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getReturnUrl(): string
+    public function getReturnUrl()
     {
         return $this->returnUrl;
     }
 
     /**
-     * @param string $returnUrl
+     * @param string|null $returnUrl
      *
      * @return Payout
      */
-    public function setReturnUrl(string $returnUrl): Payout
+    public function setReturnUrl($returnUrl): Payout
     {
         $this->returnUrl = $returnUrl;
         return $this;

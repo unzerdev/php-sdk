@@ -779,6 +779,9 @@ class Payment extends AbstractHeidelpayResource
                 case TransactionTypes::SHIPMENT:
                     $this->updateShipmentTransaction($transaction);
                     break;
+                case TransactionTypes::PAYOUT:
+                    $this->updatePayoutTransaction($transaction);
+                    break;
                 default:
                     // skip
                     break;
@@ -931,6 +934,26 @@ class Payment extends AbstractHeidelpayResource
             $this->addShipment($shipment);
         }
         $shipment->setAmount($transaction->amount);
+    }
+
+    /**
+     * This updates the local Payout object referenced by this Payment with the given Payout transaction from the
+     * Payment response.
+     *
+     * @param stdClass $transaction The transaction from the Payment response containing the Payout data.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    private function updatePayoutTransaction($transaction)
+    {
+        $payoutId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::PAYOUT);
+        $payout = $this->getPayout(true);
+        if (!$payout instanceof Payout) {
+            $payout = (new Payout())->setId($payoutId);
+            $this->setPayout($payout);
+        }
+        $payout->setAmount($transaction->amount);
     }
 
     //</editor-fold>

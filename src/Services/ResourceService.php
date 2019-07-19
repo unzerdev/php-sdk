@@ -58,6 +58,7 @@ use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Traits\CanRecur;
 use function is_string;
@@ -281,6 +282,29 @@ class ResourceService
         $resource->setFetchedAt(new DateTime('now'));
         $resource->handleResponse($response, $method);
         return $resource;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Payout resource">
+
+    /**
+     * Fetch an Payout object by its paymentId.
+     * Payout Ids are not global but specific to the payment.
+     * A Payment object can have zero to one payout.
+     *
+     * @param $payment
+     *
+     * @return Payout
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchPayout($payment): AbstractHeidelpayResource
+    {
+        /** @var Payment $paymentObject */
+        $paymentObject = $this->fetchPayment($payment);
+        return $this->fetch($paymentObject->getPayout(true));
     }
 
     //</editor-fold>
