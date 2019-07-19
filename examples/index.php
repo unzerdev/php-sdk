@@ -53,7 +53,7 @@ require_once __DIR__ . '/../../../autoload.php';
             <h2 class="ui header">
                 <i class="shopping cart icon"></i>
                 <span class="content">
-                    Payment Implentation Examples
+                    Payment Implementation Examples
                     <span class="sub header">Choose the Payment Type you want to evaluate ...</span>
                 </span>
             </h2>
@@ -62,7 +62,7 @@ require_once __DIR__ . '/../../../autoload.php';
                     <div class="content">
                         <div class="header">Card</div>
                         <div class="description">
-                            You can try authorize and charge transaction with or without 3Ds.
+                            You can try authorize, charge and payout transactions with or without 3Ds.
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='Card/';">
@@ -213,7 +213,7 @@ require_once __DIR__ . '/../../../autoload.php';
             <h2 class="ui header">
                 <i class="bolt icon"></i>
                 <span class="content">
-                    Webhook Implentation Examples
+                    Webhook Implementation Examples
                     <span class="sub header">Enable or disable webhooks ...</span>
                 </span>
             </h2>
