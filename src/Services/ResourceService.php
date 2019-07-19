@@ -161,6 +161,9 @@ class ResourceService
                 }
                 $resource = $heidelpay->fetchReversal($paymentId, $resourceId);
                 break;
+            case $resourceType === IdStrings::PAYOUT:
+                $resource = $heidelpay->fetchPayout(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
+                break;
             case $resourceType === IdStrings::PAYMENT:
                 $resource = $heidelpay->fetchPayment($resourceId);
                 break;

@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
+use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
@@ -128,6 +129,7 @@ class PayoutTest extends BasePaymentTest
      * Verify Payout transaction is fetched with Payment resource.
      *
      * @test
+     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws Exception
@@ -143,5 +145,24 @@ class PayoutTest extends BasePaymentTest
         $this->assertEquals(100, $payout->getAmount());
         $this->assertEquals('EUR', $payout->getCurrency());
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
+    }
+
+    /**
+     * Verify Payout can be fetched via url.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function payoutShouldBeFetchableViaItsUrl()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $payout = $card->payout(100.0, 'EUR', self::RETURN_URL);
+
+        $resourceSrv = new ResourceService($this->heidelpay);
+        $fetchedPayout = $resourceSrv->fetchResourceByUrl($payout->getUri());
+        $this->assertEquals($payout->expose(), $fetchedPayout->expose());
     }
 }
