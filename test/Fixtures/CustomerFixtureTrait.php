@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -24,8 +24,10 @@
  */
 namespace heidelpayPHP\test\Fixtures;
 
+use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 
 trait CustomerFixtureTrait
@@ -37,7 +39,7 @@ trait CustomerFixtureTrait
      */
     public function getMinimalCustomer(): Customer
     {
-        return new Customer('Max', 'Mustermann');
+        return CustomerFactory::createCustomer('Max', 'Mustermann');
     }
 
     /**
@@ -47,9 +49,7 @@ trait CustomerFixtureTrait
      */
     public function getMaximumCustomer(): Customer
     {
-        return (new Customer())
-            ->setFirstname('Peter')
-            ->setLastname('Universum')
+        return CustomerFactory::createCustomer('Peter', 'Universum')
             ->setSalutation(Salutations::MR)
             ->setCompany('heidelpay GmbH')
             ->setBirthDate('1989-12-24')
@@ -68,6 +68,64 @@ trait CustomerFixtureTrait
     public function getMaximumCustomerInclShippingAddress(): Customer
     {
         return $this->getMaximumCustomer()->setShippingAddress($this->getShippingAddress());
+    }
+
+    /**
+     * Creates a not registered B2B customer object
+     *
+     * @return Customer
+     */
+    public function getMinimalNotRegisteredB2bCustomer(): Customer
+    {
+        return CustomerFactory::createNotRegisteredB2bCustomer(
+            'Max',
+            'Mustermann',
+            '2001-12-12',
+            $this->getBillingAddress(),
+            'test@test.de',
+            'heidelpay GmbH',
+            CompanyCommercialSectorItems::WAREHOUSING_AND_SUPPORT_ACTIVITIES_FOR_TRANSPORTATION
+        );
+    }
+
+    /**
+     * Creates a not registered B2B customer object
+     *
+     * @return Customer
+     */
+    public function getMaximalNotRegisteredB2bCustomer(): Customer
+    {
+        return $this->getMinimalNotRegisteredB2bCustomer()
+            ->setShippingAddress($this->getShippingAddress())
+            ->setSalutation(Salutations::MR)
+            ->setMobile('+49172123456')
+            ->setPhone('+4962216471100')
+            ->setBillingAddress($this->getBillingAddress());
+    }
+
+    /**
+     * Creates a registered B2B customer object
+     *
+     * @return Customer
+     */
+    public function getMinimalRegisteredB2bCustomer(): Customer
+    {
+        return CustomerFactory::createRegisteredB2bCustomer($this->getBillingAddress(), '123456789', 'heidelpay GmbH');
+    }
+
+    /**
+     * Creates a registered B2B customer object
+     *
+     * @return Customer
+     */
+    public function getMaximalRegisteredB2bCustomer(): Customer
+    {
+        return $this->getMinimalRegisteredB2bCustomer()
+            ->setShippingAddress($this->getShippingAddress())
+            ->setSalutation(Salutations::MR)
+            ->setMobile('+49172123456')
+            ->setPhone('+4962216471100')
+            ->setBillingAddress($this->getBillingAddress());
     }
 
     /**

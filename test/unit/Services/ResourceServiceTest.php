@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -33,6 +33,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -564,27 +565,25 @@ class ResourceServiceTest extends BaseUnitTest
      */
     public function createOrUpdateCustomerShouldFetchAndUpdateCustomerIfItAlreadyExists()
     {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createCustomer', 'fetchCustomerByExtCustomerId', 'updateCustomer'])->getMock();
+
+        // provide new data for an existing customer
         $customer = (new Customer())->setCustomerId('externalCustomerId')->setEmail('customer@email.de');
-        $fetchedCustomer = (new Customer('Max', 'Mustermann'))
-            ->setCustomerId('externalCustomerId')
-            ->setId('customerId');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
-            ->setMethods(['createCustomer', 'fetchCustomer', 'updateCustomer'])->getMock();
+        // this customer is fetched when realized a customer with the given customerId already exists
+        $fetchedCustomer = CustomerFactory::createCustomer('Max', 'Mustermann')->setCustomerId('externalCustomerId')->setId('customerId');
 
-        $resourceSrvMock->expects($this->once())->method('createCustomer')->with($customer)->willThrowException(
-            new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS)
-        );
-        $resourceSrvMock->expects($this->once())->method('fetchCustomer')
-            ->with($this->callback(
-                static function ($customerToFetch) use ($customer) {
-                    /** @var Customer $customerToFetch */
-                    return $customerToFetch !== $customer &&
-                       $customerToFetch->getId() === $customer->getId() &&
-                       $customerToFetch->getCustomerId() === $customer->getCustomerId();
+        // throw exception to indicate a customer with the given customerId already exists
+        $resourceSrvMock->expects($this->once())->method('createCustomer')->with($customer)->willThrowException(new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS));
+
+        // Expect the customer to be fetched by its customerId if it already exists and has to be updated.
+        $resourceSrvMock->expects($this->once())->method('fetchCustomerByExtCustomerId')->with($this->callback(
+                static function ($customerId) use ($customer) {
+                    return $customerId === $customer->getCustomerId();
                 }))->willReturn($fetchedCustomer);
-        $resourceSrvMock->expects($this->once())->method('updateCustomer')
-            ->with($this->callback(
+
+        // Expect the fetched customer is then updated with the new data.
+        $resourceSrvMock->expects($this->once())->method('updateCustomer')->with($this->callback(
                 static function ($customerToUpdate) use ($customer) {
                     /** @var Customer $customerToUpdate */
                     return $customerToUpdate === $customer &&
@@ -592,6 +591,7 @@ class ResourceServiceTest extends BaseUnitTest
                        $customerToUpdate->getEmail() === 'customer@email.de';
                 }));
 
+        // Make the call and assertions.
         /** @var ResourceService $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->createOrUpdateCustomer($customer);
         $this->assertSame($customer, $returnedCustomer);
@@ -748,7 +748,7 @@ class ResourceServiceTest extends BaseUnitTest
     {
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['delete', 'fetchCustomer'])
             ->disableOriginalConstructor()->getMock();
-        $customer       = new Customer('Max', 'Mustermann');
+        $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
         $resourceSrvMock->expects($this->once())->method('fetchCustomer')->with('myCustomerId')->willReturn($customer);
         $resourceSrvMock->expects($this->once())->method('delete')->with($customer);
 
