@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -30,6 +30,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Amount;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -253,7 +254,7 @@ class PaymentTest extends BaseUnitTest
     {
         $heidelpayObj = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpayObj);
-        $customer = (new Customer('Max', 'Mustermann'))->setId('myCustomer');
+        $customer = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('myCustomer');
         $payment->setCustomer($customer);
 
         $this->assertSame($customer, $payment->getCustomer());

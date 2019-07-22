@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -37,19 +37,15 @@ class InvoiceTest extends BasePaymentTest
      *
      * @test
      *
-     * @return Invoice
-     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function invoiceTypeShouldBeCreatable(): Invoice
+    public function invoiceTypeShouldBeCreatable()
     {
         /** @var Invoice $invoice */
         $invoice = $this->heidelpay->createPaymentType(new Invoice());
         $this->assertInstanceOf(Invoice::class, $invoice);
         $this->assertNotNull($invoice->getId());
-
-        return $invoice;
     }
 
     /**
@@ -57,14 +53,13 @@ class InvoiceTest extends BasePaymentTest
      *
      * @test
      *
-     * @param Invoice $invoice
-     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
-     * @depends invoiceTypeShouldBeCreatable
      */
-    public function verifyInvoiceIsNotAuthorizable(Invoice $invoice)
+    public function verifyInvoiceIsNotAuthorizable()
     {
+        /** @var Invoice $invoice */
+        $invoice = $this->heidelpay->createPaymentType(new Invoice());
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
@@ -72,21 +67,35 @@ class InvoiceTest extends BasePaymentTest
     }
 
     /**
+     * Verify invoice is chargeable.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function verifyInvoiceIsChargeable()
+    {
+        /** @var Invoice $invoice */
+        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $charge = $this->heidelpay->charge(20.0, 'EUR', $invoice, self::RETURN_URL);
+        $this->assertNotNull($charge);
+        $this->assertNotEmpty($charge->getId());
+    }
+
+    /**
      * Verify invoice is not shippable.
      *
      * @test
      *
-     * @param Invoice $invoice
-     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
-     * @depends invoiceTypeShouldBeCreatable
      */
-    public function verifyInvoiceIsNotShippable(Invoice $invoice)
+    public function verifyInvoiceIsNotShippable()
     {
+        /** @var Invoice $invoice */
+        $invoice = $this->heidelpay->createPaymentType(new Invoice());
         $charge = $invoice->charge(1.0, 'EUR', self::RETURN_URL);
-        $this->assertNotNull($charge);
-        $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getIban());
         $this->assertNotEmpty($charge->getBic());
         $this->assertNotEmpty($charge->getHolder());
@@ -105,14 +114,13 @@ class InvoiceTest extends BasePaymentTest
      *
      * @test
      *
-     * @param Invoice $invoice
-     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
-     * @depends invoiceTypeShouldBeCreatable
      */
-    public function verifyInvoiceChargeCanBeCanceled(Invoice $invoice)
+    public function verifyInvoiceChargeCanBeCanceled()
     {
+        /** @var Invoice $invoice */
+        $invoice = $this->heidelpay->createPaymentType(new Invoice());
         $charge = $invoice->charge(1.0, 'EUR', self::RETURN_URL);
         $cancellation = $charge->cancel();
         $this->assertNotNull($cancellation);
@@ -124,14 +132,13 @@ class InvoiceTest extends BasePaymentTest
      *
      * @test
      *
-     * @param Invoice $invoice
-     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
-     * @depends invoiceTypeShouldBeCreatable
      */
-    public function invoiceTypeCanBeFetched(Invoice $invoice)
+    public function invoiceTypeCanBeFetched()
     {
+        /** @var Invoice $invoice */
+        $invoice = $this->heidelpay->createPaymentType(new Invoice());
         $fetchedInvoice = $this->heidelpay->fetchPaymentType($invoice->getId());
         $this->assertInstanceOf(Invoice::class, $fetchedInvoice);
         $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -636,7 +636,7 @@ class ResourceService
             }
 
             // fetch Customer resource by customerId
-            $fetchedCustomer = $this->fetchCustomer((new Customer())->setCustomerId($customer->getCustomerId()));
+            $fetchedCustomer = $this->fetchCustomerByExtCustomerId($customer->getCustomerId());
 
             // update the existing customer with the data of the new customer
             $this->updateCustomer($customer->setId($fetchedCustomer->getId()));
