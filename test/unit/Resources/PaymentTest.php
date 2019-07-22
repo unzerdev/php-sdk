@@ -1171,7 +1171,7 @@ class PaymentTest extends BaseUnitTest
         $payment->addShipment($shipment);
 
         $shipmentResponse = new stdClass();
-        $shipmentResponse->url = 'https://api-url.test/payments/MyPaymentId/shipmentr/s-shp-1';
+        $shipmentResponse->url = 'https://api-url.test/payments/MyPaymentId/shipment/s-shp-1';
         $shipmentResponse->amount = '11.111';
         $shipmentResponse->type = 'shipment';
 
