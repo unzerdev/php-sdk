@@ -1480,6 +1480,11 @@ class ResourceServiceTest extends BaseUnitTest
                 'fetchBasket',
                 ['s-bsk-1254'],
                 'https://api.heidelpay.com/v1/baskets/s-bsk-1254/'
+            ],
+            'Payout' => [
+                'fetchPayout',
+                ['s-pay-100746'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100746/payout/s-out-1/'
             ]
         ];
     }
