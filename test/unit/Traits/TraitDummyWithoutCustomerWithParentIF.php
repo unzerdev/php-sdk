@@ -29,12 +29,14 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
+use heidelpayPHP\Traits\CanPayout;
 use RuntimeException;
 
 class TraitDummyWithoutCustomerWithParentIF implements HeidelpayParentInterface
 {
     use CanAuthorize;
     use CanDirectCharge;
+    use CanPayout;
 
     /**
      * Returns the heidelpay root object.

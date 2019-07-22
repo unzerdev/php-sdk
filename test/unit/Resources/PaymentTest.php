@@ -38,6 +38,7 @@ use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
@@ -70,6 +71,10 @@ class PaymentTest extends BaseUnitTest
         $authorize = new Authorization();
         $payment->setAuthorization($authorize);
         $this->assertSame($authorize, $payment->getAuthorization(true));
+
+        $payout = new Payout();
+        $payment->setPayout($payout);
+        $this->assertSame($payout, $payment->getPayout(true));
     }
 
     /**
@@ -240,6 +245,54 @@ class PaymentTest extends BaseUnitTest
         $this->assertSame($charge1, $payment->getChargeByIndex(0, true));
         $this->assertSame($charge2, $payment->getChargeByIndex(1, true));
         $this->assertNull($payment->getChargeByIndex(2));
+    }
+
+    /**
+     * Verify getPayout should try to fetch resource if lazy loading is off and the authorization is not null.
+     *
+     * @test
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function getPayoutShouldFetchPayoutIfNotLazyAndPayoutIsNotNull()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $payout = new Payout();
+        $payment->setPayout($payout);
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('getResource')->with($payout);
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->getPayout();
+    }
+
+    /**
+     * Verify getPayout should try to fetch resource if lazy loading is off and the payout is not null.
+     *
+     * @test
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function getPayoutShouldNotFetchPayoutIfNotLazyAndPayoutIsNull()
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->never())->method('getResource');
+
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($heidelpayObj);
+
+        $payment->getPayout();
     }
 
     /**
@@ -1102,7 +1155,7 @@ class PaymentTest extends BaseUnitTest
     }
 
     /**
-     * Verify handleResponse updates existing refunds from response.
+     * Verify handleResponse updates existing shipment from response.
      *
      * @test
      *
@@ -1117,13 +1170,13 @@ class PaymentTest extends BaseUnitTest
         $this->assertEquals('1.23', $shipment->getAmount());
         $payment->addShipment($shipment);
 
-        $cancellation = new stdClass();
-        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/shipment/s-shp-1';
-        $cancellation->amount = '11.111';
-        $cancellation->type = 'shipment';
+        $shipmentResponse = new stdClass();
+        $shipmentResponse->url = 'https://api-url.test/payments/MyPaymentId/shipmentr/s-shp-1';
+        $shipmentResponse->amount = '11.111';
+        $shipmentResponse->type = 'shipment';
 
         $response = new stdClass();
-        $response->transactions = [$cancellation];
+        $response->transactions = [$shipmentResponse];
         $payment->handleResponse($response);
 
         $fetchedShipment = $payment->getShipment('s-shp-1', true);
@@ -1133,7 +1186,7 @@ class PaymentTest extends BaseUnitTest
     }
 
     /**
-     * Verify handleResponse adds non existing refund from response.
+     * Verify handleResponse adds non existing shipment from response.
      *
      * @test
      *
@@ -1147,19 +1200,78 @@ class PaymentTest extends BaseUnitTest
         $this->assertNull($payment->getShipment('s-shp-1'));
         $this->assertCount(0, $payment->getShipments());
 
-        $cancellation = new stdClass();
-        $cancellation->url = 'https://api-url.test/payments/MyPaymentId/shipment/s-shp-1';
-        $cancellation->amount = '11.111';
-        $cancellation->type = 'shipment';
+        $shipment = new stdClass();
+        $shipment->url = 'https://api-url.test/payments/MyPaymentId/shipment/s-shp-1';
+        $shipment->amount = '11.111';
+        $shipment->type = 'shipment';
 
         $response = new stdClass();
-        $response->transactions = [$cancellation];
+        $response->transactions = [$shipment];
         $payment->handleResponse($response);
 
         $fetchedShipment = $payment->getShipment('s-shp-1', true);
         $this->assertInstanceOf(Shipment::class, $fetchedShipment);
         $this->assertEquals(11.111, $fetchedShipment->getAmount());
         $this->assertCount(1, $payment->getShipments());
+    }
+
+    /**
+     * Verify handleResponse updates existing payout from response.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldUpdatePayoutFromResponseIfItExists()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $payout = (new Payout())->setAmount('1.23')->setId('s-out-1');
+        $this->assertEquals('1.23', $payout->getAmount());
+        $payment->setPayout($payout);
+
+        $payoutResponse = new stdClass();
+        $payoutResponse->url = 'https://api-url.test/payments/MyPaymentId/payouts/s-out-1';
+        $payoutResponse->amount = '11.111';
+        $payoutResponse->type = 'payout';
+
+        $response = new stdClass();
+        $response->transactions = [$payoutResponse];
+        $payment->handleResponse($response);
+
+        $fetchedPayout = $payment->getPayout(true);
+        $this->assertInstanceOf(Payout::class, $fetchedPayout);
+        $this->assertSame($payout, $fetchedPayout);
+        $this->assertEquals(11.111, $fetchedPayout->getAmount());
+    }
+
+    /**
+     * Verify handleResponse adds non existing refund from response.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function handleResponseShouldAddPayoutFromResponseIfItDoesNotExists()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $this->assertNull($payment->getPayout('s-out-1'));
+
+        $payoutResponse = new stdClass();
+        $payoutResponse->url = 'https://api-url.test/payments/MyPaymentId/payouts/s-out-1';
+        $payoutResponse->amount = '11.111';
+        $payoutResponse->type = 'payout';
+
+        $response = new stdClass();
+        $response->transactions = [$payoutResponse];
+        $payment->handleResponse($response);
+
+        $fetchedPayout = $payment->getPayout(true);
+        $this->assertInstanceOf(Payout::class, $fetchedPayout);
+        $this->assertEquals(11.111, $fetchedPayout->getAmount());
     }
 
     //</editor-fold>

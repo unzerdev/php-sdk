@@ -50,6 +50,7 @@ use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\test\BaseUnitTest;
@@ -386,14 +387,9 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'EPS' => [new EPS(), 'parent/resource/path/types/eps/'],
             'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay/'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
-            'SepaDirectDebitGuaranteed' => [
-                new SepaDirectDebitGuaranteed(''),
-                'parent/resource/path/types/sepa-direct-debit-guaranteed/'
-            ],
+            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed/'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice/'],
-            'InvoiceGuaranteed' => [
-                new InvoiceGuaranteed(),                'parent/resource/path/types/invoice-guaranteed/'
-            ],
+            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types/invoice-guaranteed/'],
             'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels/'],
             'Authorization' => [new Authorization(), 'parent/resource/path/authorize/'],
             'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
@@ -402,7 +398,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Basket' => [new Basket(), 'parent/resource/path/baskets/'],
             'Webhook' => [new Webhook(), 'parent/resource/path/webhooks/'],
             'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/'],
-            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring/']
+            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring/'],
+            'Payout' => [new Payout(), 'parent/resource/path/payouts/'],
         ];
     }
 

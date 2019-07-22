@@ -27,9 +27,11 @@ namespace heidelpayPHP\test\unit\Traits;
 
 use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
 use heidelpayPHP\Traits\CanDirectChargeWithCustomer;
+use heidelpayPHP\Traits\CanPayoutWithCustomer;
 
 class TraitDummyWithCustomerWithoutParentIF
 {
     use CanAuthorizeWithCustomer;
     use CanDirectChargeWithCustomer;
+    use CanPayoutWithCustomer;
 }

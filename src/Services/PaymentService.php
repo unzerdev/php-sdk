@@ -334,12 +334,47 @@ class PaymentService
         $metadata = null,
         $basket = null
     ): AbstractTransactionType {
+        $payment = $this->createPayment($paymentType);
+        return $this->payoutWithPayment(
+            $amount,
+            $currency,
+            $payment,
+            $returnUrl,
+            $customer,
+            $orderId,
+            $metadata,
+            $basket);
+    }
+
+    /**
+     * Performs a Payout transaction and returns the resulting Payout resource.
+     *
+     * @param float                $amount    The amount to charge.
+     * @param string               $currency  The currency of the amount.
+     * @param Payment              $payment   The payment object associated with the payout.
+     * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null $customer  The customer associated with the payout.
+     * @param string|null          $orderId   A custom order id which can be set by the merchant.
+     * @param null                 $metadata
+     * @param null                 $basket
+     *
+     * @return Payout The resulting object of the Payout resource.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function payoutWithPayment(
+        $amount,
+        $currency,
+        Payment $payment,
+        $returnUrl,
+        $customer = null,
+        $orderId = null,
+        $metadata = null,
+        $basket = null
+    ): AbstractTransactionType {
         $payout = (new Payout($amount, $currency, $returnUrl))->setOrderId($orderId);
-        $this->createPayment($paymentType)
-            ->setPayout($payout)
-            ->setCustomer($customer)
-            ->setMetadata($metadata)
-            ->setBasket($basket);
+        $payment->setPayout($payout)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->resourceService->create($payout);
 
         return $payout;
