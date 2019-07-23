@@ -28,6 +28,7 @@ namespace heidelpayPHP\test\integration;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
@@ -45,7 +46,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function paymentShouldBeFetchableById()
     {
-        $authorize = $this->createAuthorization();
+        $authorize = $this->createPaypalAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorize->getPayment()->getId());
         $this->assertNotNull(Payment::class, $payment);
         $this->assertNotEmpty($payment->getId());
@@ -64,7 +65,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function fullChargeShouldBePossibleOnPaymentObject()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
 
         // pre-check to verify changes due to fullCharge call
@@ -90,7 +91,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function paymentShouldBeFetchableWithCharges()
     {
-        $authorize = $this->createAuthorization();
+        $authorize = $this->createCardAuthorization();
         $payment = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -120,7 +121,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function partialChargeAfterAuthorization()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
         $charge = $fetchedPayment->charge(10.0);
         $this->assertNotNull($charge);
@@ -138,7 +139,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function fullCancelOnAuthorizeShouldThrowExceptionIfAlreadyCanceled()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
         $cancel = $fetchedPayment->getAuthorization()->cancel();
         $this->assertNotNull($cancel);
@@ -160,7 +161,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function partialCancelOnAuthorizeShouldBePossible()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
         $this->assertAmounts($fetchedPayment, 100.0, 0, 100.0, 0);
 
@@ -214,17 +215,11 @@ class PaymentTest extends BasePaymentTest
      */
     public function authorizationShouldBePossibleOnHeidelpayObject()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-
-        $authorizationUsingHeidelpay = $this->heidelpay->authorize(
-            100.0,
-            'EUR',
-            $card,
-            self::RETURN_URL
-        );
-
-        $this->assertNotNull($authorizationUsingHeidelpay);
-        $this->assertNotEmpty($authorizationUsingHeidelpay->getId());
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL);
+        $this->assertNotNull($authorize);
+        $this->assertNotEmpty($authorize->getId());
     }
 
     /**
@@ -235,7 +230,7 @@ class PaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function paymentChargeShouldBePossibleUsingPaymentId()
+    public function paymentChargeOnAuthorizeShouldBePossibleUsingPaymentId()
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
@@ -271,15 +266,15 @@ class PaymentTest extends BasePaymentTest
     {
         $orderId = str_replace(' ', '', microtime());
 
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $paypal, 'http://heidelpay.com', null, $orderId, null, null, false);
         $this->assertNotEmpty($authorization);
 
-        $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
+        $paypal2 = $this->heidelpay->createPaymentType(new Paypal());
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ORDER_ID_ALREADY_IN_USE);
-        $this->heidelpay->authorize(101.00, 'EUR', $card2, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $this->heidelpay->authorize(101.00, 'EUR', $paypal2, 'http://heidelpay.com', null, $orderId, null, null, false);
     }
 
     /**
@@ -293,8 +288,8 @@ class PaymentTest extends BasePaymentTest
     public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet()
     {
         $orderId = str_replace(' ', '', microtime());
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $paypal, 'http://heidelpay.com', null, $orderId, null, null, false);
         $payment = $authorization->getPayment();
         $fetchedPayment = $this->heidelpay->fetchPaymentByOrderId($orderId);
 

@@ -30,6 +30,7 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
@@ -150,11 +151,28 @@ class BasePaymentTest extends TestCase
      * @throws RuntimeException
      * @throws HeidelpayApiException
      */
-    public function createAuthorization(): Authorization
+    public function createCardAuthorization(): Authorization
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
         $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
+        return $authorization;
+    }
+
+    /**
+     * Creates and returns an Authorization object with the API which can be used in test methods.
+     *
+     * @return Authorization
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function createPaypalAuthorization(): Authorization
+    {
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $orderId = microtime(true);
+        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
         return $authorization;
     }
 

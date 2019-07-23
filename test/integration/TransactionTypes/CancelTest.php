@@ -40,7 +40,7 @@ class CancelTest extends BasePaymentTest
      */
     public function reversalShouldBeFetchableViaHeidelpayObject()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
         $fetchedCancel = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
         $this->assertNotNull($fetchedCancel);
@@ -58,7 +58,7 @@ class CancelTest extends BasePaymentTest
      */
     public function reversalShouldBeFetchableViaPaymentObject()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
         $fetchedCancel = $cancel->getPayment()->getAuthorization()->getCancellation($cancel->getId());
         $this->assertNotNull($fetchedCancel);
@@ -113,7 +113,7 @@ class CancelTest extends BasePaymentTest
      */
     public function authorizationCancellationsShouldBeFetchableViaPaymentObject()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $reversal = $authorization->cancel();
         $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
