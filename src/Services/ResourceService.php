@@ -296,12 +296,13 @@ class ResourceService
      * Payout Ids are not global but specific to the payment.
      * A Payment object can have zero to one payout.
      *
-     * @param $payment
+     * @param Payment|string $payment The Payment object or the id of a Payment object whose Payout to fetch.
+     *                                There can only be one payout object to a payment.
      *
-     * @return Payout
+     * @return Payout The Payout object of the given Payment.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function fetchPayout($payment): AbstractHeidelpayResource
     {
