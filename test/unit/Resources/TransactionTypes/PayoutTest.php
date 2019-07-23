@@ -69,7 +69,7 @@ class PayoutTest extends BasePaymentTest
      * @throws RuntimeException
      * @throws HeidelpayApiException
      */
-    public function anPayoutShouldBeUpdatedThroughResponseHandling()
+    public function aPayoutShouldBeUpdatedThroughResponseHandling()
     {
         $payout = new Payout();
         $this->assertNull($payout->getAmount());
