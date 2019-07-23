@@ -70,10 +70,16 @@ try {
     // The 3D secured flag can be used to switch between 3ds and non-3ds.
     // If your merchant is only configured for one of those you can omit the flag.
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    if ($transactionType === 'charge') {
-        $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
-    } else {
-        $transaction = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+    switch ($transactionType) {
+        case 'charge':
+            $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+            break;
+        case 'payout':
+            $transaction = $heidelpay->payout(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+            break;
+        default:
+            $transaction = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+            break;
     }
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)

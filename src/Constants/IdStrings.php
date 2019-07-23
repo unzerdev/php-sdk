@@ -31,6 +31,7 @@ class IdStrings
     const AUTHORIZE = 'aut';
     const CANCEL = 'cnl';
     const SHIPMENT = 'shp';
+    const PAYOUT = 'out';
 
     // Payment Types
     const CARD = 'crd';

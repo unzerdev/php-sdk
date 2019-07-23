@@ -182,13 +182,13 @@ class HttpService
             throw new HeidelpayApiException('The Request returned a null response!');
         }
 
-        $responseArray = json_decode($response);
-        if ($responseCode >= 400 || isset($responseArray->errors)) {
+        $responseObject = json_decode($response, false);
+        if ($responseCode >= 400 || isset($responseObject->errors)) {
             $code            = null;
             $customerMessage = $code;
             $merchantMessage = $customerMessage;
-            if (isset($responseArray->errors[0])) {
-                $errors = $responseArray->errors[0];
+            if (isset($responseObject->errors[0])) {
+                $errors = $responseObject->errors[0];
                 $merchantMessage = $errors->merchantMessage ?? '';
                 $customerMessage = $errors->customerMessage ?? '';
                 $code = $errors->code ?? '';

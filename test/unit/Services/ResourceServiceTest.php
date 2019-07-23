@@ -58,6 +58,7 @@ use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\IdService;
@@ -325,11 +326,8 @@ class ResourceServiceTest extends BaseUnitTest
         $resourceMock = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         $resourceMock->expects($this->once())->method('handleResponse')->with($response);
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])
-            ->disableOriginalConstructor()->getMock();
-        $resourceSrvMock->expects($this->once())->method('send')
-            ->with($resourceMock, HttpAdapterInterface::REQUEST_GET)
-            ->willReturn($response);
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('send')->with($resourceMock, HttpAdapterInterface::REQUEST_GET)->willReturn($response);
 
         /**
          * @var AbstractHeidelpayResource $resourceMock
@@ -780,6 +778,30 @@ class ResourceServiceTest extends BaseUnitTest
         /** @var ResourceService $resourceSrvMock */
         $returnedAuthorize = $resourceSrvMock->fetchAuthorization($paymentMock);
         $this->assertSame($authorize, $returnedAuthorize);
+    }
+
+    /**
+     * Verify fetchPayout fetches payment object and returns its payout.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchPayoutShouldFetchPaymentAndReturnItsPayout()
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetch'])->disableOriginalConstructor()->getMock();
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getPayout'])->getMock();
+
+        $payout = (new Payout())->setId('s-out-1');
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->with($paymentMock)->willReturn($paymentMock);
+        $paymentMock->expects($this->once())->method('getPayout')->willReturn($payout);
+        $resourceSrvMock->expects($this->once())->method('fetch')->with($payout)->willReturn($payout);
+
+        /** @var ResourceService $resourceSrvMock */
+        $returnedPayout = $resourceSrvMock->fetchPayout($paymentMock);
+        $this->assertSame($payout, $returnedPayout);
     }
 
     /**
@@ -1480,6 +1502,11 @@ class ResourceServiceTest extends BaseUnitTest
                 'fetchBasket',
                 ['s-bsk-1254'],
                 'https://api.heidelpay.com/v1/baskets/s-bsk-1254/'
+            ],
+            'Payout' => [
+                'fetchPayout',
+                ['s-pay-100746'],
+                'https://api.heidelpay.com/v1/payments/s-pay-100746/payout/s-out-1/'
             ]
         ];
     }

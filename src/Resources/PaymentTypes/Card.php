@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
+use heidelpayPHP\Traits\CanPayout;
 use heidelpayPHP\Traits\CanRecur;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
@@ -34,6 +35,7 @@ class Card extends BasePaymentType
 {
     use CanDirectCharge;
     use CanAuthorize;
+    use CanPayout;
     use CanRecur;
 
     /**

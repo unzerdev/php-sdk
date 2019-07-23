@@ -31,4 +31,5 @@ class TransactionTypes
     const REVERSAL = 'cancel-authorize';
     const REFUND = 'cancel-charge';
     const SHIPMENT = 'shipment';
+    const PAYOUT = 'payout';
 }

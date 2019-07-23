@@ -5,11 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.5.0][1.1.5.0]
 
+### Added
+*   Add payout transaction for Card and Sepa direct debit (guaranteed) payment type.
+*   `Customer` objects can now be created via `CustomerFactory`.
+
 ### Fixed
 *   Links to documentation page.
-
-### Added
-*   `Customer` objects can now be created via `CustomerFactory`.
 
 ### Change
 *   Add deprecation notice for `Customer::__construct()` which is replaced by the `CustomerFactory`.

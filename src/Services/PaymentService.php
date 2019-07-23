@@ -36,6 +36,7 @@ use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use RuntimeException;
 
@@ -298,6 +299,85 @@ class PaymentService
         $payment->addCharge($charge);
         $this->resourceService->create($charge);
         return $charge;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Payout transactions">
+
+    /**
+     * Performs a Payout transaction and returns the resulting Payout resource.
+     *
+     * @param float                  $amount      The amount to charge.
+     * @param string                 $currency    The currency of the amount.
+     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
+     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId     A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
+     *                                            The Basket object will be created automatically if it does not exist
+     *                                            yet (i.e. has no id).
+     *
+     * @return Payout The resulting object of the Payout resource.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function payout(
+        $amount,
+        $currency,
+        $paymentType,
+        $returnUrl,
+        $customer = null,
+        $orderId = null,
+        $metadata = null,
+        $basket = null
+    ): AbstractTransactionType {
+        $payment = $this->createPayment($paymentType);
+        return $this->payoutWithPayment(
+            $amount,
+            $currency,
+            $payment,
+            $returnUrl,
+            $customer,
+            $orderId,
+            $metadata,
+            $basket);
+    }
+
+    /**
+     * Performs a Payout transaction and returns the resulting Payout resource.
+     *
+     * @param float                $amount    The amount to charge.
+     * @param string               $currency  The currency of the amount.
+     * @param Payment              $payment   The payment object associated with the payout.
+     * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null $customer  The customer associated with the payout.
+     * @param string|null          $orderId   A custom order id which can be set by the merchant.
+     * @param null                 $metadata
+     * @param null                 $basket
+     *
+     * @return Payout The resulting object of the Payout resource.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function payoutWithPayment(
+        $amount,
+        $currency,
+        Payment $payment,
+        $returnUrl,
+        $customer = null,
+        $orderId = null,
+        $metadata = null,
+        $basket = null
+    ): AbstractTransactionType {
+        $payout = (new Payout($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $payment->setPayout($payout)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
+        $this->resourceService->create($payout);
+
+        return $payout;
     }
 
     //</editor-fold>

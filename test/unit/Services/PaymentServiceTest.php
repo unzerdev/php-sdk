@@ -30,10 +30,12 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
@@ -88,25 +90,16 @@ class PaymentServiceTest extends BaseUnitTest
     public function authorizeShouldCreatePaymentAndCallAuthorizeWithPayment()
     {
         $paymentType = (new Sofort())->setId('typeId');
-        $customer = (new Customer())->setId('customerId');
-        $metadata = (new Metadata())->setId('metadataId');
+        $customer    = (new Customer())->setId('customerId');
+        $metadata    = (new Metadata())->setId('metadataId');
 
-        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->disableOriginalConstructor()
-            ->setMethods(['authorizeWithPayment'])->getMock();
+        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->disableOriginalConstructor()->setMethods(['authorizeWithPayment'])->getMock();
         $paymentSrvMock->expects($this->exactly(4))->method('authorizeWithPayment')
             ->withConsecutive(
                 [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url'],
                 [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer],
                 [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer, $metadata],
-                [
-                    1.23,
-                    'testCurrency',
-                    $this->isInstanceOf(Payment::class),
-                    'http://return.url',
-                    $customer,
-                    $metadata,
-                    'OrderId'
-                ]
+                [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer, $metadata, 'OrderId']
             );
 
         /** @var PaymentService $paymentSrvMock */
@@ -114,8 +107,7 @@ class PaymentServiceTest extends BaseUnitTest
         $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url');
         $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer);
         $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, $metadata);
-        $paymentSrvMock
-            ->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, $metadata, 'OrderId');
+        $paymentSrvMock->authorize(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, $metadata, 'OrderId');
     }
 
     /**
@@ -138,8 +130,7 @@ class PaymentServiceTest extends BaseUnitTest
         $heidelpay = new Heidelpay('s-priv-123');
         $payment = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with(
             $this->callback(
                 static function ($authorize) use ($customer, $payment, $metadata, $basket, $card3ds) {
@@ -514,6 +505,87 @@ class PaymentServiceTest extends BaseUnitTest
         $this->assertCount(1, $payment->getShipments());
         $this->assertInstanceOf(Shipment::class, $paymentSrv->ship('myPaymentId'));
         $this->assertCount(2, $payment->getShipments());
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Payout">
+
+    /**
+     * Verify payout method calls payout with payment.
+     *
+     * @test
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function payoutShouldCreatePaymentAndCallPayoutWithPayment()
+    {
+        $paymentType = (new SepaDirectDebit('1234'))->setId('typeId');
+        $customer    = (new Customer())->setId('customerId');
+        $metadata    = (new Metadata())->setId('metadataId');
+
+        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->disableOriginalConstructor()->setMethods(['payoutWithPayment'])->getMock();
+        $paymentSrvMock->expects($this->exactly(4))->method('payoutWithPayment')
+            ->withConsecutive(
+                [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url'],
+                [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer],
+                [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer, $metadata],
+                [1.23, 'testCurrency', $this->isInstanceOf(Payment::class), 'http://return.url', $customer, $metadata, 'OrderId']
+            );
+
+        /** @var PaymentService $paymentSrvMock */
+        $paymentSrvMock->setHeidelpay(new Heidelpay('s-priv-123'));
+        $paymentSrvMock->payout(1.23, 'testCurrency', $paymentType, 'http://return.url');
+        $paymentSrvMock->payout(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer);
+        $paymentSrvMock->payout(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, $metadata);
+        $paymentSrvMock->payout(1.23, 'testCurrency', $paymentType, 'http://return.url', $customer, $metadata, 'OrderId');
+    }
+
+    /**
+     * Verify payoutWithPayment calls create for a new payout using the passed values.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function payoutWithPaymentShouldCallCreateOnResourceServiceWithANewPayout()
+    {
+        // we provide some fake resources with ids to avoid them to be automatically created
+        $customer  = (new Customer())->setId('myCustomerId');
+        $basket    = (new Basket())->setId('myBasketId');
+        $metadata = (new Metadata())->setId('myMetadataId');
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
+
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')->with(
+            $this->callback(
+                static function ($payout) use ($customer, $payment, $basket, $metadata) {
+                    /** @var Payout $payout */
+                    $newPayment = $payout->getPayment();
+                    return $payout instanceof Payout &&
+                        $payout->getAmount() === 1.234 &&
+                        $payout->getCurrency() === 'myTestCurrency' &&
+                        $payout->getOrderId() === 'myOrderId' &&
+                        $payout->getReturnUrl() === 'myTestUrl' &&
+                        $newPayment instanceof Payment &&
+                        $newPayment === $payment &&
+                        $newPayment->getCustomer() === $customer &&
+                        $newPayment->getMetadata() === $metadata &
+                        $newPayment->getBasket() === $basket &&
+                        $newPayment->getPayout() === $payout;
+                }
+            )
+        );
+
+        /** @var ResourceService $resourceSrvMock */
+        $paymentSrv = (new PaymentService($heidelpay))->setResourceService($resourceSrvMock);
+        $returnedPayout = $paymentSrv->payoutWithPayment(1.234, 'myTestCurrency', $payment, 'myTestUrl', $customer, 'myOrderId', $metadata, $basket);
+        $this->assertSame($payment->getPayout(), $returnedPayout);
     }
 
     //</editor-fold>
