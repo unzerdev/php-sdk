@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -29,12 +29,14 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
+use heidelpayPHP\Traits\CanPayout;
 use RuntimeException;
 
 class TraitDummyWithoutCustomerWithParentIF implements HeidelpayParentInterface
 {
     use CanAuthorize;
     use CanDirectCharge;
+    use CanPayout;
 
     /**
      * Returns the heidelpay root object.

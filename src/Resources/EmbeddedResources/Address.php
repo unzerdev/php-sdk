@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -166,9 +166,10 @@ class Address extends AbstractHeidelpayResource
     //</editor-fold>
 
     //<editor-fold desc="Overridable Methods">
+
     public function expose(): stdClass
     {
-        return json_decode(json_encode(parent::expose(), JSON_FORCE_OBJECT));
+        return json_decode(json_encode(parent::expose(), JSON_FORCE_OBJECT), false);
     }
 
     //</editor-fold>

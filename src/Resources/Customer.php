@@ -2,7 +2,7 @@
 /**
  * This represents the customer resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -24,9 +24,12 @@
  */
 namespace heidelpayPHP\Resources;
 
+use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
 use function in_array;
+use stdClass;
 
 class Customer extends AbstractHeidelpayResource
 {
@@ -63,11 +66,16 @@ class Customer extends AbstractHeidelpayResource
     /** @var string $customerId */
     protected $customerId;
 
+    /** @var CompanyInfo $companyInfo */
+    protected $companyInfo;
+
     /**
      * Customer constructor.
      *
      * @param string|null $firstname
      * @param string|null $lastname
+     *
+     * @deprecated since Version 1.1.5.0 use CustomerFactory::createCustomer(...) in the future.
      */
     public function __construct(string $firstname = null, string $lastname = null)
     {
@@ -289,6 +297,25 @@ class Customer extends AbstractHeidelpayResource
         return $this;
     }
 
+    /**
+     * @return CompanyInfo|null
+     */
+    public function getCompanyInfo()
+    {
+        return $this->companyInfo;
+    }
+
+    /**
+     * @param CompanyInfo $companyInfo
+     *
+     * @return Customer
+     */
+    public function setCompanyInfo(CompanyInfo $companyInfo): Customer
+    {
+        $this->companyInfo = $companyInfo;
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Resource IF">
@@ -311,6 +338,18 @@ class Customer extends AbstractHeidelpayResource
     public function getExternalId()
     {
         return $this->getCustomerId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        if (isset($response->companyInfo) && $this->companyInfo === null) {
+            $this->companyInfo = new CompanyInfo();
+        }
+
+        parent::handleResponse($response, $method);
     }
 
     //</editor-fold>

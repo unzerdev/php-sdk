@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration
+ * @package  heidelpayPHP/test/integration/transaction_types
  */
-namespace heidelpayPHP\test\integration;
+namespace heidelpayPHP\test\integration\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
