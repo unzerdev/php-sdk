@@ -34,6 +34,7 @@ use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -91,6 +92,19 @@ class BasePaymentTest extends TestCase
         $this->assertEquals($expectedCharged, $amount->getCharged(), 'The charged amount does not match.');
         $this->assertEquals($expectedTotal, $amount->getTotal(), 'The total amount does not match.');
         $this->assertEquals($expectedCanceled, $amount->getCanceled(), 'The canceled amount does not match.');
+    }
+
+    /**
+     * @param mixed $transactionType
+     *
+     * @throws AssertionFailedError
+     */
+    public function assertTransactionResourceHasBeenCreated($transactionType)
+    {
+        $this->assertNotNull($transactionType);
+        $this->assertNotEmpty($transactionType->getId());
+        $this->assertNotEmpty($transactionType->getUniqueId());
+        $this->assertNotEmpty($transactionType->getShortId());
     }
 
     //</editor-fold>

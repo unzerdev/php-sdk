@@ -50,20 +50,14 @@ class PayoutTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $payout = $card->payout(100.0, 'EUR', self::RETURN_URL);
-        $this->assertNotEmpty($payout->getId());
-        $this->assertNotEmpty($payout->getUniqueId());
-        $this->assertNotEmpty($payout->getShortId());
+        $this->assertTransactionResourceHasBeenCreated($payout);
 
         $payment = $payout->getPayment();
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertNotEmpty($payment->getId());
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
-        $amount = $payment->getAmount();
 
-        $this->assertEquals(-100, $amount->getTotal());
-        $this->assertEquals(0, $amount->getCharged());
-        $this->assertEquals(0, $amount->getCanceled());
-        $this->assertEquals(0, $amount->getRemaining());
+        $this->assertAmounts($payment, 0, 0, -100, 0);
     }
 
     /**
@@ -79,20 +73,13 @@ class PayoutTest extends BasePaymentTest
         $sepa = new SepaDirectDebit('DE89370400440532013000');
         $this->heidelpay->createPaymentType($sepa);
         $payout = $sepa->payout(100.0, 'EUR', self::RETURN_URL);
-        $this->assertNotEmpty($payout->getId());
-        $this->assertNotEmpty($payout->getUniqueId());
-        $this->assertNotEmpty($payout->getShortId());
+        $this->assertTransactionResourceHasBeenCreated($payout);
 
         $payment = $payout->getPayment();
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertNotEmpty($payment->getId());
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
-        $amount = $payment->getAmount();
-
-        $this->assertEquals(-100, $amount->getTotal());
-        $this->assertEquals(0, $amount->getCharged());
-        $this->assertEquals(0, $amount->getCanceled());
-        $this->assertEquals(0, $amount->getRemaining());
+        $this->assertAmounts($payment, 0, 0, -100, 0);
     }
 
     /**
@@ -109,20 +96,13 @@ class PayoutTest extends BasePaymentTest
         $this->heidelpay->createPaymentType($sepa);
         $customer = $this->getMaximumCustomer()->setShippingAddress($this->getBillingAddress());
         $payout   = $sepa->payout(100.0, 'EUR', self::RETURN_URL, $customer);
-        $this->assertNotEmpty($payout->getId());
-        $this->assertNotEmpty($payout->getUniqueId());
-        $this->assertNotEmpty($payout->getShortId());
+        $this->assertTransactionResourceHasBeenCreated($payout);
 
         $payment = $payout->getPayment();
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertNotEmpty($payment->getId());
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
-        $amount = $payment->getAmount();
-
-        $this->assertEquals(-100, $amount->getTotal());
-        $this->assertEquals(0, $amount->getCharged());
-        $this->assertEquals(0, $amount->getCanceled());
-        $this->assertEquals(0, $amount->getRemaining());
+        $this->assertAmounts($payment, 0, 0, -100, 0);
     }
     
     /**
