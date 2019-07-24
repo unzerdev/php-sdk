@@ -31,6 +31,9 @@ use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpayPHP\Resources\Recurring;
+use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
@@ -105,6 +108,48 @@ class BasePaymentTest extends TestCase
         $this->assertNotEmpty($transactionType->getId());
         $this->assertNotEmpty($transactionType->getUniqueId());
         $this->assertNotEmpty($transactionType->getShortId());
+    }
+
+    /**
+     * Asserts whether the given transaction was successful.
+     *
+     * @param AbstractTransactionType $transaction
+     *
+     * @throws AssertionFailedError
+     */
+    protected function assertSuccess(AbstractTransactionType $transaction)
+    {
+        $this->assertTrue($transaction->isSuccess());
+        $this->assertFalse($transaction->isPending());
+        $this->assertFalse($transaction->isError());
+    }
+
+    /**
+     * Asserts whether the given transaction was a failure.
+     *
+     * @param AbstractTransactionType $transaction
+     *
+     * @throws AssertionFailedError
+     */
+    protected function assertError(AbstractTransactionType $transaction)
+    {
+        $this->assertFalse($transaction->isSuccess());
+        $this->assertFalse($transaction->isPending());
+        $this->assertTrue($transaction->isError());
+    }
+
+    /**
+     * Asserts whether the given transaction is pending.
+     *
+     * @param AbstractTransactionType|Recurring $transaction
+     *
+     * @throws AssertionFailedError
+     */
+    protected function assertPending($transaction)
+    {
+        $this->assertFalse($transaction->isSuccess());
+        $this->assertTrue($transaction->isPending());
+        $this->assertFalse($transaction->isError());
     }
 
     //</editor-fold>
@@ -200,8 +245,8 @@ class BasePaymentTest extends TestCase
      */
     public function createCharge(): Charge
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $card = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
     }
 
     /**

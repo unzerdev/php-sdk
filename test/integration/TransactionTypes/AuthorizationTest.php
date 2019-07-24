@@ -146,21 +146,18 @@ class AuthorizationTest extends BasePaymentTest
      * @dataProvider authorizeHasExpectedStatesDP
      *
      * @param BasePaymentType|AbstractHeidelpayResource $paymentType
-     * @param bool                                      $isSuccess
-     * @param bool                                      $isPending
-     * @param bool                                      $isError
+     * @param string                                    $expectedState The state the transaction is expected to be in.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function authorizeHasExpectedStates(BasePaymentType $paymentType, $isSuccess, $isPending, $isError)
+    public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState)
     {
         $paymentType = $this->heidelpay->createPaymentType($paymentType);
-        $authorize = $this->heidelpay
-            ->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
-        $this->assertEquals($isSuccess, $authorize->isSuccess());
-        $this->assertEquals($isPending, $authorize->isPending());
-        $this->assertEquals($isError, $authorize->isError());
+        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
+
+        $stateCheck = 'assert' . ucfirst($expectedState);
+        $this->$stateCheck($authorize);
     }
 
     /**
@@ -171,8 +168,8 @@ class AuthorizationTest extends BasePaymentTest
     public function authorizeHasExpectedStatesDP(): array
     {
         return [
-            'card' => [$this->createCardObject(), true, false, false],
-            'paypal' => [new Paypal(), false, true, false]
+            'card' => [$this->createCardObject(), 'success'],
+            'paypal' => [new Paypal(), 'pending']
         ];
     }
 }

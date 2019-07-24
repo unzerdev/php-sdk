@@ -51,12 +51,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
 
         /** @var SepaDirectDebitGuaranteed $fetchedDirectDebitGuaranteed */
         $fetchedDirectDebitGuaranteed = $this->heidelpay->fetchPaymentType($directDebitGuaranteed->getId());
-        $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $fetchedDirectDebitGuaranteed);
-        $this->assertEquals($directDebitGuaranteed->getId(), $fetchedDirectDebitGuaranteed->getId());
-        $this->assertEquals(
-            $this->maskNumber($directDebitGuaranteed->getIban()),
-            $fetchedDirectDebitGuaranteed->getIban()
-        );
+        $this->assertEquals($directDebitGuaranteed->expose(), $fetchedDirectDebitGuaranteed->expose());
     }
 
     /**
@@ -72,23 +67,14 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
         /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
-        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))
-            ->setHolder('John Doe')
-            ->setBic('COBADEFFXXX');
+        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setHolder('John Doe')->setBic('COBADEFFXXX');
         $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
         $this->assertNotNull($directDebitGuaranteed->getId());
 
         /** @var SepaDirectDebitGuaranteed $fetchedDirectDebitGuaranteed */
         $fetchedDirectDebitGuaranteed = $this->heidelpay->fetchPaymentType($directDebitGuaranteed->getId());
-        $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $fetchedDirectDebitGuaranteed);
-        $this->assertEquals($directDebitGuaranteed->getId(), $fetchedDirectDebitGuaranteed->getId());
-        $this->assertEquals($directDebitGuaranteed->getHolder(), $fetchedDirectDebitGuaranteed->getHolder());
-        $this->assertEquals($directDebitGuaranteed->getBic(), $fetchedDirectDebitGuaranteed->getBic());
-        $this->assertEquals(
-            $this->maskNumber($directDebitGuaranteed->getIban()),
-            $fetchedDirectDebitGuaranteed->getIban()
-        );
+        $this->assertEquals($directDebitGuaranteed->expose(), $fetchedDirectDebitGuaranteed->expose());
 
         return $fetchedDirectDebitGuaranteed;
     }
@@ -125,14 +111,9 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
         $this->heidelpay->createPaymentType($directDebitGuaranteed);
 
-        $charge = $directDebitGuaranteed->charge(
-            100.0,
-            'EUR',
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
-        $this->assertNotNull($charge);
-        $this->assertNotNull($charge->getId());
+        $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge   = $directDebitGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
+        $this->assertTransactionResourceHasBeenCreated($charge);
     }
 
     /**
@@ -151,11 +132,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
 
-        $directDebitGuaranteed->charge(
-            100.0,
-            'EUR',
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
-        );
+        $customer = $this->getMaximumCustomerInclShippingAddress();
+        $directDebitGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
     }
 }
