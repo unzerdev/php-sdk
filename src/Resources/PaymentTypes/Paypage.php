@@ -42,6 +42,27 @@ class Paypage extends BasePaymentType
     /** @var string $returnUrl*/
     protected $returnUrl;
 
+    /** @var string $logoImage */
+    protected $logoImage;
+
+    /** @var string $fullPageImage */
+    protected $fullPageImage;
+
+    /** @var string $shopName */
+    protected $shopName;
+
+    /** @var string $shopDescription */
+    protected $shopDescription;
+
+    /** @var string $tagline */
+    protected $tagline;
+
+    /** @var string $orderId */
+    protected $orderId;
+
+    /** @var string $termsAndConditionUrl */
+    protected $termsAndConditionUrl;
+
     /**
      * Paypage constructor.
      *
@@ -112,6 +133,132 @@ class Paypage extends BasePaymentType
     public function setReturnUrl(string $returnUrl): Paypage
     {
         $this->returnUrl = $returnUrl;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogoImage(): string
+    {
+        return $this->logoImage;
+    }
+
+    /**
+     * @param string $logoImage
+     * @return Paypage
+     */
+    public function setLogoImage(string $logoImage): Paypage
+    {
+        $this->logoImage = $logoImage;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullPageImage(): string
+    {
+        return $this->fullPageImage;
+    }
+
+    /**
+     * @param string $fullPageImage
+     * @return Paypage
+     */
+    public function setFullPageImage(string $fullPageImage): Paypage
+    {
+        $this->fullPageImage = $fullPageImage;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShopName(): string
+    {
+        return $this->shopName;
+    }
+
+    /**
+     * @param string $shopName
+     * @return Paypage
+     */
+    public function setShopName(string $shopName): Paypage
+    {
+        $this->shopName = $shopName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShopDescription(): string
+    {
+        return $this->shopDescription;
+    }
+
+    /**
+     * @param string $shopDescription
+     * @return Paypage
+     */
+    public function setShopDescription(string $shopDescription): Paypage
+    {
+        $this->shopDescription = $shopDescription;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTagline(): string
+    {
+        return $this->tagline;
+    }
+
+    /**
+     * @param string $tagline
+     * @return Paypage
+     */
+    public function setTagline(string $tagline): Paypage
+    {
+        $this->tagline = $tagline;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderId(): string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param string $orderId
+     * @return Paypage
+     */
+    public function setOrderId(string $orderId): Paypage
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTermsAndConditionUrl(): string
+    {
+        return $this->termsAndConditionUrl;
+    }
+
+    /**
+     * @param string $termsAndConditionUrl
+     * @return Paypage
+     */
+    public function setTermsAndConditionUrl(string $termsAndConditionUrl): Paypage
+    {
+        $this->termsAndConditionUrl = $termsAndConditionUrl;
         return $this;
     }
 
