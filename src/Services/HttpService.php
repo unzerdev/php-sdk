@@ -213,7 +213,10 @@ class HttpService
         if (in_array($httpMethod, $writingOperations, true)) {
             $heidelpayObj->debugLog('Request: ' . $payload);
         }
-        $heidelpayObj->debugLog('Response: (' . $responseCode . ') ' . json_encode(json_decode($response)));
+        $heidelpayObj->debugLog(
+            'Response: (' . $responseCode . ') ' .
+            json_encode(json_decode($response, false), JSON_UNESCAPED_SLASHES)
+        );
     }
 
     /**
