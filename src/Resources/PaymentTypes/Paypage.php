@@ -25,13 +25,19 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
+use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
+use heidelpayPHP\Traits\HasInvoiceId;
+use heidelpayPHP\Traits\HasOrderId;
+use stdClass;
 
 class Paypage extends BasePaymentType
 {
     use CanDirectCharge;
     use CanAuthorize;
+    use HasInvoiceId;
+    use HasOrderId;
 
     /** @var float $amount */
     protected $amount;
@@ -57,11 +63,20 @@ class Paypage extends BasePaymentType
     /** @var string $tagline */
     protected $tagline;
 
-    /** @var string $orderId */
-    protected $orderId;
-
     /** @var string $termsAndConditionUrl */
     protected $termsAndConditionUrl;
+
+    /** @var string $privacyPolicyUrl */
+    protected $privacyPolicyUrl;
+
+    /** @var string $imprintUrl */
+    protected $imprintUrl;
+
+    /** @var string $helpUrl */
+    protected $helpUrl;
+
+    /** @var string $contactUrl */
+    protected $contactUrl;
 
     /**
      * Paypage constructor.
@@ -146,6 +161,7 @@ class Paypage extends BasePaymentType
 
     /**
      * @param string $logoImage
+     *
      * @return Paypage
      */
     public function setLogoImage(string $logoImage): Paypage
@@ -164,6 +180,7 @@ class Paypage extends BasePaymentType
 
     /**
      * @param string $fullPageImage
+     *
      * @return Paypage
      */
     public function setFullPageImage(string $fullPageImage): Paypage
@@ -182,6 +199,7 @@ class Paypage extends BasePaymentType
 
     /**
      * @param string $shopName
+     *
      * @return Paypage
      */
     public function setShopName(string $shopName): Paypage
@@ -200,6 +218,7 @@ class Paypage extends BasePaymentType
 
     /**
      * @param string $shopDescription
+     *
      * @return Paypage
      */
     public function setShopDescription(string $shopDescription): Paypage
@@ -218,29 +237,12 @@ class Paypage extends BasePaymentType
 
     /**
      * @param string $tagline
+     *
      * @return Paypage
      */
     public function setTagline(string $tagline): Paypage
     {
         $this->tagline = $tagline;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOrderId(): string
-    {
-        return $this->orderId;
-    }
-
-    /**
-     * @param string $orderId
-     * @return Paypage
-     */
-    public function setOrderId(string $orderId): Paypage
-    {
-        $this->orderId = $orderId;
         return $this;
     }
 
@@ -254,6 +256,7 @@ class Paypage extends BasePaymentType
 
     /**
      * @param string $termsAndConditionUrl
+     *
      * @return Paypage
      */
     public function setTermsAndConditionUrl(string $termsAndConditionUrl): Paypage
@@ -262,13 +265,122 @@ class Paypage extends BasePaymentType
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getPrivacyPolicyUrl(): string
+    {
+        return $this->privacyPolicyUrl;
+    }
+
+    /**
+     * @param string $privacyPolicyUrl
+     *
+     * @return Paypage
+     */
+    public function setPrivacyPolicyUrl(string $privacyPolicyUrl): Paypage
+    {
+        $this->privacyPolicyUrl = $privacyPolicyUrl;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImprintUrl(): string
+    {
+        return $this->imprintUrl;
+    }
+
+    /**
+     * @param string $imprintUrl
+     *
+     * @return Paypage
+     */
+    public function setImprintUrl(string $imprintUrl): Paypage
+    {
+        $this->imprintUrl = $imprintUrl;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelpUrl(): string
+    {
+        return $this->helpUrl;
+    }
+
+    /**
+     * @param string $helpUrl
+     *
+     * @return Paypage
+     */
+    public function setHelpUrl(string $helpUrl): Paypage
+    {
+        $this->helpUrl = $helpUrl;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactUrl(): string
+    {
+        return $this->contactUrl;
+    }
+
+    /**
+     * @param string $contactUrl
+     *
+     * @return Paypage
+     */
+    public function setContactUrl(string $contactUrl): Paypage
+    {
+        $this->contactUrl = $contactUrl;
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
 
+    /**
+     * {@inheritDoc}
+     * Change resource path.
+     */
     protected function getResourcePath(): string
     {
         return 'paypage/charge/';
+    }
+
+    /**
+     * {@inheritDoc}
+     * Map external name of property to internal name of property.
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        if (isset($response->impressumUrl)) {
+            $response->imprintUrl = $response->impressumUrl;
+            unset($response->impressumUrl);
+        }
+
+        parent::handleResponse($response, $method);
+    }
+
+    /**
+     * {@inheritDoc}
+     * Map external name of property to internal name of property.
+     */
+    public function expose()
+    {
+        $exposeArray = parent::expose();
+        if (isset($exposeArray['imprintUrl'])) {
+            $exposeArray['impressumUrl'] = $exposeArray['imprintUrl'];
+            unset($exposeArray['imprintUrl']);
+        }
+
+        return $exposeArray;
     }
 
     //</editor-fold>

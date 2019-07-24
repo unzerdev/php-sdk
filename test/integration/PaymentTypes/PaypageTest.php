@@ -60,14 +60,21 @@ class PaypageTest extends BasePaymentTest
      */
     public function maximumPaypageShouldBeCreatableAndFetchable()
     {
+        $orderId = $this->generateRandomId();
+        $invoiceId = $this->generateRandomId();
         $paypage = (new Paypage(100.0, 'EUR', self::RETURN_URL))
             ->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
             ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')
             ->setShopName('My Test Shop')
             ->setShopDescription('Best shop in the whole world!')
             ->setTagline('Try and stop us from being awesome!')
-            ->setOrderId($this->generateRandomId())
-            ->setTermsAndConditionUrl('https://www.heidelpay.com/en/');
+            ->setOrderId($orderId)
+            ->setTermsAndConditionUrl('https://www.heidelpay.com/en/')
+            ->setPrivacyPolicyUrl('https://www.heidelpay.com/de/')
+            ->setImprintUrl('https://www.heidelpay.com/it/')
+            ->setHelpUrl('https://www.heidelpay.com/at/')
+            ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
+            ->setInvoiceId($invoiceId);
         $this->assertEmpty($paypage->getId());
         $paypage = $this->heidelpay->createPaymentType($paypage);
         $this->assertNotEmpty($paypage->getId());
