@@ -16,20 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration
+ * @package  heidelpayPHP/test/integration/transaction_types
  */
-namespace heidelpayPHP\test\integration;
+namespace heidelpayPHP\test\integration\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
@@ -45,12 +45,9 @@ class ChargeTest extends BasePaymentTest
      */
     public function chargeShouldWorkWithTypeId()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0, 'EUR', $card->getId(), self::RETURN_URL);
-        $this->assertInstanceOf(Charge::class, $charge);
-        $this->assertNotEmpty($charge->getId());
-        $this->assertNotEmpty($charge->getUniqueId());
-        $this->assertNotEmpty($charge->getShortId());
+        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->heidelpay->charge(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
+        $this->assertTransactionResourceHasBeenCreated($charge);
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
         $this->assertNotEmpty($charge->getPayment()->getId());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
@@ -66,10 +63,9 @@ class ChargeTest extends BasePaymentTest
      */
     public function chargeShouldWorkWithTypeObject()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
-        $this->assertInstanceOf(Charge::class, $charge);
-        $this->assertNotEmpty($charge->getId());
+        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->heidelpay->charge(100.0, 'EUR', $paymentType, self::RETURN_URL);
+        $this->assertTransactionResourceHasBeenCreated($charge);
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
         $this->assertNotEmpty($charge->getPayment()->getId());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
@@ -85,11 +81,7 @@ class ChargeTest extends BasePaymentTest
      */
     public function chargeStatusIsSetCorrectly()
     {
-        $charge = $this->createCharge();
-
-        $this->assertTrue($charge->isSuccess());
-        $this->assertFalse($charge->isPending());
-        $this->assertFalse($charge->isError());
+        $this->assertSuccess($this->createCharge());
     }
 
     /**
@@ -102,8 +94,9 @@ class ChargeTest extends BasePaymentTest
      */
     public function chargeShouldAcceptAllParameters()
     {
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        // prepare test data
+        /** @var Card $paymentType */
+        $paymentType = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
         $orderId = $this->generateRandomId();
         $metadata = new Metadata();
@@ -111,10 +104,23 @@ class ChargeTest extends BasePaymentTest
         $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
 
-        $charge = $card->charge(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
-        $payment = $charge->getPayment();
+        // perform request
+        $charge = $paymentType->charge(
+            100.0,
+            'EUR',
+            self::RETURN_URL,
+            $customer,
+            $orderId,
+            $metadata,
+            $basket,
+            true,
+            $invoiceId,
+            $paymentReference
+        );
 
-        $this->assertSame($card, $payment->getPaymentType());
+        // verify the data sent and received match
+        $payment = $charge->getPayment();
+        $this->assertSame($paymentType, $payment->getPaymentType());
         $this->assertEquals(100.0, $charge->getAmount());
         $this->assertEquals('EUR', $charge->getCurrency());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
@@ -126,20 +132,16 @@ class ChargeTest extends BasePaymentTest
         $this->assertEquals($invoiceId, $charge->getInvoiceId());
         $this->assertEquals($paymentReference, $charge->getPaymentReference());
 
+        // fetch the charge
         $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPaymentId(), $charge->getId());
-        $fetchedPayment = $fetchedCharge->getPayment();
 
+        // verify the fetched transaction matches the initial transaction
+        $this->assertEquals($charge->expose(), $fetchedCharge->expose());
+        $fetchedPayment = $fetchedCharge->getPayment();
         $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());
-        $this->assertEquals($charge->getAmount(), $fetchedCharge->getAmount());
-        $this->assertEquals($charge->getCurrency(), $fetchedCharge->getCurrency());
-        $this->assertEquals($charge->getReturnUrl(), $fetchedCharge->getReturnUrl());
         $this->assertEquals($payment->getCustomer()->expose(), $fetchedPayment->getCustomer()->expose());
-        $this->assertEquals($charge->getOrderId(), $fetchedCharge->getOrderId());
         $this->assertEquals($payment->getMetadata()->expose(), $fetchedPayment->getMetadata()->expose());
         $this->assertEquals($payment->getBasket()->expose(), $fetchedPayment->getBasket()->expose());
-        $this->assertEquals($charge->isCard3ds(), $fetchedCharge->isCard3ds());
-        $this->assertEquals($charge->getInvoiceId(), $fetchedCharge->getInvoiceId());
-        $this->assertEquals($charge->getPaymentReference(), $fetchedCharge->getPaymentReference());
     }
 
     /**
@@ -152,6 +154,7 @@ class ChargeTest extends BasePaymentTest
      */
     public function chargeWithCustomerShouldAcceptAllParameters()
     {
+        // prepare test data
         /** @var InvoiceGuaranteed $ivg */
         $ivg = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomer();
@@ -162,9 +165,22 @@ class ChargeTest extends BasePaymentTest
         $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
 
-        $charge = $ivg->charge(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, null, $invoiceId, $paymentReference);
-        $payment = $charge->getPayment();
+        // perform request
+        $charge = $ivg->charge(
+            100.0,
+            'EUR',
+            self::RETURN_URL,
+            $customer,
+            $orderId,
+            $metadata,
+            $basket,
+            null,
+            $invoiceId,
+            $paymentReference
+        );
 
+        // verify the data sent and received match
+        $payment = $charge->getPayment();
         $this->assertSame($ivg, $payment->getPaymentType());
         $this->assertEquals(100.0, $charge->getAmount());
         $this->assertEquals('EUR', $charge->getCurrency());

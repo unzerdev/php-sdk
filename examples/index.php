@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -62,7 +62,7 @@ require_once __DIR__ . '/../../../autoload.php';
                     <div class="content">
                         <div class="header">Card</div>
                         <div class="description">
-                            You can try authorize and charge transaction with or without 3Ds.
+                            You can try authorize, charge and payout transactions with or without 3Ds.
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='Card/';">

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -28,7 +28,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
@@ -178,9 +178,9 @@ class BasketTest extends BasePaymentTest
         $this->heidelpay->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $card->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorize = $paypal->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
 
         $fetchedPayment = $this->heidelpay->fetchPayment($authorize->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
@@ -226,9 +226,9 @@ class BasketTest extends BasePaymentTest
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $card->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorize = $paypal->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
         $this->assertNotEmpty($basket->getId());
 
         $fetchedPayment = $this->heidelpay->fetchPayment($authorize->getPaymentId());
@@ -253,9 +253,9 @@ class BasketTest extends BasePaymentTest
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $card->charge(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $charge = $paypal->charge(10.0, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
         $this->assertNotEmpty($basket->getId());
 
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());

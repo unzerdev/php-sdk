@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -25,12 +25,16 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use DateTime;
+use heidelpayPHP\Constants\CompanyCommercialSectorItems;
+use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -46,6 +50,7 @@ use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\test\BaseUnitTest;
@@ -215,12 +220,20 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             ->setZip('69115')
             ->setStreet('Musterstrasse 15');
 
+        $info = (new CompanyInfo())
+            ->setRegistrationType(CompanyRegistrationTypes::REGISTRATION_TYPE_NOT_REGISTERED)
+            ->setCommercialRegisterNumber('0987654321')
+            ->setFunction('CEO')
+            ->setCommercialSector(CompanyCommercialSectorItems::AIR_TRANSPORT);
+
         $testResponse                 = new stdClass();
-        $testResponse->billingAddress = json_decode($address->jsonSerialize());
+        $testResponse->billingAddress = json_decode($address->jsonSerialize(), false);
+        $testResponse->companyInfo    = json_decode($info->jsonSerialize(), false);
 
         /** @var Customer $customer */
         $customer = new Customer();
         $customer->handleResponse($testResponse);
+
         $billingAddress = $customer->getBillingAddress();
         $this->assertEquals('DE-BW', $billingAddress->getState());
         $this->assertEquals('DE', $billingAddress->getCountry());
@@ -228,6 +241,12 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $this->assertEquals('Heidelberg', $billingAddress->getCity());
         $this->assertEquals('69115', $billingAddress->getZip());
         $this->assertEquals('Musterstrasse 15', $billingAddress->getStreet());
+
+        $companyInfo = $customer->getCompanyInfo();
+        $this->assertEquals(CompanyRegistrationTypes::REGISTRATION_TYPE_NOT_REGISTERED, $companyInfo->getRegistrationType());
+        $this->assertEquals('0987654321', $companyInfo->getCommercialRegisterNumber());
+        $this->assertEquals('CEO', $companyInfo->getFunction());
+        $this->assertEquals(CompanyCommercialSectorItems::AIR_TRANSPORT, $companyInfo->getCommercialSector());
     }
 
     /**
@@ -247,7 +266,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $testResponse->processing = $processing;
 
         /** @var Customer $customer */
-        $customer = (new Customer())->setCustomerId('customerId')->setFirstname('firstName')->setLastname('lastName');
+        $customer = CustomerFactory::createCustomer('firstName', 'lastName')->setCustomerId('customerId');
         $this->assertEquals('customerId', $customer->getCustomerId());
         $this->assertEquals('firstName', $customer->getFirstname());
         $this->assertEquals('lastName', $customer->getLastname());
@@ -325,7 +344,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function idsOfLinkedResourcesShouldBeAddedOnExpose()
     {
-        $customer = new Customer('Max', ' Mustermann');
+        $customer = CustomerFactory::createCustomer('Max', ' Mustermann');
         $customer->setId('MyTestId');
         $dummy      = new DummyHeidelpayResource($customer);
         $dummyArray = $dummy->expose();
@@ -342,7 +361,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function getExternalIdShouldReturnNullIfItIsNotImplementedInTheExtendingClass()
     {
-        $customer = new Customer('Max', ' Mustermann');
+        $customer = CustomerFactory::createCustomer('Max', ' Mustermann');
         $customer->setId('MyTestId');
         $dummy = new DummyHeidelPayResource($customer);
         $this->assertNull($dummy->getExternalId());
@@ -368,14 +387,9 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'EPS' => [new EPS(), 'parent/resource/path/types/eps/'],
             'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay/'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
-            'SepaDirectDebitGuaranteed' => [
-                new SepaDirectDebitGuaranteed(''),
-                'parent/resource/path/types/sepa-direct-debit-guaranteed/'
-            ],
+            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed/'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice/'],
-            'InvoiceGuaranteed' => [
-                new InvoiceGuaranteed(),                'parent/resource/path/types/invoice-guaranteed/'
-            ],
+            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types/invoice-guaranteed/'],
             'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels/'],
             'Authorization' => [new Authorization(), 'parent/resource/path/authorize/'],
             'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
@@ -384,7 +398,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Basket' => [new Basket(), 'parent/resource/path/baskets/'],
             'Webhook' => [new Webhook(), 'parent/resource/path/webhooks/'],
             'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/'],
-            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring/']
+            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring/'],
+            'Payout' => [new Payout(), 'parent/resource/path/payouts/'],
         ];
     }
 

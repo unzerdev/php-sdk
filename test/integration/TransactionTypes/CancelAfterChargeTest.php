@@ -16,15 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration
+ * @package  heidelpayPHP/test/integration/transaction_types
  */
-namespace heidelpayPHP\test\integration;
+namespace heidelpayPHP\test\integration\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
@@ -44,8 +45,8 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function chargeShouldBeFetchable(): Charge
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
         $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
 
         $chargeArray = $charge->expose();
@@ -83,8 +84,8 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function chargeShouldBeFullyRefundableWithId()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
 
         /** @var Cancellation $refund */
         $refund = $this->heidelpay->cancelChargeById($charge->getPayment()->getId(), $charge->getId());
@@ -102,8 +103,8 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function chargeShouldBePartlyRefundableWithId()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
 
         $firstPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
         $this->assertAmounts($firstPayment, 0, 100, 100, 0);
@@ -130,8 +131,8 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function chargeShouldBePartlyRefundable()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
 
         $firstPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
         $this->assertAmounts($firstPayment, 0, 100, 100, 0);
@@ -158,8 +159,8 @@ class CancelAfterChargeTest extends BasePaymentTest
      */
     public function cancelShouldAcceptPaymentReferenceParameter()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
         $cancel = $charge->cancel(null, null, 'myPaymentReference');
         $this->assertEquals('myPaymentReference', $cancel->getPaymentReference());
     }

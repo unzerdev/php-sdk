@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -25,10 +25,12 @@
 namespace heidelpayPHP\Resources\PaymentTypes;
 
 use heidelpayPHP\Traits\CanDirectCharge;
+use heidelpayPHP\Traits\CanPayout;
 
 class SepaDirectDebit extends BasePaymentType
 {
     use CanDirectCharge;
+    use CanPayout;
 
     /** @var string $iban */
     protected $iban;

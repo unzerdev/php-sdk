@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -63,10 +63,7 @@ class RecurringPaymentTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $recurring = $card->activateRecurring('https://dev.heidelpay.com');
-
-        $this->assertTrue($recurring->isPending());
-        $this->assertFalse($recurring->isSuccess());
-        $this->assertFalse($recurring->isError());
+        $this->assertPending($recurring);
         $this->assertNotEmpty($recurring->getReturnUrl());
     }
 
@@ -83,10 +80,7 @@ class RecurringPaymentTest extends BasePaymentTest
         /** @var Paypal $paypal */
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
         $recurring = $paypal->activateRecurring('https://dev.heidelpay.com');
-
-        $this->assertTrue($recurring->isPending());
-        $this->assertFalse($recurring->isSuccess());
-        $this->assertFalse($recurring->isError());
+        $this->assertPending($recurring);
         $this->assertNotEmpty($recurring->getReturnUrl());
     }
 }

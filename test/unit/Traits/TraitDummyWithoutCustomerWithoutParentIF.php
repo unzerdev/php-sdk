@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -27,9 +27,11 @@ namespace heidelpayPHP\test\unit\Traits;
 
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
+use heidelpayPHP\Traits\CanPayout;
 
 class TraitDummyWithoutCustomerWithoutParentIF
 {
     use CanAuthorize;
     use CanDirectCharge;
+    use CanPayout;
 }

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
+use heidelpayPHP\Traits\CanPayout;
 use heidelpayPHP\Traits\CanRecur;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
@@ -34,6 +35,7 @@ class Card extends BasePaymentType
 {
     use CanDirectCharge;
     use CanAuthorize;
+    use CanPayout;
     use CanRecur;
 
     /**

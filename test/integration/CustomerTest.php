@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -30,13 +30,15 @@ use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
 use function microtime;
 use RuntimeException;
 
 class CustomerTest extends BasePaymentTest
 {
+    //<editor-fold desc="General Customer">
+
     /**
      * Min customer should be creatable via the sdk.
      *
@@ -162,9 +164,9 @@ class CustomerTest extends BasePaymentTest
     {
         $customer = $this->getMaximumCustomerInclShippingAddress();
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -188,9 +190,9 @@ class CustomerTest extends BasePaymentTest
         $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -214,9 +216,9 @@ class CustomerTest extends BasePaymentTest
         $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer->getId());
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer->getId());
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -353,4 +355,110 @@ class CustomerTest extends BasePaymentTest
         $this->assertEquals($customerId, $newCustomerData->getCustomerId());
         $this->assertEquals($customer->getId(), $newCustomerData->getId());
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="not registered B2B Customer">
+
+    /**
+     * Not registered B2B customer should be creatable.
+     *
+     * @test
+     *
+     * @return Customer
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function minNotRegisteredB2bCustomerCanBeCreatedAndFetched(): Customer
+    {
+        /** @var Customer $customer */
+        $customer = $this->getMinimalNotRegisteredB2bCustomer();
+        $this->assertEmpty($customer->getId());
+        $this->heidelpay->createCustomer($customer);
+        $this->assertNotEmpty($customer->getId());
+
+        /** @var Customer $fetchedCustomer */
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $exposeArray     = $customer->expose();
+        $exposeArray['salutation'] = Salutations::UNKNOWN;
+        $this->assertEquals($exposeArray, $fetchedCustomer->expose());
+
+        return $customer;
+    }
+
+    /**
+     * Max not registered customer should be creatable.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function maxNotRegisteredB2bCustomerCanBeCreatedAndFetched()
+    {
+        /** @var Customer $customer */
+        $customer = $this->getMaximalNotRegisteredB2bCustomer();
+        $this->assertEmpty($customer->getId());
+        $this->heidelpay->createCustomer($customer);
+        $this->assertNotEmpty($customer->getId());
+
+        /** @var Customer $fetchedCustomer */
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="registered B2B Customer">
+
+    /**
+     * Registered B2B customer should be creatable.
+     *
+     * @test
+     *
+     * @return Customer
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function minRegisteredB2bCustomerCanBeCreatedAndFetched(): Customer
+    {
+        /** @var Customer $customer */
+        $customer = $this->getMinimalRegisteredB2bCustomer();
+        $this->assertEmpty($customer->getId());
+        $this->heidelpay->createCustomer($customer);
+        $this->assertNotEmpty($customer->getId());
+
+        /** @var Customer $fetchedCustomer */
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $exposeArray     = $customer->expose();
+        $exposeArray['salutation'] = Salutations::UNKNOWN;
+        $this->assertEquals($exposeArray, $fetchedCustomer->expose());
+
+        return $customer;
+    }
+
+    /**
+     * Max registered customer should be creatable.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function maxRegisteredB2bCustomerCanBeCreatedAndFetched()
+    {
+        /** @var Customer $customer */
+        $customer = $this->getMaximalRegisteredB2bCustomer();
+        $this->assertEmpty($customer->getId());
+        $this->heidelpay->createCustomer($customer);
+        $this->assertNotEmpty($customer->getId());
+
+        /** @var Customer $fetchedCustomer */
+        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
+    }
+
+    //</editor-fold>
 }

@@ -3,6 +3,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.5.1][1.1.5.1]
+
+### Change
+*   Refactor integration tests to reduce redundancies and complexity.
+
+## [1.1.5.0][1.1.5.0]
+
+### Added
+*   Add payout transaction for Card and Sepa direct debit (guaranteed) payment type.
+*   `Customer` objects can now be created via `CustomerFactory`.
+
+### Fixed
+*   Links to documentation page.
+
+### Change
+*   Add deprecation notice for `Customer::__construct()` which is replaced by the `CustomerFactory`.
+
 ## [1.1.4.0][1.1.4.0]
 
 ### Added
@@ -196,3 +213,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.1.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.1.0..1.1.2.0
 [1.1.3.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.2.0..1.1.3.0
 [1.1.4.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.3.0..1.1.4.0
+[1.1.5.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.4.0..1.1.5.0
+[1.1.5.1]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.5.0..1.1.5.1

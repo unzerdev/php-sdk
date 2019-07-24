@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -59,6 +59,7 @@ use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Traits\CanRecur;
 use function is_string;
@@ -160,6 +161,9 @@ class ResourceService
                     break;
                 }
                 $resource = $heidelpay->fetchReversal($paymentId, $resourceId);
+                break;
+            case $resourceType === IdStrings::PAYOUT:
+                $resource = $heidelpay->fetchPayout(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
                 break;
             case $resourceType === IdStrings::PAYMENT:
                 $resource = $heidelpay->fetchPayment($resourceId);
@@ -282,6 +286,30 @@ class ResourceService
         $resource->setFetchedAt(new DateTime('now'));
         $resource->handleResponse($response, $method);
         return $resource;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Payout resource">
+
+    /**
+     * Fetch an Payout object by its paymentId.
+     * Payout Ids are not global but specific to the payment.
+     * A Payment object can have zero to one payout.
+     *
+     * @param Payment|string $payment The Payment object or the id of a Payment object whose Payout to fetch.
+     *                                There can only be one payout object to a payment.
+     *
+     * @return Payout The Payout object of the given Payment.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchPayout($payment): AbstractHeidelpayResource
+    {
+        /** @var Payment $paymentObject */
+        $paymentObject = $this->fetchPayment($payment);
+        return $this->fetch($paymentObject->getPayout(true));
     }
 
     //</editor-fold>
@@ -640,7 +668,7 @@ class ResourceService
             }
 
             // fetch Customer resource by customerId
-            $fetchedCustomer = $this->fetchCustomer((new Customer())->setCustomerId($customer->getCustomerId()));
+            $fetchedCustomer = $this->fetchCustomerByExtCustomerId($customer->getCustomerId());
 
             // update the existing customer with the data of the new customer
             $this->updateCustomer($customer->setId($fetchedCustomer->getId()));

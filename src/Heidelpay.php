@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -39,6 +39,7 @@ use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Services\HttpService;
@@ -53,7 +54,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.1.4.0';
+    const SDK_VERSION = '1.1.5.1';
 
     /** @var string $key */
     private $key;
@@ -765,6 +766,27 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
+    //<editor-fold desc="Payout resource">
+
+    /**
+     * Retrieves an Payout resource via the API using the corresponding Payment.
+     * The Payout resource can not be fetched using its id since they are unique only within the Payment.
+     * A Payment can have zero or one Payouts.
+     *
+     * @param Payment|string $payment The Payment object or the id of a Payment object whose Payout to fetch.
+     *
+     * @return Payout The Payout object of the given Payment.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchPayout($payment): AbstractHeidelpayResource
+    {
+        return $this->resourceService->fetchPayout($payment);
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="Webhook resource">
 
     /**
@@ -1161,6 +1183,51 @@ class Heidelpay implements HeidelpayParentInterface
     public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
     {
         return $this->paymentService->ship($payment, $invoiceId);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Payout transactions">
+
+    /**
+     * Performs a Payout transaction and returns the resulting Payout resource.
+     *
+     * @param float                  $amount      The amount to charge.
+     * @param string                 $currency    The currency of the amount.
+     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
+     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId     A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
+     *                                            The Basket object will be created automatically if it does not exist
+     *                                            yet (i.e. has no id).
+     *
+     * @return Payout The resulting object of the Payout resource.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function payout(
+        $amount,
+        $currency,
+        $paymentType,
+        $returnUrl,
+        $customer = null,
+        $orderId = null,
+        $metadata = null,
+        $basket = null
+    ): AbstractTransactionType {
+        return $this->paymentService->payout(
+            $amount,
+            $currency,
+            $paymentType,
+            $returnUrl,
+            $customer,
+            $orderId,
+            $metadata,
+            $basket
+        );
     }
 
     //</editor-fold>
