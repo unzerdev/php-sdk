@@ -46,8 +46,8 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizeWithTypeId()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $card->getId(), self::RETURN_URL);
+        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
         $this->assertNotEmpty($authorize->getUniqueId());
@@ -64,8 +64,8 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizeWithType()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL);
+        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotNull($authorize->getId());
     }
@@ -80,11 +80,11 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizationProducesPaymentAndCustomer()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
         $customer = $this->getMinimalCustomer();
         $this->assertNull($customer->getId());
 
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, $customer);
+        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL, $customer);
         $payment = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -106,12 +106,11 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function authorizationWithCustomerId(): Authorization
     {
-        $card       = $this->heidelpay->createPaymentType($this->createCardObject());
-        $customerId = $this->heidelpay->createCustomer($this->getMinimalCustomer())->getId();
-        $orderId    = microtime(true);
-        $authorize  = $this->heidelpay
-            ->authorize(100.0, 'EUR', $card, self::RETURN_URL, $customerId, $orderId);
-        $payment    = $authorize->getPayment();
+        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $customerId  = $this->heidelpay->createCustomer($this->getMinimalCustomer())->getId();
+        $orderId     = microtime(true);
+        $authorize   = $this->heidelpay->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL, $customerId, $orderId);
+        $payment     = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
 
@@ -147,21 +146,18 @@ class AuthorizationTest extends BasePaymentTest
      * @dataProvider authorizeHasExpectedStatesDP
      *
      * @param BasePaymentType|AbstractHeidelpayResource $paymentType
-     * @param bool                                      $isSuccess
-     * @param bool                                      $isPending
-     * @param bool                                      $isError
+     * @param string                                    $expectedState The state the transaction is expected to be in.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function authorizeHasExpectedStates(BasePaymentType $paymentType, $isSuccess, $isPending, $isError)
+    public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState)
     {
         $paymentType = $this->heidelpay->createPaymentType($paymentType);
-        $authorize = $this->heidelpay
-            ->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
-        $this->assertEquals($isSuccess, $authorize->isSuccess());
-        $this->assertEquals($isPending, $authorize->isPending());
-        $this->assertEquals($isError, $authorize->isError());
+        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
+
+        $stateCheck = 'assert' . ucfirst($expectedState);
+        $this->$stateCheck($authorize);
     }
 
     /**
@@ -172,8 +168,8 @@ class AuthorizationTest extends BasePaymentTest
     public function authorizeHasExpectedStatesDP(): array
     {
         return [
-            'card' => [$this->createCardObject(), true, false, false],
-            'paypal' => [new Paypal(), false, true, false]
+            'card' => [$this->createCardObject(), 'success'],
+            'paypal' => [new Paypal(), 'pending']
         ];
     }
 }

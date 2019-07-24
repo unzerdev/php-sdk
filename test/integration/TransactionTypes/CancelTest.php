@@ -40,11 +40,10 @@ class CancelTest extends BasePaymentTest
      */
     public function reversalShouldBeFetchableViaHeidelpayObject()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
         $fetchedCancel = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
-        $this->assertNotNull($fetchedCancel);
-        $this->assertNotNull($fetchedCancel->getId());
+        $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
 
@@ -58,11 +57,10 @@ class CancelTest extends BasePaymentTest
      */
     public function reversalShouldBeFetchableViaPaymentObject()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
         $fetchedCancel = $cancel->getPayment()->getAuthorization()->getCancellation($cancel->getId());
-        $this->assertNotNull($fetchedCancel);
-        $this->assertNotNull($fetchedCancel->getId());
+        $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
 
@@ -78,10 +76,8 @@ class CancelTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
-        $fetchedCancel = $this->heidelpay
-            ->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
-        $this->assertNotNull($fetchedCancel);
-        $this->assertNotNull($fetchedCancel->getId());
+        $fetchedCancel = $this->heidelpay->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
+        $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
 
@@ -98,8 +94,7 @@ class CancelTest extends BasePaymentTest
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
         $fetchedCancel = $cancel->getPayment()->getCharge($charge->getId())->getCancellation($cancel->getId());
-        $this->assertNotNull($fetchedCancel);
-        $this->assertNotNull($fetchedCancel->getId());
+        $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
 
@@ -113,12 +108,12 @@ class CancelTest extends BasePaymentTest
      */
     public function authorizationCancellationsShouldBeFetchableViaPaymentObject()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $reversal = $authorization->cancel();
         $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
-        $this->assertNotNull($cancellation);
+        $this->assertTransactionResourceHasBeenCreated($cancellation);
         $this->assertEquals($cancellation->expose(), $reversal->expose());
     }
 
@@ -137,7 +132,7 @@ class CancelTest extends BasePaymentTest
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
 
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
-        $this->assertNotNull($cancellation);
+        $this->assertTransactionResourceHasBeenCreated($cancellation);
         $this->assertEquals($cancellation->expose(), $reversal->expose());
     }
 
@@ -153,9 +148,6 @@ class CancelTest extends BasePaymentTest
     {
         $charge = $this->createCharge();
         $reversal = $charge->cancel();
-
-        $this->assertTrue($reversal->isSuccess());
-        $this->assertFalse($reversal->isPending());
-        $this->assertFalse($reversal->isError());
+        $this->assertSuccess($reversal);
     }
 }

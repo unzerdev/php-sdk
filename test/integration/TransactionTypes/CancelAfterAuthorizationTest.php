@@ -75,10 +75,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
 
         /** @var Cancellation $cancel */
         $cancel = $payment->cancel(10.0);
-        $this->assertNotNull($cancel);
-        $this->assertNotEmpty($cancel->getId());
-        $this->assertNotEmpty($cancel->getUniqueId());
-        $this->assertNotEmpty($cancel->getShortId());
+        $this->assertTransactionResourceHasBeenCreated($cancel);
         $this->assertEquals(10.0, $cancel->getAmount());
     }
 
@@ -99,8 +96,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
 
         $cancel = $fetchedAuthorization->cancel(10.0);
-        $this->assertNotNull($cancel);
-        $this->assertNotEmpty($cancel->getId());
+        $this->assertTransactionResourceHasBeenCreated($cancel);
         $this->assertEquals(10.0, $cancel->getAmount());
 
         $payment = $this->heidelpay->fetchPayment($fetchedAuthorization->getPayment()->getId());
@@ -125,8 +121,7 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
 
         $cancel = $this->heidelpay->cancelAuthorization($authorization);
-        $this->assertNotNull($cancel);
-        $this->assertNotNull($cancel->getId());
+        $this->assertTransactionResourceHasBeenCreated($cancel);
         $this->assertEquals(100.0, $cancel->getAmount());
         $secondPayment = $cancel->getPayment();
         $this->assertAmounts($secondPayment, 0, 0, 0, 0);
@@ -134,15 +129,13 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
 
 
         $fetchedCancel = $this->heidelpay->fetchReversalByAuthorization($authorization, $cancel->getId());
-        $this->assertNotNull($fetchedCancel);
-        $this->assertNotEmpty($fetchedCancel->getId());
+        $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $thirdPayment = $authorization->getPayment();
         $this->assertAmounts($thirdPayment, 0, 0, 0, 0);
         $this->assertTrue($thirdPayment->isCanceled());
 
         $fetchedCancelSecond = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
-        $this->assertNotNull($fetchedCancelSecond);
-        $this->assertNotEmpty($fetchedCancelSecond->getId());
+        $this->assertTransactionResourceHasBeenCreated($fetchedCancelSecond);
         $this->assertEquals($fetchedCancel->expose(), $fetchedCancelSecond->expose());
         $fourthPayment = $fetchedCancelSecond->getPayment();
         $this->assertAmounts($fourthPayment, 0, 0, 0, 0);

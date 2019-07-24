@@ -65,14 +65,10 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      */
     public function verifyInvoiceGuaranteedShipment(InvoiceGuaranteed $invoiceGuaranteed)
     {
-        $charge = $invoiceGuaranteed->charge(
-            100.0,
-            'EUR',
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
-        $this->assertNotNull($charge);
-        $this->assertNotEmpty($charge->getId());
+        $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge   = $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
+        $this->assertTransactionResourceHasBeenCreated($charge);
+
         $this->assertNotEmpty($charge->getIban());
         $this->assertNotEmpty($charge->getBic());
         $this->assertNotEmpty($charge->getHolder());
@@ -80,8 +76,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
 
 
         $shipment = $this->heidelpay->ship($charge->getPayment(), $this->generateRandomId());
-        $this->assertNotNull($shipment);
-        $this->assertNotEmpty($shipment->getId());
+        $this->assertTransactionResourceHasBeenCreated($shipment);
     }
 
     /**
@@ -97,19 +92,12 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      */
     public function verifyInvoiceGuaranteedCanBeChargedAndCancelled(InvoiceGuaranteed $invoiceGuaranteed)
     {
-        $charge = $invoiceGuaranteed->charge(
-            100.0,
-            'EUR',
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
-        $this->assertTrue($charge->isPending());
-        $this->assertFalse($charge->isError());
-        $this->assertFalse($charge->isSuccess());
+        $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge   = $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
+        $this->assertPending($charge);
 
         $cancel = $charge->cancel();
-        $this->assertNotNull($cancel);
-        $this->assertNotEmpty($cancel->getId());
+        $this->assertTransactionResourceHasBeenCreated($cancel);
     }
 
     /**
@@ -146,11 +134,6 @@ class InvoiceGuaranteedTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
 
-        $invoiceGuaranteed->charge(
-            100.0,
-            'EUR',
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()
-        );
+        $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $this->getMaximumCustomerInclShippingAddress());
     }
 }
