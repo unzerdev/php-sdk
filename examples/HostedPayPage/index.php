@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the Paypage.
+ * This file provides an example implementation of the Hosted Payment Page.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -67,6 +67,8 @@ require_once __DIR__ . '/../../../../autoload.php';
     </div>
     <!-- This is just for the example - End -->
 
+    <!-- The Payment Page needs to be initialized using the private key, that means it can only be done with a Server-To-Server call.
+    Therefore we redirect to the controller without doing anything here. -->
     <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 

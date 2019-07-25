@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the PayPage example.
+ * This file defines the constants needed for the Hosted Payment Page example.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -26,6 +26,6 @@
 require_once __DIR__ . '/../Constants.php';
 
 define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'PayPage');
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'HostedPayPage');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
 define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

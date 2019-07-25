@@ -209,12 +209,15 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Pay Page
+                            Hosted Payment Page
                         </div>
                         <div class="description">
+                            This example shows how to use the Payment Page hosted externally.
+                            The customer will be redirected to a Payment Page on a heidelpay
+                            server and redirected to a given RedirectUrl.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='PayPage/';">
+                    <div class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
                         Try
                     </div>
                 </div>
