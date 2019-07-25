@@ -224,6 +224,23 @@ require_once __DIR__ . '/../../../autoload.php';
                         Try
                     </div>
                 </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Embedded Payment Page
+                        </div>
+                        <div class="description">
+                            This example shows how to use the embedded Payment Page.
+                            The Payment Page will be shown as an Overlay in your own shop.
+                        </div>
+                    </div>
+                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                        Documentation
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">
+                        Try
+                    </div>
+                </div>
             </div>
         </div>
 
