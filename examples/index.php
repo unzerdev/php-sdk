@@ -217,6 +217,9 @@ require_once __DIR__ . '/../../../autoload.php';
                             server and redirected to a given RedirectUrl.
                         </div>
                     </div>
+                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                        Documentation
+                    </div>
                     <div class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
                         Try
                     </div>
