@@ -26,10 +26,18 @@
 namespace heidelpayPHP\Resources\PaymentTypes;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Constants\TransactionTypes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Basket;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Metadata;
+use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
 use heidelpayPHP\Traits\HasInvoiceId;
 use heidelpayPHP\Traits\HasOrderId;
+use RuntimeException;
 use stdClass;
 
 class Paypage extends BasePaymentType
@@ -77,6 +85,12 @@ class Paypage extends BasePaymentType
 
     /** @var string $contactUrl */
     protected $contactUrl;
+
+    /** @var String $action */
+    private $action;
+
+    /** @var Payment|null $payment */
+    private $payment;
 
     /**
      * Paypage constructor.
@@ -152,192 +166,340 @@ class Paypage extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLogoImage(): string
+    public function getLogoImage()
     {
         return $this->logoImage;
     }
 
     /**
-     * @param string $logoImage
+     * @param string|null $logoImage
      *
      * @return Paypage
      */
-    public function setLogoImage(string $logoImage): Paypage
+    public function setLogoImage($logoImage): Paypage
     {
         $this->logoImage = $logoImage;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFullPageImage(): string
+    public function getFullPageImage()
     {
         return $this->fullPageImage;
     }
 
     /**
-     * @param string $fullPageImage
+     * @param string|null $fullPageImage
      *
      * @return Paypage
      */
-    public function setFullPageImage(string $fullPageImage): Paypage
+    public function setFullPageImage($fullPageImage): Paypage
     {
         $this->fullPageImage = $fullPageImage;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getShopName(): string
+    public function getShopName()
     {
         return $this->shopName;
     }
 
     /**
-     * @param string $shopName
+     * @param string|null $shopName
      *
      * @return Paypage
      */
-    public function setShopName(string $shopName): Paypage
+    public function setShopName($shopName): Paypage
     {
         $this->shopName = $shopName;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getShopDescription(): string
+    public function getShopDescription()
     {
         return $this->shopDescription;
     }
 
     /**
-     * @param string $shopDescription
+     * @param string|null $shopDescription
      *
      * @return Paypage
      */
-    public function setShopDescription(string $shopDescription): Paypage
+    public function setShopDescription($shopDescription): Paypage
     {
         $this->shopDescription = $shopDescription;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTagline(): string
+    public function getTagline()
     {
         return $this->tagline;
     }
 
     /**
-     * @param string $tagline
+     * @param string|null $tagline
      *
      * @return Paypage
      */
-    public function setTagline(string $tagline): Paypage
+    public function setTagline($tagline): Paypage
     {
         $this->tagline = $tagline;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTermsAndConditionUrl(): string
+    public function getTermsAndConditionUrl()
     {
         return $this->termsAndConditionUrl;
     }
 
     /**
-     * @param string $termsAndConditionUrl
+     * @param string|null $termsAndConditionUrl
      *
      * @return Paypage
      */
-    public function setTermsAndConditionUrl(string $termsAndConditionUrl): Paypage
+    public function setTermsAndConditionUrl($termsAndConditionUrl): Paypage
     {
         $this->termsAndConditionUrl = $termsAndConditionUrl;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPrivacyPolicyUrl(): string
+    public function getPrivacyPolicyUrl()
     {
         return $this->privacyPolicyUrl;
     }
 
     /**
-     * @param string $privacyPolicyUrl
+     * @param string|null $privacyPolicyUrl
      *
      * @return Paypage
      */
-    public function setPrivacyPolicyUrl(string $privacyPolicyUrl): Paypage
+    public function setPrivacyPolicyUrl($privacyPolicyUrl): Paypage
     {
         $this->privacyPolicyUrl = $privacyPolicyUrl;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getImprintUrl(): string
+    public function getImprintUrl()
     {
         return $this->imprintUrl;
     }
 
     /**
-     * @param string $imprintUrl
+     * @param string|null $imprintUrl
      *
      * @return Paypage
      */
-    public function setImprintUrl(string $imprintUrl): Paypage
+    public function setImprintUrl($imprintUrl): Paypage
     {
         $this->imprintUrl = $imprintUrl;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getHelpUrl(): string
+    public function getHelpUrl()
     {
         return $this->helpUrl;
     }
 
     /**
-     * @param string $helpUrl
+     * @param string|null $helpUrl
      *
      * @return Paypage
      */
-    public function setHelpUrl(string $helpUrl): Paypage
+    public function setHelpUrl($helpUrl): Paypage
     {
         $this->helpUrl = $helpUrl;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getContactUrl(): string
+    public function getContactUrl()
     {
         return $this->contactUrl;
     }
 
     /**
-     * @param string $contactUrl
+     * @param string|null $contactUrl
      *
      * @return Paypage
      */
-    public function setContactUrl(string $contactUrl): Paypage
+    public function setContactUrl($contactUrl): Paypage
     {
         $this->contactUrl = $contactUrl;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAction(): String
+    {
+        return $this->action;
+    }
+
+    /**
+     * @param String $action
+     *
+     * @return Paypage
+     */
+    public function setAction(String $action): Paypage
+    {
+        $this->action = $action;
+        return $this;
+    }
+
+    /**
+     * @return Payment|null
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param Payment $payment
+     *
+     * @return Paypage
+     */
+    public function setPayment(Payment $payment): Paypage
+    {
+        $this->payment = $payment;
+        return $this;
+    }
+
+    /**
+     * @return Basket|null
+     */
+    public function getBasket()
+    {
+        if (!$this->payment instanceof Payment) {
+            return null;
+        }
+        return $this->payment->getBasket();
+    }
+
+    /**
+     * @param Basket $basket
+     *
+     * @return Paypage
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    protected function setBasket(Basket $basket): Paypage
+    {
+        if (!$this->payment instanceof Payment) {
+            throw new RuntimeException('The payment resource is missing.');
+        }
+        $this->payment->setBasket($basket);
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     */
+    public function getCustomer()
+    {
+        if (!$this->payment instanceof Payment) {
+            return null;
+        }
+        return $this->payment->getCustomer();
+    }
+
+    /**
+     * @param Customer|null $customer
+     *
+     * @return Paypage
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    protected function setCustomer($customer): Paypage
+    {
+        if (!$this->payment instanceof Payment) {
+            throw new RuntimeException('The payment resource is missing.');
+        }
+        $this->payment->setCustomer($customer);
+        return $this;
+    }
+
+    /**
+     * @return Metadata|null
+     */
+    public function getMetadata()
+    {
+        if (!$this->payment instanceof Payment) {
+            return null;
+        }
+        return $this->payment->getMetadata();
+    }
+
+    /**
+     * @param Metadata|null $metadata
+     *
+     * @return Paypage
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    protected function setMetadata($metadata): Paypage
+    {
+        if (!$this->payment instanceof Payment) {
+            throw new RuntimeException('The payment resource is missing.');
+        }
+        $this->payment->setMetadata($metadata);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRedirectUrl()
+    {
+        $payment = $this->getPayment();
+        if ($payment instanceof Payment) {
+            return $payment->getRedirectUrl();
+        }
+        return null;
+    }
+
+    /**
+     * @param string $redirectUrl
+     *
+     * @return Paypage
+     */
+    public function setRedirectUrl(string $redirectUrl): Paypage
+    {
+        $payment = $this->getPayment();
+        if ($payment instanceof Payment) {
+            $payment->setRedirectUrl($redirectUrl);
+        }
         return $this;
     }
 
@@ -351,12 +513,27 @@ class Paypage extends BasePaymentType
      */
     protected function getResourcePath(): string
     {
-        return 'paypage/charge/';
+        switch ($this->action) {
+            case TransactionTypes::AUTHORIZATION:
+                return 'paypage/authorize';
+                break;
+            case TransactionTypes::CHARGE:
+                // intended Fall-Through
+            default:
+                return 'paypage/charge';
+                break;
+        }
     }
 
     /**
      * {@inheritDoc}
      * Map external name of property to internal name of property.
+     *
+     * @param stdClass $response
+     * @param string   $method
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
@@ -366,6 +543,20 @@ class Paypage extends BasePaymentType
         }
 
         parent::handleResponse($response, $method);
+
+        /** @var Payment $payment */
+        $payment = $this->getPayment();
+        if (isset($response->resources->paymentId)) {
+            $payment->setId($response->resources->paymentId);
+        }
+
+        if (isset($response->redirectUrl)) {
+            $payment->setRedirectUrl($response->redirectUrl);
+        }
+
+        if ($method !== HttpAdapterInterface::REQUEST_GET) {
+            $this->fetchPayment();
+        }
     }
 
     /**
@@ -383,5 +574,33 @@ class Paypage extends BasePaymentType
         return $exposeArray;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getLinkedResources(): array
+    {
+        return [
+            'customer'=> $this->getCustomer(),
+            'metadata' => $this->getMetadata(),
+            'basket' => $this->getBasket(),
+            'payment' => $this->getPayment(),
+        ];
+    }
+
     //</editor-fold>
+
+    /**
+     * Updates the referenced payment object if it exists and if this is not the payment object itself.
+     * This is called from the crud methods to update the payments state whenever anything happens.
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    private function fetchPayment()
+    {
+        $payment = $this->getPayment();
+        if ($payment instanceof AbstractHeidelpayResource) {
+            $this->fetchResource($payment);
+        }
+    }
 }

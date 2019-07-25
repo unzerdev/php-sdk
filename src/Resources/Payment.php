@@ -32,6 +32,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\EmbeddedResources\Amount;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -326,7 +327,7 @@ class Payment extends AbstractHeidelpayResource
      * Sets the Payments reference to the given PaymentType resource.
      * The PaymentType can be either a PaymentType object or the id of a PaymentType resource.
      *
-     * @param BasePaymentType|string $paymentType The PaymentType object or the id of the PaymentType to be referenced.
+     * @param mixed $paymentType The PaymentType object or the id of the PaymentType to be referenced.
      *
      * @return Payment This Payment object.
      *
@@ -346,7 +347,7 @@ class Payment extends AbstractHeidelpayResource
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
             $paymentTypeObject = $heidelpay->fetchPaymentType($paymentType);
-        } elseif ($paymentTypeObject instanceof BasePaymentType) {
+        } elseif ($paymentTypeObject instanceof BasePaymentType && !$paymentTypeObject instanceof Paypage) {
             if ($paymentTypeObject->getId() === null) {
                 $heidelpay->createPaymentType($paymentType);
             }

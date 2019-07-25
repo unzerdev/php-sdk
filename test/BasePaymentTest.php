@@ -169,7 +169,9 @@ class BasePaymentTest extends TestCase
         $orderId = $this->generateRandomId();
         $basket = new Basket($orderId, 123.4, 'EUR');
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 123.4, 123.4, 1))
+            ->setBasketItemReferenceId('refId')
+            ->setImageUrl('https://hpp-images.s3.amazonaws.com/7/bsk_0_6377B5798E5C55C6BF8B5BECA59529130226E580B050B913EAC3606DA0FF4F68.jpg');
         $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
         return $basket;
