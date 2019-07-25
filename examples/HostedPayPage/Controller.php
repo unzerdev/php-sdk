@@ -81,9 +81,9 @@ try {
             ->setInvoiceId('InvoiceNr' . microtime(true));
 
     if ($transactionType === 'charge') {
-        $heidelpay->initPayPageCharge($paypage, $customer, $basket);
+        $heidelpay->initPayPageCharge($paypage, $customer);
     } else {
-        $heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
+        $heidelpay->initPayPageAuthorize($paypage, $customer);
     }
 
     $_SESSION['PaymentId'] = $paypage->getPaymentId();
