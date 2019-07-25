@@ -62,7 +62,24 @@ try {
 
     // Create a charge/authorize transaction
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
+
+    // These are the mandatory parameters for the payment page ...
     $paypage = new Paypage(12.99, 'EUR', RETURN_CONTROLLER_URL);
+
+    // ... however you can customize the Payment Page using additional parameters.
+    $paypage->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
+            ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')
+            ->setShopName('My Test Shop')
+            ->setShopDescription('Best shop in the whole world!')
+            ->setTagline('Try and stop us from being awesome!')
+            ->setOrderId('OrderNr' . microtime(true))
+            ->setTermsAndConditionUrl('https://www.heidelpay.com/en/')
+            ->setPrivacyPolicyUrl('https://www.heidelpay.com/de/')
+            ->setImprintUrl('https://www.heidelpay.com/it/')
+            ->setHelpUrl('https://www.heidelpay.com/at/')
+            ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
+            ->setInvoiceId('InvoiceNr' . microtime(true));
+
     if ($transactionType === 'charge') {
         $heidelpay->initPayPageCharge($paypage, $customer, $basket);
     } else {
