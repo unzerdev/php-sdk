@@ -503,6 +503,20 @@ class Paypage extends BasePaymentType
         return $this;
     }
 
+    /**
+     * Return the Id of the referenced payment object.
+     *
+     * @return null|string The Id of the payment object or null if nothing is found.
+     */
+    public function getPaymentId()
+    {
+        if ($this->payment instanceof Payment) {
+            return $this->payment->getId();
+        }
+
+        return null;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
