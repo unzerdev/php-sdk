@@ -5,8 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.5.1][1.1.5.1]
 
+### Added
+*   Support for hosted and embedded payment page.
+
 ### Change
 *   Refactor integration tests to reduce redundancies and complexity.
+*   Enable debug logging with unescaped slashes.
+
 
 ## [1.1.5.0][1.1.5.0]
 
