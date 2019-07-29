@@ -68,10 +68,10 @@ function getTransaction(Payment $payment)
 }
 
 // Retrieve the paymentId you remembered within the Controller
-if (!isset($_SESSION['PaymentId']) && !isset($_POST['paymentId'])) {
+if (!isset($_SESSION['PaymentId'])) {
     redirect(FAILURE_URL, 'The payment id is missing.', $clientMessage);
 }
-$paymentId = $_SESSION['PaymentId'] ?? $_POST['paymentId'];
+$paymentId = $_SESSION['PaymentId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -87,12 +87,12 @@ try {
     $_SESSION['ShortId'] = $transaction->getShortId();
 
     if ($payment->isCompleted()) {
-        // The payment process has been successful
+        // The payment process has been successful.
         // You can create the order and show a success page.
         redirect(SUCCESS_URL);
     } elseif ($payment->isPending()) {
         // In case of authorization this is normal since you will later charge the payment.
-        // You can create the order with pending payment and show a success page to the customer if you want.
+        // You can create the order with status pending payment and show a success page to the customer if you want.
 
         // In cases of redirection to an external service (e.g. 3D secure, PayPal, etc) it sometimes takes time for
         // the payment to update it's status. In this case it might be pending at first and change to cancel or success later.
@@ -100,7 +100,7 @@ try {
         // then you can cancel the order later or mark it paid as soon as the event is triggered.
         redirect(SUCCESS_URL);
     }
-    // If the payment is neither success nur pending something went wrong
+    // If the payment is neither success nor pending something went wrong.
     // In this case do not create the order.
     // Redirect to an error page in your shop and show an message if you want.
 

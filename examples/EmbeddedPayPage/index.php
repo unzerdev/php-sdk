@@ -98,30 +98,22 @@ require_once __DIR__ . '/../../../../autoload.php';
                     // Add your event listeners for abort or success event
                     checkout.abort(function() {
                         $errorHolder.html('Transaction canceled by user.');
+                        $submitButton.attr("disabled", false);
                     });
                     checkout.success(function(data) {
-                        let hiddenInput = document.createElement('input');
-                        hiddenInput.setAttribute('type', 'hidden');
-                        hiddenInput.setAttribute('name', 'paymentId');
-                        hiddenInput.setAttribute('value', data.resources['paymentId']);
-                        $form.get(0).appendChild(hiddenInput);
-                        $form.get(0).setAttribute('method', 'POST');
-                        $form.get(0).setAttribute('action', '<?php echo RETURN_CONTROLLER_URL; ?>');
-
-                        // Submitting the form
-                        $form.get(0).submit();
+                        // redirect to result handler
+                        window.location.href = '<?php echo RETURN_CONTROLLER_URL; ?>';
                     });
 
                 }).catch(function(error) {
                     // handle error on init
                     $errorHolder.html(error.message);
+                    $submitButton.attr("disabled", false);
                 });
             },
             error: function (response) {
                 var responseJson = response.responseJSON;
                 $errorHolder.html(responseJson.customer);
-            },
-            complete: function () {
                 $submitButton.attr("disabled", false);
             }
         });

@@ -87,12 +87,12 @@ try {
     $_SESSION['ShortId'] = $transaction->getShortId();
 
     if ($payment->isCompleted()) {
-        // The payment process has been successful
+        // The payment process has been successful.
         // You can create the order and show a success page.
         redirect(SUCCESS_URL);
     } elseif ($payment->isPending()) {
         // In case of authorization this is normal since you will later charge the payment.
-        // You can create the order with pending payment and show a success page to the customer if you want.
+        // You can create the order with status pending payment and show a success page to the customer if you want.
 
         // In cases of redirection to an external service (e.g. 3D secure, PayPal, etc) it sometimes takes time for
         // the payment to update it's status. In this case it might be pending at first and change to cancel or success later.
@@ -100,9 +100,9 @@ try {
         // then you can cancel the order later or mark it paid as soon as the event is triggered.
         redirect(SUCCESS_URL);
     }
-    // Else something went wrong
-    // Don't create the order.
-    // Redirect to an error page in your shop if you want.
+    // If the payment is neither success nor pending something went wrong.
+    // In this case do not create the order.
+    // Redirect to an error page in your shop and show an message if you want.
 
     // Check the result message of the transaction to find out what went wrong.
     $merchantMessage = $transaction->getMessage()->getCustomer();

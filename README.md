@@ -18,7 +18,7 @@ Please refer to the following documentation for installation instructions and us
 *   [How to use the examples](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-using-the-example-implementations)
 *   [Debugging](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-debugging)
 
-## Supported payment types / Features
+## Supported payment types / features
 *   Card (credit card and debit card) + Recurring
 *   Giropay
 *   iDEAL
