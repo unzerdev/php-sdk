@@ -76,27 +76,29 @@ require_once __DIR__ . '/../../../../autoload.php';
 </form>
 
 <script>
-
     let $errorHolder = $('#error-holder');
+    let $submitButton = $('#submit-button');
 
     $("#payment-form").ajaxForm(
         {
+            beforeSubmit: (function () {
+                $submitButton.attr("disabled", true);
+                $errorHolder.html('');
+            }),
             url: '<?php echo CONTROLLER_URL; ?>',
             type: 'post',
             success: function (response) {
                 var checkout = new window.checkout(response.token);
                 // Initialize the payment page
                 checkout.init().then(function() {
-                    // When success open the dialog
+                    // On success open the dialogue
                     checkout.open();
 
                     // Add your event listeners for abort or success event
-                    checkout.abort(function(data) {
-                        // todo: handle abort
-                        $errorHolder.html(data.message);
+                    checkout.abort(function() {
+                        $errorHolder.html('Transaction canceled by user.');
                     });
                     checkout.success(function(data) {
-                        // todo: handle success
                         $errorHolder.html(data.message);
                     });
 
@@ -108,8 +110,10 @@ require_once __DIR__ . '/../../../../autoload.php';
             error: function (response) {
                 var responseJson = response.responseJSON;
                 $errorHolder.html(responseJson.customer);
+            },
+            complete: function () {
+                $submitButton.attr("disabled", false);
             }
-
         });
 
 </script>
