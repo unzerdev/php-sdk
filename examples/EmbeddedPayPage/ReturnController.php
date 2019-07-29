@@ -68,7 +68,7 @@ function getTransaction(Payment $payment)
 }
 
 // Retrieve the paymentId you remembered within the Controller
-if (!isset($_SESSION['PaymentId'], $_POST['paymentId'])) {
+if (!isset($_SESSION['PaymentId']) && !isset($_POST['paymentId'])) {
     redirect(FAILURE_URL, 'The payment id is missing.', $clientMessage);
 }
 $paymentId = $_SESSION['PaymentId'] ?? $_POST['paymentId'];
