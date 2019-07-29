@@ -68,10 +68,10 @@ function getTransaction(Payment $payment)
 }
 
 // Retrieve the paymentId you remembered within the Controller
-if (!isset($_SESSION['PaymentId'])) {
+if (!isset($_SESSION['PaymentId'], $_POST['paymentId'])) {
     redirect(FAILURE_URL, 'The payment id is missing.', $clientMessage);
 }
-$paymentId = $_SESSION['PaymentId'];
+$paymentId = $_SESSION['PaymentId'] ?? $_POST['paymentId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -100,11 +100,11 @@ try {
         // then you can cancel the order later or mark it paid as soon as the event is triggered.
         redirect(SUCCESS_URL);
     }
-    // Else something went wrong
-    // Don't create the order.
-    // Redirect to an error page in your shop if you want.
+    // If the payment is neither success nur pending something went wrong
+    // In this case do not create the order.
+    // Redirect to an error page in your shop and show an message if you want.
 
-    // Check the result message of the transaction to find out what went wrong.
+    // For better debugging log the error message in your error log
     $merchantMessage = $transaction->getMessage()->getCustomer();
 
 } catch (HeidelpayApiException $e) {

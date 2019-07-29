@@ -37,6 +37,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 
+// start new session for this example and remove all parameters
 session_start();
 session_unset();
 

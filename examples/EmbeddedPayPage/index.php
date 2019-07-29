@@ -78,8 +78,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 <script>
     let $errorHolder = $('#error-holder');
     let $submitButton = $('#submit-button');
+    let $form = $('#payment-form');
 
-    $("#payment-form").ajaxForm(
+    $form.ajaxForm(
         {
             beforeSubmit: (function () {
                 $submitButton.attr("disabled", true);
@@ -99,7 +100,16 @@ require_once __DIR__ . '/../../../../autoload.php';
                         $errorHolder.html('Transaction canceled by user.');
                     });
                     checkout.success(function(data) {
-                        $errorHolder.html(data.message);
+                        let hiddenInput = document.createElement('input');
+                        hiddenInput.setAttribute('type', 'hidden');
+                        hiddenInput.setAttribute('name', 'paymentId');
+                        hiddenInput.setAttribute('value', data.resources['paymentId']);
+                        $form.get(0).appendChild(hiddenInput);
+                        $form.get(0).setAttribute('method', 'POST');
+                        $form.get(0).setAttribute('action', '<?php echo RETURN_CONTROLLER_URL; ?>');
+
+                        // Submitting the form
+                        $form.get(0).submit();
                     });
 
                 }).catch(function(error) {
