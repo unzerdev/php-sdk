@@ -26,7 +26,7 @@ namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
@@ -83,8 +83,8 @@ class SetMetadataTest extends BasePaymentTest
         $metadata->addMetadata('ModuleVersion', '18.3.12');
         $this->assertEmpty($metadata->getId());
 
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $this->heidelpay->authorize(1.23, 'EUR', $card, 'https://heidelpay.com', null, null, $metadata);
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $this->heidelpay->authorize(1.23, 'EUR', $paypal, 'https://heidelpay.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -105,8 +105,8 @@ class SetMetadataTest extends BasePaymentTest
         $metadata->addMetadata('ModuleVersion', '18.3.12');
         $this->assertEmpty($metadata->getId());
 
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $this->heidelpay->charge(1.23, 'EUR', $card, 'https://heidelpay.com', null, null, $metadata);
+        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $this->heidelpay->charge(1.23, 'EUR', $paymentType, 'https://heidelpay.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -122,9 +122,9 @@ class SetMetadataTest extends BasePaymentTest
     {
         $metadata = (new Metadata())->addMetadata('key', 'value');
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $card->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, $metadata);
+        /** @var Paypal $paymentType */
+        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $authorize = $paymentType->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, $metadata);
         $payment = $authorize->getPayment();
         $this->assertSame($metadata, $payment->getMetadata());
 
@@ -143,8 +143,8 @@ class SetMetadataTest extends BasePaymentTest
      */
     public function authorizeShouldCreateMetadataEvenIfItHasNotBeenSet()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorize = $this->heidelpay->authorize(1.23, 'EUR', $card, 'https://heidelpay.com');
+        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $authorize = $this->heidelpay->authorize(1.23, 'EUR', $paymentType, 'https://heidelpay.com');
 
         $metadata = $authorize->getPayment()->getMetadata();
         $this->assertNotEmpty($metadata->getId());
@@ -162,8 +162,8 @@ class SetMetadataTest extends BasePaymentTest
      */
     public function chargeShouldCreateMetadataEvenIfItHasNotBeenSet()
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $charge = $this->heidelpay->charge(1.23, 'EUR', $card, 'https://heidelpay.com');
+        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $charge = $this->heidelpay->charge(1.23, 'EUR', $paymentType, 'https://heidelpay.com');
 
         $metadata = $charge->getPayment()->getMetadata();
         $this->assertNotEmpty($metadata->getId());

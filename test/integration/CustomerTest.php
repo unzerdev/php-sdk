@@ -30,7 +30,7 @@ use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
 use function microtime;
 use RuntimeException;
@@ -164,9 +164,9 @@ class CustomerTest extends BasePaymentTest
     {
         $customer = $this->getMaximumCustomerInclShippingAddress();
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -190,9 +190,9 @@ class CustomerTest extends BasePaymentTest
         $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -216,9 +216,9 @@ class CustomerTest extends BasePaymentTest
         $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
 
-        /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $card->authorize(12.0, 'EUR', self::RETURN_URL, $customer->getId());
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer->getId());
 
         /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());

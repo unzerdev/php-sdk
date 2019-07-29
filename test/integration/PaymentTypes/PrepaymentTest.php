@@ -138,12 +138,8 @@ class PrepaymentTest extends BasePaymentTest
     public function prepaymentChargeCanBeCanceled(Prepayment $prepayment)
     {
         $charge = $prepayment->charge(100.0, 'EUR', self::RETURN_URL);
-        $this->assertTrue($charge->isPending());
-        $this->assertFalse($charge->isSuccess());
-        $this->assertFalse($charge->isError());
+        $this->assertPending($charge);
         $cancellation = $charge->cancel();
-        $this->assertNotNull($cancellation);
-        $this->assertNotNull($cancellation->getId());
-        $this->heidelpay->fetchCharge($charge);
+        $this->assertTransactionResourceHasBeenCreated($cancellation);
     }
 }

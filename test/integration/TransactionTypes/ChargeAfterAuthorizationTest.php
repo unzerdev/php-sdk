@@ -40,7 +40,7 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      */
     public function authorizationShouldBeFullyChargeable()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());
@@ -63,7 +63,7 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      */
     public function authorizationShouldBeFullyChargeableViaHeidelpayObject()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());
@@ -86,7 +86,7 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      */
     public function authorizationShouldBePartlyChargeable()
     {
-        $authorization = $this->createAuthorization();
+        $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());

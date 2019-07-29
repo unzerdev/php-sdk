@@ -138,8 +138,6 @@ class ShipmentTest extends BasePaymentTest
 
         $payment  = $charge->getPayment();
         $shipment = $this->heidelpay->ship($payment, $this->generateRandomId());
-        $this->assertTrue($shipment->isSuccess());
-        $this->assertFalse($shipment->isPending());
-        $this->assertFalse($shipment->isError());
+        $this->assertSuccess($shipment);
     }
 }
