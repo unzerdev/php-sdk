@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.6.0][1.1.6.0]
+
+### Added
+*   Support for hosted and embedded payment page.
+
+### Change
+*   Refactor integration tests to reduce redundancies and complexity.
+*   Enable debug logging with unescaped slashes.
+
 ## [1.1.5.0][1.1.5.0]
 
 ### Added
@@ -209,3 +218,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.1.3.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.2.0..1.1.3.0
 [1.1.4.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.3.0..1.1.4.0
 [1.1.5.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.4.0..1.1.5.0
+[1.1.6.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.5.0..1.1.6.0

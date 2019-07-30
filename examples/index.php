@@ -206,6 +206,41 @@ require_once __DIR__ . '/../../../autoload.php';
                         Try
                     </div>
                 </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Hosted Payment Page
+                        </div>
+                        <div class="description">
+                            This example shows how to use the Payment Page hosted externally.
+                            The customer will be redirected to a Payment Page on a heidelpay
+                            server and redirected to a given RedirectUrl.
+                        </div>
+                    </div>
+                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                        Documentation
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Embedded Payment Page
+                        </div>
+                        <div class="description">
+                            This example shows how to use the embedded Payment Page.
+                            The Payment Page will be shown as an Overlay in your own shop.
+                        </div>
+                    </div>
+                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                        Documentation
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">
+                        Try
+                    </div>
+                </div>
             </div>
         </div>
 

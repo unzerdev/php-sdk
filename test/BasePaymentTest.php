@@ -30,9 +30,14 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Paypal;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpayPHP\Resources\Recurring;
+use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -92,6 +97,61 @@ class BasePaymentTest extends TestCase
         $this->assertEquals($expectedCanceled, $amount->getCanceled(), 'The canceled amount does not match.');
     }
 
+    /**
+     * @param mixed $transactionType
+     *
+     * @throws AssertionFailedError
+     */
+    public function assertTransactionResourceHasBeenCreated($transactionType)
+    {
+        $this->assertNotNull($transactionType);
+        $this->assertNotEmpty($transactionType->getId());
+        $this->assertNotEmpty($transactionType->getUniqueId());
+        $this->assertNotEmpty($transactionType->getShortId());
+    }
+
+    /**
+     * Asserts whether the given transaction was successful.
+     *
+     * @param AbstractTransactionType $transaction
+     *
+     * @throws AssertionFailedError
+     */
+    protected function assertSuccess(AbstractTransactionType $transaction)
+    {
+        $this->assertTrue($transaction->isSuccess());
+        $this->assertFalse($transaction->isPending());
+        $this->assertFalse($transaction->isError());
+    }
+
+    /**
+     * Asserts whether the given transaction was a failure.
+     *
+     * @param AbstractTransactionType $transaction
+     *
+     * @throws AssertionFailedError
+     */
+    protected function assertError(AbstractTransactionType $transaction)
+    {
+        $this->assertFalse($transaction->isSuccess());
+        $this->assertFalse($transaction->isPending());
+        $this->assertTrue($transaction->isError());
+    }
+
+    /**
+     * Asserts whether the given transaction is pending.
+     *
+     * @param AbstractTransactionType|Recurring $transaction
+     *
+     * @throws AssertionFailedError
+     */
+    protected function assertPending($transaction)
+    {
+        $this->assertFalse($transaction->isSuccess());
+        $this->assertTrue($transaction->isPending());
+        $this->assertFalse($transaction->isError());
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
@@ -109,7 +169,9 @@ class BasePaymentTest extends TestCase
         $orderId = $this->generateRandomId();
         $basket = new Basket($orderId, 123.4, 'EUR');
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 123.4, 123.4, 1))
+            ->setBasketItemReferenceId('refId')
+            ->setImageUrl('https://hpp-images.s3.amazonaws.com/7/bsk_0_6377B5798E5C55C6BF8B5BECA59529130226E580B050B913EAC3606DA0FF4F68.jpg');
         $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
         return $basket;
@@ -150,11 +212,28 @@ class BasePaymentTest extends TestCase
      * @throws RuntimeException
      * @throws HeidelpayApiException
      */
-    public function createAuthorization(): Authorization
+    public function createCardAuthorization(): Authorization
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
         $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
+        return $authorization;
+    }
+
+    /**
+     * Creates and returns an Authorization object with the API which can be used in test methods.
+     *
+     * @return Authorization
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function createPaypalAuthorization(): Authorization
+    {
+        /** @var Paypal $paypal */
+        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $orderId = microtime(true);
+        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
         return $authorization;
     }
 
@@ -168,8 +247,8 @@ class BasePaymentTest extends TestCase
      */
     public function createCharge(): Charge
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $card = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
     }
 
     /**

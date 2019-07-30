@@ -50,6 +50,7 @@ class IdStrings
     const ALIPAY = 'ali';
     const WECHATPAY = 'wcp';
     const INVOICE_FACTORING = 'ivf';
+    const PAYMENT_PAGE = 'ppg';
 
     // Resources
     const BASKET = 'bsk';
@@ -74,6 +75,7 @@ class IdStrings
         self::EPS,
         self::ALIPAY,
         self::WECHATPAY,
-        self::INVOICE_FACTORING
+        self::INVOICE_FACTORING,
+        self::PAYMENT_PAGE
     ];
 }

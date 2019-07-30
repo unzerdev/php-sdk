@@ -52,9 +52,7 @@ class SepaDirectDebitTest extends BasePaymentTest
 
         /** @var SepaDirectDebit $fetchedDirectDebit */
         $fetchedDirectDebit = $this->heidelpay->fetchPaymentType($directDebit->getId());
-        $this->assertInstanceOf(SepaDirectDebit::class, $fetchedDirectDebit);
-        $this->assertEquals($directDebit->getId(), $fetchedDirectDebit->getId());
-        $this->assertEquals($this->maskNumber($directDebit->getIban()), $fetchedDirectDebit->getIban());
+        $this->assertEquals($directDebit->expose(), $fetchedDirectDebit->expose());
     }
 
     /**
@@ -79,11 +77,7 @@ class SepaDirectDebitTest extends BasePaymentTest
 
         /** @var SepaDirectDebit $fetchedDirectDebit */
         $fetchedDirectDebit = $this->heidelpay->fetchPaymentType($directDebit->getId());
-        $this->assertInstanceOf(SepaDirectDebit::class, $fetchedDirectDebit);
-        $this->assertEquals($directDebit->getId(), $fetchedDirectDebit->getId());
-        $this->assertEquals($directDebit->getHolder(), $fetchedDirectDebit->getHolder());
-        $this->assertEquals($directDebit->getBic(), $fetchedDirectDebit->getBic());
-        $this->assertEquals($this->maskNumber($directDebit->getIban()), $fetchedDirectDebit->getIban());
+        $this->assertEquals($directDebit->expose(), $fetchedDirectDebit->expose());
 
         return $fetchedDirectDebit;
     }

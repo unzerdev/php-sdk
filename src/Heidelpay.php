@@ -25,6 +25,7 @@
  */
 namespace heidelpayPHP;
 
+use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
@@ -35,6 +36,7 @@ use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
@@ -54,7 +56,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.1.5.0';
+    const SDK_VERSION = '1.1.6.0';
 
     /** @var string $key */
     private $key;
@@ -1232,6 +1234,52 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
     //</editor-fold>
+
+    /**
+     * @param Paypage       $paypage
+     * @param Customer|null $customer
+     * @param Basket|null   $basket
+     * @param Metadata|null $metadata
+     *
+     * @return Paypage
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function initPayPageCharge(
+        Paypage $paypage,
+        Customer $customer = null,
+        Basket $basket = null,
+        Metadata $metadata = null
+    ): Paypage {
+        return $this->paymentService->initPayPage($paypage, TransactionTypes::CHARGE, $customer, $basket, $metadata);
+    }
+
+    /**
+     * @param Paypage       $paypage
+     * @param Customer|null $customer
+     * @param Basket|null   $basket
+     * @param Metadata|null $metadata
+     *
+     * @return Paypage
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function initPayPageAuthorize(
+        Paypage $paypage,
+        Customer $customer = null,
+        Basket $basket = null,
+        Metadata $metadata = null
+    ): Paypage {
+        return $this->paymentService->initPayPage(
+            $paypage,
+            TransactionTypes::AUTHORIZATION,
+            $customer,
+            $basket,
+            $metadata
+        );
+    }
 
     //<editor-fold desc="Helpers">
 
