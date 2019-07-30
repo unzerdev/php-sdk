@@ -32,6 +32,7 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
@@ -500,5 +501,34 @@ class PaymentService
 
     //</editor-fold>
     
+    //</editor-fold>
+
+    //<editor-fold desc="Paypage">
+
+    /**
+     * @param Paypage $paypage
+     * @param $action
+     * @param Customer      $customer
+     * @param Basket|null   $basket
+     * @param Metadata|null $metadata
+     *
+     * @return Paypage
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function initPayPage(
+        Paypage $paypage,
+        $action,
+        Customer $customer = null,
+        Basket $basket = null,
+        Metadata $metadata = null
+    ): Paypage {
+        $paypage->setAction($action)->setParentResource($this->heidelpay);
+        $payment = $this->createPayment($paypage)->setBasket($basket)->setCustomer($customer)->setMetadata($metadata);
+        $this->resourceService->create($paypage->setPayment($payment));
+        return $paypage;
+    }
+
     //</editor-fold>
 }
