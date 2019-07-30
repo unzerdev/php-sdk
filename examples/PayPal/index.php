@@ -26,13 +26,13 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 ?>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>
@@ -50,8 +50,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 <ul>
     <li>Username: paypal-customer@heidelpay.de</li>
     <li>Password: heidelpay</li>
-    <lb><strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com" target="_blank">here</a>.</lb>
 </ul>
+<strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com" target="_blank">here</a>.
 
 <p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
