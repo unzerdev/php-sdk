@@ -98,7 +98,9 @@ try {
         // the payment to update it's status. In this case it might be pending at first and change to cancel or success later.
         // Use the webhooks feature to stay informed about changes of the payment (e.g. cancel, success)
         // then you can cancel the order later or mark it paid as soon as the event is triggered.
-        redirect(SUCCESS_URL);
+
+        // In any case, the payment is not done when the payment is pending and you should ship until it changes to success.
+        redirect(PENDING_URL);
     }
     // If the payment is neither success nor pending something went wrong.
     // In this case do not create the order.
