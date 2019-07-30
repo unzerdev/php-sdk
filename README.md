@@ -18,7 +18,7 @@ Please refer to the following documentation for installation instructions and us
 *   [How to use the examples](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-using-the-example-implementations)
 *   [Debugging](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-debugging)
 
-## Supported payment types / features
+## Supported payment types
 *   Card (credit card and debit card) + Recurring
 *   Giropay
 *   iDEAL
@@ -29,11 +29,15 @@ Please refer to the following documentation for installation instructions and us
 *   SEPA direct debit (guaranteed)
 *   SOFORT
 *   EPS
-*   PIS
+*   FlexiPay direct (PIS)
 *   Alipay
 *   WeChat Pay
 *   Invoice Factoring
+
+## Supported features
+*   Webhooks and event handling
 *   Payment Page (embedded and hosted)
+*   Payout (Credit)
 
 ## Support
 For any issues or questions please get in touch with our support team.
