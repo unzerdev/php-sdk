@@ -113,9 +113,10 @@ class Metadata extends AbstractHeidelpayResource
      * Add the dynamically set meta data.
      * {@inheritDoc}
      */
-    public function expose(): array
+    public function expose()
     {
-        return array_merge(parent::expose(), $this->metadata);
+        $array_merge = array_merge((array)parent::expose(), $this->metadata);
+        return count($array_merge) > 0 ? $array_merge : new stdClass();
     }
 
     /**

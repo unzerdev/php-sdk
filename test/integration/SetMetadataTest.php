@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\integration;
 
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
@@ -134,40 +135,18 @@ class SetMetadataTest extends BasePaymentTest
     }
 
     /**
-     * Verify metadata will automatically created and referenced on authorize.
+     * Verify error is thrown when metadata is empty.
      *
      * @test
      *
-     * @throws RuntimeException
      * @throws HeidelpayApiException
-     */
-    public function authorizeShouldCreateMetadataEvenIfItHasNotBeenSet()
-    {
-        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
-        $authorize = $this->heidelpay->authorize(1.23, 'EUR', $paymentType, 'https://heidelpay.com');
-
-        $metadata = $authorize->getPayment()->getMetadata();
-        $this->assertNotEmpty($metadata->getId());
-
-        $this->assertArraySubset(['metadata' => $metadata], $authorize->getLinkedResources());
-    }
-
-    /**
-     * Verify metadata will automatically created and referenced on charge.
-     *
-     * @test
-     *
      * @throws RuntimeException
-     * @throws HeidelpayApiException
      */
-    public function chargeShouldCreateMetadataEvenIfItHasNotBeenSet()
+    public function emptyMetaDataShouldLeadToError()
     {
-        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
-        $charge = $this->heidelpay->charge(1.23, 'EUR', $paymentType, 'https://heidelpay.com');
-
-        $metadata = $charge->getPayment()->getMetadata();
-        $this->assertNotEmpty($metadata->getId());
-
-        $this->assertArraySubset(['metadata' => $metadata], $charge->getLinkedResources());
+        $metadata = new Metadata();
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_REQUEST_DATA_IS_INVALID);
+        $this->heidelpay->createMetadata($metadata);
     }
 }
