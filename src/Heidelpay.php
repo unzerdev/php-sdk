@@ -3,7 +3,7 @@
  * This is the heidelpay object which is the base object providing all functionalities needed to
  * access the api.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.1.6.1';
+    const SDK_VERSION = '1.2.0.0';
 
     /** @var string $key */
     private $key;

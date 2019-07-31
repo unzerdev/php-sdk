@@ -38,6 +38,7 @@ Please refer to the following documentation for installation instructions and us
 *   Webhooks and event handling
 *   Payment Page (embedded and hosted)
 *   Payout (Credit)
+*   Recurring Payment
 
 ## Support
 For any issues or questions please get in touch with our support team.
