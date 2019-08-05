@@ -99,7 +99,7 @@ class ChargeTest extends BasePaymentTest
         $paymentType = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
         $orderId = $this->generateRandomId();
-        $metadata = new Metadata();
+        $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
         $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
@@ -160,7 +160,7 @@ class ChargeTest extends BasePaymentTest
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
         $orderId = $this->generateRandomId();
-        $metadata = new Metadata();
+        $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
         $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
