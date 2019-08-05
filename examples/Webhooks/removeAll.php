@@ -26,6 +26,7 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
@@ -59,7 +60,7 @@ function printInfo($title, $text)
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>
@@ -76,9 +77,9 @@ function printInfo($title, $text)
 <div class="ui container segment">
     <h2 class="ui header">
         <i class="envelope outline icon"></i>
-        <div class="content">
+        <span class="content">
             Webhook registration
-        </div>
+        </span>
     </h2>
 
     <?php
