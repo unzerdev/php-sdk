@@ -146,7 +146,7 @@ class BasketTest extends BasePaymentTest
         $this->heidelpay->createBasket($basket);
 
         $fetchedBasket = $this->heidelpay->fetchBasket($basket->getId());
-        $fetchedBasket->setAmountTotal(4321);
+        $fetchedBasket->setAmountTotalGross(4321);
         $fetchedBasket->setAmountTotalDiscount(5432);
         $fetchedBasket->setNote('This basket is updateable!');
         $fetchedBasket->getBasketItemByIndex(0)->setTitle('This item can also be updated!');
@@ -154,7 +154,7 @@ class BasketTest extends BasePaymentTest
 
         $this->heidelpay->fetchBasket($basket);
         $this->assertEquals($orderId, $basket->getOrderId());
-        $this->assertEquals(4321, $basket->getAmountTotal());
+        $this->assertEquals(4321, $basket->getAmountTotalGross());
         $this->assertEquals(5432, $basket->getAmountTotalDiscount());
         $this->assertEquals('This basket is updateable!', $basket->getNote());
         $this->assertNotEquals($basket->getBasketItemByIndex(0)->expose(), $basketItem->expose());

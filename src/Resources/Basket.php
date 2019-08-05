@@ -31,8 +31,8 @@ use stdClass;
 
 class Basket extends AbstractHeidelpayResource
 {
-    /** @var float $amountTotal */
-    protected $amountTotal = 0.0;
+    /** @var float $amountTotalGross */
+    protected $amountTotalGross = 0.0;
 
     /** @var float $amountTotalDiscount */
     protected $amountTotalDiscount = 0.0;
@@ -55,20 +55,20 @@ class Basket extends AbstractHeidelpayResource
     /**
      * Basket constructor.
      *
-     * @param float  $amountTotal
+     * @param float  $amountTotalGross
      * @param string $currencyCode
      * @param string $orderId
      * @param array  $basketItems
      */
     public function __construct(
         string $orderId = '',
-        float $amountTotal = 0.0,
+        float $amountTotalGross = 0.0,
         string $currencyCode = 'EUR',
         array $basketItems = []
     ) {
-        $this->amountTotal  = $amountTotal;
-        $this->currencyCode = $currencyCode;
-        $this->orderId      = $orderId;
+        $this->amountTotalGross = $amountTotalGross;
+        $this->currencyCode     = $currencyCode;
+        $this->orderId          = $orderId;
         $this->setBasketItems($basketItems);
     }
 
@@ -77,19 +77,19 @@ class Basket extends AbstractHeidelpayResource
     /**
      * @return float
      */
-    public function getAmountTotal(): float
+    public function getAmountTotalGross(): float
     {
-        return $this->amountTotal;
+        return $this->amountTotalGross;
     }
 
     /**
-     * @param float $amountTotal
+     * @param float $amountTotalGross
      *
      * @return Basket
      */
-    public function setAmountTotal(float $amountTotal): Basket
+    public function setAmountTotalGross(float $amountTotalGross): Basket
     {
-        $this->amountTotal = $amountTotal;
+        $this->amountTotalGross = $amountTotalGross;
         return $this;
     }
 
