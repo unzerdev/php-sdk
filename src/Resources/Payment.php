@@ -819,7 +819,6 @@ class Payment extends AbstractHeidelpayResource
 
         $metadataId = $resources->metadataId ?? null;
         if (!empty($metadataId)) {
-            $metadataId = $resources->metadataId;
             if ($this->metadata instanceof Metadata && $this->metadata->getId() === $metadataId) {
                 $this->getResource($this->metadata);
             } else {
