@@ -116,7 +116,10 @@ class HttpServiceTest extends BaseUnitTest
 
         $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
         $adapterMock->expects($this->once())->method('init')->with(
-            'https://api.heidelpay.com/v1/my/uri/123',
+            $this->callback(
+                static function ($url) {
+                    return str_replace(['dev-api', 'stg-api'], 'api', $url) === 'https://api.heidelpay.com/v1/my/uri/123';
+                }),
             '{"dummyResource": "JsonSerialized"}',
             'GET'
         );
@@ -194,9 +197,17 @@ class HttpServiceTest extends BaseUnitTest
 
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
         $loggerMock->expects($this->exactly(5))->method('log')->withConsecutive(
-            ['GET: https://api.heidelpay.com/v1/my/uri/123'],
+            [ $this->callback(
+                    static function ($string) {
+                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === 'GET: https://api.heidelpay.com/v1/my/uri/123';
+                    })
+            ],
             ['Response: (200) {"response":"myResponseString"}'],
-            ['POST: https://api.heidelpay.com/v1/my/uri/123'],
+            [ $this->callback(
+                static function ($string) {
+                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === 'POST: https://api.heidelpay.com/v1/my/uri/123';
+                })
+            ],
             ['Request: {"dummyResource": "JsonSerialized"}'],
             ['Response: (201) {"response":"myResponseString"}']
         );
