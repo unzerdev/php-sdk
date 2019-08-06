@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Metadata are no longer automatically created and sent when they are not set by the merchant.
 *   Version and Type of the SDK are now sent to the API with every request.
 *   Add missing feature to readme.
+*   Renamed property `Basket::amountTotal` to `Basket::amountTotalGross` to follow the change in the API.
 
 ### Added
 *   Property `type` to `BasketItem`. 
