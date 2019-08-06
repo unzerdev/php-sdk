@@ -25,7 +25,6 @@
 namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Constants\BasketItemTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
@@ -85,7 +84,7 @@ class BasketTest extends BasePaymentTest
             ->setAmountDiscount(1234.9)
             ->setImageUrl('https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.jpg')
             ->setSubTitle('This is some subtitle for this item')
-            ->setType(BasketItemTypes::GOODS);
+            ->setType('this is some type');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 

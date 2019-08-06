@@ -24,7 +24,6 @@
  */
 namespace heidelpayPHP\Resources\EmbeddedResources;
 
-use heidelpayPHP\Constants\BasketItemTypes;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 
 class BasketItem extends AbstractHeidelpayResource
@@ -327,16 +326,15 @@ class BasketItem extends AbstractHeidelpayResource
     }
 
     /**
+     * The type of the basket item.
+     * Please refer to heidelpayPHP\Constants\BasketItemTypes for available type constants.
+     *
      * @param string|null $type
      *
      * @return BasketItem
      */
     public function setType($type): BasketItem
     {
-        if (!in_array($type, BasketItemTypes::ARRAY, true)) {
-            return $this;
-        }
-
         $this->type = $type;
         return $this;
     }

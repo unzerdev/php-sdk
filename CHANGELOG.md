@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Version and Type of the SDK are now sent to the API with every request.
 *   Add missing feature to readme.
 
+### Added
+*   Property `type` to `BasketItem`. 
+
 ## [1.1.6.0][1.1.6.0]
 
 ### Added
