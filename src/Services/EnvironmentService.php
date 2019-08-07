@@ -33,6 +33,9 @@ class EnvironmentService
 
     const ENV_VAR_NAME_DISABLE_TEST_LOGGING = 'HEIDELPAY_MGW_DISABLE_TEST_LOGGING';
 
+    const ENV_VAR_NAME_TIMEOUT = 'HEIDELPAY_MGW_TIMEOUT';
+    const ENV_VAR_DEFAULT_TIMEOUT = 60;
+
     /**
      * Returns the MGW environment set via environment variable or PROD es default.
      *
@@ -52,5 +55,17 @@ class EnvironmentService
     {
         $testLoggingDisabled = strtolower($_SERVER[self::ENV_VAR_NAME_DISABLE_TEST_LOGGING] ?? 'false');
         return in_array($testLoggingDisabled, ['false', '0'], true);
+    }
+
+    /**
+     * Returns the timeout set via environment variable or the default timeout.
+     * ATTENTION: Setting this value to 0 will disable the limit.
+     *
+     * @return int
+     */
+    public static function getTimeout(): int
+    {
+        $timeout = $_SERVER[self::ENV_VAR_NAME_TIMEOUT] ?? '';
+        return is_numeric($timeout) ? (int)$timeout : self::ENV_VAR_DEFAULT_TIMEOUT;
     }
 }
