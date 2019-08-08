@@ -351,7 +351,7 @@ class HeidelpayTest extends BaseUnitTest
     }
 
     /**
-     * Provide test data for heidelpayShouldForwardWebhookActionCallsToTheWebhookServic
+     * Provide test data for heidelpayShouldForwardWebhookActionCallsToTheWebhookService.
      *
      * @return array
      */
