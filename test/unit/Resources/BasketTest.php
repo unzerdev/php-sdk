@@ -45,7 +45,7 @@ class BasketTest extends BaseUnitTest
     public function gettersAndSettersShouldWorkProperly()
     {
         $basket = new Basket();
-        $this->assertEquals(0, $basket->getAmountTotal());
+        $this->assertEquals(0, $basket->getAmountTotalGross());
         $this->assertEquals(0, $basket->getAmountTotalDiscount());
         $this->assertEquals(0, $basket->getAmountTotalVat());
         $this->assertEquals('EUR', $basket->getCurrencyCode());
@@ -54,13 +54,13 @@ class BasketTest extends BaseUnitTest
         $this->assertIsEmptyArray($basket->getBasketItems());
         $this->assertNull($basket->getBasketItemByIndex(1));
 
-        $basket->setAmountTotal(12.34);
+        $basket->setAmountTotalGross(12.34);
         $basket->setAmountTotalDiscount(34.56);
         $basket->setAmountTotalVat(45.67);
         $basket->setCurrencyCode('USD');
         $basket->setNote('This is something I have to remember!');
         $basket->setOrderId('myOrderId');
-        $this->assertEquals(12.34, $basket->getAmountTotal());
+        $this->assertEquals(12.34, $basket->getAmountTotalGross());
         $this->assertEquals(34.56, $basket->getAmountTotalDiscount());
         $this->assertEquals(45.67, $basket->getAmountTotalVat());
         $this->assertEquals('USD', $basket->getCurrencyCode());
