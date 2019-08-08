@@ -27,6 +27,9 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Basket;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Services\ResourceService;
@@ -289,6 +292,71 @@ class PayPageTest extends BasePaymentTest
         $response->resources = new stdClass();
         $response->resources->paymentId = 'payment id';
         $paypage->handleResponse($response, $method);
+    }
+
+    /**
+     * Verify expose behaves as expected.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function exposeShouldSetBasicParams()
+    {
+        // when
+        $basket = (new Basket())->setId('basketId');
+        $customer = (new Customer())->setId('customerId');
+        $metadata = (new Metadata())->setId('metadataId');
+        $payment = (new Payment())
+            ->setParentResource($this->heidelpay)
+            ->setId('my payment id')
+            ->setBasket($basket)
+            ->setMetadata($metadata)
+            ->setCustomer($customer);
+        $paypage = (new Paypage(123.4567, 'EUR', self::RETURN_URL))
+            ->setParentResource($payment)
+            ->setFullPageImage('full page image')
+            ->setLogoImage('logo image')
+            ->setShopDescription('my shop description')
+            ->setShopName('my shop name')
+            ->setTagline('my shops tag line')
+            ->setContactUrl('my contact url')
+            ->setHelpUrl('my help url')
+            ->setImprintUrl('my imprint url')
+            ->setPrivacyPolicyUrl('my privacy policy url')
+            ->setTermsAndConditionUrl('my tac url')
+            ->setPayment($payment)
+            ->setRedirectUrl('https://redirect.url')
+            ->setOrderId('my order id')
+            ->setInvoiceId('my invoice id');
+
+        // then
+        $expected = [
+            'resources' => [
+                'basketId' => 'basketId',
+                'metadataId' => 'metadataId',
+                'paymentId' => 'my payment id',
+                'customerId' => 'customerId'
+            ],
+            'amount' => 123.4567,
+            'currency' => 'EUR',
+            'returnUrl' => self::RETURN_URL,
+            'fullPageImage' => 'full page image',
+            'logoImage' => 'logo image',
+            'shopDescription' => 'my shop description',
+            'shopName' => 'my shop name',
+            'tagline' => 'my shops tag line',
+            'contactUrl' => 'my contact url',
+            'helpUrl' => 'my help url',
+            'impressumUrl' => 'my imprint url',
+            'privacyPolicyUrl' => 'my privacy policy url',
+            'termsAndConditionUrl' => 'my tac url',
+            'orderId' => 'my order id',
+            'invoiceId' => 'my invoice id'
+        ];
+        $this->assertEquals($expected, $paypage->expose());
     }
 
     //<editor-fold desc="DataProvider">
