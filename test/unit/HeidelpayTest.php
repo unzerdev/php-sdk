@@ -311,14 +311,14 @@ class HeidelpayTest extends BaseUnitTest
         $customerId    = 'customerId';
         $paymentId     = 'paymentId';
         $chargeId      = 'chargeId';
-        $customer      = (new Customer())->setId('123');
+        $customer      = new Customer();
         $sofort        = new Sofort();
-        $metadata      = (new Metadata())->setId('123');
+        $metadata      = new Metadata();
         $payment       = new Payment();
         $authorization = new Authorization();
         $charge        = new Charge();
         $paypage       = new Paypage(123.1234, 'EUR', 'url');
-        $basket        = (new Basket())->setId('123');
+        $basket        = new Basket();
 
         return [
             'auth'                   => ['authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata], 'authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]],
