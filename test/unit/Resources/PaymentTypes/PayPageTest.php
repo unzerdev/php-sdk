@@ -359,6 +359,39 @@ class PayPageTest extends BasePaymentTest
         $this->assertEquals($expected, $paypage->expose());
     }
 
+    /**
+     * Verify resources are returned as null if no payment object exists.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function resourcesAreNullWithoutPaymentObject()
+    {
+        // when
+        $paypage = new Paypage(123.4567, 'EUR', self::RETURN_URL);
+
+        // then
+        $this->assertNull($paypage->getPayment());
+        $this->assertNull($paypage->getCustomer());
+        $this->assertNull($paypage->getMetadata());
+        $this->assertNull($paypage->getBasket());
+
+        // when
+        $basket = (new Basket())->setId('basketId');
+        $customer = (new Customer())->setId('customerId');
+        $metadata = (new Metadata())->setId('metadataId');
+        $payment = (new Payment())->setParentResource($this->heidelpay)->setBasket($basket)->setMetadata($metadata)->setCustomer($customer);
+        $paypage->setPayment($payment);
+
+        // then
+        $this->assertSame($payment, $paypage->getPayment());
+        $this->assertSame($payment->getCustomer(), $paypage->getCustomer());
+        $this->assertSame($payment->getMetadata(), $paypage->getMetadata());
+        $this->assertSame($payment->getBasket(), $paypage->getBasket());
+    }
+
     //<editor-fold desc="DataProvider">
 
     /**
