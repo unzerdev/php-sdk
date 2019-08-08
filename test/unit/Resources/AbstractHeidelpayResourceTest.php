@@ -28,6 +28,7 @@ use DateTime;
 use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Constants\Salutations;
+use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
@@ -44,6 +45,7 @@ use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
+use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\Recurring;
@@ -400,6 +402,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/'],
             'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring/'],
             'Payout' => [new Payout(), 'parent/resource/path/payouts/'],
+            'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge/'],
+            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize/']
         ];
     }
 
