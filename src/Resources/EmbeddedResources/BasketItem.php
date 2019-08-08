@@ -64,6 +64,9 @@ class BasketItem extends AbstractHeidelpayResource
     /** @var string|null $imageUrl */
     protected $imageUrl;
 
+    /** @var string|null $type */
+    protected $type;
+
     /**
      * BasketItem constructor.
      *
@@ -311,6 +314,28 @@ class BasketItem extends AbstractHeidelpayResource
     public function setSubTitle($subTitle): BasketItem
     {
         $this->subTitle = $subTitle;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * The type of the basket item.
+     * Please refer to heidelpayPHP\Constants\BasketItemTypes for available type constants.
+     *
+     * @param string|null $type
+     *
+     * @return BasketItem
+     */
+    public function setType($type): BasketItem
+    {
+        $this->type = $type;
         return $this;
     }
 

@@ -87,7 +87,7 @@ class Paypage extends BasePaymentType
     protected $contactUrl;
 
     /** @var String $action */
-    private $action;
+    private $action = TransactionTypes::CHARGE;
 
     /** @var Payment|null $payment */
     private $payment;
@@ -358,7 +358,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string
      */
-    public function getAction(): String
+    public function getAction(): string
     {
         return $this->action;
     }
@@ -370,7 +370,10 @@ class Paypage extends BasePaymentType
      */
     public function setAction(String $action): Paypage
     {
-        $this->action = $action;
+        if (in_array($action, [TransactionTypes::CHARGE, TransactionTypes::AUTHORIZATION], true)) {
+            $this->action = $action;
+        }
+
         return $this;
     }
 

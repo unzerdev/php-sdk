@@ -83,7 +83,8 @@ class BasketTest extends BasePaymentTest
             ->setUnit('ert')
             ->setAmountDiscount(1234.9)
             ->setImageUrl('https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.jpg')
-            ->setSubTitle('This is some subtitle for this item');
+            ->setSubTitle('This is some subtitle for this item')
+            ->setType('this is some type');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
@@ -92,7 +93,10 @@ class BasketTest extends BasePaymentTest
 
         $fetchedBasket = $this->heidelpay->fetchBasket($basket->getId());
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
-        $this->assertEquals('This basket is creatable!', $basket->getNote());
+        $this->assertEquals(
+            $basket->getBasketItemByIndex(0)->expose(),
+            $fetchedBasket->getBasketItemByIndex(0)->expose()
+        );
     }
 
     /**
