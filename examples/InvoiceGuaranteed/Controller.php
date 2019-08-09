@@ -35,11 +35,7 @@ use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 
 session_start();
 session_unset();
