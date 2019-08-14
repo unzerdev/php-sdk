@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the iDeal example.
+ * This file contains the allowed commercial sector items.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -16,16 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  http://dev.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP/constants
  */
+namespace heidelpayPHP\Constants;
 
-require_once __DIR__ . '/../Constants.php';
+class BasketItemTypes
+{
+    const GOODS    = 'goods';
+    const SHIPMENT = 'shipment';
+    const VOUCHER  = 'voucher';
+    const DIGITAL  = 'digital';
 
-define('EXAMPLE_PATH', __DIR__);
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'IDeal');
-define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
-define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');
+    const ARRAY = [self::GOODS, self::SHIPMENT, self::DIGITAL, self::VOUCHER];
+}

@@ -87,7 +87,7 @@ class Paypage extends BasePaymentType
     protected $contactUrl;
 
     /** @var String $action */
-    private $action;
+    private $action = TransactionTypes::CHARGE;
 
     /** @var Payment|null $payment */
     private $payment;
@@ -358,7 +358,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string
      */
-    public function getAction(): String
+    public function getAction(): string
     {
         return $this->action;
     }
@@ -370,7 +370,10 @@ class Paypage extends BasePaymentType
      */
     public function setAction(String $action): Paypage
     {
-        $this->action = $action;
+        if (in_array($action, [TransactionTypes::CHARGE, TransactionTypes::AUTHORIZATION], true)) {
+            $this->action = $action;
+        }
+
         return $this;
     }
 
@@ -405,23 +408,6 @@ class Paypage extends BasePaymentType
     }
 
     /**
-     * @param Basket $basket
-     *
-     * @return Paypage
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     */
-    protected function setBasket(Basket $basket): Paypage
-    {
-        if (!$this->payment instanceof Payment) {
-            throw new RuntimeException('The payment resource is missing.');
-        }
-        $this->payment->setBasket($basket);
-        return $this;
-    }
-
-    /**
      * @return Customer|null
      */
     public function getCustomer()
@@ -433,23 +419,6 @@ class Paypage extends BasePaymentType
     }
 
     /**
-     * @param Customer|null $customer
-     *
-     * @return Paypage
-     *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
-     */
-    protected function setCustomer($customer): Paypage
-    {
-        if (!$this->payment instanceof Payment) {
-            throw new RuntimeException('The payment resource is missing.');
-        }
-        $this->payment->setCustomer($customer);
-        return $this;
-    }
-
-    /**
      * @return Metadata|null
      */
     public function getMetadata()
@@ -458,23 +427,6 @@ class Paypage extends BasePaymentType
             return null;
         }
         return $this->payment->getMetadata();
-    }
-
-    /**
-     * @param Metadata|null $metadata
-     *
-     * @return Paypage
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     */
-    protected function setMetadata($metadata): Paypage
-    {
-        if (!$this->payment instanceof Payment) {
-            throw new RuntimeException('The payment resource is missing.');
-        }
-        $this->payment->setMetadata($metadata);
-        return $this;
     }
 
     /**
@@ -562,10 +514,6 @@ class Paypage extends BasePaymentType
         $payment = $this->getPayment();
         if (isset($response->resources->paymentId)) {
             $payment->setId($response->resources->paymentId);
-        }
-
-        if (isset($response->redirectUrl)) {
-            $payment->setRedirectUrl($response->redirectUrl);
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {

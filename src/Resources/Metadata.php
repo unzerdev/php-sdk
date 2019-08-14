@@ -25,7 +25,6 @@
 namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Heidelpay;
 use function in_array;
 use function is_callable;
 use stdClass;
@@ -36,8 +35,6 @@ class Metadata extends AbstractHeidelpayResource
 
     protected $shopType;
     protected $shopVersion;
-    protected $sdkType = Heidelpay::SDK_TYPE;
-    protected $sdkVersion = Heidelpay::SDK_VERSION;
 
     //<editor-fold desc="Setters/Getters">
 
@@ -80,44 +77,6 @@ class Metadata extends AbstractHeidelpayResource
     }
 
     /**
-     * @param string $sdkType
-     *
-     * @return Metadata
-     */
-    protected function setSdkType(string $sdkType): Metadata
-    {
-        $this->sdkType = $sdkType;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSdkType(): string
-    {
-        return $this->sdkType;
-    }
-
-    /**
-     * @param string $sdkVersion
-     *
-     * @return Metadata
-     */
-    protected function setSdkVersion(string $sdkVersion): Metadata
-    {
-        $this->sdkVersion = $sdkVersion;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSdkVersion(): string
-    {
-        return $this->sdkVersion;
-    }
-
-    /**
      * Magic setter
      *
      * @param string $name
@@ -154,9 +113,10 @@ class Metadata extends AbstractHeidelpayResource
      * Add the dynamically set meta data.
      * {@inheritDoc}
      */
-    public function expose(): array
+    public function expose()
     {
-        return array_merge(parent::expose(), $this->metadata);
+        $array_merge = array_merge((array)parent::expose(), $this->metadata);
+        return count($array_merge) > 0 ? $array_merge : new stdClass();
     }
 
     /**

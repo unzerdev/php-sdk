@@ -158,7 +158,8 @@ class HttpService
         $httpHeaders = [
             'Authorization' => 'Basic ' . base64_encode($key . ':'),
             'Content-Type'  => 'application/json',
-            'SDK-VERSION'   => Heidelpay::SDK_VERSION
+            'SDK-VERSION'   => Heidelpay::SDK_VERSION,
+            'SDK-TYPE'   => Heidelpay::SDK_TYPE
         ];
         /** @noinspection IsEmptyFunctionUsageInspection */
         if (!empty($locale)) {

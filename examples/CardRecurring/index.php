@@ -46,18 +46,16 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
-<h3>Example Data #1:</h3>
+<h3>Example Data for VISA:</h3>
 <ul>
-    <lh><strong>VISA</strong></lh>
     <li>Number: 4711100000000000</li>
     <li>Expiry date: Date in the future</li>
     <li>Cvc: 123</li>
     <li>Secret: secret3</li>
 </ul>
 
-<h3>Example Data #2:</h3>
+<h3>Example Data for Mastercard:</h3>
 <ul>
-    <lh><strong>Mastercard</strong></lh>
     <li>Number: 5453010000059543</li>
     <li>Expiry date: Date in the future</li>
     <li>Cvc: 123</li>

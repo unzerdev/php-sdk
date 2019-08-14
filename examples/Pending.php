@@ -1,8 +1,8 @@
 <?php
 /**
- * This is the failure page for the example payments.
+ * This is the pending page for the example payments.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,18 +29,19 @@ session_start();
 <!DOCTYPE html>
 <html lang="en">
     <body>
-        <h1>Failure</h1>
+        <h1>Pending</h1>
         <p>
-            There has been an error completing the payment.
+            The payment transaction has been completed, however the payment is pending.<br>
+            In some cases (e. g. authorization transaction or invoice payments) this is normal.<br>
+            In other cases the status of the payment is not definite at the moment.<br>
+            You can create the Order in your shop but should set its status to <i>pending payment</i>.
+        </p>
+        <p>
+            Please use the webhook feature to be informed about later changes of the payment.
+            You should ship only if the payment changes to completed.
             <?php
-            if (isset($_SESSION['merchantMessage']) && !empty($_SESSION['merchantMessage'])) {
-                echo '<p><strong>Merchant message:</strong> ' . $_SESSION['merchantMessage'] . '</p>';
-            }
-            if (isset($_SESSION['clientMessage']) && !empty($_SESSION['clientMessage'])) {
-                echo '<p><strong>Client message:</strong> ' . $_SESSION['clientMessage'] . '</p>';
-            }
             if (isset($_SESSION['ShortId']) && !empty($_SESSION['ShortId'])) {
-                echo '<p>Please look for ShortId ' . $_SESSION['ShortId'] . ' in hIP (heidelpay Intelligence Platform) to see the transaction.</p>';
+                echo '<br>Please look for ShortId ' . $_SESSION['ShortId'] . ' in hIP (heidelpay Intelligence Platform) to see the transaction.';
             }
             ?>
         </p>

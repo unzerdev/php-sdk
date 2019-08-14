@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\Adapter;
 
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+
 interface HttpAdapterInterface
 {
     const REQUEST_POST = 'POST';
@@ -44,6 +46,8 @@ interface HttpAdapterInterface
      * Executes the request and returns the response.
      *
      * @return string|null
+     *
+     * @throws HeidelpayApiException
      */
     public function execute();
 

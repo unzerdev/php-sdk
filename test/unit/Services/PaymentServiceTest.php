@@ -24,12 +24,14 @@
  */
 namespace heidelpayPHP\test\unit\Services;
 
+use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -40,6 +42,8 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use function in_array;
 use ReflectionException;
 use RuntimeException;
@@ -590,6 +594,55 @@ class PaymentServiceTest extends BaseUnitTest
 
     //</editor-fold>
 
+    //<editor-fold desc="PayPage">
+
+    /**
+     * Verify initPayPage creates a payment with resources and calls create with said payment.
+     *
+     * @test
+     *
+     * @dataProvider paymentShouldBeCreatedByInitPayPageDP
+     *
+     * @param string $action
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function paymentShouldBeCreatedByInitPayPage(string $action)
+    {
+        /** @var ResourceService|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])->disableOriginalConstructor()->getMock();
+        $paymentSrv = (new PaymentService(new Heidelpay('s-priv-1234')))->setResourceService($resourceSrvMock);
+
+        // when
+        $paypage = new Paypage(123.4, 'CHF', 'url');
+        $basket = (new Basket())->setId('basketId');
+        $customer = (new Customer())->setId('customerId');
+        $metadata = (new Metadata())->setId('metadataId');
+
+        // should
+        $resourceSrvMock->expects($this->once())->method('create')->with(
+            $this->callback(
+                static function ($paypage) use ($basket, $customer, $metadata, $action) {
+                    return $paypage instanceof Paypage &&
+                        $paypage->getPayment() instanceof Payment &&
+                        $basket === $paypage->getBasket() &&
+                        $customer === $paypage->getCustomer() &&
+                        $metadata === $paypage->getMetadata() &&
+                        $action === $paypage->getAction();
+                }
+            )
+        );
+
+        // when
+        $paymentSrv->initPayPage($paypage, $action, $customer, $basket, $metadata);
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="DataProviders">
 
     /**
@@ -601,6 +654,17 @@ class PaymentServiceTest extends BaseUnitTest
             'default' => [null],
             'non 3ds' => [false],
             '3ds' => [true],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function paymentShouldBeCreatedByInitPayPageDP(): array
+    {
+        return [
+            TransactionTypes::CHARGE => [TransactionTypes::CHARGE],
+            TransactionTypes::AUTHORIZATION => [TransactionTypes::AUTHORIZATION]
         ];
     }
 

@@ -31,8 +31,8 @@ use stdClass;
 
 class Basket extends AbstractHeidelpayResource
 {
-    /** @var float $amountTotal */
-    protected $amountTotal = 0.0;
+    /** @var float $amountTotalGross */
+    protected $amountTotalGross = 0.0;
 
     /** @var float $amountTotalDiscount */
     protected $amountTotalDiscount = 0.0;
@@ -55,20 +55,20 @@ class Basket extends AbstractHeidelpayResource
     /**
      * Basket constructor.
      *
-     * @param float  $amountTotal
+     * @param float  $amountTotalGross
      * @param string $currencyCode
      * @param string $orderId
      * @param array  $basketItems
      */
     public function __construct(
         string $orderId = '',
-        float $amountTotal = 0.0,
+        float $amountTotalGross = 0.0,
         string $currencyCode = 'EUR',
         array $basketItems = []
     ) {
-        $this->amountTotal  = $amountTotal;
-        $this->currencyCode = $currencyCode;
-        $this->orderId      = $orderId;
+        $this->amountTotalGross = $amountTotalGross;
+        $this->currencyCode     = $currencyCode;
+        $this->orderId          = $orderId;
         $this->setBasketItems($basketItems);
     }
 
@@ -77,20 +77,42 @@ class Basket extends AbstractHeidelpayResource
     /**
      * @return float
      */
+    public function getAmountTotalGross(): float
+    {
+        return $this->amountTotalGross;
+    }
+
+    /**
+     * @param float $amountTotalGross
+     *
+     * @return Basket
+     */
+    public function setAmountTotalGross(float $amountTotalGross): Basket
+    {
+        $this->amountTotalGross = $amountTotalGross;
+        return $this;
+    }
+
+    /**
+     * @return float
+     *
+     * @deprecated since 1.2.0.0 Please use getAmountTotalGross instead.
+     */
     public function getAmountTotal(): float
     {
-        return $this->amountTotal;
+        return $this->getAmountTotalGross();
     }
 
     /**
      * @param float $amountTotal
      *
      * @return Basket
+     *
+     * @deprecated since 1.2.0.0 Please use setAmountTotalGross instead.
      */
     public function setAmountTotal(float $amountTotal): Basket
     {
-        $this->amountTotal = $amountTotal;
-        return $this;
+        return $this->setAmountTotalGross($amountTotal);
     }
 
     /**
