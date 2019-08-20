@@ -1,7 +1,7 @@
 <?php
 /**
- * This is the controller for the Sofort example.
- * It is called when the pay button on the index page is clicked.
+ * This is the return controller for the FlexiPay Direct (PIS) example.
+ * It is called when the client is redirected back to the shop from the external page.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -34,9 +34,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-
-session_start();
-session_unset();
+use heidelpayPHP\Resources\TransactionTypes\Charge;
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
@@ -49,11 +47,13 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
-// You will need the id of the payment type created in the frontend (index.php)
-if (!isset($_POST['resourceId'])) {
-    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
+session_start();
+
+// Retrieve the paymentId you remembered within the Controller
+if (!isset($_SESSION['PaymentId'])) {
+    redirect(FAILURE_URL, 'The payment id is missing.', $clientMessage);
 }
-$paymentTypeId   = $_POST['resourceId'];
+$paymentId = $_SESSION['PaymentId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -61,19 +61,34 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Create a charge transaction to get the redirectUrl.
-    $transaction = $heidelpay->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+    // Redirect to success if the payment has been successfully completed.
+    $payment   = $heidelpay->fetchPayment($paymentId);
 
-    // You'll need to remember the paymentId for later in the ReturnController
-    $_SESSION['PaymentId'] = $transaction->getPaymentId();
-    $_SESSION['ShortId']   = $transaction->getShortId();
+    if ($payment->isCompleted()) {
+        // The payment process has been successful.
+        // You can create the order and show a success page.
+        redirect(SUCCESS_URL);
+    } elseif ($payment->isPending()) {
+        // In case of authorization this is normal since you will later charge the payment.
+        // You can create the order with status pending payment and show a success page to the customer if you want.
 
-    // Redirect to the Sofort page
-    if (!$transaction->isError() && $transaction->getRedirectUrl() !== null) {
-        redirect($transaction->getRedirectUrl());
+        // In cases of redirection to an external service (e.g. 3D secure, PayPal, etc) it sometimes takes time for
+        // the payment to update it's status. In this case it might be pending at first and change to cancel or success later.
+        // Use the webhooks feature to stay informed about changes of the payment (e.g. cancel, success)
+        // then you can cancel the order later or mark it paid as soon as the event is triggered.
+
+        // In any case, the payment is not done when the payment is pending and you should ship until it changes to success.
+        redirect(PENDING_URL);
     }
+    // If the payment is neither success nor pending something went wrong.
+    // In this case do not create the order.
+    // Redirect to an error page in your shop and show an message if you want.
 
-    // Check the result message of the charge to find out what went wrong.
+    // Check the result message of the transaction to find out what went wrong.
+    $transaction = $payment->getChargeByIndex(0);
+    if (!$transaction instanceof Charge) {
+        $transaction = $payment->getChargeByIndex(0);
+    }
     $merchantMessage = $transaction->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
@@ -82,3 +97,4 @@ try {
     $merchantMessage = $e->getMessage();
 }
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);
+
