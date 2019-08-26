@@ -24,8 +24,12 @@
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
+use heidelpayPHP\Traits\HasInvoiceId;
+
 class Payout extends AbstractTransactionType
 {
+    use HasInvoiceId;
+
     /** @var float|null $amount */
     protected $amount;
 

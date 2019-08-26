@@ -47,6 +47,7 @@ trait CanPayout
      * @param Basket|null          $basket    The Basket object corresponding to the payment.
      *                                        The Basket object will be created automatically if it does not exist
      *                                        yet (i.e. has no id).
+     * @param string|null          $invoiceId The external id of the invoice.
      *
      * @return Payout
      *
@@ -60,7 +61,8 @@ trait CanPayout
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $invoiceId = null
     ): Payout {
         if ($this instanceof HeidelpayParentInterface) {
             return $this->getHeidelpayObject()->payout(
@@ -71,7 +73,8 @@ trait CanPayout
                 $customer,
                 $orderId,
                 $metadata,
-                $basket
+                $basket,
+                $invoiceId
             );
         }
 

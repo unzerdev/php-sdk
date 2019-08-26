@@ -332,6 +332,7 @@ class PaymentService
      * @param Basket|null            $basket      The Basket object corresponding to the payment.
      *                                            The Basket object will be created automatically if it does not exist
      *                                            yet (i.e. has no id).
+     * @param string|null            $invoiceId   The external id of the invoice.
      *
      * @return Payout The resulting object of the Payout resource.
      *
@@ -346,7 +347,8 @@ class PaymentService
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $invoiceId = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
         return $this->payoutWithPayment(
@@ -357,7 +359,9 @@ class PaymentService
             $customer,
             $orderId,
             $metadata,
-            $basket);
+            $basket,
+            $invoiceId
+        );
     }
 
     /**
@@ -371,6 +375,7 @@ class PaymentService
      * @param string|null          $orderId   A custom order id which can be set by the merchant.
      * @param null                 $metadata
      * @param null                 $basket
+     * @param string|null          $invoiceId The external id of the invoice.
      *
      * @return Payout The resulting object of the Payout resource.
      *
@@ -385,9 +390,10 @@ class PaymentService
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $invoiceId = null
     ): AbstractTransactionType {
-        $payout = (new Payout($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $payout = (new Payout($amount, $currency, $returnUrl))->setOrderId($orderId)->setInvoiceId($invoiceId);
         $payment->setPayout($payout)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->resourceService->create($payout);
 
