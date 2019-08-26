@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Parameters `paymentReference` and `invoiceId` to `Authorization` and `Payout`.
+*   The SDK now supports the webhook event `payout`.
+
+### Changed
+*   The webhook tests now cover all supported events.
 
 ## [1.2.0.0][1.2.0.0]
 
