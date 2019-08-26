@@ -87,17 +87,15 @@ class WebhookTest extends BasePaymentTest
     /**
      * Verify Webhook event can not be updated.
      *
-     * @depends webhookResourceCanBeRegisteredAndFetched
      * @test
-     *
-     * @param Webhook $webhook
      *
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws RuntimeException
      */
-    public function webhookEventShouldNotBeUpdateable(Webhook $webhook)
+    public function webhookEventShouldNotBeUpdateable()
     {
+        $webhook = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::ALL);
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
 
@@ -111,17 +109,15 @@ class WebhookTest extends BasePaymentTest
     /**
      * Verify Webhook resource can be deleted.
      *
-     * @depends webhookResourceCanBeRegisteredAndFetched
      * @test
-     *
-     * @param Webhook $webhook
      *
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function webhookResourceShouldBeDeletable(Webhook $webhook)
+    public function webhookResourceShouldBeDeletable()
     {
+        $webhook = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::ALL);
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
 
