@@ -1200,17 +1200,18 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Performs a Payout transaction and returns the resulting Payout resource.
      *
-     * @param float                  $amount      The amount to charge.
-     * @param string                 $currency    The currency of the amount.
-     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
-     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
-     * @param string|null            $orderId     A custom order id which can be set by the merchant.
-     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
-     * @param Basket|null            $basket      The Basket object corresponding to the payment.
-     *                                            The Basket object will be created automatically if it does not exist
-     *                                            yet (i.e. has no id).
-     * @param string|null            $invoiceId   The external id of the invoice.
+     * @param float                  $amount           The amount to charge.
+     * @param string                 $currency         The currency of the amount.
+     * @param string|BasePaymentType $paymentType      The PaymentType object or the id of the PaymentType to use.
+     * @param string                 $returnUrl        The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer         The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId          A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata         The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket           The Basket object corresponding to the payment.
+     *                                                 The Basket object will be created automatically if it does not exist
+     *                                                 yet (i.e. has no id).
+     * @param string|null            $invoiceId        The external id of the invoice.
+     * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Payout The resulting object of the Payout resource.
      *
@@ -1226,7 +1227,8 @@ class Heidelpay implements HeidelpayParentInterface
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $invoiceId = null
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
         return $this->paymentService->payout(
             $amount,
@@ -1237,7 +1239,8 @@ class Heidelpay implements HeidelpayParentInterface
             $orderId,
             $metadata,
             $basket,
-            $invoiceId
+            $invoiceId,
+            $paymentReference
         );
     }
 

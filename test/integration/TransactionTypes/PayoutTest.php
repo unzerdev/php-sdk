@@ -164,9 +164,9 @@ class PayoutTest extends BasePaymentTest
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
         $invoiceId = $this->generateRandomId();
-//        $paymentReference = 'paymentReference';
+        $paymentReference = 'paymentReference';
 
-        $payout = $card->payout(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId/*, $paymentReference*/);
+        $payout = $card->payout(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId, $paymentReference);
         $payment = $payout->getPayment();
 
         $this->assertSame($card, $payment->getPaymentType());
@@ -178,7 +178,7 @@ class PayoutTest extends BasePaymentTest
         $this->assertSame($metadata, $payment->getMetadata());
         $this->assertSame($basket, $payment->getBasket());
         $this->assertEquals($invoiceId, $payout->getInvoiceId());
-//        $this->assertEquals($paymentReference, $payout->getPaymentReference());
+        $this->assertEquals($paymentReference, $payout->getPaymentReference());
 
         $fetchedPayout = $this->heidelpay->fetchPayout($payout->getPaymentId());
         $fetchedPayment = $fetchedPayout->getPayment();
@@ -192,6 +192,6 @@ class PayoutTest extends BasePaymentTest
         $this->assertEquals($payment->getMetadata()->expose(), $fetchedPayment->getMetadata()->expose());
         $this->assertEquals($payment->getBasket()->expose(), $fetchedPayment->getBasket()->expose());
         $this->assertEquals($payout->getInvoiceId(), $fetchedPayout->getInvoiceId());
-//        $this->assertEquals($payout->getPaymentReference(), $fetchedPayout->getPaymentReference());
+        $this->assertEquals($payout->getPaymentReference(), $fetchedPayout->getPaymentReference());
     }
 }

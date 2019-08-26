@@ -322,17 +322,18 @@ class PaymentService
     /**
      * Performs a Payout transaction and returns the resulting Payout resource.
      *
-     * @param float                  $amount      The amount to charge.
-     * @param string                 $currency    The currency of the amount.
-     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
-     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
-     * @param string|null            $orderId     A custom order id which can be set by the merchant.
-     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
-     * @param Basket|null            $basket      The Basket object corresponding to the payment.
-     *                                            The Basket object will be created automatically if it does not exist
-     *                                            yet (i.e. has no id).
-     * @param string|null            $invoiceId   The external id of the invoice.
+     * @param float                  $amount           The amount to charge.
+     * @param string                 $currency         The currency of the amount.
+     * @param string|BasePaymentType $paymentType      The PaymentType object or the id of the PaymentType to use.
+     * @param string                 $returnUrl        The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer         The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId          A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata         The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket           The Basket object corresponding to the payment.
+     *                                                 The Basket object will be created automatically if it does not exist
+     *                                                 yet (i.e. has no id).
+     * @param string|null            $invoiceId        The external id of the invoice.
+     * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Payout The resulting object of the Payout resource.
      *
@@ -348,7 +349,8 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $invoiceId = null
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
         return $this->payoutWithPayment(
@@ -360,22 +362,24 @@ class PaymentService
             $orderId,
             $metadata,
             $basket,
-            $invoiceId
+            $invoiceId,
+            $paymentReference
         );
     }
 
     /**
      * Performs a Payout transaction and returns the resulting Payout resource.
      *
-     * @param float                $amount    The amount to charge.
-     * @param string               $currency  The currency of the amount.
-     * @param Payment              $payment   The payment object associated with the payout.
-     * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null $customer  The customer associated with the payout.
-     * @param string|null          $orderId   A custom order id which can be set by the merchant.
+     * @param float                $amount           The amount to charge.
+     * @param string               $currency         The currency of the amount.
+     * @param Payment              $payment          The payment object associated with the payout.
+     * @param string               $returnUrl        The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null $customer         The customer associated with the payout.
+     * @param string|null          $orderId          A custom order id which can be set by the merchant.
      * @param null                 $metadata
      * @param null                 $basket
-     * @param string|null          $invoiceId The external id of the invoice.
+     * @param string|null          $invoiceId        The external id of the invoice.
+     * @param string|null          $paymentReference A reference text for the payment.
      *
      * @return Payout The resulting object of the Payout resource.
      *
@@ -391,9 +395,13 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $invoiceId = null
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
-        $payout = (new Payout($amount, $currency, $returnUrl))->setOrderId($orderId)->setInvoiceId($invoiceId);
+        $payout = (new Payout($amount, $currency, $returnUrl))
+            ->setOrderId($orderId)
+            ->setInvoiceId($invoiceId)
+            ->setPaymentReference($paymentReference);
         $payment->setPayout($payout)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->resourceService->create($payout);
 
