@@ -45,6 +45,9 @@ class Authorization extends AbstractTransactionType
     /** @var bool $card3ds */
     protected $card3ds;
 
+    /** @var string $paymentReference */
+    protected $paymentReference;
+
     /**
      * Authorization constructor.
      *
@@ -136,6 +139,24 @@ class Authorization extends AbstractTransactionType
     public function setCard3ds($card3ds): Authorization
     {
         $this->card3ds = $card3ds;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPaymentReference()
+    {
+        return $this->paymentReference;
+    }
+
+    /**
+     * @param $paymentReference
+     * @return Authorization
+     */
+    public function setPaymentReference($paymentReference): Authorization
+    {
+        $this->paymentReference = $paymentReference;
         return $this;
     }
 

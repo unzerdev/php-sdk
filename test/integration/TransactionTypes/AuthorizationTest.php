@@ -27,7 +27,9 @@ namespace heidelpayPHP\test\integration\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\test\BasePaymentTest;
@@ -161,6 +163,58 @@ class AuthorizationTest extends BasePaymentTest
     }
 
     /**
+     * Verify authorize accepts all parameters.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function authorizeShouldAcceptAllParameters()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $customer = $this->getMinimalCustomer();
+        $orderId = $this->generateRandomId();
+        $metadata = (new Metadata())->addMetadata('key', 'value');
+        $basket = $this->createBasket();
+        $invoiceId = $this->generateRandomId();
+        $paymentReference = 'paymentReference';
+
+        $authorize = $card->authorize(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, /*$invoiceId, */$paymentReference);
+        $payment = $authorize->getPayment();
+
+        $this->assertSame($card, $payment->getPaymentType());
+        $this->assertEquals(100.0, $authorize->getAmount());
+        $this->assertEquals('EUR', $authorize->getCurrency());
+        $this->assertEquals(self::RETURN_URL, $authorize->getReturnUrl());
+        $this->assertSame($customer, $payment->getCustomer());
+        $this->assertEquals($orderId, $authorize->getOrderId());
+        $this->assertSame($metadata, $payment->getMetadata());
+        $this->assertSame($basket, $payment->getBasket());
+        $this->assertTrue($authorize->isCard3ds());
+//        $this->assertEquals($invoiceId, $authorize->getInvoiceId());
+        $this->assertEquals($paymentReference, $authorize->getPaymentReference());
+
+        $fetchedCharge = $this->heidelpay->fetchAuthorization($authorize->getPaymentId());
+        $fetchedPayment = $fetchedCharge->getPayment();
+
+        $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());
+        $this->assertEquals($authorize->getAmount(), $fetchedCharge->getAmount());
+        $this->assertEquals($authorize->getCurrency(), $fetchedCharge->getCurrency());
+        $this->assertEquals($authorize->getReturnUrl(), $fetchedCharge->getReturnUrl());
+        $this->assertEquals($payment->getCustomer()->expose(), $fetchedPayment->getCustomer()->expose());
+        $this->assertEquals($authorize->getOrderId(), $fetchedCharge->getOrderId());
+        $this->assertEquals($payment->getMetadata()->expose(), $fetchedPayment->getMetadata()->expose());
+        $this->assertEquals($payment->getBasket()->expose(), $fetchedPayment->getBasket()->expose());
+        $this->assertEquals($authorize->isCard3ds(), $fetchedCharge->isCard3ds());
+//        $this->assertEquals($authorize->getInvoiceId(), $fetchedCharge->getInvoiceId());
+        $this->assertEquals($authorize->getPaymentReference(), $fetchedCharge->getPaymentReference());
+    }
+
+    //<editor-fold desc="Data Providers">
+
+    /**
      * @return array
      *
      * @throws RuntimeException
@@ -172,4 +226,6 @@ class AuthorizationTest extends BasePaymentTest
             'paypal' => [new Paypal(), 'pending']
         ];
     }
+
+    //</editor-fold>
 }

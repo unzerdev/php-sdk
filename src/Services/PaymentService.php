@@ -135,11 +135,12 @@ class PaymentService
      * @param Customer|string|null   $customer
      * @param string|null            $orderId
      * @param Metadata|string|null   $metadata
-     * @param Basket|null            $basket      The Basket object corresponding to the payment.
-     *                                            The Basket object will be created automatically if it does not exist
-     *                                            yet (i.e. has no id).
-     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
-     *                                            optional and will be ignored if not applicable.
+     * @param Basket|null            $basket           The Basket object corresponding to the payment.
+     *                                                 The Basket object will be created automatically if it does not exist
+     *                                                 yet (i.e. has no id).
+     * @param bool|null              $card3ds          Enables 3ds channel for credit cards if available. This parameter is
+     *                                                 optional and will be ignored if not applicable.
+     * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -155,7 +156,8 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
         return $this->authorizeWithPayment(
@@ -167,7 +169,8 @@ class PaymentService
             $orderId,
             $metadata,
             $basket,
-            $card3ds
+            $card3ds,
+            $paymentReference
         );
     }
 
@@ -181,11 +184,12 @@ class PaymentService
      * @param Customer|string|null $customer
      * @param string|null          $orderId
      * @param Metadata|string|null $metadata
-     * @param Basket|null          $basket    The Basket object corresponding to the payment.
-     *                                        The Basket object will be created automatically if it does not exist
-     *                                        yet (i.e. has no id).
-     * @param bool|null            $card3ds   Enables 3ds channel for credit cards if available. This parameter is
-     *                                        optional and will be ignored if not applicable.
+     * @param Basket|null          $basket           The Basket object corresponding to the payment.
+     *                                               The Basket object will be created automatically if it does not exist
+     *                                               yet (i.e. has no id).
+     * @param bool|null            $card3ds          Enables 3ds channel for credit cards if available. This parameter is
+     *                                               optional and will be ignored if not applicable.
+     * @param string|null          $paymentReference A reference text for the payment.
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -201,9 +205,12 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $paymentReference = null
     ): Authorization {
-        $authorization = (new Authorization($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $authorization = (new Authorization($amount, $currency, $returnUrl))
+            ->setOrderId($orderId)
+            ->setPaymentReference($paymentReference);
         if ($card3ds !== null) {
             $authorization->setCard3ds($card3ds);
         }
