@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.2.1.0][1.2.1.0]
 
 ### Added
-*   Parameters the `paymentReference` and `invoiceId` to `Authorization`.
+*   Parameters `paymentReference` and `invoiceId` to `Authorization` and `Payout`.
 
 ## [1.2.0.0][1.2.0.0]
 
