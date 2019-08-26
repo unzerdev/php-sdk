@@ -140,6 +140,7 @@ class PaymentService
      *                                                 yet (i.e. has no id).
      * @param bool|null              $card3ds          Enables 3ds channel for credit cards if available. This parameter is
      *                                                 optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId        The external id of the invoice.
      * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Authorization Resulting Authorization object.
@@ -157,6 +158,7 @@ class PaymentService
         $metadata = null,
         $basket = null,
         $card3ds = null,
+        $invoiceId = null,
         $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
@@ -170,6 +172,7 @@ class PaymentService
             $metadata,
             $basket,
             $card3ds,
+            $invoiceId,
             $paymentReference
         );
     }
@@ -189,6 +192,7 @@ class PaymentService
      *                                               yet (i.e. has no id).
      * @param bool|null            $card3ds          Enables 3ds channel for credit cards if available. This parameter is
      *                                               optional and will be ignored if not applicable.
+     * @param string|null          $invoiceId        The external id of the invoice.
      * @param string|null          $paymentReference A reference text for the payment.
      *
      * @return Authorization Resulting Authorization object.
@@ -206,10 +210,12 @@ class PaymentService
         $metadata = null,
         $basket = null,
         $card3ds = null,
+        $invoiceId = null,
         $paymentReference = null
     ): Authorization {
         $authorization = (new Authorization($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
+            ->setInvoiceId($invoiceId)
             ->setPaymentReference($paymentReference);
         if ($card3ds !== null) {
             $authorization->setCard3ds($card3ds);

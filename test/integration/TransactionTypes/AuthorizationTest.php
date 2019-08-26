@@ -181,7 +181,7 @@ class AuthorizationTest extends BasePaymentTest
         $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
 
-        $authorize = $card->authorize(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, /*$invoiceId, */$paymentReference);
+        $authorize = $card->authorize(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
         $payment = $authorize->getPayment();
 
         $this->assertSame($card, $payment->getPaymentType());
@@ -193,23 +193,23 @@ class AuthorizationTest extends BasePaymentTest
         $this->assertSame($metadata, $payment->getMetadata());
         $this->assertSame($basket, $payment->getBasket());
         $this->assertTrue($authorize->isCard3ds());
-//        $this->assertEquals($invoiceId, $authorize->getInvoiceId());
+        $this->assertEquals($invoiceId, $authorize->getInvoiceId());
         $this->assertEquals($paymentReference, $authorize->getPaymentReference());
 
-        $fetchedCharge = $this->heidelpay->fetchAuthorization($authorize->getPaymentId());
-        $fetchedPayment = $fetchedCharge->getPayment();
+        $fetchedAuthorize = $this->heidelpay->fetchAuthorization($authorize->getPaymentId());
+        $fetchedPayment = $fetchedAuthorize->getPayment();
 
         $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());
-        $this->assertEquals($authorize->getAmount(), $fetchedCharge->getAmount());
-        $this->assertEquals($authorize->getCurrency(), $fetchedCharge->getCurrency());
-        $this->assertEquals($authorize->getReturnUrl(), $fetchedCharge->getReturnUrl());
+        $this->assertEquals($authorize->getAmount(), $fetchedAuthorize->getAmount());
+        $this->assertEquals($authorize->getCurrency(), $fetchedAuthorize->getCurrency());
+        $this->assertEquals($authorize->getReturnUrl(), $fetchedAuthorize->getReturnUrl());
         $this->assertEquals($payment->getCustomer()->expose(), $fetchedPayment->getCustomer()->expose());
-        $this->assertEquals($authorize->getOrderId(), $fetchedCharge->getOrderId());
+        $this->assertEquals($authorize->getOrderId(), $fetchedAuthorize->getOrderId());
         $this->assertEquals($payment->getMetadata()->expose(), $fetchedPayment->getMetadata()->expose());
         $this->assertEquals($payment->getBasket()->expose(), $fetchedPayment->getBasket()->expose());
-        $this->assertEquals($authorize->isCard3ds(), $fetchedCharge->isCard3ds());
-//        $this->assertEquals($authorize->getInvoiceId(), $fetchedCharge->getInvoiceId());
-        $this->assertEquals($authorize->getPaymentReference(), $fetchedCharge->getPaymentReference());
+        $this->assertEquals($authorize->isCard3ds(), $fetchedAuthorize->isCard3ds());
+        $this->assertEquals($authorize->getInvoiceId(), $fetchedAuthorize->getInvoiceId());
+        $this->assertEquals($authorize->getPaymentReference(), $fetchedAuthorize->getPaymentReference());
     }
 
     //<editor-fold desc="Data Providers">

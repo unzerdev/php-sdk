@@ -49,6 +49,7 @@ trait CanAuthorize
      *                                               yet (i.e. has no id).
      * @param bool|null            $card3ds          Enables 3ds channel for credit cards if available. This parameter is
      *                                               optional and will be ignored if not applicable.
+     * @param string|null          $invoiceId        The external id of the invoice.
      * @param string|null          $paymentReference A reference text for the payment.
      *
      * @return Authorization
@@ -65,6 +66,7 @@ trait CanAuthorize
         $metadata = null,
         $basket = null,
         $card3ds = null,
+        $invoiceId = null,
         $paymentReference = null
     ): Authorization {
         if ($this instanceof HeidelpayParentInterface) {
@@ -78,6 +80,7 @@ trait CanAuthorize
                 $metadata,
                 $basket,
                 $card3ds,
+                $invoiceId,
                 $paymentReference
             );
         }

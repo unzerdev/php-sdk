@@ -44,10 +44,11 @@ trait CanAuthorizeWithCustomer
      * @param Customer|string $customer
      * @param string|null     $orderId
      * @param Metadata|null   $metadata
-     * @param Basket|null     $basket   The Basket object corresponding to the payment.
-     *                                  The Basket object will be created automatically if it does not exist
-     *                                  yet (i.e. has no id).
-     * @param string|null          $paymentReference A reference text for the payment.
+     * @param Basket|null     $basket           The Basket object corresponding to the payment.
+     *                                          The Basket object will be created automatically if it does not exist
+     *                                          yet (i.e. has no id).
+     * @param string|null     $invoiceId        The external id of the invoice.
+     * @param string|null     $paymentReference A reference text for the payment.
      *
      * @return Authorization
      *
@@ -62,6 +63,7 @@ trait CanAuthorizeWithCustomer
         $orderId = null,
         $metadata = null,
         $basket = null,
+        $invoiceId = null,
         $paymentReference = null
     ): Authorization {
         if ($this instanceof HeidelpayParentInterface) {
@@ -74,6 +76,7 @@ trait CanAuthorizeWithCustomer
                 $orderId,
                 $metadata,
                 $basket,
+                $invoiceId,
                 $paymentReference
             );
         }

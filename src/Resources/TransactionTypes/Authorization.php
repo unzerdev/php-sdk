@@ -27,11 +27,13 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Traits\HasCancellations;
+use heidelpayPHP\Traits\HasInvoiceId;
 use RuntimeException;
 
 class Authorization extends AbstractTransactionType
 {
     use HasCancellations;
+    use HasInvoiceId;
 
     /** @var float $amount */
     protected $amount = 0.0;
@@ -152,6 +154,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param $paymentReference
+     *
      * @return Authorization
      */
     public function setPaymentReference($paymentReference): Authorization
