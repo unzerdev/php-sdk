@@ -56,7 +56,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.2.0.0';
+    const SDK_VERSION = '1.2.1.0';
 
     /** @var string $key */
     private $key;
@@ -931,6 +931,7 @@ class Heidelpay implements HeidelpayParentInterface
      *                                                 yet (i.e. has no id).
      * @param bool|null              $card3ds          Enables 3ds channel for credit cards if available. This parameter is
      *                                                 optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId        The external id of the invoice.
      * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Authorization The resulting object of the Authorization resource.
@@ -948,6 +949,7 @@ class Heidelpay implements HeidelpayParentInterface
         $metadata = null,
         $basket = null,
         $card3ds = null,
+        $invoiceId = null,
         $paymentReference = null
     ): AbstractTransactionType {
         return $this->paymentService->authorize(
@@ -960,6 +962,7 @@ class Heidelpay implements HeidelpayParentInterface
             $metadata,
             $basket,
             $card3ds,
+            $invoiceId,
             $paymentReference
         );
     }
