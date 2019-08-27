@@ -14,6 +14,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 *   The webhook tests now cover all supported events.
 
+### Removed
+*   SAQ-A test due to lack of a corresponding key.
+
 ## [1.2.0.0][1.2.0.0]
 
 ### Changed
