@@ -185,7 +185,8 @@ class HttpService
 
         $responseObject = json_decode($response, false);
         if ($responseCode >= 400 || isset($responseObject->errors)) {
-            $code            = null;
+            $code    = null;
+            $errorId = null;
             $customerMessage = $code;
             $merchantMessage = $customerMessage;
             if (isset($responseObject->errors[0])) {
@@ -194,8 +195,14 @@ class HttpService
                 $customerMessage = $errors->customerMessage ?? '';
                 $code = $errors->code ?? '';
             }
+            if (isset($responseObject->id)) {
+                $errorId = $responseObject->id;
+                if (IdService::getResourceTypeFromIdString($errorId) !== 'err') {
+                    $errorId = null;
+                }
+            }
 
-            throw new HeidelpayApiException($merchantMessage, $customerMessage, $code);
+            throw new HeidelpayApiException($merchantMessage, $customerMessage, $code, $errorId);
         }
     }
 

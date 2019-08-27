@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   The SDK now supports the webhook event `payout`.
 *   Example for Flexipay direct.
 *   Email parameter to `Paypal` payment type.
+*   Error id to `HeidelpayApiException`.
 
 ### Changed
 *   The webhook tests now cover all supported events.
