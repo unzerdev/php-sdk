@@ -25,6 +25,7 @@
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
@@ -144,5 +145,53 @@ class PayoutTest extends BasePaymentTest
         $resourceSrv = new ResourceService($this->heidelpay);
         $fetchedPayout = $resourceSrv->fetchResourceByUrl($payout->getUri());
         $this->assertEquals($payout->expose(), $fetchedPayout->expose());
+    }
+
+    /**
+     * Verify payout accepts all parameters.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function payoutShouldAcceptAllParameters()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $customer = $this->getMinimalCustomer();
+        $orderId = $this->generateRandomId();
+        $metadata = (new Metadata())->addMetadata('key', 'value');
+        $basket = $this->createBasket();
+        $invoiceId = $this->generateRandomId();
+        $paymentReference = 'paymentReference';
+
+        $payout = $card->payout(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId, $paymentReference);
+        $payment = $payout->getPayment();
+
+        $this->assertSame($card, $payment->getPaymentType());
+        $this->assertEquals(100.0, $payout->getAmount());
+        $this->assertEquals('EUR', $payout->getCurrency());
+        $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
+        $this->assertSame($customer, $payment->getCustomer());
+        $this->assertEquals($orderId, $payout->getOrderId());
+        $this->assertSame($metadata, $payment->getMetadata());
+        $this->assertSame($basket, $payment->getBasket());
+        $this->assertEquals($invoiceId, $payout->getInvoiceId());
+        $this->assertEquals($paymentReference, $payout->getPaymentReference());
+
+        $fetchedPayout = $this->heidelpay->fetchPayout($payout->getPaymentId());
+        $fetchedPayment = $fetchedPayout->getPayment();
+
+        $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());
+        $this->assertEquals($payout->getAmount(), $fetchedPayout->getAmount());
+        $this->assertEquals($payout->getCurrency(), $fetchedPayout->getCurrency());
+        $this->assertEquals($payout->getReturnUrl(), $fetchedPayout->getReturnUrl());
+        $this->assertEquals($payment->getCustomer()->expose(), $fetchedPayment->getCustomer()->expose());
+        $this->assertEquals($payout->getOrderId(), $fetchedPayout->getOrderId());
+        $this->assertEquals($payment->getMetadata()->expose(), $fetchedPayment->getMetadata()->expose());
+        $this->assertEquals($payment->getBasket()->expose(), $fetchedPayment->getBasket()->expose());
+        $this->assertEquals($payout->getInvoiceId(), $fetchedPayout->getInvoiceId());
+        $this->assertEquals($payout->getPaymentReference(), $fetchedPayout->getPaymentReference());
     }
 }
