@@ -48,6 +48,9 @@ class WebhookEvents
     // chargeback events
     const CHARGEBACK = 'chargeback';
 
+    // payout events
+    const PAYOUT = 'payout';
+
     // types events
     const TYPES = 'types';
 
@@ -83,6 +86,7 @@ class WebhookEvents
         self::CHARGE_EXPIRED,
         self::CHARGE_CANCELED,
         self::CHARGEBACK,
+        self::PAYOUT,
         self::TYPES,
         self::CUSTOMER,
         self::CUSTOMER_CREATED,
