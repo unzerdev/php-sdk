@@ -57,6 +57,30 @@ class PaypalTest extends BasePaymentTest
     }
 
     /**
+     * Verify PayPal payment type can be created and fetched with email.
+     *
+     * @test
+     *
+     * @return BasePaymentType
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function paypalShouldBeCreatableAndFetchableWithEmail(): BasePaymentType
+    {
+        $paypal = (new Paypal())->setEmail('max@mustermann.de');
+        $this->heidelpay->createPaymentType($paypal);
+        $this->assertNotEmpty($paypal->getId());
+
+        $fetchedPaypal = $this->heidelpay->fetchPaymentType($paypal->getId());
+        $this->assertInstanceOf(Paypal::class, $fetchedPaypal);
+        $this->assertNotSame($paypal, $fetchedPaypal);
+        $this->assertEquals($paypal->expose(), $fetchedPaypal->expose());
+
+        return $fetchedPaypal;
+    }
+
+    /**
      * Verify paypal can authorize.
      *
      * @test
