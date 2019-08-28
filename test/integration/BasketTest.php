@@ -129,6 +129,7 @@ class BasketTest extends BasePaymentTest
         } catch (HeidelpayApiException $e) {
             $this->assertTrue($expectException);
             $this->assertEquals($exceptionCode, $e->getCode());
+            $this->assertNotNull($e->getErrorId());
         }
     }
 
