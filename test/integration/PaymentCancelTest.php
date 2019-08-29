@@ -54,14 +54,38 @@ class PaymentCancelTest extends BasePaymentTest
     }
 
     /**
-     * Verify partial cancel on authorize.
+     * Verify full cancel on authorize.
+     * Case 6
      *
      * @test
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function partialCancelOnAuthorizeShouldBePossible()
+    public function fullCancelOnAuthorizeShouldBePossible()
+    {
+        $authorization = $this->createCardAuthorization();
+        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $this->assertAmounts($fetchedPayment, 100.0, 0, 100.0, 0);
+
+        $cancel = $fetchedPayment->cancel();
+        $this->assertNotNull($cancel);
+        $this->assertEquals('s-cnl-1', $cancel->getId());
+        $this->assertEquals('100.0', $cancel->getAmount());
+        $this->assertAmounts($fetchedPayment, 0.0, 0, 0.0, 0);
+        $this->assertTrue($fetchedPayment->isCanceled());
+    }
+
+    /**
+     * Verify partial cancel on authorize.
+     * Case 7
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fullCancelOnPartCanceledAuthorizeShouldBePossible()
     {
         $authorization = $this->createCardAuthorization();
         $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -72,6 +96,19 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertEquals('s-cnl-1', $cancel->getId());
         $this->assertEquals('10.0', $cancel->getAmount());
         $this->assertAmounts($fetchedPayment, 90.0, 0, 90.0, 0);
+
+        $secondCancel = $fetchedPayment->cancel(10.0);
+        $this->assertNotNull($secondCancel);
+        $this->assertEquals('s-cnl-2', $secondCancel->getId());
+        $this->assertEquals('10.0', $secondCancel->getAmount());
+        $this->assertAmounts($fetchedPayment, 80.0, 0, 80.0, 0);
+
+        $thirdCancel = $fetchedPayment->cancel();
+        $this->assertNotNull($thirdCancel);
+        $this->assertEquals('s-cnl-3', $thirdCancel->getId());
+        $this->assertEquals('80.0', $thirdCancel->getAmount());
+        $this->assertAmounts($fetchedPayment, 0.0, 0, 0.0, 0);
+        $this->assertTrue($fetchedPayment->isCanceled());
     }
 
     /**
