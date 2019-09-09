@@ -32,8 +32,17 @@ class Keypair extends AbstractHeidelpayResource
     /** @var string $privateKey */
     private $privateKey;
 
-    /** @var array $availablePaymentTypes */
-    private $availablePaymentTypes = [];
+    /** @var array $paymentTypes */
+    private $paymentTypes = [];
+
+    /** @var string $secureLevel */
+    private $secureLevel;
+
+    /** @var string $alias */
+    private $alias;
+
+    /** @var bool $imageScanningEnabled */
+    private $imageScanningEnabled;
 
     //<editor-fold desc="Getters/Setters">
 
@@ -72,17 +81,86 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @return array
      */
-    public function getAvailablePaymentTypes(): array
+    public function getPaymentTypes(): array
     {
-        return $this->availablePaymentTypes;
+        return $this->paymentTypes;
     }
 
     /**
      * @param array $paymentTypes
      */
-    protected function setAvailablePaymentTypes(array $paymentTypes)
+    protected function setPaymentTypes(array $paymentTypes)
     {
-        $this->availablePaymentTypes = $paymentTypes;
+        $this->paymentTypes = $paymentTypes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecureLevel(): string
+    {
+        return $this->secureLevel;
+    }
+
+    /**
+     * @param string $secureLevel
+     *
+     * @return Keypair
+     */
+    public function setSecureLevel(string $secureLevel): Keypair
+    {
+        $this->secureLevel = $secureLevel;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlias(): string
+    {
+        return $this->alias;
+    }
+
+    /**
+     * @param string|null $alias
+     *
+     * @return Keypair
+     */
+    public function setAlias($alias): Keypair
+    {
+        $this->alias = $alias;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImageScanningEnabled(): bool
+    {
+        return $this->imageScanningEnabled;
+    }
+
+    /**
+     * @param bool $imageScanningEnabled
+     *
+     * @return Keypair
+     */
+    public function setImageScanningEnabled(bool $imageScanningEnabled): Keypair
+    {
+        $this->imageScanningEnabled = $imageScanningEnabled;
+        return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getResourcePath(): string
+    {
+        return 'keypair/types';
     }
 
     //</editor-fold>

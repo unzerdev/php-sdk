@@ -76,6 +76,6 @@ class KeyTest extends BasePaymentTest
         $keypair = $this->heidelpay->fetchKeypair();
         $this->assertNotNull($keypair);
         $this->assertNotEmpty($keypair->getPublicKey());
-        $this->assertNotEmpty($keypair->getAvailablePaymentTypes());
+//        $this->assertNotEmpty($keypair->getPaymentTypes());
     }
 }
