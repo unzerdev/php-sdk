@@ -264,7 +264,7 @@ require_once __DIR__ . '/../../../autoload.php';
                     <span class="sub header">Enable or disable webhooks ...</span>
                 </span>
             </h2>
-            <div class="ui two cards">
+            <div class="ui three cards">
                 <div class="card">
                     <div class="content">
                         <div class="header">
@@ -288,6 +288,19 @@ require_once __DIR__ . '/../../../autoload.php';
                         </div>
                     </div>
                     <div class="ui bottom attached blue button" onclick="location.href='Webhooks/removeAll.php';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            Fetch all Webhooks
+                        </div>
+                        <div class="description">
+                            Fetch all Webhooks corresponding to this key pair.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached blue button" onclick="location.href='Webhooks/fetchAll.php';">
                         Try
                     </div>
                 </div>
