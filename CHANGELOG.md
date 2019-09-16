@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Example to fetch all registered webhooks for the given key pair.
 *   Missing API response code for insurance already activated message after shipment.
+*   Giropay example
 
 ### Changed
 *   Removed deletion of all webhooks prior to registering to webhook events.
