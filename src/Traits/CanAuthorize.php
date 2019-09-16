@@ -44,11 +44,13 @@ trait CanAuthorize
      * @param Customer|string|null $customer
      * @param string|null          $orderId
      * @param Metadata|string|null $metadata
-     * @param Basket|null          $basket    The Basket object corresponding to the payment.
-     *                                        The Basket object will be created automatically if it does not exist
-     *                                        yet (i.e. has no id).
-     * @param bool|null            $card3ds   Enables 3ds channel for credit cards if available. This parameter is
-     *                                        optional and will be ignored if not applicable.
+     * @param Basket|null          $basket           The Basket object corresponding to the payment.
+     *                                               The Basket object will be created automatically if it does not exist
+     *                                               yet (i.e. has no id).
+     * @param bool|null            $card3ds          Enables 3ds channel for credit cards if available. This parameter is
+     *                                               optional and will be ignored if not applicable.
+     * @param string|null          $invoiceId        The external id of the invoice.
+     * @param string|null          $paymentReference A reference text for the payment.
      *
      * @return Authorization
      *
@@ -63,7 +65,9 @@ trait CanAuthorize
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null,
+        $paymentReference = null
     ): Authorization {
         if ($this instanceof HeidelpayParentInterface) {
             return $this->getHeidelpayObject()->authorize(
@@ -75,7 +79,9 @@ trait CanAuthorize
                 $orderId,
                 $metadata,
                 $basket,
-                $card3ds
+                $card3ds,
+                $invoiceId,
+                $paymentReference
             );
         }
 

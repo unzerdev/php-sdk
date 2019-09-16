@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the Sofort example.
+ * This is the controller for the Giropay example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2019 heidelpay GmbH
@@ -34,6 +34,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\CustomerFactory;
+
+$clientMessage = 'Something went wrong. Please try again later.';
 
 session_start();
 session_unset();
@@ -61,20 +64,21 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Create a charge transaction to get the redirectUrl.
-    $transaction = $heidelpay->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+    // Create a charge to get the redirectUrl.
+    $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
+    $charge   = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
 
     // You'll need to remember the paymentId for later in the ReturnController
-    $_SESSION['PaymentId'] = $transaction->getPaymentId();
-    $_SESSION['ShortId']   = $transaction->getShortId();
+    $_SESSION['PaymentId'] = $charge->getPaymentId();
+    $_SESSION['ShortId']   = $charge->getShortId();
 
-    // Redirect to the Sofort page
-    if (!$transaction->isError() && $transaction->getRedirectUrl() !== null) {
-        redirect($transaction->getRedirectUrl());
+    // Redirect to the Giropay page of the selected bank
+    if (!$charge->isError() && $charge->getRedirectUrl() !== null) {
+        redirect($charge->getRedirectUrl());
     }
 
     // Check the result message of the charge to find out what went wrong.
-    $merchantMessage = $transaction->getMessage()->getCustomer();
+    $merchantMessage = $charge->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();

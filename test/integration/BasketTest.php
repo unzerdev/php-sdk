@@ -129,6 +129,7 @@ class BasketTest extends BasePaymentTest
         } catch (HeidelpayApiException $e) {
             $this->assertTrue($expectException);
             $this->assertEquals($exceptionCode, $e->getCode());
+            $this->assertNotNull($e->getErrorId());
         }
     }
 
@@ -140,7 +141,7 @@ class BasketTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function basketShouldBeUpdatateable()
+    public function basketShouldBeUpdateable()
     {
         $orderId = $this->generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
