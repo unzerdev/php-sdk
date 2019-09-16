@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.2.1.1][1.2.1.1]
 
+### Fixed
+*   An issue resulting in an error when a B2B customer is fetched which does not have a function set.
+
 ### Added
 *   Giropay example
 
