@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the index controller for the Webhook tests.
+ * This is the controller performing the fetch all command for the Webhook tests.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
