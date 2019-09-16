@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the index controller for the Webhook tests.
+ * This is the controller performing the fetch all command for the Webhook tests.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -30,11 +30,9 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\Constants\WebhookEvents;
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Webhook;
 
 function printMessage($type, $title, $text)
 {
@@ -100,19 +98,7 @@ function printInfo($title, $text)
             $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
             $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-            $webhooks = $heidelpay->registerMultipleWebhooks(CONTROLLER_URL, [WebhookEvents::ALL]);
-
-            foreach ($webhooks as $webhook) {
-                /** @var Webhook $webhook */
-                printSuccess(
-                    'Event registered',
-                    '<strong>Event:</strong> ' . $webhook->getEvent() . '</br>' .
-                    '<strong>URL:</strong> ' . $webhook->getUrl() . '</br>'
-                );
-            }
-
-            printInfo('You are ready to trigger events', 'Now Perform payments <a href="..">>> HERE <<</a> to trigger events!');
-
+            $webhooks = $heidelpay->fetchAllWebhooks();
         } catch (HeidelpayApiException $e) {
             printError($e->getMessage());
             $heidelpay->debugLog('Error: ' . $e->getMessage());
@@ -120,6 +106,8 @@ function printInfo($title, $text)
             printError($e->getMessage());
             $heidelpay->debugLog('Error: ' . $e->getMessage());
         }
+
+        printInfo('Back to the payment selection', 'Now Perform payments <a href="..">>> HERE <<</a> to trigger events!');
     ?>
 </div>
 </body>
