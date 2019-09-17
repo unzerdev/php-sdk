@@ -155,6 +155,18 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            Invoice
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='Invoice/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             Invoice guaranteed
                         </div>
                         <div class="description">
