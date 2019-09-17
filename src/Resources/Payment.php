@@ -739,15 +739,16 @@ class Payment extends AbstractHeidelpayResource
      * Performs a Shipment transaction on this Payment.
      *
      * @param string|null $invoiceId The id of the invoice in the shop.
+     * @param string|null $orderId   The id of the order in the shop.
      *
      * @return AbstractHeidelpayResource|Shipment The resulting Shipment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function ship($invoiceId = null)
+    public function ship($invoiceId = null, $orderId = null)
     {
-        return $this->getHeidelpayObject()->ship($this, $invoiceId);
+        return $this->getHeidelpayObject()->ship($this, $invoiceId, $orderId);
     }
 
     //</editor-fold>
