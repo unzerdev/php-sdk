@@ -280,7 +280,7 @@ class HttpServiceTest extends BaseUnitTest
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionMessage('The payment api returned an error!');
-        $this->expectExceptionCode('');
+        $this->expectExceptionCode('No error code provided');
 
         /** @var HttpService $httpServiceMock*/
         $httpServiceMock->send('/my/uri/123', $resource);
@@ -324,7 +324,7 @@ class HttpServiceTest extends BaseUnitTest
         } catch (HeidelpayApiException $e) {
             $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
             $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
-            $this->assertEmpty($e->getCode());
+            $this->assertEquals('No error code provided', $e->getCode());
         }
 
         try {
@@ -333,7 +333,7 @@ class HttpServiceTest extends BaseUnitTest
         } catch (HeidelpayApiException $e) {
             $this->assertEquals('This is an error message for the merchant!', $e->getMerchantMessage());
             $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
-            $this->assertEmpty($e->getCode());
+            $this->assertEquals('No error code provided', $e->getCode());
         }
 
         try {
@@ -342,7 +342,7 @@ class HttpServiceTest extends BaseUnitTest
         } catch (HeidelpayApiException $e) {
             $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
             $this->assertEquals('This is an error message for the customer!', $e->getClientMessage());
-            $this->assertEmpty($e->getCode());
+            $this->assertEquals('No error code provided', $e->getCode());
         }
 
         try {
