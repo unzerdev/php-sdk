@@ -788,15 +788,35 @@ class PaymentTest extends BaseUnitTest
      */
     public function handleResponseShouldFetchAndUpdateMetadataIfTheIdIsSet()
     {
-        $payment = (new Payment())->setId('myPaymentId');
-
-        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->disableOriginalConstructor()->setMethods(['fetchMetadata'])->getMock();
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchMetadata'])->getMock();
         $resourceServiceMock->expects($this->once())->method('fetchMetadata')->with('MetadataId');
-
         /** @var ResourceService $resourceServiceMock */
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $payment = (new Payment())->setId('myPaymentId')->setParentResource($heidelpayObj);
+
+        $response = new stdClass();
+        $response->resources = new stdClass();
+        $response->resources->metadataId = 'MetadataId';
+        $payment->handleResponse($response);
+    }
+
+    /**
+     * Verify handleResponse updates metadata.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     */
+    public function handleResponseShouldGetMetadataIfUnfetchedMetadataObjectWithIdIsGiven()
+    {
+        $metadata = (new Metadata())->setId('MetadataId');
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('getResource')->with($metadata);
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment = (new Payment())->setId('myPaymentId')->setParentResource($heidelpayObj)->setMetadata($metadata);
 
         $response = new stdClass();
         $response->resources = new stdClass();
