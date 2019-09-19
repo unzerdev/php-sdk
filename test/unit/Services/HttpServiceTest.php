@@ -373,7 +373,6 @@ class HttpServiceTest extends BaseUnitTest
             $this->assertEquals('This is the error code!', $e->getCode());
             $this->assertEquals('No error id provided', $e->getErrorId());
         }
-
     }
 
     /**
