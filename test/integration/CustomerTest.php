@@ -340,6 +340,7 @@ class CustomerTest extends BasePaymentTest
             $this->assertTrue(false, 'Exception should be thrown here.');
         } catch (HeidelpayApiException $e) {
             $this->assertEquals($e->getCode(), ApiResponseCodes::API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND);
+            $this->assertNotNull($e->getErrorId());
         }
 
         // create customer with api

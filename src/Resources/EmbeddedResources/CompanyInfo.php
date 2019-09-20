@@ -126,13 +126,19 @@ class CompanyInfo extends AbstractHeidelpayResource
     //<editor-fold desc="Helpers">
 
     /**
-     * @param string $registrationType
+     * Removes some restricted symbols from the given value.
      *
-     * @return string
+     * @param string|null $value
+     *
+     * @return mixed
      */
-    private function removeRestrictedSymbols(string $registrationType): string
+    private function removeRestrictedSymbols($value)
     {
-        return str_replace(['<', '>'], '', $registrationType);
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        return str_replace(['<', '>'], '', $value);
     }
 
     //</editor-fold>

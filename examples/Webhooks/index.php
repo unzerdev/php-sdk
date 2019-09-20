@@ -26,6 +26,7 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
+/** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
@@ -61,7 +62,7 @@ function printInfo($title, $text)
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>
@@ -78,9 +79,9 @@ function printInfo($title, $text)
 <div class="ui container segment">
     <h2 class="ui header">
         <i class="envelope outline icon"></i>
-        <div class="content">
+        <span class="content">
             Webhook registration
-        </div>
+        </span>
     </h2>
 
     <?php
@@ -98,15 +99,6 @@ function printInfo($title, $text)
         try {
             $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
             $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
-
-            try {
-                $heidelpay->deleteAllWebhooks();
-                printSuccess(
-                    'De-registered all existing events for this private key',
-                    'Unsubscribed all events registered for the private key: "' . HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY . '".'
-                );
-            } catch (HeidelpayApiException $e) {
-            }
 
             $webhooks = $heidelpay->registerMultipleWebhooks(CONTROLLER_URL, [WebhookEvents::ALL]);
 

@@ -788,15 +788,35 @@ class PaymentTest extends BaseUnitTest
      */
     public function handleResponseShouldFetchAndUpdateMetadataIfTheIdIsSet()
     {
-        $payment = (new Payment())->setId('myPaymentId');
-
-        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->disableOriginalConstructor()->setMethods(['fetchMetadata'])->getMock();
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchMetadata'])->getMock();
         $resourceServiceMock->expects($this->once())->method('fetchMetadata')->with('MetadataId');
-
         /** @var ResourceService $resourceServiceMock */
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $payment = (new Payment())->setId('myPaymentId')->setParentResource($heidelpayObj);
+
+        $response = new stdClass();
+        $response->resources = new stdClass();
+        $response->resources->metadataId = 'MetadataId';
+        $payment->handleResponse($response);
+    }
+
+    /**
+     * Verify handleResponse updates metadata.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     */
+    public function handleResponseShouldGetMetadataIfUnfetchedMetadataObjectWithIdIsGiven()
+    {
+        $metadata = (new Metadata())->setId('MetadataId');
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('getResource')->with($metadata);
+        /** @var ResourceService $resourceServiceMock */
+        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment = (new Payment())->setId('myPaymentId')->setParentResource($heidelpayObj)->setMetadata($metadata);
 
         $response = new stdClass();
         $response->resources = new stdClass();
@@ -1649,8 +1669,7 @@ class PaymentTest extends BaseUnitTest
     {
         $metadata = (new Metadata())->addMetadata('myData', 'myValue');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->once())->method('create')->with($metadata);
 
         /** @var ResourceService $resourceSrvMock */
@@ -1667,6 +1686,42 @@ class PaymentTest extends BaseUnitTest
 
         $payment->setMetadata($metadata);
         $this->assertSame($heidelpay, $metadata->getParentResource());
+    }
+
+    /**
+     * Verify setMetadata will not set the metadata property if it is not of type metadata.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     */
+    public function metadataMustBeOfTypeMetadata()
+    {
+        $metadata = new Metadata();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('create')->with($metadata);
+        /** @var ResourceService $resourceSrvMock */
+        $heidelpay = (new Heidelpay('s-priv-1234'))->setResourceService($resourceSrvMock);
+
+        // when
+        $payment = new Payment($heidelpay);
+
+        // then
+        $this->assertNull($payment->getMetadata());
+
+        // when
+        $payment->setMetadata('test');
+
+        // then
+        $this->assertNull($payment->getMetadata());
+
+        // when
+        $payment->setMetadata($metadata);
+
+        // then
+        $this->assertSame($metadata, $payment->getMetadata());
     }
 
     /**

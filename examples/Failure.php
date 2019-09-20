@@ -27,7 +27,7 @@ session_start();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <body>
         <h1>Failure</h1>
         <p>

@@ -24,7 +24,6 @@
  */
 namespace heidelpayPHP\test\integration;
 
-use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
@@ -32,20 +31,6 @@ use stdClass;
 
 class MetadataTest extends BasePaymentTest
 {
-    /**
-     * Verify SDK-Data is initially set.
-     *
-     * @test
-     *
-     * @throws Exception
-     */
-    public function metadataShouldSetSDKDataAutomatically()
-    {
-        $metaData = new Metadata();
-        $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
-        $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
-    }
-
     /**
      * Verify custom data can be set.
      *
@@ -77,13 +62,9 @@ class MetadataTest extends BasePaymentTest
         $metaData->addMetadata('shopType', 'myShopType');
         $metaData->addMetadata('shopVersion', 'myShopVersion');
 
-        $this->assertNotEquals('sdkType', $metaData->getSdkType());
-        $this->assertNotEquals('sdkVersion', $metaData->getSdkVersion());
         $this->assertNotEquals('shopType', $metaData->getMetadata('shopType'));
         $this->assertNotEquals('shopVersion', $metaData->getMetadata('sdkVersion'));
 
-        $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
-        $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
         $this->assertNull($metaData->getShopType());
         $this->assertNull($metaData->getShopVersion());
     }
@@ -98,10 +79,8 @@ class MetadataTest extends BasePaymentTest
     public function exposeShouldGatherAllDefinedDataInTheAnArray()
     {
         $metaData = new Metadata();
-        $metaDataArray = $metaData->expose();
-        $this->assertCount(2, $metaDataArray);
-        $this->assertEquals(Heidelpay::SDK_VERSION, $metaDataArray['sdkVersion']);
-        $this->assertEquals(Heidelpay::SDK_TYPE, $metaDataArray['sdkType']);
+        $metaDataArray = (array)$metaData->expose();
+        $this->assertCount(0, $metaDataArray);
 
         $metaData->addMetadata('myData', 'This should be my Data');
         $metaData->addMetadata('additionalData', 'some information');
@@ -109,9 +88,7 @@ class MetadataTest extends BasePaymentTest
         $metaData->setShopVersion('1.0.0.0');
 
         $metaDataArray = $metaData->expose();
-        $this->assertCount(6, $metaDataArray);
-        $this->assertEquals(Heidelpay::SDK_VERSION, $metaDataArray['sdkVersion']);
-        $this->assertEquals(Heidelpay::SDK_TYPE, $metaDataArray['sdkType']);
+        $this->assertCount(4, $metaDataArray);
         $this->assertEquals('my own shop', $metaDataArray['shopType']);
         $this->assertEquals('1.0.0.0', $metaDataArray['shopVersion']);
         $this->assertEquals('This should be my Data', $metaDataArray['myData']);
@@ -134,8 +111,6 @@ class MetadataTest extends BasePaymentTest
         $metaData->setShopVersion('1.0.0.0');
 
         $this->assertNull($metaData->getId());
-        $this->assertEquals(Heidelpay::SDK_VERSION, $metaData->getSdkVersion());
-        $this->assertEquals(Heidelpay::SDK_TYPE, $metaData->getSdkType());
         $this->assertEquals('my own shop', $metaData->getShopType());
         $this->assertEquals('1.0.0.0', $metaData->getShopVersion());
         $this->assertEquals('This should be my Data', $metaData->getMetadata('myData'));
@@ -144,8 +119,6 @@ class MetadataTest extends BasePaymentTest
 
         $response = new stdClass();
         $response->id = 'newId';
-        $response->sdkType = 'newSdkType';
-        $response->sdkVersion = 'newSdkVersion';
         $response->shopType = 'my new shop';
         $response->shopVersion = '1.0.0.1';
         $response->myData = 'This should be my new Data';
@@ -154,8 +127,6 @@ class MetadataTest extends BasePaymentTest
 
         $metaData->handleResponse($response);
         $this->assertEquals('newId', $metaData->getId());
-        $this->assertEquals('newSdkType', $metaData->getSdkType());
-        $this->assertEquals('newSdkVersion', $metaData->getSdkVersion());
         $this->assertEquals('my new shop', $metaData->getShopType());
         $this->assertEquals('1.0.0.1', $metaData->getShopVersion());
         $this->assertEquals('This should be my new Data', $metaData->getMetadata('myData'));

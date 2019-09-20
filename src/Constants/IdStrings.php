@@ -51,6 +51,7 @@ class IdStrings
     const WECHATPAY = 'wcp';
     const INVOICE_FACTORING = 'ivf';
     const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
+    const PAYMENT_PAGE = 'ppg';
 
     // Resources
     const BASKET = 'bsk';
@@ -76,6 +77,7 @@ class IdStrings
         self::ALIPAY,
         self::WECHATPAY,
         self::INVOICE_FACTORING,
+        self::PAYMENT_PAGE,
         self::HIRE_PURCHASE_DIRECT_DEBIT
     ];
 }

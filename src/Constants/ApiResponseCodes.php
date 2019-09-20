@@ -52,6 +52,7 @@ class ApiResponseCodes
     const API_ERROR_CUSTOMER_DOES_NOT_EXIST                     = 'API.410.100.100';
     const API_ERROR_CUSTOMER_ID_ALREADY_EXISTS                  = 'API.410.200.010';
     const API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND                   = 'API.500.100.100';
+    const API_ERROR_REQUEST_DATA_IS_INVALID                     = 'API.500.300.999';
     const API_ERROR_RECURRING_PAYMENT_NOT_SUPPORTED             = 'API.500.550.004';
     const API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED            = 'API.510.310.009';
     const API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND                    = 'API.510.310.008';
@@ -63,4 +64,5 @@ class ApiResponseCodes
     const API_ERROR_FIELD_IS_MISSING                            = 'API.710.200.100';
 
     const CORE_ERROR_INVALID_OR_MISSING_LOGIN                   = 'COR.100.300.600';
+    const CORE_ERROR_INSURANCE_ALREADY_ACTIVATED                = 'COR.700.400.800';
 }

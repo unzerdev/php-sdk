@@ -41,35 +41,38 @@ class WebhookTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
+     * @dataProvider webhookResourceCanBeRegisteredAndFetchedDP
+     *
+     * @param string $event
+     *
+     * @throws Exception
      * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
-    public function webhookResourceCanBeRegisteredAndFetched(): Webhook
+    public function webhookResourceCanBeRegisteredAndFetched($event)
     {
-        $url     = $this->generateUniqueUrl();
-        $webhook = $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
+        $url = $this->generateUniqueUrl();
+        $webhook = $this->heidelpay->createWebhook($url, $event);
         $this->assertNotNull($webhook->getId());
+        $this->assertEquals($event, $webhook->getEvent());
 
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
         $this->assertEquals($webhook->expose(), $fetchedWebhook->expose());
-
-        return $webhook;
     }
 
     /**
      * Verify Webhook url can be updated.
      *
-     * @depends webhookResourceCanBeRegisteredAndFetched
      * @test
-     *
-     * @param Webhook $webhook
      *
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws RuntimeException
      */
-    public function webhookUrlShouldBeUpdateable(Webhook $webhook)
+    public function webhookUrlShouldBeUpdateable()
     {
+        $url     = $this->generateUniqueUrl();
+        $webhook = $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
 
@@ -84,17 +87,15 @@ class WebhookTest extends BasePaymentTest
     /**
      * Verify Webhook event can not be updated.
      *
-     * @depends webhookResourceCanBeRegisteredAndFetched
      * @test
-     *
-     * @param Webhook $webhook
      *
      * @throws HeidelpayApiException
      * @throws Exception
      * @throws RuntimeException
      */
-    public function webhookEventShouldNotBeUpdateable(Webhook $webhook)
+    public function webhookEventShouldNotBeUpdateable()
     {
+        $webhook = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::ALL);
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
 
@@ -108,17 +109,15 @@ class WebhookTest extends BasePaymentTest
     /**
      * Verify Webhook resource can be deleted.
      *
-     * @depends webhookResourceCanBeRegisteredAndFetched
      * @test
-     *
-     * @param Webhook $webhook
      *
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function webhookResourceShouldBeDeletable(Webhook $webhook)
+    public function webhookResourceShouldBeDeletable()
     {
+        $webhook = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::ALL);
         $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
 
@@ -140,7 +139,7 @@ class WebhookTest extends BasePaymentTest
      */
     public function webhookCreateShouldThrowErrorWhenEventIsAlreadyRegistered()
     {
-        $url     = $this->generateUniqueUrl();
+        $url = $this->generateUniqueUrl();
         $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
 
         $this->expectException(HeidelpayApiException::class);
@@ -298,6 +297,25 @@ class WebhookTest extends BasePaymentTest
             }
         }
         return $arrayContainsWebhook;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Data Providers">
+
+    /**
+     * Returns a test data set.
+     *
+     * @return array
+     */
+    public function webhookResourceCanBeRegisteredAndFetchedDP(): array
+    {
+        $testData = [];
+        foreach (WebhookEvents::ALLOWED_WEBHOOKS as $event) {
+            $testData[$event] = [$event];
+        }
+
+        return $testData;
     }
 
     //</editor-fold>

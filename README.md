@@ -29,10 +29,16 @@ Please refer to the following documentation for installation instructions and us
 *   SEPA direct debit (guaranteed)
 *   SOFORT
 *   EPS
-*   PIS
+*   FlexiPay direct (PIS)
 *   Alipay
 *   WeChat Pay
 *   Invoice Factoring
+
+## Supported features
+*   Webhooks and event handling
+*   Payment Page (embedded and hosted)
+*   Payout (Credit)
+*   Recurring Payment
 
 ## Support
 For any issues or questions please get in touch with our support team.

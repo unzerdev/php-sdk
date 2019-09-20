@@ -42,6 +42,9 @@ class DummyHeidelpayResource extends AbstractHeidelpayResource
         $this->customer = $customer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getLinkedResources(): array
     {
         return ['customer' => $this->customer];

@@ -34,19 +34,24 @@ class HeidelpayApiException extends Exception
     /** @var string $clientMessage */
     protected $clientMessage;
 
+    /** @var string */
+    private $errorId;
+
     /**
      * HeidelpayApiException constructor.
      *
      * @param string $merchantMessage
      * @param string $clientMessage
      * @param string $code
+     * @param string $errorId
      */
-    public function __construct($merchantMessage = '', $clientMessage = '', $code = 'No error code provided')
+    public function __construct($merchantMessage = '', $clientMessage = '', $code = null, $errorId = null)
     {
         $merchantMessage = empty($merchantMessage) ? static::MESSAGE : $merchantMessage;
         $this->clientMessage = empty($clientMessage) ? static::CLIENT_MESSAGE : $clientMessage;
         parent::__construct($merchantMessage);
-        $this->code = $code;
+        $this->code = empty($code) ? 'No error code provided' : $code;
+        $this->errorId = empty($errorId) ? 'No error id provided' : $errorId;
     }
 
     /**
@@ -63,5 +68,13 @@ class HeidelpayApiException extends Exception
     public function getMerchantMessage(): string
     {
         return $this->getMessage();
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorId(): string
+    {
+        return $this->errorId;
     }
 }

@@ -25,12 +25,14 @@
  */
 namespace heidelpayPHP\test\unit;
 
+use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
@@ -291,7 +293,8 @@ class HeidelpayTest extends BaseUnitTest
             'fetchRefund'                  => ['fetchRefund', [$chargeMock, $cancelId], 'fetch', [$cancellation]],
             'fetchShipment'                => ['fetchShipment', [$payment, 'shipId'], 'fetchShipment', [$payment, 'shipId']],
             'activateRecurring'            => ['activateRecurringPayment', [$card, 'returnUrl'], 'createRecurring', [$card, 'returnUrl']],
-            'activateRecurringWithId'      => ['activateRecurringPayment', [$paymentTypeId, 'returnUrl'], 'createRecurring', [$paymentTypeId, 'returnUrl']]
+            'activateRecurringWithId'      => ['activateRecurringPayment', [$paymentTypeId, 'returnUrl'], 'createRecurring', [$paymentTypeId, 'returnUrl']],
+            'fetchPayout'                  => ['fetchPayout', [$payment], 'fetchPayout', [$payment]]
         ];
     }
 
@@ -314,6 +317,8 @@ class HeidelpayTest extends BaseUnitTest
         $payment       = new Payment();
         $authorization = new Authorization();
         $charge        = new Charge();
+        $paypage       = new Paypage(123.1234, 'EUR', 'url');
+        $basket        = new Basket();
 
         return [
             'auth'                   => ['authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata], 'authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]],
@@ -338,7 +343,10 @@ class HeidelpayTest extends BaseUnitTest
             'cancelChargeByIdAlt'    => ['cancelChargeById', [$paymentId, $chargeId], 'cancelChargeById', [$paymentId, $chargeId]],
             'cancelCharge'           => ['cancelCharge', [$charge, 1.234], 'cancelCharge', [$charge, 1.234]],
             'cancelChargeAlt'        => ['cancelCharge', [$charge], 'cancelCharge', [$charge]],
-            'ship'                   => ['ship', [$payment], 'ship', [$payment]]
+            'ship'                   => ['ship', [$payment], 'ship', [$payment]],
+            'payout'                 => ['payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId'], 'payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId']],
+            'initPayPageCharge'      => ['initPayPageCharge', [$paypage, $customer, $basket, $metadata], 'initPayPage', [$paypage, TransactionTypes::CHARGE, $customer, $basket, $metadata]],
+            'initPayPageAuthorize'   => ['initPayPageAuthorize', [$paypage, $customer, $basket, $metadata], 'initPayPage', [$paypage, TransactionTypes::AUTHORIZATION, $customer, $basket, $metadata]]
         ];
     }
 

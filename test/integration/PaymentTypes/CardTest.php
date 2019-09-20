@@ -39,27 +39,6 @@ class CardTest extends BasePaymentTest
     //<editor-fold desc="Tests">
 
     /**
-     * Verify that direct card creation is not possible if the merchant is not PCI DSS compliant.
-     * In this case he needs to use the iFrame or needs to be marked PCI DSS compliant in the payment backend.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     *
-     * @group skip
-     */
-    public function createCardWithMerchantNotPCIDSSCompliantShouldThrowException()
-    {
-        $this->heidelpay->setKey(self::PRIVATE_KEY_SAQ_A);
-
-        $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_INSUFFICIENT_PERMISSION);
-        $card = $this->createCardObject();
-        $this->heidelpay->createPaymentType($card);
-    }
-
-    /**
      * Verify that card payment type resource can be created.
      *
      * @test

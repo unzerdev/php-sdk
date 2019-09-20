@@ -32,6 +32,7 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
@@ -134,11 +135,13 @@ class PaymentService
      * @param Customer|string|null   $customer
      * @param string|null            $orderId
      * @param Metadata|string|null   $metadata
-     * @param Basket|null            $basket      The Basket object corresponding to the payment.
-     *                                            The Basket object will be created automatically if it does not exist
-     *                                            yet (i.e. has no id).
-     * @param bool|null              $card3ds     Enables 3ds channel for credit cards if available. This parameter is
-     *                                            optional and will be ignored if not applicable.
+     * @param Basket|null            $basket           The Basket object corresponding to the payment.
+     *                                                 The Basket object will be created automatically if it does not exist
+     *                                                 yet (i.e. has no id).
+     * @param bool|null              $card3ds          Enables 3ds channel for credit cards if available. This parameter is
+     *                                                 optional and will be ignored if not applicable.
+     * @param string|null            $invoiceId        The external id of the invoice.
+     * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -154,7 +157,9 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
         return $this->authorizeWithPayment(
@@ -166,7 +171,9 @@ class PaymentService
             $orderId,
             $metadata,
             $basket,
-            $card3ds
+            $card3ds,
+            $invoiceId,
+            $paymentReference
         );
     }
 
@@ -180,11 +187,13 @@ class PaymentService
      * @param Customer|string|null $customer
      * @param string|null          $orderId
      * @param Metadata|string|null $metadata
-     * @param Basket|null          $basket    The Basket object corresponding to the payment.
-     *                                        The Basket object will be created automatically if it does not exist
-     *                                        yet (i.e. has no id).
-     * @param bool|null            $card3ds   Enables 3ds channel for credit cards if available. This parameter is
-     *                                        optional and will be ignored if not applicable.
+     * @param Basket|null          $basket           The Basket object corresponding to the payment.
+     *                                               The Basket object will be created automatically if it does not exist
+     *                                               yet (i.e. has no id).
+     * @param bool|null            $card3ds          Enables 3ds channel for credit cards if available. This parameter is
+     *                                               optional and will be ignored if not applicable.
+     * @param string|null          $invoiceId        The external id of the invoice.
+     * @param string|null          $paymentReference A reference text for the payment.
      *
      * @return Authorization Resulting Authorization object.
      *
@@ -200,13 +209,16 @@ class PaymentService
         $orderId = null,
         $metadata = null,
         $basket = null,
-        $card3ds = null
+        $card3ds = null,
+        $invoiceId = null,
+        $paymentReference = null
     ): Authorization {
         $basePaymentType = $payment->getPaymentType();
-
         /** @var Authorization $authorization */
         $authorization = (new Authorization($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
+            ->setInvoiceId($invoiceId)
+            ->setPaymentReference($paymentReference)
             ->setSpecialParams($basePaymentType !== null ? $basePaymentType->getTransactionParams() : []);
         if ($card3ds !== null) {
             $authorization->setCard3ds($card3ds);
@@ -318,16 +330,18 @@ class PaymentService
     /**
      * Performs a Payout transaction and returns the resulting Payout resource.
      *
-     * @param float                  $amount      The amount to charge.
-     * @param string                 $currency    The currency of the amount.
-     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
-     * @param string                 $returnUrl   The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
-     * @param string|null            $orderId     A custom order id which can be set by the merchant.
-     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
-     * @param Basket|null            $basket      The Basket object corresponding to the payment.
-     *                                            The Basket object will be created automatically if it does not exist
-     *                                            yet (i.e. has no id).
+     * @param float                  $amount           The amount to charge.
+     * @param string                 $currency         The currency of the amount.
+     * @param string|BasePaymentType $paymentType      The PaymentType object or the id of the PaymentType to use.
+     * @param string                 $returnUrl        The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null   $customer         The Customer object or the id of the customer resource to reference.
+     * @param string|null            $orderId          A custom order id which can be set by the merchant.
+     * @param Metadata|null          $metadata         The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket           The Basket object corresponding to the payment.
+     *                                                 The Basket object will be created automatically if it does not exist
+     *                                                 yet (i.e. has no id).
+     * @param string|null            $invoiceId        The external id of the invoice.
+     * @param string|null            $paymentReference A reference text for the payment.
      *
      * @return Payout The resulting object of the Payout resource.
      *
@@ -342,7 +356,9 @@ class PaymentService
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
         return $this->payoutWithPayment(
@@ -353,20 +369,25 @@ class PaymentService
             $customer,
             $orderId,
             $metadata,
-            $basket);
+            $basket,
+            $invoiceId,
+            $paymentReference
+        );
     }
 
     /**
      * Performs a Payout transaction and returns the resulting Payout resource.
      *
-     * @param float                $amount    The amount to charge.
-     * @param string               $currency  The currency of the amount.
-     * @param Payment              $payment   The payment object associated with the payout.
-     * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null $customer  The customer associated with the payout.
-     * @param string|null          $orderId   A custom order id which can be set by the merchant.
+     * @param float                $amount           The amount to charge.
+     * @param string               $currency         The currency of the amount.
+     * @param Payment              $payment          The payment object associated with the payout.
+     * @param string               $returnUrl        The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null $customer         The customer associated with the payout.
+     * @param string|null          $orderId          A custom order id which can be set by the merchant.
      * @param null                 $metadata
      * @param null                 $basket
+     * @param string|null          $invoiceId        The external id of the invoice.
+     * @param string|null          $paymentReference A reference text for the payment.
      *
      * @return Payout The resulting object of the Payout resource.
      *
@@ -381,9 +402,14 @@ class PaymentService
         $customer = null,
         $orderId = null,
         $metadata = null,
-        $basket = null
+        $basket = null,
+        $invoiceId = null,
+        $paymentReference = null
     ): AbstractTransactionType {
-        $payout = (new Payout($amount, $currency, $returnUrl))->setOrderId($orderId);
+        $payout = (new Payout($amount, $currency, $returnUrl))
+            ->setOrderId($orderId)
+            ->setInvoiceId($invoiceId)
+            ->setPaymentReference($paymentReference);
         $payment->setPayout($payout)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->resourceService->create($payout);
 
@@ -493,16 +519,17 @@ class PaymentService
      *
      * @param Payment|string $payment
      * @param string|null    $invoiceId
+     * @param string|null    $orderId
      *
      * @return Shipment Resulting Shipment object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
+    public function ship($payment, $invoiceId = null, $orderId = null): AbstractHeidelpayResource
     {
         $shipment = new Shipment();
-        $shipment->setInvoiceId($invoiceId);
+        $shipment->setInvoiceId($invoiceId)->setOrderId($orderId);
         $this->resourceService->getPaymentResource($payment)->addShipment($shipment);
         $this->resourceService->create($shipment);
         return $shipment;
@@ -510,5 +537,34 @@ class PaymentService
 
     //</editor-fold>
     
+    //</editor-fold>
+
+    //<editor-fold desc="Paypage">
+
+    /**
+     * @param Paypage $paypage
+     * @param $action
+     * @param Customer      $customer
+     * @param Basket|null   $basket
+     * @param Metadata|null $metadata
+     *
+     * @return Paypage
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function initPayPage(
+        Paypage $paypage,
+        $action,
+        Customer $customer = null,
+        Basket $basket = null,
+        Metadata $metadata = null
+    ): Paypage {
+        $paypage->setAction($action)->setParentResource($this->heidelpay);
+        $payment = $this->createPayment($paypage)->setBasket($basket)->setCustomer($customer)->setMetadata($metadata);
+        $this->resourceService->create($paypage->setPayment($payment));
+        return $paypage;
+    }
+
     //</editor-fold>
 }

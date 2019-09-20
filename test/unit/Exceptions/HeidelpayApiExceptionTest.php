@@ -42,6 +42,7 @@ class HeidelpayApiExceptionTest extends BaseUnitTest
         $exception = new HeidelpayApiException();
         $this->assertEquals(HeidelpayApiException::CLIENT_MESSAGE, $exception->getClientMessage());
         $this->assertEquals(HeidelpayApiException::MESSAGE, $exception->getMerchantMessage());
+        $this->assertEquals('No error id provided', $exception->getErrorId());
         $this->assertEquals('No error code provided', $exception->getCode());
     }
 
@@ -58,9 +59,10 @@ class HeidelpayApiExceptionTest extends BaseUnitTest
      */
     public function heidelpayApiExceptionShouldReturnTheGivenData(array $testData, array $expected)
     {
-        $exception = new HeidelpayApiException($testData['message'], $testData['client_message'], $testData['code']);
+        $exception = new HeidelpayApiException($testData['message'], $testData['clientMessage'], $testData['code'], $testData['errorId']);
         $this->assertEquals($expected['message'], $exception->getMerchantMessage());
-        $this->assertEquals($expected['client_message'], $exception->getClientMessage());
+        $this->assertEquals($expected['clientMessage'], $exception->getClientMessage());
+        $this->assertEquals($expected['errorId'], $exception->getErrorId());
         $this->assertEquals($expected['code'], $exception->getCode());
     }
 
@@ -73,28 +75,24 @@ class HeidelpayApiExceptionTest extends BaseUnitTest
     {
         return [
             'default' => [
-                    'testData' => ['message' => null, 'client_message' => null, 'code' => null],
-                    'expected' => [
-                        'message' => HeidelpayApiException::MESSAGE,
-                        'client_message' => HeidelpayApiException::CLIENT_MESSAGE,
-                        'code' => ''
-                    ]
+                    'testData' => ['message' => null, 'clientMessage' => null, 'code' => null, 'errorId' => null],
+                    'expected' => ['message' => HeidelpayApiException::MESSAGE, 'clientMessage' => HeidelpayApiException::CLIENT_MESSAGE, 'code' => 'No error code provided', 'errorId' => 'No error id provided']
                 ],
             'message' => [
-                    'testData' => ['message' => 'myMessage', 'client_message' => null, 'code' => null],
-                    'expected' => [
-                        'message' => 'myMessage',
-                        'client_message' => HeidelpayApiException::CLIENT_MESSAGE,
-                        'code' => ''
-                    ]
+                    'testData' => ['message' => 'myMessage', 'clientMessage' => null, 'code' => null, 'errorId' => ''],
+                    'expected' => ['message' => 'myMessage', 'clientMessage' => HeidelpayApiException::CLIENT_MESSAGE, 'code' => 'No error code provided', 'errorId' => 'No error id provided']
                 ],
             'clientMessage' => [
-                    'testData' => ['message' => 'myMessage', 'client_message' => 'myClientMessage', 'code' => null],
-                    'expected' => ['message' => 'myMessage', 'client_message' => 'myClientMessage', 'code' => null]
+                    'testData' => ['message' => 'myMessage', 'clientMessage' => 'myClientMessage', 'code' => null, 'errorId' => null],
+                    'expected' => ['message' => 'myMessage', 'clientMessage' => 'myClientMessage', 'code' => 'No error code provided', 'errorId' => 'No error id provided']
                 ],
             'code' => [
-                    'testData' => ['message' => 'myMessage', 'client_message' => 'myClientMessage', 'code' => 'myCode'],
-                    'expected' => ['message' => 'myMessage', 'client_message' => 'myClientMessage', 'code' => 'myCode']
+                    'testData' => ['message' => 'myMessage', 'clientMessage' => 'myClientMessage', 'code' => 'myCode', 'errorId' => null],
+                    'expected' => ['message' => 'myMessage', 'clientMessage' => 'myClientMessage', 'code' => 'myCode', 'errorId' => 'No error id provided']
+                ],
+            'errorId' => [
+                    'testData' => ['message' => 'myMessage', 'clientMessage' => 'myClientMessage', 'code' => 'myCode', 'errorId' => 'myErrorId'],
+                    'expected' => ['message' => 'myMessage', 'clientMessage' => 'myClientMessage', 'code' => 'myCode', 'errorId' => 'myErrorId']
                 ]
         ];
     }

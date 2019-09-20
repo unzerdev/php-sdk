@@ -55,8 +55,6 @@ if (!isset($_POST['resourceId'])) {
 }
 $paymentTypeId   = $_POST['resourceId'];
 
-$transactionType = $_POST['transaction_type'] ?? 'authorize';
-
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.

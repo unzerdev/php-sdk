@@ -32,6 +32,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\EmbeddedResources\Amount;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -73,7 +74,7 @@ class Payment extends AbstractHeidelpayResource
     /** @var Amount $amount */
     protected $amount;
 
-    /** @var Metadata $metadata */
+    /** @var Metadata|null $metadata */
     private $metadata;
 
     /** @var Basket $basket */
@@ -85,7 +86,6 @@ class Payment extends AbstractHeidelpayResource
     public function __construct($parent = null)
     {
         $this->amount = new Amount();
-        $this->metadata = new Metadata();
 
         $this->setParentResource($parent);
     }
@@ -326,7 +326,7 @@ class Payment extends AbstractHeidelpayResource
      * Sets the Payments reference to the given PaymentType resource.
      * The PaymentType can be either a PaymentType object or the id of a PaymentType resource.
      *
-     * @param BasePaymentType|string $paymentType The PaymentType object or the id of the PaymentType to be referenced.
+     * @param mixed $paymentType The PaymentType object or the id of the PaymentType to be referenced.
      *
      * @return Payment This Payment object.
      *
@@ -346,7 +346,7 @@ class Payment extends AbstractHeidelpayResource
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
             $paymentTypeObject = $heidelpay->fetchPaymentType($paymentType);
-        } elseif ($paymentTypeObject instanceof BasePaymentType) {
+        } elseif ($paymentTypeObject instanceof BasePaymentType && !$paymentTypeObject instanceof Paypage) {
             if ($paymentTypeObject->getId() === null) {
                 $heidelpay->createPaymentType($paymentType);
             }
@@ -357,9 +357,9 @@ class Payment extends AbstractHeidelpayResource
     }
 
     /**
-     * @return Metadata
+     * @return Metadata|null
      */
-    public function getMetadata(): Metadata
+    public function getMetadata()
     {
         return $this->metadata;
     }
@@ -374,9 +374,10 @@ class Payment extends AbstractHeidelpayResource
      */
     public function setMetadata($metadata): Payment
     {
-        if ($metadata instanceof Metadata) {
-            $this->metadata = $metadata;
+        if (!$metadata instanceof Metadata) {
+            return $this;
         }
+        $this->metadata = $metadata;
 
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
@@ -735,15 +736,16 @@ class Payment extends AbstractHeidelpayResource
      * Performs a Shipment transaction on this Payment.
      *
      * @param string|null $invoiceId The id of the invoice in the shop.
+     * @param string|null $orderId   The id of the order in the shop.
      *
      * @return AbstractHeidelpayResource|Shipment The resulting Shipment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function ship($invoiceId = null)
+    public function ship($invoiceId = null, $orderId = null)
     {
-        return $this->getHeidelpayObject()->ship($this, $invoiceId);
+        return $this->getHeidelpayObject()->ship($this, $invoiceId, $orderId);
     }
 
     //</editor-fold>
@@ -803,11 +805,12 @@ class Payment extends AbstractHeidelpayResource
             $this->setId($resources->paymentId);
         }
 
-        if (isset($resources->customerId) && !empty($resources->customerId)) {
-            if ($this->customer instanceof Customer) {
+        $customerId = $resources->customerId ?? null;
+        if (!empty($customerId)) {
+            if ($this->customer instanceof Customer && $this->customer->getId() === $customerId) {
                 $this->getResource($this->customer);
             } else {
-                $this->customer = $this->getHeidelpayObject()->fetchCustomer($resources->customerId);
+                $this->customer = $this->getHeidelpayObject()->fetchCustomer($customerId);
             }
         }
 
@@ -815,8 +818,13 @@ class Payment extends AbstractHeidelpayResource
             $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
         }
 
-        if (isset($resources->metadataId) && !empty($resources->metadataId) && $this->metadata->getId() === null) {
-            $this->metadata = $this->getHeidelpayObject()->fetchMetadata($resources->metadataId);
+        $metadataId = $resources->metadataId ?? null;
+        if (!empty($metadataId)) {
+            if ($this->metadata instanceof Metadata && $this->metadata->getId() === $metadataId) {
+                $this->getResource($this->metadata);
+            } else {
+                $this->metadata = $this->getHeidelpayObject()->fetchMetadata($resources->metadataId);
+            }
         }
 
         if (isset($resources->basketId) && !empty($resources->basketId) && !$this->basket instanceof Basket) {

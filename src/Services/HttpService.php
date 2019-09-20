@@ -158,7 +158,8 @@ class HttpService
         $httpHeaders = [
             'Authorization' => 'Basic ' . base64_encode($key . ':'),
             'Content-Type'  => 'application/json',
-            'SDK-VERSION'   => Heidelpay::SDK_VERSION
+            'SDK-VERSION'   => Heidelpay::SDK_VERSION,
+            'SDK-TYPE'   => Heidelpay::SDK_TYPE
         ];
         /** @noinspection IsEmptyFunctionUsageInspection */
         if (!empty($locale)) {
@@ -184,7 +185,8 @@ class HttpService
 
         $responseObject = json_decode($response, false);
         if ($responseCode >= 400 || isset($responseObject->errors)) {
-            $code            = null;
+            $code    = null;
+            $errorId = null;
             $customerMessage = $code;
             $merchantMessage = $customerMessage;
             if (isset($responseObject->errors[0])) {
@@ -193,8 +195,14 @@ class HttpService
                 $customerMessage = $errors->customerMessage ?? '';
                 $code = $errors->code ?? '';
             }
+            if (isset($responseObject->id)) {
+                $errorId = $responseObject->id;
+                if (IdService::getResourceTypeFromIdString($errorId) !== 'err') {
+                    $errorId = null;
+                }
+            }
 
-            throw new HeidelpayApiException($merchantMessage, $customerMessage, $code);
+            throw new HeidelpayApiException($merchantMessage, $customerMessage, $code, $errorId);
         }
     }
 
@@ -213,7 +221,10 @@ class HttpService
         if (in_array($httpMethod, $writingOperations, true)) {
             $heidelpayObj->debugLog('Request: ' . $payload);
         }
-        $heidelpayObj->debugLog('Response: (' . $responseCode . ') ' . json_encode(json_decode($response)));
+        $heidelpayObj->debugLog(
+            'Response: (' . $responseCode . ') ' .
+            json_encode(json_decode($response, false), JSON_UNESCAPED_SLASHES)
+        );
     }
 
     /**

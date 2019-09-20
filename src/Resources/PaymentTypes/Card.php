@@ -38,21 +38,6 @@ class Card extends BasePaymentType
     use CanPayout;
     use CanRecur;
 
-    /**
-     * Card constructor.
-     *
-     * @param string $number
-     * @param string $expiryDate
-     *
-     * @throws RuntimeException
-     */
-    public function __construct($number, $expiryDate)
-    {
-        $this->setNumber($number);
-        $this->setExpiryDate($expiryDate);
-    }
-
-    //<editor-fold desc="Properties">
     /** @var string $number */
     protected $number;
 
@@ -71,7 +56,19 @@ class Card extends BasePaymentType
     /** @var string $brand */
     private $brand = '';
 
-    //</editor-fold>
+    /**
+     * Card constructor.
+     *
+     * @param string $number
+     * @param string $expiryDate
+     *
+     * @throws RuntimeException
+     */
+    public function __construct($number, $expiryDate)
+    {
+        $this->setNumber($number);
+        $this->setExpiryDate($expiryDate);
+    }
 
     //<editor-fold desc="Getters/Setters">
 

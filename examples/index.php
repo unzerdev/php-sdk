@@ -107,6 +107,18 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            Giropay
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='Giropay/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             Alipay
                         </div>
                         <div class="description">
@@ -125,6 +137,30 @@ require_once __DIR__ . '/../../../autoload.php';
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='Wechatpay/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Prepayment
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='Prepayment/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Invoice
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='Invoice/';">
                         Try
                     </div>
                 </div>
@@ -218,6 +254,53 @@ require_once __DIR__ . '/../../../autoload.php';
                         Try
                     </div>
                 </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Flexipay (PIS)
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='FlexiPayDirect/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Hosted Payment Page
+                        </div>
+                        <div class="description">
+                            This example shows how to use the Payment Page hosted externally.
+                            The customer will be redirected to a Payment Page on a heidelpay
+                            server and redirected to a given RedirectUrl.
+                        </div>
+                    </div>
+                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                        Documentation
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Embedded Payment Page
+                        </div>
+                        <div class="description">
+                            This example shows how to use the embedded Payment Page.
+                            The Payment Page will be shown as an Overlay in your own shop.
+                        </div>
+                    </div>
+                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                        Documentation
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">
+                        Try
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -229,7 +312,7 @@ require_once __DIR__ . '/../../../autoload.php';
                     <span class="sub header">Enable or disable webhooks ...</span>
                 </span>
             </h2>
-            <div class="ui two cards">
+            <div class="ui three cards">
                 <div class="card">
                     <div class="content">
                         <div class="header">
@@ -253,6 +336,19 @@ require_once __DIR__ . '/../../../autoload.php';
                         </div>
                     </div>
                     <div class="ui bottom attached blue button" onclick="location.href='Webhooks/removeAll.php';">
+                        Try
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            Fetch all Webhooks
+                        </div>
+                        <div class="description">
+                            Fetch all Webhooks corresponding to this key pair.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached blue button" onclick="location.href='Webhooks/fetchAll.php';">
                         Try
                     </div>
                 </div>

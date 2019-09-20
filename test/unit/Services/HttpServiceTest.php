@@ -116,7 +116,10 @@ class HttpServiceTest extends BaseUnitTest
 
         $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
         $adapterMock->expects($this->once())->method('init')->with(
-            'https://api.heidelpay.com/v1/my/uri/123',
+            $this->callback(
+                static function ($url) {
+                    return str_replace(['dev-api', 'stg-api'], 'api', $url) === 'https://api.heidelpay.com/v1/my/uri/123';
+                }),
             '{"dummyResource": "JsonSerialized"}',
             'GET'
         );
@@ -124,7 +127,8 @@ class HttpServiceTest extends BaseUnitTest
         $headers = [
             'Authorization' => 'Basic cy1wcml2LU15VGVzdEtleTo=',
             'Content-Type'  => 'application/json',
-            'SDK-VERSION'   => Heidelpay::SDK_VERSION
+            'SDK-VERSION'   => Heidelpay::SDK_VERSION,
+            'SDK-TYPE'   => Heidelpay::SDK_TYPE
         ];
         $adapterMock->expects($this->once())->method('setHeaders')->with($headers);
         $adapterMock->expects($this->once())->method('execute')->willReturn('myResponseString');
@@ -193,9 +197,17 @@ class HttpServiceTest extends BaseUnitTest
 
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
         $loggerMock->expects($this->exactly(5))->method('log')->withConsecutive(
-            ['GET: https://api.heidelpay.com/v1/my/uri/123'],
+            [ $this->callback(
+                    static function ($string) {
+                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === 'GET: https://api.heidelpay.com/v1/my/uri/123';
+                    })
+            ],
             ['Response: (200) {"response":"myResponseString"}'],
-            ['POST: https://api.heidelpay.com/v1/my/uri/123'],
+            [ $this->callback(
+                static function ($string) {
+                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === 'POST: https://api.heidelpay.com/v1/my/uri/123';
+                })
+            ],
             ['Request: {"dummyResource": "JsonSerialized"}'],
             ['Response: (201) {"response":"myResponseString"}']
         );
@@ -268,7 +280,7 @@ class HttpServiceTest extends BaseUnitTest
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionMessage('The payment api returned an error!');
-        $this->expectExceptionCode('');
+        $this->expectExceptionCode('No error code provided');
 
         /** @var HttpService $httpServiceMock*/
         $httpServiceMock->send('/my/uri/123', $resource);
@@ -285,7 +297,6 @@ class HttpServiceTest extends BaseUnitTest
     public function handleErrorsShouldThrowExceptionIfResponseContainsErrorField()
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
-
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(
             ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
         )->getMock();
@@ -294,13 +305,10 @@ class HttpServiceTest extends BaseUnitTest
         $secondResponse = '{"errors": [{"merchantMessage": "This is an error message for the merchant!"}]}';
         $thirdResponse = '{"errors": [{"customerMessage": "This is an error message for the customer!"}]}';
         $fourthResponse = '{"errors": [{"code": "This is the error code!"}]}';
+        $fifthResponse = '{"errors": [{"code": "This is the error code!"}], "id": "s-err-1234"}';
+        $sixthResponse = '{"errors": [{"code": "This is the error code!"}], "id": "s-rre-1234"}';
 
-        $adapterMock->method('execute')->willReturnOnConsecutiveCalls(
-            $firstResponse,
-            $secondResponse,
-            $thirdResponse,
-            $fourthResponse
-        );
+        $adapterMock->method('execute')->willReturnOnConsecutiveCalls($firstResponse, $secondResponse, $thirdResponse, $fourthResponse, $fifthResponse, $sixthResponse);
         $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
 
         $resource  = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
@@ -312,7 +320,8 @@ class HttpServiceTest extends BaseUnitTest
         } catch (HeidelpayApiException $e) {
             $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
             $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
-            $this->assertEmpty($e->getCode());
+            $this->assertEquals('No error code provided', $e->getCode());
+            $this->assertEquals('No error id provided', $e->getErrorId());
         }
 
         try {
@@ -321,7 +330,8 @@ class HttpServiceTest extends BaseUnitTest
         } catch (HeidelpayApiException $e) {
             $this->assertEquals('This is an error message for the merchant!', $e->getMerchantMessage());
             $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
-            $this->assertEmpty($e->getCode());
+            $this->assertEquals('No error code provided', $e->getCode());
+            $this->assertEquals('No error id provided', $e->getErrorId());
         }
 
         try {
@@ -330,7 +340,8 @@ class HttpServiceTest extends BaseUnitTest
         } catch (HeidelpayApiException $e) {
             $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
             $this->assertEquals('This is an error message for the customer!', $e->getClientMessage());
-            $this->assertEmpty($e->getCode());
+            $this->assertEquals('No error code provided', $e->getCode());
+            $this->assertEquals('No error id provided', $e->getErrorId());
         }
 
         try {
@@ -340,6 +351,27 @@ class HttpServiceTest extends BaseUnitTest
             $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
             $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
             $this->assertEquals('This is the error code!', $e->getCode());
+            $this->assertEquals('No error id provided', $e->getErrorId());
+        }
+
+        try {
+            $httpServiceMock->send('/my/uri/123', $resource);
+            $this->assertTrue(false, 'The fifth exception should have been thrown!');
+        } catch (HeidelpayApiException $e) {
+            $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
+            $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
+            $this->assertEquals('This is the error code!', $e->getCode());
+            $this->assertEquals('s-err-1234', $e->getErrorId());
+        }
+
+        try {
+            $httpServiceMock->send('/my/uri/123', $resource);
+            $this->assertTrue(false, 'The sixth exception should have been thrown!');
+        } catch (HeidelpayApiException $e) {
+            $this->assertEquals('The payment api returned an error!', $e->getMerchantMessage());
+            $this->assertEquals('The payment api returned an error!', $e->getClientMessage());
+            $this->assertEquals('This is the error code!', $e->getCode());
+            $this->assertEquals('No error id provided', $e->getErrorId());
         }
     }
 

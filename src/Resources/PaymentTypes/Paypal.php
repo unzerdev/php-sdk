@@ -33,4 +33,30 @@ class Paypal extends BasePaymentType
     use CanAuthorize;
     use CanDirectCharge;
     use CanRecur;
+
+    /** @var string|null $email */
+    protected $email;
+
+    //<editor-fold desc="Getters/Setters">
+
+    /**
+     * @return string|null
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     *
+     * @return Paypal
+     */
+    public function setEmail(string $email): Paypal
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    //</editor-fold>
 }
