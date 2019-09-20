@@ -269,6 +269,7 @@ class PaymentService
         $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
+        $paymentType = $payment->getPaymentType();
 
         /** @var Charge $charge */
         $charge = (new Charge($amount, $currency, $returnUrl))
