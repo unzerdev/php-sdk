@@ -36,7 +36,6 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
-use heidelpayPHP\Resources\PaymentTypes\Prepayment;
 
 session_start();
 session_unset();
