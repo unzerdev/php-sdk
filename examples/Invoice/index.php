@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the Prepayment payment type.
+ * This file provides an example implementation of the Invoice payment type.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
