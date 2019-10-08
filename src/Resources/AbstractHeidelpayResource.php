@@ -248,7 +248,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * Fetches the Resource if necessary.
+     * Fetches the Resource if it has not been fetched yet and the id is set.
      *
      * @param AbstractHeidelpayResource $resource
      *

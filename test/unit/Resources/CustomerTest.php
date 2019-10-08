@@ -192,6 +192,27 @@ class CustomerTest extends BaseUnitTest
     }
 
     /**
+     * Verify removeRestrictedSymbols method works.
+     *
+     * @test
+     *
+     * @dataProvider removeRestrictedSymbolsMethodShouldReturnTheCorrectValueDP
+     *
+     * @throws Exception
+     *
+     * @param mixed $value
+     * @param mixed $expected
+     */
+    public function removeRestrictedSymbolsMethodShouldReturnTheCorrectValue($value, $expected)
+    {
+        $companyInfo = new CompanyInfo();
+        $this->assertNull($companyInfo->getFunction());
+
+        $companyInfo->setFunction($value);
+        $this->assertEquals($expected, $companyInfo->getFunction());
+    }
+
+    /**
      * Verify salutation only uses the given values.
      *
      * @test
@@ -250,4 +271,25 @@ class CustomerTest extends BaseUnitTest
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchCustomerByExtCustomerId('myCustomerId');
     }
+
+    //<editor-fold desc="Data providers">
+
+    /**
+     * DataProvider for removeRestrictedSymbolsMethodShouldReturnTheCorrectValue.
+     */
+    public function removeRestrictedSymbolsMethodShouldReturnTheCorrectValueDP(): array
+    {
+        return [
+            'null' => [null, null],
+            'empty' => ['', ''],
+            'blank' => [' ', ' '],
+            'string' => ['MyTestString', 'MyTestString'],
+            '<' => ['<', ''],
+            '>' => ['>', ''],
+            '<test>' => ['<test>', 'test'],
+            'Text1' => [' >>>This >>>text >>>should <<<look <<<different ', ' This text should look different ']
+        ];
+    }
+
+    //</editor-fold>
 }

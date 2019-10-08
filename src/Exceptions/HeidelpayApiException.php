@@ -45,13 +45,13 @@ class HeidelpayApiException extends Exception
      * @param string $code
      * @param string $errorId
      */
-    public function __construct($merchantMessage = '', $clientMessage = '', $code = 'No error code provided', $errorId = 'No error id provided')
+    public function __construct($merchantMessage = '', $clientMessage = '', $code = null, $errorId = null)
     {
         $merchantMessage = empty($merchantMessage) ? static::MESSAGE : $merchantMessage;
         $this->clientMessage = empty($clientMessage) ? static::CLIENT_MESSAGE : $clientMessage;
         parent::__construct($merchantMessage);
-        $this->code = $code;
-        $this->errorId = $errorId;
+        $this->code = empty($code) ? 'No error code provided' : $code;
+        $this->errorId = empty($errorId) ? 'No error id provided' : $errorId;
     }
 
     /**
