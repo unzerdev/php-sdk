@@ -637,9 +637,6 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancel($amount = null): Cancellation
     {
-
-
-
         list($chargeCancels, $chargeExceptions) = $this->cancelAllCharges();
         list($authCancel, $authException) = $this->cancelAuthorization($amount);
 
