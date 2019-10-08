@@ -26,11 +26,39 @@ namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\test\BaseUnitTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
 use RuntimeException;
 use stdClass;
 
 class KeypairTest extends BaseUnitTest
 {
+    /**
+     * Verify getters and setters work properly.
+     *
+     * @test
+     * @throws AssertionFailedError
+     * @throws Exception
+     */
+    public function gettersAndSettersWorkAsExpected()
+    {
+        $keypair = new Keypair();
+        $this->assertFalse($keypair->isDetailed());
+        $this->assertNull($keypair->getPublicKey());
+        $this->assertNull($keypair->getPrivateKey());
+        $this->assertEmpty($keypair->getPaymentTypes());
+        $this->assertSame($keypair->getPaymentTypes(), $keypair->getAvailablePaymentTypes());
+        $this->assertEquals('', $keypair->getSecureLevel());
+        $this->assertEquals('', $keypair->getMerchantName());
+        $this->assertEquals('', $keypair->getMerchantAddress());
+        $this->assertEquals('', $keypair->getAlias());
+        $this->assertFalse($keypair->isDetailed());
+
+        $keypair->setDetailed(true);
+
+        $this->assertTrue($keypair->isDetailed());
+    }
+
     /**
      * Verify that a key pair can be updated on handle response.
      *
@@ -41,12 +69,6 @@ class KeypairTest extends BaseUnitTest
     public function aKeypairShouldBeUpdatedThroughResponseHandling()
     {
         $keypair = new Keypair();
-        $this->assertNull($keypair->getPublicKey());
-        $this->assertNull($keypair->getPrivateKey());
-        /** @noinspection UnnecessaryAssertionInspection */
-        $this->assertInternalType('array', $keypair->getPaymentTypes());
-        $this->assertEmpty($keypair->getPaymentTypes());
-        $this->assertEquals($keypair->getPaymentTypes(), $keypair->getAvailablePaymentTypes());
 
         $paymentTypes = [
             'przelewy24',
@@ -83,14 +105,6 @@ class KeypairTest extends BaseUnitTest
     public function aKeypairShouldBeUpdatedWithDetailsThroughResponseHandling()
     {
         $keypair = new Keypair();
-        $this->assertNull($keypair->getPublicKey());
-        $this->assertNull($keypair->getPrivateKey());
-        $this->assertEmpty($keypair->getPaymentTypes());
-        $this->assertSame($keypair->getPaymentTypes(), $keypair->getAvailablePaymentTypes());
-        $this->assertEmpty($keypair->getSecureLevel());
-        $this->assertEmpty($keypair->getMerchantName());
-        $this->assertEmpty($keypair->getMerchantAddress());
-        $this->assertEmpty($keypair->getAlias());
 
         $paymentTypes = [
             (object) [
