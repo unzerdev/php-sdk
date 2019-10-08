@@ -32,20 +32,21 @@ use stdClass;
 class KeypairTest extends BaseUnitTest
 {
     /**
-     * Verify that an Authorization can be updated on handle response.
+     * Verify that a key pair can be updated on handle response.
      *
      * @test
      *
      * @throws RuntimeException
      */
-    public function anAuthorizationShouldBeUpdatedThroughResponseHandling()
+    public function aKeypairShouldBeUpdatedThroughResponseHandling()
     {
         $keypair = new Keypair();
         $this->assertNull($keypair->getPublicKey());
         $this->assertNull($keypair->getPrivateKey());
         /** @noinspection UnnecessaryAssertionInspection */
-        $this->assertInternalType('array', $keypair->getAvailablePaymentTypes());
-        $this->assertEmpty($keypair->getAvailablePaymentTypes());
+        $this->assertInternalType('array', $keypair->getPaymentTypes());
+        $this->assertEmpty($keypair->getPaymentTypes());
+        $this->assertEquals($keypair->getPaymentTypes(), $keypair->getAvailablePaymentTypes());
 
         $paymentTypes = [
             'przelewy24',
@@ -67,8 +68,79 @@ class KeypairTest extends BaseUnitTest
         $testResponse->availablePaymentTypes = $paymentTypes;
 
         $keypair->handleResponse($testResponse);
-        $this->assertArraySubset($paymentTypes, $keypair->getAvailablePaymentTypes());
+        $this->assertArraySubset($paymentTypes, $keypair->getPaymentTypes());
         $this->assertEquals('s-pub-1234', $keypair->getPublicKey());
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
+    }
+
+    /**
+     * Verify that a key pair can be updated with details on handle response.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     */
+    public function aKeypairShouldBeUpdatedWithDetailsThroughResponseHandling()
+    {
+        $keypair = new Keypair();
+        $this->assertNull($keypair->getPublicKey());
+        $this->assertNull($keypair->getPrivateKey());
+        $this->assertEmpty($keypair->getPaymentTypes());
+        $this->assertSame($keypair->getPaymentTypes(), $keypair->getAvailablePaymentTypes());
+        $this->assertEmpty($keypair->getSecureLevel());
+        $this->assertEmpty($keypair->getMerchantName());
+        $this->assertEmpty($keypair->getMerchantAddress());
+        $this->assertEmpty($keypair->getAlias());
+
+        $paymentTypes = [
+            (object) [
+                'supports' => [
+                    (object) [
+                        'brands' => ['JCB', 'VISAELECTRON', 'MAESTRO', 'VISA', 'MASTER'],
+                        'countries' => [],
+                        'channel' => '31HA07BC819430D3495C56BC18C55622',
+                        'currency' => ['CHF', 'CNY', 'JPY', 'USD', 'GBP', 'EUR']
+                    ]
+                ],
+                'type' => 'card',
+                'allowCustomerTypes' => 'B2C',
+                'allowCreditTransaction' => true,
+                '3ds' => true
+            ],
+            (object) [
+                'supports' => [
+                    (object) [
+                        'brands' => ['CUP', 'SOLO', 'CARTEBLEUE', 'VISAELECTRON', 'MAESTRO', 'AMEX', 'VISA', 'MASTER'],
+                        'countries' => [],
+                        'channel' => '31HA07BC819430D3495C7C9D07B1A922',
+                        'currency' => ['MGA', 'USD', 'GBP', 'EUR']
+                    ]
+                ],
+                'type' => 'card',
+                'allowCustomerTypes' => 'B2C',
+                'allowCreditTransaction' => true,
+                '3ds' => false
+            ]
+        ];
+
+        $testResponse = (object) [
+            'publicKey' => 's-pub-1234',
+            'privateKey' => 's-priv-4321',
+            'secureLevel' => 'SAQ-D',
+            'alias' => 'Readme.io user',
+            'merchantName' => 'Heidelpay GmbH',
+            'merchantAddress' => 'Vangerowstraße 18, 69115 Heidelberg',
+            'paymentTypes' => $paymentTypes
+            ];
+
+        $keypair->handleResponse($testResponse);
+        $this->assertEquals($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertSame($keypair->getAvailablePaymentTypes(), $keypair->getPaymentTypes());
+        $this->assertEquals('s-pub-1234', $keypair->getPublicKey());
+        $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
+        $this->assertEquals('SAQ-D', $keypair->getSecureLevel());
+        $this->assertEquals('Readme.io user', $keypair->getAlias());
+        $this->assertEquals('Heidelpay GmbH', $keypair->getMerchantName());
+        $this->assertEquals('Vangerowstraße 18, 69115 Heidelberg', $keypair->getMerchantAddress());
     }
 }

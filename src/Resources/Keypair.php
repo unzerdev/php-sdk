@@ -24,6 +24,9 @@
  */
 namespace heidelpayPHP\Resources;
 
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use stdClass;
+
 class Keypair extends AbstractHeidelpayResource
 {
     /** @var string $publicKey */
@@ -32,8 +35,26 @@ class Keypair extends AbstractHeidelpayResource
     /** @var string $privateKey */
     private $privateKey;
 
-    /** @var array $availablePaymentTypes */
-    private $availablePaymentTypes = [];
+    /** @var bool $detailed */
+    private $detailed = false;
+
+    /** @var array $paymentTypes */
+    private $paymentTypes = [];
+
+    /** @var string $secureLevel */
+    private $secureLevel;
+
+    /** @var string $alias */
+    private $alias;
+
+    /** @var string $merchantName */
+    private $merchantName;
+
+    /** @var bool $imageScanningEnabled */
+    private $imageScanningEnabled;
+
+    /** @var string $merchantAddress */
+    private $merchantAddress;
 
     //<editor-fold desc="Getters/Setters">
 
@@ -72,9 +93,25 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @return array
      */
+    public function getPaymentTypes(): array
+    {
+        return $this->paymentTypes;
+    }
+
+    /**
+     * @param array $paymentTypes
+     */
+    protected function setPaymentTypes(array $paymentTypes)
+    {
+        $this->paymentTypes = $paymentTypes;
+    }
+
+    /**
+     * @return array
+     */
     public function getAvailablePaymentTypes(): array
     {
-        return $this->availablePaymentTypes;
+        return $this->getPaymentTypes();
     }
 
     /**
@@ -82,7 +119,152 @@ class Keypair extends AbstractHeidelpayResource
      */
     protected function setAvailablePaymentTypes(array $paymentTypes)
     {
-        $this->availablePaymentTypes = $paymentTypes;
+        $this->setPaymentTypes($paymentTypes);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecureLevel(): string
+    {
+        return $this->secureLevel ?: '';
+    }
+
+    /**
+     * @param string|null $secureLevel
+     *
+     * @return Keypair
+     */
+    public function setSecureLevel($secureLevel): Keypair
+    {
+        $this->secureLevel = $secureLevel;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlias(): string
+    {
+        return $this->alias ?: '';
+    }
+
+    /**
+     * @param string|null $alias
+     *
+     * @return Keypair
+     */
+    public function setAlias($alias): Keypair
+    {
+        $this->alias = $alias;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMerchantName(): string
+    {
+        return $this->merchantName ?: '';
+    }
+
+    /**
+     * @param string|null $merchantName
+     *
+     * @return Keypair
+     */
+    public function setMerchantName($merchantName): Keypair
+    {
+        $this->merchantName = $merchantName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMerchantAddress(): string
+    {
+        return $this->merchantAddress ?: '';
+    }
+
+    /**
+     * @param string|null $merchantAddress
+     *
+     * @return Keypair
+     */
+    public function setMerchantAddress($merchantAddress): Keypair
+    {
+        $this->merchantAddress = $merchantAddress;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImageScanningEnabled(): bool
+    {
+        return $this->imageScanningEnabled;
+    }
+
+    /**
+     * @param bool $imageScanningEnabled
+     *
+     * @return Keypair
+     */
+    public function setImageScanningEnabled(bool $imageScanningEnabled): Keypair
+    {
+        $this->imageScanningEnabled = $imageScanningEnabled;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDetailed(): bool
+    {
+        return $this->detailed;
+    }
+
+    /**
+     * @param bool $detailed
+     *
+     * @return Keypair
+     */
+    public function setDetailed(bool $detailed): Keypair
+    {
+        $this->detailed = $detailed;
+        return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable Methods">
+
+    /**
+     * @inheritDoc
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        parent::handleResponse($response, $method);
+
+        $paymentTypes = [];
+        if (isset($response->paymentTypes)) {
+            $paymentTypes = $response->paymentTypes;
+        } elseif (isset($response->availablePaymentTypes)) {
+            $paymentTypes = $response->availablePaymentTypes;
+        }
+
+        foreach ($paymentTypes as $paymentType) {
+            $this->paymentTypes[] = $paymentType;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getResourcePath(): string
+    {
+        return parent::getResourcePath() . ($this->isDetailed() ? '/types' : '');
     }
 
     //</editor-fold>
