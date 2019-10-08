@@ -511,16 +511,17 @@ class PaymentService
      *
      * @param Payment|string $payment
      * @param string|null    $invoiceId
+     * @param string|null    $orderId
      *
      * @return Shipment Resulting Shipment object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
+    public function ship($payment, $invoiceId = null, $orderId = null): AbstractHeidelpayResource
     {
         $shipment = new Shipment();
-        $shipment->setInvoiceId($invoiceId);
+        $shipment->setInvoiceId($invoiceId)->setOrderId($orderId);
         $this->resourceService->getPaymentResource($payment)->addShipment($shipment);
         $this->resourceService->create($shipment);
         return $shipment;

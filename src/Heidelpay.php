@@ -56,7 +56,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.2.1.1';
+    const SDK_VERSION = '1.2.2.1';
 
     /** @var string $key */
     private $key;
@@ -1182,15 +1182,16 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param Payment|string $payment   The Payment object the the id of the Payment to ship.
      * @param string|null    $invoiceId The id of the invoice in the shop.
+     * @param string|null    $orderId   The id of the order in shop.
      *
      * @return Shipment The resulting Shipment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function ship($payment, $invoiceId = null): AbstractHeidelpayResource
+    public function ship($payment, $invoiceId = null, $orderId = null): AbstractHeidelpayResource
     {
-        return $this->paymentService->ship($payment, $invoiceId);
+        return $this->paymentService->ship($payment, $invoiceId, $orderId);
     }
 
     //</editor-fold>
