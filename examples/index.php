@@ -245,7 +245,7 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Flexipay (PIS)
+                            Flexipay direct (PIS)
                         </div>
                         <div class="description">
                         </div>
