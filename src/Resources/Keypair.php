@@ -132,7 +132,7 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    public function setSecureLevel($secureLevel): Keypair
+    protected function setSecureLevel($secureLevel): Keypair
     {
         $this->secureLevel = $secureLevel;
         return $this;
@@ -151,7 +151,7 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    public function setAlias($alias): Keypair
+    protected function setAlias($alias): Keypair
     {
         $this->alias = $alias;
         return $this;
@@ -170,7 +170,7 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    public function setMerchantName($merchantName): Keypair
+    protected function setMerchantName($merchantName): Keypair
     {
         $this->merchantName = $merchantName;
         return $this;
@@ -189,7 +189,7 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    public function setMerchantAddress($merchantAddress): Keypair
+    protected function setMerchantAddress($merchantAddress): Keypair
     {
         $this->merchantAddress = $merchantAddress;
         return $this;
