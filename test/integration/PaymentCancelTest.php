@@ -109,7 +109,7 @@ class PaymentCancelTest extends BasePaymentTest
 
     /**
      * Verify full cancel on authorize.
-     * Case 6
+     * PHPLIB-228 - Case 6
      *
      * @test
      *
@@ -132,7 +132,7 @@ class PaymentCancelTest extends BasePaymentTest
 
     /**
      * Verify partial cancel on authorize.
-     * Case 7
+     * PHPLIB-228 - Case 7
      *
      * @test
      *
