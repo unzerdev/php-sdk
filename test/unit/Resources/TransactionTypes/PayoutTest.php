@@ -49,16 +49,21 @@ class PayoutTest extends BasePaymentTest
         $this->assertNull($payout->getAmount());
         $this->assertNull($payout->getCurrency());
         $this->assertNull($payout->getReturnUrl());
+        $this->assertNull($payout->getPaymentReference());
 
         $payout = new Payout(123.4, 'myCurrency', 'https://my-return-url.test');
+        $payout->setPaymentReference('my payment reference');
         $this->assertEquals(123.4, $payout->getAmount());
         $this->assertEquals('myCurrency', $payout->getCurrency());
         $this->assertEquals('https://my-return-url.test', $payout->getReturnUrl());
+        $this->assertEquals('my payment reference', $payout->getPaymentReference());
 
         $payout->setAmount(567.8)->setCurrency('myNewCurrency')->setReturnUrl('https://another-return-url.test');
+        $payout->setPaymentReference('different payment reference');
         $this->assertEquals(567.8, $payout->getAmount());
         $this->assertEquals('myNewCurrency', $payout->getCurrency());
         $this->assertEquals('https://another-return-url.test', $payout->getReturnUrl());
+        $this->assertEquals('different payment reference', $payout->getPaymentReference());
     }
 
     /**

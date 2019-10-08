@@ -2,7 +2,7 @@
 /**
  * This class defines unit tests to verify functionality of the Authorization transaction type.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,19 +54,22 @@ class AuthorizationTest extends BaseUnitTest
         $this->assertNull($authorization->getCurrency());
         $this->assertNull($authorization->getReturnUrl());
         $this->assertNull($authorization->isCard3ds());
+        $this->assertNull($authorization->getPaymentReference());
 
         $authorization = new Authorization(123.4, 'myCurrency', 'https://my-return-url.test');
-        $authorization->setCard3ds(true);
+        $authorization->setCard3ds(true)->setPaymentReference('my payment reference');
         $this->assertEquals(123.4, $authorization->getAmount());
         $this->assertEquals('myCurrency', $authorization->getCurrency());
         $this->assertEquals('https://my-return-url.test', $authorization->getReturnUrl());
+        $this->assertEquals('my payment reference', $authorization->getPaymentReference());
         $this->assertTrue($authorization->isCard3ds());
 
         $authorization->setAmount(567.8)->setCurrency('myNewCurrency')->setReturnUrl('https://another-return-url.test');
-        $authorization->setCard3ds(false);
+        $authorization->setCard3ds(false)->setPaymentReference('different payment reference');
         $this->assertEquals(567.8, $authorization->getAmount());
         $this->assertEquals('myNewCurrency', $authorization->getCurrency());
         $this->assertEquals('https://another-return-url.test', $authorization->getReturnUrl());
+        $this->assertEquals('different payment reference', $authorization->getPaymentReference());
         $this->assertFalse($authorization->isCard3ds());
     }
 
