@@ -44,8 +44,8 @@ class KeypairTest extends BaseUnitTest
         $this->assertNull($keypair->getPublicKey());
         $this->assertNull($keypair->getPrivateKey());
         /** @noinspection UnnecessaryAssertionInspection */
-        $this->assertInternalType('array', $keypair->getPaymentTypes());
-        $this->assertEmpty($keypair->getPaymentTypes());
+        $this->assertInternalType('array', $keypair->getAvailablePaymentTypes());
+        $this->assertEmpty($keypair->getAvailablePaymentTypes());
 
         $paymentTypes = [
             'przelewy24',
@@ -64,10 +64,10 @@ class KeypairTest extends BaseUnitTest
         $testResponse = new stdClass();
         $testResponse->publicKey = 's-pub-1234';
         $testResponse->privateKey = 's-priv-4321';
-        $testResponse->paymentTypes = $paymentTypes;
+        $testResponse->availablePaymentTypes = $paymentTypes;
 
         $keypair->handleResponse($testResponse);
-        $this->assertArraySubset($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertArraySubset($paymentTypes, $keypair->getAvailablePaymentTypes());
         $this->assertEquals('s-pub-1234', $keypair->getPublicKey());
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
     }
