@@ -50,9 +50,6 @@ class Keypair extends AbstractHeidelpayResource
     /** @var string $merchantName */
     private $merchantName;
 
-    /** @var bool $imageScanningEnabled */
-    private $imageScanningEnabled;
-
     /** @var string $merchantAddress */
     private $merchantAddress;
 
@@ -195,25 +192,6 @@ class Keypair extends AbstractHeidelpayResource
     public function setMerchantAddress($merchantAddress): Keypair
     {
         $this->merchantAddress = $merchantAddress;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isImageScanningEnabled(): bool
-    {
-        return $this->imageScanningEnabled;
-    }
-
-    /**
-     * @param bool $imageScanningEnabled
-     *
-     * @return Keypair
-     */
-    public function setImageScanningEnabled(bool $imageScanningEnabled): Keypair
-    {
-        $this->imageScanningEnabled = $imageScanningEnabled;
         return $this;
     }
 
