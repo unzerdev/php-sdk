@@ -55,7 +55,7 @@ class PaymentCancelTest extends BasePaymentTest
 
     /**
      * Verify full cancel on charge.
-     * PHPLIB-228 Case 1
+     * PHPLIB-228 - Case 1
      *
      * @test
      *
@@ -72,6 +72,39 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($cancellation->getPayment()->isCanceled());
         $this->assertArraySubset([$cancellation], $fetchedPayment->getCancellations());
         $this->assertEquals($fetchedCharge->getAmount(), $cancellation->getAmount());
+    }
+
+    /**
+     * Verify partial cancel on charge.
+     * PHPLIB-228 - Case 3
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function partialCancelOnSingleChargeShouldBePossible()
+    {
+        $charge = $this->createCharge(222.33);
+        $this->assertEquals(222.33, $charge->getAmount());
+
+        $payment = $charge->getPayment();
+        $this->assertAmounts($payment, 0.0, 222.33, 222.33, 0.0);
+        $this->assertTrue($payment->isCompleted());
+
+        $cancel = $charge->cancel(123.12);
+        $this->assertEquals(123.12, $cancel->getAmount());
+
+        $this->heidelpay->fetchPayment($payment);
+        $this->assertAmounts($payment, 0.0, 99.21, 222.33, 123.12);
+        $this->assertTrue($payment->isCompleted());
+
+        $cancel = $charge->cancel(99.21);
+        $this->assertEquals(99.21, $cancel->getAmount());
+
+        $this->heidelpay->fetchPayment($payment);
+        $this->assertAmounts($payment, 0.0, 0.0, 222.33, 222.33);
+        $this->assertTrue($payment->isCanceled());
     }
 
     /**
@@ -130,21 +163,5 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertEquals('80.0', $thirdCancel->getAmount());
         $this->assertAmounts($fetchedPayment, 0.0, 0, 0.0, 0);
         $this->assertTrue($fetchedPayment->isCanceled());
-    }
-
-    /**
-     * Verify partial cancel on charge.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     */
-    public function partialCancelShouldBePossible()
-    {
-        $charge = $this->createCharge();
-        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
-        $cancel = $fetchedPayment->getChargeByIndex(0)->cancel(10.0);
-        $this->assertNotNull($cancel);
     }
 }

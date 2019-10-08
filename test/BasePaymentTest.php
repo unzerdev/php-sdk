@@ -239,6 +239,7 @@ class BasePaymentTest extends TestCase
      * Creates and returns a Charge object with the API which can be used in test methods.
      *
      * @param float $amount
+     *
      * @return Charge
      *
      * @throws HeidelpayApiException
