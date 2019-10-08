@@ -669,7 +669,7 @@ class Payment extends AbstractHeidelpayResource
                 }
             }
 
-            if ($amountToCancel !== null && ($amountToCancel -= $cancel->getAmount() <= 0)) {
+            if ($amountToCancel !== null && ($amountToCancel -= $cancel->getAmount()) <= 0) {
                 break;
             }
         }

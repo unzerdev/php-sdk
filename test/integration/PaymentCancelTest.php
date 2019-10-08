@@ -28,6 +28,8 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Exception;
 use RuntimeException;
 
 class PaymentCancelTest extends BasePaymentTest
@@ -143,32 +145,41 @@ class PaymentCancelTest extends BasePaymentTest
 
     /**
      * Verify partial cancel on multiple charges (cancel < last charge).
-     * PHPLIB-228 - Case 4
+     * PHPLIB-228 - Case 4 + 5
      *
      * @test
-     *
+     * @dataProvider partialCancelOnMultipleChargedAuthorizationAmountSmallerThenAuthorizeDP
+     * @param $amount
+     * @throws AssertionFailedError
+     * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function partialCancelOnMultipleChargedAuthorizationAmountSmallerThenLastCharge()
+    public function partialCancelOnMultipleChargedAuthorizationAmountSmallerThenAuthorize($amount)
     {
-        $authorization = $this->createCardAuthorization(123.44);
-        $payment = $authorization->getPayment();
+        $authorizeAmount = 123.44;
+        $authorization = $this->createCardAuthorization($authorizeAmount);
+        $payment       = $authorization->getPayment();
 
         $charge1 = $payment->charge(100.44);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 23.0, 100.44, 123.44, 0);
+        $this->assertAmounts($payment, 23.0, 100.44, $authorizeAmount, 0);
         $this->assertArraySubset([$charge1], $payment->getCharges());
 
         $charge2 = $payment->charge(23.00);
         $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0);
+        $this->assertAmounts($payment, 0.0, $authorizeAmount, $authorizeAmount, 0);
         $this->assertArraySubset([$charge1, $charge2], $payment->getCharges());
 
-        $cancellation = $payment->cancel(20.0);
+        $payment->cancel($amount);
         $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0.0, 103.44, 123.44, 20.00);
-        $this->assertEquals(20.0, $cancellation->getAmount());
+        $this->assertAmounts($payment, 0.0, $authorizeAmount - $amount, $authorizeAmount, $amount);
+        $cancellationTotal = 0.0;
+        foreach ($payment->getCancellations() as $cancellation) {
+            /** @var Cancellation $cancellation */
+            $cancellationTotal += $cancellation->getAmount();
+        }
+        $this->assertEquals($amount, $cancellationTotal);
     }
 
     /**
@@ -227,5 +238,16 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertEquals('80.0', $thirdCancel->getAmount());
         $this->assertAmounts($fetchedPayment, 0.0, 0, 0.0, 0);
         $this->assertTrue($fetchedPayment->isCanceled());
+    }
+
+    /**
+     * @return array
+     */
+    public function partialCancelOnMultipleChargedAuthorizationAmountSmallerThenAuthorizeDP(): array
+    {
+        return [
+            'cancel amount lt last charge' => [20],
+            'cancel amount gt last charge' => [40]
+        ];
     }
 }
