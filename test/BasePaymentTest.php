@@ -238,15 +238,16 @@ class BasePaymentTest extends TestCase
     /**
      * Creates and returns a Charge object with the API which can be used in test methods.
      *
+     * @param float $amount
      * @return Charge
      *
-     * @throws RuntimeException
      * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
-    public function createCharge(): Charge
+    public function createCharge($amount = 100.0): Charge
     {
         $card = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
+        return $this->heidelpay->charge($amount, 'EUR', $card, self::RETURN_URL);
     }
 
     /**
