@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
@@ -42,15 +43,15 @@ class PaymentCancelTest extends BasePaymentTest
     public function fullCancelOnAuthorizeShouldThrowExceptionIfAlreadyCanceled()
     {
         $authorization = $this->createCardAuthorization();
-        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
-        $cancel = $fetchedPayment->getAuthorization()->cancel();
+        $payment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $cancel = $payment->cancel();
         $this->assertNotNull($cancel);
         $this->assertEquals('s-cnl-1', $cancel->getId());
         $this->assertEquals($authorization->getAmount(), $cancel->getAmount());
 
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED);
-        $fetchedPayment->cancel();
+        $payment->cancel();
     }
 
     /**
@@ -64,14 +65,47 @@ class PaymentCancelTest extends BasePaymentTest
      */
     public function fullCancelOnChargeShouldBePossible()
     {
-        $charge = $this->createCharge();
-        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
-        $fetchedCharge = $fetchedPayment->getCharge('s-chg-1');
-        $cancellation = $fetchedCharge->cancel();
-        $this->assertNotNull($cancellation);
+        $charge = $this->createCharge(123.44);
+        $payment = $charge->getPayment();
+        $cancellation = $payment->cancel();
         $this->assertTrue($cancellation->getPayment()->isCanceled());
-        $this->assertArraySubset([$cancellation], $fetchedPayment->getCancellations());
-        $this->assertEquals($fetchedCharge->getAmount(), $cancellation->getAmount());
+        $this->assertArraySubset([$cancellation], $payment->getCancellations());
+        $this->assertEquals($charge->getAmount(), $cancellation->getAmount());
+    }
+
+    /**
+     * Verify full cancel on multiple charges.
+     * PHPLIB-228 - Case 2
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fullCancelOnPaymentWithAuthorizeAndMultipleChargesShouldBePossible()
+    {
+        $authorization = $this->createCardAuthorization(123.44);
+        $payment = $authorization->getPayment();
+
+        $charge1 = $payment->charge(100.44);
+        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertAmounts($payment, 23.0, 100.44, 123.44, 0);
+        $this->assertArraySubset([$charge1], $payment->getCharges());
+
+        $charge2 = $payment->charge(23.00);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0);
+        $this->assertArraySubset([$charge1, $charge2], $payment->getCharges());
+
+        $payment->cancel();
+        $this->assertTrue($payment->isCanceled());
+        $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
+        $cancellationTotal = 0.0;
+        foreach ($payment->getCancellations() as $cancellation) {
+            /** @var Cancellation $cancellation */
+            $cancellationTotal += $cancellation->getAmount();
+        }
+        $this->assertEquals($authorization->getAmount(), $cancellationTotal);
     }
 
     /**

@@ -205,16 +205,17 @@ class BasePaymentTest extends TestCase
     /**
      * Creates and returns an Authorization object with the API which can be used in test methods.
      *
+     * @param float $amount
      * @return Authorization
      *
-     * @throws RuntimeException
      * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
-    public function createCardAuthorization(): Authorization
+    public function createCardAuthorization($amount = 100.0): Authorization
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
-        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
+        $authorization = $this->heidelpay->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
         return $authorization;
     }
 
