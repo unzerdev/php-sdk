@@ -206,6 +206,7 @@ class BasePaymentTest extends TestCase
      * Creates and returns an Authorization object with the API which can be used in test methods.
      *
      * @param float $amount
+     *
      * @return Authorization
      *
      * @throws HeidelpayApiException

@@ -142,6 +142,36 @@ class PaymentCancelTest extends BasePaymentTest
     }
 
     /**
+     * Verify partial cancel on multiple charges (cancel < last charge).
+     * PHPLIB-228 - Case 4
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function partialCancelOnMultipleChargedAuthorizationAmountSmallerThenLastCharge()
+    {
+        $authorization = $this->createCardAuthorization(123.44);
+        $payment = $authorization->getPayment();
+
+        $charge1 = $payment->charge(100.44);
+        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertAmounts($payment, 23.0, 100.44, 123.44, 0);
+        $this->assertArraySubset([$charge1], $payment->getCharges());
+
+        $charge2 = $payment->charge(23.00);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0);
+        $this->assertArraySubset([$charge1, $charge2], $payment->getCharges());
+
+        $cancellation = $payment->cancel(20.0);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0.0, 103.44, 123.44, 20.00);
+        $this->assertEquals(20.0, $cancellation->getAmount());
+    }
+
+    /**
      * Verify full cancel on authorize.
      * PHPLIB-228 - Case 6
      *
