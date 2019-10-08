@@ -54,6 +54,27 @@ class PaymentCancelTest extends BasePaymentTest
     }
 
     /**
+     * Verify full cancel on charge.
+     * PHPLIB-228 Case 1
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fullCancelOnChargeShouldBePossible()
+    {
+        $charge = $this->createCharge();
+        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
+        $fetchedCharge = $fetchedPayment->getCharge('s-chg-1');
+        $cancellation = $fetchedCharge->cancel();
+        $this->assertNotNull($cancellation);
+        $this->assertTrue($cancellation->getPayment()->isCanceled());
+        $this->assertArraySubset([$cancellation], $fetchedPayment->getCancellations());
+        $this->assertEquals($fetchedCharge->getAmount(), $cancellation->getAmount());
+    }
+
+    /**
      * Verify full cancel on authorize.
      * Case 6
      *
@@ -109,23 +130,6 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertEquals('80.0', $thirdCancel->getAmount());
         $this->assertAmounts($fetchedPayment, 0.0, 0, 0.0, 0);
         $this->assertTrue($fetchedPayment->isCanceled());
-    }
-
-    /**
-     * Verify full cancel on charge.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     */
-    public function fullCancelOnChargeShouldBePossible()
-    {
-        $charge = $this->createCharge();
-        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
-        $fetchedCharge = $fetchedPayment->getCharge('s-chg-1');
-        $cancellation = $fetchedCharge->cancel();
-        $this->assertNotNull($cancellation);
     }
 
     /**
