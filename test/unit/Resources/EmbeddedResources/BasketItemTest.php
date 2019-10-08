@@ -51,7 +51,6 @@ class BasketItemTest extends BaseUnitTest
         $this->assertEquals('', $basketItem->getUnit());
         $this->assertEquals('', $basketItem->getTitle());
         $this->assertEquals('', $basketItem->getSubTitle());
-        $this->assertEquals('', $basketItem->getTitle());
         $this->assertNull($basketItem->getImageUrl());
 
         $basketItem->setQuantity(2);
