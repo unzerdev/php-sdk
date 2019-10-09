@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
@@ -149,7 +150,9 @@ class PaymentCancelTest extends BasePaymentTest
      *
      * @test
      * @dataProvider partialCancelOnMultipleChargedAuthorizationAmountSmallerThenAuthorizeDP
+     *
      * @param $amount
+     *
      * @throws AssertionFailedError
      * @throws Exception
      * @throws HeidelpayApiException
@@ -174,12 +177,7 @@ class PaymentCancelTest extends BasePaymentTest
         $payment->cancel($amount);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, $authorizeAmount - $amount, $authorizeAmount, $amount);
-        $cancellationTotal = 0.0;
-        foreach ($payment->getCancellations() as $cancellation) {
-            /** @var Cancellation $cancellation */
-            $cancellationTotal += $cancellation->getAmount();
-        }
-        $this->assertEquals($amount, $cancellationTotal);
+        $this->assertCancelledAmount($amount, $payment);
     }
 
     /**
@@ -241,6 +239,40 @@ class PaymentCancelTest extends BasePaymentTest
     }
 
     /**
+     * Verify full cancel on fully charged authorize.
+     * PHPLIB-228 - Case 8
+     *
+     * @test
+     * @dataProvider fullCancelOnFullyCanceledAuthorizeShouldBePossibleDP
+     *
+     * @param float $amount The amount to be cancelled.
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fullCancelOnFullyCanceledAuthorizeShouldBePossible($amount)
+    {
+        $authorization = $this->createCardAuthorization();
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertTrue($payment->isPending());
+
+        $payment->charge();
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0);
+        $this->assertTrue($payment->isCompleted());
+
+        $payment->cancel($amount);
+        $this->assertAmounts($payment, 0.0, 0.0, 100.0, 100.0);
+        $this->assertTrue($payment->isCanceled());
+
+        $this->assertCancelledAmount(100.0, $payment);
+    }
+
+    //<editor-fold desc="Data Providers">
+
+    /**
      * @return array
      */
     public function partialCancelOnMultipleChargedAuthorizationAmountSmallerThenAuthorizeDP(): array
@@ -250,4 +282,39 @@ class PaymentCancelTest extends BasePaymentTest
             'cancel amount gt last charge' => [40]
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function fullCancelOnFullyCanceledAuthorizeShouldBePossibleDP(): array
+    {
+        return [
+            'no amount given' => [null],
+            'amount given' => [100.0]
+        ];
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+
+    /**
+     * @param float   $expectedAmount The total amount of all cancellations of the given payment.
+     * @param Payment $payment        The payment whose cancellations are to be asserted.
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    private function assertCancelledAmount($expectedAmount, Payment $payment)
+    {
+        $cancellationTotal = 0.0;
+        foreach ($payment->getCancellations() as $cancellation) {
+            /** @var Cancellation $cancellation */
+            $cancellationTotal += $cancellation->getAmount();
+        }
+        $this->assertEquals($expectedAmount, $cancellationTotal);
+    }
+
+    //</editor-fold>
 }
