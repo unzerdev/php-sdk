@@ -24,7 +24,6 @@
  */
 namespace heidelpayPHP\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
@@ -43,7 +42,7 @@ class PaymentCancelTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fullCancelOnAuthorizeShouldThrowExceptionIfAlreadyCanceled()
+    public function fullCancelOnAuthorizeShouldReturnExistingCancellationIfAlreadyCanceled()
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -52,9 +51,8 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertEquals('s-cnl-1', $cancel->getId());
         $this->assertEquals($authorization->getAmount(), $cancel->getAmount());
 
-        $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED);
-        $payment->cancel();
+        $newCancel = $payment->cancel();
+        $this->assertEquals($cancel, $newCancel);
     }
 
     /**
@@ -252,7 +250,7 @@ class PaymentCancelTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fullCancelOnFullyCanceledAuthorizeShouldBePossible($amount)
+    public function fullCancelOnFullyChargedAuthorizeShouldBePossible($amount)
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
@@ -265,6 +263,35 @@ class PaymentCancelTest extends BasePaymentTest
 
         $payment->cancel($amount);
         $this->assertAmounts($payment, 0.0, 0.0, 100.0, 100.0);
+        $this->assertTrue($payment->isCanceled());
+
+        $this->assertCancelledAmount(100.0, $payment);
+    }
+
+    /**
+     * Verify full cancel on partly charged authorize.
+     * PHPLIB-228 - Case 8
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fullCancelOnPartlyChargedAuthorizeShouldBePossible()
+    {
+        $authorization = $this->createCardAuthorization();
+        $payment = $authorization->getPayment();
+        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertTrue($payment->isPending());
+
+        $payment->charge(50.0);
+        $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0);
+        $this->assertTrue($payment->isPartlyPaid());
+
+        $payment->cancel();
+        $this->assertAmounts($payment, 0.0, 0.0, 50.0, 50.0);
         $this->assertTrue($payment->isCanceled());
 
         $this->assertCancelledAmount(100.0, $payment);

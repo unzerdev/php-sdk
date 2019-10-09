@@ -642,44 +642,25 @@ class Payment extends AbstractHeidelpayResource
         $charges = array_reverse($this->charges);
         $amountToCancel = $amount;
 
-        if (count($charges) === 0) {
-            $authorize = $this->getAuthorization();
-            if ($authorize !== null) {
-                return $authorize->cancel($amountToCancel);
-            }
+        $cancel = $this->cancelChargeAmount($reason, $charges, $amountToCancel);
 
-            throw new RuntimeException('This Payment could not be cancelled.');
+        if ($cancel === null || $amountToCancel === null) {
+            $cancel = $this->cancelAmountFromAuthorization($amountToCancel) ?: $cancel;
         }
 
-        $cancel = null;
-
-        /** @var Charge $charge */
-        foreach ($charges as $charge) {
-            if ($amountToCancel === null || $amountToCancel >= $charge->getAmount()) {
-                try {
-                    $cancel = $charge->cancel(null, $reason);
-                } catch (HeidelpayApiException $e) {
-                    continue;
-                }
-            } else {
-                try {
-                    $cancel = $charge->cancel($amountToCancel, $reason);
-                } catch (HeidelpayApiException $e) {
-                    continue;
-                }
-            }
-
-            if ($amountToCancel !== null && ($amountToCancel -= $cancel->getAmount()) <= 0) {
-                break;
-            }
+        if (!$cancel instanceof Cancellation) {
+            throw new RuntimeException('Error cancelling the given payment.');
         }
 
         return $cancel;
 
-// todo: handle exceptions (e.g.) second cancel
+        // todo: handle exceptions (e.g.) second cancel
 //        list($chargeCancels, $chargeExceptions) = $this->cancelAllCharges();
 //        list($authCancel, $authException) = $this->cancelAuthorization($amount);
-//
+// todo: cancel without amount should cancel remaining auth as well
+// todo: cancel more than captured --> ?
+// todo: cancel all authorized and which has been partly captured --> ?
+
 //        $cancels = array_merge($chargeCancels, $authCancel);
 //        $exceptions = array_merge($chargeExceptions, $authException);
 //
@@ -1005,4 +986,67 @@ class Payment extends AbstractHeidelpayResource
     }
 
     //</editor-fold>
+
+    /**
+     * Cancels the given amount from the array of charged using the give reason code.
+     *
+     * @param string     $reason
+     * @param array      $charges
+     * @param float|null $amountToCancel
+     *
+     * @return Cancellation|null
+     *
+     * @throws RuntimeException
+     */
+    private function cancelChargeAmount($reason, array $charges, $amountToCancel = null)
+    {
+        $cancel = null;
+
+        /** @var Charge $charge */
+        foreach ($charges as $charge) {
+            if ($amountToCancel === null || $amountToCancel >= $charge->getAmount()) {
+                try {
+                    $cancel = $charge->cancel(null, $reason);
+                } catch (HeidelpayApiException $e) {
+                    continue;
+                }
+            } else {
+                try {
+                    $cancel = $charge->cancel($amountToCancel, $reason);
+                } catch (HeidelpayApiException $e) {
+                    continue;
+                }
+            }
+
+            if ($amountToCancel !== null && ($amountToCancel -= $cancel->getAmount()) <= 0) {
+                break;
+            }
+        }
+        return $cancel;
+    }
+
+    /**
+     * @param $amountToCancel
+     *
+     * @return Cancellation|null
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    private function cancelAmountFromAuthorization($amountToCancel)
+    {
+        $authorize = $this->getAuthorization();
+        if ($authorize !== null) {
+            try {
+                return $authorize->cancel($amountToCancel);
+            } catch (HeidelpayApiException $e) {
+                if ($e->getCode() === ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED) {
+                    return $authorize->getCancellations()[0];
+                }
+
+                throw $e;
+            }
+        }
+        return null;
+    }
 }
