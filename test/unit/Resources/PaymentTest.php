@@ -1435,6 +1435,8 @@ class PaymentTest extends BaseUnitTest
      * @throws HeidelpayApiException
      * @throws ReflectionException
      * @throws RuntimeException
+     *
+     * @deprecated since 1.2.2.1 since Payment::cancelAllCharges is deprecated
      */
     public function cancelAllChargesShouldCallCancelOnAllChargesAndReturnCancelsAndExceptions()
     {
@@ -1486,6 +1488,8 @@ class PaymentTest extends BaseUnitTest
      *
      * @throws ReflectionException
      * @throws RuntimeException
+     *
+     * @deprecated since 1.2.2.1 since Payment::cancelAllCharges is deprecated
      */
     public function cancelAllChargesShouldThrowChargeCancelExceptionsOtherThanAlreadyCharged()
     {
@@ -1551,7 +1555,7 @@ class PaymentTest extends BaseUnitTest
      */
     public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnExceptions()
     {
-        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED);
+        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CANCELLED);
 
         $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
         $authorizationMock->expects($this->once())->method('cancel')->willThrowException($exception);
