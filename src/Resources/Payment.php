@@ -695,13 +695,12 @@ class Payment extends AbstractHeidelpayResource
             try {
                 $cancels[] = $charge->cancel();
             } catch (HeidelpayApiException $e) {
-                if (!in_array($e->getCode(),
-                              [
-                                  ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK,
-                                  ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED
-                              ],
-                      true
-                )) {
+                $allowedErrors = [
+                    ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK,
+                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                    ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK
+                ];
+                if (!in_array($e->getCode(), $allowedErrors, true)) {
                     throw $e;
                 }
                 $exceptions[] = $e;
@@ -728,7 +727,7 @@ class Payment extends AbstractHeidelpayResource
             try {
                 $cancels[] = $authorization->cancel($amount);
             } catch (HeidelpayApiException $e) {
-                if (ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED !== $e->getCode()) {
+                if (ApiResponseCodes::API_ERROR_ALREADY_CANCELLED !== $e->getCode()) {
                     throw $e;
                 }
                 $exceptions[] = $e;
@@ -1000,25 +999,36 @@ class Payment extends AbstractHeidelpayResource
      */
     private function cancelChargeAmount($reason, array $charges, $amountToCancel = null)
     {
+        $cancelWholePayment = $amountToCancel === null;
         $cancel = null;
 
         /** @var Charge $charge */
         foreach ($charges as $charge) {
-            if ($amountToCancel === null || $amountToCancel >= $charge->getAmount()) {
+            if ($cancelWholePayment || $amountToCancel >= $charge->getAmount()) {
                 try {
                     $cancel = $charge->cancel(null, $reason);
                 } catch (HeidelpayApiException $e) {
+                    if ($e->getCode() !== ApiResponseCodes::API_ERROR_ALREADY_CANCELLED) {
+                        throw new RuntimeException($e->getCode());
+                    }
+                    // return existing cancel object if there is no charge left in the loop
+                    $cancel = $charge->getCancellations()[0];
                     continue;
                 }
             } else {
                 try {
                     $cancel = $charge->cancel($amountToCancel, $reason);
                 } catch (HeidelpayApiException $e) {
+                    if ($e->getCode() !== ApiResponseCodes::API_ERROR_ALREADY_CANCELLED) {
+                        throw new RuntimeException($e->getCode());
+                    }
+                    // return existing cancel object if there is no charge left in the loop
+                    $cancel = $charge->getCancellations()[0];
                     continue;
                 }
             }
 
-            if ($amountToCancel !== null && ($amountToCancel -= $cancel->getAmount()) <= 0) {
+            if (!$cancelWholePayment && ($amountToCancel -= $cancel instanceof Cancellation ? $cancel->getAmount() : 0.0) <= 0) {
                 break;
             }
         }
@@ -1036,17 +1046,23 @@ class Payment extends AbstractHeidelpayResource
     private function cancelAmountFromAuthorization($amountToCancel)
     {
         $authorize = $this->getAuthorization();
+        $cancel = null;
         if ($authorize !== null) {
             try {
-                return $authorize->cancel($amountToCancel);
+                $cancel = $authorize->cancel($amountToCancel);
             } catch (HeidelpayApiException $e) {
-                if ($e->getCode() === ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED) {
-                    return $authorize->getCancellations()[0];
+                $allowedErrors = [
+                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED
+                ];
+
+                if (!in_array($e->getCode(), $allowedErrors, true)) {
+                    throw $e;
                 }
 
-                throw $e;
+                $cancel = $authorize->getCancellations()[0];
             }
         }
-        return null;
+        return $cancel;
     }
 }

@@ -56,6 +56,28 @@ class PaymentCancelTest extends BasePaymentTest
     }
 
     /**
+     * Return first cancel if charge is already fully cancelled.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function doubleCancelOnChargeShouldReturnFirstCancel()
+    {
+        $charge = $this->createCharge(123.44);
+        $payment = $charge->getPayment();
+        $cancellation = $payment->cancel();
+        $this->assertTrue($cancellation->getPayment()->isCanceled());
+        $this->assertArraySubset([$cancellation], $payment->getCancellations());
+        $this->assertEquals($charge->getAmount(), $cancellation->getAmount());
+
+        $newCancellation = $payment->cancel();
+        $this->assertEquals($cancellation, $newCancellation);
+        $this->assertEquals($charge->getAmount(), $cancellation->getAmount());
+    }
+
+    /**
      * Verify full cancel on charge.
      * PHPLIB-228 - Case 1
      *

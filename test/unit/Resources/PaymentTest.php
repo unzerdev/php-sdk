@@ -1551,7 +1551,7 @@ class PaymentTest extends BaseUnitTest
      */
     public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnExceptions()
     {
-        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED);
+        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CANCELLED);
 
         $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
         $authorizationMock->expects($this->once())->method('cancel')->willThrowException($exception);
