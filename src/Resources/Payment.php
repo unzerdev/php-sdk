@@ -42,9 +42,9 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasPaymentState;
-use function is_string;
 use RuntimeException;
 use stdClass;
+use function is_string;
 
 class Payment extends AbstractHeidelpayResource
 {
@@ -731,24 +731,8 @@ class Payment extends AbstractHeidelpayResource
 
         return $cancellations;
 
-//        list($chargeCancels, $chargeExceptions) = $this->cancelAllCharges();
-//        list($authCancel, $authException) = $this->cancelAuthorization($amount);
-// todo: cancellation more than captured --> ?
-// todo: cancellation all authorized and which has been partly captured --> ?
-
-//        $cancellations = array_merge($chargeCancels, $authCancel);
-//        $exceptions = array_merge($chargeExceptions, $authException);
-//
-//        if (isset($cancellations[0]) && $cancellations[0] instanceof Cancellation) {
-//            return $cancellations[0];
-//        }
-//
-//        // throw the last exception if no cancellation has been created
-//        if (isset($exceptions[0]) && $exceptions[0] instanceof HeidelpayApiException) {
-//            throw $exceptions[0];
-//        }
-//
-//        throw new RuntimeException('This Payment could not be cancelled.');
+        // todo: cancellation more than captured --> ?
+        // todo: cancellation all authorized and which has been partly captured --> ?
     }
 
     /**
