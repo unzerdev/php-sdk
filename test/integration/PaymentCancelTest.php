@@ -305,6 +305,29 @@ class PaymentCancelTest extends BasePaymentTest
     }
 
     /**
+     * Verify part cancel on umcharged authorize.
+     * PHPLIB-228 - Case 10
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function partCancelOnUnchargedAuthorizeShouldBePossible()
+    {
+        $authorization = $this->createCardAuthorization();
+        $payment = $authorization->getPayment();
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+
+        $payment->cancelPayment(50.0);
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
+    }
+
+    /**
      * Verify part cancel on partly charged authorize with cancel amount lt charged amount.
      * PHPLIB-228 - Case 11
      *
