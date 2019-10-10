@@ -675,14 +675,12 @@ class Payment extends AbstractHeidelpayResource
                 if (!$cancelWholePayment) {
                     $remainingAuthorized = $this->amount->getRemaining();
 
-                    // cancel nur das, was noch nicht gecharged wurde
                     $cancelAmount = $remainingAmountToCancel > $remainingAuthorized ?
                         $remainingAuthorized : $remainingAmountToCancel;
                 }
 
                 try {
                     $cancellation = $authorize->cancel($cancelAmount);
-                    $cancellations[] = $cancellation;
                 } catch (HeidelpayApiException $e) {
                     $allowedErrors = [
                         ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
@@ -693,6 +691,14 @@ class Payment extends AbstractHeidelpayResource
                         throw $e;
                     }
                 }
+            }
+
+            if ($cancellation instanceof Cancellation) {
+                $cancellations[] = $cancellation;
+                if (!$cancelWholePayment) {
+                    $remainingAmountToCancel -= $cancellation->getAmount();
+                }
+                $cancellation = null;
             }
         }
 
@@ -743,7 +749,7 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpayApiException
      * @throws RuntimeException
      *
-     * @deprecated since 1.2.2.1 please use Payment::cancel()
+     * @deprecated since 1.2.2.1 please use Payment::cancelPayment()
      */
     public function cancelAllCharges(): array
     {

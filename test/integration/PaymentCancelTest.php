@@ -328,7 +328,34 @@ class PaymentCancelTest extends BasePaymentTest
 
         $payment->cancelPayment(20.0);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 55.0, 5.0, 80.0, 20.0);
+        $this->assertAmounts($payment, 55.0, 25.0, 80.0, 0.0);
+    }
+
+    /**
+     * Verify part cancel on partly charged authorize with cancel amount gt charged amount.
+     * PHPLIB-228 - Case 12
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function partCancelOnPartlyChargedAuthorizeWithAmountGtChargedShouldBePossible()
+    {
+        $authorization = $this->createCardAuthorization();
+        $payment = $authorization->getPayment();
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+
+        $payment->charge(40.0);
+        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0);
+
+        $payment->cancelPayment(80.0);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0.0, 20.0, 40.0, 20.0);
     }
 
     /**
