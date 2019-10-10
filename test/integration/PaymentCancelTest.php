@@ -434,6 +434,29 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
     }
 
+    /**
+     * Verify cancelling more than was charged.
+     * PHPLIB-228 - Case 15
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function cancelMoreThanWasCharged()
+    {
+        $charge = $this->createCharge(50.0);
+        $payment = $charge->getPayment();
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0.0, 50.0, 50.0, 0.0);
+
+        $payment->cancelPayment(100.0);
+        $this->assertTrue($payment->isCanceled());
+        $this->assertAmounts($payment, 0.0, 0.0, 50.0, 50.0);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
