@@ -154,7 +154,7 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 4 + 5
      *
      * @test
-     * @dataProvider partialCancelOnMultipleChargedAuthorizationAmountSmallerThenAuthorizeDP
+     * @dataProvider partCancelDataProvider
      *
      * @param $amount
      *
@@ -225,11 +225,11 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
 
         $payment->cancel(10.0);
-        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 90.0, 0, 90.0, 0);
 
         $payment->cancel(10.0);
-        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 80.0, 0, 80.0, 0);
 
         $payment->cancel();
@@ -269,16 +269,19 @@ class PaymentCancelTest extends BasePaymentTest
 
     /**
      * Verify full cancel on partly charged authorize.
-     * PHPLIB-228 - Case 8
+     * PHPLIB-228 - Case 9
      *
      * @test
+     * @dataProvider fullCancelDataProvider
+     *
+     * @param $amount
      *
      * @throws AssertionFailedError
      * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fullCancelOnPartlyChargedAuthorizeShouldBePossible()
+    public function fullCancelOnPartlyChargedAuthorizeShouldBePossible($amount)
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
@@ -289,18 +292,48 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0);
 
-        $payment->cancel();
+        $payment->cancel($amount);
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 50.0, 50.0);
     }
 
     /**
+     * Verify part cancel on partly charged authorize with cancel amount lt charged amount.
+     * PHPLIB-228 - Case 11
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function partCancelOnPartlyChargedAuthorizeWithAmountLtChargedShouldBePossible()
+    {
+        $authorization = $this->createCardAuthorization();
+        $payment = $authorization->getPayment();
+        $this->assertTrue($payment->isPending());
+        $authorizeAmount = 100.0;
+        $this->assertAmounts($payment, $authorizeAmount, 0, $authorizeAmount, 0);
+
+        $payment->charge(25.0);
+        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertAmounts($payment, 75, 25.0, $authorizeAmount, 0);
+
+        $payment->cancel(20);
+        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertAmounts($payment, 75, 5.0, $authorizeAmount, 20.0);
+    }
+
+    /**
      * Verify full cancel on initial iv charge (reversal)
+     * PHPLIB-228 - Case 13
      *
      * @test
      * @dataProvider fullCancelDataProvider
      *
      * @param float $amount
+     *
      * @throws AssertionFailedError
      * @throws Exception
      * @throws HeidelpayApiException
@@ -322,6 +355,7 @@ class PaymentCancelTest extends BasePaymentTest
 
     /**
      * Verify part cancel on initial iv charge (reversal)
+     * PHPLIB-228 - Case 14
      *
      * @test
      *
@@ -344,14 +378,12 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
     }
 
-
-
     //<editor-fold desc="Data Providers">
 
     /**
      * @return array
      */
-    public function partialCancelOnMultipleChargedAuthorizationAmountSmallerThenAuthorizeDP(): array
+    public function partCancelDataProvider(): array
     {
         return [
             'cancel amount lt last charge' => [20],
