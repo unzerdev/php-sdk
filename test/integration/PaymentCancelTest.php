@@ -69,15 +69,15 @@ class PaymentCancelTest extends BasePaymentTest
         $charge = $this->createCharge(123.44);
         $payment = $charge->getPayment();
         $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0, 123.44, 123.44, 0);
+        $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
         $cancellations = $payment->cancelPayment();
         $this->assertTrue($payment->isCanceled());
-        $this->assertAmounts($payment, 0, 0.0, 123.44, 123.44);
+        $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
         $this->assertCount(1, $cancellations);
 
         $newCancellations = $payment->cancelPayment();
-        $this->assertAmounts($payment, 0, 0.0, 123.44, 123.44);
+        $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
         $this->assertCount(0, $newCancellations);
     }
 
@@ -115,15 +115,15 @@ class PaymentCancelTest extends BasePaymentTest
         $authorization = $this->createCardAuthorization(123.44);
         $payment = $authorization->getPayment();
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 123.44, 0.0, 123.44, 0);
+        $this->assertAmounts($payment, 123.44, 0.0, 123.44, 0.0);
 
         $payment->charge(100.44);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 23.0, 100.44, 123.44, 0);
+        $this->assertAmounts($payment, 23.0, 100.44, 123.44, 0.0);
 
         $payment->charge(23.00);
         $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0);
+        $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
         $cancellations = $payment->cancelPayment();
         $this->assertTrue($payment->isCanceled());
@@ -178,11 +178,11 @@ class PaymentCancelTest extends BasePaymentTest
 
         $payment->charge(100.44);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 23.0, 100.44, $authorizeAmount, 0);
+        $this->assertAmounts($payment, 23.0, 100.44, $authorizeAmount, 0.0);
 
         $payment->charge(23.00);
         $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0.0, $authorizeAmount, $authorizeAmount, 0);
+        $this->assertAmounts($payment, 0.0, $authorizeAmount, $authorizeAmount, 0.0);
 
         $payment->cancelPayment($amount);
         $this->assertTrue($payment->isCompleted());
@@ -208,11 +208,11 @@ class PaymentCancelTest extends BasePaymentTest
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
         $payment->cancelPayment($amount);
         $this->assertTrue($payment->isCanceled());
-        $this->assertAmounts($payment, 0.0, 0, 0.0, 0);
+        $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
     }
 
     /**
@@ -229,19 +229,19 @@ class PaymentCancelTest extends BasePaymentTest
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
         $payment->cancelPayment(10.0);
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 90.0, 0, 90.0, 0);
+        $this->assertAmounts($payment, 90.0, 0.0, 90.0, 0.0);
 
         $payment->cancelPayment(10.0);
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 80.0, 0, 80.0, 0);
+        $this->assertAmounts($payment, 80.0, 0.0, 80.0, 0.0);
 
         $payment->cancelPayment();
         $this->assertTrue($payment->isCanceled());
-        $this->assertAmounts($payment, 0.0, 0, 0.0, 0);
+        $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
     }
 
     /**
@@ -263,11 +263,11 @@ class PaymentCancelTest extends BasePaymentTest
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
         $payment->charge();
         $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0);
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
         $payment->cancelPayment($amount);
         $this->assertTrue($payment->isCanceled());
@@ -293,11 +293,11 @@ class PaymentCancelTest extends BasePaymentTest
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
         $payment->charge(50.0);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0);
+        $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
 
         $payment->cancelPayment($amount);
         $this->assertTrue($payment->isCanceled());
@@ -347,11 +347,11 @@ class PaymentCancelTest extends BasePaymentTest
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
         $payment->charge(40.0);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0);
+        $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
 
         $payment->cancelPayment(80.0);
         $this->assertTrue($payment->isCompleted());
@@ -379,7 +379,7 @@ class PaymentCancelTest extends BasePaymentTest
         $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
         $payment = $charge->getPayment();
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
         $payment->cancelPayment($amount);
         $this->assertTrue($payment->isCanceled());
@@ -404,9 +404,9 @@ class PaymentCancelTest extends BasePaymentTest
         $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
         $payment = $charge->getPayment();
         $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->cancelPayment(50);
+        $payment->cancelPayment(50.0);
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
     }
