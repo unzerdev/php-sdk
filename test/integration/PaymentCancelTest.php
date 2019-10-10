@@ -320,6 +320,32 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
     }
 
+    /**
+     * Verify part cancel on initial iv charge (reversal)
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function partCancelOnInitialInvoiceChargeShouldBePossible()
+    {
+        /** @var Invoice $invoice */
+        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
+        $payment = $charge->getPayment();
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
+
+        $payment->cancel(50);
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
+    }
+
+
+
     //<editor-fold desc="Data Providers">
 
     /**
