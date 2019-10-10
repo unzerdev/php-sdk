@@ -320,16 +320,15 @@ class PaymentCancelTest extends BasePaymentTest
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertTrue($payment->isPending());
-        $authorizeAmount = 100.0;
-        $this->assertAmounts($payment, $authorizeAmount, 0, $authorizeAmount, 0);
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
         $payment->charge(25.0);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 75, 25.0, $authorizeAmount, 0);
+        $this->assertAmounts($payment, 75.0, 25.0, 100.0, 0.0);
 
-        $payment->cancelPayment(20);
+        $payment->cancelPayment(20.0);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 75, 5.0, $authorizeAmount, 20.0);
+        $this->assertAmounts($payment, 55.0, 5.0, 80.0, 20.0);
     }
 
     /**

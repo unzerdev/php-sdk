@@ -668,6 +668,38 @@ class Payment extends AbstractHeidelpayResource
         $cancellations = [];
         $cancellation = null;
 
+        if ($cancelWholePayment || $remainingAmountToCancel > 0.0) {
+            $authorize = $this->getAuthorization();
+            if ($authorize !== null) {
+                $cancelAmount = null;
+                if (!$cancelWholePayment) {
+                    $remainingAuthorized = $this->amount->getRemaining();
+
+                    // cancel nur das, was noch nicht gecharged wurde
+                    $cancelAmount = $remainingAmountToCancel > $remainingAuthorized ?
+                        $remainingAuthorized : $remainingAmountToCancel;
+                }
+
+                try {
+                    $cancellation = $authorize->cancel($cancelAmount);
+                    $cancellations[] = $cancellation;
+                } catch (HeidelpayApiException $e) {
+                    $allowedErrors = [
+                        ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                        ApiResponseCodes::API_ERROR_ALREADY_CHARGED
+                    ];
+
+                    if (!in_array($e->getCode(), $allowedErrors, true)) {
+                        throw $e;
+                    }
+                }
+            }
+        }
+
+        if (!$cancelWholePayment && $remainingAmountToCancel <= 0.0) {
+            return $cancellations;
+        }
+
         /** @var Charge $charge */
         foreach ($charges as $charge) {
             $cancelAmount = null;
@@ -694,25 +726,6 @@ class Payment extends AbstractHeidelpayResource
 
             if (!$cancelWholePayment && $remainingAmountToCancel <= 0) {
                 break;
-            }
-        }
-
-        if ($cancelWholePayment || $remainingAmountToCancel > 0.0 || count($cancellations) === 0) {
-            $authorize = $this->getAuthorization();
-            if ($authorize !== null) {
-                try {
-                    $cancellation = $authorize->cancel($remainingAmountToCancel);
-                    $cancellations[] = $cancellation;
-                } catch (HeidelpayApiException $e) {
-                    $allowedErrors = [
-                        ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
-                        ApiResponseCodes::API_ERROR_ALREADY_CHARGED
-                    ];
-
-                    if (!in_array($e->getCode(), $allowedErrors, true)) {
-                        throw $e;
-                    }
-                }
             }
         }
 
