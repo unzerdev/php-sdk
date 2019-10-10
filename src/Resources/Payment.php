@@ -656,7 +656,6 @@ class Payment extends AbstractHeidelpayResource
 
 //        list($chargeCancels, $chargeExceptions) = $this->cancelAllCharges();
 //        list($authCancel, $authException) = $this->cancelAuthorization($amount);
-// todo: cancel without amount should cancel remaining auth as well
 // todo: cancel more than captured --> ?
 // todo: cancel all authorized and which has been partly captured --> ?
 
