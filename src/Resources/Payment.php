@@ -644,7 +644,11 @@ class Payment extends AbstractHeidelpayResource
     {
         $cancellations = $this->cancelPayment($amount, $reason);
 
-        return count($cancellations) > 0 ? $cancellations[0] : null;
+        if (count($cancellations) > 0) {
+            return $cancellations[0];
+        }
+
+        throw new RuntimeException('This Payment could not be cancelled.');
     }
 
     /**
