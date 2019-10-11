@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.2.2.1][1.2.2.1]
+## [1.2.3.0][1.2.3.0]
 
 ### Added
 *   An example for `prepayment` payment method.
@@ -15,13 +15,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Problem with HeidelpayApiException.
 
 ### Changed
-*   Refactored and extended unit tests.
+*   Replaced unreliable `Payment::cancel()` method with `Payment::cancelAmount()` which takes multiple cancellation scenarios into account.
 *   Replaced `ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED` with `ApiResponseCodes::API_ERROR_ALREADY_CANCELLED`.
 *   Replaced `ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK` with `ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK`.
-*   Replaced `Payment::cancel()` method with `Payment::cancelAmount()`.
 *   Add deprecation notice for `Payment::cancelAllCharges` and `Payment::cancelAuthorization`
 *   Adapted integration tests with basket to changes in API.
 *   Refactor deprecation notices.
+*   Refactored and extended unit tests.
 
 ## [1.2.2.0][1.2.2.0]
 
@@ -294,4 +294,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.2.0.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.1.6.0..1.2.0.0
 [1.2.1.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.0.0..1.2.1.0
 [1.2.2.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.1.0..1.2.2.0
-[1.2.2.1]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.2.0..1.2.2.1
+[1.2.3.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.2.0..1.2.3.0
