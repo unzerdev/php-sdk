@@ -33,6 +33,8 @@ use RuntimeException;
 
 class PaymentCancelTest extends BasePaymentTest
 {
+    //<editor-fold desc="Existing payment">
+
     /**
      * Verify full cancel on authorize returns first cancellation if already cancelled.
      *
@@ -456,6 +458,43 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 50.0, 50.0);
     }
+
+    /**
+     * Verify second cancel on partly cancelled charge.
+     * PHPLIB-228 - Case 16
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function secondCancelExceedsRemainderOfPartlyCancelledCharge()
+    {
+        $authorization = $this->createCardAuthorization();
+        $payment = $authorization->getPayment();
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+
+        $payment->charge(50.0);
+        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
+
+        $payment->charge(50.0);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
+
+        $payment->cancelPayment(40.0);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0.0, 60.0, 100.0, 40.0);
+
+        $payment->cancelPayment(30.0);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0.0, 30.0, 100.0, 70.0);
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc="Data Providers">
 

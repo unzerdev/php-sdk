@@ -709,17 +709,23 @@ class Payment extends AbstractHeidelpayResource
         /** @var Charge $charge */
         foreach ($charges as $charge) {
             $cancelAmount = null;
-            if (!$cancelWholePayment && $remainingAmountToCancel < $charge->getAmount()) {
+            if (!$cancelWholePayment && $remainingAmountToCancel <= $charge->getTotalAmount()) {
                 $cancelAmount = $remainingAmountToCancel;
             }
 
             try {
                 $cancellation = $charge->cancel($cancelAmount, $reason);
             } catch (HeidelpayApiException $e) {
-                if ($e->getCode() !== ApiResponseCodes::API_ERROR_ALREADY_CANCELLED) {
-                    throw new RuntimeException($e->getCode());
+                $allowedErrors = [
+                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
+                    ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK
+                ];
+
+                if (!in_array($e->getCode(), $allowedErrors, true)) {
+                    throw $e;
                 }
-                continue; // try next charge object
+                continue;
             }
 
             if ($cancellation instanceof Cancellation) {
