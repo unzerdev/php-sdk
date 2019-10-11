@@ -1310,9 +1310,9 @@ class PaymentTest extends BaseUnitTest
      */
     public function cancelShouldCallCancelAllChargesAndCancelAuthorizationAndReturnFirstChargeCancellationObject()
     {
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['cancelPayment'])->getMock();
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['cancelAmount'])->getMock();
         $cancellation = new Cancellation(1.0);
-        $paymentMock->expects($this->once())->method('cancelPayment')->willReturn([$cancellation]);
+        $paymentMock->expects($this->once())->method('cancelAmount')->willReturn([$cancellation]);
 
         /** @var Payment $paymentMock */
         $this->assertSame($cancellation, $paymentMock->cancel());
