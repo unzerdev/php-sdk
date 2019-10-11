@@ -643,7 +643,7 @@ class Payment extends AbstractHeidelpayResource
     {
         $cancellations = $this->cancelPayment($amount, $reason);
 
-        return $cancellations[0] ?: null;
+        return count($cancellations) > 0 ? $cancellations[0] : null;
     }
 
     /**
@@ -742,9 +742,6 @@ class Payment extends AbstractHeidelpayResource
         }
 
         return $cancellations;
-
-        // todo: cancellation more than captured --> ?
-        // todo: cancellation all authorized and which has been partly captured --> ?
     }
 
     /**
