@@ -1539,9 +1539,7 @@ class PaymentTest extends BaseUnitTest
          * @var Payment       $paymentMock
          */
         $paymentMock->setAuthorization($authorizationMock);
-        list($cancellations, $exceptions) = $paymentMock->cancelAuthorization();
-        $this->assertArraySubset([$cancellation], $cancellations);
-        $this->assertIsEmptyArray($exceptions);
+        $this->assertEquals($cancellation, $paymentMock->cancelAuthorizationAmount());
     }
 
     /**
@@ -1568,10 +1566,7 @@ class PaymentTest extends BaseUnitTest
          * @var Payment       $paymentMock
          */
         $paymentMock->setAuthorization($authorizationMock);
-        list($cancellations, $exceptions) = $paymentMock->cancelAuthorization();
-
-        $this->assertIsEmptyArray($cancellations);
-        $this->assertArraySubset([$exception], $exceptions);
+        $this->assertNull($paymentMock->cancelAuthorizationAmount());
     }
 
     /**
@@ -1600,7 +1595,7 @@ class PaymentTest extends BaseUnitTest
         $paymentMock->setAuthorization($authorizationMock);
 
         try {
-            $paymentMock->cancelAuthorization();
+            $paymentMock->cancelAuthorizationAmount();
             $this->assertFalse(true, 'The expected exception has not been thrown.');
         } catch (HeidelpayApiException $e) {
             $this->assertSame($exception, $e);
@@ -1716,6 +1711,7 @@ class PaymentTest extends BaseUnitTest
         $this->assertNull($payment->getMetadata());
 
         // when
+        /** @noinspection PhpParamsInspection */
         $payment->setMetadata('test');
 
         // then
