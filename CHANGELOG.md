@@ -8,12 +8,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   An example for `prepayment` payment method.
 *   An example for `invoice` payment method.
+*   Charge methods `getCancelledAmount` and `getTotalAmount`.
+*   Authorize method `getCancelledAmount`.
 
 ### Fixed
 *   Problem with HeidelpayApiException.
 
 ### Changed
 *   Refactored and extended unit tests.
+*   Replaced `ApiResponseCodes::API_ERROR_AUTHORIZE_ALREADY_CANCELLED` with `ApiResponseCodes::API_ERROR_ALREADY_CANCELLED`.
+*   Replaced `ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CHARGED_BACK` with `ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK`.
+*   Replaced `Payment::cancel()` method with `Payment::cancelAmount()`.
+*   Add deprecation notice for `Payment::cancelAllCharges` and `Payment::cancelAuthorization`
+*   Adapted integration tests with basket to changes in API.
+*   Refactor deprecation notices.
 
 ## [1.2.2.0][1.2.2.0]
 
