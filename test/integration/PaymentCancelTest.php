@@ -168,12 +168,12 @@ class PaymentCancelTest extends BasePaymentTest
         $authorization = $this->createCardAuthorization($authorizeAmount);
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
 
-        $payment->charge(100.44);
+        $payment->charge(23.00);
         $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 23.0, 100.44, $authorizeAmount, 0.0);
+        $this->assertAmounts($payment, 100.44, 23.0, $authorizeAmount, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->charge(23.00);
+        $payment->charge(100.44);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, $authorizeAmount, $authorizeAmount, 0.0);
 

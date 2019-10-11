@@ -666,7 +666,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancelAmount($totalCancelAmount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL): array
     {
-        $charges = array_reverse($this->charges);
+        $charges = $this->charges;
         $remainingAmountToCancel = $totalCancelAmount;
 
         $cancelWholePayment = $remainingAmountToCancel === null;
