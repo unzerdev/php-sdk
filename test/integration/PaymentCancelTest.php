@@ -50,12 +50,12 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $cancellations = $payment->cancelPayment();
+        $cancellations = $payment->cancelAmount();
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 0.00, 0.0);
         $this->assertCount(1, $cancellations);
 
-        $this->assertCount(0, $payment->cancelPayment());
+        $this->assertCount(0, $payment->cancelAmount());
     }
 
     /**
@@ -73,13 +73,13 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
-        $cancellations = $payment->cancelPayment();
+        $cancellations = $payment->cancelAmount();
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
         $this->assertCount(1, $cancellations);
 
         $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
-        $newCancellations = $payment->cancelPayment();
+        $newCancellations = $payment->cancelAmount();
         $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
         $this->assertCount(0, $newCancellations);
     }
@@ -99,7 +99,7 @@ class PaymentCancelTest extends BasePaymentTest
         $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
         $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
-        $payment->cancelPayment();
+        $payment->cancelAmount();
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
     }
@@ -130,7 +130,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $cancellations = $payment->cancelPayment();
+        $cancellations = $payment->cancelAmount();
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
         $this->assertCount(2, $cancellations);
@@ -152,12 +152,12 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 222.33, 222.33, 0.0);
 
-        $payment->cancelPayment(123.12);
+        $payment->cancelAmount(123.12);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 99.21, 222.33, 123.12);
 
         $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
-        $payment->cancelPayment(99.21);
+        $payment->cancelAmount(99.21);
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 222.33, 222.33);
     }
@@ -192,7 +192,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 0.0, $authorizeAmount, $authorizeAmount, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment($amount);
+        $payment->cancelAmount($amount);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, $authorizeAmount - $amount, $authorizeAmount, $amount);
     }
@@ -218,7 +218,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->cancelPayment($amount);
+        $payment->cancelAmount($amount);
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
     }
@@ -239,17 +239,17 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->cancelPayment(10.0);
+        $payment->cancelAmount(10.0);
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 90.0, 0.0, 90.0, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment(10.0);
+        $payment->cancelAmount(10.0);
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 80.0, 0.0, 80.0, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment();
+        $payment->cancelAmount();
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
     }
@@ -280,7 +280,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment($amount);
+        $payment->cancelAmount($amount);
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 100.0, 100.0);
     }
@@ -311,7 +311,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment($amount);
+        $payment->cancelAmount($amount);
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 50.0, 50.0);
     }
@@ -334,7 +334,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->cancelPayment(50.0);
+        $payment->cancelAmount(50.0);
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
     }
@@ -362,7 +362,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 75.0, 25.0, 100.0, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment(20.0);
+        $payment->cancelAmount(20.0);
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 55.0, 25.0, 80.0, 0.0);
     }
@@ -390,7 +390,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment(80.0);
+        $payment->cancelAmount(80.0);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 20.0, 40.0, 20.0);
     }
@@ -418,7 +418,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->cancelPayment($amount);
+        $payment->cancelAmount($amount);
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
     }
@@ -443,7 +443,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->cancelPayment(50.0);
+        $payment->cancelAmount(50.0);
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
     }
@@ -466,7 +466,7 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 50.0, 50.0, 0.0);
 
-        $payment->cancelPayment(100.0);
+        $payment->cancelAmount(100.0);
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 50.0, 50.0);
     }
@@ -499,12 +499,12 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment(40.0);
+        $payment->cancelAmount(40.0);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 60.0, 100.0, 40.0);
 
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
-        $payment->cancelPayment(30.0);
+        $payment->cancelAmount(30.0);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 30.0, 100.0, 70.0);
     }

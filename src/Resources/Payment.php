@@ -638,11 +638,11 @@ class Payment extends AbstractHeidelpayResource
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      *
      * @deprecated since 1.2.2.1
-     * @see Payment::cancelPayment()
+     * @see Payment::cancelAmount()
      */
     public function cancel($amount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL)
     {
-        $cancellations = $this->cancelPayment($amount, $reason);
+        $cancellations = $this->cancelAmount($amount, $reason);
 
         if (count($cancellations) > 0) {
             return $cancellations[0];
@@ -664,7 +664,7 @@ class Payment extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelPayment($totalCancelAmount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL): array
+    public function cancelAmount($totalCancelAmount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL): array
     {
         $charges = array_reverse($this->charges);
         $remainingAmountToCancel = $totalCancelAmount;
@@ -736,7 +736,7 @@ class Payment extends AbstractHeidelpayResource
      * @throws RuntimeException
      *
      * @deprecated since 1.2.2.1
-     * @see Payment::cancelPayment()
+     * @see Payment::cancelAmount()
      */
     public function cancelAllCharges(): array
     {
