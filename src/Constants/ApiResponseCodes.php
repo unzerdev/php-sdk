@@ -45,13 +45,13 @@ class ApiResponseCodes
     const API_ERROR_ADDRESSES_DO_NOT_MATCH                      = 'API.330.100.106';
     const API_ERROR_CURRENCY_IS_NOT_SUPPORTED                   = 'API.330.100.202';
     /**
-     * @deprecated since 1.2.2.1
+     * @deprecated since 1.2.3.0
      * @see ApiResponseCodes::API_ERROR_ALREADY_CANCELLED
      */
     const API_ERROR_AUTHORIZE_ALREADY_CANCELLED                 = 'API.340.100.014';
     const API_ERROR_ALREADY_CANCELLED                           = 'API.340.100.014';
     /**
-     * @deprecated since 1.2.2.1
+     * @deprecated since 1.2.3.0
      * @see ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK
      */
     const API_ERROR_CHARGE_ALREADY_CHARGED_BACK                 = 'API.340.100.015';

@@ -36,6 +36,7 @@ use RuntimeException;
 
 class PaymentCancelTest extends BaseUnitTest
 {
+    //<editor-fold desc="Deprecated since 1.2.3.0">
     /**
      * Verify payment:cancel calls cancelAllCharges and cancelAuthorization and returns first charge cancellation
      * object.
@@ -86,7 +87,7 @@ class PaymentCancelTest extends BaseUnitTest
      * @throws ReflectionException
      * @throws RuntimeException
      *
-     * @deprecated since 1.2.2.1
+     * @deprecated since 1.2.3.0
      */
     public function cancelAllChargesShouldCallCancelOnAllChargesAndReturnCancelsAndExceptions()
     {
@@ -135,7 +136,7 @@ class PaymentCancelTest extends BaseUnitTest
      * @throws ReflectionException
      * @throws RuntimeException
      *
-     * @deprecated since 1.2.2.1 since Payment::cancelAllCharges is deprecated
+     * @deprecated since 1.2.3.0
      */
     public function cancelAllChargesShouldThrowChargeCancelExceptionsOtherThanAlreadyCharged()
     {
@@ -247,4 +248,5 @@ class PaymentCancelTest extends BaseUnitTest
             $this->assertSame($exception, $e);
         }
     }
+    //</editor-fold>
 }
