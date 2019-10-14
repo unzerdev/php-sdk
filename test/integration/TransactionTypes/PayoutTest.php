@@ -166,11 +166,11 @@ class PayoutTest extends BasePaymentTest
         $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
 
-        $payout = $card->payout(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId, $paymentReference);
+        $payout = $card->payout(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId, $paymentReference);
         $payment = $payout->getPayment();
 
         $this->assertSame($card, $payment->getPaymentType());
-        $this->assertEquals(100.0, $payout->getAmount());
+        $this->assertEquals(123.4, $payout->getAmount());
         $this->assertEquals('EUR', $payout->getCurrency());
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());

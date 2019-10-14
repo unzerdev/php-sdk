@@ -106,7 +106,7 @@ class ChargeTest extends BasePaymentTest
 
         // perform request
         $charge = $paymentType->charge(
-            100.0,
+            123.4,
             'EUR',
             self::RETURN_URL,
             $customer,
@@ -121,7 +121,7 @@ class ChargeTest extends BasePaymentTest
         // verify the data sent and received match
         $payment = $charge->getPayment();
         $this->assertSame($paymentType, $payment->getPaymentType());
-        $this->assertEquals(100.0, $charge->getAmount());
+        $this->assertEquals(123.4, $charge->getAmount());
         $this->assertEquals('EUR', $charge->getCurrency());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());
@@ -167,7 +167,7 @@ class ChargeTest extends BasePaymentTest
 
         // perform request
         $charge = $ivg->charge(
-            100.0,
+            123.4,
             'EUR',
             self::RETURN_URL,
             $customer,
@@ -182,7 +182,7 @@ class ChargeTest extends BasePaymentTest
         // verify the data sent and received match
         $payment = $charge->getPayment();
         $this->assertSame($ivg, $payment->getPaymentType());
-        $this->assertEquals(100.0, $charge->getAmount());
+        $this->assertEquals(123.4, $charge->getAmount());
         $this->assertEquals('EUR', $charge->getCurrency());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());
