@@ -37,6 +37,7 @@ use RuntimeException;
 class PaymentCancelTest extends BaseUnitTest
 {
     //<editor-fold desc="Deprecated since 1.2.3.0">
+
     /**
      * Verify payment:cancel calls cancelAllCharges and cancelAuthorization and returns first charge cancellation
      * object.
@@ -46,6 +47,8 @@ class PaymentCancelTest extends BaseUnitTest
      * @throws HeidelpayApiException
      * @throws ReflectionException
      * @throws RuntimeException
+     *
+     * @deprecated since 1.2.3.0
      */
     public function cancelShouldCallCancelAllChargesAndCancelAuthorizationAndReturnFirstChargeCancellationObject()
     {
@@ -65,6 +68,8 @@ class PaymentCancelTest extends BaseUnitTest
      * @throws ReflectionException
      * @throws RuntimeException
      * @throws HeidelpayApiException
+     *
+     * @deprecated since 1.2.3.0
      */
     public function cancelShouldThrowExceptionIfNoTransactionExistsToBeCancelled()
     {
@@ -163,6 +168,8 @@ class PaymentCancelTest extends BaseUnitTest
         }
     }
 
+    //</editor-fold>
+
     /**
      * Verify cancelAuthorization will call cancel on the authorization and will return a list of cancels.
      *
@@ -248,5 +255,4 @@ class PaymentCancelTest extends BaseUnitTest
             $this->assertSame($exception, $e);
         }
     }
-    //</editor-fold>
 }
