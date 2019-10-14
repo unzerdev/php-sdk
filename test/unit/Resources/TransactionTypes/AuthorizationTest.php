@@ -223,8 +223,9 @@ class AuthorizationTest extends BaseUnitTest
         $authorization->charge();
         $authorization->charge(321.9);
     }
+
     /**
-     * Verify getters and setters.
+     * Verify getter for cancelled amount.
      *
      * @test
      *
