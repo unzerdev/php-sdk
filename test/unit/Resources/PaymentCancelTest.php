@@ -229,6 +229,39 @@ class PaymentCancelTest extends BaseUnitTest
     }
 
     /**
+     * Verify that cancel amount will be cancelled on charges if auth does not exist.
+     *
+     * @test
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function chargesShouldBeCancelledIfAuthDoesNotExist2()
+    {
+        /** @var MockObject|Payment $paymentMock */
+        /** @var MockObject|Charge $charge1Mock */
+        /** @var MockObject|Charge $charge2Mock */
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['cancelAuthorizationAmount'])->getMock();
+        $charge1Mock = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->setConstructorArgs([10.0])->getMock();
+        $charge2Mock = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->setConstructorArgs([12.3])->getMock();
+
+        $cancellation1 = new Cancellation(10.0);
+        $cancellation2 = new Cancellation(2.3);
+
+        $paymentMock->expects($this->exactly(3))->method('cancelAuthorizationAmount')->willReturn(null);
+        $charge1Mock->expects($this->exactly(3))->method('cancel')->withConsecutive([10.0, 'CANCEL'], [null, 'CANCEL'], [null, 'CANCEL'])->willReturn($cancellation1);
+        $charge2Mock->expects($this->exactly(2))->method('cancel')->withConsecutive([2.3, 'CANCEL'], [null, 'CANCEL'])->willReturn($cancellation2);
+
+        $paymentMock->addCharge($charge1Mock)->addCharge($charge2Mock);
+
+        $this->assertEquals([$cancellation1], $paymentMock->cancelAmount(10.0));
+        $this->assertEquals([$cancellation1, $cancellation2], $paymentMock->cancelAmount(12.3));
+        $this->assertEquals([$cancellation1, $cancellation2], $paymentMock->cancelAmount());
+    }
+
+    /**
      * Verify cancelAuthorization will call cancel on the authorization and will return a list of cancels.
      *
      * @test
