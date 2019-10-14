@@ -293,7 +293,7 @@ class PaymentCancelTest extends BaseUnitTest
             $this->assertEquals([], $paymentMock->cancelAmount(12.3));
             $this->assertFalse($shouldHaveThrownException, 'Exception should have been thrown here!');
         } catch (HeidelpayApiException $e) {
-            $this->assertTrue($shouldHaveThrownException, 'Exception should not have been thrown here!');
+            $this->assertTrue($shouldHaveThrownException, "Exception should not have been thrown here! ({$e->getCode()})");
         }
     }
 
