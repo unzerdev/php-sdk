@@ -775,20 +775,13 @@ class Payment extends AbstractHeidelpayResource
     public function cancelAuthorization($amount = null): array
     {
         $cancels = [];
-        $exceptions = [];
+        $cancel = $this->cancelAuthorizationAmount($amount);
 
-        $authorization = $this->getAuthorization();
-        if ($authorization instanceof Authorization) {
-            try {
-                $cancels[] = $authorization->cancel($amount);
-            } catch (HeidelpayApiException $e) {
-                if (ApiResponseCodes::API_ERROR_ALREADY_CANCELLED !== $e->getCode()) {
-                    throw $e;
-                }
-                $exceptions[] = $e;
-            }
+        if ($cancel instanceof Cancellation) {
+            $cancels[] = $cancel;
         }
-        return array($cancels, $exceptions);
+
+        return array($cancels, []);
     }
 
     /**
