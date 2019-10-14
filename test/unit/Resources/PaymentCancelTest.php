@@ -31,6 +31,8 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 
@@ -169,6 +171,62 @@ class PaymentCancelTest extends BaseUnitTest
     }
 
     //</editor-fold>
+
+    /**
+     * Verify cancelAmount will call cancelAuthorizationAmount with the amountToCancel.
+     * When cancelAmount is <= the value of the cancellation it Will return auth cancellation only.
+     * Charge cancel will not be called if the amount to cancel has been cancelled on the authorization.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function cancelAmountShouldCallCancelAuthorizationAmount()
+    {
+        /** @var MockObject|Payment $paymentMock */
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['cancelAuthorizationAmount'])->getMock();
+        $chargeMock = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
+
+        $paymentMock->setAuthorization((new Authorization(12.3))->setPayment($paymentMock));
+
+        $cancellation = new Cancellation(12.3);
+        $paymentMock->expects($this->exactly(2))->method('cancelAuthorizationAmount')->willReturn($cancellation);
+        $chargeMock->expects($this->never())->method('cancel');
+
+        $this->assertEquals([$cancellation], $paymentMock->cancelAmount(10.0));
+        $this->assertEquals([$cancellation], $paymentMock->cancelAmount(12.3));
+    }
+
+    /**
+     * Verify that cancel amount will be cancelled on charges if auth does not exist.
+     *
+     * @test
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function chargesShouldBeCancelledIfAuthDoesNotExist1()
+    {
+        /** @var MockObject|Payment $paymentMock */
+        /** @var MockObject|Charge $chargeMock */
+        /** @var MockObject|Charge $charge2Mock */
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['cancelAuthorizationAmount'])->getMock();
+        $chargeMock = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->setConstructorArgs([10.0])->getMock();
+
+        $cancellation = new Cancellation(10.0);
+
+        $paymentMock->expects($this->once())->method('cancelAuthorizationAmount')->willReturn(null);
+        $chargeMock->expects($this->once())->method('cancel')->with(10.0, 'CANCEL')->willReturn($cancellation);
+        $paymentMock->addCharge($chargeMock);
+
+        $this->assertEquals([$cancellation], $paymentMock->cancelAmount(10.0));
+    }
 
     /**
      * Verify cancelAuthorization will call cancel on the authorization and will return a list of cancels.
