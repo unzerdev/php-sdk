@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\EmbeddedResources\Amount;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
@@ -42,7 +43,7 @@ class PaymentCancelTest extends BaseUnitTest
     //<editor-fold desc="Deprecated since 1.2.3.0">
 
     /**
-     * Verify payment:cancel calls cancelAllCharges and cancelAuthorization and returns first charge cancellation
+     * Verify payment:cancel calls cancelAllCharges and cancelAuthorizationAmount and returns first charge cancellation
      * object.
      *
      * @test
@@ -267,11 +268,11 @@ class PaymentCancelTest extends BaseUnitTest
      * Verify certain errors are allowed during cancellation and will be ignored.
      *
      * @test
-     * @dataProvider verifyAllowedErrorsWillBeIgnoredDuringChargeCancelDP
+     * @dataProvider allowedErrorCodesDuringChargeCancel
      *
      * @param string $allowedExceptionCode
+     * @param bool   $shouldHaveThrownException
      *
-     * @param bool $shouldHaveThrownException
      * @throws Exception
      * @throws ReflectionException
      * @throws RuntimeException
@@ -298,7 +299,7 @@ class PaymentCancelTest extends BaseUnitTest
     }
 
     /**
-     * Verify cancelAuthorization will call cancel on the authorization and will return a list of cancels.
+     * Verify cancelAuthorizationAmount will call cancel on the authorization and will return a list of cancels.
      *
      * @test
      *
@@ -306,7 +307,7 @@ class PaymentCancelTest extends BaseUnitTest
      * @throws ReflectionException
      * @throws RuntimeException
      */
-    public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnCancels()
+    public function cancelAuthorizationAmountShouldCallCancelOnTheAuthorizationAndReturnCancellation()
     {
         $cancellation = new Cancellation(1.0);
         $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
@@ -324,62 +325,71 @@ class PaymentCancelTest extends BaseUnitTest
     }
 
     /**
-     * Verify cancelAuthorization will call cancel on the authorization and will return a list of exceptions.
+     * Verify cancelAuthorizationAmount will call cancel the given amount on the authorization of the payment.
+     * Cancellation amount will be the remaining amount of the payment at max.
      *
      * @test
      *
+     * @throws Exception
      * @throws HeidelpayApiException
      * @throws ReflectionException
      * @throws RuntimeException
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
      */
-    public function cancelAuthorizationShouldCallCancelOnTheAuthorizationAndReturnExceptions()
+    public function cancelAuthorizationAmountShouldCallCancelWithTheRemainingAmountAtMax()
     {
-        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CANCELLED);
+        $cancellation = new Cancellation();
 
-        $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
-        $authorizationMock->expects($this->once())->method('cancel')->willThrowException($exception);
+        /** @var MockObject|Authorization $authorizationMock */
+        $authorizationMock = $this->getMockBuilder(Authorization::class)->setConstructorArgs([100.0])->setMethods(['cancel'])->getMock();
+        $authorizationMock->expects($this->exactly(4))->method('cancel')->withConsecutive([null], [50.0], [100.0], [100.0])->willReturn($cancellation);
 
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
-        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization', 'getAmount'])->getMock();
+        $paymentMock->method('getAmount')->willReturn((new Amount())->setRemaining(100.0));
+        $paymentMock->expects($this->exactly(4))->method('getAuthorization')->willReturn($authorizationMock);
 
         /**
          * @var Authorization $authorizationMock
          * @var Payment       $paymentMock
          */
         $paymentMock->setAuthorization($authorizationMock);
-        $this->assertNull($paymentMock->cancelAuthorizationAmount());
+        $this->assertEquals($cancellation, $paymentMock->cancelAuthorizationAmount());
+        $this->assertEquals($cancellation, $paymentMock->cancelAuthorizationAmount(50.0));
+        $this->assertEquals($cancellation, $paymentMock->cancelAuthorizationAmount(100.0));
+        $this->assertEquals($cancellation, $paymentMock->cancelAuthorizationAmount(101.0));
     }
 
     /**
-     * Verify cancelAuthorization will throw any exception with Code different to
-     * ApiResponseCodes::API_ERROR_AUTHORIZATION_ALREADY_CANCELED.
+     * Verify certain errors are allowed during cancellation and will be ignored.
      *
      * @test
+     * @dataProvider allowedErrorCodesDuringAuthCancel
      *
+     * @param string $allowedExceptionCode
+     * @param bool   $shouldHaveThrownException
+     *
+     * @throws Exception
      * @throws ReflectionException
      * @throws RuntimeException
+     * @throws AssertionFailedError
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
      */
-    public function cancelAllChargesShouldThrowAuthorizationCancelExceptionsOtherThanAlreadyCharged()
+    public function verifyAllowedErrorsWillBeIgnoredDuringAuthorizeCancel($allowedExceptionCode, $shouldHaveThrownException)
     {
-        $exception = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
-
-        $authorizationMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->getMock();
-        $authorizationMock->expects($this->once())->method('cancel')->willThrowException($exception);
-
+        /** @var MockObject|Payment $paymentMock */
+        /** @var MockObject|Authorization $authMock */
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
-        $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
+        $authMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
 
-        /**
-         * @var Authorization $authorizationMock
-         * @var Payment       $paymentMock
-         */
-        $paymentMock->setAuthorization($authorizationMock);
+        $allowedException = new HeidelpayApiException(null, null, $allowedExceptionCode);
+        $authMock->method('cancel')->willThrowException($allowedException);
+        $paymentMock->method('getAuthorization')->willReturn($authMock);
 
         try {
-            $paymentMock->cancelAuthorizationAmount();
-            $this->assertFalse(true, 'The expected exception has not been thrown.');
+            $this->assertEquals(null, $paymentMock->cancelAuthorizationAmount(12.3));
+            $this->assertFalse($shouldHaveThrownException, 'Exception should have been thrown here!');
         } catch (HeidelpayApiException $e) {
-            $this->assertSame($exception, $e);
+            $this->assertTrue($shouldHaveThrownException, "Exception should not have been thrown here! ({$e->getCode()})");
         }
     }
 
@@ -388,12 +398,23 @@ class PaymentCancelTest extends BaseUnitTest
     /**
      * @return array
      */
-    public function verifyAllowedErrorsWillBeIgnoredDuringChargeCancelDP(): array
+    public function allowedErrorCodesDuringChargeCancel(): array
     {
         return [
             'already cancelled' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
             'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
-            'already charged' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
+            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION, true]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function allowedErrorCodesDuringAuthCancel(): array
+    {
+        return [
+            'already cancelled' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
+            'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CHARGED, false],
             'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION, true]
         ];
     }
