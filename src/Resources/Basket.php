@@ -89,7 +89,7 @@ class Basket extends AbstractHeidelpayResource
      */
     public function setAmountTotalGross(float $amountTotalGross): Basket
     {
-        $this->amountTotalGross = $amountTotalGross;
+        $this->amountTotalGross = round($amountTotalGross, 4);
         return $this;
     }
 
@@ -132,7 +132,7 @@ class Basket extends AbstractHeidelpayResource
      */
     public function setAmountTotalDiscount(float $amountTotalDiscount): Basket
     {
-        $this->amountTotalDiscount = $amountTotalDiscount;
+        $this->amountTotalDiscount = round($amountTotalDiscount, 4);
         return $this;
     }
 
@@ -151,7 +151,7 @@ class Basket extends AbstractHeidelpayResource
      */
     public function setAmountTotalVat(float $amountTotalVat): Basket
     {
-        $this->amountTotalVat = $amountTotalVat;
+        $this->amountTotalVat = round($amountTotalVat, 4);
         return $this;
     }
 

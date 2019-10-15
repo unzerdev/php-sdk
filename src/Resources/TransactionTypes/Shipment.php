@@ -30,7 +30,7 @@ class Shipment extends AbstractTransactionType
 {
     use HasInvoiceId;
 
-    /** @var float $amount */
+    /** @var float|null $amount */
     protected $amount;
 
     //<editor-fold desc="Getters/Setters">
@@ -48,9 +48,9 @@ class Shipment extends AbstractTransactionType
      *
      * @return Shipment
      */
-    public function setAmount(float $amount): Shipment
+    public function setAmount($amount): Shipment
     {
-        $this->amount = $amount;
+        $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
     }
 
