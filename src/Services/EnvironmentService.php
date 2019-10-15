@@ -33,6 +33,11 @@ class EnvironmentService
 
     const ENV_VAR_NAME_DISABLE_TEST_LOGGING = 'HEIDELPAY_MGW_DISABLE_TEST_LOGGING';
 
+    const ENV_VAR_TEST_PRIVATE_KEY = 'HEIDELPAY_MGW_TEST_PRIVATE_KEY';
+    const ENV_VAR_TEST_PUBLIC_KEY = 'HEIDELPAY_MGW_TEST_PUBLIC_KEY';
+    const DEFAULT_TEST_PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
+    const DEFAULT_TEST_PUBLIC_KEY  = 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa';
+
     const ENV_VAR_NAME_TIMEOUT = 'HEIDELPAY_MGW_TIMEOUT';
     const ENV_VAR_DEFAULT_TIMEOUT = 60;
 
@@ -67,5 +72,23 @@ class EnvironmentService
     {
         $timeout = $_SERVER[self::ENV_VAR_NAME_TIMEOUT] ?? '';
         return is_numeric($timeout) ? (int)$timeout : self::ENV_VAR_DEFAULT_TIMEOUT;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTestPrivateKey()
+    {
+        $key = $_SERVER[self::ENV_VAR_TEST_PRIVATE_KEY] ?? '';
+        return empty($key) ? self::DEFAULT_TEST_PRIVATE_KEY : $key;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTestPublicKey()
+    {
+        $key = $_SERVER[self::ENV_VAR_TEST_PUBLIC_KEY] ?? '';
+        return empty($key) ? self::DEFAULT_TEST_PUBLIC_KEY : $key;
     }
 }

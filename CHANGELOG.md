@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Charge methods `getCancelledAmount` and `getTotalAmount`.
 *   Authorize method `getCancelledAmount`.
 *   Detailed `keypair` fetch.
+*   Added properties to keypair resource.
 
 ### Fixed
 *   Problem with HeidelpayApiException.
@@ -23,6 +24,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Adapted integration tests with basket to changes in API.
 *   Refactor deprecation notices.
 *   Refactored and extended unit tests.
+*   Test keypair can now be set via environment variables.
 
 ## [1.2.2.0][1.2.2.0]
 

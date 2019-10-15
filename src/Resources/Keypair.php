@@ -53,6 +53,12 @@ class Keypair extends AbstractHeidelpayResource
     /** @var string $merchantAddress */
     private $merchantAddress;
 
+    /** @var bool $cof */
+    private $cof;
+
+    /** @var bool $validateBasket */
+    private $validateBasket;
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -211,6 +217,44 @@ class Keypair extends AbstractHeidelpayResource
     public function setDetailed(bool $detailed): Keypair
     {
         $this->detailed = $detailed;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCof(): bool
+    {
+        return $this->cof;
+    }
+
+    /**
+     * @param bool $cof
+     *
+     * @return Keypair
+     */
+    public function setCof(bool $cof): Keypair
+    {
+        $this->cof = $cof;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidateBasket(): bool
+    {
+        return $this->validateBasket;
+    }
+
+    /**
+     * @param bool $validateBasket
+     *
+     * @return Keypair
+     */
+    public function setValidateBasket(bool $validateBasket): Keypair
+    {
+        $this->validateBasket = $validateBasket;
         return $this;
     }
 
