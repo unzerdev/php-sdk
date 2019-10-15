@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Refactor deprecation notices.
 *   Refactored and extended unit tests.
 *   Test keypair can now be set via environment variables.
+*   Activate recurring payment for `SEPA Direct Debit (guaranteed)`.
 
 ## [1.2.2.0][1.2.2.0]
 
