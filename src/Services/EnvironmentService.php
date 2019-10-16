@@ -75,18 +75,24 @@ class EnvironmentService
     }
 
     /**
-     * @return string|null
+     * Returns the private key string set via environment variable.
+     * Returns the default key if the environment variable is not set.
+     *
+     * @return string
      */
-    public function getTestPrivateKey()
+    public function getTestPrivateKey(): string
     {
         $key = $_SERVER[self::ENV_VAR_TEST_PRIVATE_KEY] ?? '';
         return empty($key) ? self::DEFAULT_TEST_PRIVATE_KEY : $key;
     }
 
     /**
-     * @return string|null
+     * Returns the public key string set via environment variable.
+     * Returns the default key if the environment variable is not set.
+     *
+     * @return string
      */
-    public function getTestPublicKey()
+    public function getTestPublicKey(): string
     {
         $key = $_SERVER[self::ENV_VAR_TEST_PUBLIC_KEY] ?? '';
         return empty($key) ? self::DEFAULT_TEST_PUBLIC_KEY : $key;
