@@ -658,8 +658,7 @@ class Payment extends AbstractHeidelpayResource
      * @param float|null $totalCancelAmount The amount to canceled.
      * @param string     $reason
      *
-     * @return Cancellation[] The resulting Cancellation object.
-     *                        If more then one cancellation is performed the last one will be returned.
+     * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
