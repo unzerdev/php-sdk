@@ -53,7 +53,12 @@ class Keypair extends AbstractHeidelpayResource
     /** @var string $merchantAddress */
     private $merchantAddress;
 
-    /** @var bool $cof */
+    /**
+     * Credentials on File / Card on File
+     * If true the credentials are stored for future transactions.
+     *
+     * @var bool $cof
+     */
     private $cof;
 
     /** @var bool $validateBasket */
