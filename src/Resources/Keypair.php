@@ -57,7 +57,7 @@ class Keypair extends AbstractHeidelpayResource
      * Credentials on File / Card on File
      * If true the credentials are stored for future transactions.
      *
-     * @var bool $cof
+     * @var bool|null $cof
      */
     private $cof;
 
@@ -219,16 +219,18 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    public function setDetailed(bool $detailed): Keypair
+    protected function setDetailed(bool $detailed): Keypair
     {
         $this->detailed = $detailed;
         return $this;
     }
 
     /**
-     * @return bool
+     * Returns true if Credentials are stored for later transactions.
+     *
+     * @return bool|null
      */
-    public function isCof(): bool
+    public function isCof()
     {
         return $this->cof;
     }
@@ -238,7 +240,7 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    public function setCof(bool $cof): Keypair
+    protected function setCof(bool $cof): Keypair
     {
         $this->cof = $cof;
         return $this;
@@ -257,7 +259,7 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    public function setValidateBasket(bool $validateBasket): Keypair
+    protected function setValidateBasket(bool $validateBasket): Keypair
     {
         $this->validateBasket = $validateBasket;
         return $this;
