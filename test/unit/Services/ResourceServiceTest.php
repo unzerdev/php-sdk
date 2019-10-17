@@ -407,7 +407,6 @@ class ResourceServiceTest extends BaseUnitTest
                 static function ($payment) use ($heidelpay) {
                     return $payment instanceof Payment &&
                     $payment->getOrderId() === 'myOrderId' &&
-                    $payment->getId() === 'myOrderId' &&
                     $payment->getHeidelpayObject() === $heidelpay;
                 }));
 

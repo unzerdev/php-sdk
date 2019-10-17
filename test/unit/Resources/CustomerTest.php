@@ -264,7 +264,6 @@ class CustomerTest extends BaseUnitTest
                 static function ($customer) use ($heidelpay) {
                     return $customer instanceof Customer &&
                         $customer->getCustomerId() === 'myCustomerId' &&
-                        $customer->getId() === 'myCustomerId' &&
                         $customer->getHeidelpayObject() === $heidelpay;
                 }));
 
