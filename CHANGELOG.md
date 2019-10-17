@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   An example for `prepayment` payment method.
 *   An example for `invoice` payment method.
+*   Detailed `keypair` fetch.
 
 ### Fixed
 *   Problem with HeidelpayApiException.

@@ -29,7 +29,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
-class KeyTest extends BasePaymentTest
+class KeypairTest extends BasePaymentTest
 {
     /**
      * Validate valid keys are accepted.
@@ -64,7 +64,7 @@ class KeyTest extends BasePaymentTest
     }
 
     /**
-     * Verify key pair command can be performed.
+     * Verify key pair config can be fetched.
      *
      * @test
      *
@@ -76,6 +76,31 @@ class KeyTest extends BasePaymentTest
         $keypair = $this->heidelpay->fetchKeypair();
         $this->assertNotNull($keypair);
         $this->assertNotEmpty($keypair->getPublicKey());
+        $this->assertNotEmpty($keypair->getPrivateKey());
         $this->assertNotEmpty($keypair->getAvailablePaymentTypes());
+        $this->assertNotEmpty($keypair->getMerchantAddress());
+        $this->assertNotEmpty($keypair->getMerchantName());
+        $this->assertNotEmpty($keypair->getSecureLevel());
+    }
+
+    /**
+     * Verify key pair config can be fetched with details.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function keypairShouldBeFetchableWithDetails()
+    {
+        $keypair = $this->heidelpay->fetchKeypair(true);
+        $this->assertNotNull($keypair);
+        $this->assertNotEmpty($keypair->getPublicKey());
+        $this->assertNotEmpty($keypair->getPrivateKey());
+        $this->assertNotEmpty($keypair->getPaymentTypes());
+        $this->assertNotEmpty($keypair->getAlias());
+        $this->assertNotEmpty($keypair->getMerchantAddress());
+        $this->assertNotEmpty($keypair->getMerchantName());
+        $this->assertNotEmpty($keypair->getSecureLevel());
     }
 }

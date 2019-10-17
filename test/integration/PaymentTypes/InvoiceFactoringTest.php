@@ -140,7 +140,7 @@ class InvoiceFactoringTest extends BasePaymentTest
 
         $basket = $this->createBasket();
         $charge = $invoiceFactoring->charge(
-            100.0,
+            123.4,
             'EUR',
             self::RETURN_URL,
             $customer,
@@ -179,7 +179,7 @@ class InvoiceFactoringTest extends BasePaymentTest
 
         $basket = $this->createBasket();
         $charge = $invoiceFactoring->charge(
-            100.0,
+            123.4,
             'EUR',
             self::RETURN_URL,
             $customer,
@@ -216,7 +216,7 @@ class InvoiceFactoringTest extends BasePaymentTest
 
         $basket = $this->createBasket();
         $charge = $invoiceFactoring->charge(
-            100.0,
+            123.4,
             'EUR',
             self::RETURN_URL,
             $customer,
@@ -252,7 +252,7 @@ class InvoiceFactoringTest extends BasePaymentTest
 
         $basket = $this->createBasket();
         $charge = $invoiceFactoring->charge(
-            100.0,
+            123.4,
             'EUR',
             self::RETURN_URL,
             $customer,
@@ -289,7 +289,7 @@ class InvoiceFactoringTest extends BasePaymentTest
 
         $basket = $this->createBasket();
         $charge = $invoiceFactoring->charge(
-            100.0,
+            123.4,
             'EUR',
             self::RETURN_URL,
             $customer,
@@ -324,7 +324,7 @@ class InvoiceFactoringTest extends BasePaymentTest
         $basket = $this->createBasket();
         $invoiceId = substr(str_replace(['0.',' '], '', microtime(false)), 0, 16);
         $charge = $invoiceFactoring->charge(
-            100.0,
+            123.4,
             'EUR',
             self::RETURN_URL,
             $customer,
