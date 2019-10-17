@@ -219,7 +219,7 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    protected function setDetailed(bool $detailed): Keypair
+    public function setDetailed(bool $detailed): Keypair
     {
         $this->detailed = $detailed;
         return $this;
