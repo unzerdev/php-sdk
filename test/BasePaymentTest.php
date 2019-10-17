@@ -36,6 +36,7 @@ use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Services\EnvironmentService;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
@@ -52,13 +53,6 @@ class BasePaymentTest extends TestCase
 
     const RETURN_URL = 'http://dev.heidelpay.com';
 
-    // SAQ-D certified merchants are allowed to handle and store CreditCard data,
-    // thus can create a CreditCard via this SDK.
-    // If the merchant is not certified to handle the CreditCard data SAQ-A applies
-    // in which case the merchant has to embed our iFrame via JS (UIComponents).
-    const PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
-    const PUBLIC_KEY  = 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa';
-
     /**
      * {@inheritDoc}
      *
@@ -66,8 +60,8 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY))
-            ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
+        $privateKey = (new EnvironmentService())->getTestPrivateKey();
+        $this->heidelpay = (new Heidelpay($privateKey))->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
     }
 
     //<editor-fold desc="Custom asserts">

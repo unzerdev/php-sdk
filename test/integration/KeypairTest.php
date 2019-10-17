@@ -78,8 +78,6 @@ class KeypairTest extends BasePaymentTest
         $this->assertNotEmpty($keypair->getPublicKey());
         $this->assertNotEmpty($keypair->getPrivateKey());
         $this->assertNotEmpty($keypair->getAvailablePaymentTypes());
-        $this->assertNotEmpty($keypair->getMerchantAddress());
-        $this->assertNotEmpty($keypair->getMerchantName());
         $this->assertNotEmpty($keypair->getSecureLevel());
     }
 
@@ -98,9 +96,6 @@ class KeypairTest extends BasePaymentTest
         $this->assertNotEmpty($keypair->getPublicKey());
         $this->assertNotEmpty($keypair->getPrivateKey());
         $this->assertNotEmpty($keypair->getPaymentTypes());
-        $this->assertNotEmpty($keypair->getAlias());
-        $this->assertNotEmpty($keypair->getMerchantAddress());
-        $this->assertNotEmpty($keypair->getMerchantName());
         $this->assertNotEmpty($keypair->getSecureLevel());
     }
 }

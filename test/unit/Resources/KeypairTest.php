@@ -49,6 +49,7 @@ class KeypairTest extends BaseUnitTest
         $this->assertNull($keypair->getPrivateKey());
         $this->assertEmpty($keypair->getPaymentTypes());
         $this->assertSame($keypair->getPaymentTypes(), $keypair->getAvailablePaymentTypes());
+        $this->assertNull($keypair->isCof());
         $this->assertEquals('', $keypair->getSecureLevel());
         $this->assertEquals('', $keypair->getMerchantName());
         $this->assertEquals('', $keypair->getMerchantAddress());

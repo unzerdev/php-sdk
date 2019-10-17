@@ -53,6 +53,17 @@ class Keypair extends AbstractHeidelpayResource
     /** @var string $merchantAddress */
     private $merchantAddress;
 
+    /**
+     * Credentials on File / Card on File
+     * If true the credentials are stored for future transactions.
+     *
+     * @var bool|null $cof
+     */
+    private $cof;
+
+    /** @var bool $validateBasket */
+    private $validateBasket;
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -211,6 +222,46 @@ class Keypair extends AbstractHeidelpayResource
     public function setDetailed(bool $detailed): Keypair
     {
         $this->detailed = $detailed;
+        return $this;
+    }
+
+    /**
+     * Returns true if Credentials are stored for later transactions.
+     *
+     * @return bool|null
+     */
+    public function isCof()
+    {
+        return $this->cof;
+    }
+
+    /**
+     * @param bool $cof
+     *
+     * @return Keypair
+     */
+    protected function setCof(bool $cof): Keypair
+    {
+        $this->cof = $cof;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidateBasket(): bool
+    {
+        return $this->validateBasket;
+    }
+
+    /**
+     * @param bool $validateBasket
+     *
+     * @return Keypair
+     */
+    protected function setValidateBasket(bool $validateBasket): Keypair
+    {
+        $this->validateBasket = $validateBasket;
         return $this;
     }
 
