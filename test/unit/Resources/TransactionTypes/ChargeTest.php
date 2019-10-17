@@ -33,6 +33,7 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
@@ -184,5 +185,54 @@ class ChargeTest extends BaseUnitTest
         $charge->setParentResource($heidelpayMock);
         $charge->cancel();
         $charge->cancel(321.9);
+    }
+
+    /**
+     * Verify getter for cancelled amount.
+     *
+     * @test
+     *
+     * @throws Exception
+     */
+    public function getCancelledAmountReturnsTheCancelledAmount()
+    {
+        $charge = new Charge();
+        $this->assertEquals(0.0, $charge->getCancelledAmount());
+
+        $charge = new Charge(123.4, 'myCurrency', 'https://my-return-url.test');
+        $this->assertEquals(0.0, $charge->getCancelledAmount());
+
+        $cancellation1 = new Cancellation(10.0);
+        $charge->addCancellation($cancellation1);
+        $this->assertEquals(10.0, $charge->getCancelledAmount());
+
+        $cancellation2 = new Cancellation(10.0);
+        $charge->addCancellation($cancellation2);
+        $this->assertEquals(20.0, $charge->getCancelledAmount());
+    }
+
+    /**
+     * Verify getter for total amount.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function getTotalAmountReturnsAmountMinusCancelledAmount()
+    {
+        /** @var MockObject|Charge $chargeMock */
+        $chargeMock = $this->getMockBuilder(Charge::class)
+            ->setMethods(['getCancelledAmount'])
+            ->setConstructorArgs([123.4, 'myCurrency', 'https://my-return-url.test'])
+            ->getMock();
+
+        $chargeMock->expects($this->exactly(3))->method('getCancelledAmount')
+            ->willReturnOnConsecutiveCalls(0.0, 100.0, 123.4);
+
+        $this->assertEquals(123.4, $chargeMock->getTotalAmount());
+        $this->assertEquals(23.4, $chargeMock->getTotalAmount());
+        $this->assertEquals(0.0, $chargeMock->getTotalAmount());
     }
 }

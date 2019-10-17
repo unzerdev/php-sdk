@@ -28,8 +28,8 @@ use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
-use function in_array;
 use stdClass;
+use function in_array;
 
 class Customer extends AbstractHeidelpayResource
 {
@@ -75,7 +75,10 @@ class Customer extends AbstractHeidelpayResource
      * @param string|null $firstname
      * @param string|null $lastname
      *
-     * @deprecated since Version 1.1.5.0 use CustomerFactory::createCustomer(...) in the future.
+     * @deprecated since Version 1.1.5.0
+     * @see CustomerFactory::createCustomer()
+     * @see CustomerFactory::createNotRegisteredB2bCustomer()
+     * @see CustomerFactory::createRegisteredB2bCustomer()
      */
     public function __construct(string $firstname = null, string $lastname = null)
     {

@@ -99,6 +99,28 @@ class Charge extends AbstractTransactionType
     }
 
     /**
+     * @return float|null
+     */
+    public function getCancelledAmount()
+    {
+        $amount = 0.0;
+        foreach ($this->getCancellations() as $cancellation) {
+            /** @var Cancellation $cancellation */
+            $amount += $cancellation->getAmount();
+        }
+
+        return $amount;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTotalAmount()
+    {
+        return $this->getAmount() - $this->getCancelledAmount();
+    }
+
+    /**
      * @return string|null
      */
     public function getCurrency()

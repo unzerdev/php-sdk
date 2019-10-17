@@ -105,18 +105,7 @@ class ChargeTest extends BasePaymentTest
         $paymentReference = 'paymentReference';
 
         // perform request
-        $charge = $paymentType->charge(
-            123.4,
-            'EUR',
-            self::RETURN_URL,
-            $customer,
-            $orderId,
-            $metadata,
-            $basket,
-            true,
-            $invoiceId,
-            $paymentReference
-        );
+        $charge = $paymentType->charge(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
 
         // verify the data sent and received match
         $payment = $charge->getPayment();
@@ -166,18 +155,7 @@ class ChargeTest extends BasePaymentTest
         $paymentReference = 'paymentReference';
 
         // perform request
-        $charge = $ivg->charge(
-            123.4,
-            'EUR',
-            self::RETURN_URL,
-            $customer,
-            $orderId,
-            $metadata,
-            $basket,
-            null,
-            $invoiceId,
-            $paymentReference
-        );
+        $charge = $ivg->charge(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, null, $invoiceId, $paymentReference);
 
         // verify the data sent and received match
         $payment = $charge->getPayment();
