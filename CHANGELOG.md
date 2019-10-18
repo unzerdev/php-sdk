@@ -14,7 +14,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Added properties to keypair resource.
 
 ### Fixed
-*   Problem with HeidelpayApiException.
+*   A problem with HeidelpayApiException.
+*   A problem which resulted in an error when trying to create a `customer` implicitly with a transaction when its `customerId` was set. 
 
 ### Changed
 *   Replaced unreliable `Payment::cancel()` method with `Payment::cancelAmount()` which takes multiple cancellation scenarios into account.

@@ -24,7 +24,6 @@
  */
 namespace heidelpayPHP\Resources;
 
-use function count;
 use DateTime;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
@@ -32,13 +31,14 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Services\ResourceNameService;
 use heidelpayPHP\Services\ResourceService;
-use function is_array;
-use function is_callable;
-use function is_object;
 use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
 use stdClass;
+use function count;
+use function is_array;
+use function is_callable;
+use function is_object;
 
 abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 {
@@ -54,15 +54,13 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * {@inheritDoc}
+     * Returns the id of this resource.
+     *
+     * @return string|null
      */
     public function getId()
     {
-        $resourceId = $this->id;
-        if ($resourceId === null) {
-            $resourceId = $this->getExternalId();
-        }
-        return $resourceId;
+        return $this->id;
     }
 
     /**
@@ -145,8 +143,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     public function getUri($appendId = true): string
     {
         $uri = [rtrim($this->getParentResource()->getUri(), '/'), $this->getResourcePath()];
-        if ($appendId && $this->getId() !== null) {
-            $uri[] = $this->getId();
+        if ($appendId) {
+            if ($this->getId() !== null) {
+                $uri[] = $this->getId();
+            } elseif ($this->getExternalId() !== null) {
+                $uri[] = $this->getExternalId();
+            }
         }
 
         $uri[] = '';
