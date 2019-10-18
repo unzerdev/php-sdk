@@ -32,8 +32,8 @@ use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
-use function microtime;
 use RuntimeException;
+use function microtime;
 
 class CustomerTest extends BasePaymentTest
 {
@@ -162,7 +162,8 @@ class CustomerTest extends BasePaymentTest
      */
     public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
     {
-        $customer = $this->getMaximumCustomerInclShippingAddress();
+        $customerId = 'customer' . $this->generateRandomId();
+        $customer   = $this->getMaximumCustomerInclShippingAddress()->setCustomerId($customerId);
 
         /** @var Paypal $paypal */
         $paypal = $this->heidelpay->createPaymentType(new Paypal());

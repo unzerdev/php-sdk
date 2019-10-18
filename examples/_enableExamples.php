@@ -39,8 +39,6 @@ define('HEIDELPAY_PHP_PAYMENT_API_FOLDER', '/vendor/heidelpay/heidelpay-php/exam
  * Default Values are:
  * Private key: s-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n
  * Public key:  s-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa
- *
- * Please keep in mind,
  */
 define('HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY', 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
 define('HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY', 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');

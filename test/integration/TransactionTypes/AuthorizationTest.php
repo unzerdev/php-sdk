@@ -181,11 +181,11 @@ class AuthorizationTest extends BasePaymentTest
         $invoiceId = $this->generateRandomId();
         $paymentReference = 'paymentReference';
 
-        $authorize = $card->authorize(100.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
+        $authorize = $card->authorize(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
         $payment = $authorize->getPayment();
 
         $this->assertSame($card, $payment->getPaymentType());
-        $this->assertEquals(100.0, $authorize->getAmount());
+        $this->assertEquals(123.4, $authorize->getAmount());
         $this->assertEquals('EUR', $authorize->getCurrency());
         $this->assertEquals(self::RETURN_URL, $authorize->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());

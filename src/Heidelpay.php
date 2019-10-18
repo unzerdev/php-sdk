@@ -56,7 +56,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.2.2.0';
+    const SDK_VERSION = '1.2.3.0';
 
     /** @var string $key */
     private $key;
@@ -396,14 +396,16 @@ class Heidelpay implements HeidelpayParentInterface
     /**
      * Read and return the public key and configured payment types from API.
      *
+     * @param bool $detailed If this flag is set detailed information are fetched.
+     *
      * @return Keypair The Keypair object composed of the data returned by the API.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function fetchKeypair(): AbstractHeidelpayResource
+    public function fetchKeypair($detailed = false): AbstractHeidelpayResource
     {
-        return $this->resourceService->fetchKeypair();
+        return $this->resourceService->fetchKeypair($detailed);
     }
 
     //</editor-fold>

@@ -417,14 +417,16 @@ class ResourceService
     /**
      * Fetch public key and configured payment types from API.
      *
+     * @param bool $detailed If this flag is set detailed information are fetched.
+     *
      * @return Keypair
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchKeypair(): AbstractHeidelpayResource
+    public function fetchKeypair($detailed = false): AbstractHeidelpayResource
     {
-        $keyPair = (new Keypair())->setParentResource($this->heidelpay);
+        $keyPair = (new Keypair())->setParentResource($this->heidelpay)->setDetailed($detailed);
         return $this->fetch($keyPair);
     }
 

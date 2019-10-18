@@ -101,9 +101,9 @@ class Paypage extends BasePaymentType
      */
     public function __construct(float $amount, string $currency, string $returnUrl)
     {
-        $this->amount = $amount;
-        $this->currency = $currency;
-        $this->returnUrl = $returnUrl;
+        $this->setAmount($amount);
+        $this->setCurrency($currency);
+        $this->setReturnUrl($returnUrl);
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -123,7 +123,7 @@ class Paypage extends BasePaymentType
      */
     public function setAmount(float $amount): Paypage
     {
-        $this->amount = $amount;
+        $this->amount = round($amount, 4);
         return $this;
     }
 

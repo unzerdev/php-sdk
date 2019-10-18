@@ -24,10 +24,10 @@
  */
 namespace heidelpayPHP\Resources;
 
-use function count;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use stdClass;
+use function count;
 
 class Basket extends AbstractHeidelpayResource
 {
@@ -89,14 +89,15 @@ class Basket extends AbstractHeidelpayResource
      */
     public function setAmountTotalGross(float $amountTotalGross): Basket
     {
-        $this->amountTotalGross = $amountTotalGross;
+        $this->amountTotalGross = round($amountTotalGross, 4);
         return $this;
     }
 
     /**
      * @return float
      *
-     * @deprecated since 1.2.0.0 Please use getAmountTotalGross instead.
+     * @deprecated since 1.2.0.0
+     * @see Basket::getAmountTotalGross()
      */
     public function getAmountTotal(): float
     {
@@ -108,7 +109,8 @@ class Basket extends AbstractHeidelpayResource
      *
      * @return Basket
      *
-     * @deprecated since 1.2.0.0 Please use setAmountTotalGross instead.
+     * @deprecated since 1.2.0.0
+     * @see Basket::setAmountTotalGross()
      */
     public function setAmountTotal(float $amountTotal): Basket
     {
@@ -130,7 +132,7 @@ class Basket extends AbstractHeidelpayResource
      */
     public function setAmountTotalDiscount(float $amountTotalDiscount): Basket
     {
-        $this->amountTotalDiscount = $amountTotalDiscount;
+        $this->amountTotalDiscount = round($amountTotalDiscount, 4);
         return $this;
     }
 
@@ -149,7 +151,7 @@ class Basket extends AbstractHeidelpayResource
      */
     public function setAmountTotalVat(float $amountTotalVat): Basket
     {
-        $this->amountTotalVat = $amountTotalVat;
+        $this->amountTotalVat = round($amountTotalVat, 4);
         return $this;
     }
 
