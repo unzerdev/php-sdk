@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the Prepayment payment type.
+ * This file provides an example implementation of the Invoice payment type.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -43,7 +43,6 @@ require_once __DIR__ . '/../../../../autoload.php';
             integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
-    <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
 </head>
 
 <body style="margin: 70px 70px 0;">

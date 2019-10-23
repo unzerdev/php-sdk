@@ -224,6 +224,30 @@ class AuthorizationTest extends BaseUnitTest
         $authorization->charge(321.9);
     }
 
+    /**
+     * Verify getter for cancelled amount.
+     *
+     * @test
+     *
+     * @throws Exception
+     */
+    public function getCancelledAmountReturnsTheCancelledAmount()
+    {
+        $authorization = new Authorization();
+        $this->assertEquals(0.0, $authorization->getCancelledAmount());
+
+        $authorization = new Authorization(123.4, 'myCurrency', 'https://my-return-url.test');
+        $this->assertEquals(0.0, $authorization->getCancelledAmount());
+
+        $cancellation1 = new Cancellation(10.0);
+        $authorization->addCancellation($cancellation1);
+        $this->assertEquals(10.0, $authorization->getCancelledAmount());
+
+        $cancellation2 = new Cancellation(10.0);
+        $authorization->addCancellation($cancellation2);
+        $this->assertEquals(20.0, $authorization->getCancelledAmount());
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**

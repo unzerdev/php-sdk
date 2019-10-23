@@ -36,6 +36,7 @@ use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use heidelpayPHP\Services\EnvironmentService;
 use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
@@ -52,13 +53,6 @@ class BasePaymentTest extends TestCase
 
     const RETURN_URL = 'http://dev.heidelpay.com';
 
-    // SAQ-D certified merchants are allowed to handle and store CreditCard data,
-    // thus can create a CreditCard via this SDK.
-    // If the merchant is not certified to handle the CreditCard data SAQ-A applies
-    // in which case the merchant has to embed our iFrame via JS (UIComponents).
-    const PRIVATE_KEY = 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n';
-    const PUBLIC_KEY  = 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa';
-
     /**
      * {@inheritDoc}
      *
@@ -66,8 +60,8 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp()
     {
-        $this->heidelpay = (new Heidelpay(self::PRIVATE_KEY))
-            ->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
+        $privateKey = (new EnvironmentService())->getTestPrivateKey();
+        $this->heidelpay = (new Heidelpay($privateKey))->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
         $this->childSetup();
     }
 
@@ -174,15 +168,15 @@ class BasePaymentTest extends TestCase
     public function createBasket(): Basket
     {
         $orderId = $this->generateRandomId();
-        $basketItem = (new BasketItem('myItem', 100, 100, 1))
+        $basket = new Basket($orderId, 123.4, 'EUR');
+        $basket->setAmountTotalVat(0.19);
+        $basket->setNote('This basket is creatable!');
+        $basketItem = (new BasketItem('myItem', 123.4, 123.4, 1))
             ->setBasketItemReferenceId('refId')
             ->setAmountVat(0.19)
             ->setAmountGross(100.19)
             ->setImageUrl('https://hpp-images.s3.amazonaws.com/7/bsk_0_6377B5798E5C55C6BF8B5BECA59529130226E580B050B913EAC3606DA0FF4F68.jpg');
-        $basket = (new Basket($orderId, 100.00, 'EUR'))
-            ->setAmountTotalVat(0.19)
-            ->setNote('This basket is creatable!')
-            ->addBasketItem($basketItem);
+        $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
         return $basket;
     }
@@ -217,16 +211,18 @@ class BasePaymentTest extends TestCase
     /**
      * Creates and returns an Authorization object with the API which can be used in test methods.
      *
+     * @param float $amount
+     *
      * @return Authorization
      *
-     * @throws RuntimeException
      * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
-    public function createCardAuthorization(): Authorization
+    public function createCardAuthorization($amount = 100.0): Authorization
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
-        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
+        $authorization = $this->heidelpay->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
         return $authorization;
     }
 
@@ -250,15 +246,17 @@ class BasePaymentTest extends TestCase
     /**
      * Creates and returns a Charge object with the API which can be used in test methods.
      *
+     * @param float $amount
+     *
      * @return Charge
      *
-     * @throws RuntimeException
      * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
-    public function createCharge(): Charge
+    public function createCharge($amount = 100.0): Charge
     {
         $card = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        return $this->heidelpay->charge(100.0, 'EUR', $card, self::RETURN_URL);
+        return $this->heidelpay->charge($amount, 'EUR', $card, self::RETURN_URL);
     }
 
     /**

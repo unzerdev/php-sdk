@@ -74,7 +74,7 @@ class Cancellation extends AbstractTransactionType
      */
     public function setAmount($amount): Cancellation
     {
-        $this->amount = $amount;
+        $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
     }
 

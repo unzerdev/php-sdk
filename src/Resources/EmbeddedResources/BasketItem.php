@@ -142,7 +142,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setVat(float $vat): BasketItem
     {
-        $this->vat = $vat;
+        $this->vat = round($vat, 4);
         return $this;
     }
 
@@ -161,7 +161,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountDiscount(float $amountDiscount): BasketItem
     {
-        $this->amountDiscount = $amountDiscount;
+        $this->amountDiscount = round($amountDiscount, 4);
         return $this;
     }
 
@@ -180,7 +180,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountGross(float $amountGross): BasketItem
     {
-        $this->amountGross = $amountGross;
+        $this->amountGross = round($amountGross, 4);
         return $this;
     }
 
@@ -199,7 +199,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountVat(float $amountVat): BasketItem
     {
-        $this->amountVat = $amountVat;
+        $this->amountVat = round($amountVat, 4);
         return $this;
     }
 
@@ -218,7 +218,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountPerUnit(float $amountPerUnit): BasketItem
     {
-        $this->amountPerUnit = $amountPerUnit;
+        $this->amountPerUnit = round($amountPerUnit, 4);
         return $this;
     }
 
@@ -237,7 +237,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountNet(float $amountNet): BasketItem
     {
-        $this->amountNet = $amountNet;
+        $this->amountNet = round($amountNet, 4);
         return $this;
     }
 
