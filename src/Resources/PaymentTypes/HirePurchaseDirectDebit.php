@@ -153,11 +153,11 @@ class HirePurchaseDirectDebit extends BasePaymentType
     }
 
     /**
-     * @param string $bic
+     * @param string|null $bic
      *
      * @return $this
      */
-    public function setBic(string $bic): self
+    public function setBic($bic): self
     {
         $this->bic = $bic;
         return $this;
