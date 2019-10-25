@@ -91,7 +91,7 @@ try {
         ->setAmountNet(10.0)
         ->setAmountGross(10.19)
         ->setAmountVat(0.19);
-    $basket = (new Basket($orderId, 100.00, 'EUR', [$basketItem]))
+    $basket = (new Basket($orderId, 100.19, 'EUR', [$basketItem]))
         ->setAmountTotalVat(0.19);
 
     $authorize = $heidelpay->authorize(
