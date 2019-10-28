@@ -41,6 +41,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
+     * @throws \Exception
      */
     public function hirePurchaseDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -53,12 +54,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
 
         /** @var HirePurchaseDirectDebit $fetchedHirePurchaseDirectDebit */
         $fetchedHirePurchaseDirectDebit = $this->heidelpay->fetchPaymentType($hirePurchaseDirectDebit->getId());
-        $this->assertInstanceOf(HirePurchaseDirectDebit::class, $fetchedHirePurchaseDirectDebit);
-        $this->assertEquals($hirePurchaseDirectDebit->getId(), $fetchedHirePurchaseDirectDebit->getId());
-        $this->assertEquals(
-            $this->maskNumber($hirePurchaseDirectDebit->getIban()),
-            $fetchedHirePurchaseDirectDebit->getIban()
-        );
+        $this->assertEquals($hirePurchaseDirectDebit->expose(), $fetchedHirePurchaseDirectDebit->expose());
     }
 
     /**
@@ -68,12 +64,13 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
+     * @throws \Exception
      */
     public function hirePurchaseDirectDebitShouldBeCreatable()
     {
         /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
         $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
-        $hirePurchaseDirectDebit->setOrderDate('2011-04-12');
+        $hirePurchaseDirectDebit->setOrderDate($this->getCurrentDateString());
         $hirePurchaseDirectDebit = $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
         $this->assertInstanceOf(HirePurchaseDirectDebit::class, $hirePurchaseDirectDebit);
         $this->assertNotNull($hirePurchaseDirectDebit->getId());
@@ -92,6 +89,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws Exception
+     * @throws \Exception
      */
     public function hirePurchaseDirectDebitShouldProhibitCharge()
     {
@@ -120,23 +118,16 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
+     * @throws \Exception
      */
     public function hirePurchaseDirectDebitShouldAllowAuthorize()
     {
-        /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
-        $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
-        $hirePurchaseDirectDebit->setOrderDate('2011-04-12');
+        /** @var HirePurchaseDirectDebit $hdd */
+        $hdd = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly()->setOrderDate('2011-04-12');
 
-        $authorize = $this->heidelpay->authorize(
-            100.19,
-            'EUR',
-            $hirePurchaseDirectDebit,
-            self::RETURN_URL,
-            $this->getMaximumCustomer(),
-            null,
-            null,
-            $this->createBasket()
-        );
+        $basket    = $this->createBasket();
+        $customer  = $this->getMaximumCustomer();
+        $authorize = $this->heidelpay->authorize(123.40, 'EUR', $hdd, self::RETURN_URL, $customer, null, null, $basket);
 
         $this->assertNotEmpty($authorize->getId());
     }
@@ -169,21 +160,23 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
 
     /**
      * @return HirePurchaseDirectDebit
+     *
+     * @throws \Exception
      */
     private function getHirePurchaseDirectDebitWithMandatoryFieldsOnly(): HirePurchaseDirectDebit
     {
         /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
         $hirePurchaseDirectDebit = new HirePurchaseDirectDebit(
-            'DE46940594210000012345',
-            'JASDFKJLKJD',
-            'Khang Vu',
+            'DE89370400440532013000',
+            '',
+            'Max Mustermann',
             3,
-            '2019-04-18',
+            $this->getCurrentDateString(),
             100.19,
             0.74,
             100.93,
             4.5,
-            1.11,
+            4.44,
             0,
             0,
             33.65,

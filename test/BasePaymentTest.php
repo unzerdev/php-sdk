@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test;
 
+use DateTime;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
@@ -267,6 +268,18 @@ class BasePaymentTest extends TestCase
     public function generateRandomId(): float
     {
         return (string)microtime(true);
+    }
+
+    /**
+     * Returns the current date as string in the format Y-m-d.
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    public function getCurrentDateString(): string
+    {
+        return (new DateTime())->format('Y-m-d');
     }
 
     //</editor-fold>
