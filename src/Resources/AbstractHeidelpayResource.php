@@ -177,8 +177,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             }
         }
 
-        $uri[] = '';
-
         return implode('/', $uri);
     }
 
