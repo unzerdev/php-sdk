@@ -1,6 +1,6 @@
 <?php
 /**
- * This class contains the instalment plans for payment method hire purchase (flexipay instalment).
+ * This class contains the instalment plans for payment method hire purchase (flexipay rate).
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -24,6 +24,10 @@
  */
 namespace heidelpayPHP\Resources;
 
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use stdClass;
+
 class InstalmentPlans extends AbstractHeidelpayResource
 {
     /** @var float */
@@ -35,7 +39,10 @@ class InstalmentPlans extends AbstractHeidelpayResource
     /** @var float */
     private $effectiveInterest;
 
-    /** @var InstalmentPlan[] $plans */
+    /**
+     * @var array $plans
+     *            todo: base hp
+     */
     private $plans = [];
 
     /**
@@ -110,7 +117,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
     }
 
     /**
-     * @return InstalmentPlan[]
+     * @return array
      */
     public function getPlans(): array
     {
@@ -118,7 +125,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
     }
 
     /**
-     * @param InstalmentPlan[] $plans
+     * @param array $plans
      *
      * @return InstalmentPlans
      */
@@ -165,6 +172,27 @@ class InstalmentPlans extends AbstractHeidelpayResource
     public function getResourcePath(): string
     {
         return 'types/hire-purchase-direct-debit/plans' . $this->getQueryString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        parent::handleResponse($response, $method);
+
+        if (isset($response->entity)) {
+            $plans = [];
+
+            foreach ($response->entity as $plan) {
+                // todo base hp
+                $hdd = new HirePurchaseDirectDebit(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                $hdd->handleResponse($plan);
+                $plans[] = $hdd;
+            }
+
+            $this->plans = $plans;
+        }
     }
 
     //</editor-fold>

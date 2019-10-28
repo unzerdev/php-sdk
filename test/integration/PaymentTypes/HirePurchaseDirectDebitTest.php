@@ -48,6 +48,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $plans = new InstalmentPlans(100.19, 'EUR', '12.0');
         $plans->setParentResource($this->heidelpay);
         $this->heidelpay->getResourceService()->fetch($plans);
+        $this->assertGreaterThan(0, $plans->getPlans());
     }
 
     /**
