@@ -9,7 +9,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.de>
  *
- * @package  heidelpayPHP/test/integration
+ * @package  heidelpayPHP/test/unit
  */
 namespace heidelpayPHP\test\unit\Resources;
 
