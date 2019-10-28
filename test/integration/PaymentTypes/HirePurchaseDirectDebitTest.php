@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
@@ -34,6 +35,21 @@ use RuntimeException;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
 {
+    /**
+     * Verify fetching instalment plans.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function instalmentPlansShouldBeFetchable()
+    {
+        $plans = new InstalmentPlans(100.19, 'EUR', '12.0');
+        $plans->setParentResource($this->heidelpay);
+        $this->heidelpay->getResourceService()->fetch($plans);
+    }
+
     /**
      * Verify hire purchase direct debit can be created with mandatory fields only.
      *
