@@ -25,7 +25,6 @@
 namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use stdClass;
 
 class InstalmentPlans extends AbstractHeidelpayResource
@@ -39,10 +38,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
     /** @var float */
     private $effectiveInterest;
 
-    /**
-     * @var array $plans
-     *            todo: base hp
-     */
+    /** var stdClass[] $plans */
     private $plans = [];
 
     /**
@@ -117,7 +113,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
     }
 
     /**
-     * @return array
+     * @return stdClass[]
      */
     public function getPlans(): array
     {
@@ -125,7 +121,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
     }
 
     /**
-     * @param array $plans
+     * @param stdClass[] $plans
      *
      * @return InstalmentPlans
      */
@@ -171,7 +167,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
      */
     public function getResourcePath(): string
     {
-        return 'types/hire-purchase-direct-debit/plans' . $this->getQueryString();
+        return 'plans' . $this->getQueryString();
     }
 
     /**
@@ -180,18 +176,8 @@ class InstalmentPlans extends AbstractHeidelpayResource
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         parent::handleResponse($response, $method);
-
         if (isset($response->entity)) {
-            $plans = [];
-
-            foreach ($response->entity as $plan) {
-                // todo base hp
-                $hdd = new HirePurchaseDirectDebit(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-                $hdd->handleResponse($plan);
-                $plans[] = $hdd;
-            }
-
-            $this->plans = $plans;
+            $this->plans = $response->entity;
         }
     }
 

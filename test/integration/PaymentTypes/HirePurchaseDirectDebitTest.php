@@ -43,12 +43,34 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function instalmentPlansShouldBeFetchable()
+    public function instalmentPlansShouldBeSelectable()
     {
-        $plans = new InstalmentPlans(100.19, 'EUR', '12.0');
-        $plans->setParentResource($this->heidelpay);
+        // HirePurchaseDD wird lokal angelegt
+        $hdd = (new HirePurchaseDirectDebit(null, null, null, null, null, null, null, null, null, null, null, null, null, null))->setParentResource($this->heidelpay);
+
+        // Hire Purchase hat ein Child Plans
+        $plans = (new InstalmentPlans(123.40, 'EUR', 4.99))->setParentResource($hdd);
+
+        // Plans wird gefetched (die stdClasses der plans werden in einem array abgespeichert)
         $this->heidelpay->getResourceService()->fetch($plans);
-        $this->assertGreaterThan(0, $plans->getPlans());
+        $this->assertGreaterThan(0, count($plans->getPlans()));
+
+        // Dann wird der gewünschte plan mit handleResponse
+        $selectedPlan = $plans->getPlans()[1];
+        $hdd->handleResponse($selectedPlan);
+
+        foreach ($hdd->expose() as $key => $value) {
+            $this->assertEquals($value, $selectedPlan->$key);
+        }
+
+        $hdd->setIban('DE46940594210000012345')->setAccountHolder('Manuel Weißmann');
+
+        /** @var HirePurchaseDirectDebit $hdd */
+        $hdd = $this->heidelpay->createPaymentType($hdd);
+
+        $authorize = $hdd->authorize(123.4, 'EUR', self::RETURN_URL, $this->getMaximumCustomer(), null, null, $this->createBasket());
+        $payment = $authorize->getPayment();
+        $payment->charge();
     }
 
     /**

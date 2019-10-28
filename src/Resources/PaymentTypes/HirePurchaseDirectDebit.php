@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
+use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Traits\CanAuthorize;
 
 class HirePurchaseDirectDebit extends BasePaymentType
@@ -74,6 +75,9 @@ class HirePurchaseDirectDebit extends BasePaymentType
 
     /** @var float $lastRate */
     protected $lastRate;
+
+    /** @var InstalmentPlans $plans */
+    protected $plans;
 
     /**
      * @param string $iban
@@ -134,11 +138,11 @@ class HirePurchaseDirectDebit extends BasePaymentType
     }
 
     /**
-     * @param string $iban
+     * @param string|null $iban
      *
      * @return $this
      */
-    public function setIban(string $iban): self
+    public function setIban($iban): self
     {
         $this->iban = $iban;
         return $this;
@@ -172,11 +176,11 @@ class HirePurchaseDirectDebit extends BasePaymentType
     }
 
     /**
-     * @param string $accountHolder
+     * @param string|null $accountHolder
      *
      * @return $this
      */
-    public function setAccountHolder(string $accountHolder): self
+    public function setAccountHolder($accountHolder): self
     {
         $this->accountHolder = $accountHolder;
         return $this;
@@ -407,6 +411,25 @@ class HirePurchaseDirectDebit extends BasePaymentType
     public function setLastRate(float $lastRate): HirePurchaseDirectDebit
     {
         $this->lastRate = $lastRate;
+        return $this;
+    }
+
+    /**
+     * @return InstalmentPlans
+     */
+    public function getPlans(): InstalmentPlans
+    {
+        return $this->plans;
+    }
+
+    /**
+     * @param InstalmentPlans $plans
+     *
+     * @return HirePurchaseDirectDebit
+     */
+    public function setPlans(InstalmentPlans $plans): HirePurchaseDirectDebit
+    {
+        $this->plans = $plans;
         return $this;
     }
 
