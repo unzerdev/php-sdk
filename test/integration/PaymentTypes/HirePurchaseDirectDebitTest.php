@@ -43,7 +43,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function instalmentPlansShouldBeSelectable()
+    public function instalmentPlanShouldBeSelectable()
     {
         $plans = $this->heidelpay->fetchHirePurchaseDirectDebitInstalmentPlans(123.40, 'EUR', 4.99);
         $this->assertGreaterThan(0, count($plans->getPlans()));
@@ -54,8 +54,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
 
         $authorize = $hdd->authorize(123.4, 'EUR', self::RETURN_URL, $this->getMaximumCustomer(), null, null, $this->createBasket());
-//        $payment = $authorize->getPayment();
-//        $payment->charge();
+        $payment = $authorize->getPayment();
+        $payment->charge();
     }
 
     /**
