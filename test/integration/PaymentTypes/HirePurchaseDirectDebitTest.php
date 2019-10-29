@@ -25,12 +25,13 @@
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
+use DateInterval;
+use DateTime;
+use Exception;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\InstalmentPlan;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use RuntimeException;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
@@ -45,94 +46,33 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      */
     public function instalmentPlanShouldBeSelectable()
     {
-        $plans = $this->heidelpay->fetchHirePurchaseDirectDebitInstalmentPlans(123.40, 'EUR', 4.99);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[1];
         $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
         $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
-
-        $authorize = $hdd->authorize(123.4, 'EUR', self::RETURN_URL, $this->getMaximumCustomer(), null, null, $this->createBasket());
-        $payment = $authorize->getPayment();
-        $payment->charge();
     }
 
     /**
-     * Verify hire purchase direct debit can be created with mandatory fields only.
+     * Verify fetching instalment plans.
      *
      * @test
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
-     * @throws \Exception
      */
-    public function hirePurchaseDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
+    public function instalmentPlanSelectionWithAllFieldsSet()
     {
-        /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
-        $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
+        $yesterday = (new DateTime())->add(DateInterval::createFromDateString('yesterday'));
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99, $yesterday);
+        $this->assertGreaterThan(0, count($plans->getPlans()));
 
-        $hirePurchaseDirectDebit = $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
-        $this->assertInstanceOf(HirePurchaseDirectDebit::class, $hirePurchaseDirectDebit);
-        $this->assertNotNull($hirePurchaseDirectDebit->getId());
-
-        /** @var HirePurchaseDirectDebit $fetchedHirePurchaseDirectDebit */
-        $fetchedHirePurchaseDirectDebit = $this->heidelpay->fetchPaymentType($hirePurchaseDirectDebit->getId());
-        $this->assertEquals($hirePurchaseDirectDebit->expose(), $fetchedHirePurchaseDirectDebit->expose());
-    }
-
-    /**
-     * Verify hire purchase direct debit can be created.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @throws \Exception
-     */
-    public function hirePurchaseDirectDebitShouldBeCreatable()
-    {
-        /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
-        $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
-        $hirePurchaseDirectDebit->setOrderDate($this->getCurrentDateString());
-        $hirePurchaseDirectDebit = $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
-        $this->assertInstanceOf(HirePurchaseDirectDebit::class, $hirePurchaseDirectDebit);
-        $this->assertNotNull($hirePurchaseDirectDebit->getId());
-
-        /** @var HirePurchaseDirectDebit $fetchedHirePurchaseDirectDebit */
-        $fetchedHirePurchaseDirectDebit = $this->heidelpay->fetchPaymentType($hirePurchaseDirectDebit->getId());
-        $this->assertInstanceOf(HirePurchaseDirectDebit::class, $fetchedHirePurchaseDirectDebit);
-        $this->assertEquals($hirePurchaseDirectDebit->expose(), $fetchedHirePurchaseDirectDebit->expose());
-    }
-
-    /**
-     * Verify charge is not allowed for hire purchase direct debit.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @throws Exception
-     * @throws \Exception
-     */
-    public function hirePurchaseDirectDebitShouldProhibitCharge()
-    {
-        /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
-        $hirePurchaseDirectDebit = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly();
-        $hirePurchaseDirectDebit->setOrderDate('2011-04-12');
-        $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED);
-
-        $this->heidelpay->charge(
-            100.38,
-            'EUR',
-            $hirePurchaseDirectDebit,
-            self::RETURN_URL,
-            $this->getMaximumCustomer(),
-            null,
-            null,
-            $this->createBasket()
-            );
+        /** @var InstalmentPlan $selectedPlan */
+        $selectedPlan = $plans->getPlans()[1];
+        $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX');
+        $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
     }
 
     /**
@@ -142,10 +82,18 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
-     * @throws \Exception
+     * @throws Exception
      */
     public function hirePurchaseDirectDebitShouldAllowAuthorize()
     {
+        /** @var InstalmentPlan $plan */
+        $plan = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99)->getPlans()[1];
+        $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($plan, 'DE46940594210000012345', 'Manuel Weißmann');
+
+        $authorize = $hdd->authorize(123.4, 'EUR', self::RETURN_URL, $this->getMaximumCustomer(), null, null, $this->createBasket());
+        $payment = $authorize->getPayment();
+        $payment->charge();
+
         /** @var HirePurchaseDirectDebit $hdd */
         $hdd = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly()->setOrderDate('2011-04-12');
 
@@ -180,30 +128,6 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
 //        );
 //    }
 
-    //<editor-fold desc="Helper">
 
-    /**
-     * @return HirePurchaseDirectDebit
-     *
-     * @throws \Exception
-     */
-    private function getHirePurchaseDirectDebitWithMandatoryFieldsOnly(): HirePurchaseDirectDebit
-    {
-        /** @var HirePurchaseDirectDebit $hirePurchaseDirectDebit */
-        $hirePurchaseDirectDebit = new HirePurchaseDirectDebit('DE89370400440532013000', '', 'Max Mustermann');
-        $hirePurchaseDirectDebit->setNumberOfRates(3)
-            ->setDayOfPurchase($this->getCurrentDateString())
-            ->setTotalPurchaseAmount(100.19)
-            ->setTotalInterestAmount(0.74)
-            ->setTotalAmount(100.93)
-            ->setEffectiveInterestRate(4.5)
-            ->setNominalInterestRate(4.44)
-            ->setFeeFirstRate(0)
-            ->setFeePerRate(0)
-            ->setMonthlyRate(33.65)
-            ->setLastRate(33.63);
-        return $hirePurchaseDirectDebit;
-    }
 
-    //</editor-fold>
 }

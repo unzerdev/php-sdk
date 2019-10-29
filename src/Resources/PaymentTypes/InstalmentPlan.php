@@ -26,6 +26,7 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
+use DateTime;
 use heidelpayPHP\Traits\CanAuthorize;
 use stdClass;
 
@@ -125,13 +126,13 @@ class InstalmentPlan extends BasePaymentType
     }
 
     /**
-     * @param string|null $orderDate
+     * @param DateTime|string|null $orderDate
      *
      * @return $this
      */
     public function setOrderDate($orderDate): self
     {
-        $this->orderDate = $orderDate;
+        $this->orderDate = $orderDate instanceof DateTime ? $orderDate->format('Y-m-d') : $orderDate;
         return $this;
     }
 

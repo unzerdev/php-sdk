@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
+use DateTime;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use stdClass;
@@ -42,18 +43,23 @@ class InstalmentPlans extends AbstractHeidelpayResource
     /** var stdClass[] $plans */
     private $plans = [];
 
+    /** @var string|null */
+    private $orderDate;
+
     /**
      * InstalmentPlans constructor.
      *
-     * @param float  $amount
-     * @param string $currency
-     * @param float  $effectiveInterest
+     * @param float         $amount
+     * @param string        $currency
+     * @param float         $effectiveInterest
+     * @param DateTime|null $orderDate
      */
-    public function __construct(float $amount, string $currency, float $effectiveInterest)
+    public function __construct(float $amount, string $currency, float $effectiveInterest, DateTime $orderDate = null)
     {
         $this->amount = $amount;
         $this->currency = $currency;
         $this->effectiveInterest = $effectiveInterest;
+        $this->setOrderDate($orderDate);
     }
 
     //<editor-fold desc="Getters / Setters">
@@ -134,6 +140,24 @@ class InstalmentPlans extends AbstractHeidelpayResource
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getOrderDate()
+    {
+        return $this->orderDate;
+    }
+
+    /**
+     * @param string|DateTime|null $orderDate
+     * @return InstalmentPlans
+     */
+    public function setOrderDate($orderDate): InstalmentPlans
+    {
+        $this->orderDate = $orderDate instanceof DateTime ? $orderDate->format('Y-m-d') : $orderDate;
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
@@ -149,6 +173,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
         $parameters['amount'] = $this->getAmount();
         $parameters['currency'] = $this->getCurrency();
         $parameters['effectiveInterest'] = $this->getEffectiveInterest();
+        $parameters['orderDate'] = $this->getOrderDate();
         return $parameters;
     }
 

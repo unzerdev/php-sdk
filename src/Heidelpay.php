@@ -1313,14 +1313,15 @@ class Heidelpay implements HeidelpayParentInterface
      * @param $currency
      * @param $effectiveInterest
      *
+     * @param DateTime|null $orderDate
      * @return InstalmentPlans
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchHirePurchaseDirectDebitInstalmentPlans($amount, $currency, $effectiveInterest): InstalmentPlans
+    public function fetchDirectDebitInstalmentPlans($amount, $currency, $effectiveInterest, DateTime $orderDate = null): InstalmentPlans
     {
-        return $this->getPaymentService()->hirePurchaseDirectDebit($amount, $currency, $effectiveInterest);
+        return $this->getPaymentService()->hirePurchaseDirectDebit($amount, $currency, $effectiveInterest, $orderDate);
     }
 
     /**

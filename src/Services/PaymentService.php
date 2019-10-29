@@ -581,15 +581,16 @@ class PaymentService
      * @param $currency
      * @param $effectiveInterest
      *
+     * @param DateTime|null $orderDate
      * @return InstalmentPlans|AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function hirePurchaseDirectDebit($amount, $currency, $effectiveInterest): InstalmentPlans
+    public function hirePurchaseDirectDebit($amount, $currency, $effectiveInterest, DateTime $orderDate = null): InstalmentPlans
     {
         $hdd = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
-        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest))->setParentResource($hdd);
+        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
         return $this->heidelpay->getResourceService()->fetch($plans);
     }
 
@@ -615,10 +616,10 @@ class PaymentService
         string $bic = null
     ): HirePurchaseDirectDebit {
         $hdd = new HirePurchaseDirectDebit($iban, $accountHolder, $bic);
-        if ($orderDate !== null) {
+        $hdd->setParentResource($this->heidelpay)->selectInstalmentPlan($plan);
+        if ($orderDate instanceof DateTime) {
             $hdd->setOrderDate($orderDate);
         }
-        $hdd->setParentResource($this->heidelpay)->selectInstalmentPlan($plan);
         $this->resourceService->create($hdd);
         return $hdd;
     }
