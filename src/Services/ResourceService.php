@@ -62,9 +62,9 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Traits\CanRecur;
-use function is_string;
 use RuntimeException;
 use stdClass;
+use function is_string;
 
 class ResourceService
 {
@@ -619,7 +619,7 @@ class ResourceService
                 $paymentType = new InvoiceFactoring();
                 break;
             case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
-                $paymentType = new HirePurchaseDirectDebit(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                $paymentType = new HirePurchaseDirectDebit(null, null, null);
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');
