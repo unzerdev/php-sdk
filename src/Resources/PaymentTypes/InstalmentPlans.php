@@ -185,7 +185,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
         if (isset($response->entity)) {
             $plans = [];
             foreach ($response->entity as $plan) {
-                $instalment = new InstallmentPlan();
+                $instalment = new InstalmentPlan();
                 $instalment->handleResponse($plan);
                 $plans[] = $instalment;
             }

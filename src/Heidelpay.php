@@ -25,6 +25,7 @@
  */
 namespace heidelpayPHP;
 
+use DateTime;
 use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
@@ -36,6 +37,9 @@ use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use heidelpayPHP\Resources\PaymentTypes\InstalmentPlan;
+use heidelpayPHP\Resources\PaymentTypes\InstalmentPlans;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -50,6 +54,7 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\Validators\PrivateKeyValidator;
 use RuntimeException;
+use stdClass;
 
 class Heidelpay implements HeidelpayParentInterface
 {
@@ -98,7 +103,7 @@ class Heidelpay implements HeidelpayParentInterface
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
         $this->webhookService  = new WebhookService($this);
-        $this->httpService = new HttpService();
+        $this->httpService     = new HttpService();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -1248,7 +1253,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     //</editor-fold>
-    //</editor-fold>
+
+    //<editor-fold desc="PayPage">
 
     /**
      * @param Paypage       $paypage
@@ -1295,6 +1301,55 @@ class Heidelpay implements HeidelpayParentInterface
             $metadata
         );
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Hire Purchase (Flexipay Rate)">
+
+    /**
+     * Returns available hire purchase direct debit instalment plans for the given values.
+     *
+     * @param $amount
+     * @param $currency
+     * @param $effectiveInterest
+     *
+     * @return InstalmentPlans
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchHirePurchaseDirectDebitInstalmentPlans($amount, $currency, $effectiveInterest): InstalmentPlans
+    {
+        return $this->getPaymentService()->hirePurchaseDirectDebit($amount, $currency, $effectiveInterest);
+    }
+
+    /**
+     * Select the given plan create the payment method resource and perform the initializing authorization.
+     *
+     * @param InstalmentPlan|stdClass $plan
+     * @param string                  $iban
+     * @param string                  $accountHolder
+     * @param DateTime|null           $orderDate
+     * @param string|null             $bic
+     *
+     * @return HirePurchaseDirectDebit
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function selectDirectDebitInstalmentPlan(
+        $plan,
+        string $iban,
+        string $accountHolder,
+        DateTime $orderDate = null,
+        string $bic = null
+    ): HirePurchaseDirectDebit {
+        return $this->getPaymentService()->selectDirectDebitInstalmentPlan($plan, $iban, $accountHolder, $orderDate, $bic);
+    }
+
+    //</editor-fold>
+
+    //</editor-fold>
 
     //<editor-fold desc="Helpers">
 

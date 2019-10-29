@@ -29,7 +29,7 @@ namespace heidelpayPHP\Resources\PaymentTypes;
 use heidelpayPHP\Traits\CanAuthorize;
 use stdClass;
 
-class InstallmentPlan extends BasePaymentType
+class InstalmentPlan extends BasePaymentType
 {
     use CanAuthorize;
 
@@ -373,9 +373,10 @@ class InstallmentPlan extends BasePaymentType
 
     /**
      * @param stdClass[] $rates
-     * @return InstallmentPlan
+     *
+     * @return InstalmentPlan
      */
-    public function setRates(array $rates): InstallmentPlan
+    public function setRates(array $rates): InstalmentPlan
     {
         $this->rates = $rates;
         return $this;

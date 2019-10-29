@@ -25,8 +25,9 @@
 namespace heidelpayPHP\Resources\PaymentTypes;
 
 use heidelpayPHP\Traits\CanAuthorize;
+use stdClass;
 
-class HirePurchaseDirectDebit extends InstallmentPlan
+class HirePurchaseDirectDebit extends InstalmentPlan
 {
     use CanAuthorize;
 
@@ -41,16 +42,30 @@ class HirePurchaseDirectDebit extends InstallmentPlan
 
     /**
      * @param string $iban
-     * @param string $bic
      * @param string $accountHolder
+     * @param string $bic
      */
-    public function __construct($iban, $bic, $accountHolder)
+    public function __construct($iban, $accountHolder, $bic = null)
     {
         parent::__construct();
 
         $this->iban          = $iban;
         $this->bic           = $bic;
         $this->accountHolder = $accountHolder;
+    }
+
+    /**
+     * Updates the plan of this object with the information from the given instalment plan.
+     *
+     * @param InstalmentPlan|stdClass $plan
+     *
+     * @return $this
+     */
+    public function selectInstalmentPlan($plan): self
+    {
+        $data = $plan instanceof InstalmentPlan ? (object)$plan->expose() : $plan;
+        $this->handleResponse($data);
+        return $this;
     }
 
     //<editor-fold desc="Getters/Setters">
