@@ -22,9 +22,10 @@
  *
  * @package  heidelpayPHP/resources
  */
-namespace heidelpayPHP\Resources;
+namespace heidelpayPHP\Resources\PaymentTypes;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use stdClass;
 
 class InstalmentPlans extends AbstractHeidelpayResource
@@ -54,6 +55,8 @@ class InstalmentPlans extends AbstractHeidelpayResource
         $this->currency = $currency;
         $this->effectiveInterest = $effectiveInterest;
     }
+
+    //<editor-fold desc="Getters / Setters">
 
     /**
      * @return float
@@ -131,6 +134,8 @@ class InstalmentPlans extends AbstractHeidelpayResource
         return $this;
     }
 
+    //</editor-fold>
+
     //<editor-fold desc="Overridable methods">
 
     /**
@@ -176,8 +181,15 @@ class InstalmentPlans extends AbstractHeidelpayResource
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         parent::handleResponse($response, $method);
+
         if (isset($response->entity)) {
-            $this->plans = $response->entity;
+            $plans = [];
+            foreach ($response->entity as $plan) {
+                $instalment = new InstallmentPlan();
+                $instalment->handleResponse($plan);
+                $plans[] = $instalment;
+            }
+            $this->plans = $plans;
         }
     }
 

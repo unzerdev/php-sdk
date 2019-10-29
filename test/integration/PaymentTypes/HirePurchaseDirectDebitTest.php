@@ -27,8 +27,9 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use heidelpayPHP\Resources\PaymentTypes\InstallmentPlan;
+use heidelpayPHP\Resources\PaymentTypes\InstalmentPlans;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
@@ -46,7 +47,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
     public function instalmentPlansShouldBeSelectable()
     {
         // HirePurchaseDD wird lokal angelegt
-        $hdd = (new HirePurchaseDirectDebit(null, null, null, null, null, null, null, null, null, null, null, null, null, null))->setParentResource($this->heidelpay);
+        $hdd = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
 
         // Hire Purchase hat ein Child Plans
         $plans = (new InstalmentPlans(123.40, 'EUR', 4.99))->setParentResource($hdd);
@@ -56,14 +57,12 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         // Dann wird der gewünschte plan mit handleResponse
+        /** @var InstallmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[1];
-        $hdd->handleResponse($selectedPlan);
-
-        foreach ($hdd->expose() as $key => $value) {
-            $this->assertEquals($value, $selectedPlan->$key);
-        }
+        $hdd->handleResponse(json_decode($selectedPlan->jsonSerialize(), false));
 
         $hdd->setIban('DE46940594210000012345')->setAccountHolder('Manuel Weißmann');
+        $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
 
         /** @var HirePurchaseDirectDebit $hdd */
         $hdd = $this->heidelpay->createPaymentType($hdd);
