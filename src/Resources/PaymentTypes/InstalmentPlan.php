@@ -27,12 +27,12 @@
 namespace heidelpayPHP\Resources\PaymentTypes;
 
 use DateTime;
-use heidelpayPHP\Traits\CanAuthorize;
+use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
 use stdClass;
 
 class InstalmentPlan extends BasePaymentType
 {
-    use CanAuthorize;
+    use CanAuthorizeWithCustomer;
 
     /** @var string $orderDate */
     protected $orderDate;

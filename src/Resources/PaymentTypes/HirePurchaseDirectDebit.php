@@ -24,13 +24,10 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanAuthorize;
 use stdClass;
 
 class HirePurchaseDirectDebit extends InstalmentPlan
 {
-    use CanAuthorize;
-
     /** @var string $iban */
     protected $iban;
 
