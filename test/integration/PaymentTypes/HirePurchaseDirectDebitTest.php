@@ -28,21 +28,32 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 use DateInterval;
 use DateTime;
 use Exception;
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
+use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\InstalmentPlan;
 use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
 use RuntimeException;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
 {
     /**
-     * Verify fetching instalment plans.
+     * Verify the following features:
+     * 1. fetching instalment plans.
+     * 2. selecting plan
+     * 3. create hp resource
+     * 4. fetch hp resource
+     * 5 test update hp resource
      *
      * @test
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
+     * @throws Exception
      */
     public function instalmentPlanShouldBeSelectable()
     {
@@ -51,9 +62,60 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[1];
+
+        /** @var HirePurchaseDirectDebit $hdd */
         $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
         $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
+
+        $fetchedHdd = $this->heidelpay->fetchPaymentType($hdd->getId());
+        $this->assertEquals($hdd->expose(), $fetchedHdd->expose());
+
+        $hdd->setIban('DE89370400440532013000')
+            ->setBic('COBADEFFXXX')
+            ->setInvoiceDate($this->getYesterdaysTimestamp())
+            ->setInvoiceDueDate($this->getTomorrowsTimestamp());
+        $updatedHdd = $this->heidelpay->updatePaymentType($hdd);
+        $this->assertEquals($hdd->expose(), $updatedHdd->expose());
     }
+
+    /**
+     * Verify Hire Purchase direct debit authorization (positive and negative).
+     *
+     * @test
+     * @dataProvider CustomerRankingDataProvider
+     *
+     * @param $firstname
+     * @param $lastname
+     * @param $errorCode
+     *
+     * @throws AssertionFailedError
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function hirePurchaseDirectDebitAuthorize($firstname, $lastname, $errorCode)
+    {
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99);
+        $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($plans->getPlans()[1], 'DE46940594210000012345', 'Manuel Weißmann');
+
+        $customer = $this->getCustomer()->setFirstname($firstname)->setLastname($lastname);
+        $basket = $this->createBasket();
+
+        try {
+            $authorize = $hdd->authorize(123.4, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+            if ($errorCode!== null) {
+                $this->assertTrue(false, 'Expected error for negative ranking test.');
+            }
+            $this->assertNotEmpty($authorize->getId());
+        } catch (HeidelpayApiException $e) {
+            if ($errorCode !== null) {
+                $this->assertEquals($errorCode, $e->getCode());
+            } else {
+                $this->assertTrue(false, "No error expected for positive ranking test. ({$e->getCode()})");
+            }
+        }
+    }
+
+    //</editor-fold>
 
     /**
      * Verify fetching instalment plans.
@@ -62,10 +124,11 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
+     * @throws Exception
      */
     public function instalmentPlanSelectionWithAllFieldsSet()
     {
-        $yesterday = (new DateTime())->add(DateInterval::createFromDateString('yesterday'));
+        $yesterday = $this->getYesterdaysTimestamp();
         $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
@@ -73,35 +136,6 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $selectedPlan = $plans->getPlans()[1];
         $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX');
         $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
-    }
-
-    /**
-     * Verify Hire Purchase direct debit can be authorized.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @throws Exception
-     */
-    public function hirePurchaseDirectDebitShouldAllowAuthorize()
-    {
-        /** @var InstalmentPlan $plan */
-        $plan = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99)->getPlans()[1];
-        $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($plan, 'DE46940594210000012345', 'Manuel Weißmann');
-
-        $authorize = $hdd->authorize(123.4, 'EUR', self::RETURN_URL, $this->getMaximumCustomer(), null, null, $this->createBasket());
-        $payment = $authorize->getPayment();
-        $payment->charge();
-
-        /** @var HirePurchaseDirectDebit $hdd */
-        $hdd = $this->getHirePurchaseDirectDebitWithMandatoryFieldsOnly()->setOrderDate('2011-04-12');
-
-        $basket    = $this->createBasket();
-        $customer  = $this->getMaximumCustomer();
-        $authorize = $this->heidelpay->authorize(123.40, 'EUR', $hdd, self::RETURN_URL, $customer, null, null, $basket);
-
-        $this->assertNotEmpty($authorize->getId());
     }
 
     /**
@@ -128,6 +162,57 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
 //        );
 //    }
 
+    /**
+     * @return Customer
+     */
+    public function getCustomer(): Customer
+    {
+        $customer = CustomerFactory::createCustomer('Manuel', 'Weißmann');
+        $address = (new Address())
+            ->setStreet('Hugo-Junckers-Straße 3')
+            ->setState('DE-BO')
+            ->setZip('60386')
+            ->setCity('Frankfurt am Main')
+            ->setCountry('DE');
+        $customer
+            ->setBillingAddress($address)
+            ->setBirthDate('2000-12-12')
+            ->setEmail('manuel-weissmann@heidelpay.com');
 
+        return $customer;
+    }
 
+    /**
+     * @return array
+     */
+    public function CustomerRankingDataProvider(): array
+    {
+        return [
+            'positive' => ['Manuel', 'Weißmann', null],
+            'negative #1 - Payment guarantee' => ['Manuel', 'Zeißmann', ApiResponseCodes::SDM_ERROR_CURRENT_INSURANCE_EVENT],
+            'positive #2 - Limit exceeded' => ['Manuel', 'Leißmann', ApiResponseCodes::SDM_ERROR_LIMIT_EXCEEDED],
+            'positive #3 - Negative trait' => ['Imuel', 'Seißmann', ApiResponseCodes::SDM_ERROR_NEGATIVE_TRAIT_FOUND],
+            'positive #4 - Negative increased risk' => ['Jamuel', 'Seißmann', ApiResponseCodes::SDM_ERROR_INCREASED_RISK]
+        ];
+    }
+
+    /**
+     * @return DateTime
+     *
+     * @throws Exception
+     */
+    private function getYesterdaysTimestamp(): DateTime
+    {
+        return (new DateTime())->add(DateInterval::createFromDateString('yesterday'));
+    }
+
+    /**
+     * @return DateTime
+     *
+     * @throws Exception
+     */
+    private function getTomorrowsTimestamp(): DateTime
+    {
+        return (new DateTime())->add(DateInterval::createFromDateString('tomorrow'));
+    }
 }

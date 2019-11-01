@@ -75,4 +75,9 @@ class ApiResponseCodes
 
     const CORE_ERROR_INVALID_OR_MISSING_LOGIN                   = 'COR.100.300.600';
     const CORE_ERROR_INSURANCE_ALREADY_ACTIVATED                = 'COR.700.400.800';
+
+    const SDM_ERROR_CURRENT_INSURANCE_EVENT                     = 'SDM.CURRENT_INSURANCE_EVENT';
+    const SDM_ERROR_LIMIT_EXCEEDED                              = 'SDM.LIMIT_EXCEEDED';
+    const SDM_ERROR_NEGATIVE_TRAIT_FOUND                        = 'SDM.NEGATIVE_TRAIT_FOUND';
+    const SDM_ERROR_INCREASED_RISK                              = 'SDM.INCREASED_RISK';
 }
