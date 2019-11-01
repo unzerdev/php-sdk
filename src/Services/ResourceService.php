@@ -629,6 +629,21 @@ class ResourceService
         return $this->fetch($paymentType->setParentResource($this->heidelpay)->setId($typeId));
     }
 
+    /**
+     * Updates the PaymentType resource with the given PaymentType object.
+     *
+     * @param BasePaymentType $paymentType The PaymentType object to be updated.
+     *
+     * @return BasePaymentType|AbstractHeidelpayResource The updated PaymentType object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
+    {
+        return $this->update($paymentType);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Customer resource">

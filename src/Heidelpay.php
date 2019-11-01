@@ -518,6 +518,21 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
+     * Updates the PaymentType resource with the given PaymentType object.
+     *
+     * @param BasePaymentType $paymentType The PaymentType object to be updated.
+     *
+     * @return BasePaymentType|AbstractHeidelpayResource The updated PaymentType object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
+    {
+        return $this->resourceService->updatePaymentType($paymentType);
+    }
+
+    /**
      * Retrieves a the PaymentType object with the given Id from the API.
      *
      * @param string $typeId The Id of the PaymentType resource to be fetched.
