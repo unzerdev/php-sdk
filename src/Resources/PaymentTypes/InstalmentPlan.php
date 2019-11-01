@@ -73,6 +73,12 @@ class InstalmentPlan extends BasePaymentType
     /** @var InstalmentPlans $plans */
     protected $plans;
 
+    /** @var string $invoiceDate */
+    protected $invoiceDate;
+
+    /** @var string $invoiceDueDate */
+    protected $invoiceDueDate;
+
     /** @var stdClass[] */
     private $rates;
 
@@ -164,13 +170,13 @@ class InstalmentPlan extends BasePaymentType
     }
 
     /**
-     * @param string $dayOfPurchase
+     * @param string|DateTime|null $dayOfPurchase
      *
      * @return $this
      */
     public function setDayOfPurchase(string $dayOfPurchase): self
     {
-        $this->dayOfPurchase = $dayOfPurchase;
+        $this->dayOfPurchase = $dayOfPurchase instanceof DateTime ? $dayOfPurchase->format('Y-m-d') : $dayOfPurchase;
         return $this;
     }
 
@@ -361,6 +367,45 @@ class InstalmentPlan extends BasePaymentType
     public function setPlans(InstalmentPlans $plans): self
     {
         $this->plans = $plans;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceDate(): string
+    {
+        return $this->invoiceDate;
+    }
+
+    /**
+     * @param string|DateTime|null $invoiceDate
+     *
+     * @return InstalmentPlan
+     */
+    public function setInvoiceDate($invoiceDate): InstalmentPlan
+    {
+        $this->invoiceDate = $invoiceDate instanceof DateTime ? $invoiceDate->format('Y-m-d') : $invoiceDate;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceDueDate(): string
+    {
+        return $this->invoiceDueDate;
+    }
+
+    /**
+     * @param string|DateTime|null $invoiceDueDate
+     *
+     * @return InstalmentPlan
+     */
+    public function setInvoiceDueDate($invoiceDueDate): InstalmentPlan
+    {
+        $this->invoiceDueDate = $invoiceDueDate instanceof DateTime ?
+                $invoiceDueDate->format('Y-m-d') : $invoiceDueDate;
         return $this;
     }
 
