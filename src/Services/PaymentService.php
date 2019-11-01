@@ -580,8 +580,8 @@ class PaymentService
      * @param $amount
      * @param $currency
      * @param $effectiveInterest
-     *
      * @param DateTime|null $orderDate
+     *
      * @return InstalmentPlans|AbstractHeidelpayResource
      *
      * @throws HeidelpayApiException

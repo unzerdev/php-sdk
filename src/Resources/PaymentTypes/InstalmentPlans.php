@@ -150,6 +150,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
 
     /**
      * @param string|DateTime|null $orderDate
+     *
      * @return InstalmentPlans
      */
     public function setOrderDate($orderDate): InstalmentPlans
