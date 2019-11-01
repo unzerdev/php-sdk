@@ -86,7 +86,7 @@ class CustomerFactory
 
     /**
      * @param Address $billingAddress           The billing address is mandatory for the registered B2B customer.
-     * @param string  $commercialRegisterNumber The billing address is mandatory for the registered B2B customer.
+     * @param string  $commercialRegisterNumber The register number of the company.
      * @param string  $company                  The company name is mandatory for the registered B2B customer.
      * @param string  $commercialSector         The commercial sector is not mandatory for the registered B2B customer.
      *                                          Please refer to CompanyCommercialSectorItems.
