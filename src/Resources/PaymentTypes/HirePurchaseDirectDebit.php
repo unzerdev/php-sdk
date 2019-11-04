@@ -24,7 +24,7 @@
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
-use stdClass;
+use DateTime;
 
 class HirePurchaseDirectDebit extends InstalmentPlan
 {
@@ -38,30 +38,39 @@ class HirePurchaseDirectDebit extends InstalmentPlan
     protected $accountHolder;
 
     /**
-     * @param string $iban
-     * @param string $accountHolder
-     * @param string $bic
+     * @param InstalmentPlan|null  $selectedPlan
+     * @param null|string          $iban
+     * @param null|string          $accountHolder
+     * @param null|DateTime|string $orderDate
+     * @param null|string          $bic
+     * @param null|DateTime|string $invoiceDate
+     * @param null|DateTime|string $invoiceDueDate
      */
-    public function __construct($iban, $accountHolder, $bic = null)
+    public function __construct(InstalmentPlan $selectedPlan = null, $iban = null, $accountHolder = null, $orderDate = null, $bic = null, $invoiceDate = null, $invoiceDueDate = null)
     {
         parent::__construct();
 
         $this->iban          = $iban;
         $this->bic           = $bic;
         $this->accountHolder = $accountHolder;
+        $this->setOrderDate($orderDate);
+        $this->setInvoiceDate($invoiceDate);
+        $this->setInvoiceDueDate($invoiceDueDate);
+        $this->selectInstalmentPlan($selectedPlan);
     }
 
     /**
      * Updates the plan of this object with the information from the given instalment plan.
      *
-     * @param InstalmentPlan|stdClass $plan
+     * @param InstalmentPlan|null $plan
      *
      * @return $this
      */
     public function selectInstalmentPlan($plan): self
     {
-        $data = $plan instanceof InstalmentPlan ? (object)$plan->expose() : $plan;
-        $this->handleResponse($data);
+        if ($plan instanceof InstalmentPlan) {
+            $this->handleResponse((object)$plan->expose());
+        }
         return $this;
     }
 
