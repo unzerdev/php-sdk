@@ -13,9 +13,10 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
-use heidelpayPHP\Resources\InstalmentPlans;
+use heidelpayPHP\Resources\PaymentTypes\InstalmentPlans;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class InstalmentPlanTest extends TestCase
 {
@@ -30,11 +31,12 @@ class InstalmentPlanTest extends TestCase
      * @param float  $effectiveInterest
      *
      * @throws Exception
+     * @throws RuntimeException
      */
     public function verifyQueryString($amount, $currency, $effectiveInterest)
     {
         $plans = new InstalmentPlans($amount, $currency, $effectiveInterest);
-        $this->assertEquals("types/hire-purchase-direct-debit/plans?amount={$amount}&currency={$currency}&effectiveInterest={$effectiveInterest}", $plans->getResourcePath());
+        $this->assertEquals("plans?amount={$amount}&currency={$currency}&effectiveInterest={$effectiveInterest}", $plans->getResourcePath());
     }
 
     //<editor-fold desc="Data Providers">
