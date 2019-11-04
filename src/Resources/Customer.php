@@ -84,6 +84,8 @@ class Customer extends AbstractHeidelpayResource
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
+        $this->billingAddress = new Address();
+        $this->shippingAddress = new Address();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -242,9 +244,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return Address|null
+     * @return Address
      */
-    public function getBillingAddress()
+    public function getBillingAddress(): Address
     {
         return $this->billingAddress;
     }
@@ -261,9 +263,9 @@ class Customer extends AbstractHeidelpayResource
     }
 
     /**
-     * @return Address|null
+     * @return Address
      */
-    public function getShippingAddress()
+    public function getShippingAddress(): Address
     {
         return $this->shippingAddress;
     }
