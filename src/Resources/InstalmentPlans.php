@@ -1,6 +1,8 @@
 <?php
 /**
- * This class contains the instalment plans for payment method hire purchase (flexipay rate).
+ * Resource used to fetch instalment plans for hire purchase (flexipy rate) payment method specified as parent resource.
+ * Please use Heidelpay methods to fetch the list of instalment plans
+ * (e.g. Heidelpay::fetchDirectDebitInstalmentPlans(...)).
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -22,11 +24,10 @@
  *
  * @package  heidelpayPHP/resources
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace heidelpayPHP\Resources;
 
 use DateTime;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use stdClass;
 
 class InstalmentPlans extends AbstractHeidelpayResource

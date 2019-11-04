@@ -13,7 +13,7 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
-use heidelpayPHP\Resources\PaymentTypes\InstalmentPlans;
+use heidelpayPHP\Resources\InstalmentPlans;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

@@ -1,6 +1,6 @@
 <?php
 /**
- * todo Description
+ * Resource representing the installment plan for hire purchase (flexipay rate).
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -20,11 +20,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * todo
- *
- * @package  heidelpayPHP/
+ * @package  heidelpayPHP/resources
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace heidelpayPHP\Resources;
 
 use DateTime;
 use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
