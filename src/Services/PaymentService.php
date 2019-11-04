@@ -587,7 +587,7 @@ class PaymentService
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function hirePurchaseDirectDebit($amount, $currency, $effectiveInterest, DateTime $orderDate = null): InstalmentPlans
+    public function fetchDirectDebitInstalmentPlans($amount, $currency, $effectiveInterest, DateTime $orderDate = null): InstalmentPlans
     {
         $hdd = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
         $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
@@ -625,6 +625,6 @@ class PaymentService
     }
 
     //</editor-fold>
-    
+
     //</editor-fold>
 }

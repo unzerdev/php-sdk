@@ -37,8 +37,6 @@ use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\InstalmentPlans;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
@@ -54,7 +52,6 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\Validators\PrivateKeyValidator;
 use RuntimeException;
-use stdClass;
 
 class Heidelpay implements HeidelpayParentInterface
 {
@@ -1334,33 +1331,18 @@ class Heidelpay implements HeidelpayParentInterface
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchDirectDebitInstalmentPlans($amount, $currency, $effectiveInterest, DateTime $orderDate = null): InstalmentPlans
-    {
-        return $this->getPaymentService()->hirePurchaseDirectDebit($amount, $currency, $effectiveInterest, $orderDate);
-    }
-
-    /**
-     * Select the given plan create the payment method resource and perform the initializing authorization.
-     *
-     * @param InstalmentPlan|stdClass $plan
-     * @param string                  $iban
-     * @param string                  $accountHolder
-     * @param DateTime|null           $orderDate
-     * @param string|null             $bic
-     *
-     * @return HirePurchaseDirectDebit
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     */
-    public function selectDirectDebitInstalmentPlan(
-        $plan,
-        string $iban,
-        string $accountHolder,
-        DateTime $orderDate = null,
-        string $bic = null
-    ): HirePurchaseDirectDebit {
-        return $this->getPaymentService()->selectDirectDebitInstalmentPlan($plan, $iban, $accountHolder, $orderDate, $bic);
+    public function fetchDirectDebitInstalmentPlans(
+        $amount,
+        $currency,
+        $effectiveInterest,
+        DateTime $orderDate = null
+    ): InstalmentPlans {
+        return $this->getPaymentService()->fetchDirectDebitInstalmentPlans(
+            $amount,
+            $currency,
+            $effectiveInterest,
+            $orderDate
+        );
     }
 
     //</editor-fold>
