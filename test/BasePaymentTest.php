@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test;
 
+use DateInterval;
 use DateTime;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
@@ -169,10 +170,10 @@ class BasePaymentTest extends TestCase
     public function createBasket(): Basket
     {
         $orderId = $this->generateRandomId();
-        $basket = new Basket($orderId, 123.4, 'EUR');
+        $basket = new Basket($orderId, 100.19, 'EUR');
         $basket->setAmountTotalVat(0.19);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 123.4, 123.4, 1))
+        $basketItem = (new BasketItem('myItem', 100.0, 100.0, 1))
             ->setBasketItemReferenceId('refId')
             ->setAmountVat(0.19)
             ->setAmountGross(100.19)
@@ -280,6 +281,26 @@ class BasePaymentTest extends TestCase
     public function getCurrentDateString(): string
     {
         return (new DateTime())->format('Y-m-d');
+    }
+
+    /**
+     * @return DateTime
+     *
+     * @throws \Exception
+     */
+    public function getYesterdaysTimestamp(): DateTime
+    {
+        return (new DateTime())->add(DateInterval::createFromDateString('yesterday'));
+    }
+
+    /**
+     * @return DateTime
+     *
+     * @throws \Exception
+     */
+    public function getTomorrowsTimestamp(): DateTime
+    {
+        return (new DateTime())->add(DateInterval::createFromDateString('tomorrow'));
     }
 
     //</editor-fold>

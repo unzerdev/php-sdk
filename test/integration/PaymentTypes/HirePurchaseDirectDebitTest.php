@@ -25,22 +25,24 @@
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use DateInterval;
-use DateTime;
 use Exception;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\InstalmentPlan;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
 use RuntimeException;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
 {
+    // 6 test authorize and cancel (part/full)
+    // 8 test authorize, charge and cancel (part/full)
+    // 9 test ship
+
     /**
      * Verify the following features:
      * 1. fetching instalment plans.
@@ -57,14 +59,15 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      */
     public function instalmentPlanShouldBeSelectable()
     {
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[1];
 
         /** @var HirePurchaseDirectDebit $hdd */
-        $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
+        $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
+        $this->heidelpay->createPaymentType($hdd);
         $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
 
         $fetchedHdd = $this->heidelpay->fetchPaymentType($hdd->getId());
@@ -88,20 +91,52 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @param $lastname
      * @param $errorCode
      *
-     * @throws AssertionFailedError
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
     public function hirePurchaseDirectDebitAuthorize($firstname, $lastname, $errorCode)
     {
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99);
-        $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($plans->getPlans()[1], 'DE46940594210000012345', 'Manuel Weißmann');
+
+//        /*************** Call 1 *************/
+//        $hpPlans = new InstalmentPlans(HirePurchaseDirectDebit::class, 123.40, 'EUR', 4.99);
+//        $plans = $this->heidelpay->fetchInstalmentplans($hpPlans)->getPlans();
+//        // merchant merkt sich irgendwie alle plandaten (z.B. session)
+//        // render plans
+//        /*************** end Call 1 *************/
+//
+//        /*************** Call 2 *************/
+//        // kunde hat Plan ausgewählt
+//        // Plan daten werden aus session geladen
+//        $instalmentPlan = new InstalmentPlan($plandaten);
+//        $hdd = new HirePurchaseDirectDebit('DE46940594210000012345', 'Manuel Weißmann', $instalmentPlan);
+//        $this->heidelpay->createPaymentType($hdd);
+//        $authorize = $hdd->authorize();
+//        $id = $authorize->getPaymentId(); // speichern
+//        /*************** end Call 2 *************/
+//
+//        /*************** Call 3 *************/
+//        // kunde hat bestätigt
+//        // hole payment
+//        $payment->charge();
+//        /*************** end Call 3 *************/
+//
+//        // payment methode erzeugen
+//        $hdd = new HirePurchaseDirectDebit('DE46940594210000012345', 'Manuel Weißmann', $plans->getPlans()[1]);
+//        $this->heidelpay->createPaymentType($hdd);
+//
+        ////        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99);
+
+
+        $hpPlans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99);
+        $selectedPlan = $hpPlans->getPlans()[0];
+        $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
+        $this->heidelpay->createPaymentType($hdd);
 
         $customer = $this->getCustomer()->setFirstname($firstname)->setLastname($lastname);
         $basket = $this->createBasket();
 
         try {
-            $authorize = $hdd->authorize(123.4, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+            $authorize = $hdd->authorize(100.19, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
             if ($errorCode!== null) {
                 $this->assertTrue(false, 'Expected error for negative ranking test.');
             }
@@ -115,8 +150,6 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         }
     }
 
-    //</editor-fold>
-
     /**
      * Verify fetching instalment plans.
      *
@@ -129,38 +162,95 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
     public function instalmentPlanSelectionWithAllFieldsSet()
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(123.40, 'EUR', 4.99, $yesterday);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
-        $selectedPlan = $plans->getPlans()[1];
-        $hdd = $this->heidelpay->selectDirectDebitInstalmentPlan($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX');
+        $selectedPlan = $plans->getPlans()[0];
+        $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
+        $this->heidelpay->createPaymentType($hdd);
         $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
     }
 
     /**
-     * Verify hire purchase direct debit will throw error if addresses do not match.
+     * Verify charge.
+     *
+     * @test
+     *
+     * @return Payment
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @throws Exception
+     *
+     * @group skip
+     */
+    public function verifyChargingAnInitializedHirePurchase(): Payment
+    {
+        $yesterday = $this->getYesterdaysTimestamp();
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99, $yesterday);
+        $this->assertGreaterThan(0, count($plans->getPlans()));
+
+        /** @var InstalmentPlan $selectedPlan */
+        $selectedPlan = $plans->getPlans()[0];
+        $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
+        $this->heidelpay->createPaymentType($hdd);
+
+        $authorize = $hdd->authorize(100.19, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $payment = $authorize->getPayment();
+        $charge = $payment->charge();
+        $this->assertNotNull($charge->getId());
+
+        return $payment;
+    }
+
+    /**
+     * Verify full cancel of charged HP.
+     *
+     * @test
+     *
+     * @depends verifyChargingAnInitializedHirePurchase
+     *
+     * @param Payment $payment
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     * @group skip
+     */
+    public function verifyChargeAndFullCancelAnInitializedHirePurchase(Payment $payment)
+    {
+        $payment->cancelAmount();
+    }
+
+    /**
+     * Verify charge and ship.
      *
      * @test
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
+     * @throws Exception
+     *
+     * @group skip
      */
-//    public function hddShouldThrowErrorIfAddressesDoNotMatch()
-//    {
-//        $hirePurchaseDirectDebit = (new HirePurchaseDirectDebit('DE89370400440532013000', ));
-//        $this->heidelpay->createPaymentType($hirePurchaseDirectDebit);
-//
-//        $this->expectException(HeidelpayApiException::class);
-//        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
-//
-//        $hirePurchaseDirectDebit->charge(
-//            100.0,
-//            'EUR',
-//            self::RETURN_URL,
-//            $this->getMaximumCustomerInclShippingAddress()
-//        );
-//    }
+    public function verifyShippingAChargedHirePurchase()
+    {
+        $yesterday = $this->getYesterdaysTimestamp();
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99, $yesterday);
+
+        /** @var InstalmentPlan $selectedPlan */
+        $selectedPlan = $plans->getPlans()[0];
+        $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE89370400440532013000', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $this->getCurrentDateString(), $this->getTomorrowsTimestamp());
+        $this->heidelpay->createPaymentType($hdd);
+
+        $authorize = $hdd->authorize(100.19, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $this->createBasket());
+        $payment = $authorize->getPayment();
+        $payment->charge();
+        $shipment = $payment->ship();
+        $this->assertNotNull($shipment->getId());
+    }
+
+    //<editor-fold desc="Helper">
 
     /**
      * @return Customer
@@ -182,6 +272,10 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         return $customer;
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Data Providers">
+
     /**
      * @return array
      */
@@ -196,23 +290,5 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         ];
     }
 
-    /**
-     * @return DateTime
-     *
-     * @throws Exception
-     */
-    private function getYesterdaysTimestamp(): DateTime
-    {
-        return (new DateTime())->add(DateInterval::createFromDateString('yesterday'));
-    }
-
-    /**
-     * @return DateTime
-     *
-     * @throws Exception
-     */
-    private function getTomorrowsTimestamp(): DateTime
-    {
-        return (new DateTime())->add(DateInterval::createFromDateString('tomorrow'));
-    }
+    //</editor-fold>
 }
