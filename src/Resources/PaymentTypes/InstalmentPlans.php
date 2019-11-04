@@ -49,15 +49,19 @@ class InstalmentPlans extends AbstractHeidelpayResource
     /**
      * InstalmentPlans constructor.
      *
-     * @param float         $amount
-     * @param string        $currency
-     * @param float         $effectiveInterest
-     * @param DateTime|null $orderDate
+     * @param float                $amount
+     * @param string               $currency
+     * @param float                $effectiveInterest
+     * @param DateTime|string|null $orderDate
      */
-    public function __construct(float $amount, string $currency, float $effectiveInterest, DateTime $orderDate = null)
-    {
-        $this->amount = $amount;
-        $this->currency = $currency;
+    public function __construct(
+        float $amount,
+        string $currency,
+        float $effectiveInterest,
+        $orderDate = null
+    ) {
+        $this->amount            = $amount;
+        $this->currency          = $currency;
         $this->effectiveInterest = $effectiveInterest;
         $this->setOrderDate($orderDate);
     }
@@ -174,7 +178,9 @@ class InstalmentPlans extends AbstractHeidelpayResource
         $parameters['amount'] = $this->getAmount();
         $parameters['currency'] = $this->getCurrency();
         $parameters['effectiveInterest'] = $this->getEffectiveInterest();
-        $parameters['orderDate'] = $this->getOrderDate();
+        if ($this->getOrderDate() !== null) {
+            $parameters['orderDate'] = $this->getOrderDate();
+        }
         return $parameters;
     }
 
