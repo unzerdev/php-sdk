@@ -69,8 +69,6 @@ $PDFLink = $_SESSION['PDFLink'] ?? 'no link provided';
 
 <div class="ui container">
     <div class="ui attached segment">
-        <strong>External Order Id:</strong> <?php echo (string)($externalOrderId); ?><br/>
-        <strong>Reference Id:</strong> <?php echo (string)($zgReferenceId); ?><br/>
         <strong>Please download your rate plan <a href="<?php echo (string)($PDFLink); ?>">here</a></strong><br/>
     </div>
     <div class="ui bottom attached primary button" tabindex="0" onclick="location.href='PlaceOrderController.php'">Place order</div>
