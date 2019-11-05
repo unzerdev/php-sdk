@@ -57,6 +57,16 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     //<editor-fold desc="Getters/Setters">
 
     /**
+     * Returns the API name of the resource.
+     *
+     * @return string
+     */
+    public static function getResourceName(): string
+    {
+        return ResourceNameService::getClassShortNameKebapCase(static::class);
+    }
+
+    /**
      * Returns the id of this resource.
      *
      * @return string|null
@@ -391,7 +401,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     protected function getResourcePath(): string
     {
-        return ResourceNameService::getClassShortNameKebapCase(static::class);
+        return self::getResourceName();
     }
 
     /**

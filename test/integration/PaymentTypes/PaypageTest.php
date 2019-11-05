@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
@@ -133,9 +134,11 @@ class PaypageTest extends BasePaymentTest
             ->setHelpUrl('https://www.heidelpay.com/at/')
             ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
             ->setInvoiceId($invoiceId);
+        $paypage->addExcludeType(Card::getResourceName());
         $this->assertEmpty($paypage->getId());
         $paypage = $this->heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
         $this->assertNotEmpty($paypage->getId());
+        $this->assertArraySubset([Card::getResourceName()], $paypage->getExcludeTypes());
         $payment = $paypage->getPayment();
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertNotNull($payment->getId());
