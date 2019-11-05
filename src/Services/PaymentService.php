@@ -30,12 +30,12 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\InstalmentPlan;
+use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\InstalmentPlan;
-use heidelpayPHP\Resources\PaymentTypes\InstalmentPlans;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -615,8 +615,8 @@ class PaymentService
         DateTime $orderDate = null,
         string $bic = null
     ): HirePurchaseDirectDebit {
-        $hdd = new HirePurchaseDirectDebit($iban, $accountHolder, $bic);
-        $hdd->setParentResource($this->heidelpay)->selectInstalmentPlan($plan);
+        $hdd = new HirePurchaseDirectDebit($plan, $iban, $accountHolder, $bic);
+        $hdd->setParentResource($this->heidelpay);
         if ($orderDate instanceof DateTime) {
             $hdd->setOrderDate($orderDate);
         }

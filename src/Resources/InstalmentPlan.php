@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Resources;
 
 use DateTime;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
 use stdClass;
 

@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Resources\PaymentTypes;
 
 use DateTime;
+use heidelpayPHP\Resources\InstalmentPlan;
 
 class HirePurchaseDirectDebit extends InstalmentPlan
 {

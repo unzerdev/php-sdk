@@ -31,8 +31,8 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
+use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\InstalmentPlan;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
