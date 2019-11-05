@@ -31,7 +31,10 @@ use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
@@ -79,6 +82,9 @@ class PayPageTest extends BasePaymentTest
         $this->assertNull($paypage->getPrivacyPolicyUrl());
         $this->assertNull($paypage->getTermsAndConditionUrl());
 
+        // other
+        $this->assertCount(0, $paypage->getExcludeTypes());
+
         // ----------- SET test values ------------
         $payment = (new Payment())->setId('my payment id');
         $paypage
@@ -97,7 +103,8 @@ class PayPageTest extends BasePaymentTest
             ->setPrivacyPolicyUrl('my privacy policy url')
             ->setTermsAndConditionUrl('my tac url')
             ->setPayment($payment)
-            ->setRedirectUrl('https://redirect.url');
+            ->setRedirectUrl('https://redirect.url')
+            ->addExcludeType(SepaDirectDebit::getResourceName());
 
         // ----------- VERIFY test values ------------
         $this->assertEquals(321.0, $paypage->getAmount());
@@ -123,6 +130,11 @@ class PayPageTest extends BasePaymentTest
         $this->assertEquals('my imprint url', $paypage->getImprintUrl());
         $this->assertEquals('my privacy policy url', $paypage->getPrivacyPolicyUrl());
         $this->assertEquals('my tac url', $paypage->getTermsAndConditionUrl());
+
+        // other
+        $this->assertArraySubset([SepaDirectDebit::getResourceName()], $paypage->getExcludeTypes());
+        $paypage->setExcludeTypes([Card::getResourceName(), Giropay::getResourceName()]);
+        $this->assertArraySubset([Card::getResourceName(), Giropay::getResourceName()], $paypage->getExcludeTypes());
     }
 
     /**

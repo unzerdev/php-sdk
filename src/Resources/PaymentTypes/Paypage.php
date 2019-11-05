@@ -92,6 +92,9 @@ class Paypage extends BasePaymentType
     /** @var Payment|null $payment */
     private $payment;
 
+    /** @var string[] $excludeTypes */
+    protected $excludeTypes = [];
+
     /**
      * Paypage constructor.
      *
@@ -467,6 +470,44 @@ class Paypage extends BasePaymentType
         }
 
         return null;
+    }
+
+    /**
+     * Returns an array of payment types not shown on the paypage.
+     *
+     * @return string[]
+     */
+    public function getExcludeTypes(): array
+    {
+        return $this->excludeTypes;
+    }
+
+    /**
+     * Sets array of payment types not shown on the paypage.
+     *
+     * @param string[] $excludeTypes
+     *
+     * @return Paypage
+     */
+    public function setExcludeTypes(array $excludeTypes): Paypage
+    {
+        $this->excludeTypes = $excludeTypes;
+        return $this;
+    }
+
+    /**
+     * Adds a payment type to the array of excluded payment types.
+     *
+     * @param string $excludeType The API name of the payment type resource that should not be shown on the paypage.
+     *                            It can be retrieved by calling the static function `getResourceName` on the payment
+     *                            type class e.g. Card::getResourceName().
+     *
+     * @return Paypage
+     */
+    public function addExcludeType(string $excludeType): Paypage
+    {
+        $this->excludeTypes[] = $excludeType;
+        return $this;
     }
 
     //</editor-fold>
