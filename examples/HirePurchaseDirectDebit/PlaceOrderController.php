@@ -1,7 +1,7 @@
 <?php
 /**
- * This is the controller for the hire purchase direct debit example.
- * It is called when the pay button on the index page is clicked.
+ * This is a the controller for the hire purchase direct debit example.
+ * It is called when the instalment plan is confirmed and places the order.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -34,14 +34,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 
 session_start();
-session_unset();
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
@@ -54,11 +48,11 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
-// You will need the id of the payment type created in the frontend (index.php)
-if (!isset($_POST['paymentTypeId'])) {
-    redirect(FAILURE_URL, 'Payment type id is missing!', $clientMessage);
+// You will need the id of the payment to charge it
+$paymentId = $_SESSION['PaymentId'] ?? null;
+if ($paymentId === null) {
+    redirect(FAILURE_URL, 'Payment id is missing!', $clientMessage);
 }
-$paymentTypeId   = $_POST['paymentTypeId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 /** @noinspection BadExceptionsProcessingInspection */
@@ -67,53 +61,14 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Use the quote or order id from your shop
-    $orderId = str_replace(['0.', ' '], '', microtime(false));
+    $payment = $heidelpay->fetchPayment($paymentId);
+    $charge = $payment->charge();
 
-    /** @var HirePurchaseDirectDebit $paymentType */
-    $paymentType = $heidelpay->fetchPaymentType($paymentTypeId);
-
-    // A customer with matching addresses is mandatory for Invoice Factoring payment type
-    $address  = (new Address())
-        ->setName('Linda Heideich')
-        ->setStreet('Vangerowstr. 18')
-        ->setCity('Heidelberg')
-        ->setZip('69155')
-        ->setCountry('DE');
-    $customer = (new Customer('Linda', 'Heideich'))
-        ->setBirthDate('2000-02-12')
-        ->setBillingAddress($address)
-        ->setShippingAddress($address)
-        ->setEmail('linda.heideich@test.de');
-
-    // A Basket is mandatory for SEPA direct debit guaranteed payment type
-    $basketItem = (new BasketItem('Hat', 100.00, 100.00, 1))
-        ->setAmountNet(100.0)
-        ->setAmountGross(100.19)
-        ->setAmountVat(0.19);
-    $basket = (new Basket($orderId, 100.19, 'EUR', [$basketItem]))
-        ->setAmountTotalVat(0.19);
-
-    // initialize the payment
-    $authorize = $heidelpay->authorize(
-        $paymentType->getTotalPurchaseAmount(),
-        'EUR',
-        $paymentType,
-        CONTROLLER_URL,
-        $customer,
-        $orderId,
-        null,
-        $basket);
-
-    // You'll need to remember the shortId to show it on the success or failure page
-    $_SESSION['PaymentId'] = $authorize->getPaymentId();
-    $_SESSION['externalOrderId'] = $authorize->getExternalOrderId();
-    $_SESSION['zgReferenceId'] = $authorize->getZgReferenceId();
-    $_SESSION['PDFLink'] = $authorize->getPDFLink();
+    $_SESSION['ShortId'] = $charge->getShortId();
 
     // Redirect to the success or failure depending on the state of the transaction
-    if ($authorize->isSuccess()) {
-        redirect(CONFIRM_URL);
+    if ($charge->isSuccess()) {
+        redirect(SUCCESS_URL);
     }
 
     // Check the result message of the transaction to find out what went wrong.

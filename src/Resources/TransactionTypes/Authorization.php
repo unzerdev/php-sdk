@@ -50,6 +50,15 @@ class Authorization extends AbstractTransactionType
     /** @var string $paymentReference */
     protected $paymentReference;
 
+    /** @var string $externalOrderId*/
+    private $externalOrderId;
+
+    /** @var string $zgReferenceId*/
+    private $zgReferenceId;
+
+    /** @var string $PDFLink*/
+    private $PDFLink;
+
     /**
      * Authorization constructor.
      *
@@ -174,6 +183,60 @@ class Authorization extends AbstractTransactionType
     public function setPaymentReference($paymentReference): Authorization
     {
         $this->paymentReference = $paymentReference;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExternalOrderId(): string
+    {
+        return $this->externalOrderId;
+    }
+
+    /**
+     * @param string $externalOrderId
+     * @return Authorization
+     */
+    protected function setExternalOrderId(string $externalOrderId): Authorization
+    {
+        $this->externalOrderId = $externalOrderId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZgReferenceId(): string
+    {
+        return $this->zgReferenceId;
+    }
+
+    /**
+     * @param string $zgReferenceId
+     * @return Authorization
+     */
+    protected function setZgReferenceId(string $zgReferenceId): Authorization
+    {
+        $this->zgReferenceId = $zgReferenceId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPDFLink(): string
+    {
+        return $this->PDFLink;
+    }
+
+    /**
+     * @param string $PDFLink
+     * @return Authorization
+     */
+    protected function setPDFLink(string $PDFLink): Authorization
+    {
+        $this->PDFLink = $PDFLink;
         return $this;
     }
 
