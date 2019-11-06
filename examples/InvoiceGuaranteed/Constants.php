@@ -25,6 +25,5 @@
 
 require_once __DIR__ . '/../Constants.php';
 
-define('EXAMPLE_PATH', __DIR__);
 define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'InvoiceGuaranteed');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
