@@ -250,11 +250,11 @@ class BasePaymentTest extends TestCase
     /**
      * Creates and returns an order id.
      *
-     * @return float
+     * @return string
      */
-    public function generateRandomId(): float
+    public function generateRandomId(): string
     {
-        return (string)microtime(true);
+        return str_replace('.', '', microtime(true));
     }
 
     //</editor-fold>

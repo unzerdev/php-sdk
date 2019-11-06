@@ -37,19 +37,15 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @test
      *
-     * @return InvoiceGuaranteed
-     *
      * @throws RuntimeException
      * @throws HeidelpayApiException
      */
-    public function invoiceGuaranteedTypeShouldBeCreatable(): InvoiceGuaranteed
+    public function invoiceGuaranteedTypeShouldBeCreatable()
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
         $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $this->assertInstanceOf(InvoiceGuaranteed::class, $invoiceGuaranteed);
         $this->assertNotNull($invoiceGuaranteed->getId());
-
-        return $invoiceGuaranteed;
     }
 
     /**
@@ -57,14 +53,13 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @test
      *
-     * @param InvoiceGuaranteed $invoiceGuaranteed
-     *
      * @throws RuntimeException
      * @throws HeidelpayApiException
-     * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
-    public function verifyInvoiceGuaranteedShipment(InvoiceGuaranteed $invoiceGuaranteed)
+    public function verifyInvoiceGuaranteedShipment()
     {
+        /** @var InvoiceGuaranteed $invoiceGuaranteed */
+        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
         $charge   = $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
         $this->assertTransactionResourceHasBeenCreated($charge);
@@ -83,14 +78,13 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @test
      *
-     * @param InvoiceGuaranteed $invoiceGuaranteed
-     *
      * @throws RuntimeException
      * @throws HeidelpayApiException
-     * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
-    public function verifyInvoiceGuaranteedCanBeChargedAndCancelled(InvoiceGuaranteed $invoiceGuaranteed)
+    public function verifyInvoiceGuaranteedCanBeChargedAndCancelled()
     {
+        /** @var InvoiceGuaranteed $invoiceGuaranteed */
+        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
         $charge   = $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
         $this->assertPending($charge);
@@ -104,14 +98,13 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @test
      *
-     * @param InvoiceGuaranteed $invoiceGuaranteed
-     *
      * @throws RuntimeException
      * @throws HeidelpayApiException
-     * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
-    public function invoiceGuaranteedTypeCanBeFetched(InvoiceGuaranteed $invoiceGuaranteed)
+    public function invoiceGuaranteedTypeCanBeFetched()
     {
+        /** @var InvoiceGuaranteed $invoiceGuaranteed */
+        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $fetchedInvoiceGuaranteed = $this->heidelpay->fetchPaymentType($invoiceGuaranteed->getId());
         $this->assertInstanceOf(InvoiceGuaranteed::class, $fetchedInvoiceGuaranteed);
         $this->assertEquals($invoiceGuaranteed->getId(), $fetchedInvoiceGuaranteed->getId());
@@ -122,14 +115,13 @@ class InvoiceGuaranteedTest extends BasePaymentTest
      *
      * @test
      *
-     * @param InvoiceGuaranteed $invoiceGuaranteed
-     *
      * @throws RuntimeException
      * @throws HeidelpayApiException
-     * @depends invoiceGuaranteedTypeShouldBeCreatable
      */
-    public function ivgShouldThrowErrorIfAddressesDoNotMatch(InvoiceGuaranteed $invoiceGuaranteed)
+    public function ivgShouldThrowErrorIfAddressesDoNotMatch()
     {
+        /** @var InvoiceGuaranteed $invoiceGuaranteed */
+        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
 
