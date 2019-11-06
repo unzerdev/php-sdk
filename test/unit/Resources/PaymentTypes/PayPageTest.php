@@ -416,7 +416,7 @@ class PayPageTest extends BasePaymentTest
             'GET' => [HttpAdapterInterface::REQUEST_GET, 0],
             'PUT' => [HttpAdapterInterface::REQUEST_PUT, 1],
             'DELETE' => [HttpAdapterInterface::REQUEST_DELETE, 1],
-            'POST' => [HttpAdapterInterface::REQUEST_POST, 1],
+            'POST' => [HttpAdapterInterface::REQUEST_POST, 1]
         ];
     }
 
