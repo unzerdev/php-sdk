@@ -403,7 +403,7 @@ class PaymentCancelTest extends BaseUnitTest
         return [
             'already cancelled' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
             'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
-            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION, true]
+            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL, true]
         ];
     }
 
@@ -415,7 +415,7 @@ class PaymentCancelTest extends BaseUnitTest
         return [
             'already cancelled' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
             'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CHARGED, false],
-            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION, true]
+            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL, true]
         ];
     }
 
