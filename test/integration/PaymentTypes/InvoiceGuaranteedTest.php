@@ -127,4 +127,30 @@ class InvoiceGuaranteedTest extends BasePaymentTest
 
         $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $this->getMaximumCustomerInclShippingAddress());
     }
+
+    /**
+     * Verify invoice guaranteed invoiceId can be set during charge and shipment.
+     * Verify the invoiceId set during shipping overrides the previously set invoiceId.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function verifyInvoiceIdInShipmentWillOverrideTheOneFromCharge()
+    {
+        /** @var InvoiceGuaranteed $invoiceGuaranteed */
+        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
+        $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+
+        $invoiceId  = $this->generateRandomId();
+        $charge     = $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer, null, null, null, null, $invoiceId);
+        $chargeInvoiceId = $charge->getPayment()->getInvoiceId();
+
+        $newInvoiceId = $invoiceId . 'X';
+        $shipment = $this->heidelpay->ship($charge->getPayment(), $newInvoiceId);
+        $shipmentInvoiceId = $shipment->getPayment()->getInvoiceId();
+
+        $this->assertNotEquals($chargeInvoiceId, $shipmentInvoiceId);
+    }
 }

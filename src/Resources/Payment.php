@@ -40,6 +40,7 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\IdService;
+use heidelpayPHP\Traits\HasInvoiceId;
 use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasPaymentState;
 use RuntimeException;
@@ -50,6 +51,7 @@ class Payment extends AbstractHeidelpayResource
 {
     use HasPaymentState;
     use HasOrderId;
+    use HasInvoiceId;
 
     /** @var string $redirectUrl */
     private $redirectUrl;
