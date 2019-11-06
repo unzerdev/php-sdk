@@ -196,6 +196,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $externalOrderId
+     *
      * @return Authorization
      */
     protected function setExternalOrderId(string $externalOrderId): Authorization
@@ -214,6 +215,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $zgReferenceId
+     *
      * @return Authorization
      */
     protected function setZgReferenceId(string $zgReferenceId): Authorization
@@ -232,6 +234,7 @@ class Authorization extends AbstractTransactionType
 
     /**
      * @param string $PDFLink
+     *
      * @return Authorization
      */
     protected function setPDFLink(string $PDFLink): Authorization
