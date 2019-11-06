@@ -68,6 +68,9 @@ class ApiResponseCodes
     const API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED            = 'API.510.310.009';
     const API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND                    = 'API.510.310.008';
     const API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL               = 'API.600.630.004';
+    /**
+     * @deprecated since 1.2.5.0 Will be removed in next major version.
+     */
     const API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION         = 'API.600.630.005';
     const API_ERROR_INVALID_KEY                                 = 'API.710.000.002';
     const API_ERROR_INSUFFICIENT_PERMISSION                     = 'API.710.000.005';
