@@ -9,7 +9,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Property invoiceId to `Payment` class.
 
 ### Changed
-*   Refactor tests to make them independent from each other.
+*   Refactor invoice guaranteed tests to make them independent from each other.
+
+### Removed
+*   API Response Code for basket item image extension error.
 
 ## [1.2.4.0][1.2.4.0]
 
