@@ -6,10 +6,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.2.5.0][1.2.5.0]
 
 ### Added
-*   Hire purchase payment type (FlexiPay Rate).
+*   Hire purchase direct debit payment type (FlexiPay Rate) including example implementation.
+*   Additional payment parameters to transactions.
+*   Facade method to update payment type
 
 ### Removed
-*   API Response Code for basket item image extension error.
+*   Unused Constants.
+
+### Changed
+*   Response Code for basket item image extension error has been deprecated since it has been removed from the API.
+*   Refactored cancellation feature to support FlexiPay Rate cancel.
+*   Remove trailing slash from routes.
+
+### Fixed
+*   Several minor issues.
 
 ## [1.2.4.0][1.2.4.0]
 
