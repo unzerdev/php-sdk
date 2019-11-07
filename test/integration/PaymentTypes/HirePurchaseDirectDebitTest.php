@@ -54,7 +54,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      */
     public function instalmentPlanShouldBeSelectable()
     {
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -91,7 +91,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      */
     public function hirePurchaseDirectDebitAuthorize($firstname, $lastname, $errorCode)
     {
-        $hpPlans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99);
+        $hpPlans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99);
         $selectedPlan = $hpPlans->getPlans()[0];
         $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
         $this->heidelpay->createPaymentType($hdd);
@@ -100,7 +100,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $basket = $this->createBasket();
 
         try {
-            $authorize = $hdd->authorize(100.19, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+            $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
             if ($errorCode!== null) {
                 $this->assertTrue(false, 'Expected error for negative ranking test.');
             }
@@ -126,7 +126,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
     public function instalmentPlanSelectionWithAllFieldsSet()
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99, $yesterday);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -150,7 +150,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
     public function verifyChargingAnInitializedHirePurchase()
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99, $yesterday);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -158,7 +158,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
         $this->heidelpay->createPaymentType($hdd);
 
-        $authorize = $hdd->authorize(100.19, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
         $payment = $authorize->getPayment();
         $charge = $payment->charge();
         $this->assertNotNull($charge->getId());
@@ -180,14 +180,14 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
     public function verifyShippingAChargedHirePurchase()
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99, $yesterday);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
         $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE89370400440532013000', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $this->getCurrentDateString(), $this->getTomorrowsTimestamp());
         $this->heidelpay->createPaymentType($hdd);
 
-        $authorize = $hdd->authorize(100.19, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $this->createBasket());
+        $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $this->createBasket());
         $payment = $authorize->getPayment();
         $payment->charge();
         $shipment = $payment->ship();
@@ -212,7 +212,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
     public function verifyChargeAndFullCancelAnInitializedHirePurchase()
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99, $yesterday);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -220,7 +220,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
         $this->heidelpay->createPaymentType($hdd);
 
-        $authorize = $hdd->authorize(100.19, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
         $payment = $authorize->getPayment();
         $payment->charge();
         $cancel = $payment->cancelAmount();
@@ -241,7 +241,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
     public function verifyPartlyCancelChargedHirePurchase()
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(100.19, 'EUR', 4.99, $yesterday);
+        $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -249,7 +249,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
         $this->heidelpay->createPaymentType($hdd);
 
-        $authorize = $hdd->authorize(100.19, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
         $payment = $authorize->getPayment();
         $payment->charge();
         $cancel = $payment->cancelAmount(50.0);

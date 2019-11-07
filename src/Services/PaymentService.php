@@ -61,7 +61,7 @@ class PaymentService
      */
     public function __construct(Heidelpay $heidelpay)
     {
-        $this->heidelpay = $heidelpay;
+        $this->heidelpay       = $heidelpay;
         $this->resourceService = $heidelpay->getResourceService();
     }
 
@@ -273,7 +273,7 @@ class PaymentService
         $invoiceId = null,
         $paymentReference = null
     ): AbstractTransactionType {
-        $payment = $this->createPayment($paymentType);
+        $payment     = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
 
         /** @var Charge $charge */
@@ -587,9 +587,13 @@ class PaymentService
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function fetchDirectDebitInstalmentPlans($amount, $currency, $effectiveInterest, DateTime $orderDate = null): InstalmentPlans
-    {
-        $hdd = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
+    public function fetchDirectDebitInstalmentPlans(
+        $amount,
+        $currency,
+        $effectiveInterest,
+        DateTime $orderDate = null
+    ): InstalmentPlans {
+        $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
         $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
         return $this->heidelpay->getResourceService()->fetch($plans);
     }

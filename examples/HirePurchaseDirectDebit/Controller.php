@@ -89,10 +89,10 @@ try {
     // A Basket is mandatory for SEPA direct debit guaranteed payment type
     $basketItem = (new BasketItem('Hat', 100.00, 100.00, 1))
         ->setAmountNet(100.0)
-        ->setAmountGross(100.19)
-        ->setAmountVat(0.19);
-    $basket = (new Basket($orderId, 100.19, 'EUR', [$basketItem]))
-        ->setAmountTotalVat(0.19);
+        ->setAmountGross(119.0)
+        ->setAmountVat(19.0);
+    $basket = (new Basket($orderId, 119.0, 'EUR', [$basketItem]))
+        ->setAmountTotalVat(19.0);
 
     // initialize the payment
     $authorize = $heidelpay->authorize(

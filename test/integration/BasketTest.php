@@ -208,7 +208,7 @@ class BasketTest extends BasePaymentTest
         $this->heidelpay->createPaymentType($sdd);
 
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge   = $sdd->charge(100.19, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+        $charge   = $sdd->charge(119.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
 
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());

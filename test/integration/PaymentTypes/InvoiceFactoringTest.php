@@ -139,7 +139,7 @@ class InvoiceFactoringTest extends BasePaymentTest
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(100.19, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getIban());
@@ -170,7 +170,7 @@ class InvoiceFactoringTest extends BasePaymentTest
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(100.19, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         // perform shipment
         $payment = $charge->getPayment();
@@ -199,7 +199,7 @@ class InvoiceFactoringTest extends BasePaymentTest
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(100.19, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         // perform shipment
         $payment = $charge->getPayment();
@@ -227,7 +227,7 @@ class InvoiceFactoringTest extends BasePaymentTest
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(100.19, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         // perform shipment
         $payment   = $charge->getPayment();
@@ -256,7 +256,7 @@ class InvoiceFactoringTest extends BasePaymentTest
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(100.19, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         $payment   = $charge->getPayment();
         $invoiceId = substr(str_replace(['0.',' '], '', microtime(false)), 0, 16);
@@ -283,7 +283,7 @@ class InvoiceFactoringTest extends BasePaymentTest
 
         $basket = $this->createBasket();
         $invoiceId = substr(str_replace(['0.',' '], '', microtime(false)), 0, 16);
-        $charge = $invoiceFactoring->charge(100.19, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
+        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
 
         $payment   = $charge->getPayment();
         $shipment  = $this->heidelpay->ship($payment);

@@ -673,8 +673,8 @@ class Payment extends AbstractHeidelpayResource
         $remainingAmountToCancel = $totalCancelAmount;
 
         $cancelWholePayment = $remainingAmountToCancel === null;
-        $cancellations = [];
-        $cancellation = null;
+        $cancellations      = [];
+        $cancellation       = null;
 
         if ($cancelWholePayment || $remainingAmountToCancel > 0.0) {
             $cancellation = $this->cancelAuthorizationAmount($remainingAmountToCancel);
@@ -742,7 +742,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancelAllCharges(): array
     {
-        $cancels = [];
+        $cancels    = [];
         $exceptions = [];
 
         /** @var Charge $charge */
@@ -777,7 +777,7 @@ class Payment extends AbstractHeidelpayResource
     public function cancelAuthorization($amount = null): array
     {
         $cancels = [];
-        $cancel = $this->cancelAuthorizationAmount($amount);
+        $cancel  = $this->cancelAuthorizationAmount($amount);
 
         if ($cancel instanceof Cancellation) {
             $cancels[] = $cancel;
@@ -800,7 +800,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancelAuthorizationAmount($amount = null)
     {
-        $cancellation = null;
+        $cancellation   = null;
         $completeCancel = $amount === null;
 
         $authorize = $this->getAuthorization();
@@ -808,7 +808,11 @@ class Payment extends AbstractHeidelpayResource
             $cancelAmount = null;
             if (!$completeCancel) {
                 $remainingAuthorized = $this->getAmount()->getRemaining();
-                $cancelAmount = $amount > $remainingAuthorized ? $remainingAuthorized : $amount;
+                $cancelAmount        = $amount > $remainingAuthorized ? $remainingAuthorized : $amount;
+            }
+
+            if ($cancelAmount === 0.0) {
+                return null;
             }
 
             try {
@@ -977,7 +981,7 @@ class Payment extends AbstractHeidelpayResource
     private function updateChargeTransaction($transaction)
     {
         $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
-        $charge = $this->getCharge($transactionId, true);
+        $charge        = $this->getCharge($transactionId, true);
         if (!$charge instanceof Charge) {
             $charge = (new Charge())->setPayment($this)->setId($transactionId);
             $this->addCharge($charge);
@@ -1004,7 +1008,7 @@ class Payment extends AbstractHeidelpayResource
 
         $cancellation = $authorization->getCancellation($transactionId, true);
         if (!$cancellation instanceof Cancellation) {
-            $cancellation =  (new Cancellation())->setPayment($this)->setId($transactionId);
+            $cancellation = (new Cancellation())->setPayment($this)->setId($transactionId);
             $authorization->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
@@ -1031,7 +1035,7 @@ class Payment extends AbstractHeidelpayResource
 
         $cancellation = $charge->getCancellation($refundId, true);
         if (!$cancellation instanceof Cancellation) {
-            $cancellation =  (new Cancellation())->setPayment($this)->setId($refundId);
+            $cancellation = (new Cancellation())->setPayment($this)->setId($refundId);
             $charge->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
@@ -1049,7 +1053,7 @@ class Payment extends AbstractHeidelpayResource
     private function updateShipmentTransaction($transaction)
     {
         $shipmentId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
-        $shipment = $this->getShipment($shipmentId, true);
+        $shipment   = $this->getShipment($shipmentId, true);
         if (!$shipment instanceof Shipment) {
             $shipment = (new Shipment())->setId($shipmentId);
             $this->addShipment($shipment);
@@ -1069,7 +1073,7 @@ class Payment extends AbstractHeidelpayResource
     private function updatePayoutTransaction($transaction)
     {
         $payoutId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::PAYOUT);
-        $payout = $this->getPayout(true);
+        $payout   = $this->getPayout(true);
         if (!$payout instanceof Payout) {
             $payout = (new Payout())->setId($payoutId);
             $this->setPayout($payout);

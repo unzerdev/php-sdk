@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\integration;
 
+use heidelpayPHP\Constants\CancelReasonCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\test\BasePaymentTest;

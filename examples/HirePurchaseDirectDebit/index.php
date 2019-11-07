@@ -67,7 +67,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     HirePurchase.create({
         containerId: 'example-hire-purchase', // required
-        amount: 100.19, // required
+        amount: 119.0, // required
         currency: 'EUR', // required
         effectiveInterest: 4.5, // required
         orderDate: '2019-04-18', // optional
