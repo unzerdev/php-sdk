@@ -655,22 +655,27 @@ class Payment extends AbstractHeidelpayResource
      * Performs a Cancellation transaction on the Payment.
      * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
      *
-     * @param float|null $totalCancelAmount The amount to canceled.
-     * @param string     $reason
+     * @param float|null  $amount           The amount to be canceled.
+     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null $paymentReference A reference string for the payment.
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelAmount($totalCancelAmount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL): array
-    {
-        if (strpos(get_class($this->getPaymentType()), 'HirePurchase')) {
-            throw new HeidelpayApiException('Payment::cancelAmount() can not be used with HirePurchase payment types');
-        }
-
-        $charges = $this->charges;
-        $remainingAmountToCancel = $totalCancelAmount;
+    public function cancelAmount(
+        $amount = null,
+        $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
+        $paymentReference = null,
+        $amountNet = null,
+        $amountVat = null
+    ): array {
+        $charges                 = $this->charges;
+        $remainingAmountToCancel = $amount;
 
         $cancelWholePayment = $remainingAmountToCancel === null;
         $cancellations      = [];
@@ -700,7 +705,7 @@ class Payment extends AbstractHeidelpayResource
             }
 
             try {
-                $cancellation = $charge->cancel($cancelAmount, $reason);
+                $cancellation = $charge->cancel($cancelAmount, $reasonCode, $paymentReference, $amountNet, $amountVat);
             } catch (HeidelpayApiException $e) {
                 $allowedErrors = [
                     ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,

@@ -495,6 +495,23 @@ class PaymentCancelTest extends BasePaymentTest
         $this->assertAmounts($payment, 0.0, 30.0, 100.0, 70.0);
     }
 
+    /**
+     * Verify cancellation with all parameters set.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function cancellationShouldWorkWithAllParametersSet()
+    {
+        $authorization = $this->createCardAuthorization(119.0);
+        $payment = $authorization->getPayment();
+        $payment->charge();
+        $cancellations = $payment->cancelAmount(59.5, CancelReasonCodes::REASON_CODE_CREDIT, 'Reference text!', 50.0, 9.5);
+        $this->assertCount(1, $cancellations);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Data Providers">

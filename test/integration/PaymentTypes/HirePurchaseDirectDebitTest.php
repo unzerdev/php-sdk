@@ -252,9 +252,9 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
         $payment = $authorize->getPayment();
         $payment->charge();
-        $cancel = $payment->cancelAmount(50.0);
-        $this->assertGreaterThan(0, count($cancel));
-        $this->assertTrue($payment->isPending());
+        $cancel = $payment->cancelAmount(59.5, null, null, 50.0, 9.5);
+        $this->assertCount(1, $cancel);
+        $this->assertTrue($payment->isCompleted());
     }
 
     //</editor-fold>

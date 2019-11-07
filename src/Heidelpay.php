@@ -1155,18 +1155,38 @@ class Heidelpay implements HeidelpayParentInterface
      * Performs a Cancellation transaction for the given Charge and returns the resulting Cancellation object.
      * Performs a full cancel if the parameter amount is null.
      *
-     * @param Payment|string $paymentId The Payment object or the id of the Payment the charge belongs to.
-     * @param string         $chargeId  The id of the Charge to be canceled.
-     * @param float|null     $amount    The amount to be canceled.
+     * @param Payment|string $paymentId        The Payment object or the id of the Payment the charge belongs to.
+     * @param string         $chargeId         The id of the Charge to be canceled.
+     * @param float|null     $amount           The amount to be canceled.
+     *                                         This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null    $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null    $paymentReference A reference string for the payment.
+     * @param float|null     $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelChargeById($paymentId, $chargeId, $amount = null): AbstractTransactionType
-    {
-        return $this->paymentService->cancelChargeById($paymentId, $chargeId, $amount);
+    public function cancelChargeById(
+        $paymentId,
+        $chargeId,
+        float $amount = null,
+        string $reasonCode = null,
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
+    ): AbstractTransactionType {
+        return $this->paymentService->cancelChargeById(
+            $paymentId,
+            $chargeId,
+            $amount,
+            $reasonCode,
+            $paymentReference,
+            $amountNet,
+            $amountVat
+        );
     }
 
     /**
@@ -1175,8 +1195,11 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param Charge      $charge           The Charge object to create the Cancellation for.
      * @param float|null  $amount           The amount to be canceled.
-     * @param string|null $reasonCode
+     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
@@ -1187,9 +1210,18 @@ class Heidelpay implements HeidelpayParentInterface
         Charge $charge,
         $amount = null,
         string $reasonCode = null,
-        string $paymentReference = null
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
     ): AbstractTransactionType {
-        return $this->paymentService->cancelCharge($charge, $amount, $reasonCode, $paymentReference);
+        return $this->paymentService->cancelCharge(
+            $charge,
+            $amount,
+            $reasonCode,
+            $paymentReference,
+            $amountNet,
+            $amountVat
+        );
     }
 
     //</editor-fold>

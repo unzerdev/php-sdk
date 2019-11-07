@@ -471,28 +471,43 @@ class PaymentService
     /**
      * Create a Cancellation transaction for the charge with the given id belonging to the given Payment object.
      *
-     * @param Payment|string $payment
-     * @param string         $chargeId
-     * @param null           $amount
+     * @param Payment|string $payment          The Payment object or the id of the Payment the charge belongs to.
+     * @param string         $chargeId         The id of the Charge to be canceled.
+     * @param float|null     $amount           The amount to be canceled.
+     *                                         This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null    $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null    $paymentReference A reference string for the payment.
+     * @param float|null     $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function cancelChargeById($payment, $chargeId, $amount = null): AbstractTransactionType
-    {
+    public function cancelChargeById(
+        $payment,
+        $chargeId,
+        float $amount = null,
+        string $reasonCode = null,
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
+    ): AbstractTransactionType {
         $charge = $this->resourceService->fetchChargeById($payment, $chargeId);
-        return $this->cancelCharge($charge, $amount);
+        return $this->cancelCharge($charge, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
     }
 
     /**
      * Create a Cancellation transaction for the given Charge resource.
      *
-     * @param Charge $charge
-     * @param $amount
-     * @param string|null $reasonCode
+     * @param Charge      $charge           The Charge object to create the Cancellation for.
+     * @param float|null  $amount           The amount to be canceled.
+     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -503,13 +518,17 @@ class PaymentService
         Charge $charge,
         $amount = null,
         string $reasonCode = null,
-        string $paymentReference = null
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
     ): AbstractTransactionType {
         $cancellation = new Cancellation($amount);
         $cancellation
             ->setReasonCode($reasonCode)
             ->setPayment($charge->getPayment())
-            ->setPaymentReference($paymentReference);
+            ->setPaymentReference($paymentReference)
+            ->setAmountNet($amountNet)
+            ->setAmountVat($amountVat);
         $charge->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
 
