@@ -30,7 +30,6 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -44,7 +43,6 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use RuntimeException;
-use stdClass;
 
 class PaymentService
 {
@@ -594,14 +592,14 @@ class PaymentService
     //<editor-fold desc="Hire Purchase (Flexipay Rate)">
 
     /**
-     * Returns a hire purchase direct debit object containing all available instalment plans.
+     * Returns an InstallmentPlans object containing all available instalment plans.
      *
-     * @param $amount
-     * @param $currency
-     * @param $effectiveInterest
-     * @param DateTime|null $orderDate
+     * @param float         $amount            The amount to be charged via FlexiPay Rate.
+     * @param string        $currency          The currency code of the transaction.
+     * @param float         $effectiveInterest The effective interest rate.
+     * @param DateTime|null $orderDate         The date the order took place, is set to today if left empty.
      *
-     * @return InstalmentPlans|AbstractHeidelpayResource
+     * @return InstalmentPlans|AbstractHeidelpayResource The object containing all posible instalment plans.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
@@ -615,36 +613,6 @@ class PaymentService
         $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
         $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
         return $this->heidelpay->getResourceService()->fetch($plans);
-    }
-
-    /**
-     * Select the given plan create the payment method resource and perform the initializing authorization.
-     *
-     * @param InstalmentPlan|stdClass $plan
-     * @param string                  $iban
-     * @param string                  $accountHolder
-     * @param DateTime|null           $orderDate
-     * @param string|null             $bic
-     *
-     * @return HirePurchaseDirectDebit
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     */
-    public function selectDirectDebitInstalmentPlan(
-        $plan,
-        string $iban,
-        string $accountHolder,
-        DateTime $orderDate = null,
-        string $bic = null
-    ): HirePurchaseDirectDebit {
-        $hdd = new HirePurchaseDirectDebit($plan, $iban, $accountHolder, $bic);
-        $hdd->setParentResource($this->heidelpay);
-        if ($orderDate instanceof DateTime) {
-            $hdd->setOrderDate($orderDate);
-        }
-        $this->resourceService->create($hdd);
-        return $hdd;
     }
 
     //</editor-fold>
