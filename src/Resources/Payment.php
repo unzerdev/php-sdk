@@ -665,6 +665,10 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancelAmount($totalCancelAmount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL): array
     {
+        if (strpos(get_class($this->getPaymentType()), 'HirePurchase')) {
+            throw new HeidelpayApiException('Payment::cancelAmount() can not be used with HirePurchase payment types');
+        }
+
         $charges = $this->charges;
         $remainingAmountToCancel = $totalCancelAmount;
 
