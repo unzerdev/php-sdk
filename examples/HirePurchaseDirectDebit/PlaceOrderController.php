@@ -1,6 +1,6 @@
 <?php
 /**
- * This is a the controller for the hire purchase direct debit example.
+ * This is a the controller for the hire purchase direct debit (FlexiPay Rate) example.
  * It is called when the instalment plan is confirmed and places the order.
  *
  * Copyright (C) 2019 heidelpay GmbH

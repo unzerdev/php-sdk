@@ -31,7 +31,7 @@ use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 class Cancellation extends AbstractTransactionType
 {
     /**
-     * The cancellation amount will be transfered as grossAmount in case of Hire Purchase payment type.
+     * The cancellation amount will be transferred as grossAmount in case of Hire Purchase payment type.
      *
      * @var float $amount
      */

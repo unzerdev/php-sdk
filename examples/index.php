@@ -245,7 +245,7 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Hire purchase direct debit
+                            Hire purchase direct debit (FlexiPay Rate)
                         </div>
                         <div class="description">
                         </div>
