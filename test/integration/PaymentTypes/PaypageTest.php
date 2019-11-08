@@ -133,7 +133,8 @@ class PaypageTest extends BasePaymentTest
             ->setImprintUrl('https://www.heidelpay.com/it/')
             ->setHelpUrl('https://www.heidelpay.com/at/')
             ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
-            ->setInvoiceId($invoiceId);
+            ->setInvoiceId($invoiceId)
+            ->setCard3ds(true);
         $paypage->addExcludeType(Card::getResourceName());
         $this->assertEmpty($paypage->getId());
         $paypage = $this->heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
