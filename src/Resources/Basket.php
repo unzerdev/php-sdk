@@ -66,9 +66,9 @@ class Basket extends AbstractHeidelpayResource
         string $currencyCode = 'EUR',
         array $basketItems = []
     ) {
-        $this->amountTotalGross = $amountTotalGross;
         $this->currencyCode     = $currencyCode;
         $this->orderId          = $orderId;
+        $this->setAmountTotalGross($amountTotalGross);
         $this->setBasketItems($basketItems);
     }
 

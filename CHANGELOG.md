@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Property card3ds to Paypage.
 
+### Fixed
+*   A bug which caused basket amounts to be sent with more then 4 digital places.
+
 ## [1.2.4.0][1.2.4.0]
 
 ### Added
