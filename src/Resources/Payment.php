@@ -674,34 +674,34 @@ class Payment extends AbstractHeidelpayResource
         $amountNet = null,
         $amountVat = null
     ): array {
-        $charges                 = $this->charges;
-        $remainingAmountToCancel = $amount;
+        $charges           = $this->charges;
+        $remainingToCancel = $amount;
 
-        $cancelWholePayment = $remainingAmountToCancel === null;
+        $cancelWholePayment = $remainingToCancel === null;
         $cancellations      = [];
         $cancellation       = null;
 
-        if ($cancelWholePayment || $remainingAmountToCancel > 0.0) {
-            $cancellation = $this->cancelAuthorizationAmount($remainingAmountToCancel);
+        if ($cancelWholePayment || $remainingToCancel > 0.0) {
+            $cancellation = $this->cancelAuthorizationAmount($remainingToCancel);
 
             if ($cancellation instanceof Cancellation) {
                 $cancellations[] = $cancellation;
                 if (!$cancelWholePayment) {
-                    $remainingAmountToCancel -= $cancellation->getAmount();
+                    $remainingToCancel -= $cancellation->getAmount();
                 }
                 $cancellation = null;
             }
         }
 
-        if (!$cancelWholePayment && $remainingAmountToCancel <= 0.0) {
+        if (!$cancelWholePayment && $remainingToCancel <= 0.0) {
             return $cancellations;
         }
 
         /** @var Charge $charge */
         foreach ($charges as $charge) {
             $cancelAmount = null;
-            if (!$cancelWholePayment && $remainingAmountToCancel <= $charge->getTotalAmount()) {
-                $cancelAmount = $remainingAmountToCancel;
+            if (!$cancelWholePayment && $remainingToCancel <= $charge->getTotalAmount()) {
+                $cancelAmount = $remainingToCancel;
             }
 
             try {
@@ -721,12 +721,12 @@ class Payment extends AbstractHeidelpayResource
             if ($cancellation instanceof Cancellation) {
                 $cancellations[] = $cancellation;
                 if (!$cancelWholePayment) {
-                    $remainingAmountToCancel -= $cancellation->getAmount();
+                    $remainingToCancel -= $cancellation->getAmount();
                 }
                 $cancellation = null;
             }
 
-            if (!$cancelWholePayment && $remainingAmountToCancel <= 0) {
+            if (!$cancelWholePayment && $remainingToCancel <= 0) {
                 break;
             }
         }
