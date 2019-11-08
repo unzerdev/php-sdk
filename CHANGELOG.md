@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Removed
 *   API Response Code for basket item image extension error.
 
+### Added
+*   Added card details property.
+
 ## [1.2.4.0][1.2.4.0]
 
 ### Added
