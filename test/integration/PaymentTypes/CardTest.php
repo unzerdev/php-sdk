@@ -197,14 +197,14 @@ class CardTest extends BasePaymentTest
 
         /** @var Authorization $authorization */
         $authorization = $card->authorize(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
-        $payment = $authorization->getPayment();
+        $payment       = $authorization->getPayment();
 
         // pre-check to verify changes due to fullCharge call
         $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
         $this->assertTrue($payment->isPending());
 
         /** @var Charge $charge */
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId());
+        $charge     = $this->heidelpay->chargeAuthorization($payment->getId());
         $paymentNew = $charge->getPayment();
 
         // verify payment has been updated properly
@@ -223,25 +223,35 @@ class CardTest extends BasePaymentTest
     public function partialChargeAfterAuthorization()
     {
         /** @var Card $card */
-        $card = $this->createCardObject();
-        $card = $this->heidelpay->createPaymentType($card);
-        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $card          = $this->createCardObject();
+        $card          = $this->heidelpay->createPaymentType($card);
+        $authorization = $this->heidelpay->authorize(
+            100.0,
+            'EUR',
+            $card,
+            self::RETURN_URL,
+            null,
+            null,
+            null,
+            null,
+            false
+        );
 
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
         $payment2 = $charge->getPayment();
         $this->assertAmounts($payment2, 60.0, 40.0, 100.0, 0.0);
         $this->assertTrue($payment2->isPartlyPaid());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 60);
+        $charge   = $this->heidelpay->chargeAuthorization($payment->getId(), 60);
         $payment3 = $charge->getPayment();
         $this->assertAmounts($payment3, 00.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment3->isCompleted());
@@ -258,14 +268,14 @@ class CardTest extends BasePaymentTest
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized()
     {
         /** @var Card $card */
-        $card = $this->createCardObject();
-        $card = $this->heidelpay->createPaymentType($card);
+        $card          = $this->createCardObject();
+        $card          = $this->heidelpay->createPaymentType($card);
         $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
-        $payment = $authorization->getPayment();
+        $payment       = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 50);
+        $charge   = $this->heidelpay->chargeAuthorization($payment->getId(), 50);
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 50.0, 50.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
@@ -286,20 +296,20 @@ class CardTest extends BasePaymentTest
     public function partialAndFullChargeAfterAuthorization()
     {
         /** @var Card $card */
-        $card = $this->createCardObject();
-        $card = $this->heidelpay->createPaymentType($card);
+        $card          = $this->createCardObject();
+        $card          = $this->heidelpay->createPaymentType($card);
         $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
-        $payment = $authorization->getPayment();
+        $payment       = $authorization->getPayment();
 
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->heidelpay->chargeAuthorization($payment->getId(), 20);
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId());
+        $charge   = $this->heidelpay->chargeAuthorization($payment->getId());
         $payment2 = $charge->getPayment();
         $this->assertAmounts($payment2, 0.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment2->isCompleted());
@@ -316,10 +326,10 @@ class CardTest extends BasePaymentTest
     public function authorizationShouldBeFetchable()
     {
         /** @var Card $card */
-        $card = $this->createCardObject();
-        $card = $this->heidelpay->createPaymentType($card);
+        $card          = $this->createCardObject();
+        $card          = $this->heidelpay->createPaymentType($card);
         $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL);
-        $payment = $authorization->getPayment();
+        $payment       = $authorization->getPayment();
 
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($payment->getId());
         $this->assertEquals($fetchedAuthorization->getId(), $authorization->getId());
@@ -334,9 +344,9 @@ class CardTest extends BasePaymentTest
     public function fullCancelAfterCharge()
     {
         /** @var Card $card */
-        $card = $this->createCardObject();
-        $card = $this->heidelpay->createPaymentType($card);
-        $charge = $card->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $card    = $this->createCardObject();
+        $card    = $this->heidelpay->createPaymentType($card);
+        $charge  = $card->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
         $payment = $charge->getPayment();
 
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
@@ -362,7 +372,7 @@ class CardTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($card);
 
         $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
-        $payment = $authorization->getPayment();
+        $payment       = $authorization->getPayment();
 
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
@@ -396,7 +406,7 @@ class CardTest extends BasePaymentTest
         $card = $this->heidelpay->createPaymentType($card);
 
         $authorization = $card->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
-        $payment = $authorization->getPayment();
+        $payment       = $authorization->getPayment();
 
         $payment->charge(10.0);
         $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
@@ -424,7 +434,7 @@ class CardTest extends BasePaymentTest
     public function cardChargeCanBeCanceled()
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card   = $this->heidelpay->createPaymentType($this->createCardObject());
         $charge = $card->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
 
         $cancel = $charge->cancel();
@@ -443,7 +453,7 @@ class CardTest extends BasePaymentTest
     public function cardAuthorizeCanBeCanceled()
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card      = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorize = $card->authorize(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
 
         $cancel = $authorize->cancel();
