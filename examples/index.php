@@ -245,7 +245,7 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Hire purchase direct debit
+                            FlexiPay Rate Direct Debit (Hire Purchase)
                         </div>
                         <div class="description">
                         </div>
@@ -257,7 +257,7 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Flexipay direct (PIS)
+                            FlexiPay Direct (PIS)
                         </div>
                         <div class="description">
                         </div>
