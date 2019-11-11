@@ -98,7 +98,7 @@ class Heidelpay implements HeidelpayParentInterface
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
         $this->webhookService  = new WebhookService($this);
-        $this->httpService = new HttpService();
+        $this->httpService     = new HttpService();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -226,8 +226,8 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * Enable debug output.
-     * You need to setter inject a custom handler implementing the DebugOutputHandlerInterface via setDebugHandler
-     * for this to work.
+     * You need to setter inject a custom handler implementing the DebugOutputHandlerInterface via
+     * Heidelpay::setDebugHandler() for this to work.
      *
      * @param bool $debugMode
      *
@@ -248,8 +248,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Use this method to inject a custom handler for debug messages form the http-adapter.
-     * Remember to enable debug output by setting the constant Heidelpay::DEBUG_MODE true.
+     * Use this method to inject a custom handler for debug messages from the http-adapter.
+     * Remember to enable debug output using Heidelpay::setDebugMode(true).
      *
      * @param DebugHandlerInterface $debugHandler
      *

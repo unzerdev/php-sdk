@@ -266,7 +266,7 @@ class PaymentService
         $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
-        $charge = new Charge($amount, $currency, $returnUrl);
+        $charge  = new Charge($amount, $currency, $returnUrl);
         $charge->setOrderId($orderId)->setInvoiceId($invoiceId)->setPaymentReference($paymentReference);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
@@ -396,8 +396,8 @@ class PaymentService
      * @param string               $returnUrl        The URL used to return to the shop if the process requires leaving it.
      * @param Customer|string|null $customer         The customer associated with the payout.
      * @param string|null          $orderId          A custom order id which can be set by the merchant.
-     * @param null                 $metadata
-     * @param null                 $basket
+     * @param Metadata|null        $metadata
+     * @param Basket|null          $basket
      * @param string|null          $invoiceId        The external id of the invoice.
      * @param string|null          $paymentReference A reference text for the payment.
      *
@@ -436,7 +436,7 @@ class PaymentService
      * Perform a Cancellation transaction with the given amount for the given Authorization.
      *
      * @param Authorization $authorization
-     * @param null          $amount
+     * @param float|null    $amount
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -457,7 +457,7 @@ class PaymentService
      * Creates a Cancellation transaction for the given Authorization object.
      *
      * @param Payment|string $payment
-     * @param null           $amount
+     * @param float|null     $amount
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -479,7 +479,7 @@ class PaymentService
      *
      * @param Payment|string $payment
      * @param string         $chargeId
-     * @param null           $amount
+     * @param float|null     $amount
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -495,8 +495,8 @@ class PaymentService
     /**
      * Create a Cancellation transaction for the given Charge resource.
      *
-     * @param Charge $charge
-     * @param $amount
+     * @param Charge      $charge
+     * @param float|null  $amount
      * @param string|null $reasonCode
      * @param string|null $paymentReference A reference string for the payment.
      *
