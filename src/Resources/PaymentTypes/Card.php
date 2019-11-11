@@ -120,7 +120,7 @@ class Card extends BasePaymentType
         }
 
         if (!ExpiryDateValidator::validate($expiryDate)) {
-            throw new RuntimeException('Invalid expiry date!');
+            throw new RuntimeException("Invalid expiry date format: \"{$expiryDate}\". Allowed formats are 'm/Y' and 'm/y'.");
         }
         $expiryDateParts = explode('/', $expiryDate);
         $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
