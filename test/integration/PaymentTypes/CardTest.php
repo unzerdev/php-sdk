@@ -27,11 +27,13 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\Exception;
 use RuntimeException;
 
 class CardTest extends BasePaymentTest
@@ -43,21 +45,28 @@ class CardTest extends BasePaymentTest
      *
      * @test
      *
+     * @dataProvider cardShouldBeCreatableDP
+     *
+     * @param string      $cardnumber
+     * @param CardDetails $expectedCardDetails
+     *
      * @return BasePaymentType
      *
+     * @throws Exception
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function cardShouldBeCreatable(): BasePaymentType
+    public function cardShouldBeCreatable(string $cardnumber, CardDetails $expectedCardDetails): BasePaymentType
     {
         /** @var Card $card */
-        $card = $this->createCardObject();
+        $card = $this->createCardObject($cardnumber);
         $this->assertNull($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
 
         $this->assertInstanceOf(Card::class, $card);
         $this->assertNotNull($card->getId());
         $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
+        $this->assertEquals($expectedCardDetails, $card->getCardDetails());
 
         return $card;
     }
@@ -440,6 +449,45 @@ class CardTest extends BasePaymentTest
         $cancel = $authorize->cancel();
         $this->assertNotNull($cancel);
         $this->assertNotEmpty($cancel->getId());
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Data Provider">
+
+    /**
+     * @return array
+     */
+    public function cardShouldBeCreatableDP(): array
+    {
+        $cardDetailsA = new CardDetails();
+        $cardDetailsAObj          = (object)[
+            'cardType'          => 'CLASSIC',
+            'account'           => 'CREDIT',
+            'countryIsoA2'      => 'RU',
+            'countryName'       => 'RUSSIAN FEDERATION',
+            'issuerName'        => '',
+            'issuerUrl'         => '',
+            'issuerPhoneNumber' => ''
+        ];
+        $cardDetailsA->handleResponse($cardDetailsAObj);
+
+        $cardDetailsB = new CardDetails();
+        $cardDetailsBObj          = (object)[
+            'cardType'          => '',
+            'account'           => 'CREDIT',
+            'countryIsoA2'      => 'US',
+            'countryName'       => 'UNITED STATES',
+            'issuerName'        => 'JPMORGAN CHASE BANK, N.A.',
+            'issuerUrl'         => 'HTTP://WWW.JPMORGANCHASE.COM',
+            'issuerPhoneNumber' => '1-212-270-6000'
+        ];
+        $cardDetailsB->handleResponse($cardDetailsBObj);
+
+        return [
+            'card type set'   => ['4012001037461114', $cardDetailsA],
+            'issuer data set' => ['5453010000059543', $cardDetailsB]
+        ];
     }
 
     //</editor-fold>
