@@ -65,7 +65,7 @@ class CardDetails extends AbstractHeidelpayResource
      *
      * @return CardDetails
      */
-    public function setCardType($cardType): CardDetails
+    protected function setCardType($cardType): CardDetails
     {
         $this->cardType = $cardType;
         return $this;
@@ -84,7 +84,7 @@ class CardDetails extends AbstractHeidelpayResource
      *
      * @return CardDetails
      */
-    public function setAccount($account): CardDetails
+    protected function setAccount($account): CardDetails
     {
         $this->account = $account;
         return $this;
@@ -103,7 +103,7 @@ class CardDetails extends AbstractHeidelpayResource
      *
      * @return CardDetails
      */
-    public function setCountryIsoA2($countryIsoA2): CardDetails
+    protected function setCountryIsoA2($countryIsoA2): CardDetails
     {
         $this->countryIsoA2 = $countryIsoA2;
         return $this;
@@ -122,7 +122,7 @@ class CardDetails extends AbstractHeidelpayResource
      *
      * @return CardDetails
      */
-    public function setCountryName($countryName): CardDetails
+    protected function setCountryName($countryName): CardDetails
     {
         $this->countryName = $countryName;
         return $this;
@@ -141,7 +141,7 @@ class CardDetails extends AbstractHeidelpayResource
      *
      * @return CardDetails
      */
-    public function setIssuerName($issuerName): CardDetails
+    protected function setIssuerName($issuerName): CardDetails
     {
         $this->issuerName = $issuerName;
         return $this;
@@ -160,7 +160,7 @@ class CardDetails extends AbstractHeidelpayResource
      *
      * @return CardDetails
      */
-    public function setIssuerUrl($issuerUrl): CardDetails
+    protected function setIssuerUrl($issuerUrl): CardDetails
     {
         $this->issuerUrl = $issuerUrl;
         return $this;
@@ -179,7 +179,7 @@ class CardDetails extends AbstractHeidelpayResource
      *
      * @return CardDetails
      */
-    public function setIssuerPhoneNumber($issuerPhoneNumber): CardDetails
+    protected function setIssuerPhoneNumber($issuerPhoneNumber): CardDetails
     {
         $this->issuerPhoneNumber = $issuerPhoneNumber;
         return $this;
