@@ -45,8 +45,8 @@ class ExceptionTest extends BasePaymentTest
     public function apiExceptionShouldHoldClientMessage()
     {
         $giropay             = $this->heidelpay->createPaymentType(new Giropay());
+        $firstClientMessage  = '';
         $secondClientMessage = '';
-        $firstClientMessage  = $secondClientMessage;
 
         try {
             $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
