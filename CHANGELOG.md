@@ -32,6 +32,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Fixed
 *   A bug which caused basket amounts to be sent with more then 4 digital places.
 
+### Added
+*   Geolocation to `Customer` resource.
+
 ## [1.2.4.0][1.2.4.0]
 
 ### Added
