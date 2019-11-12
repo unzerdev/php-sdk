@@ -9,14 +9,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Hire purchase direct debit payment type (FlexiPay Rate) including example implementation.
 *   Additional payment parameters to transactions.
 *   Facade method to update payment type
-
-### Removed
-*   Unused Constants.
+*   Property invoiceId to `Payment` class.
 
 ### Changed
+*   Refactor invoice guaranteed tests to make them independent from each other.
 *   Response Code for basket item image extension error has been deprecated since it has been removed from the API.
 *   Refactored cancellation feature to support FlexiPay Rate cancel.
 *   Remove trailing slash from routes.
+
+### Removed
+*   Unused Constants.
 
 ### Fixed
 *   Several minor issues.

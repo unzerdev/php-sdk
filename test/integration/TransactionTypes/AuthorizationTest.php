@@ -175,10 +175,10 @@ class AuthorizationTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
-        $invoiceId = $this->generateRandomId();
+        $invoiceId = self::generateRandomId();
         $paymentReference = 'paymentReference';
 
         $authorize = $card->authorize(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);

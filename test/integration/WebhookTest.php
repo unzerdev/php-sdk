@@ -200,7 +200,7 @@ class WebhookTest extends BasePaymentTest
     {
         // --- Verify webhooks have been registered ---
         $webhooks = $this->heidelpay->fetchAllWebhooks();
-        $this->assertGreaterThan(0, count($webhooks));
+        $this->assertGreaterThan(0, \count($webhooks));
 
         // --- Verify all webhooks can be removed at once ---
         $this->heidelpay->deleteAllWebhooks();
@@ -227,7 +227,7 @@ class WebhookTest extends BasePaymentTest
         $registeredEvents = [];
         foreach ($registeredWebhooks as $webhook) {
             /** @var Webhook $webhook */
-            if (in_array($webhook->getEvent(), $webhookEvents, true)) {
+            if (\in_array($webhook->getEvent(), $webhookEvents, true)) {
                 $this->assertEquals($url, $webhook->getUrl());
             }
             $registeredEvents[] = $webhook->getEvent();
