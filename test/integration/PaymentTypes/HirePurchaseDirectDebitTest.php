@@ -172,8 +172,6 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws Exception
-     *
-     * @group skip
      */
     public function verifyShippingAChargedHirePurchase()
     {
