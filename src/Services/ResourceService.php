@@ -619,7 +619,7 @@ class ResourceService
                 $paymentType = new InvoiceFactoring();
                 break;
             case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
-                $paymentType = new HirePurchaseDirectDebit(null, null, null);
+                $paymentType = new HirePurchaseDirectDebit();
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');
