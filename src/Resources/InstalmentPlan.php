@@ -1,6 +1,6 @@
 <?php
 /**
- * Resource representing the installment plan for hire purchase (flexipay rate).
+ * Resource representing the installment plan for hire purchase (FlexiPay Rate).
  *
  * Copyright (C) 2019 heidelpay GmbH
  *

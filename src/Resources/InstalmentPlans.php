@@ -1,6 +1,6 @@
 <?php
 /**
- * Resource used to fetch instalment plans for the hire purchase (FlexiPay Rate) payment type specified as parent resource.
+ * Resource used to fetch instalment plans for hire purchase (FlexiPay Rate) payment method specified as parent resource.
  * Please use Heidelpay methods to fetch the list of instalment plans
  * (e.g. Heidelpay::fetchDirectDebitInstalmentPlans(...)).
  *

@@ -1348,7 +1348,7 @@ class Heidelpay implements HeidelpayParentInterface
 
     //</editor-fold>
 
-    //<editor-fold desc="Hire Purchase (Flexipay Rate)">
+    //<editor-fold desc="Hire Purchase (FlexiPay Rate)">
 
     /**
      * Returns available hire purchase direct debit instalment plans for the given values.
