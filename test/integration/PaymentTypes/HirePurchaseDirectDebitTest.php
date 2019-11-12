@@ -70,10 +70,12 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
 
         $hdd->setIban('DE89370400440532013000')
             ->setBic('COBADEFFXXX')
+            ->setAccountHolder('Peter Universum')
             ->setInvoiceDate($this->getYesterdaysTimestamp())
             ->setInvoiceDueDate($this->getTomorrowsTimestamp());
-        $updatedHdd = $this->heidelpay->updatePaymentType($hdd);
-        $this->assertEquals($hdd->expose(), $updatedHdd->expose());
+        $hddClone = clone $hdd;
+        $this->heidelpay->updatePaymentType($hdd);
+        $this->assertEquals($hddClone->expose(), $hdd->expose());
     }
 
     /**
