@@ -146,8 +146,6 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws Exception
-     *
-     * @group skip
      */
     public function verifyChargingAnInitializedHirePurchase()
     {
@@ -176,8 +174,6 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      * @throws Exception
-     *
-     * @group skip
      */
     public function verifyShippingAChargedHirePurchase()
     {
@@ -211,7 +207,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws RuntimeException
      * @throws Exception
      *
-     * @group skip
+     * @group skip https://heidelpay.atlassian.net/browse/AHC-2569
      */
     public function verifyChargeAndFullCancelAnInitializedHirePurchase()
     {
