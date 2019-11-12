@@ -169,7 +169,7 @@ class BasePaymentTest extends TestCase
      */
     public function createBasket(): Basket
     {
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $basket = new Basket($orderId, 100.19, 'EUR');
         $basket->setAmountTotalVat(0.19);
         $basket->setNote('This basket is creatable!');
@@ -264,11 +264,11 @@ class BasePaymentTest extends TestCase
     /**
      * Creates and returns an order id.
      *
-     * @return float
+     * @return string
      */
-    public function generateRandomId(): float
+    public static function generateRandomId(): string
     {
-        return (string)microtime(true);
+        return str_replace('.', '', microtime(true));
     }
 
     /**

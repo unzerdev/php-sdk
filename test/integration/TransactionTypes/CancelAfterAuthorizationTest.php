@@ -73,8 +73,10 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
         $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
         $payment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
+        $cancelArray = $payment->cancelAmount(10.0);
+
         /** @var Cancellation $cancel */
-        $cancel = $payment->cancel(10.0);
+        $cancel = $cancelArray[0];
         $this->assertTransactionResourceHasBeenCreated($cancel);
         $this->assertEquals(10.0, $cancel->getAmount());
     }

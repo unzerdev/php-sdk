@@ -7,9 +7,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Hire purchase payment type (FlexiPay Rate).
+*   Property invoiceId to `Payment` class.
+
+### Changed
+*   Refactor invoice guaranteed tests to make them independent from each other.
 
 ### Removed
 *   API Response Code for basket item image extension error.
+
+### Fixed
+*   Some minor issues.
 
 ## [1.2.4.0][1.2.4.0]
 
