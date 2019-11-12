@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\test;
 
+use DateInterval;
+use DateTime;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
@@ -62,6 +64,15 @@ class BasePaymentTest extends TestCase
     {
         $privateKey = (new EnvironmentService())->getTestPrivateKey();
         $this->heidelpay = (new Heidelpay($privateKey))->setDebugHandler(new TestDebugHandler())->setDebugMode(true);
+        $this->childSetup();
+    }
+
+    /**
+     * Override this in the child test class to perform custom setup tasks e.g. setting a different Key.
+     */
+    protected function childSetup()
+    {
+        // do nothing here
     }
 
     //<editor-fold desc="Custom asserts">
@@ -158,11 +169,14 @@ class BasePaymentTest extends TestCase
      */
     public function createBasket(): Basket
     {
-        $orderId = self::generateRandomId();
-        $basket = new Basket($orderId, 123.4, 'EUR');
+        $orderId = $this->generateRandomId();
+        $basket = new Basket($orderId, 100.19, 'EUR');
+        $basket->setAmountTotalVat(0.19);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 123.4, 123.4, 1))
+        $basketItem = (new BasketItem('myItem', 100.0, 100.0, 1))
             ->setBasketItemReferenceId('refId')
+            ->setAmountVat(0.19)
+            ->setAmountGross(100.19)
             ->setImageUrl('https://hpp-images.s3.amazonaws.com/7/bsk_0_6377B5798E5C55C6BF8B5BECA59529130226E580B050B913EAC3606DA0FF4F68.jpg');
         $basket->addBasketItem($basketItem);
         $this->heidelpay->createBasket($basket);
@@ -255,6 +269,38 @@ class BasePaymentTest extends TestCase
     public static function generateRandomId(): string
     {
         return str_replace('.', '', microtime(true));
+    }
+
+    /**
+     * Returns the current date as string in the format Y-m-d.
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    public function getCurrentDateString(): string
+    {
+        return (new DateTime())->format('Y-m-d');
+    }
+
+    /**
+     * @return DateTime
+     *
+     * @throws \Exception
+     */
+    public function getYesterdaysTimestamp(): DateTime
+    {
+        return (new DateTime())->add(DateInterval::createFromDateString('yesterday'));
+    }
+
+    /**
+     * @return DateTime
+     *
+     * @throws \Exception
+     */
+    public function getTomorrowsTimestamp(): DateTime
+    {
+        return (new DateTime())->add(DateInterval::createFromDateString('tomorrow'));
     }
 
     //</editor-fold>

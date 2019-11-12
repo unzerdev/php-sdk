@@ -67,7 +67,7 @@ class PaypageTest extends BasePaymentTest
         $basket = $this->createBasket();
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
         $invoiceId = self::generateRandomId();
-        $paypage = (new Paypage(123.4, 'EUR', self::RETURN_URL))
+        $paypage = (new Paypage(100.19, 'EUR', self::RETURN_URL))
             ->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
             ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')
             ->setShopName('My Test Shop')
@@ -121,7 +121,7 @@ class PaypageTest extends BasePaymentTest
         $basket = $this->createBasket();
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
         $invoiceId = self::generateRandomId();
-        $paypage = (new Paypage(123.4, 'EUR', self::RETURN_URL))
+        $paypage = (new Paypage(100.19, 'EUR', self::RETURN_URL))
             ->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
             ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')
             ->setShopName('My Test Shop')

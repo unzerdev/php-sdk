@@ -41,8 +41,8 @@ use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
+use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
@@ -151,7 +151,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
 
         /** @var Customer $heidelpayMock */
         $customer = (new Customer())->setParentResource($heidelpayMock);
-        $this->assertEquals('parent/resource/path/customers/', $customer->getUri());
+        $this->assertEquals('parent/resource/path/customers', $customer->getUri());
     }
 
     /**
@@ -175,7 +175,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
 
         /** @var Heidelpay $heidelpayMock */
         $resource->setParentResource($heidelpayMock)->setId('myId');
-        $this->assertEquals($resourcePath . 'myId/', $resource->getUri());
+        $this->assertEquals($resourcePath . '/myId', $resource->getUri());
         $this->assertEquals($resourcePath, $resource->getUri(false));
     }
 
@@ -201,8 +201,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         /** @var Customer $customerMock */
         /** @var Heidelpay $heidelpayMock */
         $customerMock->setParentResource($heidelpayMock);
-        $this->assertEquals('parent/resource/path/customers/myExternalId/', $customerMock->getUri());
-        $this->assertEquals('parent/resource/path/customers/', $customerMock->getUri(false));
+        $this->assertEquals('parent/resource/path/customers/myExternalId', $customerMock->getUri());
+        $this->assertEquals('parent/resource/path/customers', $customerMock->getUri(false));
     }
 
     /**
@@ -381,29 +381,29 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
     public function uriDataProvider(): array
     {
         return [
-            'Customer' => [new Customer(), 'parent/resource/path/customers/'],
-            'Keypair' => [new Keypair(), 'parent/resource/path/keypair/'],
-            'Payment' => [new Payment(), 'parent/resource/path/payments/'],
-            'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card/'],
-            'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal/'],
-            'EPS' => [new EPS(), 'parent/resource/path/types/eps/'],
-            'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay/'],
-            'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
-            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed/'],
-            'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice/'],
-            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types/invoice-guaranteed/'],
-            'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels/'],
-            'Authorization' => [new Authorization(), 'parent/resource/path/authorize/'],
-            'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
-            'Charge' => [new Charge(), 'parent/resource/path/charges/'],
-            'Metadata' => [new Metadata(), 'parent/resource/path/metadata/'],
-            'Basket' => [new Basket(), 'parent/resource/path/baskets/'],
-            'Webhook' => [new Webhook(), 'parent/resource/path/webhooks/'],
-            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/'],
-            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring/'],
-            'Payout' => [new Payout(), 'parent/resource/path/payouts/'],
-            'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge/'],
-            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize/']
+            'Customer' => [new Customer(), 'parent/resource/path/customers'],
+            'Keypair' => [new Keypair(), 'parent/resource/path/keypair'],
+            'Payment' => [new Payment(), 'parent/resource/path/payments'],
+            'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card'],
+            'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal'],
+            'EPS' => [new EPS(), 'parent/resource/path/types/eps'],
+            'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay'],
+            'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit'],
+            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed'],
+            'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice'],
+            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types/invoice-guaranteed'],
+            'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels'],
+            'Authorization' => [new Authorization(), 'parent/resource/path/authorize'],
+            'Shipment' => [new Shipment(), 'parent/resource/path/shipments'],
+            'Charge' => [new Charge(), 'parent/resource/path/charges'],
+            'Metadata' => [new Metadata(), 'parent/resource/path/metadata'],
+            'Basket' => [new Basket(), 'parent/resource/path/baskets'],
+            'Webhook' => [new Webhook(), 'parent/resource/path/webhooks'],
+            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks'],
+            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring'],
+            'Payout' => [new Payout(), 'parent/resource/path/payouts'],
+            'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge'],
+            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize']
         ];
     }
 

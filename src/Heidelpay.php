@@ -25,6 +25,7 @@
  */
 namespace heidelpayPHP;
 
+use DateTime;
 use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
@@ -32,6 +33,7 @@ use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -98,7 +100,7 @@ class Heidelpay implements HeidelpayParentInterface
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
         $this->webhookService  = new WebhookService($this);
-        $this->httpService = new HttpService();
+        $this->httpService     = new HttpService();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -510,6 +512,21 @@ class Heidelpay implements HeidelpayParentInterface
     public function createPaymentType(BasePaymentType $paymentType): BasePaymentType
     {
         return $this->resourceService->createPaymentType($paymentType);
+    }
+
+    /**
+     * Updates the PaymentType resource with the given PaymentType object.
+     *
+     * @param BasePaymentType $paymentType The PaymentType object to be updated.
+     *
+     * @return BasePaymentType|AbstractHeidelpayResource The updated PaymentType object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
+    {
+        return $this->resourceService->updatePaymentType($paymentType);
     }
 
     /**
@@ -1248,7 +1265,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     //</editor-fold>
-    //</editor-fold>
+
+    //<editor-fold desc="PayPage">
 
     /**
      * @param Paypage       $paypage
@@ -1295,6 +1313,41 @@ class Heidelpay implements HeidelpayParentInterface
             $metadata
         );
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Hire Purchase (FlexiPay Rate)">
+
+    /**
+     * Returns available hire purchase direct debit instalment plans for the given values.
+     *
+     * @param $amount
+     * @param $currency
+     * @param $effectiveInterest
+     * @param DateTime|null $orderDate
+     *
+     * @return InstalmentPlans
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchDirectDebitInstalmentPlans(
+        $amount,
+        $currency,
+        $effectiveInterest,
+        DateTime $orderDate = null
+    ): InstalmentPlans {
+        return $this->getPaymentService()->fetchDirectDebitInstalmentPlans(
+            $amount,
+            $currency,
+            $effectiveInterest,
+            $orderDate
+        );
+    }
+
+    //</editor-fold>
+
+    //</editor-fold>
 
     //<editor-fold desc="Helpers">
 
