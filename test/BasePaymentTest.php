@@ -169,7 +169,7 @@ class BasePaymentTest extends TestCase
      */
     public function createBasket(): Basket
     {
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $basket = new Basket($orderId, 100.19, 'EUR');
         $basket->setAmountTotalVat(0.19);
         $basket->setNote('This basket is creatable!');
