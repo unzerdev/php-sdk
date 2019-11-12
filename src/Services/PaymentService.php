@@ -24,14 +24,17 @@
  */
 namespace heidelpayPHP\Services;
 
+use DateTime;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -56,7 +59,7 @@ class PaymentService
      */
     public function __construct(Heidelpay $heidelpay)
     {
-        $this->heidelpay = $heidelpay;
+        $this->heidelpay       = $heidelpay;
         $this->resourceService = $heidelpay->getResourceService();
     }
 
@@ -213,10 +216,13 @@ class PaymentService
         $invoiceId = null,
         $paymentReference = null
     ): Authorization {
+        $basePaymentType = $payment->getPaymentType();
+        /** @var Authorization $authorization */
         $authorization = (new Authorization($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
             ->setInvoiceId($invoiceId)
-            ->setPaymentReference($paymentReference);
+            ->setPaymentReference($paymentReference)
+            ->setSpecialParams($basePaymentType !== null ? $basePaymentType->getTransactionParams() : []);
         if ($card3ds !== null) {
             $authorization->setCard3ds($card3ds);
         }
@@ -265,9 +271,15 @@ class PaymentService
         $invoiceId = null,
         $paymentReference = null
     ): AbstractTransactionType {
-        $payment = $this->createPayment($paymentType);
-        $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setOrderId($orderId)->setInvoiceId($invoiceId)->setPaymentReference($paymentReference);
+        $payment     = $this->createPayment($paymentType);
+        $paymentType = $payment->getPaymentType();
+
+        /** @var Charge $charge */
+        $charge = (new Charge($amount, $currency, $returnUrl))
+            ->setOrderId($orderId)
+            ->setInvoiceId($invoiceId)
+            ->setPaymentReference($paymentReference)
+            ->setSpecialParams($paymentType->getTransactionParams() ?? []);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
         }
@@ -457,28 +469,43 @@ class PaymentService
     /**
      * Create a Cancellation transaction for the charge with the given id belonging to the given Payment object.
      *
-     * @param Payment|string $payment
-     * @param string         $chargeId
-     * @param null           $amount
+     * @param Payment|string $payment          The Payment object or the id of the Payment the charge belongs to.
+     * @param string         $chargeId         The id of the Charge to be canceled.
+     * @param float|null     $amount           The amount to be canceled.
+     *                                         This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null    $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null    $paymentReference A reference string for the payment.
+     * @param float|null     $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation Resulting Cancellation object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function cancelChargeById($payment, $chargeId, $amount = null): AbstractTransactionType
-    {
+    public function cancelChargeById(
+        $payment,
+        $chargeId,
+        float $amount = null,
+        string $reasonCode = null,
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
+    ): AbstractTransactionType {
         $charge = $this->resourceService->fetchChargeById($payment, $chargeId);
-        return $this->cancelCharge($charge, $amount);
+        return $this->cancelCharge($charge, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
     }
 
     /**
      * Create a Cancellation transaction for the given Charge resource.
      *
-     * @param Charge $charge
-     * @param $amount
-     * @param string|null $reasonCode
+     * @param Charge      $charge           The Charge object to create the Cancellation for.
+     * @param float|null  $amount           The amount to be canceled.
+     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -489,13 +516,17 @@ class PaymentService
         Charge $charge,
         $amount = null,
         string $reasonCode = null,
-        string $paymentReference = null
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
     ): AbstractTransactionType {
         $cancellation = new Cancellation($amount);
         $cancellation
             ->setReasonCode($reasonCode)
             ->setPayment($charge->getPayment())
-            ->setPaymentReference($paymentReference);
+            ->setPaymentReference($paymentReference)
+            ->setAmountNet($amountNet)
+            ->setAmountVat($amountVat);
         $charge->addCancellation($cancellation);
         $this->resourceService->create($cancellation);
 
@@ -528,8 +559,6 @@ class PaymentService
     }
 
     //</editor-fold>
-    
-    //</editor-fold>
 
     //<editor-fold desc="Paypage">
 
@@ -557,6 +586,36 @@ class PaymentService
         $this->resourceService->create($paypage->setPayment($payment));
         return $paypage;
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Hire Purchase (Flexipay Rate)">
+
+    /**
+     * Returns an InstallmentPlans object containing all available instalment plans.
+     *
+     * @param float         $amount            The amount to be charged via FlexiPay Rate.
+     * @param string        $currency          The currency code of the transaction.
+     * @param float         $effectiveInterest The effective interest rate.
+     * @param DateTime|null $orderDate         The date the order took place, is set to today if left empty.
+     *
+     * @return InstalmentPlans|AbstractHeidelpayResource The object containing all posible instalment plans.
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchDirectDebitInstalmentPlans(
+        $amount,
+        $currency,
+        $effectiveInterest,
+        DateTime $orderDate = null
+    ): InstalmentPlans {
+        $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
+        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
+        return $this->heidelpay->getResourceService()->fetch($plans);
+    }
+
+    //</editor-fold>
 
     //</editor-fold>
 }

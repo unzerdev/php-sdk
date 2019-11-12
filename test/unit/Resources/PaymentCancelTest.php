@@ -365,7 +365,7 @@ class PaymentCancelTest extends BaseUnitTest
      * @test
      * @dataProvider allowedErrorCodesDuringAuthCancel
      *
-     * @param string $allowedExceptionCode
+     * @param string $exceptionCode
      * @param bool   $shouldHaveThrownException
      *
      * @throws Exception
@@ -374,16 +374,17 @@ class PaymentCancelTest extends BaseUnitTest
      * @throws AssertionFailedError
      * @throws \PHPUnit\Framework\MockObject\RuntimeException
      */
-    public function verifyAllowedErrorsWillBeIgnoredDuringAuthorizeCancel($allowedExceptionCode, $shouldHaveThrownException)
+    public function verifyAllowedErrorsWillBeIgnoredDuringAuthorizeCancel($exceptionCode, $shouldHaveThrownException)
     {
         /** @var MockObject|Payment $paymentMock */
         /** @var MockObject|Authorization $authMock */
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
         $authMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
 
-        $allowedException = new HeidelpayApiException(null, null, $allowedExceptionCode);
+        $allowedException = new HeidelpayApiException(null, null, $exceptionCode);
         $authMock->method('cancel')->willThrowException($allowedException);
         $paymentMock->method('getAuthorization')->willReturn($authMock);
+        $paymentMock->getAmount()->setRemaining(100.0);
 
         try {
             $this->assertEquals(null, $paymentMock->cancelAuthorizationAmount(12.3));
