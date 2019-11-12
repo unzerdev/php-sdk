@@ -58,14 +58,14 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Create an Flexipay instance
+    // Create an FlexiPay Direct instance
     let flexiPayDirect = heidelpayInstance.FlexiPayDirect();
 
     // Handle payment form submission
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a Flexipay resource
+        // Creating a FlexiPay Direct resource
         flexiPayDirect.createResource()
             .then(function(result) {
                 let hiddenInput = document.createElement('input');

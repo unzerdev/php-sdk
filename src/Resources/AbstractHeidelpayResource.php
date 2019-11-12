@@ -51,6 +51,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /** @var DateTime */
     private $fetchedAt;
 
+    /** @var array $specialParams */
+    private $specialParams = [];
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -129,6 +132,29 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         return $this;
     }
 
+    /**
+     * Returns an array of additional params which can be added to the resource request.
+     *
+     * @return array
+     */
+    public function getSpecialParams(): array
+    {
+        return $this->specialParams;
+    }
+
+    /**
+     * Sets the array of additional params which are to be added to the resource request.
+     *
+     * @param array $specialParams
+     *
+     * @return self
+     */
+    public function setSpecialParams(array $specialParams): self
+    {
+        $this->specialParams = $specialParams;
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
@@ -160,8 +186,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                 $uri[] = $this->getExternalId();
             }
         }
-
-        $uri[] = '';
 
         return implode('/', $uri);
     }
@@ -238,7 +262,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                 !$reflection->isProtected()) {              // only send protected properties
                 $skipProperty = true;
             }
-        } catch (ReflectionException $e) {
+        } /** @noinspection BadExceptionsProcessingInspection */
+        catch (ReflectionException $e) {
             $skipProperty = true;
         }
 
@@ -341,6 +366,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         if (count($resources) > 0) {
             ksort($resources);
             $properties['resources'] = $resources;
+        }
+        //---------------------
+
+        // Add special params if any
+        foreach ($this->getSpecialParams() as $key => $specialParam) {
+            $properties[$key] = $specialParam;
         }
         //---------------------
 

@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.2.5.0][1.2.5.0]
 
+### Added
+*   Hire purchase payment type (FlexiPay Rate).
+
 ### Removed
 *   API Response Code for basket item image extension error.
 
