@@ -812,7 +812,8 @@ class Payment extends AbstractHeidelpayResource
             } catch (HeidelpayApiException $e) {
                 $allowedErrors = [
                     ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
+                    ApiResponseCodes::API_ERROR_TRANSACTION_CANCEL_NOT_ALLOWED
                 ];
 
                 if (!in_array($e->getCode(), $allowedErrors, true)) {

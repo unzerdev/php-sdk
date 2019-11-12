@@ -24,14 +24,18 @@
  */
 namespace heidelpayPHP\Services;
 
+use DateTime;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\InstalmentPlan;
+use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -40,6 +44,7 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use RuntimeException;
+use stdClass;
 
 class PaymentService
 {
@@ -213,10 +218,13 @@ class PaymentService
         $invoiceId = null,
         $paymentReference = null
     ): Authorization {
+        $basePaymentType = $payment->getPaymentType();
+        /** @var Authorization $authorization */
         $authorization = (new Authorization($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
             ->setInvoiceId($invoiceId)
-            ->setPaymentReference($paymentReference);
+            ->setPaymentReference($paymentReference)
+            ->setSpecialParams($basePaymentType !== null ? $basePaymentType->getTransactionParams() : []);
         if ($card3ds !== null) {
             $authorization->setCard3ds($card3ds);
         }
@@ -266,8 +274,14 @@ class PaymentService
         $paymentReference = null
     ): AbstractTransactionType {
         $payment = $this->createPayment($paymentType);
-        $charge = new Charge($amount, $currency, $returnUrl);
-        $charge->setOrderId($orderId)->setInvoiceId($invoiceId)->setPaymentReference($paymentReference);
+        $paymentType = $payment->getPaymentType();
+
+        /** @var Charge $charge */
+        $charge = (new Charge($amount, $currency, $returnUrl))
+            ->setOrderId($orderId)
+            ->setInvoiceId($invoiceId)
+            ->setPaymentReference($paymentReference)
+            ->setSpecialParams($paymentType->getTransactionParams() ?? []);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
         }
@@ -528,8 +542,6 @@ class PaymentService
     }
 
     //</editor-fold>
-    
-    //</editor-fold>
 
     //<editor-fold desc="Paypage">
 
@@ -557,6 +569,62 @@ class PaymentService
         $this->resourceService->create($paypage->setPayment($payment));
         return $paypage;
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Hire Purchase (Flexipay Rate)">
+
+    /**
+     * Returns a hire purchase direct debit object containing all available instalment plans.
+     *
+     * @param $amount
+     * @param $currency
+     * @param $effectiveInterest
+     * @param DateTime|null $orderDate
+     *
+     * @return InstalmentPlans|AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchDirectDebitInstalmentPlans($amount, $currency, $effectiveInterest, DateTime $orderDate = null): InstalmentPlans
+    {
+        $hdd = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
+        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
+        return $this->heidelpay->getResourceService()->fetch($plans);
+    }
+
+    /**
+     * Select the given plan create the payment method resource and perform the initializing authorization.
+     *
+     * @param InstalmentPlan|stdClass $plan
+     * @param string                  $iban
+     * @param string                  $accountHolder
+     * @param DateTime|null           $orderDate
+     * @param string|null             $bic
+     *
+     * @return HirePurchaseDirectDebit
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function selectDirectDebitInstalmentPlan(
+        $plan,
+        string $iban,
+        string $accountHolder,
+        DateTime $orderDate = null,
+        string $bic = null
+    ): HirePurchaseDirectDebit {
+        $hdd = new HirePurchaseDirectDebit($plan, $iban, $accountHolder, $bic);
+        $hdd->setParentResource($this->heidelpay);
+        if ($orderDate instanceof DateTime) {
+            $hdd->setOrderDate($orderDate);
+        }
+        $this->resourceService->create($hdd);
+        return $hdd;
+    }
+
+    //</editor-fold>
 
     //</editor-fold>
 }

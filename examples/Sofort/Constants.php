@@ -25,7 +25,6 @@
 
 require_once __DIR__ . '/../Constants.php';
 
-define('EXAMPLE_PATH', __DIR__);
 define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'Sofort');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
 define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');
