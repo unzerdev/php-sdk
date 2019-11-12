@@ -199,13 +199,17 @@ class BasePaymentTest extends TestCase
     /**
      * Creates a Card object for tests.
      *
+     * @param string $cardnumber
+     *
      * @return Card
      *
      * @throws RuntimeException
+     * @throws \Exception
      */
-    protected function createCardObject(): Card
+    protected function createCardObject(string $cardnumber = '5453010000059543'): Card
     {
-        $card = new Card('4444333322221111', '03/20');
+        $expiryDate = $this->getNextYearsTimestamp()->format('m/Y');
+        $card = new Card($cardnumber, $expiryDate);
         $card->setCvc('123');
         return $card;
     }
@@ -301,6 +305,16 @@ class BasePaymentTest extends TestCase
     public function getTomorrowsTimestamp(): DateTime
     {
         return (new DateTime())->add(DateInterval::createFromDateString('tomorrow'));
+    }
+
+    /**
+     * @return DateTime
+     *
+     * @throws \Exception
+     */
+    public function getNextYearsTimestamp(): DateTime
+    {
+        return (new DateTime())->add(DateInterval::createFromDateString('next year'));
     }
 
     //</editor-fold>
