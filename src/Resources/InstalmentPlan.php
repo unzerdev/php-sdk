@@ -414,9 +414,12 @@ class InstalmentPlan extends BasePaymentType
      */
     public function getTransactionParams(): array
     {
-        return [
-            'effectiveInterestRate' => $this->getEffectiveInterestRate()
-        ];
+        $params = [];
+        $effectiveInterestRate = $this->getEffectiveInterestRate();
+        if ($effectiveInterestRate !== null) {
+            $params['effectiveInterestRate'] = $effectiveInterestRate;
+        }
+        return $params;
     }
 
     //</editor-fold>
