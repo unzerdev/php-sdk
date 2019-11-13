@@ -13,6 +13,7 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
+use DateTime;
 use heidelpayPHP\Resources\InstalmentPlans;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -32,13 +33,11 @@ class InstalmentPlanTest extends TestCase
      *
      * @throws Exception
      * @throws RuntimeException
-     *
-     * todo add missing parameter
      */
     public function verifyQueryString($amount, $currency, $effectiveInterest)
     {
-        $plans = new InstalmentPlans($amount, $currency, $effectiveInterest);
-        $this->assertEquals("plans?amount={$amount}&currency={$currency}&effectiveInterest={$effectiveInterest}", $plans->getResourcePath());
+        $plans = new InstalmentPlans($amount, $currency, $effectiveInterest, new DateTime('13.11.2019'));
+        $this->assertEquals("plans?amount={$amount}&currency={$currency}&effectiveInterest={$effectiveInterest}&orderDate=2019-11-13", $plans->getResourcePath());
     }
 
     //<editor-fold desc="Data Providers">

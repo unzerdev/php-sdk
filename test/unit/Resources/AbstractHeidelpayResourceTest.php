@@ -42,6 +42,7 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
@@ -169,8 +170,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractHeidelpayResource$resource, $resourcePath)
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['getUri'])
-            ->getMock();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
         $heidelpayMock->method('getUri')->willReturn('parent/resource/path/');
 
         /** @var Heidelpay $heidelpayMock */
@@ -377,8 +377,6 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @return array
      *
      * @throws RuntimeException
-     *
-     * todo add hirepurchase and instalment plans
      */
     public function uriDataProvider(): array
     {
@@ -405,7 +403,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring'],
             'Payout' => [new Payout(), 'parent/resource/path/payouts'],
             'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge'],
-            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize']
+            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize'],
+            'HirePurchaseDirectDebit' => [new HirePurchaseDirectDebit(), 'parent/resource/path/types/hire-purchase-direct-debit']
         ];
     }
 

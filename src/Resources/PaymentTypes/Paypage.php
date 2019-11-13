@@ -523,6 +523,7 @@ class Paypage extends BasePaymentType
 
     /**
      * @param bool|null $card3ds
+     *
      * @return Paypage
      */
     public function setCard3ds($card3ds): Paypage
