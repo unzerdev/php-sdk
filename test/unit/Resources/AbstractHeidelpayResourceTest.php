@@ -311,12 +311,14 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             ->setShippingAddress($address)
             ->setParentResource($heidelpay);
 
+        $customer->setSpecialParams(['param1' => 'value1', 'param2' => 'value2']);
+
         $expectedJson = '{"billingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
             '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"},"birthDate":"1989-12-24",' .
             '"company":"heidelpay GmbH","customerId":"CustomerId","email":"peter.universum@universum-group.de",' .
-            '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","phone":"+4962216471100",' .
-            '"salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
-            '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
+            '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","param1":"value1","param2":"value2",' .
+            '"phone":"+4962216471100","salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE",' .
+            '"name":"Peter Universum","state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
         $this->assertEquals($expectedJson, $customer->jsonSerialize());
     }
 
