@@ -69,9 +69,6 @@ class InstalmentPlan extends BasePaymentType
     /** @var float $lastRate */
     protected $lastRate;
 
-    /** @var InstalmentPlans $plans */
-    protected $plans;
-
     /** @var string $invoiceDate */
     protected $invoiceDate;
 
@@ -347,25 +344,6 @@ class InstalmentPlan extends BasePaymentType
     public function setLastRate(float $lastRate): self
     {
         $this->lastRate = $lastRate;
-        return $this;
-    }
-
-    /**
-     * @return InstalmentPlans
-     */
-    public function getPlans(): InstalmentPlans
-    {
-        return $this->plans;
-    }
-
-    /**
-     * @param InstalmentPlans $plans
-     *
-     * @return $this
-     */
-    public function setPlans(InstalmentPlans $plans): self
-    {
-        $this->plans = $plans;
         return $this;
     }
 
