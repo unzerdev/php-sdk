@@ -105,7 +105,8 @@ class PayPageTest extends BasePaymentTest
             ->setTermsAndConditionUrl('my tac url')
             ->setPayment($payment)
             ->setRedirectUrl('https://redirect.url')
-            ->addExcludeType(SepaDirectDebit::getResourceName());
+            ->addExcludeType(SepaDirectDebit::getResourceName())
+            ->setCard3ds(true);
 
         // ----------- VERIFY test values ------------
         $this->assertEquals(321.0, $paypage->getAmount());
@@ -136,6 +137,11 @@ class PayPageTest extends BasePaymentTest
         $this->assertArraySubset([SepaDirectDebit::getResourceName()], $paypage->getExcludeTypes());
         $paypage->setExcludeTypes([Card::getResourceName(), Giropay::getResourceName()]);
         $this->assertArraySubset([Card::getResourceName(), Giropay::getResourceName()], $paypage->getExcludeTypes());
+        $this->assertTrue($paypage->isCard3ds());
+
+        // SET test values 2
+        $paypage->setCard3ds(false);
+        $this->assertFalse($paypage->isCard3ds());
     }
 
     /**
