@@ -84,6 +84,7 @@ class PayPageTest extends BasePaymentTest
 
         // other
         $this->assertCount(0, $paypage->getExcludeTypes());
+        $this->assertNull($paypage->isCard3ds());
 
         // ----------- SET test values ------------
         $payment = (new Payment())->setId('my payment id');
