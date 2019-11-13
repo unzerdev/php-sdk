@@ -282,7 +282,7 @@ class BasePaymentTest extends TestCase
      *
      * @throws \Exception
      */
-    public function getCurrentDateString(): string
+    public function getTodaysDateString(): string
     {
         return (new DateTime())->format('Y-m-d');
     }
