@@ -377,6 +377,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      * @return array
      *
      * @throws RuntimeException
+     *
+     * todo add hirepurchase and instalment plans
      */
     public function uriDataProvider(): array
     {

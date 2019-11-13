@@ -32,6 +32,8 @@ class InstalmentPlanTest extends TestCase
      *
      * @throws Exception
      * @throws RuntimeException
+     *
+     * todo add missing parameter
      */
     public function verifyQueryString($amount, $currency, $effectiveInterest)
     {
