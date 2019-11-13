@@ -24,9 +24,13 @@
  */
 namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
+use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
+use ReflectionException;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
 {
@@ -133,6 +137,30 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $this->assertEquals($this->getTomorrowsTimestamp()->format('Y-m-d'), $hdd->getInvoiceDate());
         $this->assertEquals($this->getNextYearsTimestamp()->format('Y-m-d'), $hdd->getInvoiceDueDate());
         $this->assertEquals(['effectiveInterestRate' => $hdd->getEffectiveInterestRate()], $hdd->getTransactionParams());
+    }
 
+    /**
+     * Verify handle response is called with the exposed data of the selected instalment plan.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws ReflectionException
+     */
+    public function selectedInstalmentPlanDataIsUsedToUpdateInstalmentPlanInformation()
+    {
+        /** @var HirePurchaseDirectDebit|MockObject $hddMock */
+        $hddMock = $this->getMockBuilder(HirePurchaseDirectDebit::class)->setMethods(['handleResponse'])->getMock();
+
+        /** @var InstalmentPlan|MockObject $instalmentPlanMock */
+        $instalmentPlanMock = $this->getMockBuilder(InstalmentPlan::class)->setMethods(['expose'])->getMock();
+
+        $exposedObject = (object)['data' => 'I am exposed'];
+
+        $instalmentPlanMock->expects($this->once())->method('expose')->willReturn($exposedObject);
+        $hddMock->expects($this->once())->method('handleResponse')->with($exposedObject);
+
+        $hddMock->selectInstalmentPlan($instalmentPlanMock);
     }
 }
