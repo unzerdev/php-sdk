@@ -199,17 +199,17 @@ class BasePaymentTest extends TestCase
     /**
      * Creates a Card object for tests.
      *
-     * @param string $cardnumber
+     * @param string $cardNumber
      *
      * @return Card
      *
      * @throws RuntimeException
      * @throws \Exception
      */
-    protected function createCardObject(string $cardnumber = '5453010000059543'): Card
+    protected function createCardObject(string $cardNumber = '5453010000059543'): Card
     {
         $expiryDate = $this->getNextYearsTimestamp()->format('m/Y');
-        $card = new Card($cardnumber, $expiryDate);
+        $card = new Card($cardNumber, $expiryDate);
         $card->setCvc('123');
         return $card;
     }

@@ -35,6 +35,7 @@ use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
+use function count;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
 {

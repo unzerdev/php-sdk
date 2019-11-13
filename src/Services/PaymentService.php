@@ -599,7 +599,7 @@ class PaymentService
      * @param float         $effectiveInterest The effective interest rate.
      * @param DateTime|null $orderDate         The date the order took place, is set to today if left empty.
      *
-     * @return InstalmentPlans|AbstractHeidelpayResource The object containing all posible instalment plans.
+     * @return InstalmentPlans|AbstractHeidelpayResource The object containing all possible instalment plans.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException

@@ -89,7 +89,7 @@ class HeidelpayTest extends BaseUnitTest
         $this->assertEquals('myLocale', $heidelpay->getLocale());
 
         try {
-            $heidelpay->setKey('söiodufhreoöhf');
+            $heidelpay->setKey('this is not a valid key');
             $this->assertTrue(false, 'This exception should have been thrown');
         } catch (RuntimeException $e) {
             $this->assertEquals('Illegal key: Use a valid private key with this SDK!', $e->getMessage());

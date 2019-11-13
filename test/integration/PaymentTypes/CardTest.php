@@ -47,7 +47,7 @@ class CardTest extends BasePaymentTest
      *
      * @dataProvider cardShouldBeCreatableDP
      *
-     * @param string      $cardnumber
+     * @param string      $cardNumber
      * @param CardDetails $expectedCardDetails
      *
      * @return BasePaymentType
@@ -56,10 +56,10 @@ class CardTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function cardShouldBeCreatable(string $cardnumber, CardDetails $expectedCardDetails): BasePaymentType
+    public function cardShouldBeCreatable(string $cardNumber, CardDetails $expectedCardDetails): BasePaymentType
     {
         /** @var Card $card */
-        $card = $this->createCardObject($cardnumber);
+        $card = $this->createCardObject($cardNumber);
         $this->assertNull($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
 
