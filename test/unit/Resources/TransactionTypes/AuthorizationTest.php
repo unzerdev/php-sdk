@@ -36,7 +36,6 @@ use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
-use stdClass;
 
 class AuthorizationTest extends BaseUnitTest
 {
@@ -87,21 +86,34 @@ class AuthorizationTest extends BaseUnitTest
         $this->assertNull($authorization->getAmount());
         $this->assertNull($authorization->getCurrency());
         $this->assertNull($authorization->getReturnUrl());
+        $this->assertNull($authorization->getPDFLink());
+        $this->assertNull($authorization->getZgReferenceId());
+        $this->assertNull($authorization->getExternalOrderId());
 
         $authorization = new Authorization(123.4, 'myCurrency', 'https://my-return-url.test');
         $this->assertEquals(123.4, $authorization->getAmount());
         $this->assertEquals('myCurrency', $authorization->getCurrency());
         $this->assertEquals('https://my-return-url.test', $authorization->getReturnUrl());
+        $this->assertNull($authorization->getPDFLink());
+        $this->assertNull($authorization->getZgReferenceId());
+        $this->assertNull($authorization->getExternalOrderId());
 
-        $testResponse = new stdClass();
-        $testResponse->amount = '789.0';
-        $testResponse->currency = 'TestCurrency';
-        $testResponse->returnUrl = 'https://return-url.test';
+        $testResponse = [
+            'amount' => '789.0',
+            'currency' => 'TestCurrency',
+            'returnUrl' => 'https://return-url.test',
+            'PDFLink' => 'https://url.to.pdf',
+            'zgReferenceId' => 'zg reference id',
+            'externalOrderId' => 'external order id'
+        ];
 
-        $authorization->handleResponse($testResponse);
+        $authorization->handleResponse((object)$testResponse);
         $this->assertEquals(789.0, $authorization->getAmount());
         $this->assertEquals('TestCurrency', $authorization->getCurrency());
         $this->assertEquals('https://return-url.test', $authorization->getReturnUrl());
+        $this->assertEquals('https://url.to.pdf', $authorization->getPDFLink());
+        $this->assertEquals('zg reference id', $authorization->getZgReferenceId());
+        $this->assertEquals('external order id', $authorization->getExternalOrderId());
     }
 
     /**

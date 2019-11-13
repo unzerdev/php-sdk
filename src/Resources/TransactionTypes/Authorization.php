@@ -187,57 +187,57 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExternalOrderId(): string
+    public function getExternalOrderId()
     {
         return $this->externalOrderId;
     }
 
     /**
-     * @param string $externalOrderId
+     * @param string|null $externalOrderId
      *
      * @return Authorization
      */
-    protected function setExternalOrderId(string $externalOrderId): Authorization
+    protected function setExternalOrderId($externalOrderId): Authorization
     {
         $this->externalOrderId = $externalOrderId;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getZgReferenceId(): string
+    public function getZgReferenceId()
     {
         return $this->zgReferenceId;
     }
 
     /**
-     * @param string $zgReferenceId
+     * @param string|null $zgReferenceId
      *
      * @return Authorization
      */
-    protected function setZgReferenceId(string $zgReferenceId): Authorization
+    protected function setZgReferenceId($zgReferenceId): Authorization
     {
         $this->zgReferenceId = $zgReferenceId;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPDFLink(): string
+    public function getPDFLink()
     {
         return $this->PDFLink;
     }
 
     /**
-     * @param string $PDFLink
+     * @param string|null $PDFLink
      *
      * @return Authorization
      */
-    protected function setPDFLink(string $PDFLink): Authorization
+    protected function setPDFLink($PDFLink): Authorization
     {
         $this->PDFLink = $PDFLink;
         return $this;
