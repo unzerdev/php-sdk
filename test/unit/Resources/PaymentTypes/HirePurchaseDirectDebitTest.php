@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
+use DateInterval;
+use DateTime;
 use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
@@ -137,6 +139,30 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $this->assertEquals($this->getTomorrowsTimestamp()->format('Y-m-d'), $hdd->getInvoiceDate());
         $this->assertEquals($this->getNextYearsTimestamp()->format('Y-m-d'), $hdd->getInvoiceDueDate());
         $this->assertEquals(['effectiveInterestRate' => $hdd->getEffectiveInterestRate()], $hdd->getTransactionParams());
+
+        // test dates with DateTime objects
+        $today = new DateTime();
+        $hdd->setOrderDate($today->add(new DateInterval('P1D')))
+            ->setDayOfPurchase($today->add(new DateInterval('P1D')))
+            ->setInvoiceDate($today->add(new DateInterval('P1D')))
+            ->setInvoiceDueDate($today->add(new DateInterval('P1D')));
+
+        $today = new DateTime();
+        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $hdd->getOrderDate());
+        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $hdd->getDayOfPurchase());
+        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $hdd->getInvoiceDate());
+        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $hdd->getInvoiceDueDate());
+
+        // test dates with null
+        $hdd->setOrderDate(null)
+            ->setDayOfPurchase(null)
+            ->setInvoiceDate(null)
+            ->setInvoiceDueDate(null);
+
+        $this->assertNull($hdd->getOrderDate());
+        $this->assertNull($hdd->getDayOfPurchase());
+        $this->assertNull($hdd->getInvoiceDate());
+        $this->assertNull($hdd->getInvoiceDueDate());
     }
 
     /**
