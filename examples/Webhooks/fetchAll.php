@@ -47,11 +47,6 @@ function printError($text)
     printMessage('error', 'Error', $text);
 }
 
-function printSuccess($title, $text)
-{
-    printMessage('success', $title, $text);
-}
-
 function printInfo($title, $text)
 {
     printMessage('info', $title, $text);

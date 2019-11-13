@@ -25,7 +25,6 @@
 namespace heidelpayPHP\Resources\EmbeddedResources;
 
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use stdClass;
 
 class GeoLocation extends AbstractHeidelpayResource
 {
@@ -83,18 +82,6 @@ class GeoLocation extends AbstractHeidelpayResource
     protected function setCountryIsoA2($countryCode): GeoLocation
     {
         return $this->setCountryCode($countryCode);
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
-    /**
-     * {@inheritDoc}
-     */
-    public function expose(): stdClass
-    {
-        return json_decode(json_encode(parent::expose(), JSON_FORCE_OBJECT), false);
     }
 
     //</editor-fold>

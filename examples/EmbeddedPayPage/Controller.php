@@ -46,14 +46,6 @@ header('Content-Type: application/json');
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
 
-function redirect($url, $merchantMessage = '', $clientMessage = '')
-{
-    $_SESSION['merchantMessage'] = $merchantMessage;
-    $_SESSION['clientMessage']   = $clientMessage;
-    header('Location: ' . $url);
-    die();
-}
-
 // These lines are just for this example
 $transactionType = $_POST['transaction_type'] ?? 'authorize';
 
