@@ -25,6 +25,7 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use DateTime;
+use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
@@ -93,6 +94,35 @@ class InstalmentPlanTest extends BasePaymentTest
 
         // then
         $this->assertNull($instalmentPlans->getOrderDate());
+    }
+
+    /**
+     * Verify plans can be retrieved.
+     *
+     * @test
+     *
+     * @throws Exception
+     */
+    public function plansShouldBeRetrievable()
+    {
+        // when
+        $instalmentPlans = new InstalmentPlans(1.234, 'EUR', 23.45);
+
+        // then
+        $this->assertEquals([], $instalmentPlans->getPlans());
+
+        // when
+        $plans = [(object)['orderDate' => 'plan 1'], (object)['orderDate' => 'plan 2']];
+        $instalmentPlans->handleResponse((object)['entity' => (object)$plans]);
+
+        // then
+        $plans = $instalmentPlans->getPlans();
+        $this->assertCount(2, $plans);
+
+        /** @var InstalmentPlan $plan1 */
+        list($plan1, $plan2) = $plans;
+        $this->assertEquals('plan 1', $plan1->getOrderDate());
+        $this->assertEquals('plan 2', $plan2->getOrderDate());
     }
 
     //<editor-fold desc="Data Providers">
