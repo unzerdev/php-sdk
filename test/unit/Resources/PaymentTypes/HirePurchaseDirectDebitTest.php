@@ -29,6 +29,7 @@ use DateTime;
 use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -188,5 +189,29 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $hddMock->expects($this->once())->method('handleResponse')->with($exposedObject);
 
         $hddMock->selectInstalmentPlan($instalmentPlanMock);
+    }
+
+    /**
+     * Verify instalment plan fetch can update instalment plan properties.
+     *
+     * @test
+     *
+     * @throws AssertionFailedError
+     * @throws Exception
+     */
+    public function instalmentPlanPropertiesShouldBeUpdateable()
+    {
+        $plan = new InstalmentPlan();
+        $this->assertEmpty($plan->getInstallmentRates());
+
+        $rates = [
+            (object)['title' => 'first Rate'],
+            (object)['title' => 'second Rate'],
+            (object)['title' => 'third Rate']
+        ];
+        $planData = (object)['installmentRates' => $rates];
+
+        $plan->handleResponse($planData);
+        $this->assertArraySubset($rates, $plan->getInstallmentRates());
     }
 }

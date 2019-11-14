@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Resources;
 
 use DateTime;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
 use stdClass;
@@ -75,8 +76,8 @@ class InstalmentPlan extends BasePaymentType
     /** @var string $invoiceDueDate */
     protected $invoiceDueDate;
 
-    /** @var stdClass[] */
-    private $rates;
+    /** @var stdClass[]|null $installmentRates */
+    private $installmentRates;
 
     /**
      * @param int    $numberOfRates
@@ -387,21 +388,21 @@ class InstalmentPlan extends BasePaymentType
     }
 
     /**
-     * @return stdClass[]
+     * @return stdClass[]|null
      */
-    public function getRates(): array
+    public function getInstallmentRates()
     {
-        return $this->rates;
+        return $this->installmentRates;
     }
 
     /**
-     * @param stdClass[] $rates
+     * @param stdClass[] $installmentRates
      *
      * @return InstalmentPlan
      */
-    public function setRates(array $rates): InstalmentPlan
+    protected function setInstallmentRates(array $installmentRates): InstalmentPlan
     {
-        $this->rates = $rates;
+        $this->installmentRates = $installmentRates;
         return $this;
     }
 
@@ -420,6 +421,22 @@ class InstalmentPlan extends BasePaymentType
             $params['effectiveInterestRate'] = $effectiveInterestRate;
         }
         return $params;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        parent::handleResponse($response, $method);
+
+        if (isset($response->installmentRates)) {
+            $rates = [];
+            foreach ($response->installmentRates as $rate) {
+                $rates[] = $rate;
+            }
+            $this->setInstallmentRates($rates);
+        }
     }
 
     //</editor-fold>
