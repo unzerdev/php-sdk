@@ -377,6 +377,7 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
      * The object and the transmitted value will be updated.
      *
      * @test
+     *
      * @throws RuntimeException
      */
     public function moreThenFourDecimalPlaces()
