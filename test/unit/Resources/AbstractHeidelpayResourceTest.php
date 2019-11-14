@@ -56,13 +56,14 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
+use heidelpayPHP\test\unit\DummyResource;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class AbstractHeidelpayResourceTest extends BaseUnitTest
+class AbstractHeidelpayResourceTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter functionality.
@@ -369,6 +370,24 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $customer->setId('MyTestId');
         $dummy = new DummyHeidelPayResource($customer);
         $this->assertNull($dummy->getExternalId());
+    }
+
+    /**
+     * Verify float values are rounded to 4 decimal places on expose.
+     * The object and the transmitted value will be updated.
+     *
+     * @test
+     * @throws RuntimeException
+     */
+    public function moreThenFourDecimalPlaces()
+    {
+        $object = new DummyResource();
+        $object->setTestFloat(1.23456789);
+        $this->assertEquals(1.23456789, $object->getTestFloat());
+
+        $reduced = $object->expose();
+        $this->assertEquals(['testFloat' => 1.2346], $reduced);
+        $this->assertEquals(1.2346, $object->getTestFloat());
     }
 
     //<editor-fold desc="Data Providers">

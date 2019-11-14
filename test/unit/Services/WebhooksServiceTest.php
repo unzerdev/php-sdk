@@ -30,14 +30,14 @@ use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Resources\Webhooks;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\DummyResource;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class WebhooksServiceTest extends BaseUnitTest
+class WebhooksServiceTest extends BasePaymentTest
 {
     //<editor-fold desc="General">
 

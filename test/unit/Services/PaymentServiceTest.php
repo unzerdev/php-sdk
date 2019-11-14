@@ -41,14 +41,14 @@ use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 use function in_array;
 
-class PaymentServiceTest extends BaseUnitTest
+class PaymentServiceTest extends BasePaymentTest
 {
     //<editor-fold desc="General">
 

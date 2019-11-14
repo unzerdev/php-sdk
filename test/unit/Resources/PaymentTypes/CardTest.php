@@ -26,13 +26,13 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
 use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
 use stdClass;
 
-class CardTest extends BaseUnitTest
+class CardTest extends BasePaymentTest
 {
     const TEST_ID = 's-crd-l4bbx7ory1ec';
     const TEST_METHOD_TYPE = 'card';

@@ -78,6 +78,19 @@ class BasePaymentTest extends TestCase
     //<editor-fold desc="Custom asserts">
 
     /**
+     * This performs assertions to verify the tested value is an empty array.
+     *
+     * @param mixed $value
+     *
+     * @throws Exception
+     */
+    public function assertIsEmptyArray($value)
+    {
+        $this->assertInternalType('array', $value);
+        $this->assertEmpty($value);
+    }
+
+    /**
      * @param Payment $payment
      * @param float   $expectedRemaining
      * @param float   $expectedCharged

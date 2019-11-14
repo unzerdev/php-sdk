@@ -31,14 +31,14 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
 use heidelpayPHP\Services\EnvironmentService;
 use heidelpayPHP\Services\HttpService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\Services\DummyAdapter;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 
-class HttpServiceTest extends BaseUnitTest
+class HttpServiceTest extends BasePaymentTest
 {
     /**
      * Verify getAdapter will return a CurlAdapter if none has been set.

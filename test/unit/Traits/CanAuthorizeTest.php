@@ -29,11 +29,11 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use ReflectionException;
 use RuntimeException;
 
-class CanAuthorizeTest extends BaseUnitTest
+class CanAuthorizeTest extends BasePaymentTest
 {
     /**
      * Verify authorize method throws exception if the class does not implement the HeidelpayParentInterface.

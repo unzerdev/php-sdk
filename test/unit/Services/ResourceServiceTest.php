@@ -64,14 +64,14 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\DummyResource;
 use heidelpayPHP\test\unit\Traits\TraitDummyCanRecur;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class ResourceServiceTest extends BaseUnitTest
+class ResourceServiceTest extends BasePaymentTest
 {
     /**
      * Verify getResourceIdFromUrl works correctly.

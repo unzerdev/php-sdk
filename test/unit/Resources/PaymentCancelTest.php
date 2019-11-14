@@ -31,14 +31,14 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 
-class PaymentCancelTest extends BaseUnitTest
+class PaymentCancelTest extends BasePaymentTest
 {
     //<editor-fold desc="Deprecated since 1.2.3.0">
 

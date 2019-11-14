@@ -30,13 +30,13 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 
-class CancellationTest extends BaseUnitTest
+class CancellationTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.

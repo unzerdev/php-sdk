@@ -35,12 +35,12 @@ use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
 use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 
-class CustomerTest extends BaseUnitTest
+class CustomerTest extends BasePaymentTest
 {
     //<editor-fold desc="Tests">
 

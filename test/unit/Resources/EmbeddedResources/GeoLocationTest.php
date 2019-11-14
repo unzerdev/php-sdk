@@ -25,10 +25,10 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class GeoLocationTest extends BaseUnitTest
+class GeoLocationTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter functionalities.

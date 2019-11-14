@@ -29,11 +29,11 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use ReflectionException;
 use RuntimeException;
 
-class CanPayoutWithCustomerTest extends BaseUnitTest
+class CanPayoutWithCustomerTest extends BasePaymentTest
 {
     /**
      * Verify payout method throws exception if the class does not implement the HeidelpayParentInterface.

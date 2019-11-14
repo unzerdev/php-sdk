@@ -32,12 +32,12 @@ use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 
-class AuthorizationTest extends BaseUnitTest
+class AuthorizationTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.

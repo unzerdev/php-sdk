@@ -25,10 +25,10 @@
 namespace heidelpayPHP\test\unit\Constants;
 
 use heidelpayPHP\Constants\PaymentState;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
-class PaymentStateTest extends BaseUnitTest
+class PaymentStateTest extends BasePaymentTest
 {
     /**
      * This should verify the mapping of the payment state to the state code.

@@ -25,10 +25,10 @@
 namespace heidelpayPHP\test\unit\Exceptions;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class HeidelpayApiExceptionTest extends BaseUnitTest
+class HeidelpayApiExceptionTest extends BasePaymentTest
 {
     /**
      * Verify the exception stores the given data.

@@ -25,12 +25,12 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Keypair;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
 
-class KeypairTest extends BaseUnitTest
+class KeypairTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters work properly.

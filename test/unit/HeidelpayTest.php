@@ -43,13 +43,13 @@ use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 
-class HeidelpayTest extends BaseUnitTest
+class HeidelpayTest extends BasePaymentTest
 {
     /**
      * Verify constructor works properly.
