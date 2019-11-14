@@ -2,12 +2,23 @@
 /**
  * This class verifies function of the instalment plan resources.
  *
- * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
+ * Copyright (C) 2019 heidelpay GmbH
  *
- * @link  http://dev.heidelpay.com/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @link  https://docs.heidelpay.com/
+ *
+ * @author  Simon Gabriel <development@heidelpay.com>
  *
  * @package  heidelpayPHP/test/unit
  */
@@ -15,11 +26,11 @@ namespace heidelpayPHP\test\unit\Resources;
 
 use DateTime;
 use heidelpayPHP\Resources\InstalmentPlans;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class InstalmentPlanTest extends TestCase
+class InstalmentPlanTest extends BasePaymentTest
 {
     /**
      * Verify the functionalities of the instalment plan resources.
@@ -38,6 +49,50 @@ class InstalmentPlanTest extends TestCase
     {
         $plans = new InstalmentPlans($amount, $currency, $effectiveInterest, new DateTime('13.11.2019'));
         $this->assertEquals("plans?amount={$amount}&currency={$currency}&effectiveInterest={$effectiveInterest}&orderDate=2019-11-13", $plans->getResourcePath());
+    }
+
+    /**
+     * Verify getters and setters.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function gettersAndSettersShouldWorkAsExpected()
+    {
+        // when
+        $instalmentPlans = new InstalmentPlans(1.234, 'EUR', 23.45);
+
+        // then
+        $this->assertEquals(1.234, $instalmentPlans->getAmount());
+        $this->assertEquals('EUR', $instalmentPlans->getCurrency());
+        $this->assertEquals(23.45, $instalmentPlans->getEffectiveInterest());
+        $this->assertNull($instalmentPlans->getOrderDate());
+
+        // when
+        $instalmentPlans->setAmount(2.345)
+            ->setCurrency('USD')
+            ->setEffectiveInterest(34.56)
+            ->setOrderDate($this->getTodaysDateString());
+
+        // then
+        $this->assertEquals(2.345, $instalmentPlans->getAmount());
+        $this->assertEquals('USD', $instalmentPlans->getCurrency());
+        $this->assertEquals(34.56, $instalmentPlans->getEffectiveInterest());
+        $this->assertEquals($this->getTodaysDateString(), $instalmentPlans->getOrderDate());
+
+        // when
+        $instalmentPlans->setOrderDate($this->getYesterdaysTimestamp());
+
+        // then
+        $this->assertEquals($this->getYesterdaysTimestamp()->format('Y-m-d'), $instalmentPlans->getOrderDate());
+
+        // when
+        $instalmentPlans->setOrderDate(null);
+
+        // then
+        $this->assertNull($instalmentPlans->getOrderDate());
     }
 
     //<editor-fold desc="Data Providers">
