@@ -130,7 +130,7 @@ class Paypage extends BasePaymentType
      */
     public function setAmount(float $amount): Paypage
     {
-        $this->amount = round($amount, 4);
+        $this->amount = $amount;
         return $this;
     }
 

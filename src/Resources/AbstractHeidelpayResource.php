@@ -38,6 +38,7 @@ use stdClass;
 use function count;
 use function is_array;
 use function is_callable;
+use function is_float;
 use function is_object;
 
 abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
@@ -348,6 +349,13 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             if ($value instanceof self) {
                 $value = $value->expose();
             }
+
+            // reduce floats to 4 decimal places
+            if (is_float($value)) {
+                $value = round($value, 4);
+                $this->$property = $value;
+            }
+
             $properties[$property] = $value;
         }
         //---------------------
