@@ -33,6 +33,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
+use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
@@ -41,6 +42,8 @@ use RuntimeException;
 
 class CustomerTest extends BaseUnitTest
 {
+    //<editor-fold desc="Tests">
+
     /**
      * Verify setter and getter functionality.
      *
@@ -60,6 +63,7 @@ class CustomerTest extends BaseUnitTest
         $this->assertNull($customer->getMobile());
         $this->assertNull($customer->getEmail());
         $this->assertNull($customer->getCompany());
+        $this->assertInstanceOf(GeoLocation::class, $customer->getGeoLocation());
 
         $customer->setCustomerId('MyCustomerId-123');
         $this->assertEquals('MyCustomerId-123', $customer->getCustomerId());
@@ -270,6 +274,66 @@ class CustomerTest extends BaseUnitTest
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchCustomerByExtCustomerId('myCustomerId');
     }
+
+    /**
+     * Verify Customer can be updated.
+     *
+     * @test
+     *
+     * @throws Exception
+     */
+    public function customerShouldBeUpdateable()
+    {
+        // when
+        $customer = new Customer();
+
+        // then
+        $this->assertNull($customer->getCustomerId());
+        $this->assertNull($customer->getFirstname());
+        $this->assertNull($customer->getLastname());
+        $this->assertNull($customer->getBirthDate());
+        $this->assertNull($customer->getPhone());
+        $this->assertNull($customer->getMobile());
+        $this->assertNull($customer->getEmail());
+        $this->assertNull($customer->getCompany());
+
+        $geoLocation = $customer->getGeoLocation();
+        $this->assertInstanceOf(GeoLocation::class, $geoLocation);
+        $this->assertNull($geoLocation->getClientIp());
+        $this->assertNull($geoLocation->getCountryCode());
+
+        // when
+        $newGeoLocation = (object)['clientIp' => 'client ip', 'countryCode' => 'country code'];
+        $newValues = (object)[
+            'customerId' => 'customer id',
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'birthDate' => 'birthDate',
+            'phone' => 'phone',
+            'mobile' => 'mobile',
+            'email' => 'email',
+            'company' => 'company',
+            'geolocation' => $newGeoLocation
+        ];
+        $customer->handleResponse($newValues);
+
+        // then
+        $this->assertEquals('customer id', $customer->getCustomerId());
+        $this->assertEquals('firstname', $customer->getFirstname());
+        $this->assertEquals('lastname', $customer->getLastname());
+        $this->assertEquals('birthDate', $customer->getBirthDate());
+        $this->assertEquals('phone', $customer->getPhone());
+        $this->assertEquals('mobile', $customer->getMobile());
+        $this->assertEquals('email', $customer->getEmail());
+        $this->assertEquals('company', $customer->getCompany());
+
+        $geoLocation = $customer->getGeoLocation();
+        $this->assertInstanceOf(GeoLocation::class, $geoLocation);
+        $this->assertEquals('client ip', $geoLocation->getClientIp());
+        $this->assertEquals('country code', $geoLocation->getCountryCode());
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc="Data providers">
 
