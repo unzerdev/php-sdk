@@ -394,6 +394,29 @@ class PaymentCancelTest extends BaseUnitTest
         }
     }
 
+    /**
+     * Verify cancelAuthorizationAmount will stop processing if there is no amount to cancel.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function cancelAuthorizationAmountWillNotCallCancelIfThereIsNoOpenAmount()
+    {
+        /** @var MockObject|Payment $paymentMock */
+        /** @var MockObject|Authorization $authMock */
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
+        $authMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
+        $paymentMock->method('getAuthorization')->willReturn($authMock);
+        $authMock->expects(self::never())->method('cancel');
+        $paymentMock->getAmount()->setRemaining(0.0);
+
+        $paymentMock->cancelAuthorizationAmount(12.3);
+        $paymentMock->cancelAuthorizationAmount(0.0);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
