@@ -209,7 +209,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws RuntimeException
      * @throws Exception
      *
-     * @group skip https://heidelpay.atlassian.net/browse/AHC-2626
+     * @group skip
      */
     public function verifyChargeAndFullCancelAnInitializedHirePurchase()
     {
