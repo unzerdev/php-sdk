@@ -381,8 +381,8 @@ class PaymentCancelTest extends BaseUnitTest
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
         $authMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
 
-        $allowedException = new HeidelpayApiException(null, null, $exceptionCode);
-        $authMock->method('cancel')->willThrowException($allowedException);
+        $exception = new HeidelpayApiException(null, null, $exceptionCode);
+        $authMock->method('cancel')->willThrowException($exception);
         $paymentMock->method('getAuthorization')->willReturn($authMock);
         $paymentMock->getAmount()->setRemaining(100.0);
 
