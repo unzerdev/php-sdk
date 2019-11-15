@@ -529,6 +529,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Update payment type should call update method.
      *
      * @test
+     *
      * @throws HeidelpayApiException
      * @throws ReflectionException
      * @throws RuntimeException
