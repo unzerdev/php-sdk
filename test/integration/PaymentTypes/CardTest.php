@@ -138,8 +138,16 @@ class CardTest extends BasePaymentTest
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
+        // card recurring is disabled by default
+        $this->assertFalse($card->isRecurring());
+
         /** @var Charge $charge */
         $charge = $card->charge(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+
+        // card recurring is activated through charge transaction
+        /** @var Card $fetchedCard */
+        $fetchedCard = $this->heidelpay->fetchPaymentType($card->getId());
+        $this->assertTrue($fetchedCard->isRecurring());
 
         // verify charge has been created
         $this->assertNotNull($charge->getId());
