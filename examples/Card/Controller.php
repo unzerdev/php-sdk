@@ -91,13 +91,13 @@ try {
     $redirect = !empty($transaction->getRedirectUrl());
 
     switch (true) {
-        case !$redirect && $transaction->isSuccess():
+        case (!$redirect && $transaction->isSuccess()):
             redirect(SUCCESS_URL);
             break;
-        case !$redirect && $transaction->isPending():
+        case (!$redirect && $transaction->isPending()):
             redirect(PENDING_URL);
             break;
-        case $redirect && $transaction->isSuccess():
+        case ($redirect && $transaction->isPending()):
             redirect($transaction->getRedirectUrl());
             break;
     }
