@@ -35,6 +35,7 @@ use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
+use function count;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
 {
@@ -207,7 +208,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @throws RuntimeException
      * @throws Exception
      *
-     * @group skip https://heidelpay.atlassian.net/browse/AHC-2569
+     * @group skip
      */
     public function verifyChargeAndFullCancelAnInitializedHirePurchase()
     {

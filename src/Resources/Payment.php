@@ -45,6 +45,8 @@ use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasPaymentState;
 use RuntimeException;
 use stdClass;
+use function count;
+use function in_array;
 use function is_string;
 
 class Payment extends AbstractHeidelpayResource
@@ -759,7 +761,7 @@ class Payment extends AbstractHeidelpayResource
             } catch (HeidelpayApiException $e) {
                 $allowedErrors = [
                     ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK,
-                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED
                 ];
                 if (!in_array($e->getCode(), $allowedErrors, true)) {
                     throw $e;

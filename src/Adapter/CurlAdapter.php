@@ -29,6 +29,7 @@ use heidelpayPHP\Services\EnvironmentService;
 use function extension_loaded;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use RuntimeException;
+use function in_array;
 
 class CurlAdapter implements HttpAdapterInterface
 {

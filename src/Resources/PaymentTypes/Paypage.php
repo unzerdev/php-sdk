@@ -39,6 +39,7 @@ use heidelpayPHP\Traits\HasInvoiceId;
 use heidelpayPHP\Traits\HasOrderId;
 use RuntimeException;
 use stdClass;
+use function in_array;
 
 class Paypage extends BasePaymentType
 {
@@ -523,6 +524,7 @@ class Paypage extends BasePaymentType
 
     /**
      * @param bool|null $card3ds
+     *
      * @return Paypage
      */
     public function setCard3ds($card3ds): Paypage
@@ -607,7 +609,7 @@ class Paypage extends BasePaymentType
             'customer'=> $this->getCustomer(),
             'metadata' => $this->getMetadata(),
             'basket' => $this->getBasket(),
-            'payment' => $this->getPayment(),
+            'payment' => $this->getPayment()
         ];
     }
 

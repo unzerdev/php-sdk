@@ -348,6 +348,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             if ($value instanceof self) {
                 $value = $value->expose();
             }
+
             $properties[$property] = $value;
         }
         //---------------------

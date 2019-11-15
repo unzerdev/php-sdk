@@ -38,7 +38,7 @@ class PrivateKeyValidator
     public static function validate($key): bool
     {
         $match = [];
-        preg_match('/^[sp]{1}-priv-[a-zA-Z0-9]+/', $key, $match);
+        preg_match('/^[sp]-priv-[a-zA-Z0-9]+/', $key, $match);
         return count($match) > 0;
     }
 }
