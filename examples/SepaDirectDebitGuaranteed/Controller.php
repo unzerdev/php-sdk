@@ -67,10 +67,10 @@ try {
     $orderId = str_replace(['0.', ' '], '', microtime(false));
 
     // A Basket is mandatory for SEPA direct debit guaranteed payment type
-    $basketItem = new BasketItem('Hat', 10.0, 10.0, 1);
-    $basket = new Basket($orderId, 10.0, 'EUR', [$basketItem]);
+    $basketItem = new BasketItem('Hat', 100.0, 119.0, 1);
+    $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
-    $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, CONTROLLER_URL, $customerId, $orderId, null, $basket);
+    $transaction = $heidelpay->charge(119.0, 'EUR', $paymentTypeId, CONTROLLER_URL, $customerId, $orderId, null, $basket);
 
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();
