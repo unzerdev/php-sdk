@@ -295,7 +295,8 @@ class HeidelpayTest extends BasePaymentTest
             'fetchShipment'                => ['fetchShipment', [$payment, 'shipId'], 'fetchShipment', [$payment, 'shipId']],
             'activateRecurring'            => ['activateRecurringPayment', [$card, 'returnUrl'], 'createRecurring', [$card, 'returnUrl']],
             'activateRecurringWithId'      => ['activateRecurringPayment', [$paymentTypeId, 'returnUrl'], 'createRecurring', [$paymentTypeId, 'returnUrl']],
-            'fetchPayout'                  => ['fetchPayout', [$payment], 'fetchPayout', [$payment]]
+            'fetchPayout'                  => ['fetchPayout', [$payment], 'fetchPayout', [$payment]],
+            'updatePaymentType'            => ['updatePaymentType', [$card], 'updatePaymentType', [$card]]
         ];
     }
 
