@@ -44,9 +44,9 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BaseUnitTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
-use function in_array;
 use ReflectionException;
 use RuntimeException;
+use function in_array;
 
 class PaymentServiceTest extends BaseUnitTest
 {
@@ -653,7 +653,7 @@ class PaymentServiceTest extends BaseUnitTest
         return [
             'default' => [null],
             'non 3ds' => [false],
-            '3ds' => [true],
+            '3ds' => [true]
         ];
     }
 

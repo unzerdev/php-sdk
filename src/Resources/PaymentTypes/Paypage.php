@@ -95,6 +95,9 @@ class Paypage extends BasePaymentType
     /** @var string[] $excludeTypes */
     protected $excludeTypes = [];
 
+    /** @var bool $card3ds */
+    protected $card3ds;
+
     /**
      * Paypage constructor.
      *
@@ -507,6 +510,24 @@ class Paypage extends BasePaymentType
     public function addExcludeType(string $excludeType): Paypage
     {
         $this->excludeTypes[] = $excludeType;
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isCard3ds()
+    {
+        return $this->card3ds;
+    }
+
+    /**
+     * @param bool|null $card3ds
+     * @return Paypage
+     */
+    public function setCard3ds($card3ds): Paypage
+    {
+        $this->card3ds = $card3ds;
         return $this;
     }
 

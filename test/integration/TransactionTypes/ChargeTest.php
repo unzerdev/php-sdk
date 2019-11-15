@@ -98,19 +98,19 @@ class ChargeTest extends BasePaymentTest
         /** @var Card $paymentType */
         $paymentType = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
-        $invoiceId = $this->generateRandomId();
+        $invoiceId = self::generateRandomId();
         $paymentReference = 'paymentReference';
 
         // perform request
-        $charge = $paymentType->charge(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
+        $charge = $paymentType->charge(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
 
         // verify the data sent and received match
         $payment = $charge->getPayment();
         $this->assertSame($paymentType, $payment->getPaymentType());
-        $this->assertEquals(123.4, $charge->getAmount());
+        $this->assertEquals(119.0, $charge->getAmount());
         $this->assertEquals('EUR', $charge->getCurrency());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());
@@ -148,19 +148,19 @@ class ChargeTest extends BasePaymentTest
         $ivg = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
-        $invoiceId = $this->generateRandomId();
+        $invoiceId = self::generateRandomId();
         $paymentReference = 'paymentReference';
 
         // perform request
-        $charge = $ivg->charge(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, null, $invoiceId, $paymentReference);
+        $charge = $ivg->charge(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, null, $invoiceId, $paymentReference);
 
         // verify the data sent and received match
         $payment = $charge->getPayment();
         $this->assertSame($ivg, $payment->getPaymentType());
-        $this->assertEquals(123.4, $charge->getAmount());
+        $this->assertEquals(119.0, $charge->getAmount());
         $this->assertEquals('EUR', $charge->getCurrency());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());

@@ -42,6 +42,7 @@ use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
@@ -61,9 +62,9 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Traits\CanRecur;
-use function is_string;
 use RuntimeException;
 use stdClass;
+use function is_string;
 
 class ResourceService
 {
@@ -617,12 +618,30 @@ class ResourceService
             case IdStrings::INVOICE_FACTORING:
                 $paymentType = new InvoiceFactoring();
                 break;
+            case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
+                $paymentType = new HirePurchaseDirectDebit();
+                break;
             default:
                 throw new RuntimeException('Invalid payment type!');
                 break;
         }
 
         return $this->fetch($paymentType->setParentResource($this->heidelpay)->setId($typeId));
+    }
+
+    /**
+     * Updates the PaymentType resource with the given PaymentType object.
+     *
+     * @param BasePaymentType $paymentType The PaymentType object to be updated.
+     *
+     * @return BasePaymentType|AbstractHeidelpayResource The updated PaymentType object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
+    {
+        return $this->update($paymentType);
     }
 
     //</editor-fold>

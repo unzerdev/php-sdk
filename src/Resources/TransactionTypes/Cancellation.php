@@ -25,10 +25,16 @@
 namespace heidelpayPHP\Resources\TransactionTypes;
 
 use heidelpayPHP\Constants\CancelReasonCodes;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 
 class Cancellation extends AbstractTransactionType
 {
-    /** @var float $amount */
+    /**
+     * The cancellation amount will be transferred as grossAmount in case of Hire Purchase payment type.
+     *
+     * @var float $amount
+     */
     protected $amount;
 
     /** @var string $reasonCode */
@@ -38,9 +44,23 @@ class Cancellation extends AbstractTransactionType
     protected $paymentReference;
 
     /**
+     * The net value of the cancellation amount (Hire Purchase only).
+     *
+     * @var float $amountNet
+     */
+    protected $amountNet;
+
+    /**
+     * The vat value of the cancellation amount (Hire Purchase only).
+     *
+     * @var float $amountVat
+     */
+    protected $amountVat;
+
+    /**
      * Authorization constructor.
      *
-     * @param float $amount
+     * @param float $amount The amount to be cancelled, is transferred as grossAmount in case of Hire Purchase.
      */
     public function __construct($amount = null)
     {
@@ -49,17 +69,11 @@ class Cancellation extends AbstractTransactionType
         parent::__construct();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function getResourcePath(): string
-    {
-        return 'cancels';
-    }
-
     //<editor-fold desc="Getters/Setters">
 
     /**
+     * Returns the cancellationAmount (equals grossAmount in case of Hire Purchase).
+     *
      * @return float|null
      */
     public function getAmount()
@@ -68,6 +82,8 @@ class Cancellation extends AbstractTransactionType
     }
 
     /**
+     * Sets the cancellationAmount (equals grossAmount in case of Hire Purchase).
+     *
      * @param float $amount
      *
      * @return Cancellation
@@ -79,6 +95,8 @@ class Cancellation extends AbstractTransactionType
     }
 
     /**
+     * Returns the reason code of the cancellation if set.
+     *
      * @return string|null
      */
     public function getReasonCode()
@@ -87,6 +105,8 @@ class Cancellation extends AbstractTransactionType
     }
 
     /**
+     * Sets the reason code of the cancellation.
+     *
      * @param string|null $reasonCode
      *
      * @return Cancellation
@@ -116,6 +136,83 @@ class Cancellation extends AbstractTransactionType
     {
         $this->paymentReference = $paymentReference;
         return $this;
+    }
+
+    /**
+     * Returns the net value of the amount to be cancelled.
+     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     *
+     * @return float|null
+     */
+    public function getAmountNet()
+    {
+        return $this->amountNet;
+    }
+
+    /**
+     * Sets the net value of the amount to be cancelled.
+     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     *
+     * @param float|null $amountNet The net value of the amount to be cancelled (Hire Purchase only).
+     *
+     * @return Cancellation The resulting cancellation object.
+     */
+    public function setAmountNet($amountNet): Cancellation
+    {
+        $this->amountNet = $amountNet;
+        return $this;
+    }
+
+    /**
+     * Returns the vat value of the cancellation amount.
+     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     *
+     * @return float|null
+     */
+    public function getAmountVat()
+    {
+        return $this->amountVat;
+    }
+
+    /**
+     * Sets the vat value of the cancellation amount.
+     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     *
+     * @param float|null $amountVat
+     *
+     * @return Cancellation
+     */
+    public function setAmountVat($amountVat): Cancellation
+    {
+        $this->amountVat = $amountVat;
+        return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable Methods">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function expose()
+    {
+        $exposeArray = parent::expose();
+        $payment = $this->getPayment();
+        if (isset($exposeArray['amount'])
+            && $payment instanceof Payment && $payment->getPaymentType() instanceof HirePurchaseDirectDebit) {
+            $exposeArray['amountGross'] = $exposeArray['amount'];
+            unset($exposeArray['amount']);
+        }
+        return $exposeArray;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getResourcePath(): string
+    {
+        return 'cancels';
     }
 
     //</editor-fold>
