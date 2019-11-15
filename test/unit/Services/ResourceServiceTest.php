@@ -67,6 +67,7 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\DummyResource;
 use heidelpayPHP\test\unit\Traits\TraitDummyCanRecur;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
@@ -522,6 +523,29 @@ class ResourceServiceTest extends BasePaymentTest
 
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchPaymentType($typeId);
+    }
+
+    /**
+     * Update payment type should call update method.
+     *
+     * @test
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function updatePaymentTypeShouldCallUpdateMethod()
+    {
+        $paymentType = (new HirePurchaseDirectDebit())->setId('paymentTypeId');
+
+        /** @var ResourceService|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['update'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('update')->with($paymentType)->willReturn($paymentType);
+
+        $returnedPaymentType = $resourceSrvMock->updatePaymentType($paymentType);
+
+        $this->assertSame($paymentType, $returnedPaymentType);
     }
 
     /**
