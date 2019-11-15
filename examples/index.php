@@ -69,17 +69,17 @@ require_once __DIR__ . '/../../../autoload.php';
                         Try
                     </div>
                 </div>
-<!--                <div class="card olive">-->
-<!--                    <div class="content">-->
-<!--                        <div class="header">Card Recurring</div>-->
-<!--                        <div class="description">-->
-<!--                            You can set a Card type to recurring in order to register it and charge later as well as implement recurring payments.-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="ui bottom attached green button" onclick="location.href='CardRecurring/';">-->
-<!--                        Try-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">Card Recurring</div>
+                        <div class="description">
+                            You can set a Card type to recurring in order to register it and charge later as well as implement recurring payments.
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='CardRecurring/';">
+                        Try
+                    </div>
+                </div>
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
