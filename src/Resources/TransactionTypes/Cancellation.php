@@ -27,6 +27,7 @@ namespace heidelpayPHP\Resources\TransactionTypes;
 use heidelpayPHP\Constants\CancelReasonCodes;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use function in_array;
 
 class Cancellation extends AbstractTransactionType
 {

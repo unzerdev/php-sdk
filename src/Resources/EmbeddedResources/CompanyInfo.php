@@ -27,6 +27,7 @@ namespace heidelpayPHP\Resources\EmbeddedResources;
 use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use stdClass;
+use function is_string;
 
 class CompanyInfo extends AbstractHeidelpayResource
 {

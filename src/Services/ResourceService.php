@@ -64,6 +64,7 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Traits\CanRecur;
 use RuntimeException;
 use stdClass;
+use function in_array;
 use function is_string;
 
 class ResourceService

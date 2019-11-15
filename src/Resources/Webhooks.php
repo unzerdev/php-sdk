@@ -30,6 +30,7 @@ use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\WebhookEvents;
 use RuntimeException;
 use stdClass;
+use function in_array;
 
 class Webhooks extends AbstractHeidelpayResource
 {

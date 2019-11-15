@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\Services;
 
+use function in_array;
+
 class EnvironmentService
 {
     const ENV_VAR_NAME_ENVIRONMENT = 'HEIDELPAY_MGW_ENV';
