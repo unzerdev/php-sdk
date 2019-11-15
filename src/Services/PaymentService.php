@@ -294,34 +294,54 @@ class PaymentService
      * Perform a full charge by leaving the amount null.
      *
      * @param string|Payment $payment
-     * @param null           $amount
+     * @param float|null     $amount
+     * @param string|null    $orderId
+     * @param string|null    $invoiceId
      *
      * @return Charge Resulting Charge object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
-    {
-        return $this->chargePayment($this->resourceService->getPaymentResource($payment), $amount);
+    public function chargeAuthorization(
+        $payment,
+        float $amount = null,
+        string $orderId = null,
+        string $invoiceId = null
+    ): AbstractTransactionType {
+        $paymentResource = $this->resourceService->getPaymentResource($payment);
+        return $this->chargePayment($paymentResource, $amount, $orderId, $invoiceId);
     }
 
     /**
      * Charge the given amount on the given payment object with the given currency.
      *
-     * @param Payment $payment
-     * @param null    $amount
-     * @param null    $currency
+     * @param Payment     $payment
+     * @param float|null  $amount
+     * @param string|null $currency
+     * @param string|null $orderId
+     * @param string|null $invoiceId
      *
      * @return Charge Resulting Charge object.
      *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function chargePayment($payment, $amount = null, $currency = null): AbstractTransactionType
-    {
+    public function chargePayment(
+        $payment,
+        $amount = null,
+        $currency = null,
+        string $orderId = null,
+        string $invoiceId = null
+    ): AbstractTransactionType {
         $charge = new Charge($amount, $currency);
         $charge->setPayment($payment);
+        if ($orderId !== null) {
+            $charge->setOrderId($orderId);
+        }
+        if ($invoiceId !== null) {
+            $charge->setInvoiceId($invoiceId);
+        }
         $payment->addCharge($charge);
         $this->resourceService->create($charge);
         return $charge;
@@ -388,8 +408,8 @@ class PaymentService
      * @param string               $returnUrl        The URL used to return to the shop if the process requires leaving it.
      * @param Customer|string|null $customer         The customer associated with the payout.
      * @param string|null          $orderId          A custom order id which can be set by the merchant.
-     * @param null                 $metadata
-     * @param null                 $basket
+     * @param Metadata|null        $metadata
+     * @param Basket|null          $basket
      * @param string|null          $invoiceId        The external id of the invoice.
      * @param string|null          $paymentReference A reference text for the payment.
      *
@@ -428,7 +448,7 @@ class PaymentService
      * Perform a Cancellation transaction with the given amount for the given Authorization.
      *
      * @param Authorization $authorization
-     * @param null          $amount
+     * @param float|null    $amount
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -449,7 +469,7 @@ class PaymentService
      * Creates a Cancellation transaction for the given Authorization object.
      *
      * @param Payment|string $payment
-     * @param null           $amount
+     * @param float|null     $amount
      *
      * @return Cancellation Resulting Cancellation object.
      *
@@ -549,7 +569,7 @@ class PaymentService
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function ship($payment, $invoiceId = null, $orderId = null): AbstractHeidelpayResource
+    public function ship($payment, string $invoiceId = null, string $orderId = null): AbstractHeidelpayResource
     {
         $shipment = new Shipment();
         $shipment->setInvoiceId($invoiceId)->setOrderId($orderId);
@@ -557,6 +577,8 @@ class PaymentService
         $this->resourceService->create($shipment);
         return $shipment;
     }
+
+    //</editor-fold>
 
     //</editor-fold>
 

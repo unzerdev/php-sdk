@@ -228,8 +228,8 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * Enable debug output.
-     * You need to setter inject a custom handler implementing the DebugOutputHandlerInterface via setDebugHandler
-     * for this to work.
+     * You need to setter inject a custom handler implementing the DebugOutputHandlerInterface via
+     * Heidelpay::setDebugHandler() for this to work.
      *
      * @param bool $debugMode
      *
@@ -250,8 +250,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Use this method to inject a custom handler for debug messages form the http-adapter.
-     * Remember to enable debug output by setting the constant Heidelpay::DEBUG_MODE true.
+     * Use this method to inject a custom handler for debug messages from the http-adapter.
+     * Remember to enable debug output using Heidelpay::setDebugMode(true).
      *
      * @param DebugHandlerInterface $debugHandler
      *
@@ -1078,35 +1078,48 @@ class Heidelpay implements HeidelpayParentInterface
      * Performs a Charge transaction for the Authorization of the given Payment object.
      * To perform a full charge of the authorized amount leave the amount null.
      *
-     * @param string|Payment $payment The Payment object the Authorization to charge belongs to.
-     * @param float|null     $amount  The amount to charge.
+     * @param string|Payment $payment   The Payment object the Authorization to charge belongs to.
+     * @param float|null     $amount    The amount to charge.
+     * @param string|null    $orderId   The order id from the shop.
+     * @param string|null    $invoiceId The invoice id from the shop.
      *
      * @return Charge The resulting object of the Charge resource.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
-    {
-        return $this->paymentService->chargeAuthorization($payment, $amount);
+    public function chargeAuthorization(
+        $payment,
+        float $amount = null,
+        string $orderId = null,
+        string $invoiceId = null
+    ): AbstractTransactionType {
+        return $this->paymentService->chargeAuthorization($payment, $amount, $orderId, $invoiceId);
     }
 
     /**
      * Performs a Charge transaction for a specific Payment and returns the resulting Charge object.
      *
-     * @param Payment|string $payment  The Payment object to be charged.
-     * @param null           $amount   The amount to charge.
-     * @param null           $currency The Currency of the charged amount.
+     * @param Payment|string $payment   The Payment object to be charged.
+     * @param float|null     $amount    The amount to charge.
+     * @param string|null    $currency  The Currency of the charged amount.
+     * @param string|null    $orderId   The order id from the shop.
+     * @param string|null    $invoiceId The invoice id from the shop.
      *
      * @return Charge The resulting Charge object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function chargePayment($payment, $amount = null, $currency = null): AbstractTransactionType
-    {
+    public function chargePayment(
+        $payment,
+        float $amount = null,
+        string $currency = null,
+        string $orderId = null,
+        string $invoiceId = null
+    ): AbstractTransactionType {
         $paymentObject = $this->resourceService->getPaymentResource($payment);
-        return $this->paymentService->chargePayment($paymentObject, $amount, $currency);
+        return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId);
     }
 
     //</editor-fold>

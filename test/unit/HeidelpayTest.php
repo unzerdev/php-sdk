@@ -243,7 +243,7 @@ class HeidelpayTest extends BasePaymentTest
         $cancelId       = 'cancelId';
         $metadataId     = 'metaDataId';
         $orderId        = 'orderId';
-        $paymentTypeId  = 'paymentId';
+        $paymentTypeId  = 'paymentTypeId';
         $customer       = new Customer();
         $basket         = new Basket();
         $payment        = new Payment();
@@ -269,7 +269,7 @@ class HeidelpayTest extends BasePaymentTest
             'fetchMetadata'                => ['fetchMetadata', [$metadata], 'fetchMetadata', [$metadata]],
             'fetchMetadataStr'             => ['fetchMetadata', [$metadataId], 'fetchMetadata', [$metadataId]],
             'createPaymentType'            => ['createPaymentType', [$sofort], 'createPaymentType', [$sofort]],
-            'fetchPaymentType'             => ['fetchPaymentType', [$sofort], 'fetchPaymentType', [$sofort]],
+            'fetchPaymentType'             => ['fetchPaymentType', [$paymentTypeId], 'fetchPaymentType', [$paymentTypeId]],
             'createCustomer'               => ['createCustomer', [$customer], 'createCustomer', [$customer]],
             'createOrUpdateCustomer'       => ['createOrUpdateCustomer', [$customer], 'createOrUpdateCustomer', [$customer]],
             'fetchCustomer'                => ['fetchCustomer', [$customer], 'fetchCustomer', [$customer]],
