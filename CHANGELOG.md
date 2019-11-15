@@ -19,13 +19,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Response Code for basket item image extension error has been deprecated since it has been removed from the API.
 *   Refactored cancellation feature to support FlexiPay Rate cancel.
 *   Remove trailing slash from routes.
+*   Float values are now rounded with 4 decimal places when exposed to the API. The value of the local object will be updated as well.
 
 ### Removed
 *   Unused Constants.
+*   Obsolete/dead code.
 
 ### Fixed
 *   Several minor issues.
-*   A bug which caused basket amounts to be sent with more then 4 digital places.
 
 ## [1.2.4.0][1.2.4.0]
 
