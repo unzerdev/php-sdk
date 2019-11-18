@@ -535,6 +535,7 @@ class Paypage extends BasePaymentType
 
     /**
      * @param float|null $effectiveInterestRate
+     *
      * @return Paypage
      */
     public function setEffectiveInterestRate(float $effectiveInterestRate): Paypage
