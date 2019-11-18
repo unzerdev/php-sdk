@@ -162,7 +162,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * @return array
      */
-    public function getAdditionalAttributes(): array
+    protected function getAdditionalAttributes(): array
     {
         return $this->additionalAttributes;
     }
@@ -172,7 +172,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @return AbstractHeidelpayResource
      */
-    public function setAdditionalAttributes(array $additionalAttributes): AbstractHeidelpayResource
+    protected function setAdditionalAttributes(array $additionalAttributes): AbstractHeidelpayResource
     {
         $this->additionalAttributes = $additionalAttributes;
         return $this;
@@ -187,7 +187,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @return AbstractHeidelpayResource
      */
-    public function setAdditionalAttribute(string $attribute, $value): AbstractHeidelpayResource
+    protected function setAdditionalAttribute(string $attribute, $value): AbstractHeidelpayResource
     {
         $this->additionalAttributes[$attribute] = $value;
         return $this;
@@ -200,7 +200,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @return mixed
      */
-    public function getAdditionalAttribute(string $attribute)
+    protected function getAdditionalAttribute(string $attribute)
     {
         return $this->additionalAttributes[$attribute];
     }
@@ -208,6 +208,19 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
+
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function limitFloats($value)
+    {
+        if (is_float($value)) {
+            $value = round($value, 4);
+        }
+        return $value;
+    }
 
     /**
      * {@inheritDoc}
@@ -401,15 +414,21 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
             // reduce floats to 4 decimal places
             if (is_float($value)) {
-                $value = round($value, 4);
+                $value = $this->limitFloats($value);
                 $this->$property = $value;
             }
 
-            if (is_array($value)) {
-                // omit empty arrays
-                if (empty($value)) {
+            // handle additional values
+            if ($property === 'additionalAttributes') {
+                if (!is_array($value) || empty($value)) {
                     unset($properties[$property]);
                     continue;
+                }
+
+                foreach ($value as $key => $attribute) {
+                    $attribute = $this->limitFloats($attribute);
+                    $value[$key] = $attribute;
+                    $this->setAdditionalAttribute($key, $attribute);
                 }
             }
 
