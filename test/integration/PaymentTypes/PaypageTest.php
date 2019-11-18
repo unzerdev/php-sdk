@@ -79,10 +79,13 @@ class PaypageTest extends BasePaymentTest
             ->setImprintUrl('https://www.heidelpay.com/it/')
             ->setHelpUrl('https://www.heidelpay.com/at/')
             ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
-            ->setInvoiceId($invoiceId);
+            ->setInvoiceId($invoiceId)
+            ->setCard3ds(true)
+            ->setEffectiveInterestRate(4.99);
         $this->assertEmpty($paypage->getId());
         $paypage = $this->heidelpay->initPayPageCharge($paypage, $customer, $basket);
         $this->assertNotEmpty($paypage->getId());
+        $this->assertEquals(4.99, $paypage->getEffectiveInterestRate());
         $payment = $paypage->getPayment();
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertNotNull($payment->getId());
@@ -134,11 +137,13 @@ class PaypageTest extends BasePaymentTest
             ->setHelpUrl('https://www.heidelpay.com/at/')
             ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
             ->setInvoiceId($invoiceId)
-            ->setCard3ds(true);
+            ->setCard3ds(true)
+            ->setEffectiveInterestRate(4.99);
         $paypage->addExcludeType(Card::getResourceName());
         $this->assertEmpty($paypage->getId());
         $paypage = $this->heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
         $this->assertNotEmpty($paypage->getId());
+        $this->assertEquals(4.99, $paypage->getEffectiveInterestRate());
         $this->assertArraySubset([Card::getResourceName()], $paypage->getExcludeTypes());
         $payment = $paypage->getPayment();
         $this->assertInstanceOf(Payment::class, $payment);
