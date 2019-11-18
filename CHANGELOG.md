@@ -7,33 +7,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Hire purchase direct debit payment type (FlexiPay Rate) including example implementation.
-*   Additional payment parameters to transactions.
-*   Facade method to update payment type
+*   Additional parameters from payment type to transactions.
+*   Facade method to update payment type.
 *   Property invoiceId to `Payment` class.
+*   Added card details to `Card` payment type.
+*   Property `card3ds` to `Paypage`.
+*   Geolocation to `Customer` resource.
 
 ### Changed
 *   Refactor invoice guaranteed tests to make them independent from each other.
 *   Response Code for basket item image extension error has been deprecated since it has been removed from the API.
 *   Refactored cancellation feature to support FlexiPay Rate cancel.
 *   Remove trailing slash from routes.
+*   Float values are now rounded with 4 decimal places when exposed to the API. The value of the local object will be updated as well.
 
 ### Removed
 *   Unused Constants.
+*   Obsolete/dead code.
 
 ### Fixed
 *   Several minor issues.
-
-### Added
-*   Added card details property.
-
-### Added
-*   Property card3ds to Paypage.
-
-### Fixed
-*   A bug which caused basket amounts to be sent with more then 4 digital places.
-
-### Added
-*   Geolocation to `Customer` resource.
 
 ## [1.2.4.0][1.2.4.0]
 

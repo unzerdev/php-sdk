@@ -818,10 +818,11 @@ class Payment extends AbstractHeidelpayResource
             if (!$completeCancel) {
                 $remainingAuthorized = $this->getAmount()->getRemaining();
                 $cancelAmount        = $amount > $remainingAuthorized ? $remainingAuthorized : $amount;
-            }
 
-            if ($cancelAmount === 0.0) {
-                return null;
+                // do not attempt to cancel if there is nothing left to cancel
+                if ($cancelAmount === 0.0) {
+                    return null;
+                }
             }
 
             try {

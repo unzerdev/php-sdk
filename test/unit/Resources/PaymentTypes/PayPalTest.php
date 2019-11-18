@@ -25,10 +25,10 @@
 namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class PayPalTest extends BaseUnitTest
+class PayPalTest extends BasePaymentTest
 {
     /**
      * Verify the bic can be set and read.

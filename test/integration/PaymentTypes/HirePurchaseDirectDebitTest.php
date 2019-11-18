@@ -134,6 +134,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
+        $this->assertCount($selectedPlan->getNumberOfRates(), $selectedPlan->getInstallmentRates(), 'The number of rates should equal the actual rate count.');
         $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
         $this->heidelpay->createPaymentType($hdd);
         $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
@@ -183,7 +184,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
-        $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE89370400440532013000', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $this->getCurrentDateString(), $this->getTomorrowsTimestamp());
+        $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE89370400440532013000', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $this->getTodaysDateString(), $this->getTomorrowsTimestamp());
         $this->heidelpay->createPaymentType($hdd);
 
         $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $this->createBasket());

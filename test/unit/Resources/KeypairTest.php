@@ -25,13 +25,12 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Keypair;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
-use stdClass;
 
-class KeypairTest extends BaseUnitTest
+class KeypairTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters work properly.
@@ -55,6 +54,7 @@ class KeypairTest extends BaseUnitTest
         $this->assertEquals('', $keypair->getMerchantAddress());
         $this->assertEquals('', $keypair->getAlias());
         $this->assertFalse($keypair->isDetailed());
+        $this->assertNull($keypair->isValidateBasket());
 
         $keypair->setDetailed(true);
 
@@ -70,31 +70,30 @@ class KeypairTest extends BaseUnitTest
      */
     public function aKeypairShouldBeUpdatedThroughResponseHandling()
     {
+        // when
         $keypair = new Keypair();
-
-        $paymentTypes = [
-            'przelewy24',
-            'ideal',
-            'paypal',
-            'prepayment',
-            'invoice',
-            'sepa-direct-debit-guaranteed',
-            'card',
-            'sofort',
-            'invoice-guaranteed',
-            'sepa-direct-debit',
-            'giropay'
+        $paymentTypes = ['przelewy24', 'ideal', 'paypal', 'prepayment', 'invoice', 'sepa-direct-debit-guaranteed', 'card', 'sofort', 'invoice-guaranteed', 'sepa-direct-debit', 'giropay'];
+        $testResponse = (object)[
+            'publicKey'             => 's-pub-1234',
+            'privateKey'            => 's-priv-4321',
+            'availablePaymentTypes' => $paymentTypes,
+            'cof'                   => true,
+            'validateBasket'        => false
         ];
-
-        $testResponse = new stdClass();
-        $testResponse->publicKey = 's-pub-1234';
-        $testResponse->privateKey = 's-priv-4321';
-        $testResponse->availablePaymentTypes = $paymentTypes;
-
         $keypair->handleResponse($testResponse);
+
+        // then
         $this->assertArraySubset($paymentTypes, $keypair->getPaymentTypes());
         $this->assertEquals('s-pub-1234', $keypair->getPublicKey());
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
+        $this->assertTrue($keypair->isCof());
+        $this->assertFalse($keypair->isValidateBasket());
+
+        // when
+        $testResponse = (object)['cof' => false, 'validateBasket' => true];
+        $keypair->handleResponse($testResponse);
+        $this->assertFalse($keypair->isCof());
+        $this->assertTrue($keypair->isValidateBasket());
     }
 
     /**

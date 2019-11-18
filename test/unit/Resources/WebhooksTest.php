@@ -28,12 +28,12 @@ use heidelpayPHP\Constants\WebhookEvents;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Resources\Webhooks;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
 use stdClass;
 
-class WebhooksTest extends BaseUnitTest
+class WebhooksTest extends BasePaymentTest
 {
     /**
      * Verify the constructor of the webhooks resource behaves as expected.

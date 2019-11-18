@@ -25,6 +25,7 @@
  */
 namespace heidelpayPHP\test\unit;
 
+use DateTime;
 use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
@@ -42,13 +43,13 @@ use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 
-class HeidelpayTest extends BaseUnitTest
+class HeidelpayTest extends BasePaymentTest
 {
     /**
      * Verify constructor works properly.
@@ -88,7 +89,7 @@ class HeidelpayTest extends BaseUnitTest
         $this->assertEquals('myLocale', $heidelpay->getLocale());
 
         try {
-            $heidelpay->setKey('söiodufhreoöhf');
+            $heidelpay->setKey('this is not a valid key');
             $this->assertTrue(false, 'This exception should have been thrown');
         } catch (RuntimeException $e) {
             $this->assertEquals('Illegal key: Use a valid private key with this SDK!', $e->getMessage());
@@ -294,7 +295,8 @@ class HeidelpayTest extends BaseUnitTest
             'fetchShipment'                => ['fetchShipment', [$payment, 'shipId'], 'fetchShipment', [$payment, 'shipId']],
             'activateRecurring'            => ['activateRecurringPayment', [$card, 'returnUrl'], 'createRecurring', [$card, 'returnUrl']],
             'activateRecurringWithId'      => ['activateRecurringPayment', [$paymentTypeId, 'returnUrl'], 'createRecurring', [$paymentTypeId, 'returnUrl']],
-            'fetchPayout'                  => ['fetchPayout', [$payment], 'fetchPayout', [$payment]]
+            'fetchPayout'                  => ['fetchPayout', [$payment], 'fetchPayout', [$payment]],
+            'updatePaymentType'            => ['updatePaymentType', [$card], 'updatePaymentType', [$card]]
         ];
     }
 
@@ -302,6 +304,8 @@ class HeidelpayTest extends BaseUnitTest
      * Provide test data for heidelpayShouldForwardPaymentActionCallsToThePaymentService.
      *
      * @return array
+     *
+     * @throws \Exception
      */
     public function heidelpayShouldForwardPaymentActionCallsToThePaymentServiceDP(): array
     {
@@ -319,6 +323,7 @@ class HeidelpayTest extends BaseUnitTest
         $charge        = new Charge();
         $paypage       = new Paypage(123.1234, 'EUR', 'url');
         $basket        = new Basket();
+        $today         = new DateTime();
 
         return [
             'auth'                   => ['authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata], 'authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]],
@@ -346,7 +351,8 @@ class HeidelpayTest extends BaseUnitTest
             'ship'                   => ['ship', [$payment], 'ship', [$payment]],
             'payout'                 => ['payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId'], 'payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId']],
             'initPayPageCharge'      => ['initPayPageCharge', [$paypage, $customer, $basket, $metadata], 'initPayPage', [$paypage, TransactionTypes::CHARGE, $customer, $basket, $metadata]],
-            'initPayPageAuthorize'   => ['initPayPageAuthorize', [$paypage, $customer, $basket, $metadata], 'initPayPage', [$paypage, TransactionTypes::AUTHORIZATION, $customer, $basket, $metadata]]
+            'initPayPageAuthorize'   => ['initPayPageAuthorize', [$paypage, $customer, $basket, $metadata], 'initPayPage', [$paypage, TransactionTypes::AUTHORIZATION, $customer, $basket, $metadata]],
+            'fetchDDInstalmentPlans' => ['fetchDirectDebitInstalmentPlans', [123.4567, 'EUR', 4.99, $today], 'fetchDirectDebitInstalmentPlans', [123.4567, 'EUR', 4.99, $today]]
         ];
     }
 
