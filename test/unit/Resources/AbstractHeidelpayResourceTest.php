@@ -55,13 +55,13 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class AbstractHeidelpayResourceTest extends BaseUnitTest
+class AbstractHeidelpayResourceTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter functionality.
@@ -367,6 +367,24 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $customer->setId('MyTestId');
         $dummy = new DummyHeidelPayResource($customer);
         $this->assertNull($dummy->getExternalId());
+    }
+
+    /**
+     * Verify additionalAttributes are set/get properly.
+     *
+     * @test
+     *
+     * @throws Exception
+     */
+    public function additionalAttributesShouldBeSettable()
+    {
+        $paypage = new Paypage(123.4, 'EUR', self::RETURN_URL);
+
+        // when
+        $paypage->setAdditionalAttributes(['effectiveInterestRate' => 1234.567]);
+
+        // then
+        $this->assertEquals(['effectiveInterestRate' => 1234.567], $paypage->getAdditionalAttributes());
     }
 
     //<editor-fold desc="Data Providers">

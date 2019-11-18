@@ -366,8 +366,7 @@ class PayPageTest extends BasePaymentTest
             'privacyPolicyUrl' => 'my privacy policy url',
             'termsAndConditionUrl' => 'my tac url',
             'orderId' => 'my order id',
-            'invoiceId' => 'my invoice id',
-            'excludeTypes' => []
+            'invoiceId' => 'my invoice id'
         ];
         $this->assertEquals($expected, $paypage->expose());
     }

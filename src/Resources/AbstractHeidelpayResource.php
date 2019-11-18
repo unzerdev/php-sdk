@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources
+ * @package  heidelpayPHP/Resources
  */
 namespace heidelpayPHP\Resources;
 
@@ -53,6 +53,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
     /** @var array $specialParams */
     private $specialParams = [];
+
+    /** @var array $additionalAttributes */
+    protected $additionalAttributes = [];
 
     //<editor-fold desc="Getters/Setters">
 
@@ -153,6 +156,52 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     {
         $this->specialParams = $specialParams;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalAttributes(): array
+    {
+        return $this->additionalAttributes;
+    }
+
+    /**
+     * @param array $additionalAttributes
+     *
+     * @return AbstractHeidelpayResource
+     */
+    public function setAdditionalAttributes(array $additionalAttributes): AbstractHeidelpayResource
+    {
+        $this->additionalAttributes = $additionalAttributes;
+        return $this;
+    }
+
+    /**
+     * Adds the given value to the additionalAttributes array if it is not set yet.
+     * Overwrites the given value if it already exists.
+     *
+     * @param string $attribute
+     * @param mixed  $value
+     *
+     * @return AbstractHeidelpayResource
+     */
+    public function setAdditionalAttribute(string $attribute, $value): AbstractHeidelpayResource
+    {
+        $this->additionalAttributes[$attribute] = $value;
+        return $this;
+    }
+
+    /**
+     * Returns the value of the given attribute or null if it is not set.
+     *
+     * @param string $attribute
+     *
+     * @return mixed
+     */
+    public function getAdditionalAttribute(string $attribute)
+    {
+        return $this->additionalAttributes[$attribute];
     }
 
     //</editor-fold>
@@ -267,6 +316,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             $skipProperty = true;
         }
 
+        if (!$skipProperty && is_array($value) && empty($value)) {
+            $skipProperty = true;
+        }
+
         return $skipProperty;
     }
 
@@ -347,6 +400,14 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             // expose child objects if possible
             if ($value instanceof self) {
                 $value = $value->expose();
+            }
+
+            if (is_array($value)) {
+                // omit empty arrays
+                if (empty($value)) {
+                    unset($properties[$property]);
+                    continue;
+                }
             }
 
             $properties[$property] = $value;
