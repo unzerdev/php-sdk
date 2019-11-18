@@ -36,6 +36,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 
@@ -84,7 +85,10 @@ try {
 
     // You'll need to remember the shortId to show it on the success or failure page
     $transaction = getTransaction($payment);
-    $_SESSION['ShortId'] = $transaction->getShortId();
+
+    if ($transaction instanceof AbstractTransactionType) {
+        $_SESSION['ShortId'] = $transaction->getShortId();
+    }
 
     if ($payment->isCompleted()) {
         // The payment process has been successful.
@@ -106,8 +110,10 @@ try {
     // In this case do not create the order.
     // Redirect to an error page in your shop and show an message if you want.
 
-    // For better debugging log the error message in your error log
-    $merchantMessage = $transaction->getMessage()->getCustomer();
+    if ($transaction instanceof AbstractTransactionType) {
+        // For better debugging log the error message in your error log
+        $merchantMessage = $transaction->getMessage()->getCustomer();
+    }
 
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
