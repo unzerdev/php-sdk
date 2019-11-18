@@ -25,10 +25,10 @@
 namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class SepaDirectDebitTest extends BaseUnitTest
+class SepaDirectDebitTest extends BasePaymentTest
 {
     /**
      * Verify constructor sets iban.

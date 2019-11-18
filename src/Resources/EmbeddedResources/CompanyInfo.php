@@ -26,7 +26,6 @@ namespace heidelpayPHP\Resources\EmbeddedResources;
 
 use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use stdClass;
 use function is_string;
 
 class CompanyInfo extends AbstractHeidelpayResource
@@ -140,15 +139,6 @@ class CompanyInfo extends AbstractHeidelpayResource
         }
 
         return str_replace(['<', '>'], '', $value);
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
-    public function expose(): stdClass
-    {
-        return json_decode(json_encode(parent::expose(), JSON_FORCE_OBJECT), false);
     }
 
     //</editor-fold>

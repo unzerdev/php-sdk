@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Resources;
 
 use DateTime;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
 use stdClass;
@@ -69,17 +70,14 @@ class InstalmentPlan extends BasePaymentType
     /** @var float $lastRate */
     protected $lastRate;
 
-    /** @var InstalmentPlans $plans */
-    protected $plans;
-
     /** @var string $invoiceDate */
     protected $invoiceDate;
 
     /** @var string $invoiceDueDate */
     protected $invoiceDueDate;
 
-    /** @var stdClass[] */
-    private $rates;
+    /** @var stdClass[]|null $installmentRates */
+    private $installmentRates;
 
     /**
      * @param int    $numberOfRates
@@ -123,9 +121,9 @@ class InstalmentPlan extends BasePaymentType
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getOrderDate(): string
+    public function getOrderDate()
     {
         return $this->orderDate;
     }
@@ -142,28 +140,28 @@ class InstalmentPlan extends BasePaymentType
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getNumberOfRates(): int
+    public function getNumberOfRates()
     {
         return $this->numberOfRates;
     }
 
     /**
-     * @param int $numberOfRates
+     * @param int|null $numberOfRates
      *
      * @return $this
      */
-    public function setNumberOfRates(int $numberOfRates): self
+    public function setNumberOfRates($numberOfRates): self
     {
         $this->numberOfRates = $numberOfRates;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDayOfPurchase(): string
+    public function getDayOfPurchase()
     {
         return $this->dayOfPurchase;
     }
@@ -173,206 +171,187 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setDayOfPurchase(string $dayOfPurchase): self
+    public function setDayOfPurchase($dayOfPurchase): self
     {
         $this->dayOfPurchase = $dayOfPurchase instanceof DateTime ? $dayOfPurchase->format('Y-m-d') : $dayOfPurchase;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getTotalPurchaseAmount(): float
+    public function getTotalPurchaseAmount()
     {
         return $this->totalPurchaseAmount;
     }
 
     /**
-     * @param float $totalPurchaseAmount
+     * @param float|null $totalPurchaseAmount
      *
      * @return $this
      */
-    public function setTotalPurchaseAmount(float $totalPurchaseAmount): self
+    public function setTotalPurchaseAmount($totalPurchaseAmount): self
     {
         $this->totalPurchaseAmount = $totalPurchaseAmount;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getTotalInterestAmount(): float
+    public function getTotalInterestAmount()
     {
         return $this->totalInterestAmount;
     }
 
     /**
-     * @param float $totalInterestAmount
+     * @param float|null $totalInterestAmount
      *
      * @return $this
      */
-    public function setTotalInterestAmount(float $totalInterestAmount): self
+    public function setTotalInterestAmount($totalInterestAmount): self
     {
         $this->totalInterestAmount = $totalInterestAmount;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getTotalAmount(): float
+    public function getTotalAmount()
     {
         return $this->totalAmount;
     }
 
     /**
-     * @param float $totalAmount
+     * @param float|null $totalAmount
      *
      * @return $this
      */
-    public function setTotalAmount(float $totalAmount): self
+    public function setTotalAmount($totalAmount): self
     {
         $this->totalAmount = $totalAmount;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getEffectiveInterestRate(): float
+    public function getEffectiveInterestRate()
     {
         return $this->effectiveInterestRate;
     }
 
     /**
-     * @param float $effectiveInterestRate
+     * @param float|null $effectiveInterestRate
      *
      * @return $this
      */
-    public function setEffectiveInterestRate(float $effectiveInterestRate): self
+    public function setEffectiveInterestRate($effectiveInterestRate): self
     {
         $this->effectiveInterestRate = $effectiveInterestRate;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getNominalInterestRate(): float
+    public function getNominalInterestRate()
     {
         return $this->nominalInterestRate;
     }
 
     /**
-     * @param float $nominalInterestRate
+     * @param float|null $nominalInterestRate
      *
      * @return $this
      */
-    public function setNominalInterestRate(float $nominalInterestRate): self
+    public function setNominalInterestRate($nominalInterestRate): self
     {
         $this->nominalInterestRate = $nominalInterestRate;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getFeeFirstRate(): float
+    public function getFeeFirstRate()
     {
         return $this->feeFirstRate;
     }
 
     /**
-     * @param float $feeFirstRate
+     * @param float|null $feeFirstRate
      *
      * @return $this
      */
-    public function setFeeFirstRate(float $feeFirstRate): self
+    public function setFeeFirstRate($feeFirstRate): self
     {
         $this->feeFirstRate = $feeFirstRate;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getFeePerRate(): float
+    public function getFeePerRate()
     {
         return $this->feePerRate;
     }
 
     /**
-     * @param float $feePerRate
+     * @param float|null $feePerRate
      *
      * @return $this
      */
-    public function setFeePerRate(float $feePerRate): self
+    public function setFeePerRate($feePerRate): self
     {
         $this->feePerRate = $feePerRate;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getMonthlyRate(): float
+    public function getMonthlyRate()
     {
         return $this->monthlyRate;
     }
 
     /**
-     * @param float $monthlyRate
+     * @param float|null $monthlyRate
      *
      * @return $this
      */
-    public function setMonthlyRate(float $monthlyRate): self
+    public function setMonthlyRate($monthlyRate): self
     {
         $this->monthlyRate = $monthlyRate;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getLastRate(): float
+    public function getLastRate()
     {
         return $this->lastRate;
     }
 
     /**
-     * @param float $lastRate
+     * @param float|null $lastRate
      *
      * @return $this
      */
-    public function setLastRate(float $lastRate): self
+    public function setLastRate($lastRate): self
     {
         $this->lastRate = $lastRate;
         return $this;
     }
 
     /**
-     * @return InstalmentPlans
+     * @return string|null
      */
-    public function getPlans(): InstalmentPlans
-    {
-        return $this->plans;
-    }
-
-    /**
-     * @param InstalmentPlans $plans
-     *
-     * @return $this
-     */
-    public function setPlans(InstalmentPlans $plans): self
-    {
-        $this->plans = $plans;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInvoiceDate(): string
+    public function getInvoiceDate()
     {
         return $this->invoiceDate;
     }
@@ -389,9 +368,9 @@ class InstalmentPlan extends BasePaymentType
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getInvoiceDueDate(): string
+    public function getInvoiceDueDate()
     {
         return $this->invoiceDueDate;
     }
@@ -409,21 +388,21 @@ class InstalmentPlan extends BasePaymentType
     }
 
     /**
-     * @return stdClass[]
+     * @return stdClass[]|null
      */
-    public function getRates(): array
+    public function getInstallmentRates()
     {
-        return $this->rates;
+        return $this->installmentRates;
     }
 
     /**
-     * @param stdClass[] $rates
+     * @param stdClass[] $installmentRates
      *
      * @return InstalmentPlan
      */
-    public function setRates(array $rates): InstalmentPlan
+    protected function setInstallmentRates(array $installmentRates): InstalmentPlan
     {
-        $this->rates = $rates;
+        $this->installmentRates = $installmentRates;
         return $this;
     }
 
@@ -436,9 +415,28 @@ class InstalmentPlan extends BasePaymentType
      */
     public function getTransactionParams(): array
     {
-        return [
-            'effectiveInterestRate' => $this->getEffectiveInterestRate()
-        ];
+        $params = [];
+        $effectiveInterestRate = $this->getEffectiveInterestRate();
+        if ($effectiveInterestRate !== null) {
+            $params['effectiveInterestRate'] = $effectiveInterestRate;
+        }
+        return $params;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        parent::handleResponse($response, $method);
+
+        if (isset($response->installmentRates)) {
+            $rates = [];
+            foreach ($response->installmentRates as $rate) {
+                $rates[] = $rate;
+            }
+            $this->setInstallmentRates($rates);
+        }
     }
 
     //</editor-fold>

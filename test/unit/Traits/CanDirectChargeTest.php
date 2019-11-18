@@ -29,11 +29,11 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use ReflectionException;
 use RuntimeException;
 
-class CanDirectChargeTest extends BaseUnitTest
+class CanDirectChargeTest extends BasePaymentTest
 {
     /**
      * Verify direct charge throws exception if the class does not implement the HeidelpayParentInterface.

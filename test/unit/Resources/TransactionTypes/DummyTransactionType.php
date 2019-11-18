@@ -1,6 +1,6 @@
 <?php
 /**
- * This dummy class helps validating the functionalities of the abstracttransaction type.
+ * This dummy class helps validating the functionalities of the abstract transaction type.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *

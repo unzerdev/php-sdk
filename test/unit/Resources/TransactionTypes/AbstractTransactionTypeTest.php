@@ -31,13 +31,13 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class AbstractTransactionTypeTest extends BaseUnitTest
+class AbstractTransactionTypeTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters work properly.

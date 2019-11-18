@@ -42,6 +42,7 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
@@ -56,6 +57,7 @@ use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\test\BasePaymentTest;
+use heidelpayPHP\test\unit\DummyResource;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
@@ -169,8 +171,7 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
      */
     public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractHeidelpayResource$resource, $resourcePath)
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['getUri'])
-            ->getMock();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
         $heidelpayMock->method('getUri')->willReturn('parent/resource/path/');
 
         /** @var Heidelpay $heidelpayMock */
@@ -311,12 +312,14 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
             ->setShippingAddress($address)
             ->setParentResource($heidelpay);
 
+        $customer->setSpecialParams(['param1' => 'value1', 'param2' => 'value2']);
+
         $expectedJson = '{"billingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
             '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"},"birthDate":"1989-12-24",' .
             '"company":"heidelpay GmbH","customerId":"CustomerId","email":"peter.universum@universum-group.de",' .
-            '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","phone":"+4962216471100",' .
-            '"salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
-            '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
+            '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","param1":"value1","param2":"value2",' .
+            '"phone":"+4962216471100","salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE",' .
+            '"name":"Peter Universum","state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
         $this->assertEquals($expectedJson, $customer->jsonSerialize());
     }
 
@@ -367,6 +370,25 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
         $customer->setId('MyTestId');
         $dummy = new DummyHeidelPayResource($customer);
         $this->assertNull($dummy->getExternalId());
+    }
+
+    /**
+     * Verify float values are rounded to 4 decimal places on expose.
+     * The object and the transmitted value will be updated.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     */
+    public function moreThenFourDecimalPlaces()
+    {
+        $object = new DummyResource();
+        $object->setTestFloat(1.23456789);
+        $this->assertEquals(1.23456789, $object->getTestFloat());
+
+        $reduced = $object->expose();
+        $this->assertEquals(['testFloat' => 1.2346], $reduced);
+        $this->assertEquals(1.2346, $object->getTestFloat());
     }
 
     /**
@@ -421,7 +443,8 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
             'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring'],
             'Payout' => [new Payout(), 'parent/resource/path/payouts'],
             'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge'],
-            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize']
+            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize'],
+            'HirePurchaseDirectDebit' => [new HirePurchaseDirectDebit(), 'parent/resource/path/types/hire-purchase-direct-debit']
         ];
     }
 

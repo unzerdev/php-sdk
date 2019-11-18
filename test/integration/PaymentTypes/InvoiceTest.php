@@ -147,6 +147,7 @@ class InvoiceTest extends BasePaymentTest
         $this->assertNotNull($cancellation->getId());
         $payment = $cancellation->getPayment();
         $this->assertTrue($payment->isPending());
+
         $cancellation2 = $charge->cancel(0.5);
         $this->assertNotNull($cancellation2);
         $this->assertNotNull($cancellation2->getId());

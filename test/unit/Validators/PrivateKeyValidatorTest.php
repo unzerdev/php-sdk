@@ -24,11 +24,11 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\Validators\PrivateKeyValidator;
 use PHPUnit\Framework\Exception;
 
-class PrivateKeyValidatorTest extends BaseUnitTest
+class PrivateKeyValidatorTest extends BasePaymentTest
 {
     /**
      * Verify validate method behaves as expected.

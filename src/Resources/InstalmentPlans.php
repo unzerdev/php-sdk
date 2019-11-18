@@ -222,7 +222,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
                 $instalment->handleResponse($plan);
                 $plans[] = $instalment;
             }
-            $this->plans = $plans;
+            $this->setPlans($plans);
         }
     }
 

@@ -47,7 +47,7 @@ class CardTest extends BasePaymentTest
      *
      * @dataProvider cardShouldBeCreatableDP
      *
-     * @param string      $cardnumber
+     * @param string      $cardNumber
      * @param CardDetails $expectedCardDetails
      *
      * @return BasePaymentType
@@ -56,10 +56,10 @@ class CardTest extends BasePaymentTest
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
-    public function cardShouldBeCreatable(string $cardnumber, CardDetails $expectedCardDetails): BasePaymentType
+    public function cardShouldBeCreatable(string $cardNumber, CardDetails $expectedCardDetails): BasePaymentType
     {
         /** @var Card $card */
-        $card = $this->createCardObject($cardnumber);
+        $card = $this->createCardObject($cardNumber);
         $this->assertNull($card->getId());
         $card = $this->heidelpay->createPaymentType($card);
 
@@ -138,8 +138,16 @@ class CardTest extends BasePaymentTest
         $card = $this->createCardObject();
         $card = $this->heidelpay->createPaymentType($card);
 
+        // card recurring is disabled by default
+        $this->assertFalse($card->isRecurring());
+
         /** @var Charge $charge */
         $charge = $card->charge(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+
+        // card recurring is activated through charge transaction
+        /** @var Card $fetchedCard */
+        $fetchedCard = $this->heidelpay->fetchPaymentType($card->getId());
+        $this->assertTrue($fetchedCard->isRecurring());
 
         // verify charge has been created
         $this->assertNotNull($charge->getId());

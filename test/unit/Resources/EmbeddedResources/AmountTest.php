@@ -25,10 +25,10 @@
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\EmbeddedResources\Amount;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class AmountTest extends BaseUnitTest
+class AmountTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter functionalities.

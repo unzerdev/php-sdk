@@ -78,6 +78,19 @@ class BasePaymentTest extends TestCase
     //<editor-fold desc="Custom asserts">
 
     /**
+     * This performs assertions to verify the tested value is an empty array.
+     *
+     * @param mixed $value
+     *
+     * @throws Exception
+     */
+    public function assertIsEmptyArray($value)
+    {
+        $this->assertInternalType('array', $value);
+        $this->assertEmpty($value);
+    }
+
+    /**
      * @param Payment $payment
      * @param float   $expectedRemaining
      * @param float   $expectedCharged
@@ -199,17 +212,17 @@ class BasePaymentTest extends TestCase
     /**
      * Creates a Card object for tests.
      *
-     * @param string $cardnumber
+     * @param string $cardNumber
      *
      * @return Card
      *
      * @throws RuntimeException
      * @throws \Exception
      */
-    protected function createCardObject(string $cardnumber = '5453010000059543'): Card
+    protected function createCardObject(string $cardNumber = '5453010000059543'): Card
     {
         $expiryDate = $this->getNextYearsTimestamp()->format('m/Y');
-        $card = new Card($cardnumber, $expiryDate);
+        $card = new Card($cardNumber, $expiryDate);
         $card->setCvc('123');
         return $card;
     }
@@ -282,7 +295,7 @@ class BasePaymentTest extends TestCase
      *
      * @throws \Exception
      */
-    public function getCurrentDateString(): string
+    public function getTodaysDateString(): string
     {
         return (new DateTime())->format('Y-m-d');
     }
