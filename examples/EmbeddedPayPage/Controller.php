@@ -34,7 +34,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\CustomerFactory;
+use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 
 // start new session for this example and remove all parameters
@@ -59,7 +61,7 @@ try {
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
 
     // These are the mandatory parameters for the payment page ...
-    $paypage = new Paypage(12.99, 'EUR', RETURN_CONTROLLER_URL);
+    $paypage = new Paypage(119.00, 'EUR', RETURN_CONTROLLER_URL);
 
     // ... however you can customize the Payment Page using additional parameters.
     $paypage->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
@@ -68,10 +70,18 @@ try {
             ->setOrderId('OrderNr' . microtime(true))
             ->setInvoiceId('InvoiceNr' . microtime(true));
 
+    // ... in order to enable FlexiPay Rate (Hire Purchase) you will need to set the effectiveInterestRate as well.
+    $paypage->setEffectiveInterestRate(4.99);
+
+    // ... a Basket is mandatory for HirePurchase
+    $orderId = str_replace(['0.', ' '], '', microtime(false));
+    $basketItem = new BasketItem('Hat', 100.0, 119.0, 1);
+    $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
+
     if ($transactionType === 'charge') {
-        $heidelpay->initPayPageCharge($paypage, $customer);
+        $heidelpay->initPayPageCharge($paypage, $customer, $basket);
     } else {
-        $heidelpay->initPayPageAuthorize($paypage, $customer);
+        $heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
     }
 
     $_SESSION['PaymentId'] = $paypage->getPaymentId();
