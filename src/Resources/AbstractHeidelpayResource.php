@@ -203,7 +203,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     protected function getAdditionalAttribute(string $attribute)
     {
-        return $this->additionalAttributes[$attribute];
+        return $this->additionalAttributes[$attribute] ?? null;
     }
 
     //</editor-fold>
@@ -357,10 +357,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                 $value = $value->expose();
             }
 
-            // reduce floats to 4 decimal places
+            // reduce floats to 4 decimal places and update the property in object
             if (is_float($value)) {
                 $value = ValueService::limitFloats($value);
-                $this->$property = $value;
+                self::setItemProperty($this, $property, $value);
             }
 
             // handle additional values
@@ -369,7 +369,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                     unset($properties[$property]);
                     continue;
                 }
-
                 $value = $this->exposeAdditionalAttributes($value);
             }
 
@@ -446,6 +445,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
+     * Can not be moved to service since setters and getters are most likely private.
+     *
      * @param $item
      * @param $key
      * @param $value
