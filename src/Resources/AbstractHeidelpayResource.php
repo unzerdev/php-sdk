@@ -425,10 +425,10 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                     continue;
                 }
 
-                foreach ($value as $key => $attribute) {
-                    $attribute = $this->limitFloats($attribute);
-                    $value[$key] = $attribute;
-                    $this->setAdditionalAttribute($key, $attribute);
+                foreach ($value as $attributeName => $attributeValue) {
+                    $attributeValue = $this->limitFloats($attributeValue);
+                    $value[$attributeName] = $attributeValue;
+                    $this->setAdditionalAttribute($attributeName, $attributeValue);
                 }
             }
 
@@ -439,11 +439,11 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         // Add linked resources if any
         $resources = [];
         /**
-         * @var string                    $key
+         * @var string                    $attributeName
          * @var AbstractHeidelpayResource $linkedResource
          */
-        foreach ($this->getLinkedResources() as $key => $linkedResource) {
-            $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
+        foreach ($this->getLinkedResources() as $attributeName => $linkedResource) {
+            $resources[$attributeName . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
         }
 
         if (count($resources) > 0) {
@@ -453,8 +453,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         //---------------------
 
         // Add special params if any
-        foreach ($this->getSpecialParams() as $key => $specialParam) {
-            $properties[$key] = $specialParam;
+        foreach ($this->getSpecialParams() as $attributeName => $specialParam) {
+            $properties[$attributeName] = $specialParam;
         }
         //---------------------
 
