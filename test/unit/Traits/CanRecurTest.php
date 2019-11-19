@@ -27,14 +27,14 @@ namespace heidelpayPHP\test\unit\Traits;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class CanRecurTest extends BaseUnitTest
+class CanRecurTest extends BasePaymentTest
 {
     /**
      * Verify setters and getters.

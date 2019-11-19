@@ -42,6 +42,7 @@ use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
@@ -63,14 +64,15 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\DummyResource;
 use heidelpayPHP\test\unit\Traits\TraitDummyCanRecur;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class ResourceServiceTest extends BaseUnitTest
+class ResourceServiceTest extends BasePaymentTest
 {
     /**
      * Verify getResourceIdFromUrl works correctly.
@@ -521,6 +523,30 @@ class ResourceServiceTest extends BaseUnitTest
 
         /** @var ResourceService $resourceSrvMock */
         $resourceSrvMock->fetchPaymentType($typeId);
+    }
+
+    /**
+     * Update payment type should call update method.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function updatePaymentTypeShouldCallUpdateMethod()
+    {
+        $paymentType = (new HirePurchaseDirectDebit())->setId('paymentTypeId');
+
+        /** @var ResourceService|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['update'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('update')->with($paymentType)->willReturn($paymentType);
+
+        $returnedPaymentType = $resourceSrvMock->updatePaymentType($paymentType);
+
+        $this->assertSame($paymentType, $returnedPaymentType);
     }
 
     /**
@@ -1412,6 +1438,7 @@ class ResourceServiceTest extends BaseUnitTest
             'Alipay sandbox' => [Alipay::class, 's-ali-12345678'],
             'Wechatpay sandbox' => [Wechatpay::class, 's-wcp-12345678'],
             'Invoice factoring sandbox' => [InvoiceFactoring::class, 's-ivf-12345678'],
+            'HirePurchaseDirectDebit sandbox' => [HirePurchaseDirectDebit::class, 's-hdd-12345678'],
             'Card production' => [Card::class, 'p-crd-12345678'],
             'Giropay production' => [Giropay::class, 'p-gro-12345678'],
             'Ideal production' => [Ideal::class, 'p-idl-12345678'],
@@ -1426,7 +1453,8 @@ class ResourceServiceTest extends BaseUnitTest
             'EPS production' => [EPS::class, 'p-eps-12345678'],
             'Alipay production' => [Alipay::class, 'p-ali-12345678'],
             'Wechatpay production' => [Wechatpay::class, 'p-wcp-12345678'],
-            'Invoice factoring production' => [InvoiceFactoring::class, 'p-ivf-12345678']
+            'Invoice factoring production' => [InvoiceFactoring::class, 'p-ivf-12345678'],
+            'HirePurchaseDirectDebit production' => [HirePurchaseDirectDebit::class, 'p-hdd-12345678']
         ];
     }
 
@@ -1581,6 +1609,10 @@ class ResourceServiceTest extends BaseUnitTest
             'INVOICE_FACTORING'            => [
                 's-ivf-xen2ybcovn56',
                 'https://api.heidelpay.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'
+            ],
+            'HIRE_PURCHASE_DIRECT_DEBIT'   => [
+                's-hdd-xen2ybcovn56',
+                'https://api.heidelpay.com/v1/types/hire-purchase-direct-debit/s-hdd-xen2ybcovn56/'
             ]
         ];
     }

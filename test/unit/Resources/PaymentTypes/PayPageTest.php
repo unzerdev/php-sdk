@@ -84,6 +84,7 @@ class PayPageTest extends BasePaymentTest
 
         // other
         $this->assertCount(0, $paypage->getExcludeTypes());
+        $this->assertNull($paypage->isCard3ds());
 
         // ----------- SET test values ------------
         $payment = (new Payment())->setId('my payment id');
@@ -104,7 +105,8 @@ class PayPageTest extends BasePaymentTest
             ->setTermsAndConditionUrl('my tac url')
             ->setPayment($payment)
             ->setRedirectUrl('https://redirect.url')
-            ->addExcludeType(SepaDirectDebit::getResourceName());
+            ->addExcludeType(SepaDirectDebit::getResourceName())
+            ->setCard3ds(true);
 
         // ----------- VERIFY test values ------------
         $this->assertEquals(321.0, $paypage->getAmount());
@@ -135,6 +137,11 @@ class PayPageTest extends BasePaymentTest
         $this->assertArraySubset([SepaDirectDebit::getResourceName()], $paypage->getExcludeTypes());
         $paypage->setExcludeTypes([Card::getResourceName(), Giropay::getResourceName()]);
         $this->assertArraySubset([Card::getResourceName(), Giropay::getResourceName()], $paypage->getExcludeTypes());
+        $this->assertTrue($paypage->isCard3ds());
+
+        // SET test values 2
+        $paypage->setCard3ds(false);
+        $this->assertFalse($paypage->isCard3ds());
     }
 
     /**
@@ -342,7 +349,8 @@ class PayPageTest extends BasePaymentTest
             ->setPayment($payment)
             ->setRedirectUrl('https://redirect.url')
             ->setOrderId('my order id')
-            ->setInvoiceId('my invoice id');
+            ->setInvoiceId('my invoice id')
+            ->setEffectiveInterestRate(4.99);
 
         // then
         $expected = [
@@ -367,7 +375,8 @@ class PayPageTest extends BasePaymentTest
             'termsAndConditionUrl' => 'my tac url',
             'orderId' => 'my order id',
             'invoiceId' => 'my invoice id',
-            'excludeTypes' => []
+            'excludeTypes' => [],
+            'additionalAttributes' => ['effectiveInterestRate' => 4.99]
         ];
         $this->assertEquals($expected, $paypage->expose());
     }
@@ -416,7 +425,7 @@ class PayPageTest extends BasePaymentTest
             'GET' => [HttpAdapterInterface::REQUEST_GET, 0],
             'PUT' => [HttpAdapterInterface::REQUEST_PUT, 1],
             'DELETE' => [HttpAdapterInterface::REQUEST_DELETE, 1],
-            'POST' => [HttpAdapterInterface::REQUEST_POST, 1],
+            'POST' => [HttpAdapterInterface::REQUEST_POST, 1]
         ];
     }
 

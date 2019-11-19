@@ -68,9 +68,10 @@ try {
     $_SESSION['ShortId'] = $recurring->getShortId();
 
     // Redirect to the 3ds page or to success depending on the state of the transaction
-    if (empty($recurring->getRedirectUrl()) && $recurring->isSuccess()) {
+    $redirect = !empty($recurring->getRedirectUrl());
+    if (!$redirect && $recurring->isSuccess()) {
         redirect(SUCCESS_URL);
-    } elseif (!empty($recurring->getRedirectUrl()) && $recurring->isPending()) {
+    } elseif ($redirect && $recurring->isPending()) {
         redirect($recurring->getRedirectUrl());
     }
 

@@ -26,12 +26,12 @@ namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
 use stdClass;
 
-class ShipmentTest extends BaseUnitTest
+class ShipmentTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.

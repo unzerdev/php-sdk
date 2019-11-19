@@ -25,6 +25,7 @@
  */
 namespace heidelpayPHP;
 
+use DateTime;
 use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
@@ -32,6 +33,7 @@ use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -56,7 +58,7 @@ class Heidelpay implements HeidelpayParentInterface
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.2.3.0';
+    const SDK_VERSION = '1.2.5.0';
 
     /** @var string $key */
     private $key;
@@ -98,7 +100,7 @@ class Heidelpay implements HeidelpayParentInterface
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
         $this->webhookService  = new WebhookService($this);
-        $this->httpService = new HttpService();
+        $this->httpService     = new HttpService();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -226,8 +228,8 @@ class Heidelpay implements HeidelpayParentInterface
 
     /**
      * Enable debug output.
-     * You need to setter inject a custom handler implementing the DebugOutputHandlerInterface via setDebugHandler
-     * for this to work.
+     * You need to setter inject a custom handler implementing the DebugOutputHandlerInterface via
+     * Heidelpay::setDebugHandler() for this to work.
      *
      * @param bool $debugMode
      *
@@ -248,8 +250,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     /**
-     * Use this method to inject a custom handler for debug messages form the http-adapter.
-     * Remember to enable debug output by setting the constant Heidelpay::DEBUG_MODE true.
+     * Use this method to inject a custom handler for debug messages from the http-adapter.
+     * Remember to enable debug output using Heidelpay::setDebugMode(true).
      *
      * @param DebugHandlerInterface $debugHandler
      *
@@ -510,6 +512,21 @@ class Heidelpay implements HeidelpayParentInterface
     public function createPaymentType(BasePaymentType $paymentType): BasePaymentType
     {
         return $this->resourceService->createPaymentType($paymentType);
+    }
+
+    /**
+     * Updates the PaymentType resource with the given PaymentType object.
+     *
+     * @param BasePaymentType $paymentType The PaymentType object to be updated.
+     *
+     * @return BasePaymentType|AbstractHeidelpayResource The updated PaymentType object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
+    {
+        return $this->resourceService->updatePaymentType($paymentType);
     }
 
     /**
@@ -1061,35 +1078,48 @@ class Heidelpay implements HeidelpayParentInterface
      * Performs a Charge transaction for the Authorization of the given Payment object.
      * To perform a full charge of the authorized amount leave the amount null.
      *
-     * @param string|Payment $payment The Payment object the Authorization to charge belongs to.
-     * @param float|null     $amount  The amount to charge.
+     * @param string|Payment $payment   The Payment object the Authorization to charge belongs to.
+     * @param float|null     $amount    The amount to charge.
+     * @param string|null    $orderId   The order id from the shop.
+     * @param string|null    $invoiceId The invoice id from the shop.
      *
      * @return Charge The resulting object of the Charge resource.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function chargeAuthorization($payment, $amount = null): AbstractTransactionType
-    {
-        return $this->paymentService->chargeAuthorization($payment, $amount);
+    public function chargeAuthorization(
+        $payment,
+        float $amount = null,
+        string $orderId = null,
+        string $invoiceId = null
+    ): AbstractTransactionType {
+        return $this->paymentService->chargeAuthorization($payment, $amount, $orderId, $invoiceId);
     }
 
     /**
      * Performs a Charge transaction for a specific Payment and returns the resulting Charge object.
      *
-     * @param Payment|string $payment  The Payment object to be charged.
-     * @param null           $amount   The amount to charge.
-     * @param null           $currency The Currency of the charged amount.
+     * @param Payment|string $payment   The Payment object to be charged.
+     * @param float|null     $amount    The amount to charge.
+     * @param string|null    $currency  The Currency of the charged amount.
+     * @param string|null    $orderId   The order id from the shop.
+     * @param string|null    $invoiceId The invoice id from the shop.
      *
      * @return Charge The resulting Charge object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function chargePayment($payment, $amount = null, $currency = null): AbstractTransactionType
-    {
+    public function chargePayment(
+        $payment,
+        float $amount = null,
+        string $currency = null,
+        string $orderId = null,
+        string $invoiceId = null
+    ): AbstractTransactionType {
         $paymentObject = $this->resourceService->getPaymentResource($payment);
-        return $this->paymentService->chargePayment($paymentObject, $amount, $currency);
+        return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId);
     }
 
     //</editor-fold>
@@ -1138,18 +1168,38 @@ class Heidelpay implements HeidelpayParentInterface
      * Performs a Cancellation transaction for the given Charge and returns the resulting Cancellation object.
      * Performs a full cancel if the parameter amount is null.
      *
-     * @param Payment|string $paymentId The Payment object or the id of the Payment the charge belongs to.
-     * @param string         $chargeId  The id of the Charge to be canceled.
-     * @param float|null     $amount    The amount to be canceled.
+     * @param Payment|string $paymentId        The Payment object or the id of the Payment the charge belongs to.
+     * @param string         $chargeId         The id of the Charge to be canceled.
+     * @param float|null     $amount           The amount to be canceled.
+     *                                         This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null    $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null    $paymentReference A reference string for the payment.
+     * @param float|null     $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelChargeById($paymentId, $chargeId, $amount = null): AbstractTransactionType
-    {
-        return $this->paymentService->cancelChargeById($paymentId, $chargeId, $amount);
+    public function cancelChargeById(
+        $paymentId,
+        $chargeId,
+        float $amount = null,
+        string $reasonCode = null,
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
+    ): AbstractTransactionType {
+        return $this->paymentService->cancelChargeById(
+            $paymentId,
+            $chargeId,
+            $amount,
+            $reasonCode,
+            $paymentReference,
+            $amountNet,
+            $amountVat
+        );
     }
 
     /**
@@ -1158,8 +1208,11 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @param Charge      $charge           The Charge object to create the Cancellation for.
      * @param float|null  $amount           The amount to be canceled.
-     * @param string|null $reasonCode
+     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
@@ -1170,9 +1223,18 @@ class Heidelpay implements HeidelpayParentInterface
         Charge $charge,
         $amount = null,
         string $reasonCode = null,
-        string $paymentReference = null
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
     ): AbstractTransactionType {
-        return $this->paymentService->cancelCharge($charge, $amount, $reasonCode, $paymentReference);
+        return $this->paymentService->cancelCharge(
+            $charge,
+            $amount,
+            $reasonCode,
+            $paymentReference,
+            $amountNet,
+            $amountVat
+        );
     }
 
     //</editor-fold>
@@ -1248,7 +1310,8 @@ class Heidelpay implements HeidelpayParentInterface
     }
 
     //</editor-fold>
-    //</editor-fold>
+
+    //<editor-fold desc="PayPage">
 
     /**
      * @param Paypage       $paypage
@@ -1295,6 +1358,41 @@ class Heidelpay implements HeidelpayParentInterface
             $metadata
         );
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Hire Purchase (FlexiPay Rate)">
+
+    /**
+     * Returns available hire purchase direct debit instalment plans for the given values.
+     *
+     * @param $amount
+     * @param $currency
+     * @param $effectiveInterest
+     * @param DateTime|null $orderDate
+     *
+     * @return InstalmentPlans
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function fetchDirectDebitInstalmentPlans(
+        $amount,
+        $currency,
+        $effectiveInterest,
+        DateTime $orderDate = null
+    ): InstalmentPlans {
+        return $this->getPaymentService()->fetchDirectDebitInstalmentPlans(
+            $amount,
+            $currency,
+            $effectiveInterest,
+            $orderDate
+        );
+    }
+
+    //</editor-fold>
+
+    //</editor-fold>
 
     //<editor-fold desc="Helpers">
 

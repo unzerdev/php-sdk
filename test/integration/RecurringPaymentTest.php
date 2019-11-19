@@ -51,20 +51,44 @@ class RecurringPaymentTest extends BasePaymentTest
     }
 
     /**
-     * Verify card can activate recurring payments.
+     * Verify card with 3ds can activate recurring payments.
      *
      * @test
      *
      * @throws RuntimeException
      * @throws HeidelpayApiException
      */
-    public function cardShouldBeAbleToActivateRecurringPayments()
+    public function recurringForCardWith3dsShouldReturnRedirectURL()
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->heidelpay->createPaymentType($this->createCardObject()->set3ds(true));
         $recurring = $card->activateRecurring('https://dev.heidelpay.com');
         $this->assertPending($recurring);
         $this->assertNotEmpty($recurring->getReturnUrl());
+    }
+
+    /**
+     * Verify card without 3ds can activate recurring payments.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     *
+     * @group skip
+     */
+    public function recurringForCardWithout3dsShouldActivateRecurringAtOnce()
+    {
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject()->set3ds(false));
+        $this->assertFalse($card->isRecurring());
+
+        $recurring = $card->activateRecurring('https://dev.heidelpay.com');
+        $this->assertPending($recurring);
+
+        /** @var Card $fetchedCard */
+        $fetchedCard = $this->heidelpay->fetchPaymentType($card->getId());
+        $this->assertTrue($fetchedCard->isRecurring());
     }
 
     /**

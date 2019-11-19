@@ -1,8 +1,8 @@
 <?php
 /**
- * This class defines base for unit tests to add generic helpers.
+ * This file defines the constants needed for the hire purchase direct debit example.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP/examples
  */
-namespace heidelpayPHP\test;
 
-use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\TestCase;
+require_once __DIR__ . '/../Constants.php';
 
-class BaseUnitTest extends TestCase
-{
-    /**
-     * This performs assertions to verify the tested value is an empty array.
-     *
-     * @param mixed $value
-     *
-     * @throws Exception
-     */
-    public function assertIsEmptyArray($value)
-    {
-        $this->assertInternalType('array', $value);
-        $this->assertEmpty($value);
-    }
-}
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'HirePurchaseDirectDebit');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
+define('CONFIRM_URL', EXAMPLE_URL . '/confirm.php');

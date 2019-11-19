@@ -40,16 +40,20 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\IdService;
+use heidelpayPHP\Traits\HasInvoiceId;
 use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasPaymentState;
 use RuntimeException;
 use stdClass;
+use function count;
+use function in_array;
 use function is_string;
 
 class Payment extends AbstractHeidelpayResource
 {
     use HasPaymentState;
     use HasOrderId;
+    use HasInvoiceId;
 
     /** @var string $redirectUrl */
     private $redirectUrl;
@@ -655,48 +659,57 @@ class Payment extends AbstractHeidelpayResource
      * Performs a Cancellation transaction on the Payment.
      * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
      *
-     * @param float|null $totalCancelAmount The amount to canceled.
-     * @param string     $reason
+     * @param float|null  $amount           The amount to be canceled.
+     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null $paymentReference A reference string for the payment.
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelAmount($totalCancelAmount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL): array
-    {
-        $charges = $this->charges;
-        $remainingAmountToCancel = $totalCancelAmount;
+    public function cancelAmount(
+        $amount = null,
+        $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
+        $paymentReference = null,
+        $amountNet = null,
+        $amountVat = null
+    ): array {
+        $charges           = $this->charges;
+        $remainingToCancel = $amount;
 
-        $cancelWholePayment = $remainingAmountToCancel === null;
-        $cancellations = [];
-        $cancellation = null;
+        $cancelWholePayment = $remainingToCancel === null;
+        $cancellations      = [];
+        $cancellation       = null;
 
-        if ($cancelWholePayment || $remainingAmountToCancel > 0.0) {
-            $cancellation = $this->cancelAuthorizationAmount($remainingAmountToCancel);
+        if ($cancelWholePayment || $remainingToCancel > 0.0) {
+            $cancellation = $this->cancelAuthorizationAmount($remainingToCancel);
 
             if ($cancellation instanceof Cancellation) {
                 $cancellations[] = $cancellation;
                 if (!$cancelWholePayment) {
-                    $remainingAmountToCancel -= $cancellation->getAmount();
+                    $remainingToCancel -= $cancellation->getAmount();
                 }
                 $cancellation = null;
             }
         }
 
-        if (!$cancelWholePayment && $remainingAmountToCancel <= 0.0) {
+        if (!$cancelWholePayment && $remainingToCancel <= 0.0) {
             return $cancellations;
         }
 
         /** @var Charge $charge */
         foreach ($charges as $charge) {
             $cancelAmount = null;
-            if (!$cancelWholePayment && $remainingAmountToCancel <= $charge->getTotalAmount()) {
-                $cancelAmount = $remainingAmountToCancel;
+            if (!$cancelWholePayment && $remainingToCancel <= $charge->getTotalAmount()) {
+                $cancelAmount = $remainingToCancel;
             }
 
             try {
-                $cancellation = $charge->cancel($cancelAmount, $reason);
+                $cancellation = $charge->cancel($cancelAmount, $reasonCode, $paymentReference, $amountNet, $amountVat);
             } catch (HeidelpayApiException $e) {
                 $allowedErrors = [
                     ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
@@ -712,12 +725,12 @@ class Payment extends AbstractHeidelpayResource
             if ($cancellation instanceof Cancellation) {
                 $cancellations[] = $cancellation;
                 if (!$cancelWholePayment) {
-                    $remainingAmountToCancel -= $cancellation->getAmount();
+                    $remainingToCancel -= $cancellation->getAmount();
                 }
                 $cancellation = null;
             }
 
-            if (!$cancelWholePayment && $remainingAmountToCancel <= 0) {
+            if (!$cancelWholePayment && $remainingToCancel <= 0) {
                 break;
             }
         }
@@ -738,7 +751,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancelAllCharges(): array
     {
-        $cancels = [];
+        $cancels    = [];
         $exceptions = [];
 
         /** @var Charge $charge */
@@ -748,7 +761,7 @@ class Payment extends AbstractHeidelpayResource
             } catch (HeidelpayApiException $e) {
                 $allowedErrors = [
                     ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK,
-                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED
                 ];
                 if (!in_array($e->getCode(), $allowedErrors, true)) {
                     throw $e;
@@ -773,7 +786,7 @@ class Payment extends AbstractHeidelpayResource
     public function cancelAuthorization($amount = null): array
     {
         $cancels = [];
-        $cancel = $this->cancelAuthorizationAmount($amount);
+        $cancel  = $this->cancelAuthorizationAmount($amount);
 
         if ($cancel instanceof Cancellation) {
             $cancels[] = $cancel;
@@ -796,7 +809,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancelAuthorizationAmount($amount = null)
     {
-        $cancellation = null;
+        $cancellation   = null;
         $completeCancel = $amount === null;
 
         $authorize = $this->getAuthorization();
@@ -804,7 +817,12 @@ class Payment extends AbstractHeidelpayResource
             $cancelAmount = null;
             if (!$completeCancel) {
                 $remainingAuthorized = $this->getAmount()->getRemaining();
-                $cancelAmount = $amount > $remainingAuthorized ? $remainingAuthorized : $amount;
+                $cancelAmount        = $amount > $remainingAuthorized ? $remainingAuthorized : $amount;
+
+                // do not attempt to cancel if there is nothing left to cancel
+                if ($cancelAmount === 0.0) {
+                    return null;
+                }
             }
 
             try {
@@ -812,7 +830,8 @@ class Payment extends AbstractHeidelpayResource
             } catch (HeidelpayApiException $e) {
                 $allowedErrors = [
                     ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
+                    ApiResponseCodes::API_ERROR_TRANSACTION_CANCEL_NOT_ALLOWED
                 ];
 
                 if (!in_array($e->getCode(), $allowedErrors, true)) {
@@ -972,7 +991,7 @@ class Payment extends AbstractHeidelpayResource
     private function updateChargeTransaction($transaction)
     {
         $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
-        $charge = $this->getCharge($transactionId, true);
+        $charge        = $this->getCharge($transactionId, true);
         if (!$charge instanceof Charge) {
             $charge = (new Charge())->setPayment($this)->setId($transactionId);
             $this->addCharge($charge);
@@ -999,7 +1018,7 @@ class Payment extends AbstractHeidelpayResource
 
         $cancellation = $authorization->getCancellation($transactionId, true);
         if (!$cancellation instanceof Cancellation) {
-            $cancellation =  (new Cancellation())->setPayment($this)->setId($transactionId);
+            $cancellation = (new Cancellation())->setPayment($this)->setId($transactionId);
             $authorization->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
@@ -1026,7 +1045,7 @@ class Payment extends AbstractHeidelpayResource
 
         $cancellation = $charge->getCancellation($refundId, true);
         if (!$cancellation instanceof Cancellation) {
-            $cancellation =  (new Cancellation())->setPayment($this)->setId($refundId);
+            $cancellation = (new Cancellation())->setPayment($this)->setId($refundId);
             $charge->addCancellation($cancellation);
         }
         $cancellation->setAmount($transaction->amount);
@@ -1044,7 +1063,7 @@ class Payment extends AbstractHeidelpayResource
     private function updateShipmentTransaction($transaction)
     {
         $shipmentId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
-        $shipment = $this->getShipment($shipmentId, true);
+        $shipment   = $this->getShipment($shipmentId, true);
         if (!$shipment instanceof Shipment) {
             $shipment = (new Shipment())->setId($shipmentId);
             $this->addShipment($shipment);
@@ -1064,7 +1083,7 @@ class Payment extends AbstractHeidelpayResource
     private function updatePayoutTransaction($transaction)
     {
         $payoutId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::PAYOUT);
-        $payout = $this->getPayout(true);
+        $payout   = $this->getPayout(true);
         if (!$payout instanceof Payout) {
             $payout = (new Payout())->setId($payoutId);
             $this->setPayout($payout);

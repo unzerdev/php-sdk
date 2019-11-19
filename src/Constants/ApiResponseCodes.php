@@ -34,6 +34,7 @@ class ApiResponseCodes
     const API_ERROR_PAYMENT_NOT_FOUND                           = 'API.310.100.003';
     const API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED           = 'API.320.000.004';
     const API_ERROR_TRANSACTION_CHARGE_NOT_ALLOWED              = 'API.330.000.004';
+    const API_ERROR_TRANSACTION_CANCEL_NOT_ALLOWED              = 'API.340.000.004';
     const API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED                = 'API.360.000.004';
     const API_ERROR_SHIPPING_REQUIRES_INVOICE_ID                = 'API.360.100.025';
     const API_ERROR_CUSTOMER_ID_REQUIRED                        = 'API.320.100.008';
@@ -67,6 +68,9 @@ class ApiResponseCodes
     const API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED            = 'API.510.310.009';
     const API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND                    = 'API.510.310.008';
     const API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL               = 'API.600.630.004';
+    /**
+     * @deprecated since 1.2.5.0 Will be removed in next major version.
+     */
     const API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION         = 'API.600.630.005';
     const API_ERROR_INVALID_KEY                                 = 'API.710.000.002';
     const API_ERROR_INSUFFICIENT_PERMISSION                     = 'API.710.000.005';
@@ -75,4 +79,10 @@ class ApiResponseCodes
 
     const CORE_ERROR_INVALID_OR_MISSING_LOGIN                   = 'COR.100.300.600';
     const CORE_ERROR_INSURANCE_ALREADY_ACTIVATED                = 'COR.700.400.800';
+
+    const SDM_ERROR_CURRENT_INSURANCE_EVENT                     = 'SDM.CURRENT_INSURANCE_EVENT';
+    const SDM_ERROR_LIMIT_EXCEEDED                              = 'SDM.LIMIT_EXCEEDED';
+    const SDM_ERROR_NEGATIVE_TRAIT_FOUND                        = 'SDM.NEGATIVE_TRAIT_FOUND';
+    const SDM_ERROR_INCREASED_RISK                              = 'SDM.INCREASED_RISK';
+    const SDM_ERROR_DATA_FORMAT_ERROR                           = 'SDM.DATA_FORMAT_ERROR';
 }

@@ -27,11 +27,11 @@ namespace heidelpayPHP\test\unit\Traits;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use ReflectionException;
 use RuntimeException;
 
-class HasCancellationsTest extends BaseUnitTest
+class HasCancellationsTest extends BasePaymentTest
 {
     /**
      * Verify getters setters.

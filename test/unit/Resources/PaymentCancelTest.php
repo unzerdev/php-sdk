@@ -31,14 +31,14 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 
-class PaymentCancelTest extends BaseUnitTest
+class PaymentCancelTest extends BasePaymentTest
 {
     //<editor-fold desc="Deprecated since 1.2.3.0">
 
@@ -365,7 +365,7 @@ class PaymentCancelTest extends BaseUnitTest
      * @test
      * @dataProvider allowedErrorCodesDuringAuthCancel
      *
-     * @param string $allowedExceptionCode
+     * @param string $exceptionCode
      * @param bool   $shouldHaveThrownException
      *
      * @throws Exception
@@ -374,16 +374,17 @@ class PaymentCancelTest extends BaseUnitTest
      * @throws AssertionFailedError
      * @throws \PHPUnit\Framework\MockObject\RuntimeException
      */
-    public function verifyAllowedErrorsWillBeIgnoredDuringAuthorizeCancel($allowedExceptionCode, $shouldHaveThrownException)
+    public function verifyAllowedErrorsWillBeIgnoredDuringAuthorizeCancel($exceptionCode, $shouldHaveThrownException)
     {
         /** @var MockObject|Payment $paymentMock */
         /** @var MockObject|Authorization $authMock */
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
         $authMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
 
-        $allowedException = new HeidelpayApiException(null, null, $allowedExceptionCode);
-        $authMock->method('cancel')->willThrowException($allowedException);
+        $exception = new HeidelpayApiException(null, null, $exceptionCode);
+        $authMock->method('cancel')->willThrowException($exception);
         $paymentMock->method('getAuthorization')->willReturn($authMock);
+        $paymentMock->getAmount()->setRemaining(100.0);
 
         try {
             $this->assertEquals(null, $paymentMock->cancelAuthorizationAmount(12.3));
@@ -391,6 +392,29 @@ class PaymentCancelTest extends BaseUnitTest
         } catch (HeidelpayApiException $e) {
             $this->assertTrue($shouldHaveThrownException, "Exception should not have been thrown here! ({$e->getCode()})");
         }
+    }
+
+    /**
+     * Verify cancelAuthorizationAmount will stop processing if there is no amount to cancel.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws HeidelpayApiException
+     */
+    public function cancelAuthorizationAmountWillNotCallCancelIfThereIsNoOpenAmount()
+    {
+        /** @var MockObject|Payment $paymentMock */
+        /** @var MockObject|Authorization $authMock */
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
+        $authMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
+        $paymentMock->method('getAuthorization')->willReturn($authMock);
+        $authMock->expects(self::never())->method('cancel');
+        $paymentMock->getAmount()->setRemaining(0.0);
+
+        $paymentMock->cancelAuthorizationAmount(12.3);
+        $paymentMock->cancelAuthorizationAmount(0.0);
     }
 
     //<editor-fold desc="Data Providers">
@@ -403,7 +427,7 @@ class PaymentCancelTest extends BaseUnitTest
         return [
             'already cancelled' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
             'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
-            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION, true]
+            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL, true]
         ];
     }
 
@@ -415,7 +439,7 @@ class PaymentCancelTest extends BaseUnitTest
         return [
             'already cancelled' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
             'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CHARGED, false],
-            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION, true]
+            'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL, true]
         ];
     }
 

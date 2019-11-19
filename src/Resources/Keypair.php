@@ -247,19 +247,19 @@ class Keypair extends AbstractHeidelpayResource
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isValidateBasket(): bool
+    public function isValidateBasket()
     {
         return $this->validateBasket;
     }
 
     /**
-     * @param bool $validateBasket
+     * @param bool|null $validateBasket
      *
      * @return Keypair
      */
-    protected function setValidateBasket(bool $validateBasket): Keypair
+    protected function setValidateBasket($validateBasket): Keypair
     {
         $this->validateBasket = $validateBasket;
         return $this;

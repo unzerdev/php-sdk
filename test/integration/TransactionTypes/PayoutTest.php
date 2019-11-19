@@ -160,17 +160,17 @@ class PayoutTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
-        $invoiceId = $this->generateRandomId();
+        $invoiceId = self::generateRandomId();
         $paymentReference = 'paymentReference';
 
-        $payout = $card->payout(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId, $paymentReference);
+        $payout = $card->payout(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId, $paymentReference);
         $payment = $payout->getPayment();
 
         $this->assertSame($card, $payment->getPaymentType());
-        $this->assertEquals(123.4, $payout->getAmount());
+        $this->assertEquals(119.0, $payout->getAmount());
         $this->assertEquals('EUR', $payout->getCurrency());
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());

@@ -39,6 +39,7 @@ use heidelpayPHP\Traits\HasInvoiceId;
 use heidelpayPHP\Traits\HasOrderId;
 use RuntimeException;
 use stdClass;
+use function in_array;
 
 class Paypage extends BasePaymentType
 {
@@ -95,6 +96,9 @@ class Paypage extends BasePaymentType
     /** @var string[] $excludeTypes */
     protected $excludeTypes = [];
 
+    /** @var bool $card3ds */
+    protected $card3ds;
+
     /**
      * Paypage constructor.
      *
@@ -126,7 +130,7 @@ class Paypage extends BasePaymentType
      */
     public function setAmount(float $amount): Paypage
     {
-        $this->amount = round($amount, 4);
+        $this->amount = $amount;
         return $this;
     }
 
@@ -510,6 +514,44 @@ class Paypage extends BasePaymentType
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
+    public function isCard3ds()
+    {
+        return $this->card3ds;
+    }
+
+    /**
+     * @param bool|null $card3ds
+     *
+     * @return Paypage
+     */
+    public function setCard3ds($card3ds): Paypage
+    {
+        $this->card3ds = $card3ds;
+        return $this;
+    }
+
+    /**
+     * @param float|null $effectiveInterestRate
+     *
+     * @return Paypage
+     */
+    public function setEffectiveInterestRate(float $effectiveInterestRate): Paypage
+    {
+        $this->setAdditionalAttribute('effectiveInterestRate', $effectiveInterestRate);
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getEffectiveInterestRate()
+    {
+        return $this->getAdditionalAttribute('effectiveInterestRate');
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
@@ -586,7 +628,7 @@ class Paypage extends BasePaymentType
             'customer'=> $this->getCustomer(),
             'metadata' => $this->getMetadata(),
             'basket' => $this->getBasket(),
-            'payment' => $this->getPayment(),
+            'payment' => $this->getPayment()
         ];
     }
 

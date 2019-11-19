@@ -26,13 +26,13 @@ namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class BasketTest extends BaseUnitTest
+class BasketTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters work properly.
