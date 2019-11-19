@@ -405,6 +405,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
     /**
      * @param $value
+     *
      * @return array
      */
     private function exposeAdditionalAttributes($value): array
