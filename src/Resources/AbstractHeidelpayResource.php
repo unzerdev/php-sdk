@@ -31,6 +31,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Services\ResourceNameService;
 use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\Services\ValueService;
 use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
@@ -210,19 +211,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     //<editor-fold desc="Helpers">
 
     /**
-     * @param mixed $value
-     *
-     * @return mixed
-     */
-    public function limitFloats($value)
-    {
-        if (is_float($value)) {
-            $value = round($value, 4);
-        }
-        return $value;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getHeidelpayObject(): Heidelpay
@@ -288,49 +276,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             // handle basic types
             self::setItemProperty($object, $key, $newValue);
         }
-    }
-
-    /**
-     * @param $item
-     * @param $key
-     * @param $value
-     */
-    private static function setItemProperty($item, $key, $value)
-    {
-        $setter = 'set' . ucfirst($key);
-        if (!is_callable([$item, $setter])) {
-            $setter = 'add' . ucfirst($key);
-        }
-        if (is_callable([$item, $setter])) {
-            $item->$setter($value);
-        }
-    }
-
-    /**
-     * Returns true if the given property should be skipped.
-     *
-     * @param $property
-     * @param $value
-     *
-     * @return bool
-     */
-    private static function propertyShouldBeSkipped($property, $value): bool
-    {
-        $skipProperty = false;
-
-        try {
-            $reflection = new ReflectionProperty(static::class, $property);
-            if ($value === null ||                          // do not send properties that are set to null
-                ($property === 'id' && empty($value)) ||    // do not send id property if it is empty
-                !$reflection->isProtected()) {              // only send protected properties
-                $skipProperty = true;
-            }
-        } /** @noinspection BadExceptionsProcessingInspection */
-        catch (ReflectionException $e) {
-            $skipProperty = true;
-        }
-
-        return $skipProperty;
     }
 
     //</editor-fold>
@@ -414,7 +359,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
             // reduce floats to 4 decimal places
             if (is_float($value)) {
-                $value = $this->limitFloats($value);
+                $value = ValueService::limitFloats($value);
                 $this->$property = $value;
             }
 
@@ -425,11 +370,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                     continue;
                 }
 
-                foreach ($value as $attributeName => $attributeValue) {
-                    $attributeValue = $this->limitFloats($attributeValue);
-                    $value[$attributeName] = $attributeValue;
-                    $this->setAdditionalAttribute($attributeName, $attributeValue);
-                }
+                $value = $this->exposeAdditionalAttributes($value);
             }
 
             $properties[$property] = $value;
@@ -460,6 +401,63 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
         ksort($properties);
         return count($properties) > 0 ? $properties : new stdClass();
+    }
+
+    /**
+     * @param $value
+     * @return array
+     */
+    private function exposeAdditionalAttributes($value): array
+    {
+        foreach ($value as $attributeName => $attributeValue) {
+            $attributeValue        = ValueService::limitFloats($attributeValue);
+            $value[$attributeName] = $attributeValue;
+            $this->setAdditionalAttribute($attributeName, $attributeValue);
+        }
+        return $value;
+    }
+
+    /**
+     * Returns true if the given property should be skipped.
+     *
+     * @param $property
+     * @param $value
+     *
+     * @return bool
+     */
+    private static function propertyShouldBeSkipped($property, $value): bool
+    {
+        $skipProperty = false;
+
+        try {
+            $reflection = new ReflectionProperty(static::class, $property);
+            if ($value === null ||                          // do not send properties that are set to null
+                ($property === 'id' && empty($value)) ||    // do not send id property if it is empty
+                !$reflection->isProtected()) {              // only send protected properties
+                $skipProperty = true;
+            }
+        } /** @noinspection BadExceptionsProcessingInspection */
+        catch (ReflectionException $e) {
+            $skipProperty = true;
+        }
+
+        return $skipProperty;
+    }
+
+    /**
+     * @param $item
+     * @param $key
+     * @param $value
+     */
+    private static function setItemProperty($item, $key, $value)
+    {
+        $setter = 'set' . ucfirst($key);
+        if (!is_callable([$item, $setter])) {
+            $setter = 'add' . ucfirst($key);
+        }
+        if (is_callable([$item, $setter])) {
+            $item->$setter($value);
+        }
     }
 
     //</editor-fold>
