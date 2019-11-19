@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources
+ * @package  heidelpayPHP/Resources
  */
 namespace heidelpayPHP\Resources;
 
@@ -31,6 +31,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Services\ResourceNameService;
 use heidelpayPHP\Services\ResourceService;
+use heidelpayPHP\Services\ValueService;
 use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
@@ -54,6 +55,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
     /** @var array $specialParams */
     private $specialParams = [];
+
+    /** @var array $additionalAttributes */
+    protected $additionalAttributes = [];
 
     //<editor-fold desc="Getters/Setters">
 
@@ -156,6 +160,52 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    protected function getAdditionalAttributes(): array
+    {
+        return $this->additionalAttributes;
+    }
+
+    /**
+     * @param array $additionalAttributes
+     *
+     * @return AbstractHeidelpayResource
+     */
+    protected function setAdditionalAttributes(array $additionalAttributes): AbstractHeidelpayResource
+    {
+        $this->additionalAttributes = $additionalAttributes;
+        return $this;
+    }
+
+    /**
+     * Adds the given value to the additionalAttributes array if it is not set yet.
+     * Overwrites the given value if it already exists.
+     *
+     * @param string $attribute
+     * @param mixed  $value
+     *
+     * @return AbstractHeidelpayResource
+     */
+    protected function setAdditionalAttribute(string $attribute, $value): AbstractHeidelpayResource
+    {
+        $this->additionalAttributes[$attribute] = $value;
+        return $this;
+    }
+
+    /**
+     * Returns the value of the given attribute or null if it is not set.
+     *
+     * @param string $attribute
+     *
+     * @return mixed
+     */
+    protected function getAdditionalAttribute(string $attribute)
+    {
+        return $this->additionalAttributes[$attribute] ?? null;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
@@ -226,49 +276,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             // handle basic types
             self::setItemProperty($object, $key, $newValue);
         }
-    }
-
-    /**
-     * @param $item
-     * @param $key
-     * @param $value
-     */
-    private static function setItemProperty($item, $key, $value)
-    {
-        $setter = 'set' . ucfirst($key);
-        if (!is_callable([$item, $setter])) {
-            $setter = 'add' . ucfirst($key);
-        }
-        if (is_callable([$item, $setter])) {
-            $item->$setter($value);
-        }
-    }
-
-    /**
-     * Returns true if the given property should be skipped.
-     *
-     * @param $property
-     * @param $value
-     *
-     * @return bool
-     */
-    private static function propertyShouldBeSkipped($property, $value): bool
-    {
-        $skipProperty = false;
-
-        try {
-            $reflection = new ReflectionProperty(static::class, $property);
-            if ($value === null ||                          // do not send properties that are set to null
-                ($property === 'id' && empty($value)) ||    // do not send id property if it is empty
-                !$reflection->isProtected()) {              // only send protected properties
-                $skipProperty = true;
-            }
-        } /** @noinspection BadExceptionsProcessingInspection */
-        catch (ReflectionException $e) {
-            $skipProperty = true;
-        }
-
-        return $skipProperty;
     }
 
     //</editor-fold>
@@ -350,10 +357,19 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
                 $value = $value->expose();
             }
 
-            // reduce floats to 4 decimal places
+            // reduce floats to 4 decimal places and update the property in object
             if (is_float($value)) {
-                $value = round($value, 4);
-                $this->$property = $value;
+                $value = ValueService::limitFloats($value);
+                self::setItemProperty($this, $property, $value);
+            }
+
+            // handle additional values
+            if ($property === 'additionalAttributes') {
+                if (!is_array($value) || empty($value)) {
+                    unset($properties[$property]);
+                    continue;
+                }
+                $value = $this->exposeAdditionalAttributes($value);
             }
 
             $properties[$property] = $value;
@@ -363,11 +379,11 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         // Add linked resources if any
         $resources = [];
         /**
-         * @var string                    $key
+         * @var string                    $attributeName
          * @var AbstractHeidelpayResource $linkedResource
          */
-        foreach ($this->getLinkedResources() as $key => $linkedResource) {
-            $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
+        foreach ($this->getLinkedResources() as $attributeName => $linkedResource) {
+            $resources[$attributeName . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
         }
 
         if (count($resources) > 0) {
@@ -377,13 +393,73 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         //---------------------
 
         // Add special params if any
-        foreach ($this->getSpecialParams() as $key => $specialParam) {
-            $properties[$key] = $specialParam;
+        foreach ($this->getSpecialParams() as $attributeName => $specialParam) {
+            $properties[$attributeName] = $specialParam;
         }
         //---------------------
 
         ksort($properties);
         return count($properties) > 0 ? $properties : new stdClass();
+    }
+
+    /**
+     * @param $value
+     *
+     * @return array
+     */
+    private function exposeAdditionalAttributes($value): array
+    {
+        foreach ($value as $attributeName => $attributeValue) {
+            $attributeValue        = ValueService::limitFloats($attributeValue);
+            $value[$attributeName] = $attributeValue;
+            $this->setAdditionalAttribute($attributeName, $attributeValue);
+        }
+        return $value;
+    }
+
+    /**
+     * Returns true if the given property should be skipped.
+     *
+     * @param $property
+     * @param $value
+     *
+     * @return bool
+     */
+    private static function propertyShouldBeSkipped($property, $value): bool
+    {
+        $skipProperty = false;
+
+        try {
+            $reflection = new ReflectionProperty(static::class, $property);
+            if ($value === null ||                          // do not send properties that are set to null
+                ($property === 'id' && empty($value)) ||    // do not send id property if it is empty
+                !$reflection->isProtected()) {              // only send protected properties
+                $skipProperty = true;
+            }
+        } /** @noinspection BadExceptionsProcessingInspection */
+        catch (ReflectionException $e) {
+            $skipProperty = true;
+        }
+
+        return $skipProperty;
+    }
+
+    /**
+     * Can not be moved to service since setters and getters are most likely private.
+     *
+     * @param $item
+     * @param $key
+     * @param $value
+     */
+    private static function setItemProperty($item, $key, $value)
+    {
+        $setter = 'set' . ucfirst($key);
+        if (!is_callable([$item, $setter])) {
+            $setter = 'add' . ucfirst($key);
+        }
+        if (is_callable([$item, $setter])) {
+            $item->$setter($value);
+        }
     }
 
     //</editor-fold>

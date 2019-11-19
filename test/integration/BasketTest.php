@@ -277,7 +277,7 @@ class BasketTest extends BasePaymentTest
         return [
             'valid ' => [false, 'https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.jpg'],
             'valid null' => [false, null],
-            'invalid empty' => [true, '', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL],
+            'valid empty' => [false, ''],
             'invalid not available' => [true, 'https://files.readme.io/does-not-exist.jpg', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL]
         ];
     }

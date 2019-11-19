@@ -29,6 +29,7 @@ use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Constants\TransactionTypes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
@@ -382,6 +383,7 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
      */
     public function moreThenFourDecimalPlaces()
     {
+        // general
         $object = new DummyResource();
         $object->setTestFloat(1.23456789);
         $this->assertEquals(1.23456789, $object->getTestFloat());
@@ -389,6 +391,40 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
         $reduced = $object->expose();
         $this->assertEquals(['testFloat' => 1.2346], $reduced);
         $this->assertEquals(1.2346, $object->getTestFloat());
+
+        // additionalAttributes
+        $ppg = new Paypage(1.23456789, 'EUR', self::RETURN_URL);
+        $ppg->setEffectiveInterestRate(12.3456789);
+        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 12.3457]], $ppg->expose());
+        $this->assertEquals(12.3457, $ppg->getEffectiveInterestRate());
+    }
+
+    /**
+     * Verify additionalAttributes are set/get properly.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function additionalAttributesShouldBeSettable()
+    {
+        $paypage = new Paypage(123.4, 'EUR', self::RETURN_URL);
+
+        // when
+        $paypage->setEffectiveInterestRate(123.4567);
+
+        // then
+        $this->assertEquals(123.4567, $paypage->getEffectiveInterestRate());
+        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 123.4567]], $paypage->expose());
+
+        // when
+        $paypage->handleResponse((object)['additionalAttributes' => ['effectiveInterestRate' => 1234.567]]);
+
+        // then
+        $this->assertEquals(1234.567, $paypage->getEffectiveInterestRate());
+        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 1234.567]], $paypage->expose());
     }
 
     //<editor-fold desc="Data Providers">

@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Added card details to `Card` payment type.
 *   Property `card3ds` to `Paypage`.
 *   Geolocation to `Customer` resource.
+*   Property `effectiveInterestRate` to `PayPage` to enable `HirePurchase` payment types.
 
 ### Changed
 *   Refactor invoice guaranteed tests to make them independent from each other.

@@ -533,6 +533,25 @@ class Paypage extends BasePaymentType
         return $this;
     }
 
+    /**
+     * @param float|null $effectiveInterestRate
+     *
+     * @return Paypage
+     */
+    public function setEffectiveInterestRate(float $effectiveInterestRate): Paypage
+    {
+        $this->setAdditionalAttribute('effectiveInterestRate', $effectiveInterestRate);
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getEffectiveInterestRate()
+    {
+        return $this->getAdditionalAttribute('effectiveInterestRate');
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">

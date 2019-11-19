@@ -349,7 +349,8 @@ class PayPageTest extends BasePaymentTest
             ->setPayment($payment)
             ->setRedirectUrl('https://redirect.url')
             ->setOrderId('my order id')
-            ->setInvoiceId('my invoice id');
+            ->setInvoiceId('my invoice id')
+            ->setEffectiveInterestRate(4.99);
 
         // then
         $expected = [
@@ -374,7 +375,8 @@ class PayPageTest extends BasePaymentTest
             'termsAndConditionUrl' => 'my tac url',
             'orderId' => 'my order id',
             'invoiceId' => 'my invoice id',
-            'excludeTypes' => []
+            'excludeTypes' => [],
+            'additionalAttributes' => ['effectiveInterestRate' => 4.99]
         ];
         $this->assertEquals($expected, $paypage->expose());
     }
