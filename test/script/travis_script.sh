@@ -9,14 +9,14 @@ trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit
 ## enable xdebug again
 mv ~/.phpenv/versions/$(phpenv version-name)/xdebug.ini.bak ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
 
-## run the tests
-if [[ ("$level" == "unit") ]]; then
+## run the unit tests
+if [ "$level" == "unit" ]; then
     echo "Perform unit tests only";
     ./vendor/bin/phpunit test/unit --coverage-clover build/coverage/xml
 fi
 
-## perform this task only for php 7 with deps=no
-if [[ ("$level" == "integration") ]]; then
+## run the integration tests
+if [ "$level" == "integration" ]; then
     echo "Perform integration tests only";
     ./vendor/bin/phpunit test/integration
 fi
