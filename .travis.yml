@@ -6,48 +6,48 @@ matrix:
     - name: "php 7.0 (install) - unit"
       php: 7.0
       env:
-        - deps=no
-        - level=unit
+        - DEPS="NO"
+        - LEVEL="UNIT"
     - name: "php 7.0 (update) - unit"
       php: 7.0
       env:
-        - deps=high
-        - level=unit
+        - DEPS="HIGH"
+        - LEVEL="UNIT"
     - name: "php 7.1 (install) - unit"
       php: 7.1
       env:
-        - deps=no
-        - level=unit
+        - DEPS="NO"
+        - LEVEL="UNIT"
     - name: "php 7.1 (update) - unit"
       php: 7.1
       env:
-        - deps=high
-        - level=unit
+        - DEPS="HIGH"
+        - LEVEL="UNIT"
     - name: "php 7.2 (install) - unit"
       php: 7.2
       env:
-        - deps=no
-        - level=unit
+        - DEPS="NO"
+        - LEVEL="UNIT"
     - name: "php 7.2 (update) - unit"
       php: 7.2
       env:
-        - deps=high
-        - level=unit
+        - DEPS="HIGH"
+        - LEVEL="UNIT"
     - name: "php 7.3 (install) - unit"
       php: 7.3
       env:
-        - deps=no
-        - level=unit
+        - DEPS="NO"
+        - LEVEL="UNIT"
     - name: "php 7.3 (update) - unit"
       php: 7.3
       env:
-        - deps=high
-        - level=unit
+        - DEPS="HIGH"
+        - LEVEL="UNIT"
     - name: "php 7.3 (install) - integration"
       php: 7.3
       env:
-        - deps=high
-        - level=integration
+        - DEPS="HIGH"
+        - LEVEL=integration
 cache:
   directories:
     - $HOME/.composer/cache
