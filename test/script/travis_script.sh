@@ -9,6 +9,9 @@ trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit
 ## enable xdebug again
 mv ~/.phpenv/versions/$(phpenv version-name)/xdebug.ini.bak ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
 
+echo "Env Dev: $dev";
+echo "Env Level: $level";
+
 ## run the unit tests
 if [ "$level" == "unit" ]; then
     echo "Perform unit tests only";
