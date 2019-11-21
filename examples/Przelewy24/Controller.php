@@ -66,7 +66,7 @@ try {
 
     // Create a charge to get the redirectUrl.
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    $charge   = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+    $charge   = $heidelpay->charge(12.99, 'PLN', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
 
     // You'll need to remember the paymentId for later in the ReturnController
     $_SESSION['PaymentId'] = $charge->getPaymentId();

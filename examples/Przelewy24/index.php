@@ -61,9 +61,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     // Create an Przelewy24 instance and render the iDeal form
     let p24 = heidelpayInstance.Przelewy24();
-    p24.create('Przelewy24', {
-        containerId: 'example-przelewy24'
-    });
 
     // Handling payment form submission
     let form = document.getElementById('payment-form');
