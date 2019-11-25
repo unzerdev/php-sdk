@@ -73,7 +73,7 @@ class ResourceService
     private $heidelpay;
 
     /**
-     * PaymentService constructor.
+     * ResourceService constructor.
      *
      * @param Heidelpay $heidelpay
      */
@@ -81,6 +81,27 @@ class ResourceService
     {
         $this->heidelpay = $heidelpay;
     }
+
+    //<editor-fold desc="Getters/Setters"
+
+    /** @return Heidelpay */
+    public function getHeidelpay(): Heidelpay
+    {
+        return $this->heidelpay;
+    }
+
+    /**
+     * @param Heidelpay $heidelpay
+     *
+     * @return ResourceService
+     */
+    public function setHeidelpay(Heidelpay $heidelpay): ResourceService
+    {
+        $this->heidelpay = $heidelpay;
+        return $this;
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc="General">
 

@@ -26,8 +26,8 @@
 namespace heidelpayPHP\test\unit;
 
 use DateTime;
-use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\PaymentServiceInterface;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
@@ -163,7 +163,7 @@ class HeidelpayTest extends BasePaymentTest
      * Verify heidelpay propagates payment actions to the payment service.
      *
      * @test
-     * @dataProvider heidelpayShouldForwardPaymentActionCallsToThePaymentServiceDP
+     * @dataProvider paymentServiceDP
      *
      * @param string $heidelpayMethod
      * @param array  $heidelpayParams
@@ -185,7 +185,7 @@ class HeidelpayTest extends BasePaymentTest
         $paymentSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
         $heidelpay = new Heidelpay('s-priv-234');
 
-        /** @var PaymentService $paymentSrvMock */
+        /** @var PaymentServiceInterface $paymentSrvMock */
         $heidelpay->setPaymentService($paymentSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
@@ -307,7 +307,7 @@ class HeidelpayTest extends BasePaymentTest
      *
      * @throws \Exception
      */
-    public function heidelpayShouldForwardPaymentActionCallsToThePaymentServiceDP(): array
+    public function paymentServiceDP(): array
     {
         $url           = 'https://dev.heidelpay.com';
         $orderId       = 'orderId';
@@ -329,8 +329,6 @@ class HeidelpayTest extends BasePaymentTest
             'auth'                   => ['authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata], 'authorize', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]],
             'authAlt'                => ['authorize', [234.1, 'DZD', $sofort, $url], 'authorize', [234.1, 'DZD', $sofort, $url]],
             'authStr'                => ['authorize', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId], 'authorize', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]],
-            'authWithPayment'        => ['authorizeWithPayment', [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata], 'authorizeWithPayment', [1.234, 'AFN', $payment, $url, $customer, $orderId, $metadata]],
-            'authWithPaymentStr'     => ['authorizeWithPayment', [34.12, 'DKK', $payment, $url, $customerId, $orderId], 'authorizeWithPayment', [34.12, 'DKK', $payment, $url, $customerId, $orderId]],
             'charge'                 => ['charge', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata], 'charge', [1.234, 'AFN', $sofort, $url, $customer, $orderId, $metadata]],
             'chargeAlt'              => ['charge', [234.1, 'DZD', $sofort, $url], 'charge', [234.1, 'DZD', $sofort, $url]],
             'chargeStr'              => ['charge', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId], 'charge', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]],
@@ -350,8 +348,8 @@ class HeidelpayTest extends BasePaymentTest
             'cancelChargeAlt'        => ['cancelCharge', [$charge], 'cancelCharge', [$charge]],
             'ship'                   => ['ship', [$payment], 'ship', [$payment]],
             'payout'                 => ['payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId'], 'payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId']],
-            'initPayPageCharge'      => ['initPayPageCharge', [$paypage, $customer, $basket, $metadata], 'initPayPage', [$paypage, TransactionTypes::CHARGE, $customer, $basket, $metadata]],
-            'initPayPageAuthorize'   => ['initPayPageAuthorize', [$paypage, $customer, $basket, $metadata], 'initPayPage', [$paypage, TransactionTypes::AUTHORIZATION, $customer, $basket, $metadata]],
+            'initPayPageCharge'      => ['initPayPageCharge', [$paypage, $customer, $basket, $metadata], 'initPayPageCharge', [$paypage, $customer, $basket, $metadata]],
+            'initPayPageAuthorize'   => ['initPayPageAuthorize', [$paypage, $customer, $basket, $metadata], 'initPayPageAuthorize', [$paypage, $customer, $basket, $metadata]],
             'fetchDDInstalmentPlans' => ['fetchDirectDebitInstalmentPlans', [123.4567, 'EUR', 4.99, $today], 'fetchDirectDebitInstalmentPlans', [123.4567, 'EUR', 4.99, $today]]
         ];
     }

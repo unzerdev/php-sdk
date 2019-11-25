@@ -275,7 +275,7 @@ class Payment extends AbstractHeidelpayResource
      * The Customer resource can be passed as Customer object or the Id of a Customer resource.
      * If the Customer object has not been created yet via API this is done automatically.
      *
-     * @param Customer|string $customer The Customer object or the id of the Customer to be referenced by the Payment.
+     * @param Customer|string|null $customer The Customer object or the id of the Customer to be referenced by the Payment.
      *
      * @return Payment This Payment object.
      *
