@@ -319,8 +319,8 @@ class PayPageTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function exposeShouldSetBasicParams()
     {
@@ -335,8 +335,8 @@ class PayPageTest extends BasePaymentTest
             ->setMetadata($metadata)
             ->setCustomer($customer);
         $paypage = (new Paypage(123.4567, 'EUR', self::RETURN_URL))
-            ->setParentResource($payment)
             ->setFullPageImage('full page image')
+            ->setParentResource($payment)
             ->setLogoImage('logo image')
             ->setShopDescription('my shop description')
             ->setShopName('my shop name')
@@ -386,8 +386,8 @@ class PayPageTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function resourcesAreNullWithoutPaymentObject()
     {

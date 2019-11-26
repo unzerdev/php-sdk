@@ -131,8 +131,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function chargesShouldBeHandledProperly()
     {
@@ -226,8 +226,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function getChargeMethodsShouldReturnNullIfTheChargeIdUnknown()
     {
@@ -299,8 +299,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function setCustomerShouldDoNothingIfTheCustomerIsEmpty()
     {
@@ -372,8 +372,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function setPaymentTypeShouldDoNothingIfThePaymentTypeIsEmpty()
     {
@@ -570,8 +570,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function shipmentsShouldBeHandledProperly()
     {
@@ -656,8 +656,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @param integer $state
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function handleResponseShouldUpdateStateId($state)
     {
@@ -676,8 +676,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function handleResponseShouldUpdatePaymentId()
     {
@@ -696,8 +696,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
      */
     public function handleResponseShouldFetchCustomerIfItIsNotSet()
@@ -725,8 +725,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
      */
     public function handleResponseShouldFetchAndUpdateCustomerIfItIsAlreadySet()
@@ -754,8 +754,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
      */
     public function handleResponseShouldFetchAndUpdatePaymentTypeIfTheIdIsSet()
@@ -781,8 +781,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
      */
     public function handleResponseShouldFetchAndUpdateMetadataIfTheIdIsSet()
@@ -804,8 +804,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
      */
     public function handleResponseShouldGetMetadataIfUnfetchedMetadataObjectWithIdIsGiven()
@@ -1383,8 +1383,8 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
      */
     public function metadataMustBeOfTypeMetadata()

@@ -276,7 +276,7 @@ class CustomerTest extends BasePaymentTest
     }
 
     /**
-     * Verify Customer can be updated.
+     * Verify customer can be updated.
      *
      * @test
      *

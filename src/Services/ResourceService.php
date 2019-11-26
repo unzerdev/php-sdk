@@ -113,8 +113,8 @@ class ResourceService
      *
      * @return stdClass
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function send(
         AbstractHeidelpayResource $resource,
@@ -133,8 +133,8 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -220,9 +220,8 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @throws Exception
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function create(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -249,8 +248,8 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws Exception
      */
     public function update(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
@@ -272,8 +271,8 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource|null
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function delete(AbstractHeidelpayResource &$resource)
     {
@@ -297,9 +296,10 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @throws Exception
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     *
+     * todo create and call local fetch method
      */
     public function fetch(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -381,8 +381,8 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource|Payment
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function getPaymentResource($payment)
     {

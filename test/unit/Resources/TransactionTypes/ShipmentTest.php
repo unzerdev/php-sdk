@@ -62,8 +62,8 @@ class ShipmentTest extends BasePaymentTest
      * @param Shipment $shipment
      *
      * @throws Exception
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @depends gettersAndSettersShouldWorkProperly
      */
     public function aShipmentShouldBeUpdatedThroughResponseHandling(Shipment $shipment)

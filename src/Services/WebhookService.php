@@ -103,8 +103,8 @@ class WebhookService
      *
      * @return Webhook
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function createWebhook(string $url, string $event): Webhook
     {
@@ -122,8 +122,8 @@ class WebhookService
      *
      * @return Webhook
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function fetchWebhook($webhook): Webhook
     {
@@ -145,8 +145,8 @@ class WebhookService
      *
      * @return Webhook
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function updateWebhook($webhook): Webhook
     {
@@ -162,8 +162,8 @@ class WebhookService
      *
      * @return Webhook|AbstractHeidelpayResource|null
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function deleteWebhook($webhook)
     {
@@ -183,8 +183,8 @@ class WebhookService
     /**
      * Fetches all registered webhook events and returns them in an array.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function fetchWebhooks(): array
     {
@@ -199,8 +199,8 @@ class WebhookService
     /**
      * Deletes all registered webhooks.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function deleteWebhooks()
     {
@@ -217,8 +217,8 @@ class WebhookService
      *
      * @return array
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function createWebhooks(string $url, array $events): array
     {
@@ -241,8 +241,8 @@ class WebhookService
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function fetchResourceByWebhookEvent($eventJson = null): AbstractHeidelpayResource
     {

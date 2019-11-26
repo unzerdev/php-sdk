@@ -41,8 +41,8 @@ class Przelewy24Test extends BasePaymentTest
      *
      * @return BasePaymentType
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function przelewy24ShouldBeCreatableAndFetchable(): BasePaymentType
     {
@@ -66,8 +66,8 @@ class Przelewy24Test extends BasePaymentTest
      *
      * @param Przelewy24 $przelewy24
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24)
     {
@@ -89,8 +89,8 @@ class Przelewy24Test extends BasePaymentTest
      *
      * @param Przelewy24 $przelewy24
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24)
     {
@@ -109,8 +109,8 @@ class Przelewy24Test extends BasePaymentTest
      *
      * @param string $currencyCode
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function przelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode)
     {

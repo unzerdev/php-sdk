@@ -427,10 +427,10 @@ class PaymentServiceTest extends BasePaymentTest
         $resourceSrvMock->expects(self::once())->method('create')
             ->with(self::callback(static function ($payout) use ($customer, $metadata) {
                 return $payout instanceof Payout &&
-                    1.23 === $payout->getAmount() &&
-                    'testCurrency' === $payout->getCurrency() &&
+                    $payout->getAmount() === 1.23 &&
+                    $payout->getCurrency() === 'testCurrency' &&
                     $payout->getPayment() instanceof Payment &&
-                    'http://return.url' === $payout->getReturnUrl() &&
+                    $payout->getReturnUrl() === 'http://return.url' &&
                     $customer === $payout->getPayment()->getCustomer() &&
                     $metadata === $payout->getPayment()->getMetadata();
             }));
