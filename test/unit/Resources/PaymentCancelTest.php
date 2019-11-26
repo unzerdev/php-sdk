@@ -426,7 +426,7 @@ class PaymentCancelTest extends BasePaymentTest
     {
         return [
             'already cancelled' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
-            'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
+            'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CHARGED, false],
             'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL, true]
         ];
     }
