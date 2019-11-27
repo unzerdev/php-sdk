@@ -28,7 +28,6 @@ namespace heidelpayPHP\test\unit;
 use DateTime;
 use Exception;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\PaymentServiceInterface;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
@@ -37,7 +36,6 @@ use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Services\HttpService;
@@ -46,7 +44,7 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
-use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 
@@ -132,7 +130,7 @@ class HeidelpayTest extends BasePaymentTest
      * Verify heidelpay propagates resource actions to the resource service.
      *
      * @test
-     * @dataProvider heidelpayShouldForwardResourceActionCallsToTheResourceServiceDP
+     * @dataProvider resourceServiceDP
      *
      * @param string $heidelpayMethod
      * @param array  $heidelpayParams
@@ -148,14 +146,10 @@ class HeidelpayTest extends BasePaymentTest
         $serviceMethod,
         array $serviceParams
     ) {
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
-            ->setMethods([$serviceMethod])->getMock();
-
+        /** @var ResourceService|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $resourceSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = new Heidelpay('s-priv-234');
-
-        /** @var ResourceService $resourceSrvMock */
-        $heidelpay->setResourceService($resourceSrvMock);
+        $heidelpay = (new Heidelpay('s-priv-234'))->setResourceService($resourceSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
@@ -180,14 +174,10 @@ class HeidelpayTest extends BasePaymentTest
         $serviceMethod,
         array $serviceParams
     ) {
-        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->disableOriginalConstructor()
-            ->setMethods([$serviceMethod])->getMock();
-
+        /** @var PaymentService|MockObject $paymentSrvMock */
+        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $paymentSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = new Heidelpay('s-priv-234');
-
-        /** @var PaymentServiceInterface $paymentSrvMock */
-        $heidelpay->setPaymentService($paymentSrvMock);
+        $heidelpay = (new Heidelpay('s-priv-234'))->setPaymentService($paymentSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
@@ -212,14 +202,10 @@ class HeidelpayTest extends BasePaymentTest
         $serviceMethod,
         array $serviceParams
     ) {
-        $webhookSrvMock = $this->getMockBuilder(WebhookService::class)->disableOriginalConstructor()
-            ->setMethods([$serviceMethod])->getMock();
-
+        /** @var WebhookService|MockObject $webhookSrvMock */
+        $webhookSrvMock = $this->getMockBuilder(WebhookService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $webhookSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = new Heidelpay('s-priv-234');
-
-        /** @var WebhookService $webhookSrvMock */
-        $heidelpay->setWebhookService($webhookSrvMock);
+        $heidelpay = (new Heidelpay('s-priv-234'))->setWebhookService($webhookSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
@@ -233,9 +219,8 @@ class HeidelpayTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws RuntimeException
-     * @throws ReflectionException
      */
-    public function heidelpayShouldForwardResourceActionCallsToTheResourceServiceDP(): array
+    public function resourceServiceDP(): array
     {
         $customerId     = 'customerId';
         $basketId       = 'basketId';
@@ -253,15 +238,8 @@ class HeidelpayTest extends BasePaymentTest
         $auth           = new Authorization();
         $charge         = new Charge();
         $metadata       = new Metadata();
-        $cancellation   = new Cancellation();
-        $chargeMock     = $this->getMockBuilder(Charge::class)->setMethods(['getCancellation'])->getMock();
-        $chargeMock->expects($this->once())->method('getCancellation')->with($cancelId, true)->willReturn(
-            $cancellation
-        );
 
         return [
-            'getResource'                  => ['getResource', [$customer], 'getResource', [$customer]],
-            'fetchResource'                => ['fetchResource', [$customer], 'fetch', [$customer]],
             'fetchPayment'                 => ['fetchPayment', [$payment], 'fetchPayment', [$payment]],
             'fetchPaymentByOrderId'        => ['fetchPaymentByOrderId', [$orderId], 'fetchPaymentByOrderId', [$orderId]],
             'fetchPaymentStr'              => ['fetchPayment', [$paymentId], 'fetchPayment', [$paymentId]],
@@ -286,16 +264,16 @@ class HeidelpayTest extends BasePaymentTest
             'fetchAuthorization'           => ['fetchAuthorization', [$payment], 'fetchAuthorization', [$payment]],
             'fetchAuthorizationStr'        => ['fetchAuthorization', [$paymentId], 'fetchAuthorization', [$paymentId]],
             'fetchChargeById'              => ['fetchChargeById', [$paymentId, $chargeId], 'fetchChargeById', [$paymentId, $chargeId]],
-            'fetchCharge'                  => ['fetchCharge', [$charge], 'fetch', [$charge]],
+            'fetchCharge'                  => ['fetchCharge', [$charge], 'fetchCharge', [$charge]],
             'fetchReversalByAuthorization' => ['fetchReversalByAuthorization', [$auth, $cancelId], 'fetchReversalByAuthorization', [$auth, $cancelId]],
             'fetchReversal'                => ['fetchReversal', [$payment, $cancelId], 'fetchReversal', [$payment, $cancelId]],
             'fetchReversalStr'             => ['fetchReversal', [$paymentId, $cancelId], 'fetchReversal', [$paymentId, $cancelId]],
             'fetchRefundById'              => ['fetchRefundById', [$payment, $chargeId, $cancelId], 'fetchRefundById', [$payment, $chargeId, $cancelId]],
             'fetchRefundByIdStr'           => ['fetchRefundById', [$paymentId, $chargeId, $cancelId], 'fetchRefundById', [$paymentId, $chargeId, $cancelId]],
-            'fetchRefund'                  => ['fetchRefund', [$chargeMock, $cancelId], 'fetch', [$cancellation]],
+            'fetchRefund'                  => ['fetchRefund', [$charge, $cancelId], 'fetchRefund', [$charge, $cancelId]],
             'fetchShipment'                => ['fetchShipment', [$payment, 'shipId'], 'fetchShipment', [$payment, 'shipId']],
-            'activateRecurring'            => ['activateRecurringPayment', [$card, 'returnUrl'], 'createRecurring', [$card, 'returnUrl']],
-            'activateRecurringWithId'      => ['activateRecurringPayment', [$paymentTypeId, 'returnUrl'], 'createRecurring', [$paymentTypeId, 'returnUrl']],
+            'activateRecurring'            => ['activateRecurringPayment', [$card, 'returnUrl'], 'activateRecurringPayment', [$card, 'returnUrl']],
+            'activateRecurringWithId'      => ['activateRecurringPayment', [$paymentTypeId, 'returnUrl'], 'activateRecurringPayment', [$paymentTypeId, 'returnUrl']],
             'fetchPayout'                  => ['fetchPayout', [$payment], 'fetchPayout', [$payment]],
             'updatePaymentType'            => ['updatePaymentType', [$card], 'updatePaymentType', [$card]]
         ];

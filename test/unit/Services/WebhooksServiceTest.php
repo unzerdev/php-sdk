@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\unit\Services;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Resources\Webhooks;
 use heidelpayPHP\Services\ResourceService;
@@ -86,7 +87,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookService = new WebhookService($heidelpay);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['create'])->getMock();
-        /** @var ResourceService $resourceServiceMock */
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         $resourceServiceMock->expects($this->once())->method('create')->with($this->callback(
             static function ($param) use ($heidelpay) {
@@ -114,10 +115,10 @@ class WebhooksServiceTest extends BasePaymentTest
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
-            ->setMethods(['fetch'])->getMock();
-        /** @var ResourceService $resourceServiceMock */
+            ->setMethods(['fetchResource'])->getMock();
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
-        $resourceServiceMock->expects($this->once())->method('fetch')->with($this->callback(
+        $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhook && $param->getHeidelpayObject() === $heidelpay;
             }
@@ -141,10 +142,10 @@ class WebhooksServiceTest extends BasePaymentTest
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
-            ->setMethods(['fetch'])->getMock();
-        /** @var ResourceService $resourceServiceMock */
+            ->setMethods(['fetchResource'])->getMock();
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
-        $resourceServiceMock->expects($this->once())->method('fetch')->with($this->callback(
+        $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhook &&
                        $param->getHeidelpayObject() === $heidelpay &&
@@ -170,7 +171,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookService = new WebhookService($heidelpay);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['update'])->getMock();
-        /** @var ResourceService $resourceServiceMock */
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         $resourceServiceMock->expects($this->once())->method('update')->with($this->callback(
             static function ($param) use ($heidelpay) {
@@ -200,7 +201,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookService = new WebhookService($heidelpay);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['delete'])->getMock();
-        /** @var ResourceService $resourceServiceMock */
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         $resourceServiceMock->expects($this->once())->method('delete')->with($this->callback(
             static function ($param) {
@@ -229,10 +230,10 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookServiceMock = $this->getMockBuilder(WebhookService::class)->setConstructorArgs([$heidelpay])
             ->setMethods(['fetchWebhook'])->getMock();
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
-            ->setMethods(['fetch', 'delete'])->getMock();
+            ->setMethods(['fetchResource', 'delete'])->getMock();
         /**
-         * @var ResourceService $resourceServiceMock
-         * @var WebhookService  $webhookServiceMock
+         * @var ResourceServiceInterface $resourceServiceMock
+         * @var WebhookService           $webhookServiceMock
          */
         $webhookServiceMock->setResourceService($resourceServiceMock);
 
@@ -268,8 +269,8 @@ class WebhooksServiceTest extends BasePaymentTest
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
-            ->setMethods(['fetch'])->getMock();
-        /** @var ResourceService $resourceServiceMock */
+            ->setMethods(['fetchResource'])->getMock();
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
 
         $webhooksMock = $this->getMockBuilder(Webhooks::class)->disableOriginalConstructor()
@@ -277,7 +278,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookArray = ['webhook1', 'webhook2'];
         $webhooksMock->expects($this->once())->method('getWebhookList')->willReturn($webhookArray);
 
-        $resourceServiceMock->expects($this->once())->method('fetch')->with($this->callback(
+        $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhooks && $param->getHeidelpayObject() === $heidelpay;
             }
@@ -301,7 +302,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookService = new WebhookService($heidelpay);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['delete'])->getMock();
-        /** @var ResourceService $resourceServiceMock */
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         $resourceServiceMock->expects($this->once())->method('delete')->with($this->callback(
             static function ($param) use ($heidelpay) {
@@ -327,7 +328,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookService = new WebhookService($heidelpay);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['create'])->getMock();
-        /** @var ResourceService $resourceServiceMock */
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
 
         $webhooksMock = $this->getMockBuilder(Webhooks::class)->setMethods(['getWebhookList'])->getMock();
@@ -399,8 +400,8 @@ class WebhooksServiceTest extends BasePaymentTest
             ->setMethods(['fetchResourceByUrl'])->getMock();
         $resourceServiceMock->expects($this->once())->method('fetchResourceByUrl')->willReturn(null);
         /**
-         * @var ResourceService $resourceServiceMock
-         * @var WebhookService  $webhookService
+         * @var ResourceServiceInterface $resourceServiceMock
+         * @var WebhookService           $webhookService
          */
         $webhookService->setResourceService($resourceServiceMock);
 
@@ -437,8 +438,8 @@ class WebhooksServiceTest extends BasePaymentTest
         $dummyResource       = new DummyResource();
         $resourceServiceMock->expects($this->once())->method('fetchResourceByUrl')->with($retrieveUrl)->willReturn($dummyResource);
         /**
-         * @var ResourceService $resourceServiceMock
-         * @var WebhookService  $webhookService
+         * @var ResourceServiceInterface $resourceServiceMock
+         * @var WebhookService           $webhookService
          */
         $webhookService->setResourceService($resourceServiceMock);
 

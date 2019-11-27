@@ -27,6 +27,7 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
@@ -295,8 +296,8 @@ class PayPageTest extends BasePaymentTest
     public function paymentShouldBeFetchedWhenItIsNoGetRequest($method, $fetchCallCount)
     {
         // mock resource service to check whether fetch is called on it with the payment object.
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetch'])->getMock();
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
 
         // when
         $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
@@ -304,7 +305,7 @@ class PayPageTest extends BasePaymentTest
         $paypage->setPayment($payment)->setParentResource($payment);
 
         // should
-        $resourceSrvMock->expects($this->exactly($fetchCallCount))->method('fetch')->with($payment);
+        $resourceSrvMock->expects($this->exactly($fetchCallCount))->method('fetchResource')->with($payment);
 
         // when
         $response = new stdClass();

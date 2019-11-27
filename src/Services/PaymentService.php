@@ -360,7 +360,8 @@ class PaymentService implements PaymentServiceInterface
         $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
         /** @var InstalmentPlans $plans */
         $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
-        return $this->heidelpay->getResourceService()->fetch($plans);
+        $plans = $this->heidelpay->getResourceService()->fetchResource($plans);
+        return $plans;
     }
 
     //</editor-fold>

@@ -26,6 +26,7 @@ namespace heidelpayPHP\Services;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Resources\Webhooks;
@@ -37,7 +38,7 @@ class WebhookService
     /** @var Heidelpay $heidelpay */
     private $heidelpay;
 
-    /** @var ResourceService $resourceService */
+    /** @var ResourceServiceInterface $resourceService */
     private $resourceService;
 
     /**
@@ -73,19 +74,19 @@ class WebhookService
     }
 
     /**
-     * @return ResourceService
+     * @return ResourceServiceInterface
      */
-    public function getResourceService(): ResourceService
+    public function getResourceService(): ResourceServiceInterface
     {
         return $this->resourceService;
     }
 
     /**
-     * @param ResourceService $resourceService
+     * @param ResourceServiceInterface $resourceService
      *
      * @return WebhookService
      */
-    public function setResourceService(ResourceService $resourceService): WebhookService
+    public function setResourceService(ResourceServiceInterface $resourceService): WebhookService
     {
         $this->resourceService = $resourceService;
         return $this;
@@ -134,7 +135,7 @@ class WebhookService
         }
 
         $webhookObject->setParentResource($this->heidelpay);
-        $this->resourceService->fetch($webhookObject);
+        $this->resourceService->fetchResource($webhookObject);
         return $webhookObject;
     }
 
@@ -191,7 +192,7 @@ class WebhookService
         /** @var Webhooks $webhooks */
         $webhooks = new Webhooks();
         $webhooks->setParentResource($this->heidelpay);
-        $webhooks = $this->resourceService->fetch($webhooks);
+        $webhooks = $this->resourceService->fetchResource($webhooks);
 
         return $webhooks->getWebhookList();
     }

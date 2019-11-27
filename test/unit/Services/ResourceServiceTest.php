@@ -30,6 +30,7 @@ use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
@@ -125,11 +126,11 @@ class ResourceServiceTest extends BasePaymentTest
         $resource,
         $timesFetchIsCalled
     ) {
-        $resourceSrv = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->disableOriginalConstructor()->getMock();
-        $resourceSrv->expects($this->exactly($timesFetchIsCalled))->method('fetch')->with($resource);
+        /** @var ResourceService|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->exactly($timesFetchIsCalled))->method('fetchResource')->with($resource);
 
-        /** @var ResourceService $resourceSrv */
-        $resourceSrv->getResource($resource);
+        $resourceSrvMock->getResource($resource);
     }
 
     /**
@@ -146,16 +147,14 @@ class ResourceServiceTest extends BasePaymentTest
         $response = new stdClass();
         $response->id = 'myTestId';
 
+        /** @var Customer|MockObject $testResource */
         $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         $testResource->expects($this->once())->method('handleResponse')->with($response, HttpAdapterInterface::REQUEST_POST);
 
+        /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
         $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_POST)->willReturn($response);
 
-        /**
-         * @var ResourceService           $resourceServiceMock
-         * @var AbstractHeidelpayResource $testResource
-         */
         $this->assertSame($testResource, $resourceServiceMock->create($testResource));
         $this->assertEquals('myTestId', $testResource->getId());
     }
@@ -175,16 +174,14 @@ class ResourceServiceTest extends BasePaymentTest
         $response->isError = true;
         $response->id = 'myId';
 
+        /** @var Customer|MockObject $testResource */
         $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         $testResource->expects($this->never())->method('handleResponse');
 
+        /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
         $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_POST)->willReturn($response);
 
-        /**
-         * @var ResourceService           $resourceServiceMock
-         * @var AbstractHeidelpayResource $testResource
-         */
         $this->assertSame($testResource, $resourceServiceMock->create($testResource));
         $this->assertNull($testResource->getId());
     }
@@ -202,16 +199,14 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $response = new stdClass();
 
+        /** @var Customer|MockObject $testResource */
         $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         $testResource->expects($this->once())->method('handleResponse')->with($response, HttpAdapterInterface::REQUEST_PUT);
 
+        /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
         $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_PUT)->willReturn($response);
 
-        /**
-         * @var ResourceService           $resourceServiceMock
-         * @var AbstractHeidelpayResource $testResource
-         */
         $this->assertSame($testResource, $resourceServiceMock->update($testResource));
     }
 
@@ -226,19 +221,14 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function updateShouldNotHandleResponseWithError()
     {
-        $response = new stdClass();
-        $response->isError = true;
-
+        /** @var Customer|MockObject $testResource */
         $testResource = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         $testResource->expects($this->never())->method('handleResponse');
 
+        /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
-        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_PUT)->willReturn($response);
+        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_PUT)->willReturn((object)['isError' => true]);
 
-        /**
-         * @var ResourceService           $resourceServiceMock
-         * @var AbstractHeidelpayResource $testResource
-         */
         $this->assertSame($testResource, $resourceServiceMock->update($testResource));
     }
 
@@ -253,16 +243,13 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function deleteShouldCallSendAndThenSetTheResourceNull()
     {
-        $response = new stdClass();
-
+        /** @var Customer|MockObject $testResource */
         $testResource = $this->getMockBuilder(Customer::class)->getMock();
-        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
-        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_DELETE)->willReturn($response);
 
-        /**
-         * @var ResourceService           $resourceServiceMock
-         * @var AbstractHeidelpayResource $testResource
-         */
+        /** @var ResourceService|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
+        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_DELETE)->willReturn(new stdClass());
+
         $this->assertNull($resourceServiceMock->delete($testResource));
         $this->assertNull($testResource);
     }
@@ -278,18 +265,13 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function deleteShouldNotDeleteObjectOnResponseWithError()
     {
-        $response = new stdClass();
-        $response->isError = true;
-
+        /** @var Customer|MockObject $testResource */
         $testResource = $this->getMockBuilder(Customer::class)->getMock();
 
+        /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
-        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_DELETE)->willReturn($response);
+        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_DELETE)->willReturn((object)['isError' => true]);
 
-        /**
-         * @var ResourceService           $resourceServiceMock
-         * @var AbstractHeidelpayResource $testResource
-         */
         $responseResource = $resourceServiceMock->delete($testResource);
         $this->assertNotNull($responseResource);
         $this->assertNotNull($testResource);
@@ -310,18 +292,17 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $response = new stdClass();
         $response->test = '234';
+
+        /** @var AbstractHeidelpayResource|MockObject $resourceMock */
         $resourceMock = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         $resourceMock->expects($this->once())->method('handleResponse')->with($response);
 
+        /** @var ResourceService|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->once())->method('send')->with($resourceMock, HttpAdapterInterface::REQUEST_GET)->willReturn($response);
 
-        /**
-         * @var AbstractHeidelpayResource $resourceMock
-         * @var ResourceService           $resourceSrvMock
-         */
         $this->assertNull($resourceMock->getFetchedAt());
-        $resourceSrvMock->fetch($resourceMock);
+        $resourceSrvMock->fetchResource($resourceMock);
 
         $now = (new DateTime('now'))->getTimestamp();
         $then = $resourceMock->getFetchedAt()->getTimestamp();
@@ -341,10 +322,11 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $payment = (new Payment())->setId('myPaymentId');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->disableOriginalConstructor()->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($payment);
+        /** @var ResourceService|MockObject $resourceServiceMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($payment);
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedPayment = $resourceSrvMock->fetchPayment($payment);
         $this->assertSame($payment, $returnedPayment);
     }
@@ -361,16 +343,17 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchPaymentCalledWithIdShouldCreatePaymentObjectWithIdAndCallFetch()
     {
         $heidelpay = new Heidelpay('s-priv-1234');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')
-            ->with($this->callback(
-                static function ($payment) use ($heidelpay) {
-                    return $payment instanceof Payment &&
-                    $payment->getId() === 'testPaymentId' &&
-                    $payment->getHeidelpayObject() === $heidelpay;
-                }));
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceService|MockObject $resourceServiceMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')
+            ->with($this->callback(static function ($payment) use ($heidelpay) {
+                return $payment instanceof Payment &&
+                $payment->getId() === 'testPaymentId' &&
+                $payment->getHeidelpayObject() === $heidelpay;
+            }));
+
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $resourceSrvMock->fetchPayment('testPaymentId');
     }
 
@@ -386,16 +369,17 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchPaymentByOrderIdShouldCreatePaymentObjectWithOrderIdAndCallFetch()
     {
         $heidelpay = new Heidelpay('s-priv-1234');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')
-            ->with($this->callback(
-                static function ($payment) use ($heidelpay) {
-                    return $payment instanceof Payment &&
-                    $payment->getOrderId() === 'myOrderId' &&
-                    $payment->getHeidelpayObject() === $heidelpay;
-                }));
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceService|MockObject $resourceServiceMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')
+            ->with($this->callback(static function ($payment) use ($heidelpay) {
+                return $payment instanceof Payment &&
+                $payment->getOrderId() === 'myOrderId' &&
+                $payment->getHeidelpayObject() === $heidelpay;
+            }));
+
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $resourceSrvMock->fetchPaymentByOrderId('myOrderId');
     }
 
@@ -411,13 +395,15 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchKeypairShouldCallFetchWithAKeypairObject()
     {
         $heidelpay = new Heidelpay('s-priv-1234');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')
             ->with($this->callback(static function ($keypair) use ($heidelpay) {
                 return $keypair instanceof Keypair && $keypair->getHeidelpayObject() === $heidelpay;
             }));
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $resourceSrvMock->fetchKeypair();
     }
 
@@ -441,7 +427,7 @@ class ResourceServiceTest extends BasePaymentTest
                 return $type === $paymentType && $type->getHeidelpayObject() === $heidelpay;
             }));
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedType = $resourceSrvMock->createPaymentType($paymentType);
 
         $this->assertSame($paymentType, $returnedType);
@@ -464,8 +450,8 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $heidelpay = new Heidelpay('s-priv-1234');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')
             ->with($this->callback(static function ($type) use ($heidelpay, $typeClass, $typeId) {
                 /** @var BasePaymentType $type */
                 return $type instanceof $typeClass &&
@@ -473,7 +459,7 @@ class ResourceServiceTest extends BasePaymentTest
                 $type->getId() === $typeId;
             }));
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $resourceSrvMock->fetchPaymentType($typeId);
     }
 
@@ -491,13 +477,13 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchPaymentTypeShouldThrowExceptionOnInvalidTypeId($typeId)
     {
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->disableOriginalConstructor()->getMock();
-        $resourceSrvMock->expects($this->never())->method('fetch');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->never())->method('fetchResource');
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid payment type!');
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $resourceSrvMock->fetchPaymentType($typeId);
     }
 
@@ -516,7 +502,7 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $paymentType = (new HirePurchaseDirectDebit())->setId('paymentTypeId');
 
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['update'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->once())->method('update')->with($paymentType)->willReturn($paymentType);
 
@@ -545,7 +531,7 @@ class ResourceServiceTest extends BasePaymentTest
                 return $resource === $customer && $resource->getHeidelpayObject() === $heidelpay;
             }));
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->createCustomer($customer);
 
         $this->assertSame($customer, $returnedCustomer);
@@ -589,7 +575,7 @@ class ResourceServiceTest extends BasePaymentTest
             }));
 
         // Make the call and assertions.
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->createOrUpdateCustomer($customer);
         $this->assertSame($customer, $returnedCustomer);
         $this->assertEquals('customerId', $customer->getId());
@@ -620,7 +606,7 @@ class ResourceServiceTest extends BasePaymentTest
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_REQUIRED);
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $resourceSrvMock->createOrUpdateCustomer($customer);
     }
 
@@ -638,8 +624,8 @@ class ResourceServiceTest extends BasePaymentTest
         $heidelpay = new Heidelpay('s-priv-123');
         $customer = (new Customer())->setId('myCustomerId');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($customer);
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($customer);
 
         try {
             $customer->getHeidelpayObject();
@@ -649,7 +635,7 @@ class ResourceServiceTest extends BasePaymentTest
             $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
         }
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->fetchCustomer($customer);
         $this->assertSame($customer, $returnedCustomer);
         $this->assertSame($heidelpay, $customer->getHeidelpayObject());
@@ -668,15 +654,15 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $heidelpay = new Heidelpay('s-priv-123');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')->with(
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with(
             $this->callback(static function ($param) use ($heidelpay) {
                 return $param instanceof Customer &&
                    $param->getId() === 'myCustomerId' &&
                    $param->getHeidelpayObject() === $heidelpay;
             }));
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->fetchCustomer('myCustomerId');
         $this->assertEquals('myCustomerId', $returnedCustomer->getId());
         $this->assertEquals($heidelpay, $returnedCustomer->getHeidelpayObject());
@@ -695,7 +681,7 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $customer = (new Customer())->setId('customerId');
 
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['update'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->once())->method('update')->with($customer);
 
@@ -716,7 +702,7 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $customer = (new Customer())->setId('customerId');
 
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['delete'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->once())->method('delete')->with($customer);
 
@@ -740,7 +726,7 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceSrvMock->expects($this->once())->method('fetchCustomer')->with('myCustomerId')->willReturn($customer);
         $resourceSrvMock->expects($this->once())->method('delete')->with($customer);
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->deleteCustomer('myCustomerId');
         $this->assertSame($customer, $returnedCustomer);
     }
@@ -756,15 +742,15 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchAuthorizationShouldFetchPaymentAndReturnItsAuthorization()
     {
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetch'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetchResource'])->disableOriginalConstructor()->getMock();
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
 
         $authorize = (new Authorization())->setId('s-aut-1');
 
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock->expects($this->once())->method('fetchPayment')->with($paymentMock)->willReturn($paymentMock);
         $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorize);
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($authorize)->willReturn($authorize);
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($authorize)->willReturn($authorize);
 
         $returnedAuthorize = $resourceSrvMock->fetchAuthorization($paymentMock);
         $this->assertSame($authorize, $returnedAuthorize);
@@ -781,15 +767,15 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchPayoutShouldFetchPaymentAndReturnItsPayout()
     {
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetch'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetchResource'])->disableOriginalConstructor()->getMock();
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getPayout'])->getMock();
 
         $payout = (new Payout())->setId('s-out-1');
         $resourceSrvMock->expects($this->once())->method('fetchPayment')->with($paymentMock)->willReturn($paymentMock);
         $paymentMock->expects($this->once())->method('getPayout')->willReturn($payout);
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($payout)->willReturn($payout);
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($payout)->willReturn($payout);
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedPayout = $resourceSrvMock->fetchPayout($paymentMock);
         $this->assertSame($payout, $returnedPayout);
     }
@@ -805,15 +791,15 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchChargeByIdShouldFetchPaymentAndReturnTheChargeOfThePayment()
     {
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetch'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment', 'fetchResource'])->disableOriginalConstructor()->getMock();
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCharge'])->getMock();
 
         $charge = (new Charge())->setId('chargeId');
         $paymentMock->expects($this->once())->method('getCharge')->with('chargeId')->willReturn($charge);
 
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock->expects($this->once())->method('fetchPayment')->with($paymentMock)->willReturn($paymentMock);
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($charge)->willReturn($charge);
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($charge)->willReturn($charge);
 
         $returnedCharge = $resourceSrvMock->fetchChargeById($paymentMock, 'chargeId');
         $this->assertSame($charge, $returnedCharge);
@@ -830,12 +816,13 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchReversalByAuthorizationShouldFetchAuthorizeAndReturnTheReversalFromIt()
     {
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->disableOriginalConstructor()->getMock();
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
+        /** @var Authorization|MockObject $authorizeMock */
         $authorizeMock = $this->getMockBuilder(Authorization::class)->setMethods(['getCancellation'])->getMock();
 
         $cancellation = new Cancellation();
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($authorizeMock);
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($authorizeMock);
         $authorizeMock->expects($this->once())->method('getCancellation')->with('cancelId')->willReturn($cancellation);
 
         $returnedCancel = $resourceSrvMock->fetchReversalByAuthorization($authorizeMock, 'cancelId');
@@ -862,7 +849,7 @@ class ResourceServiceTest extends BasePaymentTest
         $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
         $authorizationMock->expects($this->once())->method('getCancellation')->willReturn($cancel);
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedCancel = $resourceSrvMock->fetchReversal('paymentId', 'cancelId');
         $this->assertSame($cancel, $returnedCancel);
     }
@@ -883,7 +870,7 @@ class ResourceServiceTest extends BasePaymentTest
         $charge = (new Charge())->setId('chargeId');
         $cancel = (new Cancellation())->setId('cancellationId');
 
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock->expects($this->once())->method('fetchChargeById')->with('paymentId', 'chargeId')->willReturn($charge);
         $resourceSrvMock->expects($this->once())->method('fetchRefund')->with($charge, 'cancellationId')->willReturn($cancel);
 
@@ -902,12 +889,12 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchRefundShouldGetAndFetchDesiredChargeCancellation()
     {
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->disableOriginalConstructor()->getMock();
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
         $cancel = (new Cancellation())->setId('cancellationId');
         $chargeMock = $this->getMockBuilder(Charge::class)->setMethods(['getCancellation'])->getMock();
         $chargeMock->expects($this->once())->method('getCancellation')->with('cancellationId', true)->willReturn($cancel);
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($cancel)->willReturn($cancel);
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($cancel)->willReturn($cancel);
 
         /** @var Charge          $chargeMock*/
         $returnedCancellation = $resourceSrvMock->fetchRefund($chargeMock, 'cancellationId');
@@ -925,7 +912,7 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchShipmentShouldFetchPaymentAndReturnTheDesiredShipmentFromIt()
     {
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment'])->disableOriginalConstructor()->getMock();
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getShipment'])->getMock();
         $shipment = (new Shipment())->setId('shipmentId');
@@ -948,10 +935,10 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchMetadataShouldCallFetchWithTheGivenMetadataObject()
     {
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->disableOriginalConstructor()->getMock();
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
         $metadata = (new Metadata())->setId('myMetadataId');
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($metadata);
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($metadata);
 
         $this->assertSame($metadata, $resourceSrvMock->fetchMetadata($metadata));
     }
@@ -967,7 +954,7 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function createMetadataShouldCallCreateWithTheGivenMetadataObject()
     {
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])->disableOriginalConstructor()->getMock();
         $metadata = new Metadata();
         $resourceSrvMock->expects($this->once())->method('create')->with($metadata);
@@ -986,9 +973,9 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchMetadataShouldCallFetchWithANewMetadataObjectWithTheGivenId()
     {
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->disableOriginalConstructor()->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')->with(
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with(
             $this->callback(static function ($metadata) {
                 return $metadata instanceof Metadata && $metadata->getId() === 's-mtd-1234';
             }));
@@ -1042,7 +1029,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function createBasketShouldSetTheParentResourceAndCallCreateWithTheGivenBasket()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['create'])->getMock();
         $resourceSrvMock->expects($this->once())->method('create');
 
@@ -1070,9 +1057,9 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchBasketShouldCreateBasketObjectWithGivenIdAndCallFetchWithIt()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['fetch'])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')->with(
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['fetchResource'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with(
             $this->callback(static function ($basket) use ($heidelpay) {
                 /** @var Basket $basket */
                 return $basket->getId() === 'myBasketId' && $basket->getParentResource() === $heidelpay;
@@ -1097,10 +1084,10 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchBasketShouldCallFetchWithTheGivenBasketObject()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['fetch'])->getMock();
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['fetchResource'])->getMock();
         $basket = new Basket();
-        $resourceSrvMock->expects($this->once())->method('fetch')->with($basket);
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($basket);
 
         $returnedBasket = $resourceSrvMock->fetchBasket($basket);
 
@@ -1121,7 +1108,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function updateBasketShouldCallUpdateAndReturnTheGivenBasket()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['update'])->getMock();
         $basket = new Basket();
         $resourceSrvMock->expects($this->once())->method('update')->with($basket);
@@ -1225,8 +1212,8 @@ class ResourceServiceTest extends BasePaymentTest
                 return $data instanceof Recurring && $data->getReturnUrl() === 'returnUrl' && $data->getPaymentTypeId() === 'myId';
             }));
 
-        /** @var ResourceService $resourceServiceMock */
-        $resourceServiceMock->createRecurring('typeId', 'returnUrl');
+        /** @var ResourceServiceInterface $resourceServiceMock */
+        $resourceServiceMock->activateRecurringPayment('typeId', 'returnUrl');
     }
 
     /**
@@ -1243,7 +1230,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function createRecurringShouldNotFetchThePaymentTypeByObject()
     {
         $paymentType = new TraitDummyCanRecur();
-        /** @var ResourceService|MockObject $resourceSrvMock */
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType', 'create'])->getMock();
         $resourceSrvMock->expects(self::never())->method('fetchPaymentType');
         $resourceSrvMock->expects(self::once())->method('create')
@@ -1251,7 +1238,7 @@ class ResourceServiceTest extends BasePaymentTest
                 return $data instanceof Recurring && $data->getReturnUrl() === 'returnUrl' && $data->getPaymentTypeId() === 'myId';
             }));
 
-        $resourceSrvMock->createRecurring($paymentType, 'returnUrl');
+        $resourceSrvMock->activateRecurringPayment($paymentType, 'returnUrl');
     }
 
     /**
@@ -1268,7 +1255,7 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
         $this->expectException(RuntimeException::class);
 
-        $resourceService->createRecurring(new Sofort(), 'returnUrl');
+        $resourceService->activateRecurringPayment(new Sofort(), 'returnUrl');
     }
 
     //<editor-fold desc="Data Providers">
