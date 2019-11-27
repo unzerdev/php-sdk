@@ -23,7 +23,6 @@ use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -68,7 +67,7 @@ interface PaymentServiceInterface
         $card3ds = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType;
+    ): Authorization;
 
     /**
      * Performs a Charge transaction and returns the resulting Charge resource.
@@ -105,7 +104,7 @@ interface PaymentServiceInterface
         $card3ds = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType;
+    ): Charge;
 
     /**
      * Performs a Charge transaction for the Authorization of the given Payment object.
@@ -126,7 +125,7 @@ interface PaymentServiceInterface
         float $amount = null,
         string $orderId = null,
         string $invoiceId = null
-    ): AbstractTransactionType;
+    ): Charge;
 
     /**
      * Performs a Charge transaction for a specific Payment and returns the resulting Charge object.
@@ -148,7 +147,7 @@ interface PaymentServiceInterface
         string $currency = null,
         string $orderId = null,
         string $invoiceId = null
-    ): AbstractTransactionType;
+    ): Charge;
 
     /**
      * Performs a Payout transaction and returns the resulting Payout resource.
@@ -166,7 +165,7 @@ interface PaymentServiceInterface
      * @param string|null            $invoiceId        The external id of the invoice.
      * @param string|null            $paymentReference A reference text for the payment.
      *
-     * @return Payout The resulting object of the Payout resource.
+     * @return Payout|AbstractHeidelpayResource The resulting object of the Payout resource.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
@@ -182,7 +181,7 @@ interface PaymentServiceInterface
         $basket = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType;
+    ): Payout;
 
     /**
      * Performs a Cancellation transaction and returns the resulting Cancellation object.
@@ -196,7 +195,7 @@ interface PaymentServiceInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType;
+    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation;
 
     /**
      * Performs a Cancellation transaction for the Authorization of the given Payment object.
@@ -210,7 +209,7 @@ interface PaymentServiceInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType;
+    public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation;
 
     /**
      * Performs a Cancellation transaction for the given Charge and returns the resulting Cancellation object.
@@ -238,7 +237,7 @@ interface PaymentServiceInterface
         string $paymentReference = null,
         float $amountNet = null,
         float $amountVat = null
-    ): AbstractTransactionType;
+    ): Cancellation;
 
     /**
      * Performs a Cancellation transaction and returns the resulting Cancellation object.
@@ -264,7 +263,7 @@ interface PaymentServiceInterface
         string $paymentReference = null,
         float $amountNet = null,
         float $amountVat = null
-    ): AbstractTransactionType;
+    ): Cancellation;
 
     /**
      * Performs a Shipment transaction and returns the resulting Shipment object.
@@ -278,7 +277,7 @@ interface PaymentServiceInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function ship($payment, string $invoiceId = null, string $orderId = null): AbstractHeidelpayResource;
+    public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment;
 
     /**
      * Initializes a PayPage for charge transaction and returns the PayPage resource.
@@ -354,5 +353,5 @@ interface PaymentServiceInterface
         $currency,
         $effectiveInterest,
         DateTime $orderDate = null
-    );
+    ): InstalmentPlans;
 }

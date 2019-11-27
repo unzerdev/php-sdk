@@ -38,7 +38,6 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -72,9 +71,9 @@ class PaymentService implements PaymentServiceInterface
     /**
      * @param Heidelpay $heidelpay
      *
-     * @return PaymentServiceInterface
+     * @return PaymentService
      */
-    public function setHeidelpay(Heidelpay $heidelpay): PaymentServiceInterface
+    public function setHeidelpay(Heidelpay $heidelpay): PaymentService
     {
         $this->heidelpay = $heidelpay;
         return $this;
@@ -107,7 +106,7 @@ class PaymentService implements PaymentServiceInterface
         $card3ds = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType {
+    ): Authorization {
         $payment = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
 
@@ -144,7 +143,7 @@ class PaymentService implements PaymentServiceInterface
         $card3ds = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType {
+    ): Charge {
         $payment     = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
 
@@ -171,7 +170,7 @@ class PaymentService implements PaymentServiceInterface
         float $amount = null,
         string $orderId = null,
         string $invoiceId = null
-    ): AbstractTransactionType {
+    ): Charge {
         $paymentResource = $this->getResourceService()->getPaymentResource($payment);
         return $this->chargePayment($paymentResource, $amount, $orderId, $invoiceId);
     }
@@ -185,7 +184,7 @@ class PaymentService implements PaymentServiceInterface
         string $currency = null,
         string $orderId = null,
         string $invoiceId = null
-    ): AbstractTransactionType {
+    ): Charge {
         $charge = new Charge($amount, $currency);
         $charge->setPayment($payment);
         if ($orderId !== null) {
@@ -217,7 +216,7 @@ class PaymentService implements PaymentServiceInterface
         $basket = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType {
+    ): Payout {
         $payment = $this->createPayment($paymentType);
         $payout = (new Payout($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
@@ -236,7 +235,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
+    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation
     {
         $cancellation = new Cancellation($amount);
         $cancellation->setPayment($authorization->getPayment());
@@ -249,7 +248,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType
+    public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation
     {
         $authorization = $this->getResourceService()->fetchAuthorization($payment);
         return $this->cancelAuthorization($authorization, $amount);
@@ -270,7 +269,7 @@ class PaymentService implements PaymentServiceInterface
         string $paymentReference = null,
         float $amountNet = null,
         float $amountVat = null
-    ): AbstractTransactionType {
+    ): Cancellation {
         $charge = $this->getResourceService()->fetchChargeById($payment, $chargeId);
         return $this->cancelCharge($charge, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
     }
@@ -285,7 +284,7 @@ class PaymentService implements PaymentServiceInterface
         string $paymentReference = null,
         float $amountNet = null,
         float $amountVat = null
-    ): AbstractTransactionType {
+    ): Cancellation {
         $cancellation = new Cancellation($amount);
         $cancellation
             ->setReasonCode($reasonCode)
@@ -306,7 +305,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function ship($payment, string $invoiceId = null, string $orderId = null): AbstractHeidelpayResource
+    public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment
     {
         $shipment = new Shipment();
         $shipment->setInvoiceId($invoiceId)->setOrderId($orderId);
@@ -357,8 +356,9 @@ class PaymentService implements PaymentServiceInterface
         $currency,
         $effectiveInterest,
         DateTime $orderDate = null
-    ) {
+    ): InstalmentPlans {
         $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
+        /** @var InstalmentPlans $plans */
         $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
         return $this->heidelpay->getResourceService()->fetch($plans);
     }

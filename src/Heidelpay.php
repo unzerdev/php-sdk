@@ -33,6 +33,7 @@ use heidelpayPHP\Interfaces\PaymentServiceInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
@@ -949,7 +950,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
         $card3ds = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType {
+    ): Authorization {
         return $this->paymentService->authorize(
             $amount,
             $currency,
@@ -984,7 +985,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
         $card3ds = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType {
+    ): Charge {
         return $this->paymentService->charge(
             $amount,
             $currency,
@@ -1008,7 +1009,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
         float $amount = null,
         string $orderId = null,
         string $invoiceId = null
-    ): AbstractTransactionType {
+    ): Charge {
         return $this->paymentService->chargeAuthorization($payment, $amount, $orderId, $invoiceId);
     }
 
@@ -1021,7 +1022,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
         string $currency = null,
         string $orderId = null,
         string $invoiceId = null
-    ): AbstractTransactionType {
+    ): Charge {
         $paymentObject = $this->resourceService->getPaymentResource($payment);
         return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId);
     }
@@ -1033,7 +1034,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorization(Authorization $authorization, $amount = null): AbstractTransactionType
+    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation
     {
         return $this->paymentService->cancelAuthorization($authorization, $amount);
     }
@@ -1041,7 +1042,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorizationByPayment($payment, $amount = null): AbstractTransactionType
+    public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation
     {
         return $this->paymentService->cancelAuthorizationByPayment($payment, $amount);
     }
@@ -1061,7 +1062,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
         string $paymentReference = null,
         float $amountNet = null,
         float $amountVat = null
-    ): AbstractTransactionType {
+    ): Cancellation {
         return $this->paymentService->cancelChargeById(
             $payment,
             $chargeId,
@@ -1083,7 +1084,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
         string $paymentReference = null,
         float $amountNet = null,
         float $amountVat = null
-    ): AbstractTransactionType {
+    ): Cancellation {
         return $this->paymentService->cancelCharge(
             $charge,
             $amount,
@@ -1101,7 +1102,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function ship($payment, string $invoiceId = null, string $orderId = null): AbstractHeidelpayResource
+    public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment
     {
         return $this->paymentService->ship($payment, $invoiceId, $orderId);
     }
@@ -1124,7 +1125,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
         $basket = null,
         $invoiceId = null,
         $paymentReference = null
-    ): AbstractTransactionType {
+    ): Payout {
         return $this->paymentService->payout(
             $amount,
             $currency,
@@ -1179,8 +1180,8 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface
         $currency,
         $effectiveInterest,
         DateTime $orderDate = null
-    ) {
-        return $this->getPaymentService()->fetchDirectDebitInstalmentPlans(
+    ): InstalmentPlans {
+        return $this->paymentService->fetchDirectDebitInstalmentPlans(
             $amount,
             $currency,
             $effectiveInterest,

@@ -160,7 +160,7 @@ class PaymentTest extends BasePaymentTest
         $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
         $charge = $this->heidelpay->chargePayment($authorization->getPaymentId());
 
-        $this->assertInstanceOf(Charge::class, $charge);
+        $this->assertNotEmpty($charge->getId());
     }
 
     /**
@@ -177,7 +177,8 @@ class PaymentTest extends BasePaymentTest
         $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
         $charge = $this->heidelpay->chargePayment($authorization->getPaymentId(), null, 'order-' . self::generateRandomId(), 'invoice-' . self::generateRandomId());
 
-        $this->assertInstanceOf(Charge::class, $charge);
+        $this->assertNotEmpty($charge->getId());
+
     }
 
     /**

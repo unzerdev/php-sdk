@@ -26,6 +26,7 @@
 namespace heidelpayPHP\test\unit;
 
 use DateTime;
+use Exception;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\PaymentServiceInterface;
 use heidelpayPHP\Resources\Basket;
@@ -305,7 +306,7 @@ class HeidelpayTest extends BasePaymentTest
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function paymentServiceDP(): array
     {
