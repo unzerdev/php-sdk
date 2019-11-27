@@ -352,10 +352,10 @@ class HeidelpayTest extends BasePaymentTest
             'updateWebhook'=> [ 'updateWebhook', [$webhook], 'updateWebhook', [$webhook] ],
             'deleteWebhook'=> [ 'deleteWebhook', [$webhookId], 'deleteWebhook', [$webhookId] ],
             'deleteWebhook by object'=> [ 'deleteWebhook', [$webhook], 'deleteWebhook', [$webhook] ],
-            'fetchAllWebhooks'=> [ 'fetchAllWebhooks', [], 'fetchWebhooks', [] ],
-            'deleteAllWebhooks'=> [ 'deleteAllWebhooks', [], 'deleteWebhooks', [] ],
-            'registerMultipleWebhooks'=> ['registerMultipleWebhooks', [$url, $event], 'createWebhooks', [$url, $event] ],
-            'fetchResourceFromEvent'=> ['fetchResourceFromEvent', [], 'fetchResourceByWebhookEvent', [] ]
+            'fetchAllWebhooks'=> [ 'fetchAllWebhooks', [], 'fetchAllWebhooks', [] ],
+            'deleteAllWebhooks'=> [ 'deleteAllWebhooks', [], 'deleteAllWebhooks', [] ],
+            'registerMultipleWebhooks'=> ['registerMultipleWebhooks', [$url, $event], 'registerMultipleWebhooks', [$url, $event] ],
+            'fetchResourceFromEvent'=> ['fetchResourceFromEvent', [], 'fetchResourceFromEvent', [] ]
         ];
     }
 

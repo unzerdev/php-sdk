@@ -178,7 +178,6 @@ class PaymentTest extends BasePaymentTest
         $charge = $this->heidelpay->chargePayment($authorization->getPaymentId(), null, 'order-' . self::generateRandomId(), 'invoice-' . self::generateRandomId());
 
         $this->assertNotEmpty($charge->getId());
-
     }
 
     /**

@@ -284,7 +284,7 @@ class WebhooksServiceTest extends BasePaymentTest
             }
         ))->willReturn($webhooksMock);
 
-        $this->assertSame($webhookArray, $webhookService->fetchWebhooks());
+        $this->assertSame($webhookArray, $webhookService->fetchAllWebhooks());
     }
 
     /**
@@ -310,7 +310,7 @@ class WebhooksServiceTest extends BasePaymentTest
             }
         ));
 
-        $webhookService->deleteWebhooks();
+        $webhookService->deleteAllWebhooks();
     }
 
     /**
@@ -345,7 +345,7 @@ class WebhooksServiceTest extends BasePaymentTest
 
         $this->assertEquals(
             $webhookList,
-            $webhookService->createWebhooks('myUrlString', ['TestEvent1', 'TestEvent2'])
+            $webhookService->registerMultipleWebhooks('myUrlString', ['TestEvent1', 'TestEvent2'])
         );
     }
 
@@ -374,7 +374,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $this->expectExceptionMessage('Error fetching resource!');
 
         /** @var WebhookService $webhookService */
-        $webhookService->fetchResourceByWebhookEvent();
+        $webhookService->fetchResourceFromEvent();
     }
 
     /**
@@ -408,7 +408,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Error fetching resource!');
 
-        $webhookService->fetchResourceByWebhookEvent();
+        $webhookService->fetchResourceFromEvent();
     }
 
     /**
@@ -445,7 +445,7 @@ class WebhooksServiceTest extends BasePaymentTest
 
         // trigger test and verify the resource fetched from resourceService is returned
         /** @var WebhookService $webhookService */
-        $this->assertSame($dummyResource, $webhookService->fetchResourceByWebhookEvent());
+        $this->assertSame($dummyResource, $webhookService->fetchResourceFromEvent());
     }
 
     //</editor-fold>
