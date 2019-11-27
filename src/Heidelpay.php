@@ -309,14 +309,6 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
 
     //<editor-fold desc="Resources">
 
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
-    {
-        return $this->resourceService->fetchResource($resource);
-    }
-
     //<editor-fold desc="Recurring">
 
     /**

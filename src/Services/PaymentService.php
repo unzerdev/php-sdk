@@ -120,7 +120,7 @@ class PaymentService implements PaymentServiceInterface
             $authorization->setCard3ds($card3ds);
         }
         $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
-        $this->getResourceService()->create($authorization);
+        $this->getResourceService()->createResource($authorization);
         return $authorization;
     }
 
@@ -157,7 +157,7 @@ class PaymentService implements PaymentServiceInterface
             $charge->setCard3ds($card3ds);
         }
         $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
-        $this->getResourceService()->create($charge);
+        $this->getResourceService()->createResource($charge);
 
         return $charge;
     }
@@ -194,7 +194,7 @@ class PaymentService implements PaymentServiceInterface
             $charge->setInvoiceId($invoiceId);
         }
         $payment->addCharge($charge);
-        $this->getResourceService()->create($charge);
+        $this->getResourceService()->createResource($charge);
         return $charge;
     }
 
@@ -223,7 +223,7 @@ class PaymentService implements PaymentServiceInterface
             ->setInvoiceId($invoiceId)
             ->setPaymentReference($paymentReference);
         $payment->setPayout($payout)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
-        $this->getResourceService()->create($payout);
+        $this->getResourceService()->createResource($payout);
 
         return $payout;
     }
@@ -240,7 +240,7 @@ class PaymentService implements PaymentServiceInterface
         $cancellation = new Cancellation($amount);
         $cancellation->setPayment($authorization->getPayment());
         $authorization->addCancellation($cancellation);
-        $this->getResourceService()->create($cancellation);
+        $this->getResourceService()->createResource($cancellation);
 
         return $cancellation;
     }
@@ -293,7 +293,7 @@ class PaymentService implements PaymentServiceInterface
             ->setAmountNet($amountNet)
             ->setAmountVat($amountVat);
         $charge->addCancellation($cancellation);
-        $this->getResourceService()->create($cancellation);
+        $this->getResourceService()->createResource($cancellation);
 
         return $cancellation;
     }
@@ -310,7 +310,7 @@ class PaymentService implements PaymentServiceInterface
         $shipment = new Shipment();
         $shipment->setInvoiceId($invoiceId)->setOrderId($orderId);
         $this->getResourceService()->getPaymentResource($payment)->addShipment($shipment);
-        $this->getResourceService()->create($shipment);
+        $this->getResourceService()->createResource($shipment);
         return $shipment;
     }
 
@@ -396,7 +396,7 @@ class PaymentService implements PaymentServiceInterface
     ): Paypage {
         $paypage->setAction($action)->setParentResource($this->heidelpay);
         $payment = $this->createPayment($paypage)->setBasket($basket)->setCustomer($customer)->setMetadata($metadata);
-        $this->getResourceService()->create($paypage->setPayment($payment));
+        $this->getResourceService()->createResource($paypage->setPayment($payment));
         return $paypage;
     }
 

@@ -387,7 +387,7 @@ class Payment extends AbstractHeidelpayResource
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
         if ($this->metadata->getId() === null) {
-            $heidelpay->getResourceService()->create($this->metadata->setParentResource($heidelpay));
+            $heidelpay->getResourceService()->createResource($this->metadata->setParentResource($heidelpay));
         }
 
         return $this;
@@ -422,7 +422,7 @@ class Payment extends AbstractHeidelpayResource
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
         if ($this->basket->getId() === null) {
-            $heidelpay->getResourceService()->create($this->basket->setParentResource($heidelpay));
+            $heidelpay->getResourceService()->createResource($this->basket->setParentResource($heidelpay));
         }
 
         return $this;

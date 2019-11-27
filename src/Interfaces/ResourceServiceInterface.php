@@ -32,18 +32,6 @@ use RuntimeException;
 interface ResourceServiceInterface
 {
     /**
-     * Updates the given local resource object (id must be set)
-     *
-     * @param AbstractHeidelpayResource $resource The local resource object to update.
-     *
-     * @return AbstractHeidelpayResource The updated resource object.
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
-     */
-    public function fetchResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource;
-
-    /**
      * Retrieves an Payout resource via the API using the corresponding Payment or paymentId.
      * The Payout resource can not be fetched using its id since they are unique only within the Payment.
      * A Payment can have zero or one Payouts.

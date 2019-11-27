@@ -1360,8 +1360,8 @@ class PaymentTest extends BasePaymentTest
     {
         $metadata = (new Metadata())->addMetadata('myData', 'myValue');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])->disableOriginalConstructor()->getMock();
-        $resourceSrvMock->expects($this->once())->method('create')->with($metadata);
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('createResource')->with($metadata);
 
         /** @var ResourceServiceInterface $resourceSrvMock */
         $heidelpay = (new Heidelpay('s-priv-1234'))->setResourceService($resourceSrvMock);
@@ -1391,8 +1391,8 @@ class PaymentTest extends BasePaymentTest
     public function metadataMustBeOfTypeMetadata()
     {
         $metadata = new Metadata();
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['create'])->disableOriginalConstructor()->getMock();
-        $resourceSrvMock->expects($this->once())->method('create')->with($metadata);
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('createResource')->with($metadata);
         /** @var ResourceServiceInterface $resourceSrvMock */
         $heidelpay = (new Heidelpay('s-priv-1234'))->setResourceService($resourceSrvMock);
 
@@ -1428,13 +1428,13 @@ class PaymentTest extends BasePaymentTest
     public function setBasketShouldCallCreateIfTheGivenBasketObjectDoesNotExistYet()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['create'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
 
         /** @var ResourceServiceInterface $resourceSrvMock */
         $heidelpay->setResourceService($resourceSrvMock);
 
         $basket = new Basket();
-        $resourceSrvMock->expects($this->once())->method('create')->with(
+        $resourceSrvMock->expects($this->once())->method('createResource')->with(
             $this->callback(
                 static function ($object) use ($basket, $heidelpay) {
                     /** @var Basket $object */
@@ -1458,11 +1458,11 @@ class PaymentTest extends BasePaymentTest
     public function setBasketWontCallResourceServiceWhenBasketIsNull()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['create'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
 
         /** @var ResourceServiceInterface $resourceSrvMock */
         $heidelpay->setResourceService($resourceSrvMock);
-        $resourceSrvMock->expects($this->once())->method('create');
+        $resourceSrvMock->expects($this->once())->method('createResource');
 
         // set basket first to prove the setter works both times
         $basket = new Basket();

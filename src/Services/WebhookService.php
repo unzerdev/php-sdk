@@ -111,7 +111,7 @@ class WebhookService
     {
         $webhook = new Webhook($url, $event);
         $webhook->setParentResource($this->heidelpay);
-        $this->resourceService->create($webhook);
+        $this->resourceService->createResource($webhook);
         return $webhook;
     }
 
@@ -152,7 +152,7 @@ class WebhookService
     public function updateWebhook($webhook): Webhook
     {
         $webhook->setParentResource($this->heidelpay);
-        $this->resourceService->update($webhook);
+        $this->resourceService->updateResource($webhook);
         return $webhook;
     }
 
@@ -174,7 +174,7 @@ class WebhookService
             $webhookObject = $this->fetchWebhook($webhook);
         }
 
-        return $this->resourceService->delete($webhookObject);
+        return $this->resourceService->deleteResource($webhookObject);
     }
 
     //</editor-fold>
@@ -207,7 +207,7 @@ class WebhookService
     {
         $webhooks = new Webhooks();
         $webhooks->setParentResource($this->heidelpay);
-        $this->resourceService->delete($webhooks);
+        $this->resourceService->deleteResource($webhooks);
     }
 
     /**
@@ -226,7 +226,7 @@ class WebhookService
         /** @var Webhooks $webhooks */
         $webhooks = new Webhooks($url, $events);
         $webhooks->setParentResource($this->heidelpay);
-        $webhooks = $this->resourceService->create($webhooks);
+        $webhooks = $this->resourceService->createResource($webhooks);
 
         return $webhooks->getWebhookList();
     }

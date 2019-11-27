@@ -224,7 +224,7 @@ class ResourceService implements ResourceServiceInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function create(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function createResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         $method = HttpAdapterInterface::REQUEST_POST;
         $response = $this->send($resource, $method);
@@ -253,7 +253,7 @@ class ResourceService implements ResourceServiceInterface
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws Exception
      */
-    public function update(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function updateResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         $method = HttpAdapterInterface::REQUEST_PUT;
         $response = $this->send($resource, $method);
@@ -275,7 +275,7 @@ class ResourceService implements ResourceServiceInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function delete(AbstractHeidelpayResource &$resource)
+    public function deleteResource(AbstractHeidelpayResource &$resource)
     {
         $response = $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
 
@@ -291,16 +291,14 @@ class ResourceService implements ResourceServiceInterface
     }
 
     /**
-     * Fetch the resource from the api (id must be set).
+     * Updates the given local resource object (id must be set)
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractHeidelpayResource $resource The local resource object to update.
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractHeidelpayResource The updated resource object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
-     *
-     * todo create and call local fetch method
      */
     public function fetchResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -355,7 +353,7 @@ class ResourceService implements ResourceServiceInterface
         if (in_array(CanRecur::class, class_uses($paymentTypeObject), true)) {
             $recurring = new Recurring($paymentTypeObject->getId(), $returnUrl);
             $recurring->setParentResource($this->heidelpay);
-            $this->create($recurring);
+            $this->createResource($recurring);
             return $recurring;
         }
 
@@ -438,7 +436,7 @@ class ResourceService implements ResourceServiceInterface
     public function createMetadata(Metadata $metadata): Metadata
     {
         $metadata->setParentResource($this->heidelpay);
-        $this->create($metadata);
+        $this->createResource($metadata);
         return $metadata;
     }
 
@@ -467,7 +465,7 @@ class ResourceService implements ResourceServiceInterface
     public function createBasket(Basket $basket): Basket
     {
         $basket->setParentResource($this->heidelpay);
-        $this->create($basket);
+        $this->createResource($basket);
         return $basket;
     }
 
@@ -492,7 +490,7 @@ class ResourceService implements ResourceServiceInterface
     public function updateBasket(Basket $basket): Basket
     {
         $basket->setParentResource($this->heidelpay);
-        $this->update($basket);
+        $this->updateResource($basket);
         return $basket;
     }
 
@@ -507,7 +505,7 @@ class ResourceService implements ResourceServiceInterface
     {
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this->heidelpay);
-        $this->create($paymentType);
+        $this->createResource($paymentType);
         return $paymentType;
     }
 
@@ -586,7 +584,7 @@ class ResourceService implements ResourceServiceInterface
     public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
     {
         /** @var BasePaymentType $retPaymentType */
-        $retPaymentType = $this->update($paymentType);
+        $retPaymentType = $this->updateResource($paymentType);
         return $retPaymentType;
     }
 
@@ -600,7 +598,7 @@ class ResourceService implements ResourceServiceInterface
     public function createCustomer(Customer $customer): Customer
     {
         $customer->setParentResource($this->heidelpay);
-        $this->create($customer);
+        $this->createResource($customer);
         return $customer;
     }
 
@@ -656,7 +654,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function updateCustomer(Customer $customer): Customer
     {
-        $this->update($customer);
+        $this->updateResource($customer);
         return $customer;
     }
 
@@ -671,7 +669,7 @@ class ResourceService implements ResourceServiceInterface
             $customerObject = $this->fetchCustomer($customer);
         }
 
-        $this->delete($customerObject);
+        $this->deleteResource($customerObject);
         return $customerObject;
     }
 
