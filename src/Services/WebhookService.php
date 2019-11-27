@@ -64,6 +64,7 @@ class WebhookService implements WebhookServiceInterface
 
     /**
      * @param Heidelpay $heidelpay
+     *
      * @return WebhookService
      */
     public function setHeidelpay(Heidelpay $heidelpay): WebhookService
@@ -82,6 +83,7 @@ class WebhookService implements WebhookServiceInterface
 
     /**
      * @param ResourceServiceInterface $resourceService
+     *
      * @return WebhookService
      */
     public function setResourceService(ResourceServiceInterface $resourceService): WebhookService
