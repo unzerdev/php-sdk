@@ -73,26 +73,6 @@ class Customer extends AbstractHeidelpayResource
     /** @var GeoLocation $geoLocation */
     private $geoLocation;
 
-    /**
-     * Customer constructor.
-     *
-     * @param string|null $firstname
-     * @param string|null $lastname
-     *
-     * @deprecated since Version 1.1.5.0
-     * @see CustomerFactory::createCustomer()
-     * @see CustomerFactory::createNotRegisteredB2bCustomer()
-     * @see CustomerFactory::createRegisteredB2bCustomer()
-     */
-    public function __construct(string $firstname = null, string $lastname = null)
-    {
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->billingAddress = new Address();
-        $this->shippingAddress = new Address();
-        $this->geoLocation = new GeoLocation();
-    }
-
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -253,6 +233,9 @@ class Customer extends AbstractHeidelpayResource
      */
     public function getBillingAddress(): Address
     {
+        if (!$this->billingAddress instanceof Address) {
+            $this->billingAddress = new Address();
+        }
         return $this->billingAddress;
     }
 
@@ -272,6 +255,9 @@ class Customer extends AbstractHeidelpayResource
      */
     public function getShippingAddress(): Address
     {
+        if (!$this->shippingAddress instanceof Address) {
+            $this->shippingAddress = new Address();
+        }
         return $this->shippingAddress;
     }
 
@@ -329,6 +315,9 @@ class Customer extends AbstractHeidelpayResource
      */
     public function getGeoLocation()
     {
+        if (!$this->geoLocation instanceof GeoLocation) {
+            $this->geoLocation = new GeoLocation();
+        }
         return $this->geoLocation;
     }
 
