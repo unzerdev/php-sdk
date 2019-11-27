@@ -21,7 +21,7 @@
  *
  * @author Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/adapter
+ * @package  heidelpayPHP\adapter
  */
 namespace heidelpayPHP\Adapter;
 

@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/validators
+ * @package  heidelpayPHP\Validators
  */
 namespace heidelpayPHP\Validators;
 

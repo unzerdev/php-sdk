@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/interfaces
+ * @package  heidelpayPHP\Interfaces
  */
 namespace heidelpayPHP\Interfaces;
 
