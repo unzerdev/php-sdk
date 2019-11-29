@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/Services
+ * @package  heidelpayPHP\Services
  */
 namespace heidelpayPHP\Services;
 
