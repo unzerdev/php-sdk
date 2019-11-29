@@ -38,6 +38,7 @@ use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\Webhook;
+use heidelpayPHP\Services\CancelService;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
@@ -210,6 +211,34 @@ class HeidelpayTest extends BasePaymentTest
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
 
+    /**
+     * Verify heidelpay propagates cancel actions to the cancel service.
+     *
+     * @test
+     * @dataProvider cancelServiceDP
+     *
+     * @param string $heidelpayMethod
+     * @param array  $heidelpayParams
+     * @param string $serviceMethod
+     * @param array  $serviceParams
+     *
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function heidelpayShouldForwardCancelActionCallsToTheCancelService(
+        $heidelpayMethod,
+        array $heidelpayParams,
+        $serviceMethod,
+        array $serviceParams
+    ) {
+        /** @var CancelService|MockObject $cancelSrvMock */
+        $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
+        $cancelSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
+        $heidelpay = (new Heidelpay('s-priv-234'))->setCancelService($cancelSrvMock);
+
+        $heidelpay->$heidelpayMethod(...$heidelpayParams);
+    }
+
     //<editor-fold desc="DataProviders">
 
     /**
@@ -293,13 +322,10 @@ class HeidelpayTest extends BasePaymentTest
         $paymentTypeId = 'paymentTypeId';
         $customerId    = 'customerId';
         $paymentId     = 'paymentId';
-        $chargeId      = 'chargeId';
         $customer      = new Customer();
         $sofort        = new Sofort();
         $metadata      = new Metadata();
         $payment       = new Payment();
-        $authorization = new Authorization();
-        $charge        = new Charge();
         $paypage       = new Paypage(123.1234, 'EUR', 'url');
         $basket        = new Basket();
         $today         = new DateTime();
@@ -316,15 +342,6 @@ class HeidelpayTest extends BasePaymentTest
             'chargeAuthStr'          => ['chargeAuthorization', [$paymentId, 2.345], 'chargeAuthorization', [$paymentId, 2.345]],
             'chargePayment'          => ['chargePayment', [$payment, 1.234, 'ALL'], 'chargePayment', [$payment, 1.234, 'ALL']],
             'chargePaymentAlt'       => ['chargePayment', [$payment], 'chargePayment', [$payment]],
-            'cancelAuth'             => ['cancelAuthorization', [$authorization, 1.234], 'cancelAuthorization', [$authorization, 1.234]],
-            'cancelAuthAlt'          => ['cancelAuthorization', [$authorization], 'cancelAuthorization', [$authorization]],
-            'cancelAuthByPayment'    => ['cancelAuthorizationByPayment', [$payment, 1.234], 'cancelAuthorizationByPayment', [$payment, 1.234]],
-            'cancelAuthByPaymentAlt' => ['cancelAuthorizationByPayment', [$payment], 'cancelAuthorizationByPayment', [$payment]],
-            'cancelAuthByPaymentStr' => ['cancelAuthorizationByPayment', [$paymentId, 234.5], 'cancelAuthorizationByPayment', [$paymentId, 234.5]],
-            'cancelChargeById'       => ['cancelChargeById', [$paymentId, $chargeId, 1.234], 'cancelChargeById', [$paymentId, $chargeId, 1.234]],
-            'cancelChargeByIdAlt'    => ['cancelChargeById', [$paymentId, $chargeId], 'cancelChargeById', [$paymentId, $chargeId]],
-            'cancelCharge'           => ['cancelCharge', [$charge, 1.234], 'cancelCharge', [$charge, 1.234]],
-            'cancelChargeAlt'        => ['cancelCharge', [$charge], 'cancelCharge', [$charge]],
             'ship'                   => ['ship', [$payment], 'ship', [$payment]],
             'payout'                 => ['payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId'], 'payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId']],
             'initPayPageCharge'      => ['initPayPageCharge', [$paypage, $customer, $basket, $metadata], 'initPayPageCharge', [$paypage, $customer, $basket, $metadata]],
@@ -356,6 +373,30 @@ class HeidelpayTest extends BasePaymentTest
             'deleteAllWebhooks'=> [ 'deleteAllWebhooks', [], 'deleteAllWebhooks', [] ],
             'registerMultipleWebhooks'=> ['registerMultipleWebhooks', [$url, $event], 'registerMultipleWebhooks', [$url, $event] ],
             'fetchResourceFromEvent'=> ['fetchResourceFromEvent', [], 'fetchResourceFromEvent', [] ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function cancelServiceDP(): array
+    {
+        $payment       = new Payment();
+        $charge        = new Charge();
+        $authorization = new Authorization();
+        $chargeId      = 'chargeId';
+        $paymentId      = 'paymentId';
+
+        return [
+            'cancelAuth'             => ['cancelAuthorization', [$authorization, 1.234], 'cancelAuthorization', [$authorization, 1.234]],
+            'cancelAuthAlt'          => ['cancelAuthorization', [$authorization], 'cancelAuthorization', [$authorization]],
+            'cancelAuthByPayment'    => ['cancelAuthorizationByPayment', [$payment, 1.234], 'cancelAuthorizationByPayment', [$payment, 1.234]],
+            'cancelAuthByPaymentAlt' => ['cancelAuthorizationByPayment', [$payment], 'cancelAuthorizationByPayment', [$payment]],
+            'cancelAuthByPaymentStr' => ['cancelAuthorizationByPayment', [$paymentId, 234.5], 'cancelAuthorizationByPayment', [$paymentId, 234.5]],
+            'cancelChargeById'       => ['cancelChargeById', [$paymentId, $chargeId, 1.234], 'cancelChargeById', [$paymentId, $chargeId, 1.234]],
+            'cancelChargeByIdAlt'    => ['cancelChargeById', [$paymentId, $chargeId], 'cancelChargeById', [$paymentId, $chargeId]],
+            'cancelCharge'           => ['cancelCharge', [$charge, 1.234], 'cancelCharge', [$charge, 1.234]],
+            'cancelChargeAlt'        => ['cancelCharge', [$charge], 'cancelCharge', [$charge]],
         ];
     }
 

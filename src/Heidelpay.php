@@ -27,6 +27,7 @@ namespace heidelpayPHP;
 
 use DateTime;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Interfaces\CancelServiceInterface;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Interfaces\PaymentServiceInterface;
@@ -48,6 +49,7 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Resources\Webhook;
+use heidelpayPHP\Services\CancelService;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
@@ -55,7 +57,7 @@ use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\Validators\PrivateKeyValidator;
 use RuntimeException;
 
-class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface
+class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface, CancelServiceInterface
 {
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
@@ -76,6 +78,9 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
 
     /** @var WebhookServiceInterface $webhookService */
     private $webhookService;
+
+    /** @var CancelServiceInterface $cancelService */
+    private $cancelService;
 
     /** @var HttpService $httpService */
     private $httpService;
@@ -102,6 +107,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
         $this->webhookService  = new WebhookService($this);
+        $this->cancelService  = new CancelService($this);
         $this->httpService     = new HttpService();
     }
 
@@ -217,6 +223,25 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     public function setWebhookService(WebhookServiceInterface $webhookService): Heidelpay
     {
         $this->webhookService = $webhookService;
+        return $this;
+    }
+
+    /**
+     * @return CancelServiceInterface
+     */
+    public function getCancelService(): CancelServiceInterface
+    {
+        return $this->cancelService;
+    }
+
+    /**
+     * @param CancelService $cancelService
+     *
+     * @return Heidelpay
+     */
+    public function setCancelService(CancelService $cancelService): Heidelpay
+    {
+        $this->cancelService = $cancelService->setHeidelpay($this);
         return $this;
     }
 
@@ -945,7 +970,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      */
     public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation
     {
-        return $this->paymentService->cancelAuthorization($authorization, $amount);
+        return $this->cancelService->cancelAuthorization($authorization, $amount);
     }
 
     /**
@@ -953,7 +978,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      */
     public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation
     {
-        return $this->paymentService->cancelAuthorizationByPayment($payment, $amount);
+        return $this->cancelService->cancelAuthorizationByPayment($payment, $amount);
     }
 
     //</editor-fold>
@@ -972,7 +997,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation {
-        return $this->paymentService->cancelChargeById(
+        return $this->cancelService->cancelChargeById(
             $payment,
             $chargeId,
             $amount,
@@ -994,7 +1019,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation {
-        return $this->paymentService->cancelCharge(
+        return $this->cancelService->cancelCharge(
             $charge,
             $amount,
             $reasonCode,

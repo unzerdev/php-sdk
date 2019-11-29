@@ -27,7 +27,7 @@ namespace heidelpayPHP\test\unit\Services;
 use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\PaymentServiceInterface;
+use heidelpayPHP\Interfaces\CancelServiceInterface;
 use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
@@ -44,6 +44,7 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use heidelpayPHP\Services\CancelService;
 use heidelpayPHP\Services\PaymentService;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
@@ -279,8 +280,8 @@ class PaymentServiceTest extends BasePaymentTest
                     in_array($cancellation, $authorization->getCancellations(), true);
             }));
 
-        $paymentSrv           = $heidelpay->setResourceService($resourceSrvMock)->getPaymentService();
-        $returnedCancellation = $paymentSrv->cancelAuthorization($authorization, 12.122);
+        $cancelSrv            = $heidelpay->setResourceService($resourceSrvMock)->getCancelService();
+        $returnedCancellation = $cancelSrv->cancelAuthorization($authorization, 12.122);
         $this->assertArraySubset([$returnedCancellation], $authorization->getCancellations());
     }
 
@@ -301,13 +302,13 @@ class PaymentServiceTest extends BasePaymentTest
         /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchAuthorization'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->exactly(2))->method('fetchAuthorization')->willReturn($authorization);
-        /** @var PaymentService|MockObject $paymentSrvMock */
-        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['cancelAuthorization'])->disableOriginalConstructor()->getMock();
-        $paymentSrvMock->expects($this->exactly(2))->method('cancelAuthorization')->withConsecutive([$authorization, null], [$authorization, 1.123]);
-        $heidelpay->setResourceService($resourceSrvMock)->setPaymentService($paymentSrvMock);
+        /** @var CancelService|MockObject $cancelSrvMock */
+        $cancelSrvMock = $this->getMockBuilder(CancelService::class)->setMethods(['cancelAuthorization'])->disableOriginalConstructor()->getMock();
+        $cancelSrvMock->expects($this->exactly(2))->method('cancelAuthorization')->withConsecutive([$authorization, null], [$authorization, 1.123]);
+        $heidelpay->setResourceService($resourceSrvMock)->setCancelService($cancelSrvMock);
 
-        $paymentSrvMock->cancelAuthorizationByPayment(new Payment());
-        $paymentSrvMock->cancelAuthorizationByPayment(new Payment(), 1.123);
+        $cancelSrvMock->cancelAuthorizationByPayment(new Payment());
+        $cancelSrvMock->cancelAuthorizationByPayment(new Payment(), 1.123);
     }
 
     /**
@@ -328,13 +329,13 @@ class PaymentServiceTest extends BasePaymentTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchChargeById'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->exactly(2))->method('fetchChargeById')->with($payment, 's-chg-1')->willReturn($charge);
 
-        /** @var PaymentServiceInterface|MockObject $paymentSrvMock */
-        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['cancelCharge', 'getResourceService'])->disableOriginalConstructor()->getMock();
-        $paymentSrvMock->expects($this->exactly(2))->method('cancelCharge')->withConsecutive([$charge], [$charge, 10.11]);
-        $paymentSrvMock->expects($this->exactly(2))->method('getResourceService')->willReturn($resourceSrvMock);
+        /** @var CancelServiceInterface|MockObject $cancelSrvMock */
+        $cancelSrvMock = $this->getMockBuilder(CancelService::class)->setMethods(['cancelCharge', 'getResourceService'])->disableOriginalConstructor()->getMock();
+        $cancelSrvMock->expects($this->exactly(2))->method('cancelCharge')->withConsecutive([$charge], [$charge, 10.11]);
+        $cancelSrvMock->expects($this->exactly(2))->method('getResourceService')->willReturn($resourceSrvMock);
 
-        $paymentSrvMock->cancelChargeById($payment, 's-chg-1');
-        $paymentSrvMock->cancelChargeById($payment, 's-chg-1', 10.11);
+        $cancelSrvMock->cancelChargeById($payment, 's-chg-1');
+        $cancelSrvMock->cancelChargeById($payment, 's-chg-1', 10.11);
     }
 
     /**
@@ -348,10 +349,10 @@ class PaymentServiceTest extends BasePaymentTest
      */
     public function cancelChargeShouldCreateCancellationAndCallsCreate()
     {
-        $heidelpay  = new Heidelpay('s-priv-1234');
-        $paymentSrv = $heidelpay->getPaymentService();
-        $payment    = (new Payment())->setParentResource($heidelpay);
-        $charge     = (new Charge())->setPayment($payment);
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $cancelSrv = $heidelpay->getCancelService();
+        $payment   = (new Payment())->setParentResource($heidelpay);
+        $charge    = (new Charge())->setPayment($payment);
 
         /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->disableOriginalConstructor()->getMock();
@@ -364,7 +365,7 @@ class PaymentServiceTest extends BasePaymentTest
             }));
         $heidelpay->setResourceService($resourceSrvMock);
 
-        $paymentSrv->cancelCharge($charge, 12.22);
+        $cancelSrv->cancelCharge($charge, 12.22);
     }
 
     //</editor-fold>

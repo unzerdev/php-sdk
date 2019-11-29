@@ -39,7 +39,6 @@ use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
@@ -230,76 +229,6 @@ class PaymentService implements PaymentServiceInterface
         $this->getResourceService()->createResource($payout);
 
         return $payout;
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Authorization Cancel/Reversal transaction">
-
-    /**
-     * {@inheritDoc}
-     */
-    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation
-    {
-        $cancellation = new Cancellation($amount);
-        $cancellation->setPayment($authorization->getPayment());
-        $authorization->addCancellation($cancellation);
-        $this->getResourceService()->createResource($cancellation);
-
-        return $cancellation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation
-    {
-        $authorization = $this->getResourceService()->fetchAuthorization($payment);
-        return $this->cancelAuthorization($authorization, $amount);
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Charge Cancel/Refund transaction">
-
-    /**
-     * {@inheritDoc}
-     */
-    public function cancelChargeById(
-        $payment,
-        $chargeId,
-        float $amount = null,
-        string $reasonCode = null,
-        string $paymentReference = null,
-        float $amountNet = null,
-        float $amountVat = null
-    ): Cancellation {
-        $charge = $this->getResourceService()->fetchChargeById($payment, $chargeId);
-        return $this->cancelCharge($charge, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function cancelCharge(
-        Charge $charge,
-        $amount = null,
-        string $reasonCode = null,
-        string $paymentReference = null,
-        float $amountNet = null,
-        float $amountVat = null
-    ): Cancellation {
-        $cancellation = new Cancellation($amount);
-        $cancellation
-            ->setReasonCode($reasonCode)
-            ->setPayment($charge->getPayment())
-            ->setPaymentReference($paymentReference)
-            ->setAmountNet($amountNet)
-            ->setAmountVat($amountVat);
-        $charge->addCancellation($cancellation);
-        $this->getResourceService()->createResource($cancellation);
-
-        return $cancellation;
     }
 
     //</editor-fold>
