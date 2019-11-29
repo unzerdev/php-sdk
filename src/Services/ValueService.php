@@ -24,6 +24,8 @@
  */
 namespace heidelpayPHP\Services;
 
+use function is_float;
+
 class ValueService
 {
     /**

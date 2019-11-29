@@ -45,7 +45,6 @@ use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasPaymentState;
 use RuntimeException;
 use stdClass;
-use function count;
 use function in_array;
 use function is_string;
 
@@ -840,8 +839,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param $resources
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     private function updateResponseResources($resources)
     {

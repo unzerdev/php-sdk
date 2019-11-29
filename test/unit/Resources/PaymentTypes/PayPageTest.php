@@ -335,8 +335,8 @@ class PayPageTest extends BasePaymentTest
             ->setMetadata($metadata)
             ->setCustomer($customer);
         $paypage = (new Paypage(123.4567, 'EUR', self::RETURN_URL))
-            ->setParentResource($payment)
             ->setFullPageImage('full page image')
+            ->setParentResource($payment)
             ->setLogoImage('logo image')
             ->setShopDescription('my shop description')
             ->setShopName('my shop name')
