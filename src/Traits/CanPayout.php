@@ -50,10 +50,10 @@ trait CanPayout
      * @param string|null          $invoiceId        The external id of the invoice.
      * @param string|null          $paymentReference A reference text for the payment.
      *
-     * @return Payout
+     * @return Payout The resulting payout object.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function payout(
         $amount,

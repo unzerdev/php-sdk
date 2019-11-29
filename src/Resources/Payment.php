@@ -275,7 +275,7 @@ class Payment extends AbstractHeidelpayResource
      * The Customer resource can be passed as Customer object or the Id of a Customer resource.
      * If the Customer object has not been created yet via API this is done automatically.
      *
-     * @param Customer|string $customer The Customer object or the id of the Customer to be referenced by the Payment.
+     * @param Customer|string|null $customer The Customer object or the id of the Customer to be referenced by the Payment.
      *
      * @return Payment This Payment object.
      *
@@ -374,8 +374,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Payment
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function setMetadata($metadata): Payment
     {
@@ -408,8 +408,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Payment
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function setBasket($basket): Payment
     {
@@ -805,8 +805,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Cancellation|null
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function cancelAuthorizationAmount($amount = null)
     {
@@ -850,7 +850,7 @@ class Payment extends AbstractHeidelpayResource
      * @param null $amount   The amount to be charged.
      * @param null $currency The currency of the charged amount.
      *
-     * @return Charge The resulting Charge object.
+     * @return Charge|AbstractHeidelpayResource The resulting Charge object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
@@ -883,8 +883,8 @@ class Payment extends AbstractHeidelpayResource
     /**
      * @param array $transactions
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     private function updateResponseTransactions(array $transactions = [])
     {

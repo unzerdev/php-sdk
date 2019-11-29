@@ -41,8 +41,8 @@ class EPSTest extends BasePaymentTest
      *
      * @return EPS
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function epsShouldBeCreatable(): EPS
     {
@@ -68,8 +68,8 @@ class EPSTest extends BasePaymentTest
      *
      * @param EPS $eps
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @depends epsShouldBeCreatable
      */
     public function epsShouldThrowExceptionOnAuthorize(EPS $eps)
@@ -88,8 +88,8 @@ class EPSTest extends BasePaymentTest
      *
      * @param EPS $eps
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function epsShouldBeChargeable(EPS $eps)
     {

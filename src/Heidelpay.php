@@ -349,8 +349,8 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return mixed
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function activateRecurringPayment($paymentType, $returnUrl)
     {
@@ -421,8 +421,8 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Metadata The fetched Metadata resource.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function createMetadata($metadata): Metadata
     {
@@ -436,8 +436,8 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Metadata The fetched Metadata resource.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function fetchMetadata($metadata): Metadata
     {
@@ -455,8 +455,8 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Basket The created Basket object.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function createBasket(Basket $basket): Basket
     {
@@ -470,8 +470,8 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Basket The fetched Basket object.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function fetchBasket($basket): Basket
     {
@@ -485,8 +485,8 @@ class Heidelpay implements HeidelpayParentInterface
      *
      * @return Basket The updated Basket object.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function updateBasket(Basket $basket): Basket
     {

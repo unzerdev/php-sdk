@@ -1223,10 +1223,9 @@ class ResourceServiceTest extends BasePaymentTest
      * @param string $resourceUrl
      *
      * @throws Exception
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
      */
     public function fetchResourceByUrlShouldFetchTheDesiredResource(
         $expectedFetchMethod,
@@ -1254,10 +1253,9 @@ class ResourceServiceTest extends BasePaymentTest
      * @param string $resourceUrl
      *
      * @throws Exception
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
      */
     public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentType($paymentTypeId, $resourceUrl)
     {
@@ -1276,10 +1274,9 @@ class ResourceServiceTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
      */
     public function fetchResourceByUrlForAPaymentTypeShouldReturnNullIfTheTypeIsUnknown()
     {
@@ -1355,8 +1352,8 @@ class ResourceServiceTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException        A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException             A RuntimeException is thrown when there is a error while using the SDK.
      * @throws \PHPUnit\Framework\Exception
      */
     public function createRecurringShouldThrowExceptionWhenRecurringPaymentIsNotSupportedByType()
