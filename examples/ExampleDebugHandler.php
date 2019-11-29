@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  heidelpayPHP\examples
  */
 namespace heidelpayPHP\examples;
 
