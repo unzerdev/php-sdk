@@ -1134,7 +1134,6 @@ class ResourceServiceTest extends BasePaymentTest
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
      */
     public function fetchResourceByUrlShouldFetchTheDesiredResource($fetchMethod, $arguments, $resourceUrl)
     {
@@ -1159,7 +1158,6 @@ class ResourceServiceTest extends BasePaymentTest
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
      */
     public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentType($paymentTypeId, $resourceUrl)
     {
@@ -1179,7 +1177,6 @@ class ResourceServiceTest extends BasePaymentTest
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
      */
     public function fetchResourceByUrlForAPaymentTypeShouldReturnNullIfTheTypeIsUnknown()
     {
