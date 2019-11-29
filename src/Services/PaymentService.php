@@ -62,7 +62,9 @@ class PaymentService implements PaymentServiceInterface
 
     //<editor-fold desc="Getters/Setters"
 
-    /** @return Heidelpay */
+    /**
+     * @return Heidelpay
+     */
     public function getHeidelpay(): Heidelpay
     {
         return $this->heidelpay;
@@ -79,7 +81,9 @@ class PaymentService implements PaymentServiceInterface
         return $this;
     }
 
-    /** @return ResourceService */
+    /**
+     * @return ResourceService
+     */
     public function getResourceService(): ResourceService
     {
         return $this->getHeidelpay()->getResourceService();

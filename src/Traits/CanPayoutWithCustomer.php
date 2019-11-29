@@ -48,7 +48,7 @@ trait CanPayoutWithCustomer
      *                                        The Basket object will be created automatically if it does not exist
      *                                        yet (i.e. has no id).
      *
-     * @return Payout
+     * @return Payout The resulting payout object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.

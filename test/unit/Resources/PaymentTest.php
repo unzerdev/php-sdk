@@ -1352,9 +1352,9 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
     public function setMetaDataShouldSetParentResourceAndCreateMetaDataObject()
     {
@@ -1421,9 +1421,9 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
      */
     public function setBasketShouldCallCreateIfTheGivenBasketObjectDoesNotExistYet()
     {
@@ -1451,9 +1451,9 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
      */
     public function setBasketWontCallResourceServiceWhenBasketIsNull()
     {
@@ -1479,9 +1479,9 @@ class PaymentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      * @throws ReflectionException
-     * @throws RuntimeException
      */
     public function updateResponseResourcesShouldFetchBasketIdIfItIsSetInResponse()
     {

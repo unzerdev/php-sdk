@@ -366,8 +366,7 @@ class ResourceService implements ResourceServiceInterface
 
     /**
      * Fetches the payment object if the id is given.
-     * Else it just returns the given payment argument.
-     * (!) It does not fetch or update a given payment object but returns it as-is. (!)
+     * Else it just returns the given payment argument as-is.
      *
      * @param $payment
      *
@@ -685,7 +684,13 @@ class ResourceService implements ResourceServiceInterface
         /** @var Payment $paymentObject */
         $paymentObject = $this->fetchPayment($payment);
         /** @var Authorization $authorize */
-        $authorize = $this->fetchResource($paymentObject->getAuthorization(true));
+        $authorize = $paymentObject->getAuthorization(true);
+
+        if (!$authorize instanceof Authorization) {
+            throw new RuntimeException('The payment does not seem to have an Authorization.');
+        }
+
+        $this->fetchResource($authorize);
         return $authorize;
     }
 
@@ -694,9 +699,8 @@ class ResourceService implements ResourceServiceInterface
     //<editor-fold desc="Charge resource">
     public function fetchCharge(Charge $charge): Charge
     {
-        /** @var Charge $retCharge */
-        $retCharge = $this->fetchResource($charge);
-        return $retCharge;
+        $this->fetchResource($charge);
+        return $charge;
     }
 
     /**
@@ -706,8 +710,13 @@ class ResourceService implements ResourceServiceInterface
     {
         /** @var Payment $paymentObject */
         $paymentObject = $this->fetchPayment($payment);
-        /** @var Charge $charge */
-        $charge = $this->fetchResource($paymentObject->getCharge($chargeId, true));
+        $charge = $paymentObject->getCharge($chargeId, true);
+
+        if (!$charge instanceof Charge) {
+            throw new RuntimeException('The charge object could not be found.');
+        }
+
+        $this->fetchResource($charge);
         return $charge;
     }
 

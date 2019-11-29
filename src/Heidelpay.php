@@ -74,7 +74,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /** @var PaymentServiceInterface $paymentService */
     private $paymentService;
 
-    /** @var WebhookService $webhookService */
+    /** @var WebhookServiceInterface $webhookService */
     private $webhookService;
 
     /** @var HttpService $httpService */
@@ -183,11 +183,11 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     }
 
     /**
-     * @param PaymentService $paymentService
+     * @param PaymentServiceInterface $paymentService
      *
      * @return Heidelpay
      */
-    public function setPaymentService(PaymentService $paymentService): Heidelpay
+    public function setPaymentService(PaymentServiceInterface $paymentService): Heidelpay
     {
         $this->paymentService = $paymentService->setHeidelpay($this);
         return $this;
@@ -202,19 +202,19 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     }
 
     /**
-     * @return WebhookService
+     * @return WebhookServiceInterface
      */
-    public function getWebhookService(): WebhookService
+    public function getWebhookService(): WebhookServiceInterface
     {
         return $this->webhookService;
     }
 
     /**
-     * @param WebhookService $webhookService
+     * @param WebhookServiceInterface $webhookService
      *
      * @return Heidelpay
      */
-    public function setWebhookService(WebhookService $webhookService): Heidelpay
+    public function setWebhookService(WebhookServiceInterface $webhookService): Heidelpay
     {
         $this->webhookService = $webhookService;
         return $this;
