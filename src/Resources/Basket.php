@@ -95,30 +95,6 @@ class Basket extends AbstractHeidelpayResource
 
     /**
      * @return float
-     *
-     * @deprecated since 1.2.0.0
-     * @see Basket::getAmountTotalGross()
-     */
-    public function getAmountTotal(): float
-    {
-        return $this->getAmountTotalGross();
-    }
-
-    /**
-     * @param float $amountTotal
-     *
-     * @return Basket
-     *
-     * @deprecated since 1.2.0.0
-     * @see Basket::setAmountTotalGross()
-     */
-    public function setAmountTotal(float $amountTotal): Basket
-    {
-        return $this->setAmountTotalGross($amountTotal);
-    }
-
-    /**
-     * @return float
      */
     public function getAmountTotalDiscount(): float
     {
