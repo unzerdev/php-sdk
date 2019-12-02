@@ -643,7 +643,7 @@ class Payment extends AbstractHeidelpayResource
      */
     public function cancelAmount(
         float $amount = null,
-        string $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
+        $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
         string $paymentReference = null,
         float $amountNet = null,
         float $amountVat = null

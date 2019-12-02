@@ -35,7 +35,7 @@ interface CancelServiceInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation;
+    public function cancelAuthorization(Authorization $authorization, float $amount = null): Cancellation;
 
     /**
      * Performs a Cancellation transaction for the Authorization of the given Payment object.
@@ -49,7 +49,7 @@ interface CancelServiceInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation;
+    public function cancelAuthorizationByPayment($payment, float $amount = null): Cancellation;
 
     /**
      * Performs a Cancellation transaction for the given Charge and returns the resulting Cancellation object.
@@ -71,7 +71,7 @@ interface CancelServiceInterface
      */
     public function cancelChargeById(
         $payment,
-        $chargeId,
+        string $chargeId,
         float $amount = null,
         string $reasonCode = null,
         string $paymentReference = null,
@@ -98,7 +98,7 @@ interface CancelServiceInterface
      */
     public function cancelCharge(
         Charge $charge,
-        $amount = null,
+        float $amount = null,
         string $reasonCode = null,
         string $paymentReference = null,
         float $amountNet = null,
@@ -124,11 +124,11 @@ interface CancelServiceInterface
      */
     public function cancelPayment(
         Payment $payment,
-        $amount = null,
+        float $amount = null,
         $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        $paymentReference = null,
-        $amountNet = null,
-        $amountVat = null
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
     ): array;
 
     /**

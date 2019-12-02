@@ -86,7 +86,7 @@ class CancelService implements CancelServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation
+    public function cancelAuthorization(Authorization $authorization, float $amount = null): Cancellation
     {
         $cancellation = new Cancellation($amount);
         $cancellation->setPayment($authorization->getPayment());
@@ -99,7 +99,7 @@ class CancelService implements CancelServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation
+    public function cancelAuthorizationByPayment($payment, float $amount = null): Cancellation
     {
         $authorization = $this->getResourceService()->fetchAuthorization($payment);
         return $this->cancelAuthorization($authorization, $amount);
@@ -114,7 +114,7 @@ class CancelService implements CancelServiceInterface
      */
     public function cancelChargeById(
         $payment,
-        $chargeId,
+        string $chargeId,
         float $amount = null,
         string $reasonCode = null,
         string $paymentReference = null,
@@ -130,7 +130,7 @@ class CancelService implements CancelServiceInterface
      */
     public function cancelCharge(
         Charge $charge,
-        $amount = null,
+        float $amount = null,
         string $reasonCode = null,
         string $paymentReference = null,
         float $amountNet = null,
@@ -166,11 +166,11 @@ class CancelService implements CancelServiceInterface
      */
     public function cancelPayment(
         Payment $payment,
-      $amount = null,
-      $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-      $paymentReference = null,
-      $amountNet = null,
-      $amountVat = null
+        float $amount = null,
+        $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
     ): array {
         $charges           = $payment->getCharges();
         $remainingToCancel = $amount;

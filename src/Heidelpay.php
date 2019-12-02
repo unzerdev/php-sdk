@@ -969,7 +969,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorization(Authorization $authorization, $amount = null): Cancellation
+    public function cancelAuthorization(Authorization $authorization, float $amount = null): Cancellation
     {
         return $this->cancelService->cancelAuthorization($authorization, $amount);
     }
@@ -977,7 +977,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation
+    public function cancelAuthorizationByPayment($payment, float $amount = null): Cancellation
     {
         return $this->cancelService->cancelAuthorizationByPayment($payment, $amount);
     }
@@ -991,11 +991,11 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      */
     public function cancelPayment(
         Payment $payment,
-        $amount = null,
+        float $amount = null,
         $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        $paymentReference = null,
-        $amountNet = null,
-        $amountVat = null
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
     ): array {
         return $this->getCancelService()->cancelPayment($payment, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
     }
@@ -1017,7 +1017,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      */
     public function cancelChargeById(
         $payment,
-        $chargeId,
+        string $chargeId,
         float $amount = null,
         string $reasonCode = null,
         string $paymentReference = null,
@@ -1040,7 +1040,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      */
     public function cancelCharge(
         Charge $charge,
-        $amount = null,
+        float $amount = null,
         string $reasonCode = null,
         string $paymentReference = null,
         float $amountNet = null,
