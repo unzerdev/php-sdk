@@ -195,14 +195,14 @@ interface ResourceServiceInterface
     /**
      * Updates the PaymentType resource with the given PaymentType object.
      *
-     * @param BasePaymentType $x The PaymentType object to be updated.
+     * @param BasePaymentType $paymentType The PaymentType object to be updated.
      *
      * @return BasePaymentType|AbstractHeidelpayResource The updated PaymentType object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function updatePaymentType(BasePaymentType $x): BasePaymentType;
+    public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType;
 
     /**
      * Create an API resource for the given customer object.
