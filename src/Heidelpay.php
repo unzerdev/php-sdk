@@ -107,7 +107,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
         $this->webhookService  = new WebhookService($this);
-        $this->cancelService  = new CancelService($this);
+        $this->cancelService   = new CancelService($this);
         $this->httpService     = new HttpService();
     }
 
