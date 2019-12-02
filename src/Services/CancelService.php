@@ -117,12 +117,12 @@ class CancelService implements CancelServiceInterface
         string $chargeId,
         float $amount = null,
         string $reasonCode = null,
-        string $paymentReference = null,
+        string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation {
         $charge = $this->getResourceService()->fetchChargeById($payment, $chargeId);
-        return $this->cancelCharge($charge, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
+        return $this->cancelCharge($charge, $amount, $reasonCode, $referenceText, $amountNet, $amountVat);
     }
 
     /**
@@ -132,7 +132,7 @@ class CancelService implements CancelServiceInterface
         Charge $charge,
         float $amount = null,
         string $reasonCode = null,
-        string $paymentReference = null,
+        string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation {
@@ -140,7 +140,7 @@ class CancelService implements CancelServiceInterface
         $cancellation
             ->setReasonCode($reasonCode)
             ->setPayment($charge->getPayment())
-            ->setPaymentReference($paymentReference)
+            ->setPaymentReference($referenceText)
             ->setAmountNet($amountNet)
             ->setAmountVat($amountVat);
         $charge->addCancellation($cancellation);
@@ -155,7 +155,7 @@ class CancelService implements CancelServiceInterface
      * @param Payment    $payment
      * @param float|null $amount
      * @param mixed      $reasonCode
-     * @param null|mixed $paymentReference
+     * @param null|mixed $referenceText
      * @param null|mixed $amountNet
      * @param null|mixed $amountVat
      *
@@ -168,7 +168,7 @@ class CancelService implements CancelServiceInterface
         Payment $payment,
         float $amount = null,
         $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        string $paymentReference = null,
+        string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): array {
@@ -203,7 +203,7 @@ class CancelService implements CancelServiceInterface
             }
 
             try {
-                $cancellation = $charge->cancel($cancelAmount, $reasonCode, $paymentReference, $amountNet, $amountVat);
+                $cancellation = $charge->cancel($cancelAmount, $reasonCode, $referenceText, $amountNet, $amountVat);
             } catch (HeidelpayApiException $e) {
                 $allowedErrors = [
                     ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,

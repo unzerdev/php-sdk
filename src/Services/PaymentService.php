@@ -218,13 +218,13 @@ class PaymentService implements PaymentServiceInterface
         $metadata = null,
         $basket = null,
         $invoiceId = null,
-        $paymentReference = null
+        $referenceText = null
     ): Payout {
         $payment = $this->createPayment($paymentType);
         $payout = (new Payout($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
             ->setInvoiceId($invoiceId)
-            ->setPaymentReference($paymentReference);
+            ->setPaymentReference($referenceText);
         $payment->setPayout($payout)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
         $this->getResourceService()->createResource($payout);
 

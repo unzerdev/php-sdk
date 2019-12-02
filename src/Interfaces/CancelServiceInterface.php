@@ -55,14 +55,14 @@ interface CancelServiceInterface
      * Performs a Cancellation transaction for the given Charge and returns the resulting Cancellation object.
      * Performs a full cancel if the parameter amount is null.
      *
-     * @param Payment|string $payment          The Payment object or the id of the Payment the charge belongs to.
-     * @param string         $chargeId         The id of the Charge to be canceled.
-     * @param float|null     $amount           The amount to be canceled.
-     *                                         This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null    $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
-     * @param string|null    $paymentReference A reference string for the payment.
-     * @param float|null     $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null     $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param Payment|string $payment       The Payment object or the id of the Payment the charge belongs to.
+     * @param string         $chargeId      The id of the Charge to be canceled.
+     * @param float|null     $amount        The amount to be canceled.
+     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null    $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null    $referenceText A reference string for the payment.
+     * @param float|null     $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
@@ -74,7 +74,7 @@ interface CancelServiceInterface
         string $chargeId,
         float $amount = null,
         string $reasonCode = null,
-        string $paymentReference = null,
+        string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation;
@@ -83,13 +83,13 @@ interface CancelServiceInterface
      * Performs a Cancellation transaction and returns the resulting Cancellation object.
      * Performs a full cancel if the parameter amount is null.
      *
-     * @param Charge      $charge           The Charge object to create the Cancellation for.
-     * @param float|null  $amount           The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
-     * @param string|null $paymentReference A reference string for the payment.
-     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param Charge      $charge        The Charge object to create the Cancellation for.
+     * @param float|null  $amount        The amount to be canceled.
+     *                                   This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null $referenceText A reference string for the payment.
+     * @param float|null  $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
@@ -100,7 +100,7 @@ interface CancelServiceInterface
         Charge $charge,
         float $amount = null,
         string $reasonCode = null,
-        string $paymentReference = null,
+        string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation;
@@ -109,13 +109,13 @@ interface CancelServiceInterface
      * Performs a Cancellation transaction on the Payment.
      * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
      *
-     * @param Payment     $payment          The payment whose authorization should be canceled.
-     * @param float|null  $amount           The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
-     * @param string|null $paymentReference A reference string for the payment.
-     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param Payment     $payment       The payment whose authorization should be canceled.
+     * @param float|null  $amount        The amount to be canceled.
+     *                                   This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null $referenceText A reference string for the payment.
+     * @param float|null  $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
@@ -126,7 +126,7 @@ interface CancelServiceInterface
         Payment $payment,
         float $amount = null,
         $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        string $paymentReference = null,
+        string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): array;

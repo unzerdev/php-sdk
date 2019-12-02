@@ -43,21 +43,6 @@ use RuntimeException;
 interface ResourceServiceInterface
 {
     /**
-     * Retrieves an Payout resource via the API using the corresponding Payment or paymentId.
-     * The Payout resource can not be fetched using its id since they are unique only within the Payment.
-     * A Payment can have zero or one Payouts.
-     *
-     * @param Payment|string $payment The Payment object or the id of a Payment object whose Payout to fetch.
-     *                                There can only be one payout object to a payment.
-     *
-     * @return Payout The Payout object of the given Payment.
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
-     */
-    public function fetchPayout($payment): Payout;
-
-    /**
      * Activate recurring payment for the given payment type (if possible).
      *
      * @param string|BasePaymentType $paymentType The payment to activate recurring payment for.
@@ -169,7 +154,9 @@ interface ResourceServiceInterface
     public function updateBasket(Basket $basket): Basket;
 
     /**
-     * Create the given payment type via api.
+     * Creates a PaymentType resource from the given PaymentType object.
+     * This is used to create the payment object prior to any transaction.
+     * Usually this will be done by the heidelpayUI components (https://docs.heidelpay.com/docs/heidelpay-ui-components)
      *
      * @param BasePaymentType $paymentType
      *
@@ -179,18 +166,6 @@ interface ResourceServiceInterface
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function createPaymentType(BasePaymentType $paymentType): BasePaymentType;
-
-    /**
-     * Fetch the payment type with the given Id from the API.
-     *
-     * @param string $typeId
-     *
-     * @return BasePaymentType|AbstractHeidelpayResource
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
-     */
-    public function fetchPaymentType($typeId): BasePaymentType;
 
     /**
      * Updates the PaymentType resource with the given PaymentType object.
@@ -203,6 +178,18 @@ interface ResourceServiceInterface
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType;
+
+    /**
+     * Fetch the payment type with the given Id from the API.
+     *
+     * @param string $typeId
+     *
+     * @return BasePaymentType|AbstractHeidelpayResource
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchPaymentType($typeId): BasePaymentType;
 
     /**
      * Create an API resource for the given customer object.
@@ -317,7 +304,7 @@ interface ResourceServiceInterface
     public function fetchCharge(Charge $charge): Charge;
 
     /**
-     * Fetch a cancel on an authorization (aka reversal).
+     * Fetch a cancellation on an authorization (aka reversal).
      *
      * @param Authorization $authorization  The authorization object for which to fetch the cancellation.
      * @param string        $cancellationId The id of the cancellation to fetch.
@@ -381,4 +368,19 @@ interface ResourceServiceInterface
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function fetchShipment($payment, $shipmentId): Shipment;
+
+    /**
+     * Retrieves an Payout resource via the API using the corresponding Payment or paymentId.
+     * The Payout resource can not be fetched using its id since they are unique only within the Payment.
+     * A Payment can have zero or one Payouts.
+     *
+     * @param Payment|string $payment The Payment object or the id of a Payment object whose Payout to fetch.
+     *                                There can only be one payout object to a payment.
+     *
+     * @return Payout The Payout object of the given Payment.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function fetchPayout($payment): Payout;
 }
