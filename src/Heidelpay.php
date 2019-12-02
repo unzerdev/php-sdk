@@ -26,6 +26,7 @@
 namespace heidelpayPHP;
 
 use DateTime;
+use heidelpayPHP\Constants\CancelReasonCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\CancelServiceInterface;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
@@ -979,6 +980,32 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     public function cancelAuthorizationByPayment($payment, $amount = null): Cancellation
     {
         return $this->cancelService->cancelAuthorizationByPayment($payment, $amount);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Payment Cancel">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelPayment(
+        Payment $payment,
+        $amount = null,
+        $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
+        $paymentReference = null,
+        $amountNet = null,
+        $amountVat = null
+    ): array {
+        return $this->getCancelService()->cancelPayment($payment, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelPaymentAuthorization(Payment $payment, float $amount = null)
+    {
+        return $this->getCancelService()->cancelPaymentAuthorization($payment, $amount);
     }
 
     //</editor-fold>

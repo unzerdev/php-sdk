@@ -24,11 +24,16 @@
  */
 namespace heidelpayPHP\Services;
 
+use heidelpayPHP\Constants\ApiResponseCodes;
+use heidelpayPHP\Constants\CancelReasonCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\CancelServiceInterface;
+use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
+use RuntimeException;
 
 class CancelService implements CancelServiceInterface
 {
@@ -145,4 +150,135 @@ class CancelService implements CancelServiceInterface
     }
 
     //</editor-fold>
+
+    /**
+     * @param Payment    $payment
+     * @param float|null $amount
+     * @param mixed      $reasonCode
+     * @param null|mixed $paymentReference
+     * @param null|mixed $amountNet
+     * @param null|mixed $amountVat
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function cancelPayment(
+        Payment $payment,
+      $amount = null,
+      $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
+      $paymentReference = null,
+      $amountNet = null,
+      $amountVat = null
+    ): array {
+        $charges           = $payment->getCharges();
+        $remainingToCancel = $amount;
+
+        $cancelWholePayment = $remainingToCancel === null;
+        $cancellations      = [];
+        $cancellation       = null;
+
+        if ($cancelWholePayment || $remainingToCancel > 0.0) {
+            $cancellation = $this->cancelPaymentAuthorization($payment, $remainingToCancel);
+
+            if ($cancellation instanceof Cancellation) {
+                $cancellations[] = $cancellation;
+                if (!$cancelWholePayment) {
+                    $remainingToCancel -= $cancellation->getAmount();
+                }
+                $cancellation = null;
+            }
+        }
+
+        if (!$cancelWholePayment && $remainingToCancel <= 0.0) {
+            return $cancellations;
+        }
+
+        /** @var Charge $charge */
+        foreach ($charges as $charge) {
+            $cancelAmount = null;
+            if (!$cancelWholePayment && $remainingToCancel <= $charge->getTotalAmount()) {
+                $cancelAmount = $remainingToCancel;
+            }
+
+            try {
+                $cancellation = $charge->cancel($cancelAmount, $reasonCode, $paymentReference, $amountNet, $amountVat);
+            } catch (HeidelpayApiException $e) {
+                $allowedErrors = [
+                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK
+                ];
+
+                if (!in_array($e->getCode(), $allowedErrors, true)) {
+                    throw $e;
+                }
+                continue;
+            }
+
+            if ($cancellation instanceof Cancellation) {
+                $cancellations[] = $cancellation;
+                if (!$cancelWholePayment) {
+                    $remainingToCancel -= $cancellation->getAmount();
+                }
+                $cancellation = null;
+            }
+
+            if (!$cancelWholePayment && $remainingToCancel <= 0) {
+                break;
+            }
+        }
+
+        return $cancellations;
+    }
+
+    /**
+     * Cancel the given amount of the payments authorization.
+     *
+     * @param Payment    $payment The payment whose authorization should be canceled.
+     * @param float|null $amount  The amount to be cancelled. If null the remaining uncharged amount of the authorization
+     *                            will be cancelled completely. If it exceeds the remaining uncharged amount the
+     *                            cancellation will only cancel the remaining uncharged amount.
+     *
+     * @return Cancellation|null
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function cancelPaymentAuthorization(Payment $payment, float $amount = null)
+    {
+        $cancellation   = null;
+        $completeCancel = $amount === null;
+
+        $authorize = $payment->getAuthorization();
+        if ($authorize !== null) {
+            $cancelAmount = null;
+            if (!$completeCancel) {
+                $remainingAuthorized = $payment->getAmount()->getRemaining();
+                $cancelAmount        = $amount > $remainingAuthorized ? $remainingAuthorized : $amount;
+
+                // do not attempt to cancel if there is nothing left to cancel
+                if ($cancelAmount === 0.0) {
+                    return null;
+                }
+            }
+
+            try {
+                $cancellation = $authorize->cancel($cancelAmount);
+            } catch (HeidelpayApiException $e) {
+                $allowedErrors = [
+                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
+                    ApiResponseCodes::API_ERROR_TRANSACTION_CANCEL_NOT_ALLOWED
+                ];
+
+                if (!in_array($e->getCode(), $allowedErrors, true)) {
+                    throw $e;
+                }
+            }
+        }
+
+        return $cancellation;
+    }
 }
