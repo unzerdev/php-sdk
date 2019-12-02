@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.3.0.0][1.3.0.0]
 
+### This update contains breaking changes and you might have to update your implementation
+
 ### Change
 *   Refactor heidelpay facade to implement service interfaces.
+*   Move payment cancel methods to cancel service. 
+*   Cleanup doc comments.
 
 ## [1.2.5.1][1.2.5.1]
 
@@ -98,6 +102,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   SAQ-A test due to lack of a corresponding key.
 
 ## [1.2.0.0][1.2.0.0]
+
+### This update contains breaking changes and you might have to update your implementation
 
 ### Changed
 *   Refactored all examples.
@@ -208,7 +214,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.0.0][1.1.0.0]
 
-###### This update contains breaking changes and you will most certainly have to update your implementation
+### This update contains breaking changes and you might have to update your implementation
 
 ### Changed
 *   Payment types `Prepayment`, `Invoice` and `Invoice guaranteed` can no longer perform the authorize transaction but only direct charge.
