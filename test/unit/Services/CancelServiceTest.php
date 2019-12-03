@@ -1,6 +1,6 @@
 <?php
 /**
- * This class defines unit tests to verify cancel functionality of the Payment resource.
+ * This class defines unit tests to verify cancel functionality of the CancelService.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *
@@ -22,7 +22,7 @@
  *
  * @package  heidelpayPHP\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace heidelpayPHP\test\unit\Services;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
@@ -39,7 +39,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 
-class PaymentCancelTest extends BasePaymentTest
+class CancelServiceTest extends BasePaymentTest
 {
     /**
      * Verify cancelAmount will call cancelAuthorizationAmount with the amountToCancel.
