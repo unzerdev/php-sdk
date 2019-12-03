@@ -538,6 +538,8 @@ class PaymentServiceTest extends BasePaymentTest
 
     //</editor-fold>
 
+    //<editor-fold desc="Hire Purchase">
+
     /**
      * Verify fetch hdd instalment plans.
      *
@@ -569,6 +571,8 @@ class PaymentServiceTest extends BasePaymentTest
             }))->willReturn(new InstalmentPlans(12.23, 'EUR', 4.99, $date));
         $heidelpay->getPaymentService()->fetchDirectDebitInstalmentPlans(12.23, 'EUR', 4.99, $date);
     }
+
+    //</editor-fold>
 
     //<editor-fold desc="DataProviders">
 
