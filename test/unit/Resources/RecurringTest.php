@@ -24,9 +24,12 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\Recurring;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
+use RuntimeException;
 
 class RecurringTest extends BasePaymentTest
 {
@@ -36,16 +39,19 @@ class RecurringTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
      */
     public function gettersAndSettersShouldWorkAsExpected()
     {
         $recurring = new Recurring('payment type id', $this::RETURN_URL);
+        $recurring->setPayment(new Payment());
         $this->assertEquals('payment type id', $recurring->getPaymentTypeId());
         $this->assertEquals($this::RETURN_URL, $recurring->getReturnUrl());
 
-        $recurring->setRedirectUrl('redirect url');
+        $recurring->handleResponse((object)['redirectUrl' => 'redirect url']);
         $this->assertEquals('redirect url', $recurring->getRedirectUrl());
-        $recurring->setRedirectUrl('different redirect url');
+        $recurring->handleResponse((object)['redirectUrl' => 'different redirect url']);
         $this->assertEquals('different redirect url', $recurring->getRedirectUrl());
 
         $recurring->setPaymentTypeId('another type id');

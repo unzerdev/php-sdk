@@ -101,7 +101,7 @@ class Recurring extends AbstractTransactionType
      *
      * @return Recurring
      */
-    public function setRedirectUrl(string $redirectUrl): Recurring
+    protected function setRedirectUrl(string $redirectUrl): Recurring
     {
         $this->redirectUrl = $redirectUrl;
         return $this;

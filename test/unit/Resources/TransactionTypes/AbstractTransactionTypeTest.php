@@ -71,7 +71,9 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $transactionType->setPayment($payment);
         $transactionType->setDate($date);
         $transactionType->setIsError(true)->setIsPending(true)->setIsSuccess(true);
-        $transactionType->getMessage()->setCode('1234')->setCustomer('This ist the customer message!');
+        $transactionType->getMessage()->handleResponse(
+            (object)['code' => '1234', 'customer' => 'This ist the customer message!']
+        );
 
         $this->assertSame($payment, $transactionType->getPayment());
         $this->assertEquals($date, $transactionType->getDate());

@@ -65,7 +65,7 @@ class PaymentTest extends BasePaymentTest
         /** @noinspection UnnecessaryAssertionInspection */
         $this->assertInstanceOf(Amount::class, $payment->getAmount());
 
-        $payment->setRedirectUrl('https://my-redirect-url.test');
+        $payment->handleResponse((object)['redirectUrl' => 'https://my-redirect-url.test']);
         $this->assertEquals('https://my-redirect-url.test', $payment->getRedirectUrl());
 
         $authorize = new Authorization();
@@ -643,7 +643,7 @@ class PaymentTest extends BasePaymentTest
         /** @var Amount $amountMock */
         $payment->setAmount($amountMock);
 
-        $payment->setCurrency('MyTestSetCurrency');
+        $amountMock->handleResponse((object) ['currency' => 'MyTestSetCurrency']);
         $this->assertEquals('MyTestGetCurrency', $payment->getCurrency());
     }
 
