@@ -452,12 +452,15 @@ class Paypage extends BasePaymentType
      * @param string $redirectUrl
      *
      * @return Paypage
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
      */
     public function setRedirectUrl(string $redirectUrl): Paypage
     {
         $payment = $this->getPayment();
         if ($payment instanceof Payment) {
-            $payment->setRedirectUrl($redirectUrl);
+            $payment->handleResponse((object)['redirectUrl' => $redirectUrl]);
         }
         return $this;
     }

@@ -255,13 +255,13 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @param string|null $paymentReference
+     * @param string|null $referenceText
      *
      * @return Charge
      */
-    public function setPaymentReference($paymentReference): Charge
+    public function setPaymentReference($referenceText): Charge
     {
-        $this->paymentReference = $paymentReference;
+        $this->paymentReference = $referenceText;
         return $this;
     }
 

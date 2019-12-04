@@ -168,7 +168,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         }
 
         if (isset($response->redirectUrl)) {
-            $payment->setRedirectUrl($response->redirectUrl);
+            $payment->handleResponse((object)['redirectUrl' => $response->redirectUrl]);
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {

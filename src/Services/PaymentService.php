@@ -108,7 +108,7 @@ class PaymentService implements PaymentServiceInterface
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $paymentReference = null
+        $referenceText = null
     ): Authorization {
         $payment = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
@@ -117,7 +117,7 @@ class PaymentService implements PaymentServiceInterface
         $authorization = (new Authorization($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
             ->setInvoiceId($invoiceId)
-            ->setPaymentReference($paymentReference)
+            ->setPaymentReference($referenceText)
             ->setSpecialParams($paymentType !== null ? $paymentType->getTransactionParams() : []);
         if ($card3ds !== null) {
             $authorization->setCard3ds($card3ds);

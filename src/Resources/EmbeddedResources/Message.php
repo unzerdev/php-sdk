@@ -49,7 +49,7 @@ class Message extends AbstractHeidelpayResource
      *
      * @return Message
      */
-    public function setCode(string $code): Message
+    protected function setCode(string $code): Message
     {
         $this->code = $code;
         return $this;
@@ -68,7 +68,7 @@ class Message extends AbstractHeidelpayResource
      *
      * @return Message
      */
-    public function setCustomer(string $customer): Message
+    protected function setCustomer(string $customer): Message
     {
         $this->customer = $customer;
         return $this;
