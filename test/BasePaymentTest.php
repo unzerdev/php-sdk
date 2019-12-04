@@ -241,8 +241,7 @@ class BasePaymentTest extends TestCase
     {
         $card          = $this->heidelpay->createPaymentType($this->createCardObject());
         $orderId       = microtime(true);
-        $authorization = $this->heidelpay->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
-        return $authorization;
+        return $this->heidelpay->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
     }
 
     /**

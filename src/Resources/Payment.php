@@ -107,11 +107,11 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Sets the redirectUrl via response from API.
      *
-     * @param string $redirectUrl
+     * @param string|null $redirectUrl
      *
      * @return Payment
      */
-    public function setRedirectUrl(string $redirectUrl): Payment
+    public function setRedirectUrl($redirectUrl): Payment
     {
         $this->redirectUrl = $redirectUrl;
         return $this;

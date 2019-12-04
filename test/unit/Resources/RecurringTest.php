@@ -48,7 +48,6 @@ class RecurringTest extends BasePaymentTest
         $recurring->setRedirectUrl('different redirect url');
         $this->assertEquals('different redirect url', $recurring->getRedirectUrl());
 
-
         $recurring->setPaymentTypeId('another type id');
         $this->assertEquals('another type id', $recurring->getPaymentTypeId());
 
