@@ -392,11 +392,11 @@ class ResourceService implements ResourceServiceInterface
     {
         $paymentObject = $payment;
         if (is_string($payment)) {
-            $paymentObject = new Payment($this->heidelpay);
+            $paymentObject = new Payment();
             $paymentObject->setId($payment);
         }
 
-        $this->fetchResource($paymentObject);
+        $this->fetchResource($paymentObject->setParentResource($this->heidelpay));
         return $paymentObject;
     }
 
@@ -446,11 +446,10 @@ class ResourceService implements ResourceServiceInterface
     {
         $metadataObject = $metadata;
         if (is_string($metadata)) {
-            $metadataObject = (new Metadata())->setParentResource($this->heidelpay);
-            $metadataObject->setId($metadata);
+            $metadataObject = (new Metadata())->setId($metadata);
         }
 
-        $this->fetchResource($metadataObject);
+        $this->fetchResource($metadataObject->setParentResource($this->heidelpay));
         return $metadataObject;
     }
 

@@ -39,7 +39,6 @@ use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Alipay;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
@@ -185,10 +184,8 @@ class ResourceServiceTest extends BasePaymentTest
      * @throws ReflectionException
      * @throws RuntimeException
      */
-    public function fetchResourceShouldFetchIfTheResourcesIdIsSetAndItHasNotBeenFetchedBefore(
-        $resource,
-        $timesFetchIsCalled
-    ) {
+    public function fetchResourceIfTheResourcesIdIsSetAndItHasNotBeenFetchedBefore($resource, $timesFetchIsCalled)
+    {
         /** @var ResourceService|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->exactly($timesFetchIsCalled))->method('fetchResource')->with($resource);
@@ -439,110 +436,38 @@ class ResourceServiceTest extends BasePaymentTest
         $this->assertNull($resourceSrvMock->fetchResourceByUrl('https://api.heidelpay.com/v1/types/card/s-unknown-xen2ybcovn56/'));
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Payment">
-
     /**
      * Verify fetchPayment method will fetch the passed payment object.
      *
      * @test
+     * @dataProvider fetchShouldCallFetchResourceDP
      *
-     * @throws HeidelpayApiException
+     * @param string $fetchMethod
+     * @param array  $arguments
+     * @param mixed  $callback
+     *
      * @throws ReflectionException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
      * @throws RuntimeException
      */
-    public function fetchPaymentShouldCallFetchWithTheGivenPaymentObject()
-    {
-        $payment = (new Payment())->setId('myPaymentId');
-
-        /** @var ResourceService|MockObject $resourceServiceMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($payment);
-
-        /** @var ResourceServiceInterface $resourceSrvMock */
-        $returnedPayment = $resourceSrvMock->fetchPayment($payment);
-        $this->assertSame($payment, $returnedPayment);
-    }
-
-    /**
-     * Verify fetchPayment method called with paymentId will create a payment object set its id and call fetch with it.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
-     */
-    public function fetchPaymentCalledWithIdShouldCreatePaymentObjectWithIdAndCallFetch()
+    public function fetchShouldCallFetchResource(string $fetchMethod, array $arguments, $callback)
     {
         $heidelpay = new Heidelpay('s-priv-1234');
 
         /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')
-            ->with($this->callback(static function ($payment) use ($heidelpay) {
-                return $payment instanceof Payment &&
-                $payment->getId() === 'testPaymentId' &&
-                $payment->getHeidelpayObject() === $heidelpay;
-            }));
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($this->callback(
+            static function ($resource) use ($callback, $heidelpay) {
+                /** @var AbstractHeidelpayResource $resource */
+                return $callback($resource) && $resource->getHeidelpayObject() === $heidelpay;
+            }
+        ));
 
-        /** @var ResourceServiceInterface $resourceSrvMock */
-        $resourceSrvMock->fetchPayment('testPaymentId');
-    }
-
-    /**
-     * Verify fetchPaymentByOrderId method will create a payment object set its orderId and call fetch with it.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
-     */
-    public function fetchPaymentByOrderIdShouldCreatePaymentObjectWithOrderIdAndCallFetch()
-    {
-        $heidelpay = new Heidelpay('s-priv-1234');
-
-        /** @var ResourceService|MockObject $resourceServiceMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')
-            ->with($this->callback(static function ($payment) use ($heidelpay) {
-                return $payment instanceof Payment &&
-                $payment->getOrderId() === 'myOrderId' &&
-                $payment->getHeidelpayObject() === $heidelpay;
-            }));
-
-        /** @var ResourceServiceInterface $resourceSrvMock */
-        $resourceSrvMock->fetchPaymentByOrderId('myOrderId');
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Keypair">
-
-    /**
-     * Verify fetchKeypair will call fetch with a Keypair object.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
-     */
-    public function fetchKeypairShouldCallFetchWithAKeypairObject()
-    {
-        $heidelpay = new Heidelpay('s-priv-1234');
-
-        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')
-            ->with($this->callback(static function ($keypair) use ($heidelpay) {
-                return $keypair instanceof Keypair && $keypair->getHeidelpayObject() === $heidelpay;
-            }));
-
-        /** @var ResourceServiceInterface $resourceSrvMock */
-        $resourceSrvMock->fetchKeypair();
+        /** @var AbstractHeidelpayResource $resource */
+        $resource = $resourceSrvMock->$fetchMethod(...$arguments);
+        $this->assertEquals($heidelpay, $resource->getParentResource());
+        $this->assertEquals($heidelpay, $resource->getHeidelpayObject());
     }
 
     //</editor-fold>
@@ -573,36 +498,6 @@ class ResourceServiceTest extends BasePaymentTest
         $returnedType = $resourceSrvMock->createPaymentType($paymentType);
 
         $this->assertSame($paymentType, $returnedType);
-    }
-
-    /**
-     * Verify fetchPaymentType method is creating the correct payment type instance depending on the passed id.
-     *
-     * @test
-     * @dataProvider paymentTypeAndIdProvider
-     *
-     * @param string $typeClass
-     * @param string $typeId
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
-     */
-    public function fetchPaymentTypeShouldFetchCorrectPaymentInstanceDependingOnId($typeClass, $typeId)
-    {
-        $heidelpay = new Heidelpay('s-priv-1234');
-
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')
-            ->with($this->callback(static function ($type) use ($heidelpay, $typeClass, $typeId) {
-                /** @var BasePaymentType $type */
-                return $type instanceof $typeClass &&
-                $type->getHeidelpayObject() === $heidelpay &&
-                $type->getId() === $typeId;
-            }));
-
-        /** @var ResourceServiceInterface $resourceSrvMock */
-        $resourceSrvMock->fetchPaymentType($typeId);
     }
 
     /**
@@ -788,33 +683,6 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify fetchCustomer will call fetch with a new Customer object if the customer is referenced by id.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
-     */
-    public function fetchCustomerShouldCallFetchWithNewCustomerObject()
-    {
-        $heidelpay = new Heidelpay('s-priv-123');
-
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')->with(
-            $this->callback(static function ($param) use ($heidelpay) {
-                return $param instanceof Customer &&
-                   $param->getId() === 'myCustomerId' &&
-                   $param->getHeidelpayObject() === $heidelpay;
-            }));
-
-        /** @var ResourceServiceInterface $resourceSrvMock */
-        $returnedCustomer = $resourceSrvMock->fetchCustomer('myCustomerId');
-        $this->assertEquals('myCustomerId', $returnedCustomer->getId());
-        $this->assertEquals($heidelpay, $returnedCustomer->getHeidelpayObject());
-    }
-
-    /**
      * Verify updateCustomer calls update with customer object.
      *
      * @test
@@ -906,6 +774,32 @@ class ResourceServiceTest extends BasePaymentTest
         $this->assertSame($authorize, $returnedAuthorize);
     }
 
+    /**
+     * Verify fetchAuthorization will throw runtime error if the given payment does not seem to have an authorization.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function fetchAuthorizationShouldThrowExceptionIfNoAuthorizationIsPresent()
+    {
+        /** @var MockObject|ResourceService $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPayment'])->getMock();
+
+        $payment = new Payment();
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->willReturn($payment);
+
+        $this->assertNull($payment->getAuthorization());
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The payment does not seem to have an Authorization.');
+
+        $resourceSrvMock->fetchAuthorization('paymentId');
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Payout">
@@ -961,6 +855,50 @@ class ResourceServiceTest extends BasePaymentTest
 
         $returnedCharge = $resourceSrvMock->fetchChargeById($paymentMock, 'chargeId');
         $this->assertSame($charge, $returnedCharge);
+    }
+
+    /**
+     * Verify fetchCharge fetches payment object and gets and returns the charge object from it.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchChargeShouldFetchPaymentAndReturnTheChargeOfThePayment()
+    {
+        /** @var ResourceService|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
+        $charge = (new Charge())->setId('chargeId');
+
+        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($charge)->willReturn($charge);
+
+        $this->assertSame($charge, $resourceSrvMock->fetchCharge($charge));
+    }
+
+    /**
+     * Verify fetchChargeById throws exception if the charge can not be found.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function fetchChargeByIdShouldThrowExceptionIfChargeDoesNotExist()
+    {
+        /** @var MockObject|Payment $paymentMock */
+        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCharge'])->getMock();
+        $paymentMock->expects($this->once())->method('getCharge')->with('chargeId')->willReturn(null);
+
+        /** @var MockObject|ResourceService $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment'])->disableOriginalConstructor()->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchPayment')->with($paymentMock)->willReturn($paymentMock);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The charge object could not be found.');
+        $resourceSrvMock->fetchChargeById($paymentMock, 'chargeId');
     }
 
     //</editor-fold>
@@ -1095,25 +1033,6 @@ class ResourceServiceTest extends BasePaymentTest
     //<editor-fold desc="Metadata">
 
     /**
-     * Verify fetchMetadata calls fetch with the given metadata object.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
-     */
-    public function fetchMetadataShouldCallFetchWithTheGivenMetadataObject()
-    {
-        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
-        $metadata = (new Metadata())->setId('myMetadataId');
-        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($metadata);
-
-        $this->assertSame($metadata, $resourceSrvMock->fetchMetadata($metadata));
-    }
-
-    /**
      * Verify createMetadata calls create with the given metadata object.
      *
      * @test
@@ -1130,27 +1049,6 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceSrvMock->expects($this->once())->method('createResource')->with($metadata);
 
         $this->assertSame($metadata, $resourceSrvMock->createMetadata($metadata));
-    }
-
-    /**
-     * Verify fetchMetadata calls fetch with a new metadata object with the given id.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
-     */
-    public function fetchMetadataShouldCallFetchWithANewMetadataObjectWithTheGivenId()
-    {
-        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->disableOriginalConstructor()->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')->with(
-            $this->callback(static function ($metadata) {
-                return $metadata instanceof Metadata && $metadata->getId() === 's-mtd-1234';
-            }));
-
-        $resourceSrvMock->fetchMetadata('s-mtd-1234');
     }
 
     //</editor-fold>
@@ -1183,57 +1081,6 @@ class ResourceServiceTest extends BasePaymentTest
 
         $this->assertSame($basket, $resourceSrvMock->createBasket($basket));
         $this->assertSame($heidelpay, $basket->getParentResource());
-    }
-
-    /**
-     * Verify fetchBasket will create basket obj and call fetch with it if the id is given.
-     *
-     * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
-     */
-    public function fetchBasketShouldCreateBasketObjectWithGivenIdAndCallFetchWithIt()
-    {
-        $heidelpay = new Heidelpay('s-priv-123');
-        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['fetchResource'])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')->with(
-            $this->callback(static function ($basket) use ($heidelpay) {
-                /** @var Basket $basket */
-                return $basket->getId() === 'myBasketId' && $basket->getParentResource() === $heidelpay;
-            }));
-
-        $basket = $resourceSrvMock->fetchBasket('myBasketId');
-
-        $this->assertEquals('myBasketId', $basket->getId());
-        $this->assertEquals($heidelpay, $basket->getParentResource());
-        $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
-    }
-
-    /**
-     * Verify fetchBasket will call fetch with the given basket obj.
-     *
-     * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
-     */
-    public function fetchBasketShouldCallFetchWithTheGivenBasketObject()
-    {
-        $heidelpay = new Heidelpay('s-priv-123');
-        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['fetchResource'])->getMock();
-        $basket = new Basket();
-        $resourceSrvMock->expects($this->once())->method('fetchResource')->with($basket);
-
-        $returnedBasket = $resourceSrvMock->fetchBasket($basket);
-
-        $this->assertSame($basket, $returnedBasket);
-        $this->assertEquals($heidelpay, $basket->getParentResource());
-        $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
     }
 
     /**
@@ -1382,50 +1229,6 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
-     * Data provider for fetchPaymentTypeShouldCreateCorrectPaymentInstanceDependingOnId.
-     *
-     * @return array
-     */
-    public function paymentTypeAndIdProvider(): array
-    {
-        return [
-            'Card sandbox' => [Card::class, 's-crd-12345678'],
-            'Giropay sandbox' => [Giropay::class, 's-gro-12345678'],
-            'Ideal sandbox' => [Ideal::class, 's-idl-12345678'],
-            'Invoice sandbox' => [Invoice::class, 's-ivc-12345678'],
-            'InvoiceGuaranteed sandbox' => [InvoiceGuaranteed::class, 's-ivg-12345678'],
-            'Paypal sandbox' => [Paypal::class, 's-ppl-12345678'],
-            'Prepayment sandbox' => [Prepayment::class, 's-ppy-12345678'],
-            'Przelewy24 sandbox' => [Przelewy24::class, 's-p24-12345678'],
-            'SepaDirectDebit sandbox' => [SepaDirectDebit::class, 's-sdd-12345678'],
-            'SepaDirectDebitGuaranteed sandbox' => [SepaDirectDebitGuaranteed::class, 's-ddg-12345678'],
-            'Sofort sandbox' => [Sofort::class, 's-sft-12345678'],
-            'PIS sandbox' => [PIS::class, 's-pis-12345678'],
-            'EPS sandbox' => [EPS::class, 's-eps-12345678'],
-            'Alipay sandbox' => [Alipay::class, 's-ali-12345678'],
-            'Wechatpay sandbox' => [Wechatpay::class, 's-wcp-12345678'],
-            'Invoice factoring sandbox' => [InvoiceFactoring::class, 's-ivf-12345678'],
-            'HirePurchaseDirectDebit sandbox' => [HirePurchaseDirectDebit::class, 's-hdd-12345678'],
-            'Card production' => [Card::class, 'p-crd-12345678'],
-            'Giropay production' => [Giropay::class, 'p-gro-12345678'],
-            'Ideal production' => [Ideal::class, 'p-idl-12345678'],
-            'Invoice production' => [Invoice::class, 'p-ivc-12345678'],
-            'InvoiceGuaranteed production' => [InvoiceGuaranteed::class, 'p-ivg-12345678'],
-            'Paypal production' => [Paypal::class, 'p-ppl-12345678'],
-            'Prepayment production' => [Prepayment::class, 'p-ppy-12345678'],
-            'Przelewy24 production' => [Przelewy24::class, 'p-p24-12345678'],
-            'SepaDirectDebit production' => [SepaDirectDebit::class, 'p-sdd-12345678'],
-            'SepaDirectDebitGuaranteed production' => [SepaDirectDebitGuaranteed::class, 'p-ddg-12345678'],
-            'Sofort production' => [Sofort::class, 'p-sft-12345678'],
-            'EPS production' => [EPS::class, 'p-eps-12345678'],
-            'Alipay production' => [Alipay::class, 'p-ali-12345678'],
-            'Wechatpay production' => [Wechatpay::class, 'p-wcp-12345678'],
-            'Invoice factoring production' => [InvoiceFactoring::class, 'p-ivf-12345678'],
-            'HirePurchaseDirectDebit production' => [HirePurchaseDirectDebit::class, 'p-hdd-12345678']
-        ];
-    }
-
-    /**
      * Data provider for fetchPaymentTypeShouldThrowExceptionOnInvalidTypeId.
      *
      * @return array
@@ -1503,6 +1306,83 @@ class ResourceServiceTest extends BasePaymentTest
             HttpAdapterInterface::REQUEST_POST   => [HttpAdapterInterface::REQUEST_POST, '/my/post/uri', false],
             HttpAdapterInterface::REQUEST_PUT    => [HttpAdapterInterface::REQUEST_PUT, '/my/put/uri', true],
             HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, '/my/delete/uri', true],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function fetchShouldCallFetchResourceDP(): array
+    {
+        $fetchPaymentCB          = static function ($payment) {
+            return $payment instanceof Payment && $payment->getId() === 'myPaymentId';
+        };
+        $fetchPaymentByOrderIdCB = static function ($payment) {
+            return $payment instanceof Payment && $payment->getOrderId() === 'myOrderId';
+        };
+        $fetchKeypairCB          = static function ($keypair) {
+            return $keypair instanceof Keypair;
+        };
+        $fetchCustomerCB         = static function ($customer) {
+            return $customer instanceof Customer && $customer->getId() === 'myCustomerId';
+        };
+        $fetchMetadataCB         = static function ($metadata) {
+            return $metadata instanceof Metadata && $metadata->getId() === 's-mtd-1234';
+        };
+        $fetchBasketCB         = static function ($basket) {
+            return $basket instanceof Basket && $basket->getId() === 'myBasketId';
+        };
+
+        // generate the asserting callback function for PaymentType fetch
+        $getPaymentTypeCB = static function ($typeClass) {
+            return static function ($type) use ($typeClass) {
+                return $type instanceof $typeClass;
+            };
+        };
+
+        return [
+            'fetchPayment' => ['fetchPayment', [(new Payment())->setId('myPaymentId')], $fetchPaymentCB],
+            'fetchPayment by id' => ['fetchPayment', ['myPaymentId'], $fetchPaymentCB],
+            'fetchPayment by orderId' => ['fetchPaymentByOrderId', ['myOrderId'], $fetchPaymentByOrderIdCB],
+            'fetchKeypair' => ['fetchKeypair', [], $fetchKeypairCB],
+            'fetchCustomer' => ['fetchCustomer', ['myCustomerId'], $fetchCustomerCB],
+            'fetchMetadata by obj' => ['fetchMetadata', [(new Metadata())->setId('s-mtd-1234')], $fetchMetadataCB],
+            'fetchMetadata by id' => ['fetchMetadata', ['s-mtd-1234'], $fetchMetadataCB],
+            'fetchBasket by id' => ['fetchBasket', ['myBasketId'], $fetchBasketCB],
+            'fetchBasket by obj' => ['fetchBasket', [(new Basket())->setId('myBasketId')], $fetchBasketCB],
+            'PaymentType Card sandbox' => ['fetchPaymentType', ['s-crd-12345678'], $getPaymentTypeCB(Card::class)],
+            'PaymentType Giropay sandbox' => ['fetchPaymentType', ['s-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
+            'PaymentType Ideal sandbox' => ['fetchPaymentType', ['s-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
+            'PaymentType Invoice sandbox' => ['fetchPaymentType', ['s-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
+            'PaymentType InvoiceGuaranteed sandbox' => ['fetchPaymentType', ['s-ivg-12345678'], $getPaymentTypeCB(InvoiceGuaranteed::class)],
+            'PaymentType Paypal sandbox' => ['fetchPaymentType', ['s-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
+            'PaymentType Prepayment sandbox' => ['fetchPaymentType', ['s-ppy-12345678'], $getPaymentTypeCB(Prepayment::class)],
+            'PaymentType Przelewy24 sandbox' => ['fetchPaymentType', ['s-p24-12345678'], $getPaymentTypeCB(Przelewy24::class)],
+            'PaymentType SepaDirectDebit sandbox' => ['fetchPaymentType', ['s-sdd-12345678'], $getPaymentTypeCB(SepaDirectDebit::class)],
+            'PaymentType SepaDirectDebitGuaranteed sandbox' => ['fetchPaymentType', ['s-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitGuaranteed::class)],
+            'PaymentType Sofort sandbox' => ['fetchPaymentType', ['s-sft-12345678'], $getPaymentTypeCB(Sofort::class)],
+            'PaymentType PIS sandbox' => ['fetchPaymentType', ['s-pis-12345678'], $getPaymentTypeCB(PIS::class)],
+            'PaymentType EPS sandbox' => ['fetchPaymentType', ['s-eps-12345678'], $getPaymentTypeCB(EPS::class)],
+            'PaymentType Alipay sandbox' => ['fetchPaymentType', ['s-ali-12345678'], $getPaymentTypeCB(Alipay::class)],
+            'PaymentType Wechatpay sandbox' => ['fetchPaymentType', ['s-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
+            'PaymentType Invoice factoring sandbox' => ['fetchPaymentType', ['s-ivf-12345678'], $getPaymentTypeCB(InvoiceFactoring::class)],
+            'PaymentType HirePurchaseDirectDebit sandbox' => ['fetchPaymentType', ['s-hdd-12345678'], $getPaymentTypeCB(HirePurchaseDirectDebit::class)],
+            'PaymentType Card production' => ['fetchPaymentType', ['p-crd-12345678'], $getPaymentTypeCB(Card::class)],
+            'PaymentType Giropay production' => ['fetchPaymentType', ['p-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
+            'PaymentType Ideal production' => ['fetchPaymentType', ['p-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
+            'PaymentType Invoice production' => ['fetchPaymentType', ['p-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
+            'PaymentType InvoiceGuaranteed production' => ['fetchPaymentType', ['p-ivg-12345678'], $getPaymentTypeCB(InvoiceGuaranteed::class)],
+            'PaymentType Paypal production' => ['fetchPaymentType', ['p-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
+            'PaymentType Prepayment production' => ['fetchPaymentType', ['p-ppy-12345678'], $getPaymentTypeCB(Prepayment::class)],
+            'PaymentType Przelewy24 production' => ['fetchPaymentType', ['p-p24-12345678'], $getPaymentTypeCB(Przelewy24::class)],
+            'PaymentType SepaDirectDebit production' => ['fetchPaymentType', ['p-sdd-12345678'], $getPaymentTypeCB(SepaDirectDebit::class)],
+            'PaymentType SepaDirectDebitGuaranteed production' => ['fetchPaymentType', ['p-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitGuaranteed::class)],
+            'PaymentType Sofort production' => ['fetchPaymentType', ['p-sft-12345678'], $getPaymentTypeCB(Sofort::class)],
+            'PaymentType EPS production' => ['fetchPaymentType', ['p-eps-12345678'], $getPaymentTypeCB(EPS::class)],
+            'PaymentType Alipay production' => ['fetchPaymentType', ['p-ali-12345678'], $getPaymentTypeCB(Alipay::class)],
+            'PaymentType Wechatpay production' => ['fetchPaymentType', ['p-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
+            'PaymentType Invoice factoring production' => ['fetchPaymentType', ['p-ivf-12345678'], $getPaymentTypeCB(InvoiceFactoring::class)],
+            'PaymentType HirePurchaseDirectDebit production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(HirePurchaseDirectDebit::class)]
         ];
     }
 
