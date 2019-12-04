@@ -172,7 +172,6 @@ class CancelService implements CancelServiceInterface
         float $amountNet = null,
         float $amountVat = null
     ): array {
-        $charges           = $payment->getCharges();
         $remainingToCancel = $amount;
 
         $cancelWholePayment = $remainingToCancel === null;
@@ -195,42 +194,16 @@ class CancelService implements CancelServiceInterface
             return $cancellations;
         }
 
-        /** @var Charge $charge */
-        foreach ($charges as $charge) {
-            $cancelAmount = null;
-            if (!$cancelWholePayment && $remainingToCancel <= $charge->getTotalAmount()) {
-                $cancelAmount = $remainingToCancel;
-            }
+        $chargeCancels = $this->cancelPaymentCharges(
+            $payment,
+            $reasonCode,
+            $referenceText,
+            $amountNet,
+            $amountVat,
+            $remainingToCancel
+        );
 
-            try {
-                $cancellation = $charge->cancel($cancelAmount, $reasonCode, $referenceText, $amountNet, $amountVat);
-            } catch (HeidelpayApiException $e) {
-                $allowedErrors = [
-                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK
-                ];
-
-                if (!in_array($e->getCode(), $allowedErrors, true)) {
-                    throw $e;
-                }
-                continue;
-            }
-
-            if ($cancellation instanceof Cancellation) {
-                $cancellations[] = $cancellation;
-                if (!$cancelWholePayment) {
-                    $remainingToCancel -= $cancellation->getAmount();
-                }
-                $cancellation = null;
-            }
-
-            if (!$cancelWholePayment && $remainingToCancel <= 0) {
-                break;
-            }
-        }
-
-        return $cancellations;
+        return array_merge($cancellations, $chargeCancels);
     }
 
     /**
@@ -280,5 +253,67 @@ class CancelService implements CancelServiceInterface
         }
 
         return $cancellation;
+    }
+
+    /**
+     * @param Payment $payment
+     * @param string  $reasonCode
+     * @param string  $referenceText
+     * @param float   $amountNet
+     * @param float   $amountVat
+     * @param float   $remainingToCancel
+     *
+     * @return array
+     *
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function cancelPaymentCharges(
+        Payment $payment,
+        $reasonCode,
+        $referenceText,
+        $amountNet,
+        $amountVat,
+        float $remainingToCancel = null
+    ): array {
+        $cancellations = [];
+        $cancelWholePayment = $remainingToCancel === null;
+
+        /** @var Charge $charge */
+        foreach ($payment->getCharges() as $charge) {
+            $cancelAmount = null;
+            if (!$cancelWholePayment && $remainingToCancel <= $charge->getTotalAmount()) {
+                $cancelAmount = $remainingToCancel;
+            }
+
+            try {
+                $cancellation = $charge->cancel($cancelAmount, $reasonCode, $referenceText, $amountNet, $amountVat);
+            } catch (HeidelpayApiException $e) {
+                $allowedErrors = [
+                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
+                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK
+                ];
+
+                if (!in_array($e->getCode(), $allowedErrors, true)) {
+                    throw $e;
+                }
+                continue;
+            }
+
+            if ($cancellation instanceof Cancellation) {
+                $cancellations[] = $cancellation;
+                if (!$cancelWholePayment) {
+                    $remainingToCancel -= $cancellation->getAmount();
+                }
+                $cancellation = null;
+            }
+
+            // stop if the amount has already been cancelled
+            if (!$cancelWholePayment && $remainingToCancel <= 0) {
+                break;
+            }
+        }
+        return $cancellations;
     }
 }

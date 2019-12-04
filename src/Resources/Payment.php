@@ -475,8 +475,7 @@ class Payment extends AbstractHeidelpayResource
         }
 
         $authorization = $this->getAuthorization(true);
-        $cancellations = array_merge($authorization ? $authorization->getCancellations() : [], ...$refunds);
-        return $cancellations;
+        return array_merge($authorization ? $authorization->getCancellations() : [], ...$refunds);
     }
 
     /**
