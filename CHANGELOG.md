@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Refactor heidelpay facade to implement service interfaces.
 *   Move payment cancel methods to cancel service. 
 *   Cleanup doc comments.
+*   Refactor unit tests.
+
+### Remove
+*   Removed deprecated code.
 
 ## [1.2.5.1][1.2.5.1]
 
