@@ -161,14 +161,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * @return array
-     */
-    protected function getAdditionalAttributes(): array
-    {
-        return $this->additionalAttributes;
-    }
-
-    /**
      * @param array $additionalAttributes
      *
      * @return AbstractHeidelpayResource
