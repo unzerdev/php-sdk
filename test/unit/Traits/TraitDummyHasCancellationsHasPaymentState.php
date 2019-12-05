@@ -24,10 +24,11 @@
  */
 namespace heidelpayPHP\test\unit\Traits;
 
+use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Traits\HasCancellations;
 use heidelpayPHP\Traits\HasPaymentState;
 
-class TraitDummyHasCancellationsHasPaymentState
+class TraitDummyHasCancellationsHasPaymentState extends AbstractHeidelpayResource
 {
     use HasCancellations;
     use HasPaymentState;

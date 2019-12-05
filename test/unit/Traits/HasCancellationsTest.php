@@ -59,7 +59,7 @@ class HasCancellationsTest extends BasePaymentTest
         $this->assertArraySubset([$cancellation1, $cancellation2, $cancellation3], $dummy->getCancellations());
 
         // assert getCancellation
-        $this->assertSame($cancellation3, $dummy->getCancellation('3'));
+        $this->assertSame($cancellation3, $dummy->getCancellation('3', true));
 
         // assert setCancellations
         $cancellation4 = (new Cancellation())->setId('4');
