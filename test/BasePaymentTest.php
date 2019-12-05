@@ -257,8 +257,7 @@ class BasePaymentTest extends TestCase
         /** @var Paypal $paypal */
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
         $orderId = microtime(true);
-        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
-        return $authorization;
+        return $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
     }
 
     /**

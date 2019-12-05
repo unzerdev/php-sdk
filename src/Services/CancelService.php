@@ -34,6 +34,7 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use RuntimeException;
+use function in_array;
 
 class CancelService implements CancelServiceInterface
 {
