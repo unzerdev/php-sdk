@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Move payment cancel methods to cancel service. 
 *   Cleanup doc comments.
 *   Refactor unit tests.
+*   Refactor access modifiers of setters intended for system access only.
 
 ### Remove
 *   Removed deprecated code.
