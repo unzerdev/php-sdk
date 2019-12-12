@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   A bug which led to an error when trying to cancel the initial transaction of a charged invoice.
 *   Several minor issues.
 
+### Changed
+*   Refactor travis config.
+
 ## [1.2.5.0][1.2.5.0]
 
 ### Added

@@ -13,6 +13,11 @@ matrix:
       env:
         - DEPS=HIGH
         - LEVEL=UNIT
+    - name: "php 7.0 (update) - integration"
+      php: 7.0
+      env:
+        - DEPS=HIGH
+        - LEVEL=INTEGRATION
     - name: "php 7.1 (install) - unit"
       php: 7.1
       env:
@@ -43,11 +48,6 @@ matrix:
       env:
         - DEPS=HIGH
         - LEVEL=UNIT
-    - name: "php 7.3 (install) - integration"
-      php: 7.3
-      env:
-        - DEPS=HIGH
-        - LEVEL=INTEGRATION
 cache:
   directories:
     - $HOME/.composer/cache
