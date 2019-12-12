@@ -7,10 +7,10 @@ PHPVER=$(phpenv version-name)
 INSTALL_COMMAND="composer install --no-interaction --prefer-dist"
 UPDATE_COMMAND="composer update --no-interaction --prefer-source"
 
-if [ "$deps" == "no" ]; then
+if [ "$DEPS" == "NO" ]; then
     ${INSTALL_COMMAND}
 fi
 
-if [ "$deps" == "high" ]; then
+if [ "$DEPS" == "HIGH" ]; then
     ${UPDATE_COMMAND}
 fi
