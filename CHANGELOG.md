@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Example for Payment Type `Przelewy24`.
 
 ### Fixed
+*   A bug which led to an error when trying to cancel the initial transaction of a charged invoice.
 *   Several minor issues.
 
 ## [1.2.5.0][1.2.5.0]
