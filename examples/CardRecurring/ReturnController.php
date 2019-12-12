@@ -66,7 +66,7 @@ try {
     $paymentType = $heidelpay->fetchPaymentType($paymentTypeId);
 
     if ($paymentType->isRecurring()) {
-            redirect(SUCCESS_URL);
+        redirect(SUCCESS_URL);
     }
 
 } catch (HeidelpayApiException $e) {
