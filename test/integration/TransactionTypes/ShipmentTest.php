@@ -41,14 +41,10 @@ class ShipmentTest extends BasePaymentTest
      */
     public function shipmentShouldBeCreatableAndFetchable()
     {
-        $invoiceGuaranteed = new InvoiceGuaranteed();
-        $charge = $this->heidelpay->charge(
-            100.0,
-            'EUR',
-            $invoiceGuaranteed,
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
+        $ivg      = new InvoiceGuaranteed();
+        $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+
+        $charge   = $this->heidelpay->charge(100.0, 'EUR', $ivg, self::RETURN_URL, $customer);
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge);
 
@@ -72,13 +68,8 @@ class ShipmentTest extends BasePaymentTest
     public function shipmentCanBeCalledOnThePaymentObject()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $charge = $this->heidelpay->charge(
-            100.0,
-            'EUR',
-            $invoiceGuaranteed,
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
+        $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
 
         $payment  = $charge->getPayment();
         $shipment = $payment->ship(self::generateRandomId(), self::generateRandomId());
@@ -103,13 +94,8 @@ class ShipmentTest extends BasePaymentTest
     public function shipmentShouldBePossibleWithPaymentObject()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $charge = $this->heidelpay->charge(
-            100.0,
-            'EUR',
-            $invoiceGuaranteed,
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
+        $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
 
         $payment  = $charge->getPayment();
         $shipment = $this->heidelpay->ship($payment, self::generateRandomId(), self::generateRandomId());
@@ -128,13 +114,8 @@ class ShipmentTest extends BasePaymentTest
     public function shipmentStatusIsSetCorrectly()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $charge = $this->heidelpay->charge(
-            100.0,
-            'EUR',
-            $invoiceGuaranteed,
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
+        $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
 
         $payment  = $charge->getPayment();
         $shipment = $this->heidelpay->ship($payment, self::generateRandomId(), self::generateRandomId());
