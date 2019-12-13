@@ -49,7 +49,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function webhookResourceCanBeRegisteredAndFetched($event)
     {
@@ -115,7 +115,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function webhookResourceShouldBeDeletable()
     {
@@ -137,7 +137,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function webhookCreateShouldThrowErrorWhenEventIsAlreadyRegistered()
     {
@@ -160,7 +160,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchWebhooksShouldReturnArrayOfRegisteredWebhooks()
     {
@@ -196,7 +196,7 @@ class WebhookTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function allWebhooksShouldBeRemovableAtOnce()
     {
@@ -217,7 +217,7 @@ class WebhookTest extends BasePaymentTest
      * @depends allWebhooksShouldBeRemovableAtOnce
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function bulkSettingWebhookEventsShouldBePossible()
     {
@@ -247,7 +247,7 @@ class WebhookTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function bulkSettingOnlyOneWebhookShouldBePossible()
     {

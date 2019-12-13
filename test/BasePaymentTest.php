@@ -178,7 +178,7 @@ class BasePaymentTest extends TestCase
      * @return Basket
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createBasket(): Basket
     {
@@ -235,7 +235,7 @@ class BasePaymentTest extends TestCase
      * @return Authorization
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createCardAuthorization($amount = 100.0): Authorization
     {
@@ -270,7 +270,7 @@ class BasePaymentTest extends TestCase
      * @return Charge
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createCharge($amount = 100.0): Charge
     {

@@ -1224,7 +1224,7 @@ class ResourceServiceTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws ReflectionException
      */
     public function fetchResourceByUrlShouldFetchTheDesiredResource(
@@ -1254,7 +1254,7 @@ class ResourceServiceTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws ReflectionException
      */
     public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentType($paymentTypeId, $resourceUrl)
@@ -1275,7 +1275,7 @@ class ResourceServiceTest extends BasePaymentTest
      *
      * @throws Exception
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws ReflectionException
      */
     public function fetchResourceByUrlForAPaymentTypeShouldReturnNullIfTheTypeIsUnknown()
@@ -1353,7 +1353,7 @@ class ResourceServiceTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException        A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException             A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException             A RuntimeException is thrown when there is an error while using the SDK.
      * @throws \PHPUnit\Framework\Exception
      */
     public function createRecurringShouldThrowExceptionWhenRecurringPaymentIsNotSupportedByType()
