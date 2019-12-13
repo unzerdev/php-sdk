@@ -43,6 +43,7 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\Recurring;
+use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -938,18 +939,18 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * Performs an Authorization transaction using a Payment object and returns the resulting Authorization resource.
      *
-     * @param float $amount The amount to authorize.
-     * @param string $currency The currency of the amount.
-     * @param Payment $payment The Payment object to create the Authorization for.
-     * @param string $returnUrl The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null $customer The Customer object or the id of the customer resource to reference.
-     * @param string|null $orderId A custom order id which can be set by the merchant.
-     * @param Metadata|null $metadata The Metadata object containing custom information for the payment.
-     * @param Basket|null $basket The Basket object corresponding to the payment.
+     * @param float                $amount    The amount to authorize.
+     * @param string               $currency  The currency of the amount.
+     * @param Payment              $payment   The Payment object to create the Authorization for.
+     * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null $customer  The Customer object or the id of the customer resource to reference.
+     * @param string|null          $orderId   A custom order id which can be set by the merchant.
+     * @param Metadata|null        $metadata  The Metadata object containing custom information for the payment.
+     * @param Basket|null          $basket    The Basket object corresponding to the payment.
      *                                        The Basket object will be created automatically if it does not exist
      *                                        yet (i.e. has no id).
      *
-     * @return Authorization The resulting object of the Authorization resource.
+     * @return AbstractTransactionType The resulting object of the Authorization resource.
      *
      * @deprecated since 1.2.6.0
      */
