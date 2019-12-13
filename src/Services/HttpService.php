@@ -162,7 +162,6 @@ class HttpService
             'SDK-VERSION'   => Heidelpay::SDK_VERSION,
             'SDK-TYPE'   => Heidelpay::SDK_TYPE
         ];
-        /** @noinspection IsEmptyFunctionUsageInspection */
         if (!empty($locale)) {
             $httpHeaders['Accept-Language'] = $locale;
         }
