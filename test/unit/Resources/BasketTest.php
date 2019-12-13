@@ -168,4 +168,23 @@ class BasketTest extends BasePaymentTest
         $this->assertEquals('0', $basketItem3->getBasketItemReferenceId());
         $this->assertEquals('1', $basketItem4->getBasketItemReferenceId());
     }
+
+    /**
+     * Verify amount total is replaced by amount total gross.
+     *
+     * @test
+     *
+     * @throws Exception
+     *
+     * @deprecated since 1.2.6.0
+     */
+    public function amountTotalSetterGetterAccessAmountTotalGross()
+    {
+        $basket = new Basket();
+        $this->assertEquals($basket->getAmountTotalGross(), $basket->getAmountTotal());
+        $basket->setAmountTotalGross(123.45);
+        $this->assertEquals($basket->getAmountTotalGross(), $basket->getAmountTotal());
+        $basket->setAmountTotal(45.321);
+        $this->assertEquals($basket->getAmountTotalGross(), $basket->getAmountTotal());
+    }
 }

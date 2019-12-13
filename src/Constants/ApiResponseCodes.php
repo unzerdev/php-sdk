@@ -45,7 +45,17 @@ class ApiResponseCodes
     const API_ERROR_IVF_REQUIRES_BASKET                         = 'API.330.100.023';
     const API_ERROR_ADDRESSES_DO_NOT_MATCH                      = 'API.330.100.106';
     const API_ERROR_CURRENCY_IS_NOT_SUPPORTED                   = 'API.330.100.202';
+    /**
+     * @deprecated since 1.2.3.0
+     * @see ApiResponseCodes::API_ERROR_ALREADY_CANCELLED
+     */
+    const API_ERROR_AUTHORIZE_ALREADY_CANCELLED                 = 'API.340.100.014';
     const API_ERROR_ALREADY_CANCELLED                           = 'API.340.100.014';
+    /**
+     * @deprecated since 1.2.3.0
+     * @see ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK
+     */
+    const API_ERROR_CHARGE_ALREADY_CHARGED_BACK                 = 'API.340.100.015';
     const API_ERROR_ALREADY_CHARGED_BACK                        = 'API.340.100.015';
     const API_ERROR_ALREADY_CHARGED                             = 'API.340.100.018';
     const API_ERROR_CANCEL_REASON_CODE_IS_MISSING               = 'API.340.100.024';
@@ -58,6 +68,10 @@ class ApiResponseCodes
     const API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED            = 'API.510.310.009';
     const API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND                    = 'API.510.310.008';
     const API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL               = 'API.600.630.004';
+    /**
+     * @deprecated since 1.2.5.0 Will be removed in next major version.
+     */
+    const API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION         = 'API.600.630.005';
     const API_ERROR_INVALID_KEY                                 = 'API.710.000.002';
     const API_ERROR_INSUFFICIENT_PERMISSION                     = 'API.710.000.005';
     const API_ERROR_WRONG_AUTHENTICATION_METHOD                 = 'API.710.000.007';
