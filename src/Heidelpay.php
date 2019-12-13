@@ -27,6 +27,7 @@ namespace heidelpayPHP;
 
 use DateTime;
 use heidelpayPHP\Constants\CancelReasonCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Interfaces\CancelServiceInterface;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
