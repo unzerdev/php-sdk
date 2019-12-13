@@ -639,7 +639,7 @@ class Payment extends AbstractHeidelpayResource
      *                           If more then one cancellation is performed the last one will be returned.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.3.0
      * @see Payment::cancelAmount()
