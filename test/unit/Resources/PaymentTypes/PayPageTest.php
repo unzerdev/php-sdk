@@ -150,8 +150,8 @@ class PayPageTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function responseHandlingShouldWorkProperly()
     {
@@ -228,8 +228,8 @@ class PayPageTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paymentObjectShouldBeUpdatedProperly()
     {
@@ -263,8 +263,8 @@ class PayPageTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function responseHandlingShouldMapSpecialFieldsProperly()
     {
@@ -290,8 +290,8 @@ class PayPageTest extends BasePaymentTest
      * @param mixed  $fetchCallCount
      *
      *@throws ReflectionException
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paymentShouldBeFetchedWhenItIsNoGetRequest($method, $fetchCallCount)
     {
