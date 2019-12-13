@@ -345,7 +345,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return AbstractHeidelpayResource The updated resource object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.6.0
      */
@@ -362,7 +362,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return AbstractHeidelpayResource The updated resource object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.6.0
      */
@@ -382,7 +382,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return mixed
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function activateRecurringPayment($paymentType, $returnUrl): Recurring
     {
@@ -401,7 +401,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Payment Returns the updated payment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchPayment($payment): Payment
     {
@@ -416,7 +416,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Payment Returns the updated payment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchPaymentByOrderId($orderId): Payment
     {
@@ -435,7 +435,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Keypair The Keypair object composed of the data returned by the API.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchKeypair($detailed = false): Keypair
     {
@@ -454,7 +454,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Metadata The fetched Metadata resource.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createMetadata(Metadata $metadata): Metadata
     {
@@ -469,7 +469,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Metadata The fetched Metadata resource.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchMetadata($metadata): Metadata
     {
@@ -488,7 +488,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Basket The created Basket object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createBasket(Basket $basket): Basket
     {
@@ -503,7 +503,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Basket The fetched Basket object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchBasket($basket): Basket
     {
@@ -518,7 +518,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Basket The updated Basket object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function updateBasket(Basket $basket): Basket
     {
@@ -539,7 +539,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return BasePaymentType|AbstractHeidelpayResource The created and updated PaymentType object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createPaymentType(BasePaymentType $paymentType): BasePaymentType
     {
@@ -554,7 +554,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return BasePaymentType|AbstractHeidelpayResource The updated PaymentType object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
     {
@@ -569,7 +569,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return BasePaymentType|AbstractHeidelpayResource The fetched PaymentType object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchPaymentType($typeId): BasePaymentType
     {
@@ -588,7 +588,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Customer The created and updated Customer object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createCustomer(Customer $customer): Customer
     {
@@ -603,7 +603,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Customer The created and updated Customer object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createOrUpdateCustomer(Customer $customer): Customer
     {
@@ -620,7 +620,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Customer The retrieved/updated Customer object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchCustomer($customer): Customer
     {
@@ -635,7 +635,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Customer The retrieved Customer object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchCustomerByExtCustomerId($customerId): Customer
     {
@@ -650,7 +650,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Customer The updated Customer object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function updateCustomer(Customer $customer): Customer
     {
@@ -664,7 +664,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @param Customer|string $customer Either the Customer object or the id of the Customer resource.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function deleteCustomer($customer)
     {
@@ -685,7 +685,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Authorization The Authorization object of the given Payment.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchAuthorization($payment): Authorization
     {
@@ -706,7 +706,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Charge The retrieved Charge object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchChargeById($paymentId, $chargeId): Charge
     {
@@ -721,7 +721,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Charge
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchCharge(Charge $charge): Charge
     {
@@ -741,7 +741,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Cancellation The retrieved Cancellation object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchReversalByAuthorization($authorization, $cancellationId): Cancellation
     {
@@ -757,7 +757,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Cancellation The cancellation object retrieved from the API.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchReversal($payment, $cancellationId): Cancellation
     {
@@ -774,7 +774,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Cancellation The retrieved Cancellation resource.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchRefundById($payment, $chargeId, $cancellationId): Cancellation
     {
@@ -790,7 +790,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Cancellation The retrieved Cancellation object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchRefund(Charge $charge, $cancellationId): Cancellation
     {
@@ -810,7 +810,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return Shipment The retrieved Shipment object.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchShipment($payment, $shipmentId): Shipment
     {

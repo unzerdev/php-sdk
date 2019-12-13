@@ -39,7 +39,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly()
     {
@@ -62,7 +62,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @return SepaDirectDebitGuaranteed
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
@@ -87,7 +87,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
     public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitGuaranteed $directDebitGuaranteed)
@@ -104,7 +104,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function directDebitGuaranteedShouldAllowCharge()
     {
@@ -122,7 +122,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function ddgShouldThrowErrorIfAddressesDoNotMatch()
     {
