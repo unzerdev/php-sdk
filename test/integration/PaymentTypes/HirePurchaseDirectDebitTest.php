@@ -50,7 +50,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function instalmentPlanShouldBeSelectable()
@@ -90,7 +90,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @param $errorCode
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function hirePurchaseDirectDebitAuthorize($firstname, $lastname, $errorCode)
     {
@@ -123,7 +123,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function instalmentPlanSelectionWithAllFieldsSet()
@@ -146,7 +146,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function verifyChargingAnInitializedHirePurchase()
@@ -174,7 +174,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function verifyShippingAChargedHirePurchase()
@@ -206,7 +206,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @depends verifyChargingAnInitializedHirePurchase
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      *
      * @group skip
@@ -237,7 +237,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @depends verifyChargingAnInitializedHirePurchase
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function verifyPartlyCancelChargedHirePurchase()

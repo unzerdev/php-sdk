@@ -43,8 +43,8 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutCanBeCalledForCardType()
     {
@@ -66,8 +66,8 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutCanBeCalledForSepaDirectDebitType()
     {
@@ -88,8 +88,8 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutCanBeCalledForSepaDirectDebitGuaranteedType()
     {
@@ -112,7 +112,7 @@ class PayoutTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function payoutShouldBeFetchedWhenItsPaymentResourceIsFetched()
@@ -134,7 +134,7 @@ class PayoutTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutShouldBeFetchableViaItsUrl()
     {
@@ -153,7 +153,7 @@ class PayoutTest extends BasePaymentTest
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutShouldAcceptAllParameters()
     {

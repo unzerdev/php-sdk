@@ -177,8 +177,8 @@ class PaymentServiceTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws ReflectionException
      */
     public function chargeAuthorizationShouldCallChargePaymentWithTheGivenPaymentObject()
@@ -198,8 +198,8 @@ class PaymentServiceTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws ReflectionException
      */
     public function chargeAuthorizationShouldCallFetchPaymentIfThePaymentIsPassedAsIdString()
@@ -416,8 +416,8 @@ class PaymentServiceTest extends BasePaymentTest
      * @test
      *
      * @throws ReflectionException
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function shipShouldCreateShipmentAndCallCreateOnResourceServiceWithIt()
     {
@@ -451,8 +451,8 @@ class PaymentServiceTest extends BasePaymentTest
      * @test
      *
      * @throws ReflectionException
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutShouldCreatePaymentAndCallPayoutWithPayment()
     {
@@ -585,8 +585,8 @@ class PaymentServiceTest extends BasePaymentTest
      * @throws Exception
      * @throws ReflectionException
      * @throws \PHPUnit\Framework\MockObject\RuntimeException
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException                          A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException                               A RuntimeException is thrown when there is an error while using the SDK.
      * @throws \Exception
      */
     public function fetchInstalmentPlansWillCallFetchOnResourceService()
