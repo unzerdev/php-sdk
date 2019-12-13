@@ -73,8 +73,6 @@ class Customer extends AbstractHeidelpayResource
     /** @var GeoLocation $geoLocation */
     private $geoLocation;
 
-    //<editor-fold desc="Getters/Setters">
-
     /**
      * Customer constructor.
      *
@@ -94,6 +92,8 @@ class Customer extends AbstractHeidelpayResource
         $this->shippingAddress = new Address();
         $this->geoLocation = new GeoLocation();
     }
+
+    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null

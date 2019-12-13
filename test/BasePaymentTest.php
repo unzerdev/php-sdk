@@ -239,10 +239,9 @@ class BasePaymentTest extends TestCase
      */
     public function createCardAuthorization($amount = 100.0): Authorization
     {
-        $card          = $this->heidelpay->createPaymentType($this->createCardObject());
-        $orderId       = microtime(true);
-        $authorization = $this->heidelpay->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
-        return $authorization;
+        $card    = $this->heidelpay->createPaymentType($this->createCardObject());
+        $orderId = microtime(true);
+        return $this->heidelpay->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
     }
 
     /**
@@ -256,10 +255,9 @@ class BasePaymentTest extends TestCase
     public function createPaypalAuthorization(): Authorization
     {
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal  = $this->heidelpay->createPaymentType(new Paypal());
         $orderId = microtime(true);
-        $authorization = $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
-        return $authorization;
+        return $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
     }
 
     /**
