@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/traits
+ * @package  heidelpayPHP\Traits
  */
 namespace heidelpayPHP\Traits;
 
@@ -52,10 +52,10 @@ trait CanDirectChargeWithCustomer
      * @param string|null     $invoiceId        The external id of the invoice.
      * @param string|null     $paymentReference A reference text for the payment.
      *
-     * @return Charge
+     * @return Charge The resulting charge object.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function charge(
         $amount,

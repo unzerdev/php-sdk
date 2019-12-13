@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/traits
+ * @package  heidelpayPHP\Traits
  */
 namespace heidelpayPHP\Traits;
 
@@ -73,13 +73,13 @@ trait HasCancellations
     /**
      * Return specific Cancellation object or null if it does not exist.
      *
-     * @param string  $cancellationId
+     * @param string  $cancellationId The id of the cancellation object
      * @param boolean $lazy
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      *
-     * @return mixed
+     * @return Cancellation|null The cancellation or null if none could be found.
      */
     public function getCancellation($cancellationId, $lazy = false)
     {
