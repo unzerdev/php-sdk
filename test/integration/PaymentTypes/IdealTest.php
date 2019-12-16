@@ -40,7 +40,7 @@ class IdealTest extends BasePaymentTest
      * @return Ideal
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function idealShouldBeCreatable(): Ideal
     {
@@ -60,7 +60,7 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends idealShouldBeCreatable
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal)
@@ -80,7 +80,7 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function idealShouldBeChargeable(Ideal $ideal)
     {
@@ -102,7 +102,7 @@ class IdealTest extends BasePaymentTest
      * @param Ideal $ideal
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function idealTypeCanBeFetched(Ideal $ideal)
     {

@@ -3,22 +3,51 @@ dist: trusty
 matrix:
   fast_finish: true
   include:
-    - php: 7.0
-      env: deps=no
-    - php: 7.0
-      env: deps=high
-    - php: 7.1
-      env: deps=no
-    - php: 7.1
-      env: deps=high
-    - php: 7.2
-      env: deps=no
-    - php: 7.2
-      env: deps=high
-    - php: 7.3
-      env: deps=no
-    - php: 7.3
-      env: deps=high
+    - name: "php 7.0 (install) - unit"
+      php: 7.0
+      env:
+        - DEPS=NO
+        - LEVEL=UNIT
+    - name: "php 7.0 (update) - unit"
+      php: 7.0
+      env:
+        - DEPS=HIGH
+        - LEVEL=UNIT
+    - name: "php 7.0 (update) - integration"
+      php: 7.0
+      env:
+        - DEPS=HIGH
+        - LEVEL=INTEGRATION
+    - name: "php 7.1 (install) - unit"
+      php: 7.1
+      env:
+        - DEPS=NO
+        - LEVEL=UNIT
+    - name: "php 7.1 (update) - unit"
+      php: 7.1
+      env:
+        - DEPS=HIGH
+        - LEVEL=UNIT
+    - name: "php 7.2 (install) - unit"
+      php: 7.2
+      env:
+        - DEPS=NO
+        - LEVEL=UNIT
+    - name: "php 7.2 (update) - unit"
+      php: 7.2
+      env:
+        - DEPS=HIGH
+        - LEVEL=UNIT
+    - name: "php 7.3 (install) - unit"
+      php: 7.3
+      env:
+        - DEPS=NO
+        - LEVEL=UNIT
+    - name: "php 7.3 (update) - unit"
+      php: 7.3
+      env:
+        - DEPS=HIGH
+        - LEVEL=UNIT
 cache:
   directories:
     - $HOME/.composer/cache

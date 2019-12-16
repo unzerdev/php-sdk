@@ -41,8 +41,8 @@ class PISTest extends BasePaymentTest
      *
      * @return PIS
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function pisShouldBeCreatableAndFetchable(): PIS
     {
@@ -67,8 +67,8 @@ class PISTest extends BasePaymentTest
      *
      * @return Charge
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends pisShouldBeCreatableAndFetchable
      */
     public function pisShouldBeAbleToCharge(PIS $pis): Charge
@@ -88,8 +88,8 @@ class PISTest extends BasePaymentTest
      *
      * @param PIS $pis
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends pisShouldBeCreatableAndFetchable
      */
     public function pisShouldNotBeAuthorizable(PIS $pis)

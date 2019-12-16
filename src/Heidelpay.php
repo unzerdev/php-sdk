@@ -43,6 +43,7 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\Recurring;
+use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -62,7 +63,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.3.0.0';
+    const SDK_VERSION = '1.2.6.0';
 
     /** @var string $key */
     private $key;
@@ -334,6 +335,41 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     //</editor-fold>
 
     //<editor-fold desc="Resources">
+
+    /**
+     * Updates the given local resource object if it has not been fetched before.
+     * If you are looking to update a local resource even if it has been fetched before please call fetchResource().
+     *
+     * @param AbstractHeidelpayResource $resource The local resource object to update.
+     *
+     * @return AbstractHeidelpayResource The updated resource object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     *
+     * @deprecated since 1.2.6.0
+     */
+    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    {
+        return $this->resourceService->getResource($resource);
+    }
+
+    /**
+     * Updates the given local resource object.
+     *
+     * @param AbstractHeidelpayResource $resource The local resource object to update.
+     *
+     * @return AbstractHeidelpayResource The updated resource object.
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     *
+     * @deprecated since 1.2.6.0
+     */
+    public function fetchResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    {
+        return $this->resourceService->fetchResource($resource);
+    }
 
     //<editor-fold desc="Recurring">
 
@@ -702,6 +738,38 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
             $invoiceId,
             $referenceText
         );
+    }
+
+    /**
+     * Performs an Authorization transaction using a Payment object and returns the resulting Authorization resource.
+     *
+     * @param float                $amount    The amount to authorize.
+     * @param string               $currency  The currency of the amount.
+     * @param Payment              $payment   The Payment object to create the Authorization for.
+     * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
+     * @param Customer|string|null $customer  The Customer object or the id of the customer resource to reference.
+     * @param string|null          $orderId   A custom order id which can be set by the merchant.
+     * @param Metadata|null        $metadata  The Metadata object containing custom information for the payment.
+     * @param Basket|null          $basket    The Basket object corresponding to the payment.
+     *                                        The Basket object will be created automatically if it does not exist
+     *                                        yet (i.e. has no id).
+     *
+     * @return AbstractTransactionType The resulting object of the Authorization resource.
+     *
+     * @deprecated since 1.2.6.0
+     */
+    public function authorizeWithPayment(
+        $amount,
+        $currency,
+        Payment $payment,
+        $returnUrl = null,
+        $customer = null,
+        $orderId = null,
+        $metadata = null,
+        $basket = null
+    ): AbstractTransactionType {
+        return $this->paymentService
+            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata, $basket);
     }
 
     //</editor-fold>

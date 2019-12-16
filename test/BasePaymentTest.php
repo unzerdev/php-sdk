@@ -178,7 +178,7 @@ class BasePaymentTest extends TestCase
      * @return Basket
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createBasket(): Basket
     {
@@ -235,12 +235,12 @@ class BasePaymentTest extends TestCase
      * @return Authorization
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createCardAuthorization($amount = 100.0): Authorization
     {
-        $card          = $this->heidelpay->createPaymentType($this->createCardObject());
-        $orderId       = microtime(true);
+        $card    = $this->heidelpay->createPaymentType($this->createCardObject());
+        $orderId = microtime(true);
         return $this->heidelpay->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
     }
 
@@ -249,13 +249,13 @@ class BasePaymentTest extends TestCase
      *
      * @return Authorization
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createPaypalAuthorization(): Authorization
     {
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal  = $this->heidelpay->createPaymentType(new Paypal());
         $orderId = microtime(true);
         return $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
     }
@@ -268,7 +268,7 @@ class BasePaymentTest extends TestCase
      * @return Charge
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createCharge($amount = 100.0): Charge
     {
