@@ -41,8 +41,8 @@ class AlipayTest extends BasePaymentTest
      *
      * @return Alipay
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function alipayShouldBeCreatableAndFetchable(): Alipay
     {
@@ -67,8 +67,8 @@ class AlipayTest extends BasePaymentTest
      *
      * @return Charge
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends alipayShouldBeCreatableAndFetchable
      */
     public function alipayShouldBeAbleToCharge(Alipay $alipay): Charge
@@ -88,8 +88,8 @@ class AlipayTest extends BasePaymentTest
      *
      * @param Alipay $alipay
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends alipayShouldBeCreatableAndFetchable
      */
     public function alipayShouldNotBeAuthorizable(Alipay $alipay)

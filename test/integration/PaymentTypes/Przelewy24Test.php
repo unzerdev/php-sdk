@@ -128,13 +128,11 @@ class Przelewy24Test extends BasePaymentTest
      */
     public function przelewy24CurrencyCodeProvider(): array
     {
-        $currencyArray = [
+        return [
             'EUR' => ['EUR'],
             'US Dollar'=> ['USD'],
             'Swiss Franc' => ['CHF']
         ];
-
-        return $currencyArray;
     }
 
     //</editor-fold>

@@ -45,6 +45,8 @@ use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasPaymentState;
 use RuntimeException;
 use stdClass;
+
+use function count;
 use function in_array;
 use function is_string;
 
@@ -386,7 +388,7 @@ class Payment extends AbstractHeidelpayResource
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
         if ($this->metadata->getId() === null) {
-            $heidelpay->getResourceService()->create($this->metadata->setParentResource($heidelpay));
+            $heidelpay->getResourceService()->createResource($this->metadata->setParentResource($heidelpay));
         }
 
         return $this;
@@ -421,7 +423,7 @@ class Payment extends AbstractHeidelpayResource
         /** @var Heidelpay $heidelpay */
         $heidelpay = $this->getHeidelpayObject();
         if ($this->basket->getId() === null) {
-            $heidelpay->getResourceService()->create($this->basket->setParentResource($heidelpay));
+            $heidelpay->getResourceService()->createResource($this->basket->setParentResource($heidelpay));
         }
 
         return $this;
@@ -477,8 +479,7 @@ class Payment extends AbstractHeidelpayResource
         }
 
         $authorization = $this->getAuthorization(true);
-        $cancellations = array_merge($authorization ? $authorization->getCancellations() : [], ...$refunds);
-        return $cancellations;
+        return array_merge($authorization ? $authorization->getCancellations() : [], ...$refunds);
     }
 
     /**

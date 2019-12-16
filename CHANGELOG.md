@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Changed
 *   Refactor travis config.
+*   Refactor heidelpay facade to implement service interfaces.
 
 ## [1.2.5.0][1.2.5.0]
 

@@ -317,7 +317,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     protected function fetchResource(AbstractHeidelpayResource $resource)
     {
-        $this->getResourceService()->fetch($resource);
+        $this->getResourceService()->fetchResource($resource);
     }
 
     //</editor-fold>

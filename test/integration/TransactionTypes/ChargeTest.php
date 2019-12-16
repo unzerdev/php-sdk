@@ -40,8 +40,8 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeShouldWorkWithTypeId()
     {
@@ -58,8 +58,8 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeShouldWorkWithTypeObject()
     {

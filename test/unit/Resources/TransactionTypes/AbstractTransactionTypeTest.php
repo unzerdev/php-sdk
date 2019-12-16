@@ -28,6 +28,7 @@ use DateTime;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Services\ResourceService;
@@ -111,8 +112,8 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponseShouldUpdateValuesOfAbstractTransaction()
     {
@@ -181,10 +182,10 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $payment = (new Payment())->setId('myPaymentId');
 
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->disableOriginalConstructor()->setMethods(['fetch'])->getMock();
-        $resourceServiceMock->expects($this->once())->method('fetch')->with($payment);
+            ->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payment);
 
-        /** @var ResourceService $resourceServiceMock */
+        /** @var ResourceServiceInterface $resourceServiceMock */
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment->setParentResource($heidelpayObj);
 
