@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Constants\CancelReasonCodes;
 use heidelpayPHP\Constants\IdStrings;
 use heidelpayPHP\Constants\TransactionTypes;
