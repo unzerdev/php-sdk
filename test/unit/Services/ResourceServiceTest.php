@@ -1110,6 +1110,7 @@ class ResourceServiceTest extends BasePaymentTest
     //</editor-fold>
 
     //<editor-fold desc="Recurring">
+
     /**
      * Verify createRecurring calls fetch for the payment type if it is given the id.
      *
