@@ -36,6 +36,8 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use RuntimeException;
 use function in_array;
 
+use function in_array;
+
 class CancelService implements CancelServiceInterface
 {
     /** @var Heidelpay */
