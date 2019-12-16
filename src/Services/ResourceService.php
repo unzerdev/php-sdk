@@ -581,9 +581,9 @@ class ResourceService implements ResourceServiceInterface
      */
     public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
     {
-        /** @var BasePaymentType $retPaymentType */
-        $retPaymentType = $this->updateResource($paymentType);
-        return $retPaymentType;
+        /** @var BasePaymentType $returnPaymentType */
+        $returnPaymentType = $this->updateResource($paymentType);
+        return $returnPaymentType;
     }
 
     //</editor-fold>
