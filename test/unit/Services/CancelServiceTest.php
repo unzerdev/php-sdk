@@ -26,6 +26,7 @@ namespace heidelpayPHP\test\unit\Services;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\EmbeddedResources\Amount;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -78,13 +79,17 @@ class CancelServiceTest extends BasePaymentTest
      */
     public function cancelShouldThrowExceptionIfNoTransactionExistsToBeCancelled()
     {
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['cancelAllCharges', 'cancelAuthorization'])->getMock();
+        /** @var CancelService|MockObject $cancelSrvMock */
+        $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods(['cancelAllCharges', 'cancelAuthorization'])->getMock();
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('This Payment could not be cancelled.');
 
-        /** @var Payment $paymentMock */
-        $paymentMock->cancel();
+        $heidelpay = new Heidelpay('s-priv-1234');
+        $heidelpay->setCancelService($cancelSrvMock);
+        $payment = (new Payment())->setParentResource($heidelpay);
+
+        $payment->cancel();
     }
 
     /**

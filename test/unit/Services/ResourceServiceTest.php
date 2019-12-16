@@ -1107,74 +1107,9 @@ class ResourceServiceTest extends BasePaymentTest
         $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
     }
 
-    /**
-     * Verify fetchResourceByUrl calls fetch for the desired resource.
-     *
-     * @test
-     * @dataProvider fetchResourceByUrlShouldFetchTheDesiredResourceDP
-     *
-     * @param string $fetchMethod
-     * @param mixed  $arguments
-     * @param string $resourceUrl
-     *
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws ReflectionException
-     */
-    public function fetchResourceByUrlShouldFetchTheDesiredResource($fetchMethod, $arguments, $resourceUrl)
-    {
-        /** @var Heidelpay|MockObject $heidelpayMock */
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods([$fetchMethod])->getMock();
-        $heidelpayMock->expects($this->once())->method($fetchMethod)->with(...$arguments);
-        $resourceService = new ResourceService($heidelpayMock);
-
-        $resourceService->fetchResourceByUrl($resourceUrl);
-    }
-
-    /**
-     * Verify fetchResourceByUrl calls fetch for the desired resource.
-     *
-     * @test
-     * @dataProvider fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP
-     *
-     * @param $paymentTypeId
-     * @param string $resourceUrl
-     *
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws ReflectionException
-     */
-    public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentType($paymentTypeId, $resourceUrl)
-    {
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType'])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetchPaymentType')->with($paymentTypeId);
-
-        $resourceSrvMock->fetchResourceByUrl($resourceUrl);
-    }
     //</editor-fold>
 
     //<editor-fold desc="Recurring">
-    /**
-     * Verify does not call fetchResourceByUrl and returns null if the resource type is unknown.
-     *
-     * @test
-     *
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws ReflectionException
-     */
-    public function fetchResourceByUrlForAPaymentTypeShouldReturnNullIfTheTypeIsUnknown()
-    {
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType'])->getMock();
-        $resourceSrvMock->expects($this->never())->method('fetchPaymentType');
-
-        $this->assertNull($resourceSrvMock->fetchResourceByUrl('https://api.heidelpay.com/v1/types/card/s-unknown-xen2ybcovn56/'));
-    }
 
     /**
      * Verify createRecurring calls fetch for the payment type if it is given the id.
