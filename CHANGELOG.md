@@ -21,7 +21,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Refactor access modifiers of setters intended for system access only.
 
 ### Remove
-*   Removed deprecated code.
+*   Move method doc blocks to service interfaces.
+*   Remove dead code.
 
 ## [1.2.5.0][1.2.5.0]
 
