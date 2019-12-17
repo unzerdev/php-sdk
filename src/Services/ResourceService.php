@@ -328,7 +328,6 @@ class ResourceService implements ResourceServiceInterface
      */
     public function fetchPayout($payment): Payout
     {
-        /** @var Payment $paymentObject */
         $paymentObject = $this->fetchPayment($payment);
         /** @var Payout $payout */
         $payout = $this->fetchResource($paymentObject->getPayout(true));
