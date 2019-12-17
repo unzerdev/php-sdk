@@ -153,6 +153,8 @@ class CancelService implements CancelServiceInterface
 
     //</editor-fold>
 
+    //<editor-fold desc="Payment">
+
     /**
      * @param Payment    $payment
      * @param float|null $amount
@@ -318,4 +320,6 @@ class CancelService implements CancelServiceInterface
         }
         return $cancellations;
     }
+
+    //</editor-fold>
 }
