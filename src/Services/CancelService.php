@@ -187,9 +187,7 @@ class CancelService implements CancelServiceInterface
 
             if ($cancellation instanceof Cancellation) {
                 $cancellations[] = $cancellation;
-                if (!$cancelWholePayment) {
-                    $remainingToCancel -= $cancellation->getAmount();
-                }
+                $remainingToCancel = $this->updateCancelAmount($remainingToCancel, $cancellation->getAmount());
                 $cancellation = null;
             }
         }
@@ -244,15 +242,7 @@ class CancelService implements CancelServiceInterface
             try {
                 $cancellation = $authorize->cancel($cancelAmount);
             } catch (HeidelpayApiException $e) {
-                $allowedErrors = [
-                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
-                    ApiResponseCodes::API_ERROR_TRANSACTION_CANCEL_NOT_ALLOWED
-                ];
-
-                if (!in_array($e->getCode(), $allowedErrors, true)) {
-                    throw $e;
-                }
+                $this->isExceptionAllowed($e);
             }
         }
 
@@ -293,23 +283,13 @@ class CancelService implements CancelServiceInterface
             try {
                 $cancellation = $charge->cancel($cancelAmount, $reasonCode, $referenceText, $amountNet, $amountVat);
             } catch (HeidelpayApiException $e) {
-                $allowedErrors = [
-                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK
-                ];
-
-                if (!in_array($e->getCode(), $allowedErrors, true)) {
-                    throw $e;
-                }
+                $this->isExceptionAllowed($e);
                 continue;
             }
 
             if ($cancellation instanceof Cancellation) {
                 $cancellations[] = $cancellation;
-                if (!$cancelWholePayment) {
-                    $remainingToCancel -= $cancellation->getAmount();
-                }
+                $remainingToCancel = $this->updateCancelAmount($remainingToCancel, $cancellation->getAmount());
                 $cancellation = null;
             }
 
@@ -319,6 +299,49 @@ class CancelService implements CancelServiceInterface
             }
         }
         return $cancellations;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Helpers">
+
+    /**
+     * Throws exception if the passed exception is not to be ignored while cancelling charges or authorization.
+     *
+     * @param $exception
+     *
+     * @throws HeidelpayApiException
+     */
+    public function isExceptionAllowed(HeidelpayApiException $exception)
+    {
+        $allowedErrors = [
+            ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
+            ApiResponseCodes::API_ERROR_ALREADY_CHARGED,
+            ApiResponseCodes::API_ERROR_TRANSACTION_CANCEL_NOT_ALLOWED,
+            ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK
+        ];
+
+        if (!in_array($exception->getCode(), $allowedErrors, true)) {
+            throw $exception;
+        }
+    }
+
+    /**
+     * Calculates and returns the remaining amount to cancel.
+     * Returns null if the whole payment is to be canceled.
+     *
+     * @param float|null $remainingToCancel
+     * @param float      $amount
+     *
+     * @return float|null
+     */
+    public function updateCancelAmount($remainingToCancel, float $amount)
+    {
+        $cancelWholePayment = $remainingToCancel === null;
+        if (!$cancelWholePayment) {
+            $remainingToCancel -= $amount;
+        }
+        return $remainingToCancel;
     }
 
     //</editor-fold>
