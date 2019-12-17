@@ -20,7 +20,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Refactor unit tests.
 
 ### Remove
-*   Removed deprecated code.
+*   Move method doc blocks to service interfaces.
+*   Remove dead code.
 
 ## [1.2.5.0][1.2.5.0]
 
