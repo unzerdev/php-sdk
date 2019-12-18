@@ -156,17 +156,7 @@ class CancelService implements CancelServiceInterface
     //<editor-fold desc="Payment">
 
     /**
-     * @param Payment    $payment
-     * @param float|null $amount
-     * @param mixed      $reasonCode
-     * @param null|mixed $referenceText
-     * @param null|mixed $amountNet
-     * @param null|mixed $amountVat
-     *
-     * @return array
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function cancelPayment(
         Payment $payment,
@@ -209,17 +199,7 @@ class CancelService implements CancelServiceInterface
     }
 
     /**
-     * Cancel the given amount of the payments authorization.
-     *
-     * @param Payment    $payment The payment whose authorization should be canceled.
-     * @param float|null $amount  The amount to be cancelled. If null the remaining uncharged amount of the authorization
-     *                            will be cancelled completely. If it exceeds the remaining uncharged amount the
-     *                            cancellation will only cancel the remaining uncharged amount.
-     *
-     * @return Cancellation|null
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * {@inheritDoc}
      */
     public function cancelPaymentAuthorization(Payment $payment, float $amount = null)
     {
@@ -312,7 +292,7 @@ class CancelService implements CancelServiceInterface
      *
      * @throws HeidelpayApiException
      */
-    public function isExceptionAllowed(HeidelpayApiException $exception)
+    private function isExceptionAllowed(HeidelpayApiException $exception)
     {
         $allowedErrors = [
             ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
@@ -335,7 +315,7 @@ class CancelService implements CancelServiceInterface
      *
      * @return float|null
      */
-    public function updateCancelAmount($remainingToCancel, float $amount)
+    private function updateCancelAmount($remainingToCancel, float $amount)
     {
         $cancelWholePayment = $remainingToCancel === null;
         if (!$cancelWholePayment) {
