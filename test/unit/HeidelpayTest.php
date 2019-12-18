@@ -249,7 +249,7 @@ class HeidelpayTest extends BasePaymentTest
      * @throws Exception
      * @throws RuntimeException
      */
-    public function resourceServiceDP(): array
+    public static function resourceServiceDP(): array
     {
         $customerId     = 'customerId';
         $basketId       = 'basketId';
@@ -315,7 +315,7 @@ class HeidelpayTest extends BasePaymentTest
      *
      * @throws Exception
      */
-    public function paymentServiceDP(): array
+    public static function paymentServiceDP(): array
     {
         $url           = 'https://dev.heidelpay.com';
         $orderId       = 'orderId';
@@ -355,7 +355,7 @@ class HeidelpayTest extends BasePaymentTest
      *
      * @return array
      */
-    public function heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP(): array
+    public static function heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP(): array
     {
         $url       = 'https://dev.heidelpay.com';
         $webhookId = 'webhookId';
@@ -379,7 +379,7 @@ class HeidelpayTest extends BasePaymentTest
     /**
      * @return array
      */
-    public function cancelServiceDP(): array
+    public static function cancelServiceDP(): array
     {
         $payment       = new Payment();
         $charge        = new Charge();

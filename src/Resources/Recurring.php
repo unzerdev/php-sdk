@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Traits\HasCustomerMessage;
+use heidelpayPHP\Traits\HasDate;
 use heidelpayPHP\Traits\HasStates;
 use heidelpayPHP\Traits\HasUniqueAndShortId;
 
@@ -33,6 +34,7 @@ class Recurring extends AbstractHeidelpayResource
     use HasStates;
     use HasUniqueAndShortId;
     use HasCustomerMessage;
+    use HasDate;
 
     /** @var string $returnUrl */
     protected $returnUrl;

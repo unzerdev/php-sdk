@@ -54,8 +54,6 @@ class Payout extends AbstractTransactionType
         $this->setAmount($amount);
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Setters/Getters">

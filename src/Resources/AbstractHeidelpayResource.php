@@ -25,7 +25,6 @@
 namespace heidelpayPHP\Resources;
 
 use DateTime;
-use Exception;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
@@ -56,9 +55,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 
     /** @var array $specialParams */
     private $specialParams = [];
-
-    /** @var DateTime|null */
-    private $date;
 
     /** @var array $additionalAttributes */
     protected $additionalAttributes = [];
@@ -138,27 +134,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     public function setFetchedAt(DateTime $fetchedAt): self
     {
         $this->fetchedAt = $fetchedAt;
-        return $this;
-    }
-
-    /**
-     * @return DateTime|null
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param DateTime|null $date
-     *
-     * @return AbstractHeidelpayResource
-     *
-     * @throws Exception
-     */
-    protected function setDate($date): AbstractHeidelpayResource
-    {
-        $this->date = new DateTime($date);
         return $this;
     }
 

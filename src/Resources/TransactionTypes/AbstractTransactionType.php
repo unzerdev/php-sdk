@@ -24,14 +24,13 @@
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
-use DateTime;
-use Exception;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\HasCustomerMessage;
+use heidelpayPHP\Traits\HasDate;
 use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasStates;
 use heidelpayPHP\Traits\HasUniqueAndShortId;
@@ -44,14 +43,12 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     use HasStates;
     use HasUniqueAndShortId;
     use HasCustomerMessage;
+    use HasDate;
 
     //<editor-fold desc="Properties">
 
     /** @var Payment $payment */
     private $payment;
-
-    /** @var DateTime $date */
-    private $date;
 
     //</editor-fold>
 
@@ -103,30 +100,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     public function getRedirectUrl()
     {
         return $this->payment->getRedirectUrl();
-    }
-
-    /**
-     * This returns the date of the Transaction as string.
-     *
-     * @return string|null
-     */
-    public function getDate()
-    {
-        $date = $this->date;
-        return $date ? $date->format('Y-m-d h:i:s') : null;
-    }
-
-    /**
-     * @param string $date
-     *
-     * @return $this
-     *
-     * @throws Exception
-     */
-    public function setDate(string $date): self
-    {
-        $this->date = new DateTime($date);
-        return $this;
     }
 
     //</editor-fold>
