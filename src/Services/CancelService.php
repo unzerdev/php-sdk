@@ -158,13 +158,22 @@ class CancelService implements CancelServiceInterface
      * {@inheritDoc}
      */
     public function cancelPayment(
-        Payment $payment,
+        $payment,
         float $amount = null,
         $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
         string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): array {
+        $paymentObject = $payment;
+        if (is_string($payment)) {
+            $paymentObject = $this->getResourceService()->fetchPayment($payment);
+        }
+
+        if (!$paymentObject instanceof Payment) {
+            throw new RuntimeException('Invalid payment object.');
+        }
+
         $remainingToCancel = $amount;
 
         $cancelWholePayment = $remainingToCancel === null;
@@ -172,7 +181,7 @@ class CancelService implements CancelServiceInterface
         $cancellation       = null;
 
         if ($cancelWholePayment || $remainingToCancel > 0.0) {
-            $cancellation = $this->cancelPaymentAuthorization($payment, $remainingToCancel);
+            $cancellation = $this->cancelPaymentAuthorization($paymentObject, $remainingToCancel);
 
             if ($cancellation instanceof Cancellation) {
                 $cancellations[] = $cancellation;
@@ -186,7 +195,7 @@ class CancelService implements CancelServiceInterface
         }
 
         $chargeCancels = $this->cancelPaymentCharges(
-            $payment,
+            $paymentObject,
             $reasonCode,
             $referenceText,
             $amountNet,
@@ -200,7 +209,7 @@ class CancelService implements CancelServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function cancelPaymentAuthorization(Payment $payment, float $amount = null)
+    public function cancelPaymentAuthorization($payment, float $amount = null)
     {
         $cancellation   = null;
         $completeCancel = $amount === null;

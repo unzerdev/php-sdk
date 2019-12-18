@@ -33,6 +33,7 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Services\CancelService;
+use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
@@ -433,6 +434,29 @@ class CancelServiceTest extends BasePaymentTest
 
         $paymentMock->cancelAuthorizationAmount(12.3);
         $paymentMock->cancelAuthorizationAmount(0.0);
+    }
+
+    /**
+     * Verify cancelPayment will fetch payment if the payment is referenced by paymentId.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     */
+    public function paymentCancelShouldFetchPaymentIfPaymentIdIsPassed()
+    {
+        /** @var MockObject|ResourceService $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPayment'])->getMock();
+        $cancelService = $this->heidelpay->setResourceService($resourceServiceMock)->getCancelService();
+
+        $payment = (new Payment($this->heidelpay))->setId('paymentId');
+
+        $resourceServiceMock->expects(self::once())->method('fetchPayment')->with('paymentId')->willReturn($payment);
+        $cancelService->cancelPayment('paymentId');
     }
 
     //<editor-fold desc="Data Providers">
