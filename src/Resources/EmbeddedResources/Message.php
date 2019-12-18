@@ -34,6 +34,9 @@ class Message extends AbstractHeidelpayResource
     /** @var string $customer */
     private $customer = '';
 
+    /** @var string $merchant */
+    private $merchant = '';
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -71,6 +74,25 @@ class Message extends AbstractHeidelpayResource
     protected function setCustomer(string $customer): Message
     {
         $this->customer = $customer;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMerchant()
+    {
+        return $this->merchant;
+    }
+
+    /**
+     * @param string|null $merchant
+     *
+     * @return Message
+     */
+    protected function setMerchant($merchant): Message
+    {
+        $this->merchant = $merchant;
         return $this;
     }
 
