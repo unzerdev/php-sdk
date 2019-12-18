@@ -862,7 +862,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * {@inheritDoc}
      */
     public function cancelPayment(
-        Payment $payment,
+        $payment,
         float $amount = null,
         $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
         string $referenceText = null,
@@ -876,7 +876,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * {@inheritDoc}
      */
-    public function cancelPaymentAuthorization(Payment $payment, float $amount = null)
+    public function cancelPaymentAuthorization($payment, float $amount = null)
     {
         return $this->cancelService->cancelPaymentAuthorization($payment, $amount);
     }
