@@ -24,7 +24,6 @@
  */
 namespace heidelpayPHP\test\integration;
 
-use DateTime;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Card;
@@ -68,7 +67,7 @@ class RecurringPaymentTest extends BasePaymentTest
         $recurring = $card->activateRecurring('https://dev.heidelpay.com');
         $this->assertPending($recurring);
         $this->assertEquals('https://dev.heidelpay.com', $recurring->getReturnUrl());
-        $this->assertInstanceOf(DateTime::class, $recurring->getDate());
+        $this->assertNotEmpty($recurring->getDate());
 
         $message = $recurring->getMessage();
         $this->assertEquals(ApiResponseCodes::CORE_TRANSACTION_PENDING, $message->getCode());
