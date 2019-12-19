@@ -15,6 +15,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 *   Refactor travis config.
 *   Refactor heidelpay facade to implement service interfaces.
+*   Move payment cancel methods to cancel service. 
+*   Cleanup doc comments.
+*   Refactor unit tests.
+
+### Remove
+*   Move method doc blocks to service interfaces.
+*   Remove dead code.
 
 ## [1.2.5.0][1.2.5.0]
 
@@ -101,6 +108,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   SAQ-A test due to lack of a corresponding key.
 
 ## [1.2.0.0][1.2.0.0]
+
+### This update contains breaking changes and you might have to update your implementation
 
 ### Changed
 *   Refactored all examples.
@@ -211,7 +220,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.0.0][1.1.0.0]
 
-###### This update contains breaking changes and you will most certainly have to update your implementation
+### This update contains breaking changes and you might have to update your implementation
 
 ### Changed
 *   Payment types `Prepayment`, `Invoice` and `Invoice guaranteed` can no longer perform the authorize transaction but only direct charge.

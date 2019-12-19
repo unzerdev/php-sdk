@@ -238,6 +238,8 @@ class PaymentServiceTest extends BasePaymentTest
                 return $charge instanceof Charge &&
                     $charge->getAmount() === 1.234 &&
                     $charge->getCurrency() === 'myTestCurrency' &&
+                    $charge->getOrderId() === null &&
+                    $charge->getInvoiceId() === null &&
                     $newPayment instanceof Payment &&
                     $newPayment === $payment &&
                     in_array($charge, $newPayment->getCharges(), true);
@@ -245,6 +247,41 @@ class PaymentServiceTest extends BasePaymentTest
 
         $paymentSrv     = $heidelpay->setResourceService($resourceSrvMock)->getPaymentService();
         $returnedCharge = $paymentSrv->chargePayment($payment, 1.234, 'myTestCurrency');
+        $this->assertArraySubset([$returnedCharge], $payment->getCharges());
+    }
+
+    /**
+     * Verify chargePayment will set Ids if they are defined.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException
+     * @throws ReflectionException
+     * @throws RuntimeException
+     */
+    public function chargePaymentShouldSetArgumentsInNewChargeObject()
+    {
+        $heidelpay = new Heidelpay('s-priv-123');
+        $payment   = (new Payment())->setParentResource($heidelpay)->setId('myPaymentId');
+
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
+        $resourceSrvMock->expects($this->once())->method('createResource')
+            ->with($this->callback(static function ($charge) use ($payment) {
+                /** @var Charge $charge */
+                $newPayment = $charge->getPayment();
+                return $charge instanceof Charge &&
+                    $charge->getAmount() === 1.234 &&
+                    $charge->getCurrency() === 'myTestCurrency' &&
+                    $charge->getOrderId() === 'orderId' &&
+                    $charge->getInvoiceId() === 'invoiceId' &&
+                    $newPayment instanceof Payment &&
+                    $newPayment === $payment &&
+                    in_array($charge, $newPayment->getCharges(), true);
+            }));
+
+        $paymentSrv     = $heidelpay->setResourceService($resourceSrvMock)->getPaymentService();
+        $returnedCharge = $paymentSrv->chargePayment($payment, 1.234, 'myTestCurrency', 'orderId', 'invoiceId');
         $this->assertArraySubset([$returnedCharge], $payment->getCharges());
     }
 
@@ -538,6 +575,8 @@ class PaymentServiceTest extends BasePaymentTest
 
     //</editor-fold>
 
+    //<editor-fold desc="Hire Purchase">
+
     /**
      * Verify fetch hdd instalment plans.
      *
@@ -569,6 +608,8 @@ class PaymentServiceTest extends BasePaymentTest
             }))->willReturn(new InstalmentPlans(12.23, 'EUR', 4.99, $date));
         $heidelpay->getPaymentService()->fetchDirectDebitInstalmentPlans(12.23, 'EUR', 4.99, $date);
     }
+
+    //</editor-fold>
 
     //<editor-fold desc="DataProviders">
 

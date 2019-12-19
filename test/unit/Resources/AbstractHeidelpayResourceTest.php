@@ -262,12 +262,8 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
      */
     public function updateValuesShouldUpdateValuesFromProcessingInTheActualObject()
     {
-        $testResponse             = new stdClass();
-        $processing               = new stdClass();
-        $processing->customerId   = 'processingCustomerId';
-        $processing->firstname    = 'processingFirstName';
-        $processing->lastname     = 'processingLastName';
-        $testResponse->processing = $processing;
+        $testResponse  = new stdClass();
+        $testResponse->processing = (object)['customerId' => 'cst-id', 'firstname' => 'first', 'lastname' => 'last'];
 
         /** @var Customer $customer */
         $customer = CustomerFactory::createCustomer('firstName', 'lastName')->setCustomerId('customerId');
@@ -276,9 +272,9 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
         $this->assertEquals('lastName', $customer->getLastname());
 
         $customer->handleResponse($testResponse);
-        $this->assertEquals('processingCustomerId', $customer->getCustomerId());
-        $this->assertEquals('processingFirstName', $customer->getFirstname());
-        $this->assertEquals('processingLastName', $customer->getLastname());
+        $this->assertEquals('cst-id', $customer->getCustomerId());
+        $this->assertEquals('first', $customer->getFirstname());
+        $this->assertEquals('last', $customer->getLastname());
     }
 
     /**
