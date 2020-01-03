@@ -67,9 +67,9 @@ class WebhookTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
      * @throws Exception
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function webhookUrlShouldBeUpdateable()
     {
@@ -91,9 +91,9 @@ class WebhookTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
      * @throws Exception
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function webhookEventShouldNotBeUpdateable()
     {
