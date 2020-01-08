@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Fixed
 *   A bug which led to an error when trying to cancel the initial transaction of a charged invoice.
+*   Composer: PHP version constraint.
 *   Several minor issues.
 
 ### Changed
