@@ -24,6 +24,7 @@
  */
 namespace heidelpayPHP\test\integration;
 
+use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
@@ -52,19 +53,25 @@ class RecurringPaymentTest extends BasePaymentTest
 
     /**
      * Verify card with 3ds can activate recurring payments.
+     * After recurring call the parameters are set.
      *
      * @test
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function recurringForCardWith3dsShouldReturnRedirectURL()
+    public function recurringForCardWith3dsShouldReturnAttributes()
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject()->set3ds(true));
         $recurring = $card->activateRecurring('https://dev.heidelpay.com');
         $this->assertPending($recurring);
-        $this->assertNotEmpty($recurring->getReturnUrl());
+        $this->assertEquals('https://dev.heidelpay.com', $recurring->getReturnUrl());
+        $this->assertNotEmpty($recurring->getDate());
+
+        $message = $recurring->getMessage();
+        $this->assertEquals(ApiResponseCodes::CORE_TRANSACTION_PENDING, $message->getCode());
+        $this->assertNotEmpty($message->getCustomer());
     }
 
     /**

@@ -73,8 +73,6 @@ class Charge extends AbstractTransactionType
         $this->setAmount($amount);
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Setters/Getters">
@@ -255,13 +253,13 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @param string|null $paymentReference
+     * @param string|null $referenceText
      *
      * @return Charge
      */
-    public function setPaymentReference($paymentReference): Charge
+    public function setPaymentReference($referenceText): Charge
     {
-        $this->paymentReference = $paymentReference;
+        $this->paymentReference = $referenceText;
         return $this;
     }
 

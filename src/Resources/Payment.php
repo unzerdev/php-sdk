@@ -111,11 +111,11 @@ class Payment extends AbstractHeidelpayResource
     /**
      * Sets the redirectUrl via response from API.
      *
-     * @param string $redirectUrl
+     * @param string|null $redirectUrl
      *
      * @return Payment
      */
-    public function setRedirectUrl(string $redirectUrl): Payment
+    protected function setRedirectUrl($redirectUrl): Payment
     {
         $this->redirectUrl = $redirectUrl;
         return $this;
@@ -575,9 +575,9 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return self
      */
-    public function setCurrency(string $currency): self
+    protected function setCurrency(string $currency): self
     {
-        $this->amount->setCurrency($currency);
+        $this->amount->handleResponse((object)['currency' => $currency]);
         return $this;
     }
 

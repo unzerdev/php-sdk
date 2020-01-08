@@ -1,8 +1,8 @@
 <?php
 /**
- * This class defines a dummy implementing HasCancellations and HasPaymentState traits.
+ * This trait adds the message properties to a resource class.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,30 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  heidelpayPHP\Traits
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace heidelpayPHP\Traits;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Traits\HasCancellations;
-use heidelpayPHP\Traits\HasPaymentState;
+use heidelpayPHP\Resources\EmbeddedResources\Message;
 
-class TraitDummyHasCancellationsHasPaymentState extends AbstractHeidelpayResource
+trait HasCustomerMessage
 {
-    use HasCancellations;
-    use HasPaymentState;
+    /** @var Message $message */
+    private $message;
+
+    //<editor-fold desc="Getters/Setters">
+
+    /**
+     * @return Message
+     */
+    public function getMessage(): Message
+    {
+        if (!$this->message instanceof Message) {
+            $this->message = new Message();
+        }
+
+        return $this->message;
+    }
+
+    //</editor-fold>
 }

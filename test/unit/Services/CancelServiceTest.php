@@ -361,7 +361,9 @@ class CancelServiceTest extends BasePaymentTest
 
         /** @var Payment|MockObject $paymentMock */
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization', 'getAmount'])->getMock();
-        $paymentMock->method('getAmount')->willReturn((new Amount())->setRemaining(100.0));
+        $amountObj   = new Amount();
+        $amountObj->handleResponse((object)['remaining' => 100.0]);
+        $paymentMock->method('getAmount')->willReturn($amountObj);
         $paymentMock->expects($this->exactly(4))->method('getAuthorization')->willReturn($authorizationMock);
         $paymentMock->setParentResource($this->heidelpay);
 
@@ -398,7 +400,7 @@ class CancelServiceTest extends BasePaymentTest
         $exception = new HeidelpayApiException(null, null, $exceptionCode);
         $authMock->method('cancel')->willThrowException($exception);
         $paymentMock->method('getAuthorization')->willReturn($authMock);
-        $paymentMock->getAmount()->setRemaining(100.0);
+        $paymentMock->getAmount()->handleResponse((object)['remaining' => 100.0]);
         $paymentMock->setParentResource($this->heidelpay);
 
         try {
@@ -426,7 +428,8 @@ class CancelServiceTest extends BasePaymentTest
         $authMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
         $paymentMock->method('getAuthorization')->willReturn($authMock);
         $authMock->expects(self::never())->method('cancel');
-        $paymentMock->getAmount()->setRemaining(0.0);
+        $paymentMock->getAmount()->handleResponse((object)['remaining' => 0.0]);
+
         $paymentMock->setParentResource($this->heidelpay);
 
         $paymentMock->cancelAuthorizationAmount(12.3);

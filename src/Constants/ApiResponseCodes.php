@@ -26,10 +26,14 @@ namespace heidelpayPHP\Constants;
 
 class ApiResponseCodes
 {
+    // Status codes
     const API_SUCCESS_REQUEST_PROCESSED_IN_TEST_MODE            = 'API.000.100.112';
     const API_SUCCESS_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED       = 'API.100.550.340';
     const API_SUCCESS_CHARGED_AMOUNT_LOWER_THAN_EXPECTED        = 'API.100.550.341';
 
+    const CORE_TRANSACTION_PENDING                              = 'COR.000.200.000';
+
+    // Errors codes
     const API_ERROR_GENERAL                                     = 'API.000.000.999';
     const API_ERROR_PAYMENT_NOT_FOUND                           = 'API.310.100.003';
     const API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED           = 'API.320.000.004';

@@ -724,7 +724,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $paymentReference = null
+        $referenceText = null
     ): Authorization {
         return $this->paymentService->authorize(
             $amount,
@@ -737,7 +737,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
             $basket,
             $card3ds,
             $invoiceId,
-            $paymentReference
+            $referenceText
         );
     }
 

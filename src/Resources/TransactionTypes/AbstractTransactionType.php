@@ -24,14 +24,13 @@
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
-use DateTime;
-use Exception;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\EmbeddedResources\Message;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
+use heidelpayPHP\Traits\HasCustomerMessage;
+use heidelpayPHP\Traits\HasDate;
 use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasStates;
 use heidelpayPHP\Traits\HasUniqueAndShortId;
@@ -43,27 +42,15 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     use HasOrderId;
     use HasStates;
     use HasUniqueAndShortId;
+    use HasCustomerMessage;
+    use HasDate;
 
     //<editor-fold desc="Properties">
 
     /** @var Payment $payment */
     private $payment;
 
-    /** @var DateTime $date */
-    private $date;
-
-    /** @var Message $message */
-    private $message;
-
     //</editor-fold>
-
-    /**
-     * AbstractTransactionType constructor.
-     */
-    public function __construct()
-    {
-        $this->message = new Message();
-    }
 
     //<editor-fold desc="Getters/Setters">
 
@@ -115,38 +102,6 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         return $this->payment->getRedirectUrl();
     }
 
-    /**
-     * This returns the date of the Transaction as string.
-     *
-     * @return string|null
-     */
-    public function getDate()
-    {
-        $date = $this->date;
-        return $date ? $date->format('Y-m-d h:i:s') : null;
-    }
-
-    /**
-     * @param string $date
-     *
-     * @return $this
-     *
-     * @throws Exception
-     */
-    public function setDate(string $date): self
-    {
-        $this->date = new DateTime($date);
-        return $this;
-    }
-
-    /**
-     * @return Message
-     */
-    public function getMessage(): Message
-    {
-        return $this->message;
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
@@ -168,15 +123,11 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
         }
 
         if (isset($response->redirectUrl)) {
-            $payment->setRedirectUrl($response->redirectUrl);
+            $payment->handleResponse((object)['redirectUrl' => $response->redirectUrl]);
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
             $this->fetchPayment();
-        }
-
-        if (isset($response->message)) {
-            $this->message->handleResponse($response->message);
         }
     }
 

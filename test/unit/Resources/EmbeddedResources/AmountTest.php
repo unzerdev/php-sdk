@@ -47,11 +47,8 @@ class AmountTest extends BasePaymentTest
         $this->assertEquals(0.0, $amount->getCharged());
         $this->assertEquals(0.0, $amount->getRemaining());
 
-        $amount->setTotal(1.1);
-        $amount->setCanceled(2.2);
-        $amount->setCharged(3.3);
-        $amount->setRemaining(4.4);
-        $amount->setCurrency('MyCurrency');
+        $resp = ['total' => 1.1, 'canceled' => 2.2, 'charged' => 3.3, 'remaining' => 4.4, 'currency' => 'MyCurrency'];
+        $amount->handleResponse((object)$resp);
 
         $this->assertEquals('MyCurrency', $amount->getCurrency());
         $this->assertEquals(1.1, $amount->getTotal());

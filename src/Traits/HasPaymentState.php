@@ -127,7 +127,7 @@ trait HasPaymentState
      *
      * @return self
      */
-    public function setState(int $state): self
+    protected function setState(int $state): self
     {
         $this->state = $state;
         return $this;

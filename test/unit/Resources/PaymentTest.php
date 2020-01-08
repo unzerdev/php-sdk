@@ -43,6 +43,7 @@ use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
@@ -65,7 +66,7 @@ class PaymentTest extends BasePaymentTest
         /** @noinspection UnnecessaryAssertionInspection */
         $this->assertInstanceOf(Amount::class, $payment->getAmount());
 
-        $payment->setRedirectUrl('https://my-redirect-url.test');
+        $payment->handleResponse((object)['redirectUrl' => 'https://my-redirect-url.test']);
         $this->assertEquals('https://my-redirect-url.test', $payment->getRedirectUrl());
 
         $authorize = new Authorization();
@@ -632,18 +633,17 @@ class PaymentTest extends BasePaymentTest
      * @throws Exception
      * @throws RuntimeException
      * @throws ReflectionException
+     * @throws HeidelpayApiException
      */
     public function getAndSetCurrencyShouldPropagateToTheAmountObject()
     {
+        /** @var Amount|MockObject $amountMock */
         $amountMock = $this->getMockBuilder(Amount::class)->setMethods(['getCurrency', 'setCurrency'])->getMock();
         $amountMock->expects($this->once())->method('getCurrency')->willReturn('MyTestGetCurrency');
         $amountMock->expects($this->once())->method('setCurrency')->with('MyTestSetCurrency');
 
-        $payment = new Payment();
-        /** @var Amount $amountMock */
-        $payment->setAmount($amountMock);
-
-        $payment->setCurrency('MyTestSetCurrency');
+        $payment = (new Payment())->setAmount($amountMock);
+        $payment->handleResponse((object) ['currency' => 'MyTestSetCurrency']);
         $this->assertEquals('MyTestGetCurrency', $payment->getCurrency());
     }
 
@@ -1308,16 +1308,15 @@ class PaymentTest extends BasePaymentTest
     public function chargeMethodShouldPropagateToHeidelpayChargePaymentMethod()
     {
         $payment = new Payment();
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()
-            ->setMethods(['chargePayment'])->getMock();
+
+        /** @var Heidelpay|MockObject $heidelpayMock */
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['chargePayment'])->getMock();
         $heidelpayMock->expects($this->exactly(3))->method('chargePayment')
             ->withConsecutive(
                 [$payment, null, null],
                 [$payment, 1.1, null],
                 [$payment, 2.2, 'MyCurrency']
             )->willReturn(new Charge());
-
-        /** @var Heidelpay $heidelpayMock */
         $payment->setParentResource($heidelpayMock);
 
         $payment->charge();
@@ -1337,13 +1336,12 @@ class PaymentTest extends BasePaymentTest
     public function shipMethodShouldPropagateToHeidelpayChargePaymentMethod()
     {
         $payment = new Payment();
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()
-            ->setMethods(['ship'])->getMock();
+
+        /** @var Heidelpay|MockObject $heidelpayMock */
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['ship'])->getMock();
         $heidelpayMock->expects($this->once())->method('ship')->willReturn(new Shipment());
 
-        /** @var Heidelpay $heidelpayMock */
         $payment->setParentResource($heidelpayMock);
-
         $payment->ship();
     }
 
@@ -1360,10 +1358,10 @@ class PaymentTest extends BasePaymentTest
     {
         $metadata = (new Metadata())->addMetadata('myData', 'myValue');
 
+        /** @var ResourceService|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->once())->method('createResource')->with($metadata);
 
-        /** @var ResourceServiceInterface $resourceSrvMock */
         $heidelpay = (new Heidelpay('s-priv-1234'))->setResourceService($resourceSrvMock);
         $payment = new Payment($heidelpay);
 
@@ -1391,9 +1389,10 @@ class PaymentTest extends BasePaymentTest
     public function metadataMustBeOfTypeMetadata()
     {
         $metadata = new Metadata();
+
+        /** @var ResourceService|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->disableOriginalConstructor()->getMock();
         $resourceSrvMock->expects($this->once())->method('createResource')->with($metadata);
-        /** @var ResourceServiceInterface $resourceSrvMock */
         $heidelpay = (new Heidelpay('s-priv-1234'))->setResourceService($resourceSrvMock);
 
         // when
@@ -1428,9 +1427,9 @@ class PaymentTest extends BasePaymentTest
     public function setBasketShouldCallCreateIfTheGivenBasketObjectDoesNotExistYet()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
 
-        /** @var ResourceServiceInterface $resourceSrvMock */
+        /** @var ResourceService|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
         $heidelpay->setResourceService($resourceSrvMock);
 
         $basket = new Basket();
@@ -1458,11 +1457,11 @@ class PaymentTest extends BasePaymentTest
     public function setBasketWontCallResourceServiceWhenBasketIsNull()
     {
         $heidelpay = new Heidelpay('s-priv-123');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
 
-        /** @var ResourceServiceInterface $resourceSrvMock */
-        $heidelpay->setResourceService($resourceSrvMock);
+        /** @var ResourceService|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
         $resourceSrvMock->expects($this->once())->method('createResource');
+        $heidelpay->setResourceService($resourceSrvMock);
 
         // set basket first to prove the setter works both times
         $basket = new Basket();
@@ -1485,8 +1484,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function updateResponseResourcesShouldFetchBasketIdIfItIsSetInResponse()
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()
-            ->setMethods(['fetchBasket'])->getMock();
+        /** @var Heidelpay|MockObject $heidelpayMock */
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['fetchBasket'])->getMock();
 
         $basket = new Basket();
         $heidelpayMock->expects($this->once())->method('fetchBasket')->with('myResourcesBasketId')->willReturn($basket);
@@ -1510,9 +1509,9 @@ class PaymentTest extends BasePaymentTest
      */
     public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet()
     {
-        $orderId = str_replace(' ', '', microtime());
-        $payment = (new Payment())->setOrderId($orderId)->setParentResource(new Heidelpay('s-priv-123'));
-        $lastElement      = explode('/', rtrim($payment->getUri(), '/'));
+        $orderId     = str_replace(' ', '', microtime());
+        $payment     = (new Payment())->setOrderId($orderId)->setParentResource(new Heidelpay('s-priv-123'));
+        $lastElement = explode('/', rtrim($payment->getUri(), '/'));
         $this->assertEquals($orderId, end($lastElement));
     }
 
