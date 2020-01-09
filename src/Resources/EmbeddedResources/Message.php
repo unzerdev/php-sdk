@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources/embedded_resources
+ * @package  heidelpayPHP\Resources\EmbeddedResources
  */
 namespace heidelpayPHP\Resources\EmbeddedResources;
 
@@ -33,6 +33,9 @@ class Message extends AbstractHeidelpayResource
 
     /** @var string $customer */
     private $customer = '';
+
+    /** @var string $merchant */
+    private $merchant = '';
 
     //<editor-fold desc="Getters/Setters">
 
@@ -49,7 +52,7 @@ class Message extends AbstractHeidelpayResource
      *
      * @return Message
      */
-    public function setCode(string $code): Message
+    protected function setCode(string $code): Message
     {
         $this->code = $code;
         return $this;
@@ -68,9 +71,28 @@ class Message extends AbstractHeidelpayResource
      *
      * @return Message
      */
-    public function setCustomer(string $customer): Message
+    protected function setCustomer(string $customer): Message
     {
         $this->customer = $customer;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMerchant()
+    {
+        return $this->merchant;
+    }
+
+    /**
+     * @param string|null $merchant
+     *
+     * @return Message
+     */
+    protected function setMerchant($merchant): Message
+    {
+        $this->merchant = $merchant;
         return $this;
     }
 

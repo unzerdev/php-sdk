@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources;
 
@@ -175,6 +175,8 @@ class BasketTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
+     *
+     * @deprecated since 1.2.6.0
      */
     public function amountTotalSetterGetterAccessAmountTotalGross()
     {

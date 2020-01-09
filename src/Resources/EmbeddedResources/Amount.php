@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources/embedded_resources
+ * @package  heidelpayPHP\Resources\EmbeddedResources
  */
 namespace heidelpayPHP\Resources\EmbeddedResources;
 
@@ -51,7 +51,7 @@ class Amount extends AbstractHeidelpayResource
      *
      * @return $this
      */
-    public function setTotal(float $total): self
+    protected function setTotal(float $total): self
     {
         $this->total = $total;
         return $this;
@@ -70,7 +70,7 @@ class Amount extends AbstractHeidelpayResource
      *
      * @return $this
      */
-    public function setCharged(float $charged): self
+    protected function setCharged(float $charged): self
     {
         $this->charged = $charged;
         return $this;
@@ -89,7 +89,7 @@ class Amount extends AbstractHeidelpayResource
      *
      * @return self
      */
-    public function setCanceled(float $canceled): self
+    protected function setCanceled(float $canceled): self
     {
         $this->canceled = $canceled;
         return $this;
@@ -108,7 +108,7 @@ class Amount extends AbstractHeidelpayResource
      *
      * @return self
      */
-    public function setRemaining(float $remaining): self
+    protected function setRemaining(float $remaining): self
     {
         $this->remaining = $remaining;
         return $this;
@@ -127,7 +127,7 @@ class Amount extends AbstractHeidelpayResource
      *
      * @return self
      */
-    public function setCurrency(string $currency): self
+    protected function setCurrency(string $currency): self
     {
         $this->currency = $currency;
         return $this;

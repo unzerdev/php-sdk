@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Traits;
 
@@ -67,7 +67,7 @@ class HasPaymentStateTest extends BasePaymentTest
         $this->assertFalse($traitDummy->isPaymentReview());
         $this->assertFalse($traitDummy->isChargeBack());
 
-        $traitDummy->setState($state);
+        $traitDummy->handleResponse((object)['state' => $state]);
         $this->assertEquals($state, $traitDummy->getState());
         $this->assertEquals($stateName, $traitDummy->getStateName());
         $this->assertEquals($pending, $traitDummy->isPending());

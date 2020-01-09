@@ -20,9 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/Services
+ * @package  heidelpayPHP\Services
  */
 namespace heidelpayPHP\Services;
+
+use function is_float;
 
 class ValueService
 {

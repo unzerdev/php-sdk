@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP\PaymentTypes
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
@@ -452,12 +452,15 @@ class Paypage extends BasePaymentType
      * @param string $redirectUrl
      *
      * @return Paypage
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setRedirectUrl(string $redirectUrl): Paypage
     {
         $payment = $this->getPayment();
         if ($payment instanceof Payment) {
-            $payment->setRedirectUrl($redirectUrl);
+            $payment->handleResponse((object)['redirectUrl' => $redirectUrl]);
         }
         return $this;
     }
@@ -578,11 +581,8 @@ class Paypage extends BasePaymentType
      * {@inheritDoc}
      * Map external name of property to internal name of property.
      *
-     * @param stdClass $response
-     * @param string   $method
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
@@ -638,8 +638,8 @@ class Paypage extends BasePaymentType
      * Updates the referenced payment object if it exists and if this is not the payment object itself.
      * This is called from the crud methods to update the payments state whenever anything happens.
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function fetchPayment()
     {

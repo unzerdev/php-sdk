@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP\examples
  */
 
 /** Require the constants of this example */
@@ -35,7 +35,7 @@ use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
+use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
@@ -80,7 +80,7 @@ try {
         ->setCity('Heidelberg')
         ->setZip('69155')
         ->setCountry('DE');
-    $customer = (new Customer('Linda', 'Heideich'))
+    $customer = CustomerFactory::createCustomer('Linda', 'Heideich')
         ->setBirthDate('2000-02-12')
         ->setBillingAddress($address)
         ->setShippingAddress($address)
@@ -91,8 +91,7 @@ try {
         ->setAmountNet(100.0)
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);
-    $basket = (new Basket($orderId, 119.0, 'EUR', [$basketItem]))
-        ->setAmountTotalVat(19.0);
+    $basket = (new Basket($orderId, 119.0, 'EUR', [$basketItem]))->setAmountTotalVat(19.0);
 
     // initialize the payment
     $authorize = $heidelpay->authorize(
@@ -103,7 +102,8 @@ try {
         $customer,
         $orderId,
         null,
-        $basket);
+        $basket
+    );
 
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['PaymentId'] = $authorize->getPaymentId();

@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources;
 
@@ -30,6 +30,7 @@ use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
@@ -262,21 +263,20 @@ class CustomerTest extends BasePaymentTest
     public function fetchCustomerByOrderIdShouldCreateCustomerObjectWithCustomerIdAndCallFetch()
     {
         $heidelpay = new Heidelpay('s-priv-1234');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetch'])->setConstructorArgs([$heidelpay])->getMock();
-        $resourceSrvMock->expects($this->once())->method('fetch')
-            ->with($this->callback(
-                static function ($customer) use ($heidelpay) {
-                    return $customer instanceof Customer &&
-                        $customer->getCustomerId() === 'myCustomerId' &&
-                        $customer->getHeidelpayObject() === $heidelpay;
-                }));
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock->expects($this->once())->method('fetchResource')
+            ->with($this->callback(static function ($customer) use ($heidelpay) {
+                return $customer instanceof Customer &&
+                    $customer->getCustomerId() === 'myCustomerId' &&
+                    $customer->getHeidelpayObject() === $heidelpay;
+            }));
 
-        /** @var ResourceService $resourceSrvMock */
+        /** @var ResourceServiceInterface $resourceSrvMock */
         $resourceSrvMock->fetchCustomerByExtCustomerId('myCustomerId');
     }
 
     /**
-     * Verify Customer can be updated.
+     * Verify customer can be updated.
      *
      * @test
      *

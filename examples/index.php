@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP\examples
  */
 
 /** Require the constants of this example */
@@ -137,6 +137,18 @@ require_once __DIR__ . '/../../../autoload.php';
                         </div>
                     </div>
                     <div class="ui bottom attached green button" onclick="location.href='Wechatpay/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Przelewy24 (P24)
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='Przelewy24/';">
                         Try
                     </div>
                 </div>

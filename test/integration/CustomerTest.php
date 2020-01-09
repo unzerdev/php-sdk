@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration
+ * @package  heidelpayPHP\test\integration
  */
 namespace heidelpayPHP\test\integration;
 
@@ -47,8 +47,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @return Customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function minCustomerCanBeCreatedAndFetched(): Customer
     {
@@ -84,8 +84,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @return Customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function maxCustomerCanBeCreatedAndFetched(): Customer
     {
@@ -104,8 +104,8 @@ class CustomerTest extends BasePaymentTest
     /**
      * @param Customer $customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
@@ -116,8 +116,8 @@ class CustomerTest extends BasePaymentTest
     }
 
     /**
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
@@ -134,8 +134,8 @@ class CustomerTest extends BasePaymentTest
     /**
      * @param Customer $customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
@@ -149,8 +149,8 @@ class CustomerTest extends BasePaymentTest
     /**
      * @param Customer $customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
@@ -168,8 +168,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
     {
@@ -194,8 +194,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function transactionShouldReferenceCustomerIfItExist()
     {
@@ -220,8 +220,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function transactionShouldReferenceCustomerIfItExistAndItsIdHasBeenPassed()
     {
@@ -249,8 +249,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @param Customer $customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function customerShouldBeUpdatable(Customer $customer)
     {
@@ -273,8 +273,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @param Customer $customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function customerShouldBeDeletableById(Customer $customer)
     {
@@ -293,8 +293,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function customerShouldBeDeletableByObject()
     {
@@ -316,8 +316,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function apiShouldReturnErrorIfCustomerAlreadyExists()
     {
@@ -339,8 +339,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function customerShouldBeFetchedByCustomerIdAndUpdatedIfItAlreadyExists()
     {
@@ -380,8 +380,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @return Customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function minNotRegisteredB2bCustomerCanBeCreatedAndFetched(): Customer
     {
@@ -405,8 +405,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function maxNotRegisteredB2bCustomerCanBeCreatedAndFetched()
     {
@@ -432,8 +432,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @return Customer
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function minRegisteredB2bCustomerCanBeCreatedAndFetched(): Customer
     {
@@ -457,8 +457,8 @@ class CustomerTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function maxRegisteredB2bCustomerCanBeCreatedAndFetched()
     {

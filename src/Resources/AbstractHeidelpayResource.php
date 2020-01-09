@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/Resources
+ * @package  heidelpayPHP\Resources
  */
 namespace heidelpayPHP\Resources;
 
@@ -161,14 +161,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * @return array
-     */
-    protected function getAdditionalAttributes(): array
-    {
-        return $this->additionalAttributes;
-    }
-
-    /**
      * @param array $additionalAttributes
      *
      * @return AbstractHeidelpayResource
@@ -299,8 +291,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     protected function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -312,12 +304,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @param AbstractHeidelpayResource $resource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     protected function fetchResource(AbstractHeidelpayResource $resource)
     {
-        $this->getResourceService()->fetch($resource);
+        $this->getResourceService()->fetchResource($resource);
     }
 
     //</editor-fold>

@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/transaction_types
+ * @package  heidelpayPHP\TransactionTypes
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
@@ -73,8 +73,6 @@ class Charge extends AbstractTransactionType
         $this->setAmount($amount);
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Setters/Getters">
@@ -255,13 +253,13 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @param string|null $paymentReference
+     * @param string|null $referenceText
      *
      * @return Charge
      */
-    public function setPaymentReference($paymentReference): Charge
+    public function setPaymentReference($referenceText): Charge
     {
-        $this->paymentReference = $paymentReference;
+        $this->paymentReference = $referenceText;
         return $this;
     }
 
@@ -312,8 +310,8 @@ class Charge extends AbstractTransactionType
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancel(
         $amount = null,

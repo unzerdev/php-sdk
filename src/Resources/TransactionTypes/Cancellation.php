@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/transaction_types
+ * @package  heidelpayPHP\TransactionTypes
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
@@ -66,8 +66,6 @@ class Cancellation extends AbstractTransactionType
     public function __construct($amount = null)
     {
         $this->setAmount($amount);
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Getters/Setters">

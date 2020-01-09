@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <simon.gabriel@heidelpay.com>
  *
- * @package  heidelpayPHP/adapter
+ * @package  heidelpayPHP\Adapter
  */
 namespace heidelpayPHP\Adapter;
 
@@ -47,7 +47,7 @@ interface HttpAdapterInterface
      *
      * @return string|null
      *
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      */
     public function execute();
 

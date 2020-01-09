@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/traits
+ * @package  heidelpayPHP\Traits
  */
 namespace heidelpayPHP\Traits;
 
@@ -50,7 +50,7 @@ trait HasStates
      *
      * @return self
      */
-    public function setIsError(bool $isError): self
+    protected function setIsError(bool $isError): self
     {
         $this->isError = $isError;
         return $this;
@@ -69,7 +69,7 @@ trait HasStates
      *
      * @return self
      */
-    public function setIsSuccess(bool $isSuccess): self
+    protected function setIsSuccess(bool $isSuccess): self
     {
         $this->isSuccess = $isSuccess;
         return $this;
@@ -88,7 +88,7 @@ trait HasStates
      *
      * @return self
      */
-    public function setIsPending(bool $isPending): self
+    protected function setIsPending(bool $isPending): self
     {
         $this->isPending = $isPending;
         return $this;

@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration/payment_types
+ * @package  heidelpayPHP\test\integration\PaymentTypes
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 
@@ -41,8 +41,8 @@ class EPSTest extends BasePaymentTest
      *
      * @return EPS
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function epsShouldBeCreatable(): EPS
     {
@@ -68,8 +68,8 @@ class EPSTest extends BasePaymentTest
      *
      * @param EPS $eps
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends epsShouldBeCreatable
      */
     public function epsShouldThrowExceptionOnAuthorize(EPS $eps)
@@ -88,8 +88,8 @@ class EPSTest extends BasePaymentTest
      *
      * @param EPS $eps
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function epsShouldBeChargeable(EPS $eps)
     {
@@ -112,8 +112,8 @@ class EPSTest extends BasePaymentTest
      *
      * @param EPS $eps
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function epsTypeCanBeFetched(EPS $eps)
     {
