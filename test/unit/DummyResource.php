@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit;
 
@@ -28,6 +28,33 @@ use heidelpayPHP\Resources\AbstractHeidelpayResource;
 
 class DummyResource extends AbstractHeidelpayResource
 {
+    /** @var float $testFloat */
+    protected $testFloat = 0.0;
+
+    //<editor-fold desc="Setters / Getters">
+
+    /**
+     * @return float
+     */
+    public function getTestFloat(): float
+    {
+        return $this->testFloat;
+    }
+
+    /**
+     * @param float $testFloat
+     *
+     * @return DummyResource
+     */
+    public function setTestFloat(float $testFloat): DummyResource
+    {
+        $this->testFloat = $testFloat;
+        return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
     public function jsonSerialize()
     {
         return '{"dummyResource": "JsonSerialized"}';
@@ -37,4 +64,6 @@ class DummyResource extends AbstractHeidelpayResource
     {
         return '/my/uri' . ($appendId ? '/123' : '');
     }
+
+    //</editor-fold>
 }

@@ -20,21 +20,21 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Traits;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class CanRecurTest extends BaseUnitTest
+class CanRecurTest extends BasePaymentTest
 {
     /**
      * Verify setters and getters.
@@ -58,8 +58,8 @@ class CanRecurTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function activateRecurringWillThrowExceptionIfTheObjectHasWrongType()
     {

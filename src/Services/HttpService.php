@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/services
+ * @package  heidelpayPHP\Services
  */
 namespace heidelpayPHP\Services;
 
@@ -30,6 +30,7 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use RuntimeException;
+use function in_array;
 
 class HttpService
 {
@@ -104,8 +105,8 @@ class HttpService
      *
      * @return string
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function send(
         $uri = null,
@@ -161,7 +162,6 @@ class HttpService
             'SDK-VERSION'   => Heidelpay::SDK_VERSION,
             'SDK-TYPE'   => Heidelpay::SDK_TYPE
         ];
-        /** @noinspection IsEmptyFunctionUsageInspection */
         if (!empty($locale)) {
             $httpHeaders['Accept-Language'] = $locale;
         }

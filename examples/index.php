@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP\examples
  */
 
 /** Require the constants of this example */
@@ -143,6 +143,18 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            Przelewy24 (P24)
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='Przelewy24/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             Prepayment
                         </div>
                         <div class="description">
@@ -245,7 +257,19 @@ require_once __DIR__ . '/../../../autoload.php';
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Flexipay direct (PIS)
+                            FlexiPay Rate Direct Debit (Hire Purchase)
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div class="ui bottom attached green button" onclick="location.href='HirePurchaseDirectDebit/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            FlexiPay Direct (PIS)
                         </div>
                         <div class="description">
                         </div>

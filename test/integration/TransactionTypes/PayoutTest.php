@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration/transaction_types
+ * @package  heidelpayPHP\test\integration\TransactionTypes
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
@@ -43,8 +43,8 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutCanBeCalledForCardType()
     {
@@ -66,8 +66,8 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutCanBeCalledForSepaDirectDebitType()
     {
@@ -88,8 +88,8 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutCanBeCalledForSepaDirectDebitGuaranteedType()
     {
@@ -111,8 +111,8 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function payoutShouldBeFetchedWhenItsPaymentResourceIsFetched()
@@ -133,8 +133,8 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutShouldBeFetchableViaItsUrl()
     {
@@ -152,25 +152,25 @@ class PayoutTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutShouldAcceptAllParameters()
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
-        $invoiceId = $this->generateRandomId();
+        $invoiceId = self::generateRandomId();
         $paymentReference = 'paymentReference';
 
-        $payout = $card->payout(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId, $paymentReference);
+        $payout = $card->payout(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, $invoiceId, $paymentReference);
         $payment = $payout->getPayment();
 
         $this->assertSame($card, $payment->getPaymentType());
-        $this->assertEquals(123.4, $payout->getAmount());
+        $this->assertEquals(119.0, $payout->getAmount());
         $this->assertEquals('EUR', $payout->getCurrency());
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());

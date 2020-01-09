@@ -20,19 +20,19 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class BasketTest extends BaseUnitTest
+class BasketTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters work properly.
@@ -175,6 +175,8 @@ class BasketTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
+     *
+     * @deprecated since 1.2.6.0
      */
     public function amountTotalSetterGetterAccessAmountTotalGross()
     {

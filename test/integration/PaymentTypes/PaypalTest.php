@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration/payment_types
+ * @package  heidelpayPHP\test\integration\PaymentTypes
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 
@@ -39,8 +39,8 @@ class PaypalTest extends BasePaymentTest
      *
      * @return BasePaymentType
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paypalShouldBeCreatableAndFetchable(): BasePaymentType
     {
@@ -63,8 +63,8 @@ class PaypalTest extends BasePaymentTest
      *
      * @return BasePaymentType
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paypalShouldBeCreatableAndFetchableWithEmail(): BasePaymentType
     {
@@ -88,8 +88,8 @@ class PaypalTest extends BasePaymentTest
      *
      * @param Paypal $paypal
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paypalShouldBeAuthorizable(Paypal $paypal)
     {
@@ -111,8 +111,8 @@ class PaypalTest extends BasePaymentTest
      *
      * @param Paypal $paypal
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paypalShouldBeChargeable(Paypal $paypal)
     {

@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
@@ -31,14 +31,14 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class ChargeTest extends BaseUnitTest
+class ChargeTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.
@@ -80,8 +80,8 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function aChargeShouldBeUpdatedThroughResponseHandling()
     {
@@ -138,8 +138,8 @@ class ChargeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToCharge()
     {

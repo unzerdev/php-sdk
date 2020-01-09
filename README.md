@@ -29,10 +29,11 @@ Please refer to the following documentation for installation instructions and us
 *   SEPA direct debit (guaranteed) + Recurring
 *   SOFORT
 *   EPS
-*   FlexiPay direct (PIS)
+*   FlexiPay® Direct (PIS)
 *   Alipay
 *   WeChat Pay
 *   Invoice Factoring
+*   FlexiPay® Rate (Hire Purchase Direct Debit)
 
 ## Supported features
 *   Webhooks and event handling

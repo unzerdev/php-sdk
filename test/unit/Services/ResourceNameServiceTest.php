@@ -20,15 +20,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit;
 
 use heidelpayPHP\Services\ResourceNameService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class ResourceNameServiceTest extends BaseUnitTest
+class ResourceNameServiceTest extends BasePaymentTest
 {
     /**
      * Verify getting the short name of a class.

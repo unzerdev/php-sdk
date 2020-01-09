@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/constants
+ * @package  heidelpayPHP\Constants
  */
 namespace heidelpayPHP\Constants;
 
@@ -50,6 +50,7 @@ class IdStrings
     const ALIPAY = 'ali';
     const WECHATPAY = 'wcp';
     const INVOICE_FACTORING = 'ivf';
+    const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
     const PAYMENT_PAGE = 'ppg';
 
     // Resources
@@ -76,6 +77,7 @@ class IdStrings
         self::ALIPAY,
         self::WECHATPAY,
         self::INVOICE_FACTORING,
-        self::PAYMENT_PAGE
+        self::PAYMENT_PAGE,
+        self::HIRE_PURCHASE_DIRECT_DEBIT
     ];
 }

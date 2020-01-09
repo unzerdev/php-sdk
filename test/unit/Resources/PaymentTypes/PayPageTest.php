@@ -20,18 +20,22 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\TransactionTypes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
+use heidelpayPHP\Resources\PaymentTypes\Giropay;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
@@ -79,6 +83,10 @@ class PayPageTest extends BasePaymentTest
         $this->assertNull($paypage->getPrivacyPolicyUrl());
         $this->assertNull($paypage->getTermsAndConditionUrl());
 
+        // other
+        $this->assertCount(0, $paypage->getExcludeTypes());
+        $this->assertNull($paypage->isCard3ds());
+
         // ----------- SET test values ------------
         $payment = (new Payment())->setId('my payment id');
         $paypage
@@ -97,7 +105,9 @@ class PayPageTest extends BasePaymentTest
             ->setPrivacyPolicyUrl('my privacy policy url')
             ->setTermsAndConditionUrl('my tac url')
             ->setPayment($payment)
-            ->setRedirectUrl('https://redirect.url');
+            ->setRedirectUrl('https://redirect.url')
+            ->addExcludeType(SepaDirectDebit::getResourceName())
+            ->setCard3ds(true);
 
         // ----------- VERIFY test values ------------
         $this->assertEquals(321.0, $paypage->getAmount());
@@ -123,6 +133,16 @@ class PayPageTest extends BasePaymentTest
         $this->assertEquals('my imprint url', $paypage->getImprintUrl());
         $this->assertEquals('my privacy policy url', $paypage->getPrivacyPolicyUrl());
         $this->assertEquals('my tac url', $paypage->getTermsAndConditionUrl());
+
+        // other
+        $this->assertArraySubset([SepaDirectDebit::getResourceName()], $paypage->getExcludeTypes());
+        $paypage->setExcludeTypes([Card::getResourceName(), Giropay::getResourceName()]);
+        $this->assertArraySubset([Card::getResourceName(), Giropay::getResourceName()], $paypage->getExcludeTypes());
+        $this->assertTrue($paypage->isCard3ds());
+
+        // SET test values 2
+        $paypage->setCard3ds(false);
+        $this->assertFalse($paypage->isCard3ds());
     }
 
     /**
@@ -130,8 +150,8 @@ class PayPageTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function responseHandlingShouldWorkProperly()
     {
@@ -208,8 +228,8 @@ class PayPageTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paymentObjectShouldBeUpdatedProperly()
     {
@@ -243,8 +263,8 @@ class PayPageTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function responseHandlingShouldMapSpecialFieldsProperly()
     {
@@ -270,14 +290,14 @@ class PayPageTest extends BasePaymentTest
      * @param mixed  $fetchCallCount
      *
      *@throws ReflectionException
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paymentShouldBeFetchedWhenItIsNoGetRequest($method, $fetchCallCount)
     {
         // mock resource service to check whether fetch is called on it with the payment object.
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetch'])->getMock();
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
 
         // when
         $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
@@ -285,7 +305,7 @@ class PayPageTest extends BasePaymentTest
         $paypage->setPayment($payment)->setParentResource($payment);
 
         // should
-        $resourceSrvMock->expects($this->exactly($fetchCallCount))->method('fetch')->with($payment);
+        $resourceSrvMock->expects($this->exactly($fetchCallCount))->method('fetchResource')->with($payment);
 
         // when
         $response = new stdClass();
@@ -300,8 +320,8 @@ class PayPageTest extends BasePaymentTest
      * @test
      *
      * @throws Exception
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function exposeShouldSetBasicParams()
     {
@@ -316,8 +336,8 @@ class PayPageTest extends BasePaymentTest
             ->setMetadata($metadata)
             ->setCustomer($customer);
         $paypage = (new Paypage(123.4567, 'EUR', self::RETURN_URL))
-            ->setParentResource($payment)
             ->setFullPageImage('full page image')
+            ->setParentResource($payment)
             ->setLogoImage('logo image')
             ->setShopDescription('my shop description')
             ->setShopName('my shop name')
@@ -330,7 +350,8 @@ class PayPageTest extends BasePaymentTest
             ->setPayment($payment)
             ->setRedirectUrl('https://redirect.url')
             ->setOrderId('my order id')
-            ->setInvoiceId('my invoice id');
+            ->setInvoiceId('my invoice id')
+            ->setEffectiveInterestRate(4.99);
 
         // then
         $expected = [
@@ -354,7 +375,9 @@ class PayPageTest extends BasePaymentTest
             'privacyPolicyUrl' => 'my privacy policy url',
             'termsAndConditionUrl' => 'my tac url',
             'orderId' => 'my order id',
-            'invoiceId' => 'my invoice id'
+            'invoiceId' => 'my invoice id',
+            'excludeTypes' => [],
+            'additionalAttributes' => ['effectiveInterestRate' => 4.99]
         ];
         $this->assertEquals($expected, $paypage->expose());
     }
@@ -364,8 +387,8 @@ class PayPageTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function resourcesAreNullWithoutPaymentObject()
     {
@@ -403,7 +426,7 @@ class PayPageTest extends BasePaymentTest
             'GET' => [HttpAdapterInterface::REQUEST_GET, 0],
             'PUT' => [HttpAdapterInterface::REQUEST_PUT, 1],
             'DELETE' => [HttpAdapterInterface::REQUEST_DELETE, 1],
-            'POST' => [HttpAdapterInterface::REQUEST_POST, 1],
+            'POST' => [HttpAdapterInterface::REQUEST_POST, 1]
         ];
     }
 

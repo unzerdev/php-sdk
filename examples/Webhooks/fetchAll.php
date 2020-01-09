@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP\examples
  */
 
 /** Require the constants of this example */
@@ -45,11 +45,6 @@ function printMessage($type, $title, $text)
 function printError($text)
 {
     printMessage('error', 'Error', $text);
-}
-
-function printSuccess($title, $text)
-{
-    printMessage('success', $title, $text);
 }
 
 function printInfo($title, $text)

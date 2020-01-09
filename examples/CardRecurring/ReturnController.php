@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP\examples
  */
 
 /** Require the constants of this example */
@@ -62,11 +62,13 @@ try {
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Redirect to success if the payment has been successfully completed or is still in handled.
+    /** @var Card $paymentType */
     $paymentType = $heidelpay->fetchPaymentType($paymentTypeId);
 
-    if ($paymentType instanceof Card && $paymentType->isRecurring()) {
+    if ($paymentType->isRecurring()) {
         redirect(SUCCESS_URL);
     }
+
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();

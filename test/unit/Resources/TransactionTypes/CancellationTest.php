@@ -20,16 +20,23 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
 use heidelpayPHP\Constants\CancelReasonCodes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionException;
+use RuntimeException;
 
-class CancellationTest extends BaseUnitTest
+class CancellationTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.
@@ -44,13 +51,17 @@ class CancellationTest extends BaseUnitTest
         $this->assertNull($cancellation->getAmount());
         $this->assertEmpty($cancellation->getReasonCode());
         $this->assertEmpty($cancellation->getPaymentReference());
+        $this->assertNull($cancellation->getAmountNet());
+        $this->assertNull($cancellation->getAmountVat());
 
         $cancellation = new Cancellation(123.4);
         $this->assertEquals(123.4, $cancellation->getAmount());
         $this->assertEmpty($cancellation->getReasonCode());
 
-        $cancellation->setAmount(567.8);
+        $cancellation->setAmount(567.8)->setAmountNet(234.5)->setAmountVat(123.4);
         $this->assertEquals(567.8, $cancellation->getAmount());
+        $this->assertEquals(234.5, $cancellation->getAmountNet());
+        $this->assertEquals(123.4, $cancellation->getAmountVat());
 
         $cancellation->setPaymentReference('my Payment Reference');
         $this->assertEquals('my Payment Reference', $cancellation->getPaymentReference());
@@ -66,5 +77,27 @@ class CancellationTest extends BaseUnitTest
 
         $cancellation->setReasonCode(null);
         $this->assertNull($cancellation->getReasonCode());
+    }
+
+    /**
+     * Verify expose will translate amount to amountGross if payment type is Hire Purchase.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws ReflectionException
+     */
+    public function exposeWillReplaceAmountWithAmountGross()
+    {
+        /** @var Cancellation|MockObject $cancelMock */
+        $cancelMock = $this->getMockBuilder(Cancellation::class)->setMethods(['getLinkedResources'])->getMock();
+        $cancelMock->setAmount('123.4');
+        $this->assertEquals(['amount' => 123.4], $cancelMock->expose());
+
+        $paymentType = (new HirePurchaseDirectDebit())->setId('id');
+        $cancelMock->setPayment((new Payment(new Heidelpay('s-priv-1234')))->setPaymentType($paymentType));
+        $this->assertEquals(['amountGross' => 123.4], $cancelMock->expose());
     }
 }

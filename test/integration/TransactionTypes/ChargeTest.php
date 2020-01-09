@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration/transaction_types
+ * @package  heidelpayPHP\test\integration\TransactionTypes
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
@@ -40,8 +40,8 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeShouldWorkWithTypeId()
     {
@@ -58,8 +58,8 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeShouldWorkWithTypeObject()
     {
@@ -76,8 +76,8 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeStatusIsSetCorrectly()
     {
@@ -89,8 +89,8 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeShouldAcceptAllParameters()
     {
@@ -98,19 +98,19 @@ class ChargeTest extends BasePaymentTest
         /** @var Card $paymentType */
         $paymentType = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
-        $invoiceId = $this->generateRandomId();
+        $invoiceId = self::generateRandomId();
         $paymentReference = 'paymentReference';
 
         // perform request
-        $charge = $paymentType->charge(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
+        $charge = $paymentType->charge(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
 
         // verify the data sent and received match
         $payment = $charge->getPayment();
         $this->assertSame($paymentType, $payment->getPaymentType());
-        $this->assertEquals(123.4, $charge->getAmount());
+        $this->assertEquals(119.0, $charge->getAmount());
         $this->assertEquals('EUR', $charge->getCurrency());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());
@@ -138,8 +138,8 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeWithCustomerShouldAcceptAllParameters()
     {
@@ -148,19 +148,19 @@ class ChargeTest extends BasePaymentTest
         $ivg = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
-        $invoiceId = $this->generateRandomId();
+        $invoiceId = self::generateRandomId();
         $paymentReference = 'paymentReference';
 
         // perform request
-        $charge = $ivg->charge(123.4, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, null, $invoiceId, $paymentReference);
+        $charge = $ivg->charge(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, null, $invoiceId, $paymentReference);
 
         // verify the data sent and received match
         $payment = $charge->getPayment();
         $this->assertSame($ivg, $payment->getPaymentType());
-        $this->assertEquals(123.4, $charge->getAmount());
+        $this->assertEquals(119.0, $charge->getAmount());
         $this->assertEquals('EUR', $charge->getCurrency());
         $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
         $this->assertSame($customer, $payment->getCustomer());

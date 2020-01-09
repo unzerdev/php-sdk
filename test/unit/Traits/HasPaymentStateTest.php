@@ -20,15 +20,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Traits;
 
 use heidelpayPHP\Constants\PaymentState;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use RuntimeException;
 
-class HasPaymentStateTest extends BaseUnitTest
+class HasPaymentStateTest extends BasePaymentTest
 {
     /**
      * Verify that getters and setters work properly.
@@ -67,7 +67,7 @@ class HasPaymentStateTest extends BaseUnitTest
         $this->assertFalse($traitDummy->isPaymentReview());
         $this->assertFalse($traitDummy->isChargeBack());
 
-        $traitDummy->setState($state);
+        $traitDummy->handleResponse((object)['state' => $state]);
         $this->assertEquals($state, $traitDummy->getState());
         $this->assertEquals($stateName, $traitDummy->getStateName());
         $this->assertEquals($pending, $traitDummy->isPending());

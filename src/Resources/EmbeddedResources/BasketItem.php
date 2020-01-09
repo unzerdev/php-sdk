@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources/embedded_resources
+ * @package  heidelpayPHP\Resources\EmbeddedResources
  */
 namespace heidelpayPHP\Resources\EmbeddedResources;
 
@@ -82,9 +82,9 @@ class BasketItem extends AbstractHeidelpayResource
         int $quantity = 1
     ) {
         $this->title                 = $title;
-        $this->amountNet             = $amountNet;
-        $this->amountPerUnit         = $amountPerUnit;
         $this->quantity              = $quantity;
+        $this->setAmountNet($amountNet);
+        $this->setAmountPerUnit($amountPerUnit);
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -142,7 +142,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setVat(float $vat): BasketItem
     {
-        $this->vat = round($vat, 4);
+        $this->vat = $vat;
         return $this;
     }
 
@@ -161,7 +161,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountDiscount(float $amountDiscount): BasketItem
     {
-        $this->amountDiscount = round($amountDiscount, 4);
+        $this->amountDiscount = $amountDiscount;
         return $this;
     }
 
@@ -180,7 +180,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountGross(float $amountGross): BasketItem
     {
-        $this->amountGross = round($amountGross, 4);
+        $this->amountGross = $amountGross;
         return $this;
     }
 
@@ -199,7 +199,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountVat(float $amountVat): BasketItem
     {
-        $this->amountVat = round($amountVat, 4);
+        $this->amountVat = $amountVat;
         return $this;
     }
 
@@ -218,7 +218,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountPerUnit(float $amountPerUnit): BasketItem
     {
-        $this->amountPerUnit = round($amountPerUnit, 4);
+        $this->amountPerUnit = $amountPerUnit;
         return $this;
     }
 
@@ -237,7 +237,7 @@ class BasketItem extends AbstractHeidelpayResource
      */
     public function setAmountNet(float $amountNet): BasketItem
     {
-        $this->amountNet = round($amountNet, 4);
+        $this->amountNet = $amountNet;
         return $this;
     }
 

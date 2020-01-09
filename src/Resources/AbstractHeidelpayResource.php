@@ -20,11 +20,10 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources
+ * @package  heidelpayPHP\Resources
  */
 namespace heidelpayPHP\Resources;
 
-use function count;
 use DateTime;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
@@ -32,13 +31,16 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Services\ResourceNameService;
 use heidelpayPHP\Services\ResourceService;
-use function is_array;
-use function is_callable;
-use function is_object;
+use heidelpayPHP\Services\ValueService;
 use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
 use stdClass;
+use function count;
+use function is_array;
+use function is_callable;
+use function is_float;
+use function is_object;
 
 abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
 {
@@ -51,18 +53,32 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /** @var DateTime */
     private $fetchedAt;
 
+    /** @var array $specialParams */
+    private $specialParams = [];
+
+    /** @var array $additionalAttributes */
+    protected $additionalAttributes = [];
+
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * {@inheritDoc}
+     * Returns the API name of the resource.
+     *
+     * @return string
+     */
+    public static function getResourceName(): string
+    {
+        return ResourceNameService::getClassShortNameKebapCase(static::class);
+    }
+
+    /**
+     * Returns the id of this resource.
+     *
+     * @return string|null
      */
     public function getId()
     {
-        $resourceId = $this->id;
-        if ($resourceId === null) {
-            $resourceId = $this->getExternalId();
-        }
-        return $resourceId;
+        return $this->id;
     }
 
     /**
@@ -121,6 +137,67 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         return $this;
     }
 
+    /**
+     * Returns an array of additional params which can be added to the resource request.
+     *
+     * @return array
+     */
+    public function getSpecialParams(): array
+    {
+        return $this->specialParams;
+    }
+
+    /**
+     * Sets the array of additional params which are to be added to the resource request.
+     *
+     * @param array $specialParams
+     *
+     * @return self
+     */
+    public function setSpecialParams(array $specialParams): self
+    {
+        $this->specialParams = $specialParams;
+        return $this;
+    }
+
+    /**
+     * @param array $additionalAttributes
+     *
+     * @return AbstractHeidelpayResource
+     */
+    protected function setAdditionalAttributes(array $additionalAttributes): AbstractHeidelpayResource
+    {
+        $this->additionalAttributes = $additionalAttributes;
+        return $this;
+    }
+
+    /**
+     * Adds the given value to the additionalAttributes array if it is not set yet.
+     * Overwrites the given value if it already exists.
+     *
+     * @param string $attribute
+     * @param mixed  $value
+     *
+     * @return AbstractHeidelpayResource
+     */
+    protected function setAdditionalAttribute(string $attribute, $value): AbstractHeidelpayResource
+    {
+        $this->additionalAttributes[$attribute] = $value;
+        return $this;
+    }
+
+    /**
+     * Returns the value of the given attribute or null if it is not set.
+     *
+     * @param string $attribute
+     *
+     * @return mixed
+     */
+    protected function getAdditionalAttribute(string $attribute)
+    {
+        return $this->additionalAttributes[$attribute] ?? null;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
@@ -145,11 +222,13 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     public function getUri($appendId = true): string
     {
         $uri = [rtrim($this->getParentResource()->getUri(), '/'), $this->getResourcePath()];
-        if ($appendId && $this->getId() !== null) {
-            $uri[] = $this->getId();
+        if ($appendId) {
+            if ($this->getId() !== null) {
+                $uri[] = $this->getId();
+            } elseif ($this->getExternalId() !== null) {
+                $uri[] = $this->getExternalId();
+            }
         }
-
-        $uri[] = '';
 
         return implode('/', $uri);
     }
@@ -191,48 +270,6 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         }
     }
 
-    /**
-     * @param $item
-     * @param $key
-     * @param $value
-     */
-    private static function setItemProperty($item, $key, $value)
-    {
-        $setter = 'set' . ucfirst($key);
-        if (!is_callable([$item, $setter])) {
-            $setter = 'add' . ucfirst($key);
-        }
-        if (is_callable([$item, $setter])) {
-            $item->$setter($value);
-        }
-    }
-
-    /**
-     * Returns true if the given property should be skipped.
-     *
-     * @param $property
-     * @param $value
-     *
-     * @return bool
-     */
-    private static function propertyShouldBeSkipped($property, $value): bool
-    {
-        $skipProperty = false;
-
-        try {
-            $reflection = new ReflectionProperty(static::class, $property);
-            if ($value === null ||                          // do not send properties that are set to null
-                ($property === 'id' && empty($value)) ||    // do not send id property if it is empty
-                !$reflection->isProtected()) {              // only send protected properties
-                $skipProperty = true;
-            }
-        } catch (ReflectionException $e) {
-            $skipProperty = true;
-        }
-
-        return $skipProperty;
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="Resource service facade">
@@ -254,8 +291,8 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     protected function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
@@ -267,12 +304,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @param AbstractHeidelpayResource $resource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     protected function fetchResource(AbstractHeidelpayResource $resource)
     {
-        $this->getResourceService()->fetch($resource);
+        $this->getResourceService()->fetchResource($resource);
     }
 
     //</editor-fold>
@@ -311,6 +348,22 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
             if ($value instanceof self) {
                 $value = $value->expose();
             }
+
+            // reduce floats to 4 decimal places and update the property in object
+            if (is_float($value)) {
+                $value = ValueService::limitFloats($value);
+                self::setItemProperty($this, $property, $value);
+            }
+
+            // handle additional values
+            if ($property === 'additionalAttributes') {
+                if (!is_array($value) || empty($value)) {
+                    unset($properties[$property]);
+                    continue;
+                }
+                $value = $this->exposeAdditionalAttributes($value);
+            }
+
             $properties[$property] = $value;
         }
         //---------------------
@@ -318,11 +371,11 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         // Add linked resources if any
         $resources = [];
         /**
-         * @var string                    $key
+         * @var string                    $attributeName
          * @var AbstractHeidelpayResource $linkedResource
          */
-        foreach ($this->getLinkedResources() as $key => $linkedResource) {
-            $resources[$key . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
+        foreach ($this->getLinkedResources() as $attributeName => $linkedResource) {
+            $resources[$attributeName . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
         }
 
         if (count($resources) > 0) {
@@ -331,8 +384,74 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         }
         //---------------------
 
+        // Add special params if any
+        foreach ($this->getSpecialParams() as $attributeName => $specialParam) {
+            $properties[$attributeName] = $specialParam;
+        }
+        //---------------------
+
         ksort($properties);
         return count($properties) > 0 ? $properties : new stdClass();
+    }
+
+    /**
+     * @param $value
+     *
+     * @return array
+     */
+    private function exposeAdditionalAttributes($value): array
+    {
+        foreach ($value as $attributeName => $attributeValue) {
+            $attributeValue        = ValueService::limitFloats($attributeValue);
+            $value[$attributeName] = $attributeValue;
+            $this->setAdditionalAttribute($attributeName, $attributeValue);
+        }
+        return $value;
+    }
+
+    /**
+     * Returns true if the given property should be skipped.
+     *
+     * @param $property
+     * @param $value
+     *
+     * @return bool
+     */
+    private static function propertyShouldBeSkipped($property, $value): bool
+    {
+        $skipProperty = false;
+
+        try {
+            $reflection = new ReflectionProperty(static::class, $property);
+            if ($value === null ||                          // do not send properties that are set to null
+                ($property === 'id' && empty($value)) ||    // do not send id property if it is empty
+                !$reflection->isProtected()) {              // only send protected properties
+                $skipProperty = true;
+            }
+        } /** @noinspection BadExceptionsProcessingInspection */
+        catch (ReflectionException $e) {
+            $skipProperty = true;
+        }
+
+        return $skipProperty;
+    }
+
+    /**
+     * Can not be moved to service since setters and getters are most likely private.
+     *
+     * @param $item
+     * @param $key
+     * @param $value
+     */
+    private static function setItemProperty($item, $key, $value)
+    {
+        $setter = 'set' . ucfirst($key);
+        if (!is_callable([$item, $setter])) {
+            $setter = 'add' . ucfirst($key);
+        }
+        if (is_callable([$item, $setter])) {
+            $item->$setter($value);
+        }
     }
 
     //</editor-fold>
@@ -358,7 +477,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     protected function getResourcePath(): string
     {
-        return ResourceNameService::getClassShortNameKebapCase(static::class);
+        return self::getResourceName();
     }
 
     /**

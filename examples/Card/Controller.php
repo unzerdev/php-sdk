@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP\examples
  */
 
 /** Require the constants of this example */
@@ -87,14 +87,19 @@ try {
     $_SESSION['ShortId'] = $transaction->getShortId();
 
     // Redirect to the 3ds page or to success depending on the state of the transaction
-    $payment = $transaction->getPayment();
-    $noRedirect   = empty($transaction->getRedirectUrl());
-    if ($noRedirect && $payment->isCompleted()) {
-        redirect(SUCCESS_URL);
-    } elseif ($noRedirect && $payment->isPending()) {
-        redirect(PENDING_URL);
-    } elseif (!$noRedirect && $payment->isPending()) {
-        redirect($transaction->getRedirectUrl());
+    $payment  = $transaction->getPayment();
+    $redirect = !empty($transaction->getRedirectUrl());
+
+    switch (true) {
+        case (!$redirect && $transaction->isSuccess()):
+            redirect(SUCCESS_URL);
+            break;
+        case (!$redirect && $transaction->isPending()):
+            redirect(PENDING_URL);
+            break;
+        case ($redirect && $transaction->isPending()):
+            redirect($transaction->getRedirectUrl());
+            break;
     }
 
     // Check the result message of the transaction to find out what went wrong.

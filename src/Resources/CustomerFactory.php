@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources
+ * @package  heidelpayPHP\Resources
  */
 namespace heidelpayPHP\Resources;
 
@@ -86,7 +86,7 @@ class CustomerFactory
 
     /**
      * @param Address $billingAddress           The billing address is mandatory for the registered B2B customer.
-     * @param string  $commercialRegisterNumber The billing address is mandatory for the registered B2B customer.
+     * @param string  $commercialRegisterNumber The register number of the company.
      * @param string  $company                  The company name is mandatory for the registered B2B customer.
      * @param string  $commercialSector         The commercial sector is not mandatory for the registered B2B customer.
      *                                          Please refer to CompanyCommercialSectorItems.

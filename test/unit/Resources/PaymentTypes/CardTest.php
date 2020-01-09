@@ -20,18 +20,19 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
+use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
 use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
 use stdClass;
 
-class CardTest extends BaseUnitTest
+class CardTest extends BasePaymentTest
 {
     const TEST_ID = 's-crd-l4bbx7ory1ec';
     const TEST_METHOD_TYPE = 'card';
@@ -240,5 +241,34 @@ class CardTest extends BaseUnitTest
         $this->assertEquals(self::TEST_CVC, $this->card->getCvc());
         $this->assertEquals(self::TEST_EXPIRY_DATE, $this->card->getExpiryDate());
         $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
+        $cardDetails = $this->card->getCardDetails();
+        $this->assertNull($cardDetails);
+
+        $cardDetails = new stdClass;
+        $cardDetails->cardType = 'my card type';
+        $cardDetails->account = 'CREDIT';
+        $cardDetails->countryIsoA2 = 'DE';
+        $cardDetails->countryName = 'Germany';
+        $cardDetails->issuerName = 'my issuer name';
+        $cardDetails->issuerUrl = 'https://my.issuer.url';
+        $cardDetails->issuerPhoneNumber = '+49 6221 6471-400';
+        $testResponse->cardDetails = $cardDetails;
+
+        $this->card->handleResponse($testResponse);
+        $this->assertEquals(self::TEST_ID, $this->card->getId());
+        $this->assertEquals(self::TEST_NUMBER, $this->card->getNumber());
+        $this->assertEquals(self::TEST_BRAND, $this->card->getBrand());
+        $this->assertEquals(self::TEST_CVC, $this->card->getCvc());
+        $this->assertEquals(self::TEST_EXPIRY_DATE, $this->card->getExpiryDate());
+        $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
+        $details = $this->card->getCardDetails();
+        $this->assertInstanceOf(CardDetails::class, $details);
+        $this->assertEquals('my card type', $details->getCardType());
+        $this->assertEquals('CREDIT', $details->getAccount());
+        $this->assertEquals('DE', $details->getCountryIsoA2());
+        $this->assertEquals('Germany', $details->getCountryName());
+        $this->assertEquals('my issuer name', $details->getIssuerName());
+        $this->assertEquals('https://my.issuer.url', $details->getIssuerUrl());
+        $this->assertEquals('+49 6221 6471-400', $details->getIssuerPhoneNumber());
     }
 }

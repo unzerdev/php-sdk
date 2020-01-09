@@ -20,15 +20,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class BasketItemTest extends BaseUnitTest
+class BasketItemTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter functionalities.

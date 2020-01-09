@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
@@ -32,13 +32,12 @@ use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
-use stdClass;
 
-class AuthorizationTest extends BaseUnitTest
+class AuthorizationTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.
@@ -78,8 +77,8 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function anAuthorizationShouldBeUpdatedThroughResponseHandling()
     {
@@ -87,21 +86,34 @@ class AuthorizationTest extends BaseUnitTest
         $this->assertNull($authorization->getAmount());
         $this->assertNull($authorization->getCurrency());
         $this->assertNull($authorization->getReturnUrl());
+        $this->assertNull($authorization->getPDFLink());
+        $this->assertNull($authorization->getZgReferenceId());
+        $this->assertNull($authorization->getExternalOrderId());
 
         $authorization = new Authorization(123.4, 'myCurrency', 'https://my-return-url.test');
         $this->assertEquals(123.4, $authorization->getAmount());
         $this->assertEquals('myCurrency', $authorization->getCurrency());
         $this->assertEquals('https://my-return-url.test', $authorization->getReturnUrl());
+        $this->assertNull($authorization->getPDFLink());
+        $this->assertNull($authorization->getZgReferenceId());
+        $this->assertNull($authorization->getExternalOrderId());
 
-        $testResponse = new stdClass();
-        $testResponse->amount = '789.0';
-        $testResponse->currency = 'TestCurrency';
-        $testResponse->returnUrl = 'https://return-url.test';
+        $testResponse = [
+            'amount' => '789.0',
+            'currency' => 'TestCurrency',
+            'returnUrl' => 'https://return-url.test',
+            'PDFLink' => 'https://url.to.pdf',
+            'zgReferenceId' => 'zg reference id',
+            'externalOrderId' => 'external order id'
+        ];
 
-        $authorization->handleResponse($testResponse);
+        $authorization->handleResponse((object)$testResponse);
         $this->assertEquals(789.0, $authorization->getAmount());
         $this->assertEquals('TestCurrency', $authorization->getCurrency());
         $this->assertEquals('https://return-url.test', $authorization->getReturnUrl());
+        $this->assertEquals('https://url.to.pdf', $authorization->getPDFLink());
+        $this->assertEquals('zg reference id', $authorization->getZgReferenceId());
+        $this->assertEquals('external order id', $authorization->getExternalOrderId());
     }
 
     /**
@@ -125,8 +137,8 @@ class AuthorizationTest extends BaseUnitTest
      * @test
      *
      * @throws Exception
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToAuthorization()
     {
@@ -182,8 +194,8 @@ class AuthorizationTest extends BaseUnitTest
      *
      * @param float|null $value
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeShouldThrowExceptionIfPaymentIsNotSet($value)
     {

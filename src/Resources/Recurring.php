@@ -20,10 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources
+ * @package  heidelpayPHP\Resources
  */
 namespace heidelpayPHP\Resources;
 
+use heidelpayPHP\Traits\HasCustomerMessage;
+use heidelpayPHP\Traits\HasDate;
 use heidelpayPHP\Traits\HasStates;
 use heidelpayPHP\Traits\HasUniqueAndShortId;
 
@@ -31,6 +33,8 @@ class Recurring extends AbstractHeidelpayResource
 {
     use HasStates;
     use HasUniqueAndShortId;
+    use HasCustomerMessage;
+    use HasDate;
 
     /** @var string $returnUrl */
     protected $returnUrl;
@@ -104,7 +108,7 @@ class Recurring extends AbstractHeidelpayResource
      *
      * @return Recurring
      */
-    public function setRedirectUrl(string $redirectUrl): Recurring
+    protected function setRedirectUrl(string $redirectUrl): Recurring
     {
         $this->redirectUrl = $redirectUrl;
         return $this;
@@ -114,6 +118,9 @@ class Recurring extends AbstractHeidelpayResource
 
     //<editor-fold desc="Overridable Methods">
 
+    /**
+     * {@inheritDoc}
+     */
     protected function getResourcePath(): string
     {
         $parts = [

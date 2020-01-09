@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/services
+ * @package  heidelpayPHP\Services
  */
 namespace heidelpayPHP\Services;
 
@@ -61,7 +61,7 @@ class ResourceNameService
     private static function toKebapCase($str): string
     {
         $kebapCaseString = preg_replace_callback(
-            '/([A-Z][a-z]{1})+/',
+            '/([A-Z][a-z])+/',
             static function ($str) {
                 return '-' . strtolower($str[0]);
             },

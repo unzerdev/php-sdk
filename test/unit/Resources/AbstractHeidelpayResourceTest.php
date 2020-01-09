@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources;
 
@@ -29,6 +29,7 @@ use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Constants\TransactionTypes;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
@@ -41,8 +42,9 @@ use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
@@ -55,13 +57,14 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
+use heidelpayPHP\test\unit\DummyResource;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class AbstractHeidelpayResourceTest extends BaseUnitTest
+class AbstractHeidelpayResourceTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter functionality.
@@ -151,7 +154,7 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
 
         /** @var Customer $heidelpayMock */
         $customer = (new Customer())->setParentResource($heidelpayMock);
-        $this->assertEquals('parent/resource/path/customers/', $customer->getUri());
+        $this->assertEquals('parent/resource/path/customers', $customer->getUri());
     }
 
     /**
@@ -169,13 +172,12 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractHeidelpayResource$resource, $resourcePath)
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['getUri'])
-            ->getMock();
+        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
         $heidelpayMock->method('getUri')->willReturn('parent/resource/path/');
 
         /** @var Heidelpay $heidelpayMock */
         $resource->setParentResource($heidelpayMock)->setId('myId');
-        $this->assertEquals($resourcePath . 'myId/', $resource->getUri());
+        $this->assertEquals($resourcePath . '/myId', $resource->getUri());
         $this->assertEquals($resourcePath, $resource->getUri(false));
     }
 
@@ -201,8 +203,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         /** @var Customer $customerMock */
         /** @var Heidelpay $heidelpayMock */
         $customerMock->setParentResource($heidelpayMock);
-        $this->assertEquals('parent/resource/path/customers/myExternalId/', $customerMock->getUri());
-        $this->assertEquals('parent/resource/path/customers/', $customerMock->getUri(false));
+        $this->assertEquals('parent/resource/path/customers/myExternalId', $customerMock->getUri());
+        $this->assertEquals('parent/resource/path/customers', $customerMock->getUri(false));
     }
 
     /**
@@ -260,12 +262,8 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
      */
     public function updateValuesShouldUpdateValuesFromProcessingInTheActualObject()
     {
-        $testResponse             = new stdClass();
-        $processing               = new stdClass();
-        $processing->customerId   = 'processingCustomerId';
-        $processing->firstname    = 'processingFirstName';
-        $processing->lastname     = 'processingLastName';
-        $testResponse->processing = $processing;
+        $testResponse  = new stdClass();
+        $testResponse->processing = (object)['customerId' => 'cst-id', 'firstname' => 'first', 'lastname' => 'last'];
 
         /** @var Customer $customer */
         $customer = CustomerFactory::createCustomer('firstName', 'lastName')->setCustomerId('customerId');
@@ -274,9 +272,9 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $this->assertEquals('lastName', $customer->getLastname());
 
         $customer->handleResponse($testResponse);
-        $this->assertEquals('processingCustomerId', $customer->getCustomerId());
-        $this->assertEquals('processingFirstName', $customer->getFirstname());
-        $this->assertEquals('processingLastName', $customer->getLastname());
+        $this->assertEquals('cst-id', $customer->getCustomerId());
+        $this->assertEquals('first', $customer->getFirstname());
+        $this->assertEquals('last', $customer->getLastname());
     }
 
     /**
@@ -311,12 +309,14 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
             ->setShippingAddress($address)
             ->setParentResource($heidelpay);
 
+        $customer->setSpecialParams(['param1' => 'value1', 'param2' => 'value2']);
+
         $expectedJson = '{"billingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
             '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"},"birthDate":"1989-12-24",' .
             '"company":"heidelpay GmbH","customerId":"CustomerId","email":"peter.universum@universum-group.de",' .
-            '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","phone":"+4962216471100",' .
-            '"salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
-            '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
+            '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","param1":"value1","param2":"value2",' .
+            '"phone":"+4962216471100","salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE",' .
+            '"name":"Peter Universum","state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
         $this->assertEquals($expectedJson, $customer->jsonSerialize());
     }
 
@@ -369,6 +369,60 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
         $this->assertNull($dummy->getExternalId());
     }
 
+    /**
+     * Verify float values are rounded to 4 decimal places on expose.
+     * The object and the transmitted value will be updated.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     */
+    public function moreThenFourDecimalPlaces()
+    {
+        // general
+        $object = new DummyResource();
+        $object->setTestFloat(1.23456789);
+        $this->assertEquals(1.23456789, $object->getTestFloat());
+
+        $reduced = $object->expose();
+        $this->assertEquals(['testFloat' => 1.2346], $reduced);
+        $this->assertEquals(1.2346, $object->getTestFloat());
+
+        // additionalAttributes
+        $ppg = new Paypage(1.23456789, 'EUR', self::RETURN_URL);
+        $ppg->setEffectiveInterestRate(12.3456789);
+        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 12.3457]], $ppg->expose());
+        $this->assertEquals(12.3457, $ppg->getEffectiveInterestRate());
+    }
+
+    /**
+     * Verify additionalAttributes are set/get properly.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function additionalAttributesShouldBeSettable()
+    {
+        $paypage = new Paypage(123.4, 'EUR', self::RETURN_URL);
+
+        // when
+        $paypage->setEffectiveInterestRate(123.4567);
+
+        // then
+        $this->assertEquals(123.4567, $paypage->getEffectiveInterestRate());
+        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 123.4567]], $paypage->expose());
+
+        // when
+        $paypage->handleResponse((object)['additionalAttributes' => ['effectiveInterestRate' => 1234.567]]);
+
+        // then
+        $this->assertEquals(1234.567, $paypage->getEffectiveInterestRate());
+        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 1234.567]], $paypage->expose());
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
@@ -381,29 +435,30 @@ class AbstractHeidelpayResourceTest extends BaseUnitTest
     public function uriDataProvider(): array
     {
         return [
-            'Customer' => [new Customer(), 'parent/resource/path/customers/'],
-            'Keypair' => [new Keypair(), 'parent/resource/path/keypair/'],
-            'Payment' => [new Payment(), 'parent/resource/path/payments/'],
-            'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card/'],
-            'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal/'],
-            'EPS' => [new EPS(), 'parent/resource/path/types/eps/'],
-            'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay/'],
-            'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit/'],
-            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed/'],
-            'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice/'],
-            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types/invoice-guaranteed/'],
-            'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels/'],
-            'Authorization' => [new Authorization(), 'parent/resource/path/authorize/'],
-            'Shipment' => [new Shipment(), 'parent/resource/path/shipments/'],
-            'Charge' => [new Charge(), 'parent/resource/path/charges/'],
-            'Metadata' => [new Metadata(), 'parent/resource/path/metadata/'],
-            'Basket' => [new Basket(), 'parent/resource/path/baskets/'],
-            'Webhook' => [new Webhook(), 'parent/resource/path/webhooks/'],
-            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks/'],
-            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring/'],
-            'Payout' => [new Payout(), 'parent/resource/path/payouts/'],
-            'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge/'],
-            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize/']
+            'Customer' => [new Customer(), 'parent/resource/path/customers'],
+            'Keypair' => [new Keypair(), 'parent/resource/path/keypair'],
+            'Payment' => [new Payment(), 'parent/resource/path/payments'],
+            'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card'],
+            'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal'],
+            'EPS' => [new EPS(), 'parent/resource/path/types/eps'],
+            'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay'],
+            'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit'],
+            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed'],
+            'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice'],
+            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types/invoice-guaranteed'],
+            'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels'],
+            'Authorization' => [new Authorization(), 'parent/resource/path/authorize'],
+            'Shipment' => [new Shipment(), 'parent/resource/path/shipments'],
+            'Charge' => [new Charge(), 'parent/resource/path/charges'],
+            'Metadata' => [new Metadata(), 'parent/resource/path/metadata'],
+            'Basket' => [new Basket(), 'parent/resource/path/baskets'],
+            'Webhook' => [new Webhook(), 'parent/resource/path/webhooks'],
+            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks'],
+            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring'],
+            'Payout' => [new Payout(), 'parent/resource/path/payouts'],
+            'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge'],
+            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize'],
+            'HirePurchaseDirectDebit' => [new HirePurchaseDirectDebit(), 'parent/resource/path/types/hire-purchase-direct-debit']
         ];
     }
 

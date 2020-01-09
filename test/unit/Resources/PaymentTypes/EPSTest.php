@@ -20,22 +20,22 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Resources\PaymentTypes\EPS;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
+use PHPUnit\Framework\Exception;
 
-class EPSTest extends BaseUnitTest
+class EPSTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters work as expected.
      *
      * @test
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      */
     public function gettersAndSettersShouldWorkAsExpected()
     {

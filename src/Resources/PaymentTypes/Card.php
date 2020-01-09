@@ -20,16 +20,19 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP\PaymentTypes
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanPayout;
-use heidelpayPHP\Traits\CanRecur;
+use heidelpayPHP\Adapter\HttpAdapterInterface;
+use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
+use heidelpayPHP\Traits\CanPayout;
+use heidelpayPHP\Traits\CanRecur;
 use heidelpayPHP\Validators\ExpiryDateValidator;
 use RuntimeException;
+use stdClass;
 
 class Card extends BasePaymentType
 {
@@ -55,6 +58,9 @@ class Card extends BasePaymentType
 
     /** @var string $brand */
     private $brand = '';
+
+    /** @var CardDetails $cardDetails */
+    private $cardDetails;
 
     /**
      * Card constructor.
@@ -114,7 +120,7 @@ class Card extends BasePaymentType
         }
 
         if (!ExpiryDateValidator::validate($expiryDate)) {
-            throw new RuntimeException('Invalid expiry date!');
+            throw new RuntimeException("Invalid expiry date format: \"{$expiryDate}\". Allowed formats are 'm/Y' and 'm/y'.");
         }
         $expiryDateParts = explode('/', $expiryDate);
         $this->expiryDate = date('m/Y', mktime(0, 0, 0, $expiryDateParts[0], 1, $expiryDateParts[1]));
@@ -201,7 +207,17 @@ class Card extends BasePaymentType
         return $this;
     }
 
+    /**
+     * @return CardDetails|null
+     */
+    public function getCardDetails()
+    {
+        return $this->cardDetails;
+    }
+
     //</editor-fold>
+
+    //<editor-fold desc="Overridable Methods">
 
     /**
      * Rename internal property names to external property names.
@@ -217,4 +233,19 @@ class Card extends BasePaymentType
         }
         return $exposeArray;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    {
+        parent::handleResponse($response, $method);
+
+        if (isset($response->cardDetails)) {
+            $this->cardDetails = new CardDetails();
+            $this->cardDetails->handleResponse($response->cardDetails);
+        }
+    }
+
+    //</editor-fold>
 }

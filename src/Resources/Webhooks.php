@@ -22,7 +22,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources
+ * @package  heidelpayPHP\Resources
  */
 namespace heidelpayPHP\Resources;
 
@@ -30,6 +30,7 @@ use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\WebhookEvents;
 use RuntimeException;
 use stdClass;
+use function in_array;
 
 class Webhooks extends AbstractHeidelpayResource
 {

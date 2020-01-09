@@ -20,26 +20,26 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Traits;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use ReflectionException;
 use RuntimeException;
 
-class HasCancellationsTest extends BaseUnitTest
+class HasCancellationsTest extends BasePaymentTest
 {
     /**
      * Verify getters setters.
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function hasCancellationGettersAndSettersShouldWorkProperly()
     {
@@ -59,7 +59,7 @@ class HasCancellationsTest extends BaseUnitTest
         $this->assertArraySubset([$cancellation1, $cancellation2, $cancellation3], $dummy->getCancellations());
 
         // assert getCancellation
-        $this->assertSame($cancellation3, $dummy->getCancellation('3'));
+        $this->assertSame($cancellation3, $dummy->getCancellation('3', true));
 
         // assert setCancellations
         $cancellation4 = (new Cancellation())->setId('4');

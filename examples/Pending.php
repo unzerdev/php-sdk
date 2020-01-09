@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP\examples
  */
 
 session_start();
@@ -41,7 +41,10 @@ session_start();
             You should ship only if the payment changes to completed.
             <?php
             if (isset($_SESSION['ShortId']) && !empty($_SESSION['ShortId'])) {
-                echo '<br>Please look for ShortId ' . $_SESSION['ShortId'] . ' in hIP (heidelpay Intelligence Platform) to see the transaction.';
+                echo '<p>Please look for ShortId ' . $_SESSION['ShortId'] . ' in hIP (heidelpay Intelligence Platform) to see the transaction.</p>';
+            }
+            if (isset($_SESSION['PaymentId']) && !empty($_SESSION['PaymentId'])) {
+                echo '<p>The PaymentId of your transaction is \'' . $_SESSION['PaymentId'] . '\'.</p>';
             }
             ?>
         </p>

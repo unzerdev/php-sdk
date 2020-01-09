@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration/transaction_types
+ * @package  heidelpayPHP\test\integration\TransactionTypes
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
@@ -36,23 +36,19 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function shipmentShouldBeCreatableAndFetchable()
     {
-        $invoiceGuaranteed = new InvoiceGuaranteed();
-        $charge = $this->heidelpay->charge(
-            100.0,
-            'EUR',
-            $invoiceGuaranteed,
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
+        $ivg      = new InvoiceGuaranteed();
+        $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+
+        $charge   = $this->heidelpay->charge(100.0, 'EUR', $ivg, self::RETURN_URL, $customer);
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge);
 
-        $shipment = $this->heidelpay->ship($charge->getPayment(), $this->generateRandomId(), $this->generateRandomId());
+        $shipment = $this->heidelpay->ship($charge->getPayment(), self::generateRandomId(), self::generateRandomId());
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
 
@@ -66,22 +62,17 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function shipmentCanBeCalledOnThePaymentObject()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $charge = $this->heidelpay->charge(
-            100.0,
-            'EUR',
-            $invoiceGuaranteed,
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
+        $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
 
         $payment  = $charge->getPayment();
-        $shipment = $payment->ship($this->generateRandomId(), $this->generateRandomId());
+        $shipment = $payment->ship(self::generateRandomId(), self::generateRandomId());
         $this->assertNotNull($shipment);
         $this->assertNotEmpty($shipment->getId());
         $this->assertNotEmpty($shipment->getUniqueId());
@@ -97,22 +88,17 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function shipmentShouldBePossibleWithPaymentObject()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $charge = $this->heidelpay->charge(
-            100.0,
-            'EUR',
-            $invoiceGuaranteed,
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
+        $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
 
         $payment  = $charge->getPayment();
-        $shipment = $this->heidelpay->ship($payment, $this->generateRandomId(), $this->generateRandomId());
+        $shipment = $this->heidelpay->ship($payment, self::generateRandomId(), self::generateRandomId());
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
     }
@@ -122,22 +108,17 @@ class ShipmentTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function shipmentStatusIsSetCorrectly()
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
-        $charge = $this->heidelpay->charge(
-            100.0,
-            'EUR',
-            $invoiceGuaranteed,
-            self::RETURN_URL,
-            $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress())
-        );
+        $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
+        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
 
         $payment  = $charge->getPayment();
-        $shipment = $this->heidelpay->ship($payment, $this->generateRandomId(), $this->generateRandomId());
+        $shipment = $this->heidelpay->ship($payment, self::generateRandomId(), self::generateRandomId());
         $this->assertSuccess($shipment);
     }
 }

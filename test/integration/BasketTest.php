@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration
+ * @package  heidelpayPHP\test\integration
  */
 namespace heidelpayPHP\test\integration;
 
@@ -42,8 +42,8 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function minBasketShouldBeCreatableAndFetchable()
     {
@@ -69,12 +69,12 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function maxBasketShouldBeCreatableAndFetchableWorkAround()
     {
-        $basket = new Basket($this->generateRandomId(), 123.4, 'EUR', []);
+        $basket = new Basket(self::generateRandomId(), 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))
             ->setBasketItemReferenceId('refId')
@@ -116,7 +116,7 @@ class BasketTest extends BasePaymentTest
      */
     public function basketItemWithInvalidUrlWillThrowAnError($expectException, $imageUrl, $exceptionCode = null)
     {
-        $basket = new Basket($this->generateRandomId(), 123.4, 'EUR', []);
+        $basket = new Basket(self::generateRandomId(), 123.4, 'EUR', []);
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setImageUrl($imageUrl);
         $basket->addBasketItem($basketItem);
 
@@ -138,12 +138,12 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function basketShouldBeUpdateable()
     {
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
@@ -170,12 +170,12 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 123.4, 234.5, 12))->setBasketItemReferenceId('refId');
@@ -196,8 +196,8 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
@@ -208,7 +208,7 @@ class BasketTest extends BasePaymentTest
         $this->heidelpay->createPaymentType($sdd);
 
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge   = $sdd->charge(123.4, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+        $charge   = $sdd->charge(119.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
 
         $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
@@ -219,12 +219,12 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
@@ -245,12 +245,12 @@ class BasketTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
-        $orderId = $this->generateRandomId();
+        $orderId = self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basket->setAmountTotalVat(10.9);
@@ -277,8 +277,7 @@ class BasketTest extends BasePaymentTest
         return [
             'valid ' => [false, 'https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.jpg'],
             'valid null' => [false, null],
-            'invalid empty' => [true, '', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL],
-            'invalid no image' => [true, 'https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.exe', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION],
+            'valid empty' => [false, ''],
             'invalid not available' => [true, 'https://files.readme.io/does-not-exist.jpg', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL]
         ];
     }

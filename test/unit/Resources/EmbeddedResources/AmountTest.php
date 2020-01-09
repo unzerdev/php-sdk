@@ -20,15 +20,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\EmbeddedResources\Amount;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class AmountTest extends BaseUnitTest
+class AmountTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter functionalities.
@@ -47,11 +47,8 @@ class AmountTest extends BaseUnitTest
         $this->assertEquals(0.0, $amount->getCharged());
         $this->assertEquals(0.0, $amount->getRemaining());
 
-        $amount->setTotal(1.1);
-        $amount->setCanceled(2.2);
-        $amount->setCharged(3.3);
-        $amount->setRemaining(4.4);
-        $amount->setCurrency('MyCurrency');
+        $resp = ['total' => 1.1, 'canceled' => 2.2, 'charged' => 3.3, 'remaining' => 4.4, 'currency' => 'MyCurrency'];
+        $amount->handleResponse((object)$resp);
 
         $this->assertEquals('MyCurrency', $amount->getCurrency());
         $this->assertEquals(1.1, $amount->getTotal());

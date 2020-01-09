@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/services
+ * @package  heidelpayPHP\Services
  */
 namespace heidelpayPHP\Services;
 
@@ -95,7 +95,7 @@ class IdService
         $typeIdString = null;
 
         $typeIdParts = [];
-        preg_match('/^[sp]{1}-([a-z]{3}|p24)-\d*/', $typeId, $typeIdParts);
+        preg_match('/^[sp]-([a-z]{3}|p24)-\d*/', $typeId, $typeIdParts);
 
         if (count($typeIdParts) >= 2) {
             $typeIdString = $typeIdParts[1];

@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/transaction_types
+ * @package  heidelpayPHP\TransactionTypes
  */
 namespace heidelpayPHP\Resources\TransactionTypes;
 
@@ -73,8 +73,6 @@ class Charge extends AbstractTransactionType
         $this->setAmount($amount);
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
-
-        parent::__construct();
     }
 
     //<editor-fold desc="Setters/Getters">
@@ -255,13 +253,13 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @param string|null $paymentReference
+     * @param string|null $referenceText
      *
      * @return Charge
      */
-    public function setPaymentReference($paymentReference): Charge
+    public function setPaymentReference($referenceText): Charge
     {
-        $this->paymentReference = $paymentReference;
+        $this->paymentReference = $referenceText;
         return $this;
     }
 
@@ -303,17 +301,32 @@ class Charge extends AbstractTransactionType
      * Returns the last cancellation object if charge is already canceled.
      * Creates and returns new cancellation object otherwise.
      *
-     * @param float|null  $amount
-     * @param string|null $reasonCode
-     * @param string|null $paymentReference
+     * @param float|null  $amount           The amount to be canceled.
+     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null $paymentReference A reference string for the payment.
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
      *
-     * @return Cancellation
+     * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function cancel($amount = null, string $reasonCode = null, string $paymentReference = null): Cancellation
-    {
-        return $this->getHeidelpayObject()->cancelCharge($this, $amount, $reasonCode, $paymentReference);
+    public function cancel(
+        $amount = null,
+        string $reasonCode = null,
+        string $paymentReference = null,
+        float $amountNet = null,
+        float $amountVat = null
+    ): Cancellation {
+        return $this->getHeidelpayObject()->cancelCharge(
+            $this,
+            $amount,
+            $reasonCode,
+            $paymentReference,
+            $amountNet,
+            $amountVat
+        );
     }
 }

@@ -20,12 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources/embedded_resources
+ * @package  heidelpayPHP\Resources\EmbeddedResources
  */
 namespace heidelpayPHP\Resources\EmbeddedResources;
 
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use stdClass;
 
 class Address extends AbstractHeidelpayResource
 {
@@ -161,15 +160,6 @@ class Address extends AbstractHeidelpayResource
     {
         $this->country = $country;
         return $this;
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
-    public function expose(): stdClass
-    {
-        return json_decode(json_encode(parent::expose(), JSON_FORCE_OBJECT), false);
     }
 
     //</editor-fold>

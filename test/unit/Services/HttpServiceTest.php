@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit;
 
@@ -31,14 +31,14 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\DebugHandlerInterface;
 use heidelpayPHP\Services\EnvironmentService;
 use heidelpayPHP\Services\HttpService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\Services\DummyAdapter;
 use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
 
-class HttpServiceTest extends BaseUnitTest
+class HttpServiceTest extends BasePaymentTest
 {
     /**
      * Verify getAdapter will return a CurlAdapter if none has been set.
@@ -86,8 +86,8 @@ class HttpServiceTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function sendShouldThrowExceptionIfResourceIsNotSet()
     {

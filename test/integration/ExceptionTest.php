@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration
+ * @package  heidelpayPHP\test\integration
  */
 namespace heidelpayPHP\test\integration;
 
@@ -39,13 +39,14 @@ class ExceptionTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function apiExceptionShouldHoldClientMessage()
     {
-        $giropay = $this->heidelpay->createPaymentType(new Giropay());
-        $firstClientMessage = $secondClientMessage = '';
+        $giropay             = $this->heidelpay->createPaymentType(new Giropay());
+        $firstClientMessage  = '';
+        $secondClientMessage = '';
 
         try {
             $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);

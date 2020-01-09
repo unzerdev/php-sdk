@@ -20,12 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  heidelpayPHP\examples
  */
 
 require_once __DIR__ . '/../Constants.php';
 
-define('EXAMPLE_PATH', __DIR__);
 define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CardRecurring');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
 define('RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

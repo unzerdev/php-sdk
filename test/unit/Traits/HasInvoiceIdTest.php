@@ -20,14 +20,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class HasInvoiceIdTest extends BaseUnitTest
+class HasInvoiceIdTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.

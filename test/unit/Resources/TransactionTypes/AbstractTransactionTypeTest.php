@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
@@ -31,13 +31,14 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use RuntimeException;
 use stdClass;
 
-class AbstractTransactionTypeTest extends BaseUnitTest
+class AbstractTransactionTypeTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters work properly.
@@ -69,8 +70,9 @@ class AbstractTransactionTypeTest extends BaseUnitTest
         $date = (new DateTime('now'))->format('Y-m-d h:i:s');
         $transactionType->setPayment($payment);
         $transactionType->setDate($date);
-        $transactionType->setIsError(true)->setIsPending(true)->setIsSuccess(true);
-        $transactionType->getMessage()->setCode('1234')->setCustomer('This ist the customer message!');
+        $transactionType->handleResponse((object)['isError' => true, 'isPending' => true, 'isSuccess' => true]);
+        $messageResponse = (object)['code' => '1234', 'customer' => 'Customer message!'];
+        $transactionType->handleResponse((object)['message' => $messageResponse]);
 
         $this->assertSame($payment, $transactionType->getPayment());
         $this->assertEquals($date, $transactionType->getDate());
@@ -82,7 +84,7 @@ class AbstractTransactionTypeTest extends BaseUnitTest
 
         $message = $transactionType->getMessage();
         $this->assertSame('1234', $message->getCode());
-        $this->assertSame('This ist the customer message!', $message->getCustomer());
+        $this->assertSame('Customer message!', $message->getCustomer());
     }
 
     /**
@@ -111,8 +113,8 @@ class AbstractTransactionTypeTest extends BaseUnitTest
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponseShouldUpdateValuesOfAbstractTransaction()
     {
@@ -180,11 +182,10 @@ class AbstractTransactionTypeTest extends BaseUnitTest
     {
         $payment = (new Payment())->setId('myPaymentId');
 
-        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->disableOriginalConstructor()->setMethods(['fetch'])->getMock();
-        $resourceServiceMock->expects($this->once())->method('fetch')->with($payment);
+        /** @var ResourceService|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
+        $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payment);
 
-        /** @var ResourceService $resourceServiceMock */
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment->setParentResource($heidelpayObj);
 

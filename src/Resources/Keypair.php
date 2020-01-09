@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources
+ * @package  heidelpayPHP\Resources
  */
 namespace heidelpayPHP\Resources;
 
@@ -53,7 +53,12 @@ class Keypair extends AbstractHeidelpayResource
     /** @var string $merchantAddress */
     private $merchantAddress;
 
-    /** @var bool $cof */
+    /**
+     * Credentials on File / Card on File
+     * If true the credentials are stored for future transactions.
+     *
+     * @var bool|null $cof
+     */
     private $cof;
 
     /** @var bool $validateBasket */
@@ -221,9 +226,11 @@ class Keypair extends AbstractHeidelpayResource
     }
 
     /**
-     * @return bool
+     * Returns true if Credentials are stored for later transactions.
+     *
+     * @return bool|null
      */
-    public function isCof(): bool
+    public function isCof()
     {
         return $this->cof;
     }
@@ -233,26 +240,26 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return Keypair
      */
-    public function setCof(bool $cof): Keypair
+    protected function setCof(bool $cof): Keypair
     {
         $this->cof = $cof;
         return $this;
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isValidateBasket(): bool
+    public function isValidateBasket()
     {
         return $this->validateBasket;
     }
 
     /**
-     * @param bool $validateBasket
+     * @param bool|null $validateBasket
      *
      * @return Keypair
      */
-    public function setValidateBasket(bool $validateBasket): Keypair
+    protected function setValidateBasket($validateBasket): Keypair
     {
         $this->validateBasket = $validateBasket;
         return $this;

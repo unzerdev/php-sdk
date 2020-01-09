@@ -2,7 +2,7 @@
 /**
  * This defines a base class for all payment types e.g. Card, GiroPay, etc.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP\PaymentTypes
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
@@ -36,6 +36,17 @@ abstract class BasePaymentType extends AbstractHeidelpayResource
     protected function getResourcePath(): string
     {
         return 'types/' . parent::getResourcePath();
+    }
+
+    /**
+     * Returns an array containing additional parameters which are to be exposed within
+     * authorize and charge transactions of the payment method.
+     *
+     * @return array
+     */
+    public function getTransactionParams(): array
+    {
+        return [];
     }
 
     //</editor-fold>

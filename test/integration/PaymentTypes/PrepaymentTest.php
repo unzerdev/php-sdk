@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/integration/payment_types
+ * @package  heidelpayPHP\test\integration\PaymentTypes
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 
@@ -39,8 +39,8 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @return Prepayment
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @test
      */
     public function prepaymentShouldBeCreatableAndFetchable(): AbstractHeidelpayResource
@@ -67,8 +67,8 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @return Charge
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function prepaymentTypeShouldBeChargeable(Prepayment $prepayment): Charge
     {
@@ -92,8 +92,8 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @param Prepayment $prepayment
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function prepaymentTypeShouldNotBeAuthorizable(Prepayment $prepayment)
     {
@@ -112,8 +112,8 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @param Charge $charge
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function prepaymentTypeShouldNotBeShippable(Charge $charge)
     {
@@ -132,8 +132,8 @@ class PrepaymentTest extends BasePaymentTest
      *
      * @param Prepayment $prepayment
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function prepaymentChargeCanBeCanceled(Prepayment $prepayment)
     {

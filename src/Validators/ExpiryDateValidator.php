@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/validators
+ * @package  heidelpayPHP\Validators
  */
 namespace heidelpayPHP\Validators;
 
@@ -35,6 +35,6 @@ class ExpiryDateValidator
      */
     public static function validate($expiryDate): bool
     {
-        return preg_match('/^(0[\d]|1[0-2]|[1-9]){1}\/(\d{2}|\d{4})$/', $expiryDate);
+        return preg_match('/^(0[\d]|1[0-2]|[1-9])\/(\d{2}|\d{4})$/', $expiryDate);
     }
 }

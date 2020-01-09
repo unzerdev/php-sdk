@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Traits;
 
@@ -29,19 +29,19 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use ReflectionException;
 use RuntimeException;
 
-class CanPayoutWithCustomerTest extends BaseUnitTest
+class CanPayoutWithCustomerTest extends BasePaymentTest
 {
     /**
      * Verify payout method throws exception if the class does not implement the HeidelpayParentInterface.
      *
      * @test
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payoutShouldThrowExceptionIfTheClassDoesNotImplementParentInterface()
     {

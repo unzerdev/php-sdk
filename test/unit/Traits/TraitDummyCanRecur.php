@@ -20,14 +20,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Traits\CanRecur;
 
-class TraitDummyCanRecur extends AbstractHeidelpayResource
+class TraitDummyCanRecur extends BasePaymentType
 {
     use CanRecur;
 

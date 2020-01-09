@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  http://dev.heidelpay.com/
+ * @link  https://docs.heidelpay.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources/embedded_resources
+ * @package  heidelpayPHP\Resources\EmbeddedResources
  */
 namespace heidelpayPHP\Resources\EmbeddedResources;
 
 use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use stdClass;
+use function is_string;
 
 class CompanyInfo extends AbstractHeidelpayResource
 {
@@ -139,15 +139,6 @@ class CompanyInfo extends AbstractHeidelpayResource
         }
 
         return str_replace(['<', '>'], '', $value);
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
-    public function expose(): stdClass
-    {
-        return json_decode(json_encode(parent::expose(), JSON_FORCE_OBJECT), false);
     }
 
     //</editor-fold>

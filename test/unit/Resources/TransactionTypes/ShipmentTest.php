@@ -20,18 +20,18 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
 use stdClass;
 
-class ShipmentTest extends BaseUnitTest
+class ShipmentTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.
@@ -62,8 +62,8 @@ class ShipmentTest extends BaseUnitTest
      * @param Shipment $shipment
      *
      * @throws Exception
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends gettersAndSettersShouldWorkProperly
      */
     public function aShipmentShouldBeUpdatedThroughResponseHandling(Shipment $shipment)

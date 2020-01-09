@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/validators
+ * @package  heidelpayPHP\Validators
  */
 namespace heidelpayPHP\Validators;
 
@@ -38,7 +38,7 @@ class PublicKeyValidator
     public static function validate($key): bool
     {
         $match = [];
-        preg_match('/^[sp]{1}-pub-[a-zA-Z0-9]+/', $key, $match);
+        preg_match('/^[sp]-pub-[a-zA-Z0-9]+/', $key, $match);
         return count($match) > 0;
     }
 }

@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/payment_types
+ * @package  heidelpayPHP\PaymentTypes
  */
 namespace heidelpayPHP\Resources\PaymentTypes;
 
@@ -39,6 +39,7 @@ use heidelpayPHP\Traits\HasInvoiceId;
 use heidelpayPHP\Traits\HasOrderId;
 use RuntimeException;
 use stdClass;
+use function in_array;
 
 class Paypage extends BasePaymentType
 {
@@ -92,6 +93,12 @@ class Paypage extends BasePaymentType
     /** @var Payment|null $payment */
     private $payment;
 
+    /** @var string[] $excludeTypes */
+    protected $excludeTypes = [];
+
+    /** @var bool $card3ds */
+    protected $card3ds;
+
     /**
      * Paypage constructor.
      *
@@ -123,7 +130,7 @@ class Paypage extends BasePaymentType
      */
     public function setAmount(float $amount): Paypage
     {
-        $this->amount = round($amount, 4);
+        $this->amount = $amount;
         return $this;
     }
 
@@ -445,12 +452,15 @@ class Paypage extends BasePaymentType
      * @param string $redirectUrl
      *
      * @return Paypage
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setRedirectUrl(string $redirectUrl): Paypage
     {
         $payment = $this->getPayment();
         if ($payment instanceof Payment) {
-            $payment->setRedirectUrl($redirectUrl);
+            $payment->handleResponse((object)['redirectUrl' => $redirectUrl]);
         }
         return $this;
     }
@@ -467,6 +477,82 @@ class Paypage extends BasePaymentType
         }
 
         return null;
+    }
+
+    /**
+     * Returns an array of payment types not shown on the paypage.
+     *
+     * @return string[]
+     */
+    public function getExcludeTypes(): array
+    {
+        return $this->excludeTypes;
+    }
+
+    /**
+     * Sets array of payment types not shown on the paypage.
+     *
+     * @param string[] $excludeTypes
+     *
+     * @return Paypage
+     */
+    public function setExcludeTypes(array $excludeTypes): Paypage
+    {
+        $this->excludeTypes = $excludeTypes;
+        return $this;
+    }
+
+    /**
+     * Adds a payment type to the array of excluded payment types.
+     *
+     * @param string $excludeType The API name of the payment type resource that should not be shown on the paypage.
+     *                            It can be retrieved by calling the static function `getResourceName` on the payment
+     *                            type class e.g. Card::getResourceName().
+     *
+     * @return Paypage
+     */
+    public function addExcludeType(string $excludeType): Paypage
+    {
+        $this->excludeTypes[] = $excludeType;
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isCard3ds()
+    {
+        return $this->card3ds;
+    }
+
+    /**
+     * @param bool|null $card3ds
+     *
+     * @return Paypage
+     */
+    public function setCard3ds($card3ds): Paypage
+    {
+        $this->card3ds = $card3ds;
+        return $this;
+    }
+
+    /**
+     * @param float|null $effectiveInterestRate
+     *
+     * @return Paypage
+     */
+    public function setEffectiveInterestRate(float $effectiveInterestRate): Paypage
+    {
+        $this->setAdditionalAttribute('effectiveInterestRate', $effectiveInterestRate);
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getEffectiveInterestRate()
+    {
+        return $this->getAdditionalAttribute('effectiveInterestRate');
     }
 
     //</editor-fold>
@@ -495,11 +581,8 @@ class Paypage extends BasePaymentType
      * {@inheritDoc}
      * Map external name of property to internal name of property.
      *
-     * @param stdClass $response
-     * @param string   $method
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
@@ -545,7 +628,7 @@ class Paypage extends BasePaymentType
             'customer'=> $this->getCustomer(),
             'metadata' => $this->getMetadata(),
             'basket' => $this->getBasket(),
-            'payment' => $this->getPayment(),
+            'payment' => $this->getPayment()
         ];
     }
 
@@ -555,8 +638,8 @@ class Paypage extends BasePaymentType
      * Updates the referenced payment object if it exists and if this is not the payment object itself.
      * This is called from the crud methods to update the payments state whenever anything happens.
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function fetchPayment()
     {

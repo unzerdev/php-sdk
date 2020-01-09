@@ -20,15 +20,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\test\unit
  */
 namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\test\BaseUnitTest;
+use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 
-class WebhookTest extends BaseUnitTest
+class WebhookTest extends BasePaymentTest
 {
     /**
      * Verify the constructor of the webhook resource behaves as expected.

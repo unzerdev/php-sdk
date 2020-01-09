@@ -20,11 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/resources
+ * @package  heidelpayPHP\Resources
  */
 namespace heidelpayPHP\Resources;
 
 use heidelpayPHP\Adapter\HttpAdapterInterface;
+use function count;
 use function in_array;
 use function is_callable;
 use stdClass;

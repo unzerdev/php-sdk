@@ -1,8 +1,8 @@
 <?php
 /**
- * This class defines base for unit tests to add generic helpers.
+ * This trait adds the message properties to a resource class.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2019 heidelpay GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,30 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/test/unit
+ * @package  heidelpayPHP\Traits
  */
-namespace heidelpayPHP\test;
+namespace heidelpayPHP\Traits;
 
-use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\TestCase;
+use heidelpayPHP\Resources\EmbeddedResources\Message;
 
-class BaseUnitTest extends TestCase
+trait HasCustomerMessage
 {
+    /** @var Message $message */
+    private $message;
+
+    //<editor-fold desc="Getters/Setters">
+
     /**
-     * This performs assertions to verify the tested value is an empty array.
-     *
-     * @param mixed $value
-     *
-     * @throws Exception
+     * @return Message
      */
-    public function assertIsEmptyArray($value)
+    public function getMessage(): Message
     {
-        $this->assertInternalType('array', $value);
-        $this->assertEmpty($value);
+        if (!$this->message instanceof Message) {
+            $this->message = new Message();
+        }
+
+        return $this->message;
     }
+
+    //</editor-fold>
 }

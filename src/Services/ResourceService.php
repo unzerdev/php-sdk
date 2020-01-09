@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP/services
+ * @package  heidelpayPHP\Services
  */
 namespace heidelpayPHP\Services;
 
@@ -31,6 +31,7 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Constants\IdStrings;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Basket;
 use heidelpayPHP\Resources\Customer;
@@ -42,6 +43,7 @@ use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\Ideal;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
@@ -61,17 +63,18 @@ use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\Traits\CanRecur;
-use function is_string;
 use RuntimeException;
 use stdClass;
+use function in_array;
+use function is_string;
 
-class ResourceService
+class ResourceService implements ResourceServiceInterface
 {
     /** @var Heidelpay */
     private $heidelpay;
 
     /**
-     * PaymentService constructor.
+     * ResourceService constructor.
      *
      * @param Heidelpay $heidelpay
      */
@@ -79,6 +82,27 @@ class ResourceService
     {
         $this->heidelpay = $heidelpay;
     }
+
+    //<editor-fold desc="Getters/Setters"
+
+    /** @return Heidelpay */
+    public function getHeidelpay(): Heidelpay
+    {
+        return $this->heidelpay;
+    }
+
+    /**
+     * @param Heidelpay $heidelpay
+     *
+     * @return ResourceServiceInterface
+     */
+    public function setHeidelpay(Heidelpay $heidelpay): ResourceServiceInterface
+    {
+        $this->heidelpay = $heidelpay;
+        return $this;
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc="General">
 
@@ -90,8 +114,8 @@ class ResourceService
      *
      * @return stdClass
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function send(
         AbstractHeidelpayResource $resource,
@@ -110,13 +134,13 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         if ($resource->getFetchedAt() === null && $resource->getId() !== null) {
-            $this->fetch($resource);
+            $this->fetchResource($resource);
         }
         return $resource;
     }
@@ -126,8 +150,8 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource|null
      *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchResourceByUrl($url)
     {
@@ -197,11 +221,10 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @throws Exception
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function create(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function createResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         $method = HttpAdapterInterface::REQUEST_POST;
         $response = $this->send($resource, $method);
@@ -226,11 +249,11 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
-    public function update(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function updateResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         $method = HttpAdapterInterface::REQUEST_PUT;
         $response = $this->send($resource, $method);
@@ -249,10 +272,10 @@ class ResourceService
      *
      * @return AbstractHeidelpayResource|null
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function delete(AbstractHeidelpayResource &$resource)
+    public function deleteResource(AbstractHeidelpayResource &$resource)
     {
         $response = $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
 
@@ -268,17 +291,16 @@ class ResourceService
     }
 
     /**
-     * Fetch the resource from the api (id must be set).
+     * Updates the given local resource object (id must be set)
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractHeidelpayResource $resource The local resource object to update.
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractHeidelpayResource The updated resource object.
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     * @throws Exception
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetch(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function fetchResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
     {
         $method = HttpAdapterInterface::REQUEST_GET;
         $response = $this->send($resource, $method);
@@ -302,13 +324,14 @@ class ResourceService
      * @return Payout The Payout object of the given Payment.
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchPayout($payment): AbstractHeidelpayResource
+    public function fetchPayout($payment): Payout
     {
-        /** @var Payment $paymentObject */
         $paymentObject = $this->fetchPayment($payment);
-        return $this->fetch($paymentObject->getPayout(true));
+        /** @var Payout $payout */
+        $payout = $this->fetchResource($paymentObject->getPayout(true));
+        return $payout;
     }
 
     //</editor-fold>
@@ -316,18 +339,9 @@ class ResourceService
     //<editor-fold desc="Recurring">
 
     /**
-     * Activate recurring payment for the given payment type (if possible).
-     *
-     * @param string|BasePaymentType $paymentType The payment to activate recurring payment for.
-     * @param string                 $returnUrl   The URL to which the customer gets redirected in case of a 3ds
-     *                                            transaction
-     *
-     * @return Recurring
-     *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
+     * {@inheritDoc}
      */
-    public function createRecurring($paymentType, $returnUrl): Recurring
+    public function activateRecurringPayment($paymentType, $returnUrl): Recurring
     {
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
@@ -338,7 +352,7 @@ class ResourceService
         if (in_array(CanRecur::class, class_uses($paymentTypeObject), true)) {
             $recurring = new Recurring($paymentTypeObject->getId(), $returnUrl);
             $recurring->setParentResource($this->heidelpay);
-            $this->create($recurring);
+            $this->createResource($recurring);
             return $recurring;
         }
 
@@ -351,17 +365,16 @@ class ResourceService
 
     /**
      * Fetches the payment object if the id is given.
-     * Else it just returns the given payment argument.
-     * (!) It does not fetch or update a given payment object but returns it as-is. (!)
+     * Else it just returns the given payment argument as-is.
      *
      * @param $payment
      *
      * @return AbstractHeidelpayResource|Payment
      *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getPaymentResource($payment)
+    public function getPaymentResource($payment): Payment
     {
         $paymentObject = $payment;
 
@@ -372,41 +385,27 @@ class ResourceService
     }
 
     /**
-     * Fetch and return payment by given payment id.
-     *
-     * @param Payment|string $payment
-     *
-     * @return Payment
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function fetchPayment($payment): Payment
     {
         $paymentObject = $payment;
         if (is_string($payment)) {
-            $paymentObject = new Payment($this->heidelpay);
+            $paymentObject = new Payment();
             $paymentObject->setId($payment);
         }
 
-        $this->fetch($paymentObject);
+        $this->fetchResource($paymentObject->setParentResource($this->heidelpay));
         return $paymentObject;
     }
 
     /**
-     * Fetch and return payment by given order id.
-     *
-     * @param string $orderId
-     *
-     * @return Payment
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function fetchPaymentByOrderId($orderId): Payment
     {
         $paymentObject = (new Payment($this->heidelpay))->setOrderId($orderId);
-        $this->fetch($paymentObject);
+        $this->fetchResource($paymentObject);
         return $paymentObject;
     }
 
@@ -415,19 +414,14 @@ class ResourceService
     //<editor-fold desc="Keypair resource">
 
     /**
-     * Fetch public key and configured payment types from API.
-     *
-     * @param bool $detailed If this flag is set detailed information are fetched.
-     *
-     * @return Keypair
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchKeypair($detailed = false): AbstractHeidelpayResource
+    public function fetchKeypair($detailed = false): Keypair
     {
+        /** @var Keypair $keyPair */
         $keyPair = (new Keypair())->setParentResource($this->heidelpay)->setDetailed($detailed);
-        return $this->fetch($keyPair);
+        $this->fetchResource($keyPair);
+        return $keyPair;
     }
 
     //</editor-fold>
@@ -435,41 +429,26 @@ class ResourceService
     //<editor-fold desc="Metadata resource">
 
     /**
-     * Create Metadata resource.
-     *
-     * @param Metadata $metadata The Metadata object to be created.
-     *
-     * @return Metadata The fetched Metadata resource.
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function createMetadata(Metadata $metadata): Metadata
     {
         $metadata->setParentResource($this->heidelpay);
-        $this->create($metadata);
+        $this->createResource($metadata);
         return $metadata;
     }
 
     /**
-     * Fetch and return Metadata resource.
-     *
-     * @param Metadata|string $metadata
-     *
-     * @return Metadata
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function fetchMetadata($metadata): Metadata
     {
         $metadataObject = $metadata;
         if (is_string($metadata)) {
-            $metadataObject = (new Metadata())->setParentResource($this->heidelpay);
-            $metadataObject->setId($metadata);
+            $metadataObject = (new Metadata())->setId($metadata);
         }
 
-        $this->fetch($metadataObject);
+        $this->fetchResource($metadataObject->setParentResource($this->heidelpay));
         return $metadataObject;
     }
 
@@ -478,31 +457,17 @@ class ResourceService
     //<editor-fold desc="Basket resource">
 
     /**
-     * Creates and returns the given basket resource.
-     *
-     * @param Basket $basket The basket to be created.
-     *
-     * @return Basket The created Basket object.
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function createBasket(Basket $basket): Basket
     {
         $basket->setParentResource($this->heidelpay);
-        $this->create($basket);
+        $this->createResource($basket);
         return $basket;
     }
 
     /**
-     * Fetches and returns the given Basket (by object or id).
-     *
-     * @param Basket|string $basket Basket object or id of basket to be fetched.
-     *
-     * @return Basket The fetched Basket object.
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function fetchBasket($basket): Basket
     {
@@ -512,24 +477,17 @@ class ResourceService
         }
         $basketObj->setParentResource($this->heidelpay);
 
-        $this->fetch($basketObj);
+        $this->fetchResource($basketObj);
         return $basketObj;
     }
 
     /**
-     * Update the a basket resource with the given basket object (id must be set).
-     *
-     * @param Basket $basket
-     *
-     * @return Basket The updated Basket object.
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function updateBasket(Basket $basket): Basket
     {
         $basket->setParentResource($this->heidelpay);
-        $this->update($basket);
+        $this->updateResource($basket);
         return $basket;
     }
 
@@ -538,34 +496,20 @@ class ResourceService
     //<editor-fold desc="PaymentType resource">
 
     /**
-     * Create the given payment type via api.
-     *
-     * @param BasePaymentType $paymentType
-     *
-     * @return BasePaymentType|AbstractHeidelpayResource
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function createPaymentType(BasePaymentType $paymentType): BasePaymentType
     {
         /** @var AbstractHeidelpayResource $paymentType */
         $paymentType->setParentResource($this->heidelpay);
-        $this->create($paymentType);
+        $this->createResource($paymentType);
         return $paymentType;
     }
 
     /**
-     * Fetch the payment type with the given Id from the API.
-     *
-     * @param string $typeId
-     *
-     * @return BasePaymentType|AbstractHeidelpayResource
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchPaymentType($typeId): AbstractHeidelpayResource
+    public function fetchPaymentType($typeId): BasePaymentType
     {
         $resourceType = IdService::getResourceTypeFromIdString($typeId);
         switch ($resourceType) {
@@ -617,12 +561,28 @@ class ResourceService
             case IdStrings::INVOICE_FACTORING:
                 $paymentType = new InvoiceFactoring();
                 break;
+            case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
+                $paymentType = new HirePurchaseDirectDebit();
+                break;
             default:
                 throw new RuntimeException('Invalid payment type!');
                 break;
         }
 
-        return $this->fetch($paymentType->setParentResource($this->heidelpay)->setId($typeId));
+        /** @var BasePaymentType $paymentType */
+        $paymentType = $paymentType->setParentResource($this->heidelpay)->setId($typeId);
+        $this->fetchResource($paymentType);
+        return $paymentType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updatePaymentType(BasePaymentType $paymentType): BasePaymentType
+    {
+        /** @var BasePaymentType $returnPaymentType */
+        $returnPaymentType = $this->updateResource($paymentType);
+        return $returnPaymentType;
     }
 
     //</editor-fold>
@@ -630,33 +590,19 @@ class ResourceService
     //<editor-fold desc="Customer resource">
 
     /**
-     * Create the given Customer object via API.
-     *
-     * @param Customer $customer
-     *
-     * @return Customer
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function createCustomer(Customer $customer): AbstractHeidelpayResource
+    public function createCustomer(Customer $customer): Customer
     {
         $customer->setParentResource($this->heidelpay);
-        $this->create($customer);
+        $this->createResource($customer);
         return $customer;
     }
 
     /**
-     * Create the given Customer object via API.
-     *
-     * @param Customer $customer
-     *
-     * @return Customer
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function createOrUpdateCustomer(Customer $customer): AbstractHeidelpayResource
+    public function createOrUpdateCustomer(Customer $customer): Customer
     {
         try {
             $this->createCustomer($customer);
@@ -676,16 +622,9 @@ class ResourceService
     }
 
     /**
-     * Fetch and return Customer object from API by the given id.
-     *
-     * @param Customer|string $customer
-     *
-     * @return Customer
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchCustomer($customer): AbstractHeidelpayResource
+    public function fetchCustomer($customer): Customer
     {
         $customerObject = $customer;
 
@@ -693,52 +632,31 @@ class ResourceService
             $customerObject = (new Customer())->setId($customer);
         }
 
-        $this->fetch($customerObject->setParentResource($this->heidelpay));
+        $this->fetchResource($customerObject->setParentResource($this->heidelpay));
         return $customerObject;
     }
 
     /**
-     * Fetch and return Customer object from API by the given external customer id.
-     *
-     * @param string $customerId
-     *
-     * @return Customer
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function fetchCustomerByExtCustomerId($customerId): Customer
     {
         $customerObject = (new Customer())->setCustomerId($customerId);
-        $this->fetch($customerObject->setParentResource($this->heidelpay));
+        $this->fetchResource($customerObject->setParentResource($this->heidelpay));
         return $customerObject;
     }
 
     /**
-     * Update and return a Customer object via API.
-     *
-     * @param Customer $customer
-     *
-     * @return Customer
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function updateCustomer(Customer $customer): AbstractHeidelpayResource
+    public function updateCustomer(Customer $customer): Customer
     {
-        $this->update($customer);
+        $this->updateResource($customer);
         return $customer;
     }
 
     /**
-     * Delete the given Customer resource.
-     *
-     * @param Customer|string|null $customer
-     *
-     * @return Customer|null|string
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
     public function deleteCustomer($customer)
     {
@@ -748,7 +666,7 @@ class ResourceService
             $customerObject = $this->fetchCustomer($customer);
         }
 
-        $this->delete($customerObject);
+        $this->deleteResource($customerObject);
         return $customerObject;
     }
 
@@ -757,45 +675,47 @@ class ResourceService
     //<editor-fold desc="Authorization resource">
 
     /**
-     * Fetch an Authorization object by its paymentId.
-     * Authorization Ids are not global but specific to the payment.
-     * A Payment object can have zero to one authorizations.
-     *
-     * @param $payment
-     *
-     * @return Authorization
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchAuthorization($payment): AbstractHeidelpayResource
+    public function fetchAuthorization($payment): Authorization
     {
         /** @var Payment $paymentObject */
         $paymentObject = $this->fetchPayment($payment);
-        return $this->fetch($paymentObject->getAuthorization(true));
+        /** @var Authorization $authorize */
+        $authorize = $paymentObject->getAuthorization(true);
+
+        if (!$authorize instanceof Authorization) {
+            throw new RuntimeException('The payment does not seem to have an Authorization.');
+        }
+
+        $this->fetchResource($authorize);
+        return $authorize;
     }
 
     //</editor-fold>
 
     //<editor-fold desc="Charge resource">
+    public function fetchCharge(Charge $charge): Charge
+    {
+        $this->fetchResource($charge);
+        return $charge;
+    }
 
     /**
-     * Fetch a Charge object by paymentId and chargeId.
-     * Charge Ids are not global but specific to the payment.
-     *
-     * @param Payment|string $payment
-     * @param string         $chargeId
-     *
-     * @return Charge
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchChargeById($payment, $chargeId): AbstractHeidelpayResource
+    public function fetchChargeById($payment, $chargeId): Charge
     {
         /** @var Payment $paymentObject */
         $paymentObject = $this->fetchPayment($payment);
-        return $this->fetch($paymentObject->getCharge($chargeId, true));
+        $charge = $paymentObject->getCharge($chargeId, true);
+
+        if (!$charge instanceof Charge) {
+            throw new RuntimeException('The charge object could not be found.');
+        }
+
+        $this->fetchResource($charge);
+        return $charge;
     }
 
     //</editor-fold>
@@ -803,53 +723,28 @@ class ResourceService
     //<editor-fold desc="Cancellation resource">
 
     /**
-     * Fetch a cancel on an authorization (aka reversal).
-     *
-     * @param Authorization|string $authorization
-     * @param string               $cancellationId
-     *
-     * @return Cancellation
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchReversalByAuthorization($authorization, $cancellationId): AbstractHeidelpayResource
+    public function fetchReversalByAuthorization($authorization, $cancellationId): Cancellation
     {
-        $this->fetch($authorization);
+        $this->fetchResource($authorization);
         return $authorization->getCancellation($cancellationId);
     }
 
     /**
-     * Fetch a Cancellation resource on an authorization (aka reversal) via id.
-     *
-     * @param string $paymentId
-     * @param string $cancellationId
-     *
-     * @return Cancellation
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchReversal($paymentId, $cancellationId): AbstractHeidelpayResource
+    public function fetchReversal($payment, $cancellationId): Cancellation
     {
         /** @var Authorization $authorization */
-        $authorization = $this->fetchPayment($paymentId)->getAuthorization();
+        $authorization = $this->fetchPayment($payment)->getAuthorization();
         return $authorization->getCancellation($cancellationId);
     }
 
     /**
-     * Fetch a Cancellation resource on a charge (aka refund) via id.
-     *
-     * @param Payment|string $payment
-     * @param string         $chargeId
-     * @param string         $cancellationId
-     *
-     * @return Cancellation
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchRefundById($payment, $chargeId, $cancellationId): AbstractHeidelpayResource
+    public function fetchRefundById($payment, $chargeId, $cancellationId): Cancellation
     {
         /** @var Charge $charge */
         $charge = $this->fetchChargeById($payment, $chargeId);
@@ -857,19 +752,13 @@ class ResourceService
     }
 
     /**
-     * Fetch a Cancellation resource on a Charge (aka refund).
-     *
-     * @param Charge $charge
-     * @param string $cancellationId
-     *
-     * @return Cancellation
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchRefund(Charge $charge, $cancellationId): AbstractHeidelpayResource
+    public function fetchRefund(Charge $charge, $cancellationId): Cancellation
     {
-        return $this->fetch($charge->getCancellation($cancellationId, true));
+        /** @var Cancellation $cancel */
+        $cancel = $this->fetchResource($charge->getCancellation($cancellationId, true));
+        return $cancel;
     }
 
     //</editor-fold>
@@ -877,17 +766,9 @@ class ResourceService
     //<editor-fold desc="Shipment resource">
 
     /**
-     * Fetch a Shipment resource of the given Payment resource by id.
-     *
-     * @param Payment|string $payment
-     * @param string         $shipmentId
-     *
-     * @return Shipment
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
+     * {@inheritDoc}
      */
-    public function fetchShipment($payment, $shipmentId): AbstractHeidelpayResource
+    public function fetchShipment($payment, $shipmentId): Shipment
     {
         $paymentObject = $this->fetchPayment($payment);
         return $paymentObject->getShipment($shipmentId);
