@@ -133,7 +133,9 @@ class RecurringPaymentTest extends BasePaymentTest
         $dd->charge(10.0, 'EUR', self::RETURN_URL);
         $dd = $this->heidelpay->fetchPaymentType($dd->getId());
         $this->assertTrue($dd->isRecurring());
-        // todo: catch error when AHC-2432 is done
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
         $this->heidelpay->activateRecurringPayment($dd, self::RETURN_URL);
     }
 
@@ -149,8 +151,9 @@ class RecurringPaymentTest extends BasePaymentTest
     {
         /** @var SepaDirectDebitGuaranteed $ddg */
         $ddg = $this->heidelpay->createPaymentType(new SepaDirectDebitGuaranteed('DE89370400440532013000'));
-        $recurring = $ddg->activateRecurring('https://dev.heidelpay.com');
-        $this->assertPending($recurring);
-        $this->assertNotEmpty($recurring->getReturnUrl());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ACTIVATE_RECURRING_VIA_TRANSACTION);
+        $ddg->activateRecurring('https://dev.heidelpay.com');
     }
 }
