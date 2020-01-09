@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Example for Payment Type `Przelewy24`.
-*   Enabled recurring payment for SEPA direct debit.
+*   Enabled recurring payment for SEPA direct debit (guaranteed).
 
 ### Fixed
 *   A bug which led to an error when trying to cancel the initial transaction of a charged invoice.
