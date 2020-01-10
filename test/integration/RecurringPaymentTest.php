@@ -28,6 +28,8 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
+use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
@@ -113,5 +115,45 @@ class RecurringPaymentTest extends BasePaymentTest
         $recurring = $paypal->activateRecurring('https://dev.heidelpay.com');
         $this->assertPending($recurring);
         $this->assertNotEmpty($recurring->getReturnUrl());
+    }
+
+    /**
+     * Verify sepa direct debit can activate recurring payments.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function sepaDirectDebitShouldBeAbleToActivateRecurringPayments()
+    {
+        /** @var SepaDirectDebit $dd */
+        $dd = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $this->assertFalse($dd->isRecurring());
+        $dd->charge(10.0, 'EUR', self::RETURN_URL);
+        $dd = $this->heidelpay->fetchPaymentType($dd->getId());
+        $this->assertTrue($dd->isRecurring());
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
+        $this->heidelpay->activateRecurringPayment($dd, self::RETURN_URL);
+    }
+
+    /**
+     * Verify sepa direct debit guaranteed can activate recurring payments.
+     *
+     * @test
+     *
+     * @throws RuntimeException
+     * @throws HeidelpayApiException
+     */
+    public function sepaDirectDebitGuaranteedShouldBeAbleToActivateRecurringPayments()
+    {
+        /** @var SepaDirectDebitGuaranteed $ddg */
+        $ddg = $this->heidelpay->createPaymentType(new SepaDirectDebitGuaranteed('DE89370400440532013000'));
+
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ACTIVATE_RECURRING_VIA_TRANSACTION);
+        $ddg->activateRecurring('https://dev.heidelpay.com');
     }
 }

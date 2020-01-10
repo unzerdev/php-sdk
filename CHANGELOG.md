@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Example for Payment Type `Przelewy24`.
+*   Enabled recurring payment for SEPA direct debit (guaranteed).
 
 ### Fixed
 *   A bug which led to an error when trying to cancel the initial transaction of a charged invoice.
@@ -79,6 +80,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Refactor deprecation notices.
 *   Refactored and extended unit tests.
 *   Test keypair can now be set via environment variables.
+*   Activate recurring payment for `SEPA Direct Debit (guaranteed)`.
 
 ## [1.2.2.0][1.2.2.0]
 

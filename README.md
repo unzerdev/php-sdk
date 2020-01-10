@@ -26,7 +26,7 @@ Please refer to the following documentation for installation instructions and us
 *   PayPal + Recurring
 *   Prepayment
 *   Przelewy24
-*   SEPA direct debit (guaranteed)
+*   SEPA direct debit (guaranteed) + Recurring
 *   SOFORT
 *   EPS
 *   FlexiPay® Direct (PIS)
