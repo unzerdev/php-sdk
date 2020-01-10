@@ -81,6 +81,7 @@ class EnvironmentService
      * Returns the default key if the environment variable is not set.
      *
      * @param bool $non3ds
+     *
      * @return string
      */
     public function getTestPrivateKey($non3ds = false): string
@@ -95,6 +96,7 @@ class EnvironmentService
      * Returns the default key if the environment variable is not set.
      *
      * @param bool $non3ds
+     *
      * @return string
      */
     public function getTestPublicKey($non3ds = false): string
