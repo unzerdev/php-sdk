@@ -197,29 +197,6 @@ class PaymentTest extends BasePaymentTest
     }
 
     /**
-     * Verify an Exception is thrown if the orderId already exists.
-     *
-     * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     */
-    public function apiShouldReturnErrorIfOrderIdAlreadyExists()
-    {
-        $orderId = str_replace(' ', '', microtime());
-
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
-        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $paypal, 'http://heidelpay.com', null, $orderId, null, null, false);
-        $this->assertNotEmpty($authorization);
-
-        $paypal2 = $this->heidelpay->createPaymentType(new Paypal());
-
-        $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ORDER_ID_ALREADY_IN_USE);
-        $this->heidelpay->authorize(101.00, 'EUR', $paypal2, 'http://heidelpay.com', null, $orderId, null, null, false);
-    }
-
-    /**
      * Verify a payment is fetched by orderId if the id is not set.
      *
      * @test
@@ -243,6 +220,7 @@ class PaymentTest extends BasePaymentTest
      * Verify orderId does not need to be unique.
      *
      * @test
+     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
@@ -268,6 +246,7 @@ class PaymentTest extends BasePaymentTest
      * Verify invoiceId does not need to be unique.
      *
      * @test
+     *
      * @throws HeidelpayApiException
      * @throws RuntimeException
      */
