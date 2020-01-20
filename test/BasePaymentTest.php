@@ -129,11 +129,11 @@ class BasePaymentTest extends TestCase
     /**
      * Asserts whether the given transaction was successful.
      *
-     * @param AbstractTransactionType $transaction
+     * @param AbstractTransactionType|Recurring $transaction
      *
      * @throws AssertionFailedError
      */
-    protected function assertSuccess(AbstractTransactionType $transaction)
+    protected function assertSuccess($transaction)
     {
         $this->assertTrue($transaction->isSuccess());
         $this->assertFalse($transaction->isPending());
@@ -143,11 +143,11 @@ class BasePaymentTest extends TestCase
     /**
      * Asserts whether the given transaction was a failure.
      *
-     * @param AbstractTransactionType $transaction
+     * @param AbstractTransactionType|Recurring $transaction
      *
      * @throws AssertionFailedError
      */
-    protected function assertError(AbstractTransactionType $transaction)
+    protected function assertError($transaction)
     {
         $this->assertFalse($transaction->isSuccess());
         $this->assertFalse($transaction->isPending());

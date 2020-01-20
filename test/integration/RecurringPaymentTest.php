@@ -26,10 +26,12 @@ namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use heidelpayPHP\Services\EnvironmentService;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\Exception;
 use RuntimeException;
@@ -83,20 +85,26 @@ class RecurringPaymentTest extends BasePaymentTest
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @group skip
      */
     public function recurringForCardWithout3dsShouldActivateRecurringAtOnce()
     {
+        $privateKey = (new EnvironmentService())->getTestPrivateKey(true);
+        if (empty($privateKey)) {
+            $this->markTestIncomplete('No non 3ds private key set');
+        }
+        $heidelpay = new Heidelpay($privateKey);
+
+        $heidelpay->setDebugMode(true)->setDebugHandler($this->heidelpay->getDebugHandler());
+
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject()->set3ds(false));
+        $card = $heidelpay->createPaymentType($this->createCardObject()->set3ds(false));
         $this->assertFalse($card->isRecurring());
 
         $recurring = $card->activateRecurring('https://dev.heidelpay.com');
-        $this->assertPending($recurring);
+        $this->assertSuccess($recurring);
 
         /** @var Card $fetchedCard */
-        $fetchedCard = $this->heidelpay->fetchPaymentType($card->getId());
+        $fetchedCard = $heidelpay->fetchPaymentType($card->getId());
         $this->assertTrue($fetchedCard->isRecurring());
     }
 
