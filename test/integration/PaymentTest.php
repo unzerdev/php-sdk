@@ -28,6 +28,7 @@ namespace heidelpayPHP\test\integration;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Payment;
+use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -236,5 +237,55 @@ class PaymentTest extends BasePaymentTest
 
         $this->assertNotSame($payment, $fetchedPayment);
         $this->assertEquals($payment->expose(), $fetchedPayment->expose());
+    }
+
+    /**
+     * Verify orderId does not need to be unique.
+     *
+     * @test
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function shouldAllowNonUniqueOrderId()
+    {
+        $orderId = self::generateRandomId();
+
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card->charge(1023, 'EUR', self::RETURN_URL, null, $orderId);
+
+        try {
+            /** @var Card $card2 */
+            $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
+            $card2->charge(1023, 'EUR', self::RETURN_URL, null, $orderId);
+            $this->assertTrue(true);
+        } catch (HeidelpayApiException $e) {
+            $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
+        }
+    }
+
+    /**
+     * Verify invoiceId does not need to be unique.
+     *
+     * @test
+     * @throws HeidelpayApiException
+     * @throws RuntimeException
+     */
+    public function shouldAllowNonUniqueInvoiceId()
+    {
+        $invoiceId = self::generateRandomId();
+
+        /** @var Card $card */
+        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card->charge(1023, 'EUR', self::RETURN_URL, null, null, null, null, null, $invoiceId);
+
+        try {
+            /** @var Card $card2 */
+            $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
+            $card2->charge(1023, 'EUR', self::RETURN_URL, null, null, null, null, null, $invoiceId);
+            $this->assertTrue(true);
+        } catch (HeidelpayApiException $e) {
+            $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
+        }
     }
 }
