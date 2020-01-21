@@ -10,7 +10,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Enabled recurring payment for SEPA direct debit (guaranteed).
 
 ### Fixed
-*   A bug which led to an error when trying to cancel the initial transaction of a charged invoice.
 *   Composer: PHP version constraint.
 *   Several minor issues.
 
@@ -25,6 +24,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Remove
 *   Move method doc blocks to service interfaces.
 *   Remove dead code.
+
+## [1.2.5.1][1.2.5.1]
+
+### Fix
+*   A bug which led to an error when trying to cancel the initial transaction of a charged invoice.
 
 ## [1.2.5.0][1.2.5.0]
 
@@ -358,4 +362,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.2.3.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.2.0..1.2.3.0
 [1.2.4.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.3.0..1.2.4.0
 [1.2.5.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.4.0..1.2.5.0
-[1.2.6.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.5.0..1.2.6.0
+[1.2.5.1]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.5.0..1.2.5.1
+[1.2.6.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.5.1..1.2.6.0
