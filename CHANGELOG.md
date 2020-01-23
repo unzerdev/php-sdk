@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 *   Http headers to debug log.
+*   PID to debug log.
 
 ### Changed
 *   Write example log messages to examples\log\example.log instead of error.log.
