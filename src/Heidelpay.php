@@ -99,6 +99,8 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @param string $key    The private key your received from your heidelpay contact person.
      * @param string $locale The locale of the customer defining defining the translation.
      *
+     * @link https://docs.heidelpay.com/docs/web-integration#section-localization-and-languages
+     *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      */
     public function __construct($key, $locale = null)
