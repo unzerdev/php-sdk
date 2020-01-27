@@ -97,7 +97,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * Construct a new heidelpay object.
      *
      * @param string $key    The private key your received from your heidelpay contact person.
-     * @param string $locale The locale of the customer defining defining the translation.
+     * @param string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
      * @link https://docs.heidelpay.com/docs/web-integration#section-localization-and-languages
      *
