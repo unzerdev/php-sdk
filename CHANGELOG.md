@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 *   Update example implementation for Hire Purchase direct debit payment type (FlexiPay® Rate).
 
+### Fix
+*   Ensure locale strings comply to standard.
+
 ## [1.2.6.0][1.2.6.0]
 
 ### Added

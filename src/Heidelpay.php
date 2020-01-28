@@ -104,7 +104,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     public function __construct($key, $locale = null)
     {
         $this->setKey($key);
-        $this->locale = $locale;
+        $this->setLocale($locale);
 
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
@@ -158,14 +158,14 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * Sets the customer locale.
      *
-     * @param string $locale The customer locale to set.
-     *                       Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
+     * @param string|null $locale The customer locale to set.
+     *                            Ref. https://docs.heidelpay.com for a list of supported values.
      *
      * @return Heidelpay This heidelpay object.
      */
     public function setLocale($locale): Heidelpay
     {
-        $this->locale = $locale;
+        $this->locale = str_replace('_', '-', $locale);
         return $this;
     }
 
