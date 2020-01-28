@@ -60,7 +60,7 @@ class ExceptionTest extends BasePaymentTest
         }
 
         try {
-            $this->heidelpay->setLocale('de_DE');
+            $this->heidelpay->setLocale('de-DE');
             $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
         } catch (HeidelpayApiException $e) {
             $this->assertInstanceOf(HeidelpayApiException::class, $e);

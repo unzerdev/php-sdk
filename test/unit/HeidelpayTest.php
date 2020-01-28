@@ -68,11 +68,11 @@ class HeidelpayTest extends BasePaymentTest
         $this->assertEquals('s-priv-1234', $heidelpay->getKey());
         $this->assertEquals(null, $heidelpay->getLocale());
 
-        $heidelpaySwiss = new Heidelpay('s-priv-1234', 'de_CH');
-        $this->assertEquals('de_CH', $heidelpaySwiss->getLocale());
+        $heidelpaySwiss = new Heidelpay('s-priv-1234', 'de-CH');
+        $this->assertEquals('de-CH', $heidelpaySwiss->getLocale());
 
-        $heidelpayGerman = new Heidelpay('s-priv-1234', 'de_DE');
-        $this->assertEquals('de_DE', $heidelpayGerman->getLocale());
+        $heidelpayGerman = new Heidelpay('s-priv-1234', 'de-DE');
+        $this->assertEquals('de-DE', $heidelpayGerman->getLocale());
     }
 
     /**
