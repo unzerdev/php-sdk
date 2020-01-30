@@ -29,7 +29,7 @@ session_start();
 <!DOCTYPE html>
 <html lang="en">
     <body>
-        <h1>Pending</h1>
+        <h1 id="result">Pending</h1>
         <p>
             The payment transaction has been completed, however the payment is pending.<br>
             In some cases (e. g. authorization transaction or invoice payments) this is normal.<br>

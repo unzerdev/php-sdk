@@ -65,7 +65,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             You can try authorize, charge and payout transactions with or without 3Ds.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='Card/';">
+                    <div id="tryCardExample" class="ui bottom attached green button" onclick="location.href='Card/';">
                         Try
                     </div>
                 </div>
@@ -76,7 +76,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             You can set a Card type to recurring in order to register it and charge later as well as implement recurring payments.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='CardRecurring/';">
+                    <div id="tryCardRecurringExample" class="ui bottom attached green button" onclick="location.href='CardRecurring/';">
                         Try
                     </div>
                 </div>
@@ -88,7 +88,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='EPSCharge/';">
+                    <div id="tryEPSExample" class="ui bottom attached green button" onclick="location.href='EPSCharge/';">
                         Try
                     </div>
                 </div>
@@ -100,7 +100,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='IDeal/';">
+                    <div id="tryIDealExample" class="ui bottom attached green button" onclick="location.href='IDeal/';">
                         Try
                     </div>
                 </div>
@@ -112,7 +112,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='Giropay/';">
+                    <div id="tryGiropayExample" class="ui bottom attached green button" onclick="location.href='Giropay/';">
                         Try
                     </div>
                 </div>
@@ -124,7 +124,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='Alipay/';">
+                    <div id="tryAlipayExample" class="ui bottom attached green button" onclick="location.href='Alipay/';">
                         Try
                     </div>
                 </div>
@@ -136,7 +136,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='Wechatpay/';">
+                    <div id="tryWechatPayExample" class="ui bottom attached green button" onclick="location.href='Wechatpay/';">
                         Try
                     </div>
                 </div>
@@ -148,7 +148,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='Przelewy24/';">
+                    <div id="tryP24Example" class="ui bottom attached green button" onclick="location.href='Przelewy24/';">
                         Try
                     </div>
                 </div>
@@ -160,7 +160,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='Prepayment/';">
+                    <div id="tryPrePaymentExample" class="ui bottom attached green button" onclick="location.href='Prepayment/';">
                         Try
                     </div>
                 </div>
@@ -172,7 +172,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='Invoice/';">
+                    <div id="tryInvoiceExample" class="ui bottom attached green button" onclick="location.href='Invoice/';">
                         Try
                     </div>
                 </div>
@@ -186,7 +186,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             Please refer to the example of <i>Invoice Factoring</i> if you don't want to add the customer via payment form.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
+                    <div id="tryInvoiceGuaranteedExample" class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
                         Try
                     </div>
                 </div>
@@ -200,7 +200,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             Please refer to the example of <i>Invoice guaranteed</i> if you want to add the customer data withing the payment form.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='InvoiceFactoring/';">
+                    <div id="tryInvoiceFactoringExample" class="ui bottom attached green button" onclick="location.href='InvoiceFactoring/';">
                         Try
                     </div>
                 </div>
@@ -213,7 +213,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             You can try authorize and direct charge.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='PayPal/';">
+                    <div id="tryPayPalExample" class="ui bottom attached green button" onclick="location.href='PayPal/';">
                         Try
                     </div>
                 </div>
@@ -226,7 +226,7 @@ require_once __DIR__ . '/../../../autoload.php';
                             You can set a Pay Pal type to recurring in order to register it and charge later as well as implement recurring payments.
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='PayPalRecurring/';">
+                    <div id="tryPayPalRecurringExample" class="ui bottom attached green button" onclick="location.href='PayPalRecurring/';">
                         Try
                     </div>
                 </div>
@@ -238,7 +238,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='Sofort/';">
+                    <div id="trySofortExample" class="ui bottom attached green button" onclick="location.href='Sofort/';">
                         Try
                     </div>
                 </div>
@@ -250,7 +250,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
+                    <div id="tryDirecDebitGuaranteedExample" class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
                         Try
                     </div>
                 </div>
@@ -262,7 +262,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='HirePurchaseDirectDebit/';">
+                    <div id="tryHirePurchaseDirectDebitExample" class="ui bottom attached green button" onclick="location.href='HirePurchaseDirectDebit/';">
                         Try
                     </div>
                 </div>
@@ -274,7 +274,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='FlexiPayDirect/';">
+                    <div id="tryFlexiPayDirectExample" class="ui bottom attached green button" onclick="location.href='FlexiPayDirect/';">
                         Try
                     </div>
                 </div>
@@ -292,7 +292,7 @@ require_once __DIR__ . '/../../../autoload.php';
                     <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
                         Documentation
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
+                    <div id="tryHostedPayPageExample" class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
                         Try
                     </div>
                 </div>
@@ -309,7 +309,7 @@ require_once __DIR__ . '/../../../autoload.php';
                     <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
                         Documentation
                     </div>
-                    <div class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">
+                    <div id="tryEmbeddedPayPageExample" class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">
                         Try
                     </div>
                 </div>
