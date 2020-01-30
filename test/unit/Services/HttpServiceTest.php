@@ -188,28 +188,44 @@ class HttpServiceTest extends BasePaymentTest
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
 
-        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(
-            ['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close']
-        )->getMock();
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close'])->getMock();
         $adapterMock->method('execute')->willReturn('{"response":"myResponseString"}');
         $adapterMock->method('getResponseCode')->willReturnOnConsecutiveCalls('200', '201');
         $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
 
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
-        $loggerMock->expects($this->exactly(5))->method('log')->withConsecutive(
+        $loggerMock->expects($this->exactly(7))->method('log')->withConsecutive(
             [ $this->callback(
                     static function ($string) {
-                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === 'GET: https://api.heidelpay.com/v1/my/uri/123';
+                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (string)(getmypid()) . ') GET: https://api.heidelpay.com/v1/my/uri/123';
                     })
             ],
-            ['Response: (200) {"response":"myResponseString"}'],
             [ $this->callback(
                 static function ($string) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === 'POST: https://api.heidelpay.com/v1/my/uri/123';
+                    $matches = [];
+                    preg_match('/^(?:\([\d]*\) Headers: )({.*})/', $string, $matches);
+                    $elements = json_decode($matches[1], true);
+                    return array_key_exists('Authorization', $elements) && array_key_exists('Content-Type', $elements) &&
+                           array_key_exists('SDK-TYPE', $elements) && array_key_exists('SDK-VERSION', $elements);
                 })
             ],
-            ['Request: {"dummyResource": "JsonSerialized"}'],
-            ['Response: (201) {"response":"myResponseString"}']
+            ['(' . (string)(getmypid()) . ') Response: (200) {"response":"myResponseString"}'],
+            [ $this->callback(
+                static function ($string) {
+                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (string)(getmypid()) . ') POST: https://api.heidelpay.com/v1/my/uri/123';
+                })
+            ],
+            [ $this->callback(
+                static function ($string) {
+                    $matches = [];
+                    preg_match('/^(?:\([\d]*\) Headers: )({.*})/', $string, $matches);
+                    $elements = json_decode($matches[1], true);
+                    return array_key_exists('Authorization', $elements) && array_key_exists('Content-Type', $elements) &&
+                        array_key_exists('SDK-TYPE', $elements) && array_key_exists('SDK-VERSION', $elements);
+                })
+            ],
+            ['(' . (string)(getmypid()) . ') Request: {"dummyResource": "JsonSerialized"}'],
+            ['(' . (string)(getmypid()) . ') Response: (201) {"response":"myResponseString"}']
         );
 
         /** @var DebugHandlerInterface $loggerMock */
