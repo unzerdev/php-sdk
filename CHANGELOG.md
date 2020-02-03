@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Http headers to debug log.
 *   PID to debug log.
+*   PHP7.4 support.
 
 ## [1.2.6.0][1.2.6.0]
 
