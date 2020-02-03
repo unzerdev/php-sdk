@@ -29,7 +29,7 @@ session_start();
 <!DOCTYPE html>
 <html lang="en">
     <body>
-        <h1>Failure</h1>
+        <h1 id="result">Failure</h1>
         <p>
             There has been an error completing the payment.
             <?php

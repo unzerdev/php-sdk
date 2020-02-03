@@ -64,7 +64,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.2.6.0';
+    const SDK_VERSION = '1.2.7.0';
 
     /** @var string $key */
     private $key;
@@ -97,14 +97,16 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * Construct a new heidelpay object.
      *
      * @param string $key    The private key your received from your heidelpay contact person.
-     * @param string $locale The locale of the customer defining defining the translation.
+     * @param string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
+     *
+     * @link https://docs.heidelpay.com/docs/web-integration#section-localization-and-languages
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      */
     public function __construct($key, $locale = null)
     {
         $this->setKey($key);
-        $this->locale = $locale;
+        $this->setLocale($locale);
 
         $this->resourceService = new ResourceService($this);
         $this->paymentService  = new PaymentService($this);
@@ -158,14 +160,14 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * Sets the customer locale.
      *
-     * @param string $locale The customer locale to set.
-     *                       Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
+     * @param string|null $locale The customer locale to set.
+     *                            Ref. https://docs.heidelpay.com for a list of supported values.
      *
      * @return Heidelpay This heidelpay object.
      */
     public function setLocale($locale): Heidelpay
     {
-        $this->locale = $locale;
+        $this->locale = str_replace('_', '-', $locale);
         return $this;
     }
 
@@ -1022,7 +1024,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
         if ($this->isDebugMode()) {
             $debugHandler = $this->getDebugHandler();
             if ($debugHandler instanceof DebugHandlerInterface) {
-                $debugHandler->log($message);
+                $debugHandler->log('(' . (string)(getmypid()) . ') ' . $message);
             }
         }
     }

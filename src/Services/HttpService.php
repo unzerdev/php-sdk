@@ -78,7 +78,7 @@ class HttpService
     public function getEnvironmentService(): EnvironmentService
     {
         if (!$this->environmentService instanceof EnvironmentService) {
-            $this->environmentService =  new EnvironmentService();
+            $this->environmentService = new EnvironmentService();
         }
         return $this->environmentService;
     }
@@ -119,9 +119,10 @@ class HttpService
         $heidelpayObj = $resource->getHeidelpayObject();
 
         // perform request
-        $url = $this->getEnvironmentUrl($uri);
+        $url     = $this->getEnvironmentUrl($uri);
         $payload = $resource->jsonSerialize();
-        $this->initRequest($heidelpayObj, $url, $payload, $httpMethod);
+        $headers = $this->composerHttpHeaders($heidelpayObj);
+        $this->initRequest($url, $payload, $httpMethod, $headers);
         $httpAdapter  = $this->getAdapter();
         $response     = $httpAdapter->execute();
         $responseCode = $httpAdapter->getResponseCode();
@@ -131,7 +132,7 @@ class HttpService
         try {
             $this->handleErrors($responseCode, $response);
         } finally {
-            $this->debugLog($heidelpayObj, $payload, $responseCode, $httpMethod, $url, $response);
+            $this->debugLog($heidelpayObj, $payload, $headers, $responseCode, $httpMethod, $url, $response);
         }
 
         return $response;
@@ -140,31 +141,18 @@ class HttpService
     /**
      * Initializes and returns the http request object.
      *
-     * @param Heidelpay $heidelpay
-     * @param string    $uri
-     * @param string    $payload
-     * @param string    $httpMethod
+     * @param string $uri
+     * @param string $payload
+     * @param string $httpMethod
+     * @param $httpHeaders
      *
      * @throws RuntimeException
      */
-    private function initRequest(Heidelpay $heidelpay, $uri, $payload, $httpMethod)
+    private function initRequest($uri, $payload, $httpMethod, $httpHeaders)
     {
         $httpAdapter = $this->getAdapter();
         $httpAdapter->init($uri, $payload, $httpMethod);
         $httpAdapter->setUserAgent(Heidelpay::SDK_TYPE);
-
-        // Set HTTP-headers
-        $locale      = $heidelpay->getLocale();
-        $key         = $heidelpay->getKey();
-        $httpHeaders = [
-            'Authorization' => 'Basic ' . base64_encode($key . ':'),
-            'Content-Type'  => 'application/json',
-            'SDK-VERSION'   => Heidelpay::SDK_VERSION,
-            'SDK-TYPE'   => Heidelpay::SDK_TYPE
-        ];
-        if (!empty($locale)) {
-            $httpHeaders['Accept-Language'] = $locale;
-        }
         $httpAdapter->setHeaders($httpHeaders);
     }
 
@@ -185,15 +173,15 @@ class HttpService
 
         $responseObject = json_decode($response, false);
         if ($responseCode >= 400 || isset($responseObject->errors)) {
-            $code    = null;
-            $errorId = null;
+            $code            = null;
+            $errorId         = null;
             $customerMessage = $code;
             $merchantMessage = $customerMessage;
             if (isset($responseObject->errors[0])) {
-                $errors = $responseObject->errors[0];
+                $errors          = $responseObject->errors[0];
                 $merchantMessage = $errors->merchantMessage ?? '';
                 $customerMessage = $errors->customerMessage ?? '';
-                $code = $errors->code ?? '';
+                $code            = $errors->code ?? '';
             }
             if (isset($responseObject->id)) {
                 $errorId = $responseObject->id;
@@ -209,15 +197,24 @@ class HttpService
     /**
      * @param Heidelpay   $heidelpayObj
      * @param string      $payload
+     * @param mixed       $headers
      * @param int         $responseCode
      * @param string      $httpMethod
      * @param string      $url
      * @param string|null $response
      */
-    public function debugLog(Heidelpay $heidelpayObj, $payload, $responseCode, $httpMethod, string $url, $response)
-    {
+    public function debugLog(
+        Heidelpay $heidelpayObj,
+        $payload,
+        $headers,
+        $responseCode,
+        $httpMethod,
+        string $url,
+        $response
+    ) {
         $heidelpayObj->debugLog($httpMethod . ': ' . $url);
         $writingOperations = [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT];
+        $heidelpayObj->debugLog('Headers: ' . json_encode($headers, JSON_UNESCAPED_SLASHES));
         if (in_array($httpMethod, $writingOperations, true)) {
             $heidelpayObj->debugLog('Request: ' . $payload);
         }
@@ -249,5 +246,27 @@ class HttpService
         }
         $envUrl[] = Heidelpay::BASE_URL;
         return 'https://' . implode('-', $envUrl) . '/' . Heidelpay::API_VERSION . $uri;
+    }
+
+    /**
+     * @param Heidelpay $heidelpay
+     *
+     * @return array
+     */
+    public function composerHttpHeaders(Heidelpay $heidelpay): array
+    {
+        $locale      = $heidelpay->getLocale();
+        $key         = $heidelpay->getKey();
+        $httpHeaders = [
+            'Authorization' => 'Basic ' . base64_encode($key . ':'),
+            'Content-Type'  => 'application/json',
+            'SDK-VERSION'   => Heidelpay::SDK_VERSION,
+            'SDK-TYPE'      => Heidelpay::SDK_TYPE
+        ];
+        if (!empty($locale)) {
+            $httpHeaders['Accept-Language'] = $locale;
+        }
+
+        return $httpHeaders;
     }
 }
