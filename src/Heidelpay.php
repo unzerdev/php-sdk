@@ -64,7 +64,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
     const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.2.6.0';
+    const SDK_VERSION = '1.2.7.0';
 
     /** @var string $key */
     private $key;
@@ -97,7 +97,9 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * Construct a new heidelpay object.
      *
      * @param string $key    The private key your received from your heidelpay contact person.
-     * @param string $locale The locale of the customer defining defining the translation.
+     * @param string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
+     *
+     * @link https://docs.heidelpay.com/docs/web-integration#section-localization-and-languages
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      */
@@ -1022,7 +1024,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
         if ($this->isDebugMode()) {
             $debugHandler = $this->getDebugHandler();
             if ($debugHandler instanceof DebugHandlerInterface) {
-                $debugHandler->log($message);
+                $debugHandler->log('(' . (string)(getmypid()) . ') ' . $message);
             }
         }
     }

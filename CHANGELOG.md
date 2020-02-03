@@ -5,8 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.2.7.0][1.2.7.0]
 
+### Added
+*   Http headers to debug log.
+*   PID to debug log.
+
 ### Changed
 *   Update example implementation for Hire Purchase direct debit payment type (FlexiPay® Rate).
+*   Write log messages from examples to examples\log\example.log instead of error.log.
 
 ### Fix
 *   Ensure locale strings comply to standard.
