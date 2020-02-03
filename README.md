@@ -5,6 +5,7 @@
 [![PHP 7.1](https://img.shields.io/badge/php-7.1-blue.svg)](http://www.php.net)
 [![PHP 7.2](https://img.shields.io/badge/php-7.2-blue.svg)](http://www.php.net)
 [![PHP 7.3](https://img.shields.io/badge/php-7.3-blue.svg)](http://www.php.net)
+[![PHP 7.4](https://img.shields.io/badge/php-7.4-blue.svg)](http://www.php.net)
 
 ![Logo](https://dev.heidelpay.com/devHeidelpay_400_180.jpg)
 
