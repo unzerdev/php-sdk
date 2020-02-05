@@ -107,7 +107,6 @@ try {
 
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['PaymentId'] = $authorize->getPaymentId();
-    $_SESSION['PDFLink'] = $authorize->getPDFLink();
 
     // Redirect to the success or failure depending on the state of the transaction
     if ($authorize->isSuccess()) {
