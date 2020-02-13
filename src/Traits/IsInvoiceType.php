@@ -11,8 +11,7 @@
  *
  * @package  heidelpay/${Package}
  */
-
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace heidelpayPHP\Traits;
 
 trait IsInvoiceType
 {
