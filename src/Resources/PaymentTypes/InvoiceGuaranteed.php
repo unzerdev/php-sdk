@@ -29,4 +29,5 @@ use heidelpayPHP\Traits\CanDirectChargeWithCustomer;
 class InvoiceGuaranteed extends BasePaymentType
 {
     use CanDirectChargeWithCustomer;
+    use IsInvoiceType;
 }

@@ -29,4 +29,5 @@ use heidelpayPHP\Traits\CanDirectCharge;
 class Invoice extends BasePaymentType
 {
     use CanDirectCharge;
+    use IsInvoiceType;
 }
