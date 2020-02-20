@@ -23,6 +23,7 @@
  *
  * @package  heidelpayPHP\examples
  */
+
 use heidelpayPHP\examples\ExampleDebugHandler;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
@@ -125,7 +126,7 @@ try {
     <div class="ui attached segment">
         <strong>Please download your rate plan <a href="<?php echo (string)($PDFLink); ?>">here</a></strong><br/>
     </div>
-    <div class="ui bottom attached primary button" tabindex="0" onclick="location.href='PlaceOrderController.php'">Place order</div>
+    <div id="place_order" class="ui bottom attached primary button" tabindex="0" onclick="location.href='PlaceOrderController.php'">Place order</div>
 </div>
 
 </body>
