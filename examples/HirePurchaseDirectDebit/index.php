@@ -34,14 +34,12 @@ require_once __DIR__ . '/../../../../autoload.php';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>
-        Heidelpay UI Examples
-    </title>
+    <meta charset="UTF-8"/>
+    <title>Heidelpay UI Examples</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
             integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
+    <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css"/>
     <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
 </head>
 

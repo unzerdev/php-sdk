@@ -38,6 +38,6 @@ class ExampleDebugHandler implements DebugHandlerInterface
     public function log(string $message)
     {
         /** @noinspection ForgottenDebugOutputInspection */
-        error_log($message . "\n", self::LOG_TYPE_APPEND_TO_FILE, 'log/example.log');
+        error_log($message . "\n", self::LOG_TYPE_APPEND_TO_FILE, __DIR__ . '/log/example.log');
     }
 }
