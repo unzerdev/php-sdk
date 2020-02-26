@@ -110,17 +110,17 @@ try {
     <div class="ui attached right aligned segment">
         <div class="ui label">
             Total Purchase Amount
-            <div class="detail"><?php echo number_format($totalPurchaseAmount, 2) . ' ' . $currency; ?></div>
+            <div id="total_purchase_amount" class="detail"><?php echo number_format($totalPurchaseAmount, 2) . ' ' . $currency; ?></div>
         </div>
         <div class="ui hidden fitted divider"></div>
         <div class="ui label">
             Total Interest Amount
-            <div class="detail"><?php echo number_format($totalInterestAmount, 2) . ' ' . $currency; ?></div>
+            <div id="total_interest_amount" class="detail"><?php echo number_format($totalInterestAmount, 2) . ' ' . $currency; ?></div>
         </div>
         <div class="ui hidden fitted divider"></div>
         <div class="ui label">
             Total Amount
-            <div class="detail"><?php echo number_format($totalAmount, 2) . ' ' . $currency; ?></div>
+            <div id="total_amount" class="detail"><?php echo number_format($totalAmount, 2) . ' ' . $currency; ?></div>
         </div>
     </div>
     <div class="ui attached segment">
