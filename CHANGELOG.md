@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Http headers to debug log.
 *   PID to debug log.
+*   PHP7.4 support.
+*   Handles for automatic testing to examples.
 
 ### Changed
 *   Update example implementation for Hire Purchase direct debit payment type (FlexiPay® Rate).
