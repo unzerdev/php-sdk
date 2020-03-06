@@ -24,6 +24,11 @@
  * @package  heidelpayPHP\examples
  */
 
+use heidelpayPHP\examples\ExampleDebugHandler;
+use heidelpayPHP\Exceptions\HeidelpayApiException;
+use heidelpayPHP\Heidelpay;
+use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
@@ -33,10 +38,45 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 session_start();
 
-$externalOrderId = $_SESSION['externalOrderId'] ?? 'no external order id provided';
-$zgReferenceId = $_SESSION['zgReferenceId'] ?? 'no reference id provided';
-$PDFLink = $_SESSION['PDFLink'] ?? 'no link provided';
+$clientMessage = 'Something went wrong. Please try again later.';
+$merchantMessage = 'Something went wrong. Please try again later.';
 
+function redirect($url, $merchantMessage = '', $clientMessage = '')
+{
+    $_SESSION['merchantMessage'] = $merchantMessage;
+    $_SESSION['clientMessage']   = $clientMessage;
+    header('Location: ' . $url);
+    die();
+}
+
+$paymentId = $_SESSION['PaymentId'] ?? null;
+if ($paymentId === null) {
+    redirect(FAILURE_URL, 'Payment id is missing!', $clientMessage);
+}
+
+// Catch API errors, write the message to your log and show the ClientMessage to the client.
+try {
+    // Create a heidelpay object using your private key and register a debug handler if you want to.
+    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+
+    $payment = $heidelpay->fetchPayment($paymentId);
+
+    $PDFLink = $payment->getAuthorization()->getPDFLink();
+    /** @var HirePurchaseDirectDebit $type */
+    $type = $payment->getPaymentType();
+    $totalAmount = $type->getTotalAmount();
+    $totalPurchaseAmount = $type->getTotalPurchaseAmount();
+    $totalInterestAmount = $type->getTotalInterestAmount();
+    $currency = $payment->getAmount()->getCurrency();
+} catch (HeidelpayApiException $e) {
+    $merchantMessage = $e->getMerchantMessage();
+    $clientMessage = $e->getClientMessage();
+    redirect(FAILURE_URL, $merchantMessage, $clientMessage);
+} catch (RuntimeException $e) {
+    $merchantMessage = $e->getMessage();
+    redirect(FAILURE_URL, $merchantMessage, $clientMessage);
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +91,6 @@ $PDFLink = $_SESSION['PDFLink'] ?? 'no link provided';
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-
 
 </head>
 
@@ -68,10 +107,26 @@ $PDFLink = $_SESSION['PDFLink'] ?? 'no link provided';
 </div>
 
 <div class="ui container">
+    <div class="ui attached right aligned segment">
+        <div class="ui label">
+            Total Purchase Amount
+            <div id="total_purchase_amount" class="detail"><?php echo number_format($totalPurchaseAmount, 2) . ' ' . $currency; ?></div>
+        </div>
+        <div class="ui hidden fitted divider"></div>
+        <div class="ui label">
+            Total Interest Amount
+            <div id="total_interest_amount" class="detail"><?php echo number_format($totalInterestAmount, 2) . ' ' . $currency; ?></div>
+        </div>
+        <div class="ui hidden fitted divider"></div>
+        <div class="ui label">
+            Total Amount
+            <div id="total_amount" class="detail"><?php echo number_format($totalAmount, 2) . ' ' . $currency; ?></div>
+        </div>
+    </div>
     <div class="ui attached segment">
         <strong>Please download your rate plan <a href="<?php echo (string)($PDFLink); ?>">here</a></strong><br/>
     </div>
-    <div class="ui bottom attached primary button" tabindex="0" onclick="location.href='PlaceOrderController.php'">Place order</div>
+    <div id="place_order" class="ui bottom attached primary button" tabindex="0" onclick="location.href='PlaceOrderController.php'">Place order</div>
 </div>
 
 </body>

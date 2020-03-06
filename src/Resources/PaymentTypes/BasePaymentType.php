@@ -28,6 +28,16 @@ use heidelpayPHP\Resources\AbstractHeidelpayResource;
 
 abstract class BasePaymentType extends AbstractHeidelpayResource
 {
+    /**
+     * Return true for invoice types.
+     *
+     * @return bool
+     */
+    public function isInvoiceType(): bool
+    {
+        return false;
+    }
+
     //<editor-fold desc="Overridable Methods">
 
     /**

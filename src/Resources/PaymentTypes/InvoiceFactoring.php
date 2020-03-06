@@ -25,8 +25,10 @@
 namespace heidelpayPHP\Resources\PaymentTypes;
 
 use heidelpayPHP\Traits\CanDirectChargeWithCustomer;
+use heidelpayPHP\Traits\IsInvoiceType;
 
 class InvoiceFactoring extends BasePaymentType
 {
     use CanDirectChargeWithCustomer;
+    use IsInvoiceType;
 }

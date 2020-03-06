@@ -29,7 +29,7 @@ session_start();
 <!DOCTYPE html>
 <html lang="en">
     <body>
-        <h1>Success</h1>
+        <h1 id="result">Success</h1>
         <p>
             The payment has been successfully completed.
             <?php

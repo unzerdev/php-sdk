@@ -28,12 +28,16 @@ use heidelpayPHP\Interfaces\DebugHandlerInterface;
 
 class ExampleDebugHandler implements DebugHandlerInterface
 {
+    const LOG_TYPE_APPEND_TO_FILE = 3;
+
     /**
      * {@inheritDoc}
+     *
+     * ATTENTION: Please make sure the destination file is writable.
      */
     public function log(string $message)
     {
-        // ATTENTION: Uncomment following line to write debug messages to the error log of your web server.
-        //error_log($message);
+        /** @noinspection ForgottenDebugOutputInspection */
+        error_log($message . "\n", self::LOG_TYPE_APPEND_TO_FILE, __DIR__ . '/log/example.log');
     }
 }

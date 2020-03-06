@@ -369,6 +369,30 @@ class CustomerTest extends BasePaymentTest
         $this->assertEquals($customer->getId(), $newCustomerData->getId());
     }
 
+    /**
+     * Verify customer address can take a name as long as both first and lastname concatenated.
+     *
+     * @test
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function addressNameCanHoldFirstAndLastNameConcatenated()
+    {
+        $customerId = 'customer' . self::generateRandomId();
+        $customer   = $this->getMaximumCustomerInclShippingAddress()->setCustomerId($customerId);
+        $longName   = 'firstfirstfirstfirstfirstfirstfirstfirst lastlastlastlastlastlastlastlastlastlast';
+        $customer->getShippingAddress()->setName($longName);
+        $this->heidelpay->createCustomer($customer);
+        $this->assertEquals($longName, $customer->getShippingAddress()->getName());
+
+        $veryLongName   = $longName . 'X';
+        $customer->getShippingAddress()->setName($veryLongName);
+        $this->expectException(HeidelpayApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESS_NAME_TO_LONG);
+        $this->heidelpay->updateCustomer($customer);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="not registered B2B Customer">
