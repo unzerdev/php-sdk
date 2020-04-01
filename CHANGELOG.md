@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.2.7.1][1.2.7.1]
 
 ### Added
-*   used php version to http header.
+*   PHP version to HTTP header.
 
 ## [1.2.7.0][1.2.7.0]
 
