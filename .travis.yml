@@ -3,21 +3,6 @@ dist: trusty
 matrix:
   fast_finish: true
   include:
-    - name: "php 7.0 (install) - unit"
-      php: 7.0
-      env:
-        - DEPS=NO
-        - LEVEL=UNIT
-    - name: "php 7.0 (update) - unit"
-      php: 7.0
-      env:
-        - DEPS=HIGH
-        - LEVEL=UNIT
-    - name: "php 7.0 (update) - integration"
-      php: 7.0
-      env:
-        - DEPS=HIGH
-        - LEVEL=INTEGRATION
     - name: "php 7.1 (install) - unit"
       php: 7.1
       env:
@@ -28,6 +13,11 @@ matrix:
       env:
         - DEPS=HIGH
         - LEVEL=UNIT
+    - name: "php 7.1 (update) - integration"
+      php: 7.1
+      env:
+        - DEPS=HIGH
+        - LEVEL=INTEGRATION
     - name: "php 7.2 (install) - unit"
       php: 7.2
       env:
