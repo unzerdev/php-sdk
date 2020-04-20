@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   PHP version to HTTP header.
 
+### Remove
+*   PHP7.0 support.
+*   Travis tests using composer update.
+
 ### Fix
 *   Changed date format string to support times with 24h-format.
 

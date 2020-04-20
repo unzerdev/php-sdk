@@ -1,7 +1,6 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/heidelpay/heidelpay-php.svg?style=flat-square)](https://packagist.org/packages/heidelpay/heidelpay-php)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a5fceb1b4f674fb49db39929559f3959)](https://www.codacy.com/app/heidelpay/heidelpayPHP?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=heidelpay/heidelpayPHP&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/a5fceb1b4f674fb49db39929559f3959)](https://www.codacy.com/app/heidelpay/heidelpayPHP?utm_source=github.com&utm_medium=referral&utm_content=heidelpay/heidelpayPHP&utm_campaign=Badge_Coverage)
-[![PHP 7.0](https://img.shields.io/badge/php-7.0-blue.svg)](http://www.php.net)
 [![PHP 7.1](https://img.shields.io/badge/php-7.1-blue.svg)](http://www.php.net)
 [![PHP 7.2](https://img.shields.io/badge/php-7.2-blue.svg)](http://www.php.net)
 [![PHP 7.3](https://img.shields.io/badge/php-7.3-blue.svg)](http://www.php.net)
