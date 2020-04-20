@@ -67,7 +67,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $this->assertNull($transactionType->getRedirectUrl());
 
         $payment->setId('MyPaymentId');
-        $date = (new DateTime('now'))->format('Y-m-d h:i:s');
+        $date = (new DateTime('now'))->format('Y-m-d H:i:s');
         $transactionType->setPayment($payment);
         $transactionType->setDate($date);
         $transactionType->handleResponse((object)['isError' => true, 'isPending' => true, 'isSuccess' => true]);

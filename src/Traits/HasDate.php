@@ -42,7 +42,7 @@ trait HasDate
     public function getDate()
     {
         $date = $this->date;
-        return $date ? $date->format('Y-m-d h:i:s') : null;
+        return $date ? $date->format('Y-m-d H:i:s') : null;
     }
 
     /**
