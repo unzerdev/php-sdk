@@ -27,7 +27,6 @@ namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
@@ -45,11 +44,10 @@ class PaymentTest extends BasePaymentTest
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function paymentShouldBeFetchableById()
+    public function paymentShouldBeFetchableById(): void
     {
         $authorize = $this->createPaypalAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorize->getPayment()->getId());
-        $this->assertNotNull(Payment::class, $payment);
         $this->assertNotEmpty($payment->getId());
         $this->assertInstanceOf(Authorization::class, $payment->getAuthorization());
         $this->assertNotEmpty($payment->getAuthorization()->getId());
