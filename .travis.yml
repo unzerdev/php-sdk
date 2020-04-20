@@ -30,7 +30,7 @@ matrix:
         - LEVEL=UNIT
 cache:
   directories:
-    - $HOME/.composer/cachec
+    - $HOME/.composer/cache
     - $HOME/.local
 before_install:
     - ./test/script/travis_before_install.sh
