@@ -31,6 +31,7 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use RuntimeException;
 use function in_array;
+use const PHP_VERSION;
 
 class HttpService
 {
@@ -261,7 +262,8 @@ class HttpService
             'Authorization' => 'Basic ' . base64_encode($key . ':'),
             'Content-Type'  => 'application/json',
             'SDK-VERSION'   => Heidelpay::SDK_VERSION,
-            'SDK-TYPE'      => Heidelpay::SDK_TYPE
+            'SDK-TYPE'      => Heidelpay::SDK_TYPE,
+            'PHP-VERSION'   => PHP_VERSION
         ];
         if (!empty($locale)) {
             $httpHeaders['Accept-Language'] = $locale;

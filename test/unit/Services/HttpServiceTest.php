@@ -37,6 +37,7 @@ use heidelpayPHP\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\Exception;
 use ReflectionException;
 use RuntimeException;
+use const PHP_VERSION;
 
 class HttpServiceTest extends BasePaymentTest
 {
@@ -128,7 +129,8 @@ class HttpServiceTest extends BasePaymentTest
             'Authorization' => 'Basic cy1wcml2LU15VGVzdEtleTo=',
             'Content-Type'  => 'application/json',
             'SDK-VERSION'   => Heidelpay::SDK_VERSION,
-            'SDK-TYPE'   => Heidelpay::SDK_TYPE
+            'SDK-TYPE'   => Heidelpay::SDK_TYPE,
+            'PHP-VERSION'   => PHP_VERSION
         ];
         $adapterMock->expects($this->once())->method('setHeaders')->with($headers);
         $adapterMock->expects($this->once())->method('execute')->willReturn('myResponseString');
