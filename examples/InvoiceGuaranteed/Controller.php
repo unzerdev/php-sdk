@@ -64,7 +64,7 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $orderId = str_replace(['0.', ' '], '', microtime(false));
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // A Basket is mandatory for Invoice Factoring payment type
     $basketItem = new BasketItem('Hat', 100.0, 119.0, 1);

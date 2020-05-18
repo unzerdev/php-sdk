@@ -74,7 +74,7 @@ class BasketTest extends BasePaymentTest
      */
     public function maxBasketShouldBeCreatableAndFetchableWorkAround()
     {
-        $basket = new Basket(self::generateRandomId(), 123.4, 'EUR', []);
+        $basket = new Basket('b' . self::generateRandomId(), 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))
             ->setBasketItemReferenceId('refId')
@@ -116,7 +116,7 @@ class BasketTest extends BasePaymentTest
      */
     public function basketItemWithInvalidUrlWillThrowAnError($expectException, $imageUrl, $exceptionCode = null)
     {
-        $basket = new Basket(self::generateRandomId(), 123.4, 'EUR', []);
+        $basket = new Basket('b' . self::generateRandomId(), 123.4, 'EUR', []);
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setImageUrl($imageUrl);
         $basket->addBasketItem($basketItem);
 
@@ -143,7 +143,7 @@ class BasketTest extends BasePaymentTest
      */
     public function basketShouldBeUpdateable()
     {
-        $orderId = self::generateRandomId();
+        $orderId = 'o'. self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
@@ -175,7 +175,7 @@ class BasketTest extends BasePaymentTest
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet()
     {
-        $orderId = self::generateRandomId();
+        $orderId = 'o'. self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 123.4, 234.5, 12))->setBasketItemReferenceId('refId');
@@ -224,7 +224,7 @@ class BasketTest extends BasePaymentTest
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
-        $orderId = self::generateRandomId();
+        $orderId = 'o'. self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
@@ -250,7 +250,7 @@ class BasketTest extends BasePaymentTest
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet()
     {
-        $orderId = self::generateRandomId();
+        $orderId = 'o'. self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
         $basket->setAmountTotalVat(10.9);

@@ -63,10 +63,10 @@ class PaypageTest extends BasePaymentTest
      */
     public function maximumPaypageChargeShouldBeCreatable()
     {
-        $orderId = self::generateRandomId();
+        $orderId = 'o'. self::generateRandomId();
         $basket = $this->createBasket();
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-        $invoiceId = self::generateRandomId();
+        $invoiceId = 'i'. self::generateRandomId();
         $paypage = (new Paypage(119.0, 'EUR', self::RETURN_URL))
             ->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
             ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')
@@ -120,10 +120,10 @@ class PaypageTest extends BasePaymentTest
      */
     public function maximumPaypageAuthorizeShouldBeCreatable()
     {
-        $orderId = self::generateRandomId();
+        $orderId = 'o'. self::generateRandomId();
         $basket = $this->createBasket();
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-        $invoiceId = self::generateRandomId();
+        $invoiceId = 'i'. self::generateRandomId();
         $paypage = (new Paypage(119.0, 'EUR', self::RETURN_URL))
             ->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
             ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')

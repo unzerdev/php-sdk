@@ -69,7 +69,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
         $this->assertNotEmpty($charge->getHolder());
         $this->assertNotEmpty($charge->getDescriptor());
 
-        $shipment = $this->heidelpay->ship($charge->getPayment(), self::generateRandomId(), self::generateRandomId());
+        $shipment = $this->heidelpay->ship($charge->getPayment(), 'i' . self::generateRandomId(), 'o' . self::generateRandomId());
         $this->assertTransactionResourceHasBeenCreated($shipment);
     }
 
@@ -143,7 +143,7 @@ class InvoiceGuaranteedTest extends BasePaymentTest
         $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
 
-        $invoiceId  = self::generateRandomId();
+        $invoiceId  = 'i' . self::generateRandomId();
         $charge     = $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer, null, null, null, null, $invoiceId);
         $chargeInvoiceId = $charge->getPayment()->getInvoiceId();
 

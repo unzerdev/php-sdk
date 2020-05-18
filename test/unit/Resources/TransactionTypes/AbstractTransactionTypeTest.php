@@ -49,11 +49,15 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      */
     public function theGettersAndSettersShouldWorkProperly()
     {
+        // initial check
         $payment = new Payment();
         $transactionType = new DummyTransactionType();
         $this->assertNull($transactionType->getPayment());
         $this->assertNull($transactionType->getDate());
         $this->assertNull($transactionType->getPaymentId());
+        $this->assertNull($transactionType->getShortId());
+        $this->assertNull($transactionType->getUniqueId());
+        $this->assertNull($transactionType->getTraceId());
 
         $this->assertFalse($transactionType->isError());
         $this->assertFalse($transactionType->isSuccess());
@@ -66,25 +70,52 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $transactionType->setPayment($payment);
         $this->assertNull($transactionType->getRedirectUrl());
 
+        // update
         $payment->setId('MyPaymentId');
         $date = (new DateTime('now'))->format('Y-m-d H:i:s');
-        $transactionType->setPayment($payment);
         $transactionType->setDate($date);
-        $transactionType->handleResponse((object)['isError' => true, 'isPending' => true, 'isSuccess' => true]);
+        $ids = (object)['shortId' => 'myShortId', 'uniqueId' => 'myUniqueId', 'traceId' => 'myTraceId'];
+        $transactionType->handleResponse((object)['isError' => true, 'isPending' => true, 'isSuccess' => true, 'processing' => $ids]);
         $messageResponse = (object)['code' => '1234', 'customer' => 'Customer message!'];
         $transactionType->handleResponse((object)['message' => $messageResponse]);
 
+        // check again
         $this->assertSame($payment, $transactionType->getPayment());
-        $this->assertEquals($date, $transactionType->getDate());
+        $this->assertSame($date, $transactionType->getDate());
         $this->assertNull($transactionType->getExternalId());
-        $this->assertEquals($payment->getId(), $transactionType->getPaymentId());
+        $this->assertSame($payment->getId(), $transactionType->getPaymentId());
         $this->assertTrue($transactionType->isSuccess());
         $this->assertTrue($transactionType->isPending());
         $this->assertTrue($transactionType->isError());
+        $this->assertSame('myShortId', $transactionType->getShortId());
+        $this->assertSame('myUniqueId', $transactionType->getUniqueId());
+        $this->assertSame('myTraceId', $transactionType->getTraceId());
 
         $message = $transactionType->getMessage();
         $this->assertSame('1234', $message->getCode());
         $this->assertSame('Customer message!', $message->getCustomer());
+    }
+
+    /**
+     * Verify getters and setters work properly.
+     *
+     * @test
+     *
+     * @throws \Exception
+     *
+     * Todo: Workaround to be removed when API sends TraceID in processing-group
+     */
+    public function checkTraceIdWorkaround()
+    {
+        // initial check
+        $transactionType = new DummyTransactionType();
+        $this->assertNull($transactionType->getTraceId());
+
+        // update
+        $transactionType->handleResponse((object)['resources' => (object)['traceId' => 'myTraceId']]);
+
+        // check again
+        $this->assertSame('myTraceId', $transactionType->getTraceId());
     }
 
     /**

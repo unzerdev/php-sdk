@@ -3,6 +3,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.7.2][1.2.7.2]
+
+### Fix
+*   Rename Cards property holder to cardHolder.
+*   Add cancellation object to authorization only if cancellation has been successful.
+
+### Change
+*   Fix some minor issues.
+*   Refactor tests due to API changes.
+*   Update response codes due to API changes.
+
+### Added
+*   TraceId property to payment and transactions.
+*   Email form field to PayPal example.
+*   Description to zgReferenceId setter/getter.
+*   Added geolocation to Card resource.
+*   Payout webhook events.
+
 ## [1.2.7.1][1.2.7.1]
 
 ### Added
@@ -394,3 +412,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.2.6.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.5.1..1.2.6.0
 [1.2.7.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.6.0..1.2.7.0
 [1.2.7.1]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.7.0..1.2.7.1
+[1.2.7.2]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.7.1..1.2.7.2

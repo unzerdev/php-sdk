@@ -68,7 +68,7 @@ try {
     // These are the mandatory parameters for the payment page ...
     $paypage = new Paypage(119.0, 'EUR', RETURN_CONTROLLER_URL);
 
-    $orderId = str_replace(['0.', ' '], '', microtime(false));
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // ... however you can customize the Payment Page using additional parameters.
     $paypage->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
@@ -82,7 +82,7 @@ try {
             ->setImprintUrl('https://www.heidelpay.com/it/')
             ->setHelpUrl('https://www.heidelpay.com/at/')
             ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
-            ->setInvoiceId('InvoiceNr' . microtime(true));
+            ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable FlexiPay Rate (Hire Purchase) you will need to set the effectiveInterestRate as well.
     $paypage->setEffectiveInterestRate(4.99);

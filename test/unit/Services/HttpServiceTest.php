@@ -124,7 +124,7 @@ class HttpServiceTest extends BasePaymentTest
             '{"dummyResource": "JsonSerialized"}',
             'GET'
         );
-        $adapterMock->expects($this->once())->method('setUserAgent')->with('HeidelpayPHP');
+        $adapterMock->expects($this->once())->method('setUserAgent')->with('heidelpayPHP');
         $headers = [
             'Authorization' => 'Basic cy1wcml2LU15VGVzdEtleTo=',
             'Content-Type'  => 'application/json',

@@ -54,6 +54,10 @@ class AuthorizationTest extends BasePaymentTest
         $this->assertNotEmpty($authorize->getId());
         $this->assertNotEmpty($authorize->getUniqueId());
         $this->assertNotEmpty($authorize->getShortId());
+
+        $traceId = $authorize->getTraceId();
+        $this->assertNotEmpty($traceId);
+        $this->assertSame($traceId, $authorize->getPayment()->getTraceId());
     }
 
     /**
@@ -175,10 +179,10 @@ class AuthorizationTest extends BasePaymentTest
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
-        $orderId = self::generateRandomId();
+        $orderId = 'o' . self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
         $basket = $this->createBasket();
-        $invoiceId = self::generateRandomId();
+        $invoiceId = 'i' . self::generateRandomId();
         $paymentReference = 'paymentReference';
 
         $authorize = $card->authorize(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);

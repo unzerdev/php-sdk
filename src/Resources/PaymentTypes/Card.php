@@ -30,6 +30,7 @@ use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
 use heidelpayPHP\Traits\CanPayout;
 use heidelpayPHP\Traits\CanRecur;
+use heidelpayPHP\Traits\HasGeoLocation;
 use heidelpayPHP\Validators\ExpiryDateValidator;
 use RuntimeException;
 use stdClass;
@@ -40,6 +41,7 @@ class Card extends BasePaymentType
     use CanAuthorize;
     use CanPayout;
     use CanRecur;
+    use HasGeoLocation;
 
     /** @var string $number */
     protected $number;
@@ -50,8 +52,8 @@ class Card extends BasePaymentType
     /** @var string $cvc */
     protected $cvc;
 
-    /** @var string $holder */
-    protected $holder = '';
+    /** @var string $cardHolder */
+    protected $cardHolder = '';
 
     /** @var bool $card3ds */
     protected $card3ds;
@@ -150,20 +152,42 @@ class Card extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getHolder()
+    public function getCardHolder()
     {
-        return $this->holder;
+        return $this->cardHolder;
     }
 
     /**
-     * @param string $holder
+     * @param string $cardHolder
      *
      * @return Card
      */
-    public function setHolder($holder): Card
+    public function setCardHolder($cardHolder): Card
     {
-        $this->holder = $holder;
+        $this->cardHolder = $cardHolder;
         return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @deprecated since 1.2.7.2
+     */
+    public function getHolder()
+    {
+        return $this->getCardHolder();
+    }
+
+    /**
+     * @param string $cardHolder
+     *
+     * @return Card
+     *
+     * @deprecated since 1.2.7.2
+     */
+    public function setHolder($cardHolder): Card
+    {
+        return $this->setCardHolder($cardHolder);
     }
 
     /**

@@ -25,6 +25,7 @@
  */
 namespace heidelpayPHP\Adapter;
 
+use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Services\EnvironmentService;
 use function extension_loaded;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
@@ -126,7 +127,7 @@ class CurlAdapter implements HttpAdapterInterface
      */
     public function setUserAgent($userAgent)
     {
-        $this->setOption(CURLOPT_USERAGENT, 'HeidelpayPHP');
+        $this->setOption(CURLOPT_USERAGENT, Heidelpay::SDK_TYPE);
     }
 
     /**

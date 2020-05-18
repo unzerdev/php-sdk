@@ -74,6 +74,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     </div>
     <!-- This is just for the example - End -->
 
+    <div id="container-example-paypal"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
@@ -84,6 +85,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     // Create an Paypal instance
     let Paypal = heidelpayInstance.Paypal();
+    Paypal.create('email', {
+        containerId: 'container-example-paypal'
+    })
 
     // Handle payment form submission
     let form = document.getElementById('payment-form');

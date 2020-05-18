@@ -64,7 +64,9 @@ class CustomerTest extends BasePaymentTest
         $this->assertNull($customer->getMobile());
         $this->assertNull($customer->getEmail());
         $this->assertNull($customer->getCompany());
-        $this->assertInstanceOf(GeoLocation::class, $customer->getGeoLocation());
+        $geoLocation = $customer->getGeoLocation();
+        $this->assertNull($geoLocation->getClientIp());
+        $this->assertNull($geoLocation->getCountryCode());
 
         $customer->setCustomerId('MyCustomerId-123');
         $this->assertEquals('MyCustomerId-123', $customer->getCustomerId());

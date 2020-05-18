@@ -182,7 +182,7 @@ class BasePaymentTest extends TestCase
      */
     public function createBasket(): Basket
     {
-        $orderId = self::generateRandomId();
+        $orderId = 'b' . self::generateRandomId();
         $basket = new Basket($orderId, 119.0, 'EUR');
         $basket->setAmountTotalVat(19.0);
         $basket->setNote('This basket is creatable!');
@@ -223,7 +223,7 @@ class BasePaymentTest extends TestCase
     {
         $expiryDate = $this->getNextYearsTimestamp()->format('m/Y');
         $card = new Card($cardNumber, $expiryDate);
-        $card->setCvc('123');
+        $card->setCvc('123')->setCardHolder('max mustermann');
         return $card;
     }
 

@@ -28,12 +28,14 @@ use heidelpayPHP\Adapter\HttpAdapterInterface;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
-use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
+use heidelpayPHP\Traits\HasGeoLocation;
 use stdClass;
 use function in_array;
 
 class Customer extends AbstractHeidelpayResource
 {
+    use HasGeoLocation;
+
     /** @var string $firstname */
     protected $firstname;
 
@@ -70,9 +72,6 @@ class Customer extends AbstractHeidelpayResource
     /** @var CompanyInfo $companyInfo */
     protected $companyInfo;
 
-    /** @var GeoLocation $geoLocation */
-    private $geoLocation;
-
     /**
      * Customer constructor.
      *
@@ -90,7 +89,6 @@ class Customer extends AbstractHeidelpayResource
         $this->lastname = $lastname;
         $this->billingAddress = new Address();
         $this->shippingAddress = new Address();
-        $this->geoLocation = new GeoLocation();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -322,14 +320,6 @@ class Customer extends AbstractHeidelpayResource
     {
         $this->companyInfo = $companyInfo;
         return $this;
-    }
-
-    /**
-     * @return GeoLocation|null
-     */
-    public function getGeoLocation()
-    {
-        return $this->geoLocation;
     }
 
     //</editor-fold>

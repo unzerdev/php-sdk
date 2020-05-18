@@ -490,6 +490,17 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
     {
         self::updateValues($this, $response);
+
+        // Todo: Workaround to be removed when API sends TraceID in processing-group
+        if (
+            isset($response->resources->traceId) &&
+            is_callable([$this, 'setTraceId']) &&
+            is_callable([$this, 'getTraceId']) &&
+            $this->getTraceId() === null
+        ) {
+            $this->setTraceId($response->resources->traceId);
+        }
+        // Todo: Workaround end
     }
 
     /**

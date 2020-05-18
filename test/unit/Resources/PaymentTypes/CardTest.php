@@ -29,6 +29,7 @@ use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\test\BasePaymentTest;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
+use ReflectionException;
 use RuntimeException;
 use stdClass;
 
@@ -105,6 +106,10 @@ class CardTest extends BasePaymentTest
 
         $this->assertEquals($number, $card->getNumber());
         $this->assertEquals($expiryDate, $card->getExpiryDate());
+
+        $geoLocation = $card->getGeoLocation();
+        $this->assertNull($geoLocation->getClientIp());
+        $this->assertNull($geoLocation->getCountryCode());
     }
 
     /**
@@ -184,11 +189,51 @@ class CardTest extends BasePaymentTest
      */
     public function verifyHolderCanBeSetAndChanged()
     {
+        $this->assertEquals(null, $this->card->getCardHolder());
+        $this->card->setCardHolder('Julia Heideich');
+        $this->assertEquals('Julia Heideich', $this->card->getCardHolder());
+        $this->card->setCardHolder(self::TEST_HOLDER);
+        $this->assertEquals(self::TEST_HOLDER, $this->card->getCardHolder());
+    }
+
+    /**
+     * Verify setting holder.
+     *
+     * @test
+     *
+     * @throws Exception
+     *
+     * @deprecated since 1.2.7.2
+     */
+    public function verifyHolderCanBeSetAndChangedOld()
+    {
         $this->assertEquals(null, $this->card->getHolder());
         $this->card->setHolder('Julia Heideich');
         $this->assertEquals('Julia Heideich', $this->card->getHolder());
         $this->card->setHolder(self::TEST_HOLDER);
         $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
+    }
+
+    /**
+     * Verify setting holder.
+     *
+     * @test
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     * @throws ReflectionException
+     *
+     * @deprecated since 1.2.7.2
+     */
+    public function verifyHolderSettersPropagate()
+    {
+        $cardMock = $this->getMockBuilder(Card::class)->disableOriginalConstructor()->setMethods(['setCardHolder', 'getCardHolder'])->getMock();
+        $cardMock->expects($this->once())->method('setCardHolder')->with('set my CardHolder');
+        $cardMock->expects($this->once())->method('getCardHolder')->willReturn('get my CardHolder');
+
+        /** @var Card $cardMock */
+        $cardMock->setHolder('set my CardHolder');
+        $this->assertSame('get my CardHolder', $cardMock->getHolder());
     }
 
     /**
@@ -225,24 +270,31 @@ class CardTest extends BasePaymentTest
      */
     public function verifyCardCanBeUpdated()
     {
-        $testResponse = new stdClass();
-        $testResponse->id = self::TEST_ID;
-        $testResponse->number = self::TEST_NUMBER;
-        $testResponse->brand = self::TEST_BRAND;
-        $testResponse->cvc = self::TEST_CVC;
-        $testResponse->expiryDate = self::TEST_EXPIRY_DATE;
-        $testResponse->holder = self::TEST_HOLDER;
+        $newGeoLocation = (object)['clientIp' => 'client ip', 'countryCode' => 'country code'];
+        $newValues = (object)[
+            'id' => self::TEST_ID,
+            'number' => self::TEST_NUMBER,
+            'brand' => self::TEST_BRAND,
+            'cvc' => self::TEST_CVC,
+            'expiryDate' => self::TEST_EXPIRY_DATE,
+            'cardHolder' => self::TEST_HOLDER,
+            'geolocation' => $newGeoLocation
+        ];
 
-        $this->card->handleResponse($testResponse);
+        $this->card->handleResponse($newValues);
 
         $this->assertEquals(self::TEST_ID, $this->card->getId());
         $this->assertEquals(self::TEST_NUMBER, $this->card->getNumber());
         $this->assertEquals(self::TEST_BRAND, $this->card->getBrand());
         $this->assertEquals(self::TEST_CVC, $this->card->getCvc());
         $this->assertEquals(self::TEST_EXPIRY_DATE, $this->card->getExpiryDate());
-        $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
+        $this->assertEquals(self::TEST_HOLDER, $this->card->getCardHolder());
         $cardDetails = $this->card->getCardDetails();
         $this->assertNull($cardDetails);
+
+        $geoLocation = $this->card->getGeoLocation();
+        $this->assertEquals('client ip', $geoLocation->getClientIp());
+        $this->assertEquals('country code', $geoLocation->getCountryCode());
 
         $cardDetails = new stdClass;
         $cardDetails->cardType = 'my card type';
@@ -252,15 +304,15 @@ class CardTest extends BasePaymentTest
         $cardDetails->issuerName = 'my issuer name';
         $cardDetails->issuerUrl = 'https://my.issuer.url';
         $cardDetails->issuerPhoneNumber = '+49 6221 6471-400';
-        $testResponse->cardDetails = $cardDetails;
+        $newValues->cardDetails = $cardDetails;
 
-        $this->card->handleResponse($testResponse);
+        $this->card->handleResponse($newValues);
         $this->assertEquals(self::TEST_ID, $this->card->getId());
         $this->assertEquals(self::TEST_NUMBER, $this->card->getNumber());
         $this->assertEquals(self::TEST_BRAND, $this->card->getBrand());
         $this->assertEquals(self::TEST_CVC, $this->card->getCvc());
         $this->assertEquals(self::TEST_EXPIRY_DATE, $this->card->getExpiryDate());
-        $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
+        $this->assertEquals(self::TEST_HOLDER, $this->card->getCardHolder());
         $details = $this->card->getCardDetails();
         $this->assertInstanceOf(CardDetails::class, $details);
         $this->assertEquals('my card type', $details->getCardType());

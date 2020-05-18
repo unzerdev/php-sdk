@@ -204,6 +204,8 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
+     * Returns the reference Id of the insurance provider if applicable.
+     *
      * @return string|null
      */
     public function getZgReferenceId()
@@ -212,6 +214,8 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
+     * Sets the reference Id of the insurance provider.
+     *
      * @param string|null $zgReferenceId
      *
      * @return Authorization

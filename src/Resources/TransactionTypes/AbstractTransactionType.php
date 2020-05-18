@@ -33,6 +33,7 @@ use heidelpayPHP\Traits\HasCustomerMessage;
 use heidelpayPHP\Traits\HasDate;
 use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasStates;
+use heidelpayPHP\Traits\HasTraceId;
 use heidelpayPHP\Traits\HasUniqueAndShortId;
 use RuntimeException;
 use stdClass;
@@ -42,6 +43,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     use HasOrderId;
     use HasStates;
     use HasUniqueAndShortId;
+    use HasTraceId;
     use HasCustomerMessage;
     use HasDate;
 

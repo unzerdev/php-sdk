@@ -67,14 +67,14 @@ try {
     $paypage->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
             ->setShopName('My Test Shop')
             ->setTagline('Try and stop us from being awesome!')
-            ->setOrderId('OrderNr' . microtime(true))
-            ->setInvoiceId('InvoiceNr' . microtime(true));
+            ->setOrderId('o' . microtime(true))
+            ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable FlexiPay Rate (Hire Purchase) you will need to set the effectiveInterestRate as well.
     $paypage->setEffectiveInterestRate(4.99);
 
     // ... a Basket is mandatory for HirePurchase
-    $orderId = str_replace(['0.', ' '], '', microtime(false));
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
     $basketItem = new BasketItem('Hat', 100.0, 119.0, 1);
     $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 

@@ -63,8 +63,8 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
 {
     const BASE_URL = 'api.heidelpay.com';
     const API_VERSION = 'v1';
-    const SDK_TYPE = 'HeidelpayPHP';
-    const SDK_VERSION = '1.2.7.1';
+    const SDK_TYPE = 'heidelpayPHP';
+    const SDK_VERSION = '1.2.7.2';
 
     /** @var string $key */
     private $key;
@@ -172,11 +172,11 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     }
 
     /**
-     * @param ResourceServiceInterface $resourceService
+     * @param ResourceService $resourceService
      *
      * @return Heidelpay
      */
-    public function setResourceService(ResourceServiceInterface $resourceService): Heidelpay
+    public function setResourceService(ResourceService $resourceService): Heidelpay
     {
         $this->resourceService = $resourceService->setHeidelpay($this);
         return $this;
@@ -193,11 +193,11 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     }
 
     /**
-     * @param PaymentServiceInterface $paymentService
+     * @param PaymentService $paymentService
      *
      * @return Heidelpay
      */
-    public function setPaymentService(PaymentServiceInterface $paymentService): Heidelpay
+    public function setPaymentService(PaymentService $paymentService): Heidelpay
     {
         $this->paymentService = $paymentService->setHeidelpay($this);
         return $this;
@@ -1024,7 +1024,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
         if ($this->isDebugMode()) {
             $debugHandler = $this->getDebugHandler();
             if ($debugHandler instanceof DebugHandlerInterface) {
-                $debugHandler->log('(' . (string)(getmypid()) . ') ' . $message);
+                $debugHandler->log('(' . getmypid() . ') ' . $message);
             }
         }
     }

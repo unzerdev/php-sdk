@@ -50,6 +50,8 @@ class WebhookEvents
 
     // payout events
     const PAYOUT = 'payout';
+    const PAYOUT_SUCCEEDED = 'payout.succeeded';
+    const PAYOUT_FAILED = 'payout.failed';
 
     // types events
     const TYPES = 'types';
@@ -87,6 +89,8 @@ class WebhookEvents
         self::CHARGE_CANCELED,
         self::CHARGEBACK,
         self::PAYOUT,
+        self::PAYOUT_SUCCEEDED,
+        self::PAYOUT_FAILED,
         self::TYPES,
         self::CUSTOMER,
         self::CUSTOMER_CREATED,

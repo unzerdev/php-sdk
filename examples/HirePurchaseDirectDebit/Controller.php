@@ -68,7 +68,7 @@ try {
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Use the quote or order id from your shop
-    $orderId = str_replace(['0.', ' '], '', microtime(false));
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     /** @var HirePurchaseDirectDebit $paymentType */
     $paymentType = $heidelpay->fetchPaymentType($paymentTypeId);

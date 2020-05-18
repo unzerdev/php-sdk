@@ -43,8 +43,8 @@ class SepaDirectDebitTest extends BasePaymentTest
      */
     public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
     {
-        /** @var SepaDirectDebit $directDebit */
         $directDebit = new SepaDirectDebit('DE89370400440532013000');
+        /** @var SepaDirectDebit $directDebit */
         $directDebit = $this->heidelpay->createPaymentType($directDebit);
         $this->assertInstanceOf(SepaDirectDebit::class, $directDebit);
         $this->assertNotNull($directDebit->getId());
@@ -64,8 +64,8 @@ class SepaDirectDebitTest extends BasePaymentTest
      */
     public function sepaDirectDebitShouldBeCreatable()
     {
-        /** @var SepaDirectDebit $sdd */
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
+        /** @var SepaDirectDebit $sdd */
         $sdd = $this->heidelpay->createPaymentType($sdd);
         $this->assertInstanceOf(SepaDirectDebit::class, $sdd);
         $this->assertNotNull($sdd->getId());

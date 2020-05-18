@@ -1,6 +1,6 @@
 <?php
 /**
- * Represents the customers geolocation.
+ * Represents the geo location of an entity.
  *
  * Copyright (C) 2019 heidelpay GmbH
  *

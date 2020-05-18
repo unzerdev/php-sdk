@@ -43,6 +43,7 @@ use heidelpayPHP\Services\IdService;
 use heidelpayPHP\Traits\HasInvoiceId;
 use heidelpayPHP\Traits\HasOrderId;
 use heidelpayPHP\Traits\HasPaymentState;
+use heidelpayPHP\Traits\HasTraceId;
 use RuntimeException;
 use stdClass;
 
@@ -55,6 +56,7 @@ class Payment extends AbstractHeidelpayResource
     use HasPaymentState;
     use HasOrderId;
     use HasInvoiceId;
+    use HasTraceId;
 
     /** @var string $redirectUrl */
     private $redirectUrl;

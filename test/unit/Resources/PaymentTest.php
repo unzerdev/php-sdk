@@ -60,22 +60,48 @@ class PaymentTest extends BasePaymentTest
      */
     public function gettersAndSettersShouldWorkProperly()
     {
+        // initial check
         $payment = (new Payment())->setParentResource(new Heidelpay('s-priv-1234'));
         $this->assertNull($payment->getRedirectUrl());
         $this->assertNull($payment->getCustomer());
         /** @noinspection UnnecessaryAssertionInspection */
         $this->assertInstanceOf(Amount::class, $payment->getAmount());
+        $this->assertNull($payment->getTraceId());
 
-        $payment->handleResponse((object)['redirectUrl' => 'https://my-redirect-url.test']);
-        $this->assertEquals('https://my-redirect-url.test', $payment->getRedirectUrl());
-
+        // update
+        $ids = (object)['traceId' => 'myTraceId'];
+        $payment->handleResponse((object)['redirectUrl' => 'https://my-redirect-url.test', 'processing' => $ids]);
         $authorize = new Authorization();
         $payment->setAuthorization($authorize);
-        $this->assertSame($authorize, $payment->getAuthorization(true));
-
         $payout = new Payout();
         $payment->setPayout($payout);
+
+        // check
+        $this->assertEquals('https://my-redirect-url.test', $payment->getRedirectUrl());
+        $this->assertSame($authorize, $payment->getAuthorization(true));
         $this->assertSame($payout, $payment->getPayout(true));
+        $this->assertSame('myTraceId', $payment->getTraceId());
+    }
+
+    /**
+     * @test
+     *
+     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     *
+     * Todo: Workaround to be removed when API sends TraceID in processing-group
+     */
+    public function checkTraceIdWorkaround()
+    {
+        // initial check
+        $payment = (new Payment())->setParentResource(new Heidelpay('s-priv-1234'));
+        $this->assertNull($payment->getTraceId());
+
+        // update
+        $payment->handleResponse((object)['resources' => (object)['traceId' => 'myTraceId']]);
+
+        // check
+        $this->assertSame('myTraceId', $payment->getTraceId());
     }
 
     /**

@@ -231,7 +231,7 @@ class InvoiceFactoringTest extends BasePaymentTest
 
         // perform shipment
         $payment   = $charge->getPayment();
-        $invoiceId = substr(str_replace(['0.',' '], '', microtime(false)), 0, 16);
+        $invoiceId = 'i' . self::generateRandomId();
         $shipment  = $this->heidelpay->ship($payment, $invoiceId);
         $this->assertNotNull($shipment->getId());
         $this->assertEquals($invoiceId, $shipment->getInvoiceId());
@@ -259,7 +259,7 @@ class InvoiceFactoringTest extends BasePaymentTest
         $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         $payment   = $charge->getPayment();
-        $invoiceId = substr(str_replace(['0.',' '], '', microtime(false)), 0, 16);
+        $invoiceId = 'i' . self::generateRandomId();
         $shipment  = $payment->ship($invoiceId);
         $this->assertNotNull($shipment->getId());
         $this->assertEquals($invoiceId, $shipment->getInvoiceId());
@@ -282,7 +282,7 @@ class InvoiceFactoringTest extends BasePaymentTest
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $invoiceId = substr(str_replace(['0.',' '], '', microtime(false)), 0, 16);
+        $invoiceId = 'i' . self::generateRandomId();
         $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
 
         $payment   = $charge->getPayment();

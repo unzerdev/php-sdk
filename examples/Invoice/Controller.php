@@ -61,7 +61,7 @@ try {
     $invoice = $heidelpay->createPaymentType(new Invoice());
 
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    $orderId = str_replace(['0.', ' '], '', microtime(false));
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     $transaction = $invoice->charge(12.99, 'EUR', CONTROLLER_URL, $customer, $orderId);
 

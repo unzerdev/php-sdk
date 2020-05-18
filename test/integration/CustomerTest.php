@@ -29,7 +29,6 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
@@ -52,25 +51,21 @@ class CustomerTest extends BasePaymentTest
      */
     public function minCustomerCanBeCreatedAndFetched(): Customer
     {
-        /** @var Customer $customer */
         $customer = $this->getMinimalCustomer();
         $this->assertEmpty($customer->getId());
         $this->heidelpay->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
         $geoLocation = $customer->getGeoLocation();
-        $this->assertInstanceOf(GeoLocation::class, $geoLocation);
         $this->assertNull($geoLocation->getClientIp());
         $this->assertNull($geoLocation->getCountryCode());
 
-        /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $exposeArray     = $customer->expose();
         $exposeArray['salutation'] = Salutations::UNKNOWN;
         $this->assertEquals($exposeArray, $fetchedCustomer->expose());
 
         $geoLocation = $fetchedCustomer->getGeoLocation();
-        $this->assertInstanceOf(GeoLocation::class, $geoLocation);
         $this->assertNotEmpty($geoLocation->getClientIp());
         $this->assertNotEmpty($geoLocation->getCountryCode());
 
@@ -123,7 +118,7 @@ class CustomerTest extends BasePaymentTest
      */
     public function customerCanBeFetchedByCustomerId()
     {
-        $customerId = str_replace([' ', '.'], '', microtime());
+        $customerId = 'c' . self::generateRandomId();
         $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
         $this->heidelpay->createCustomer($customer);
 
@@ -173,7 +168,7 @@ class CustomerTest extends BasePaymentTest
      */
     public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
     {
-        $customerId = 'customer' . self::generateRandomId();
+        $customerId = 'c' . self::generateRandomId();
         $customer   = $this->getMaximumCustomerInclShippingAddress()->setCustomerId($customerId);
 
         /** @var Paypal $paypal */
@@ -379,7 +374,7 @@ class CustomerTest extends BasePaymentTest
      */
     public function addressNameCanHoldFirstAndLastNameConcatenated()
     {
-        $customerId = 'customer' . self::generateRandomId();
+        $customerId = 'c' . self::generateRandomId();
         $customer   = $this->getMaximumCustomerInclShippingAddress()->setCustomerId($customerId);
         $longName   = 'firstfirstfirstfirstfirstfirstfirstfirst lastlastlastlastlastlastlastlastlastlast';
         $customer->getShippingAddress()->setName($longName);

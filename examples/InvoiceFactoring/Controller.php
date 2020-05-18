@@ -73,7 +73,7 @@ try {
         ->setCountry('DE');
     $customer->setBirthDate('2000-02-12')->setBillingAddress($address)->setShippingAddress($address);
 
-    $orderId = str_replace(['0.', ' '], '', microtime(false));
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // A Basket is mandatory for Invoice Factoring payment type
     $basketItem = new BasketItem('Hat', 100.0, 119.0, 1);

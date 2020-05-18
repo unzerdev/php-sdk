@@ -43,8 +43,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly()
     {
-        /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
         $directDebitGuaranteed = new SepaDirectDebitGuaranteed('DE89370400440532013000');
+        /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
         $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
         $this->assertNotNull($directDebitGuaranteed->getId());
@@ -66,8 +66,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
-        /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
         $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setHolder('John Doe')->setBic('COBADEFFXXX');
+        /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
         $directDebitGuaranteed = $this->heidelpay->createPaymentType($directDebitGuaranteed);
         $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
         $this->assertNotNull($directDebitGuaranteed->getId());
