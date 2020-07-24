@@ -69,7 +69,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getPublicKey()
+    public function getPublicKey(): ?string
     {
         return $this->publicKey;
     }
@@ -77,7 +77,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @param string $publicKey
      */
-    protected function setPublicKey(string $publicKey)
+    protected function setPublicKey(string $publicKey): void
     {
         $this->publicKey = $publicKey;
     }
@@ -85,7 +85,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getPrivateKey()
+    public function getPrivateKey(): ?string
     {
         return $this->privateKey;
     }
@@ -93,7 +93,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @param string $privateKey
      */
-    protected function setPrivateKey(string $privateKey)
+    protected function setPrivateKey(string $privateKey): void
     {
         $this->privateKey = $privateKey;
     }
@@ -109,7 +109,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @param array $paymentTypes
      */
-    protected function setPaymentTypes(array $paymentTypes)
+    protected function setPaymentTypes(array $paymentTypes): void
     {
         $this->paymentTypes = $paymentTypes;
     }
@@ -125,7 +125,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @param array $paymentTypes
      */
-    protected function setAvailablePaymentTypes(array $paymentTypes)
+    protected function setAvailablePaymentTypes(array $paymentTypes): void
     {
         $this->setPaymentTypes($paymentTypes);
     }
@@ -230,7 +230,7 @@ class Keypair extends AbstractHeidelpayResource
      *
      * @return bool|null
      */
-    public function isCof()
+    public function isCof(): ?bool
     {
         return $this->cof;
     }
@@ -249,7 +249,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @return bool|null
      */
-    public function isValidateBasket()
+    public function isValidateBasket(): ?bool
     {
         return $this->validateBasket;
     }
@@ -272,7 +272,7 @@ class Keypair extends AbstractHeidelpayResource
     /**
      * @inheritDoc
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

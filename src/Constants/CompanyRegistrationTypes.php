@@ -26,6 +26,6 @@ namespace heidelpayPHP\Constants;
 
 class CompanyRegistrationTypes
 {
-    const REGISTRATION_TYPE_REGISTERED = 'registered';
-    const REGISTRATION_TYPE_NOT_REGISTERED = 'not_registered';
+    public const REGISTRATION_TYPE_REGISTERED = 'registered';
+    public const REGISTRATION_TYPE_NOT_REGISTERED = 'not_registered';
 }

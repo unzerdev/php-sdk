@@ -80,7 +80,7 @@ class HirePurchaseDirectDebit extends InstalmentPlan
     /**
      * @return string|null
      */
-    public function getIban()
+    public function getIban(): ?string
     {
         return $this->iban;
     }
@@ -99,7 +99,7 @@ class HirePurchaseDirectDebit extends InstalmentPlan
     /**
      * @return string|null
      */
-    public function getBic()
+    public function getBic(): ?string
     {
         return $this->bic;
     }
@@ -118,7 +118,7 @@ class HirePurchaseDirectDebit extends InstalmentPlan
     /**
      * @return string|null
      */
-    public function getAccountHolder()
+    public function getAccountHolder(): ?string
     {
         return $this->accountHolder;
     }

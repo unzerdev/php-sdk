@@ -26,7 +26,7 @@ namespace heidelpayPHP\Constants;
 
 class Salutations
 {
-    const MR = 'mr';
-    const MRS = 'mrs';
-    const UNKNOWN = 'unknown';
+    public const MR = 'mr';
+    public const MRS = 'mrs';
+    public const UNKNOWN = 'unknown';
 }

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the Payout transaction type.
  *
@@ -24,13 +26,11 @@
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use RuntimeException;
 use stdClass;
 
@@ -40,10 +40,8 @@ class PayoutTest extends BasePaymentTest
      * Verify getters and setters.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function gettersAndSettersShouldWorkProperly()
+    public function gettersAndSettersShouldWorkProperly(): void
     {
         $payout = new Payout();
         $this->assertNull($payout->getAmount());
@@ -70,11 +68,8 @@ class PayoutTest extends BasePaymentTest
      * Verify that an Payout can be updated on handle response.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function aPayoutShouldBeUpdatedThroughResponseHandling()
+    public function aPayoutShouldBeUpdatedThroughResponseHandling(): void
     {
         $payout = new Payout();
         $this->assertNull($payout->getAmount());
@@ -101,10 +96,8 @@ class PayoutTest extends BasePaymentTest
      * Verify getLinkedResources throws exception if the paymentType is not set.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
+    public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payment type is missing!');
@@ -116,12 +109,8 @@ class PayoutTest extends BasePaymentTest
      * Verify linked resource.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getLinkedResourceShouldReturnResourcesBelongingToPayout()
+    public function getLinkedResourceShouldReturnResourcesBelongingToPayout(): void
     {
         $heidelpayObj = new Heidelpay('s-priv-123345');
         $paymentType = $this->createCardObject()->setId('123');

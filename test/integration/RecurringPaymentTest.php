@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * Test cases to verify functionality and integration of recurring payments.
  *
@@ -32,22 +34,17 @@ use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Services\EnvironmentService;
-use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
+use heidelpayPHP\test\BaseIntegrationTest;
 use RuntimeException;
 
-class RecurringPaymentTest extends BasePaymentTest
+class RecurringPaymentTest extends BaseIntegrationTest
 {
     /**
      * Verify exception is thrown if it is called on a non resource object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws Exception
-     * @throws HeidelpayApiException
      */
-    public function exceptionShouldBeThrownIfTheObjectIsNotAResource()
+    public function exceptionShouldBeThrownIfTheObjectIsNotAResource(): void
     {
         $resource = new DummyResource();
 
@@ -60,11 +57,8 @@ class RecurringPaymentTest extends BasePaymentTest
      * After recurring call the parameters are set.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function recurringForCardWith3dsShouldReturnAttributes()
+    public function recurringForCardWith3dsShouldReturnAttributes(): void
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject()->set3ds(true));
@@ -82,13 +76,10 @@ class RecurringPaymentTest extends BasePaymentTest
      * Verify card without 3ds can activate recurring payments.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function recurringForCardWithout3dsShouldActivateRecurringAtOnce()
+    public function recurringForCardWithout3dsShouldActivateRecurringAtOnce(): void
     {
-        $privateKey = (new EnvironmentService())->getTestPrivateKey(true);
+        $privateKey = EnvironmentService::getTestPrivateKey(true);
         if (empty($privateKey)) {
             $this->markTestIncomplete('No non 3ds private key set');
         }
@@ -112,11 +103,8 @@ class RecurringPaymentTest extends BasePaymentTest
      * Verify paypal can activate recurring payments.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function paypalShouldBeAbleToActivateRecurringPayments()
+    public function paypalShouldBeAbleToActivateRecurringPayments(): void
     {
         /** @var Paypal $paypal */
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
@@ -129,11 +117,8 @@ class RecurringPaymentTest extends BasePaymentTest
      * Verify sepa direct debit can activate recurring payments.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
      */
-    public function sepaDirectDebitShouldBeAbleToActivateRecurringPayments()
+    public function sepaDirectDebitShouldBeAbleToActivateRecurringPayments(): void
     {
         /** @var SepaDirectDebit $dd */
         $dd = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
@@ -151,17 +136,20 @@ class RecurringPaymentTest extends BasePaymentTest
      * Verify sepa direct debit guaranteed can activate recurring payments.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws HeidelpayApiException
      */
-    public function sepaDirectDebitGuaranteedShouldBeAbleToActivateRecurringPayments()
+    public function sepaDirectDebitGuaranteedShouldBeAbleToActivateRecurringPayments(): void
     {
         /** @var SepaDirectDebitGuaranteed $ddg */
         $ddg = $this->heidelpay->createPaymentType(new SepaDirectDebitGuaranteed('DE89370400440532013000'));
+        $this->assertFalse($ddg->isRecurring());
+        $customer = $this->getMaximumCustomer();
+        $customer->setShippingAddress($customer->getBillingAddress());
+        $ddg->charge(10.0, 'EUR', self::RETURN_URL, $customer);
+        $ddg = $this->heidelpay->fetchPaymentType($ddg->getId());
+        $this->assertTrue($ddg->isRecurring());
 
         $this->expectException(HeidelpayApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ACTIVATE_RECURRING_VIA_TRANSACTION);
-        $ddg->activateRecurring('https://dev.heidelpay.com');
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
+        $this->heidelpay->activateRecurringPayment($ddg, self::RETURN_URL);
     }
 }

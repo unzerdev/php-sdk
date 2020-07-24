@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of EPS payment type.
  *
@@ -26,7 +28,6 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 
 class EPSTest extends BasePaymentTest
 {
@@ -34,10 +35,8 @@ class EPSTest extends BasePaymentTest
      * Verify getters and setters work as expected.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function gettersAndSettersShouldWorkAsExpected()
+    public function gettersAndSettersShouldWorkAsExpected(): void
     {
         $eps = new EPS();
         $this->assertNull($eps->getBic());

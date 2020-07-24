@@ -34,7 +34,7 @@ trait HasInvoiceId
     /**
      * @return string|null
      */
-    public function getInvoiceId()
+    public function getInvoiceId(): ?string
     {
         return $this->invoiceId;
     }

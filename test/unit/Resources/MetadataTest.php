@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify metadata functionalities.
  *
@@ -22,11 +24,10 @@
  *
  * @package  heidelpayPHP\test\unit
  */
-namespace heidelpayPHP\test\integration;
+namespace heidelpayPHP\test\unit\Resources;
 
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use stdClass;
 
 class MetadataTest extends BasePaymentTest
@@ -35,10 +36,8 @@ class MetadataTest extends BasePaymentTest
      * Verify custom data can be set.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function metaDataShouldAllowForCustomDataToBeSet()
+    public function metaDataShouldAllowForCustomDataToBeSet(): void
     {
         $metaData = new Metadata();
         $metaData->addMetadata('myCustomData', 'Wow I can add custom information');
@@ -51,10 +50,8 @@ class MetadataTest extends BasePaymentTest
      * Verify defined data can not be set.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function metadataShouldNotAllowForMagicAccessToSdkAndShopData()
+    public function metadataShouldNotAllowForMagicAccessToSdkAndShopData(): void
     {
         $metaData = new Metadata();
         $metaData->addMetadata('sdkType', 'sdkType');
@@ -73,10 +70,8 @@ class MetadataTest extends BasePaymentTest
      * Verify expose contains all defined data.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function exposeShouldGatherAllDefinedDataInTheAnArray()
+    public function exposeShouldGatherAllDefinedDataInTheAnArray(): void
     {
         $metaData = new Metadata();
         $metaDataArray = (array)$metaData->expose();
@@ -99,10 +94,8 @@ class MetadataTest extends BasePaymentTest
      * Verify metadata can be updated.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function handleResponseShouldUpdateMetadata()
+    public function handleResponseShouldUpdateMetadata(): void
     {
         $metaData = new Metadata();
         $metaData->addMetadata('myData', 'This should be my Data');

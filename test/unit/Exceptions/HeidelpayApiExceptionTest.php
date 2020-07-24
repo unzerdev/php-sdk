@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the HeidelpayApiException.
  *
@@ -26,7 +28,6 @@ namespace heidelpayPHP\test\unit\Exceptions;
 
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 
 class HeidelpayApiExceptionTest extends BasePaymentTest
 {
@@ -34,10 +35,8 @@ class HeidelpayApiExceptionTest extends BasePaymentTest
      * Verify the exception stores the given data.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function heidelpayApiExceptionShouldReturnDefaultDataWhenNoneIsSet()
+    public function heidelpayApiExceptionShouldReturnDefaultDataWhenNoneIsSet(): void
     {
         $exception = new HeidelpayApiException();
         $this->assertEquals(HeidelpayApiException::CLIENT_MESSAGE, $exception->getClientMessage());
@@ -54,10 +53,8 @@ class HeidelpayApiExceptionTest extends BasePaymentTest
      *
      * @param array $expected
      * @param array $testData
-     *
-     * @throws Exception
      */
-    public function heidelpayApiExceptionShouldReturnTheGivenData(array $testData, array $expected)
+    public function heidelpayApiExceptionShouldReturnTheGivenData(array $testData, array $expected): void
     {
         $exception = new HeidelpayApiException($testData['message'], $testData['clientMessage'], $testData['code'], $testData['errorId']);
         $this->assertEquals($expected['message'], $exception->getMerchantMessage());

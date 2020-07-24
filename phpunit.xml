@@ -8,8 +8,6 @@
          convertWarningsToExceptions="false"
          processIsolation="false"
          stopOnFailure="false"
-         strict="true"
-         syntaxCheck="false"
          verbose="true">
     <groups>
         <exclude>

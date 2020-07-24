@@ -78,7 +78,7 @@ class Authorization extends AbstractTransactionType
     /**
      * @return float|null
      */
-    public function getAmount()
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
@@ -97,7 +97,7 @@ class Authorization extends AbstractTransactionType
     /**
      * @return float|null
      */
-    public function getCancelledAmount()
+    public function getCancelledAmount(): ?float
     {
         $amount = 0.0;
         foreach ($this->getCancellations() as $cancellation) {
@@ -111,7 +111,7 @@ class Authorization extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getCurrency()
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
@@ -130,7 +130,7 @@ class Authorization extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getReturnUrl()
+    public function getReturnUrl(): ?string
     {
         return $this->returnUrl;
     }
@@ -149,7 +149,7 @@ class Authorization extends AbstractTransactionType
     /**
      * @return bool|null
      */
-    public function isCard3ds()
+    public function isCard3ds(): ?bool
     {
         return $this->card3ds;
     }
@@ -168,7 +168,7 @@ class Authorization extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getPaymentReference()
+    public function getPaymentReference(): ?string
     {
         return $this->paymentReference;
     }
@@ -187,7 +187,7 @@ class Authorization extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getExternalOrderId()
+    public function getExternalOrderId(): ?string
     {
         return $this->externalOrderId;
     }
@@ -208,7 +208,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return string|null
      */
-    public function getZgReferenceId()
+    public function getZgReferenceId(): ?string
     {
         return $this->zgReferenceId;
     }
@@ -229,7 +229,7 @@ class Authorization extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getPDFLink()
+    public function getPDFLink(): ?string
     {
         return $this->PDFLink;
     }

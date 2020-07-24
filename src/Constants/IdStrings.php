@@ -27,40 +27,40 @@ namespace heidelpayPHP\Constants;
 class IdStrings
 {
     // Transactions
-    const CHARGE = 'chg';
-    const AUTHORIZE = 'aut';
-    const CANCEL = 'cnl';
-    const SHIPMENT = 'shp';
-    const PAYOUT = 'out';
+    public const CHARGE = 'chg';
+    public const AUTHORIZE = 'aut';
+    public const CANCEL = 'cnl';
+    public const SHIPMENT = 'shp';
+    public const PAYOUT = 'out';
 
     // Payment Types
-    const CARD = 'crd';
-    const GIROPAY = 'gro';
-    const IDEAL = 'idl';
-    const INVOICE = 'ivc';
-    const INVOICE_GUARANTEED = 'ivg';
-    const PAYPAL = 'ppl';
-    const PREPAYMENT = 'ppy';
-    const PRZELEWY24 = 'p24';
-    const SEPA_DIRECT_DEBIT_GUARANTEED = 'ddg';
-    const SEPA_DIRECT_DEBIT = 'sdd';
-    const SOFORT = 'sft';
-    const PIS = 'pis';
-    const EPS = 'eps';
-    const ALIPAY = 'ali';
-    const WECHATPAY = 'wcp';
-    const INVOICE_FACTORING = 'ivf';
-    const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
-    const PAYMENT_PAGE = 'ppg';
+    public const CARD = 'crd';
+    public const GIROPAY = 'gro';
+    public const IDEAL = 'idl';
+    public const INVOICE = 'ivc';
+    public const INVOICE_GUARANTEED = 'ivg';
+    public const PAYPAL = 'ppl';
+    public const PREPAYMENT = 'ppy';
+    public const PRZELEWY24 = 'p24';
+    public const SEPA_DIRECT_DEBIT_GUARANTEED = 'ddg';
+    public const SEPA_DIRECT_DEBIT = 'sdd';
+    public const SOFORT = 'sft';
+    public const PIS = 'pis';
+    public const EPS = 'eps';
+    public const ALIPAY = 'ali';
+    public const WECHATPAY = 'wcp';
+    public const INVOICE_FACTORING = 'ivf';
+    public const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
+    public const PAYMENT_PAGE = 'ppg';
 
     // Resources
-    const BASKET = 'bsk';
-    const WEBHOOK = 'whk';
-    const PAYMENT = 'pay';
-    const CUSTOMER = 'cst';
-    const METADATA = 'mtd';
+    public const BASKET = 'bsk';
+    public const WEBHOOK = 'whk';
+    public const PAYMENT = 'pay';
+    public const CUSTOMER = 'cst';
+    public const METADATA = 'mtd';
     
-    const PAYMENT_TYPES = [
+    public const PAYMENT_TYPES = [
         self::CARD,
         self::GIROPAY,
         self::IDEAL,

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
  * functionality of the payment method hire purchase direct debit.
@@ -25,7 +27,6 @@
  */
 namespace heidelpayPHP\test\integration\PaymentTypes;
 
-use Exception;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Customer;
@@ -33,11 +34,10 @@ use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 use function count;
 
-class HirePurchaseDirectDebitTest extends BasePaymentTest
+class HirePurchaseDirectDebitTest extends BaseIntegrationTest
 {
     /**
      * Verify the following features:
@@ -48,12 +48,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * 5 test update hp resource
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws Exception
      */
-    public function instalmentPlanShouldBeSelectable()
+    public function instalmentPlanShouldBeSelectable(): void
     {
         $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99);
         $this->assertGreaterThan(0, count($plans->getPlans()));
@@ -61,7 +57,6 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[1];
 
-        /** @var HirePurchaseDirectDebit $hdd */
         $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
         $this->heidelpay->createPaymentType($hdd);
         $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
@@ -88,13 +83,11 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @param $firstname
      * @param $lastname
      * @param $errorCode
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function hirePurchaseDirectDebitAuthorize($firstname, $lastname, $errorCode)
+    public function hirePurchaseDirectDebitAuthorize($firstname, $lastname, $errorCode): void
     {
         $hpPlans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99);
+        /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $hpPlans->getPlans()[0];
         $hdd = new HirePurchaseDirectDebit($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
         $this->heidelpay->createPaymentType($hdd);
@@ -121,12 +114,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * Verify fetching instalment plans.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws Exception
      */
-    public function instalmentPlanSelectionWithAllFieldsSet()
+    public function instalmentPlanSelectionWithAllFieldsSet(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
         $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
@@ -144,12 +133,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * Verify charge.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws Exception
      */
-    public function verifyChargingAnInitializedHirePurchase()
+    public function verifyChargingAnInitializedHirePurchase(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
         $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
@@ -172,12 +157,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * Verify charge and ship.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws Exception
      */
-    public function verifyShippingAChargedHirePurchase()
+    public function verifyShippingAChargedHirePurchase(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
         $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
@@ -204,12 +185,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @depends verifyChargingAnInitializedHirePurchase
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws Exception
      */
-    public function verifyChargeAndFullCancelAnInitializedHirePurchase()
+    public function verifyChargeAndFullCancelAnInitializedHirePurchase(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
         $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
@@ -233,12 +210,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * @test
      *
      * @depends verifyChargingAnInitializedHirePurchase
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws Exception
      */
-    public function verifyPartlyCancelChargedHirePurchase()
+    public function verifyPartlyCancelChargedHirePurchase(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
         $plans = $this->heidelpay->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This custom debug handler will echo out debug messages.
  *
@@ -29,13 +31,39 @@ use heidelpayPHP\Services\EnvironmentService;
 
 class TestDebugHandler implements DebugHandlerInterface
 {
+    /** @var string $tempLog Stores the log messages until reset via clearTempLog() or echoed out via dumpTempLog(). */
+    private $tempLog = '';
+
     /**
      * {@inheritDoc}
      */
-    public function log(string $message)
+    public function log(string $message): void
     {
+        $logMessage = 'heidelpay debug message: ' . $message . "\n";
+
         if (EnvironmentService::isTestLoggingActive()) {
-            echo 'heidelpay debug message: ' . $message . "\n";
+            // Echo log messages directly.
+            echo $logMessage;
+        } else {
+            // Store log to echo it when needed.
+            $this->tempLog .= $logMessage;
         }
+    }
+
+    /**
+     * Clears the temp log.
+     */
+    public function clearTempLog(): void
+    {
+        $this->tempLog = '';
+    }
+
+    /**
+     * Echos the contents of tempLog and clears it afterwards.
+     */
+    public function dumpTempLog(): void
+    {
+        echo $this->tempLog;
+        $this->clearTempLog();
     }
 }

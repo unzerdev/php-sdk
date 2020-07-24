@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This dummy class is used to verify certain behaviour of the AbstractHeidelpayResource.
  *

@@ -26,10 +26,10 @@ namespace heidelpayPHP\Constants;
 
 class TransactionTypes
 {
-    const AUTHORIZATION = 'authorize';
-    const CHARGE = 'charge';
-    const REVERSAL = 'cancel-authorize';
-    const REFUND = 'cancel-charge';
-    const SHIPMENT = 'shipment';
-    const PAYOUT = 'payout';
+    public const AUTHORIZATION = 'authorize';
+    public const CHARGE = 'charge';
+    public const REVERSAL = 'cancel-authorize';
+    public const REFUND = 'cancel-charge';
+    public const SHIPMENT = 'shipment';
+    public const PAYOUT = 'payout';
 }

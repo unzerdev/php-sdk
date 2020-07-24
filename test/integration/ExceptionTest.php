@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
  * functionality of the Customer resource.
@@ -28,21 +30,17 @@ namespace heidelpayPHP\test\integration;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class ExceptionTest extends BasePaymentTest
+class ExceptionTest extends BaseIntegrationTest
 {
     /**
      * Verify that the HeidelpayApiException holds a special message for for the client.
      * Verify that there are different messages for different languages.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function apiExceptionShouldHoldClientMessage()
+    public function apiExceptionShouldHoldClientMessage(): void
     {
         $giropay             = $this->heidelpay->createPaymentType(new Giropay());
         $firstClientMessage  = '';

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class verifies function of the instalment plan resources.
  *
@@ -28,8 +30,6 @@ use DateTime;
 use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\InstalmentPlans;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
-use RuntimeException;
 
 class InstalmentPlanTest extends BasePaymentTest
 {
@@ -42,11 +42,8 @@ class InstalmentPlanTest extends BasePaymentTest
      * @param float  $amount
      * @param string $currency
      * @param float  $effectiveInterest
-     *
-     * @throws Exception
-     * @throws RuntimeException
      */
-    public function verifyQueryString($amount, $currency, $effectiveInterest)
+    public function verifyQueryString($amount, $currency, $effectiveInterest): void
     {
         $plans = new InstalmentPlans($amount, $currency, $effectiveInterest, new DateTime('13.11.2019'));
         $this->assertEquals("plans?amount={$amount}&currency={$currency}&effectiveInterest={$effectiveInterest}&orderDate=2019-11-13", $plans->getResourcePath());
@@ -56,11 +53,8 @@ class InstalmentPlanTest extends BasePaymentTest
      * Verify getters and setters.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws \Exception
      */
-    public function gettersAndSettersShouldWorkAsExpected()
+    public function gettersAndSettersShouldWorkAsExpected(): void
     {
         // when
         $instalmentPlans = new InstalmentPlans(1.234, 'EUR', 23.45);
@@ -100,10 +94,8 @@ class InstalmentPlanTest extends BasePaymentTest
      * Verify plans can be retrieved.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function plansShouldBeRetrievable()
+    public function plansShouldBeRetrievable(): void
     {
         // when
         $instalmentPlans = new InstalmentPlans(1.234, 'EUR', 23.45);
@@ -120,7 +112,8 @@ class InstalmentPlanTest extends BasePaymentTest
         $this->assertCount(2, $plans);
 
         /** @var InstalmentPlan $plan1 */
-        list($plan1, $plan2) = $plans;
+        /** @var InstalmentPlan $plan2 */
+        [$plan1, $plan2] = $plans;
         $this->assertEquals('plan 1', $plan1->getOrderDate());
         $this->assertEquals('plan 2', $plan2->getOrderDate());
     }

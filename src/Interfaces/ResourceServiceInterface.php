@@ -271,12 +271,10 @@ interface ResourceServiceInterface
      *
      * @param Customer|string $customer The customer to be deleted. Can be the customer object or its id.
      *
-     * @return Customer|null The customer object if there was a failure deleting it or null if the deletion succeeded.
-     *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function deleteCustomer($customer);
+    public function deleteCustomer($customer): void;
 
     /**
      * Fetch an authorization object by its payment object or id.

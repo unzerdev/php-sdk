@@ -65,11 +65,11 @@ class IdService
      *
      * @return string|null
      */
-    public static function getResourceIdOrNullFromUrl($url, $idString, $onlyLast = false)
+    public static function getResourceIdOrNullFromUrl($url, $idString, $onlyLast = false): ?string
     {
         try {
             return self::getResourceIdFromUrl($url, $idString, $onlyLast);
-        } catch (RuntimeException $e) {
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (RuntimeException $e) {
             return null;
         }
     }
@@ -79,7 +79,7 @@ class IdService
      *
      * @return string|null
      */
-    public static function getLastResourceIdFromUrlString($url)
+    public static function getLastResourceIdFromUrlString($url): ?string
     {
         return self::getResourceIdOrNullFromUrl($url, '([a-z]{3}|p24)', true);
     }
@@ -89,9 +89,8 @@ class IdService
      *
      * @return string|null
      */
-    public static function getResourceTypeFromIdString($typeId)
+    public static function getResourceTypeFromIdString($typeId): ?string
     {
-        $paymentType  = null;
         $typeIdString = null;
 
         $typeIdParts = [];

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the webhook service.
  *
@@ -24,7 +26,6 @@
  */
 namespace heidelpayPHP\test\unit\Services;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\Webhook;
@@ -33,8 +34,6 @@ use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\Services\WebhookService;
 use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\test\unit\DummyResource;
-use PHPUnit\Framework\Exception;
-use ReflectionException;
 use RuntimeException;
 use stdClass;
 
@@ -46,10 +45,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify setters and getters work properly.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function gettersAndSettersShouldWorkProperly()
+    public function gettersAndSettersShouldWorkProperly(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -76,12 +73,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify create webhook calls resource service with webhook object.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws ReflectionException
      */
-    public function createWebhookShouldCallResourceServiceWithWebhookObject()
+    public function createWebhookShouldCallResourceServiceWithWebhookObject(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -89,6 +82,7 @@ class WebhooksServiceTest extends BasePaymentTest
             ->setMethods(['createResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('createResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhook &&
@@ -105,12 +99,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify fetch webhook calls resource service with the given webhook object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function fetchWebhookShouldCallResourceServiceWithTheGivenWebhookObject()
+    public function fetchWebhookShouldCallResourceServiceWithTheGivenWebhookObject(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -118,6 +108,7 @@ class WebhooksServiceTest extends BasePaymentTest
             ->setMethods(['fetchResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhook && $param->getHeidelpayObject() === $heidelpay;
@@ -132,12 +123,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify fetch webhook calls resource service with a new webhook object with the given id.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function fetchWebhookShouldCallResourceServiceWithANewWebhookObjectWithTheGivenId()
+    public function fetchWebhookShouldCallResourceServiceWithANewWebhookObjectWithTheGivenId(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -145,6 +132,7 @@ class WebhooksServiceTest extends BasePaymentTest
             ->setMethods(['fetchResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhook &&
@@ -160,12 +148,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify update webhook calls resource service with the given webhook object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function updateWebhookShouldCallResourceServiceWithTheGivenWebhookObject()
+    public function updateWebhookShouldCallResourceServiceWithTheGivenWebhookObject(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -173,6 +157,7 @@ class WebhooksServiceTest extends BasePaymentTest
             ->setMethods(['updateResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('updateResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhook &&
@@ -190,12 +175,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify delete webhook calls resource service with the given webhook object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function deleteWebhookShouldCallResourceServiceWithTheGivenWebhookObject()
+    public function deleteWebhookShouldCallResourceServiceWithTheGivenWebhookObject(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -203,6 +184,7 @@ class WebhooksServiceTest extends BasePaymentTest
             ->setMethods(['deleteResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('deleteResource')->with($this->callback(
             static function ($param) {
                 return $param instanceof Webhook &&
@@ -219,12 +201,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify delete webhook calls resource service with the given webhook object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function deleteWebhookShouldCallResourceServiceFetchingAndDeletingTheWebhookWithTheGivenId()
+    public function deleteWebhookShouldCallResourceServiceFetchingAndDeletingTheWebhookWithTheGivenId(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookServiceMock = $this->getMockBuilder(WebhookService::class)->setConstructorArgs([$heidelpay])
@@ -238,8 +216,10 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookServiceMock->setResourceService($resourceServiceMock);
 
         $webhook = new Webhook('WebhookId', 'TestEvent');
+        /** @noinspection PhpParamsInspection */
         $webhookServiceMock->expects($this->once())->method('fetchWebhook')->with('WebhookId')
             ->willReturn($webhook);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('deleteResource')->with($this->callback(
             static function ($param) use ($webhook) {
                 return $param === $webhook;
@@ -259,12 +239,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * webhooks object as the fetch method is called.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function fetchWebhooksShouldCallResourceService()
+    public function fetchWebhooksShouldCallResourceService(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -278,6 +254,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhookArray = ['webhook1', 'webhook2'];
         $webhooksMock->expects($this->once())->method('getWebhookList')->willReturn($webhookArray);
 
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhooks && $param->getHeidelpayObject() === $heidelpay;
@@ -291,12 +268,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify delete webhooks calls resource service with a new webhooks object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function deleteWebhooksShouldCallResourceServiceWithANewWebhooksObject()
+    public function deleteWebhooksShouldCallResourceServiceWithANewWebhooksObject(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -304,6 +277,7 @@ class WebhooksServiceTest extends BasePaymentTest
             ->setMethods(['deleteResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('deleteResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhooks && $param->getHeidelpayObject() === $heidelpay;
@@ -317,12 +291,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify create webhooks calls resource service with webhooks object.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws ReflectionException
      */
-    public function createWebhooksShouldCallResourceServiceWithNewWebhooksObject()
+    public function createWebhooksShouldCallResourceServiceWithNewWebhooksObject(): void
     {
         $heidelpay = new Heidelpay('s-priv-123');
         $webhookService = new WebhookService($heidelpay);
@@ -334,6 +304,7 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhooksMock = $this->getMockBuilder(Webhooks::class)->setMethods(['getWebhookList'])->getMock();
         $webhookList = ['ListItem1', 'ListItem2'];
         $webhooksMock->expects($this->once())->method('getWebhookList')->willReturn($webhookList);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('createResource')->with($this->callback(
             static function ($param) use ($heidelpay) {
                 return $param instanceof Webhooks &&
@@ -357,13 +328,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify exception is thrown if the retrieveURL is empty.
      *
      * @test
-     *
-     * @throws ReflectionException
-     * @throws RuntimeException
-     * @throws Exception
-     * @throws HeidelpayApiException
      */
-    public function fetchResourceByEventWithEmptyRetrieveUrlShouldThrowException()
+    public function fetchResourceByEventWithEmptyRetrieveUrlShouldThrowException(): void
     {
         // override readInputStreamTo provide custom retrieveURL
         $webhookService = $this->getMockBuilder(WebhookService::class)
@@ -381,13 +347,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify exception is thrown if the retrieveURL is empty.
      *
      * @test
-     *
-     * @throws ReflectionException
-     * @throws RuntimeException
-     * @throws Exception
-     * @throws HeidelpayApiException
      */
-    public function fetchResourceByEventShouldThrowExceptionIfResourceObjectCanNotBeRetrieved()
+    public function fetchResourceByEventShouldThrowExceptionIfResourceObjectCanNotBeRetrieved(): void
     {
         // override readInputStreamTo provide custom retrieveURL
         $webhookService = $this->getMockBuilder(WebhookService::class)
@@ -415,13 +376,8 @@ class WebhooksServiceTest extends BasePaymentTest
      * Verify fetch resource by event.
      *
      * @test
-     *
-     * @throws ReflectionException
-     * @throws RuntimeException
-     * @throws Exception
-     * @throws HeidelpayApiException
      */
-    public function fetchResourceByEventShouldGetResourceServiceWithRetrieveUrl()
+    public function fetchResourceByEventShouldGetResourceServiceWithRetrieveUrl(): void
     {
         // setup received event
         $retrieveUrl            = 'https://test/url';
@@ -436,6 +392,7 @@ class WebhooksServiceTest extends BasePaymentTest
         // inject resource service mock into webhook service to verify fetchResourceByUrl is called with the received url
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchResourceByUrl'])->getMock();
         $dummyResource       = new DummyResource();
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResourceByUrl')->with($retrieveUrl)->willReturn($dummyResource);
         /**
          * @var ResourceServiceInterface $resourceServiceMock

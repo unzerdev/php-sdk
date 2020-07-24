@@ -80,7 +80,7 @@ class Message extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getMerchant()
+    public function getMerchant(): ?string
     {
         return $this->merchant;
     }

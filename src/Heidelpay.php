@@ -44,7 +44,6 @@ use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Paypage;
 use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
@@ -61,10 +60,10 @@ use RuntimeException;
 
 class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface, CancelServiceInterface
 {
-    const BASE_URL = 'api.heidelpay.com';
-    const API_VERSION = 'v1';
-    const SDK_TYPE = 'heidelpayPHP';
-    const SDK_VERSION = '1.2.7.2';
+    public const BASE_URL = 'api.heidelpay.com';
+    public const API_VERSION = 'v1';
+    public const SDK_TYPE = 'heidelpayPHP';
+    public const SDK_VERSION = '1.2.8.0';
 
     /** @var string $key */
     private $key;
@@ -152,7 +151,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @return string|null The locale of the customer.
      *                     Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
      */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
@@ -275,7 +274,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * @return DebugHandlerInterface|null
      */
-    public function getDebugHandler()
+    public function getDebugHandler(): ?DebugHandlerInterface
     {
         return $this->debugHandler;
     }
@@ -539,7 +538,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * {@inheritDoc}
      */
-    public function deleteCustomer($customer)
+    public function deleteCustomer($customer): void
     {
         $this->resourceService->deleteCustomer($customer);
     }
@@ -683,7 +682,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * {@inheritDoc}
      */
-    public function deleteAllWebhooks()
+    public function deleteAllWebhooks(): void
     {
         $this->webhookService->deleteAllWebhooks();
     }
@@ -741,38 +740,6 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
             $invoiceId,
             $referenceText
         );
-    }
-
-    /**
-     * Performs an Authorization transaction using a Payment object and returns the resulting Authorization resource.
-     *
-     * @param float                $amount    The amount to authorize.
-     * @param string               $currency  The currency of the amount.
-     * @param Payment              $payment   The Payment object to create the Authorization for.
-     * @param string               $returnUrl The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null $customer  The Customer object or the id of the customer resource to reference.
-     * @param string|null          $orderId   A custom order id which can be set by the merchant.
-     * @param Metadata|null        $metadata  The Metadata object containing custom information for the payment.
-     * @param Basket|null          $basket    The Basket object corresponding to the payment.
-     *                                        The Basket object will be created automatically if it does not exist
-     *                                        yet (i.e. has no id).
-     *
-     * @return AbstractTransactionType The resulting object of the Authorization resource.
-     *
-     * @deprecated since 1.2.6.0
-     */
-    public function authorizeWithPayment(
-        $amount,
-        $currency,
-        Payment $payment,
-        $returnUrl = null,
-        $customer = null,
-        $orderId = null,
-        $metadata = null,
-        $basket = null
-    ): AbstractTransactionType {
-        return $this->paymentService
-            ->authorizeWithPayment($amount, $currency, $payment, $returnUrl, $customer, $orderId, $metadata, $basket);
     }
 
     //</editor-fold>
@@ -878,7 +845,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * {@inheritDoc}
      */
-    public function cancelPaymentAuthorization($payment, float $amount = null)
+    public function cancelPaymentAuthorization($payment, float $amount = null): ?Cancellation
     {
         return $this->cancelService->cancelPaymentAuthorization($payment, $amount);
     }
@@ -1019,7 +986,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      *
      * @param $message
      */
-    public function debugLog($message)
+    public function debugLog($message): void
     {
         if ($this->isDebugMode()) {
             $debugHandler = $this->getDebugHandler();

@@ -49,7 +49,7 @@ class Webhook extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -68,7 +68,7 @@ class Webhook extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getEvent()
+    public function getEvent(): ?string
     {
         return $this->event;
     }

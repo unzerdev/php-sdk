@@ -42,7 +42,7 @@ class Paypal extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }

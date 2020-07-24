@@ -83,24 +83,13 @@ function printInfo($title, $text)
     </h2>
 
     <?php
-        // Show info message if the general test keys are used
-        if (DEFAULT_PRIVATE_KEY === HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY) {
-            printMessage(
-                'yellow',
-                'Attention: You are using the default key pair!',
-                "Keep in mind that webhooks are registered for the private key used to create them.\n" .
-                "This may lead to unwanted behaviour, since someone else using the same key pair might change your webhooks e.g. by deleting them.\n" .
-                'We suggest you replace the predefined key pair in file _enableExamples.php with your own'
-            );
-        }
-
         try {
             $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
             $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
             $heidelpay->deleteAllWebhooks();
             printSuccess(
-                'De-registered all existing events for this private key',
+                'De-registered all existing events for the given private key',
                 'Unsubscribed all events registered for the private key: "' . HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY . '".'
             );
 

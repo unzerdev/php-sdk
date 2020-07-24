@@ -28,10 +28,10 @@ use heidelpayPHP\Exceptions\HeidelpayApiException;
 
 interface HttpAdapterInterface
 {
-    const REQUEST_POST = 'POST';
-    const REQUEST_DELETE = 'DELETE';
-    const REQUEST_PUT = 'PUT';
-    const REQUEST_GET = 'GET';
+    public const REQUEST_POST = 'POST';
+    public const REQUEST_DELETE = 'DELETE';
+    public const REQUEST_PUT = 'PUT';
+    public const REQUEST_GET = 'GET';
 
     /**
      * Initializes the request.
@@ -40,7 +40,7 @@ interface HttpAdapterInterface
      * @param string $payload    Json encoded payload string.
      * @param string $httpMethod The Http method to perform.
      */
-    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET);
+    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET): void;
 
     /**
      * Executes the request and returns the response.
@@ -49,7 +49,7 @@ interface HttpAdapterInterface
      *
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      */
-    public function execute();
+    public function execute(): ?string;
 
     /**
      * Returns the Http code of the response.
@@ -61,7 +61,7 @@ interface HttpAdapterInterface
     /**
      * Closes the connection of the request.
      */
-    public function close();
+    public function close(): void;
 
     /**
      * Sets the headers for the request.
@@ -69,12 +69,12 @@ interface HttpAdapterInterface
      *
      * @param array $headers
      */
-    public function setHeaders(array $headers);
+    public function setHeaders(array $headers): void;
 
     /**
      * Sets the user Agent.
      *
      * @param $userAgent
      */
-    public function setUserAgent($userAgent);
+    public function setUserAgent($userAgent): void;
 }

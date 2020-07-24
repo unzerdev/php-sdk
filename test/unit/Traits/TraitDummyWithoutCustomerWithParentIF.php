@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines a dummy implementing traits without customer dependency and with implementing the parent
  * interface.
@@ -30,7 +32,6 @@ use heidelpayPHP\Interfaces\HeidelpayParentInterface;
 use heidelpayPHP\Traits\CanAuthorize;
 use heidelpayPHP\Traits\CanDirectCharge;
 use heidelpayPHP\Traits\CanPayout;
-use RuntimeException;
 
 class TraitDummyWithoutCustomerWithParentIF implements HeidelpayParentInterface
 {
@@ -42,8 +43,6 @@ class TraitDummyWithoutCustomerWithParentIF implements HeidelpayParentInterface
      * Returns the heidelpay root object.
      *
      * @return Heidelpay
-     *
-     * @throws RuntimeException
      */
     public function getHeidelpayObject(): Heidelpay
     {

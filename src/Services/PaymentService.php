@@ -291,8 +291,8 @@ class PaymentService implements PaymentServiceInterface
         DateTime $orderDate = null
     ): InstalmentPlans {
         $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
-        /** @var InstalmentPlans $plans */
         $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
+        /** @var InstalmentPlans $plans */
         $plans = $this->heidelpay->getResourceService()->fetchResource($plans);
         return $plans;
     }

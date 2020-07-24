@@ -34,7 +34,7 @@ trait HasOrderId
     /**
      * @return string|null
      */
-    public function getOrderId()
+    public function getOrderId(): ?string
     {
         return $this->orderId;
     }

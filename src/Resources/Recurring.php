@@ -98,7 +98,7 @@ class Recurring extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getRedirectUrl()
+    public function getRedirectUrl(): ?string
     {
         return $this->redirectUrl;
     }

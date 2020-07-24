@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of PayPal payment type.
  *
@@ -26,7 +28,6 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 
 class PayPalTest extends BasePaymentTest
 {
@@ -34,10 +35,8 @@ class PayPalTest extends BasePaymentTest
      * Verify the bic can be set and read.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function bicShouldBeRW()
+    public function bicShouldBeRW(): void
     {
         $paypal = new Paypal();
         $this->assertNull($paypal->getEmail());

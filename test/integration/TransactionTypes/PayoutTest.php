@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify payout transactions.
  *
@@ -24,7 +26,6 @@
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
@@ -32,21 +33,16 @@ use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class PayoutTest extends BasePaymentTest
+class PayoutTest extends BaseIntegrationTest
 {
     /**
      * Verify payout can be performed for card payment type.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function payoutCanBeCalledForCardType()
+    public function payoutCanBeCalledForCardType(): void
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
@@ -69,11 +65,8 @@ class PayoutTest extends BasePaymentTest
      * Verify payout can be performed for sepa direct debit payment type.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function payoutCanBeCalledForSepaDirectDebitType()
+    public function payoutCanBeCalledForSepaDirectDebitType(): void
     {
         $sepa = new SepaDirectDebit('DE89370400440532013000');
         $this->heidelpay->createPaymentType($sepa);
@@ -91,11 +84,8 @@ class PayoutTest extends BasePaymentTest
      * Verify payout can be performed for sepa direct debit guaranteed payment type.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function payoutCanBeCalledForSepaDirectDebitGuaranteedType()
+    public function payoutCanBeCalledForSepaDirectDebitGuaranteedType(): void
     {
         $sepa = new SepaDirectDebitGuaranteed('DE89370400440532013000');
         $this->heidelpay->createPaymentType($sepa);
@@ -114,12 +104,8 @@ class PayoutTest extends BasePaymentTest
      * Verify Payout transaction is fetched with Payment resource.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws Exception
      */
-    public function payoutShouldBeFetchedWhenItsPaymentResourceIsFetched()
+    public function payoutShouldBeFetchedWhenItsPaymentResourceIsFetched(): void
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
@@ -136,11 +122,8 @@ class PayoutTest extends BasePaymentTest
      * Verify Payout can be fetched via url.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function payoutShouldBeFetchableViaItsUrl()
+    public function payoutShouldBeFetchableViaItsUrl(): void
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
@@ -155,11 +138,8 @@ class PayoutTest extends BasePaymentTest
      * Verify payout accepts all parameters.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function payoutShouldAcceptAllParameters()
+    public function payoutShouldAcceptAllParameters(): void
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());

@@ -23,12 +23,23 @@
  * @package  heidelpayPHP\examples
  */
 
+use heidelpayPHP\Validators\PrivateKeyValidator;
+use heidelpayPHP\Validators\PublicKeyValidator;
+
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
 /** @noinspection PhpIncludeInspection */
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../autoload.php';
+
+function printMessage($type, $title, $text)
+{
+    echo '<div class="ui ' . $type . ' message">'.
+        '<div class="header">' . $title . '</div>'.
+        '<p>' . nl2br($text) . '</p>'.
+        '</div>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +68,22 @@ require_once __DIR__ . '/../../../autoload.php';
                     <span class="sub header">Choose the Payment Type you want to evaluate ...</span>
                 </span>
             </h2>
+
+            <?php
+                // Show info message if the key pair is invalid
+                if (
+                    !PrivateKeyValidator::validate(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY) ||
+                    !PublicKeyValidator::validate(HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY)
+                ) {
+                    printMessage(
+                        'yellow',
+                        'Attention: You need to provide a valid key pair!',
+                        "The key pair provided in file _enableExamples.php does not seem to be valid.\n".
+                        'Please contact our support to get a test key pair <a href="mailto:support@heidelpay.com">support@heidelpay.com</a>'
+                    );
+                }
+            ?>
+
             <div class="ui four cards">
                 <div class="card olive">
                     <div class="content">
@@ -250,7 +277,7 @@ require_once __DIR__ . '/../../../autoload.php';
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryDirecDebitGuaranteedExample" class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
+                    <div id="tryDirectDebitGuaranteedExample" class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
                         Try
                     </div>
                 </div>

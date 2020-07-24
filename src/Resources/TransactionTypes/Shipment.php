@@ -38,7 +38,7 @@ class Shipment extends AbstractTransactionType
     /**
      * @return float|null
      */
-    public function getAmount()
+    public function getAmount(): ?float
     {
         return $this->amount;
     }

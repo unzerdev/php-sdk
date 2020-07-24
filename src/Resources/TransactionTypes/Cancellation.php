@@ -75,7 +75,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return float|null
      */
-    public function getAmount()
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
@@ -98,7 +98,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return string|null
      */
-    public function getReasonCode()
+    public function getReasonCode(): ?string
     {
         return $this->reasonCode;
     }
@@ -121,7 +121,7 @@ class Cancellation extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getPaymentReference()
+    public function getPaymentReference(): ?string
     {
         return $this->paymentReference;
     }
@@ -143,7 +143,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return float|null
      */
-    public function getAmountNet()
+    public function getAmountNet(): ?float
     {
         return $this->amountNet;
     }
@@ -168,7 +168,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return float|null
      */
-    public function getAmountVat()
+    public function getAmountVat(): ?float
     {
         return $this->amountVat;
     }

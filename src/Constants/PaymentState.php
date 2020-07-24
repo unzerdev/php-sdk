@@ -28,19 +28,19 @@ use RuntimeException;
 
 class PaymentState
 {
-    const STATE_PENDING = 0;
-    const STATE_COMPLETED = 1;
-    const STATE_CANCELED = 2;
-    const STATE_PARTLY = 3;
-    const STATE_PAYMENT_REVIEW = 4;
-    const STATE_CHARGEBACK = 5;
+    public const STATE_PENDING = 0;
+    public const STATE_COMPLETED = 1;
+    public const STATE_CANCELED = 2;
+    public const STATE_PARTLY = 3;
+    public const STATE_PAYMENT_REVIEW = 4;
+    public const STATE_CHARGEBACK = 5;
 
-    const STATE_NAME_PENDING = 'pending';
-    const STATE_NAME_COMPLETED = 'completed';
-    const STATE_NAME_CANCELED = 'canceled';
-    const STATE_NAME_PARTLY = 'partly';
-    const STATE_NAME_PAYMENT_REVIEW = 'payment review';
-    const STATE_NAME_CHARGEBACK = 'chargeback';
+    public const STATE_NAME_PENDING = 'pending';
+    public const STATE_NAME_COMPLETED = 'completed';
+    public const STATE_NAME_CANCELED = 'canceled';
+    public const STATE_NAME_PARTLY = 'partly';
+    public const STATE_NAME_PAYMENT_REVIEW = 'payment review';
+    public const STATE_NAME_CHARGEBACK = 'chargeback';
 
     /**
      * Returns the name of the state with the given code.

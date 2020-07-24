@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the HasPaymentState trait.
  *
@@ -26,7 +28,6 @@ namespace heidelpayPHP\test\unit\Traits;
 
 use heidelpayPHP\Constants\PaymentState;
 use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
 
 class HasPaymentStateTest extends BasePaymentTest
 {
@@ -35,8 +36,6 @@ class HasPaymentStateTest extends BasePaymentTest
      *
      * @test
      * @dataProvider gettersAndSettersShouldWorkProperlyDP
-     *
-     * @throws RuntimeException
      *
      * @param mixed $state
      * @param mixed $stateName
@@ -56,7 +55,7 @@ class HasPaymentStateTest extends BasePaymentTest
         $partlyPaid,
         $paymentReview,
         $chargeBack
-    ) {
+    ): void {
         $traitDummy = new TraitDummyHasCancellationsHasPaymentState();
         $this->assertEquals(PaymentState::STATE_PENDING, $traitDummy->getState());
         $this->assertEquals(PaymentState::STATE_NAME_PENDING, $traitDummy->getStateName());

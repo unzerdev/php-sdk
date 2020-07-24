@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the AbstractTransactionType.
  *
@@ -26,16 +28,12 @@ namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
 use DateTime;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionException;
-use RuntimeException;
 use stdClass;
 
 class AbstractTransactionTypeTest extends BasePaymentTest
@@ -44,10 +42,8 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      * Verify getters and setters work properly.
      *
      * @test
-     *
-     * @throws \Exception
      */
-    public function theGettersAndSettersShouldWorkProperly()
+    public function theGettersAndSettersShouldWorkProperly(): void
     {
         // initial check
         $payment = new Payment();
@@ -101,11 +97,9 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      *
      * @test
      *
-     * @throws \Exception
-     *
      * Todo: Workaround to be removed when API sends TraceID in processing-group
      */
-    public function checkTraceIdWorkaround()
+    public function checkTraceIdWorkaround(): void
     {
         // initial check
         $transactionType = new DummyTransactionType();
@@ -122,12 +116,8 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      * Verify getRedirectUrl() calls Payment::getRedirectUrl().
      *
      * @test
-     *
-     * @throws Exception
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function getRedirectUrlShouldCallPaymentGetRedirectUrl()
+    public function getRedirectUrlShouldCallPaymentGetRedirectUrl(): void
     {
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getRedirectUrl'])->getMock();
         $paymentMock->expects($this->once())->method('getRedirectUrl')->willReturn('https://my-redirect-url.test');
@@ -143,11 +133,8 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      * Verify abstract transaction allows for updating.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function handleResponseShouldUpdateValuesOfAbstractTransaction()
+    public function handleResponseShouldUpdateValuesOfAbstractTransaction(): void
     {
         $payment = (new Payment())->setId('myPaymentId');
         $transactionType = (new DummyTransactionType())->setPayment($payment);
@@ -185,12 +172,8 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      *
      * @param string  $method
      * @param integer $timesCalled
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function updatePaymentShouldOnlyBeCalledOnNotRequests($method, $timesCalled)
+    public function updatePaymentShouldOnlyBeCalledOnNotRequests($method, $timesCalled): void
     {
         $transactionTypeMock =
             $this->getMockBuilder(DummyTransactionType::class)->setMethods(['fetchPayment'])->getMock();
@@ -204,23 +187,19 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      * Verify payment object is fetched on fetchPayment call using the heidelpays resource service object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function fetchPaymentShouldFetchPaymentObject()
+    public function fetchPaymentShouldFetchPaymentObject(): void
     {
         $payment = (new Payment())->setId('myPaymentId');
 
         /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payment);
 
         $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment->setParentResource($heidelpayObj);
 
-        /** @var DummyTransactionType $transactionType */
         $transactionType = (new DummyTransactionType())->setPayment($payment);
         $transactionType->fetchPayment();
     }

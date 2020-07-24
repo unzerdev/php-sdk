@@ -39,7 +39,7 @@ trait HasDate
      *
      * @return string|null
      */
-    public function getDate()
+    public function getDate(): ?string
     {
         $date = $this->date;
         return $date ? $date->format('Y-m-d H:i:s') : null;

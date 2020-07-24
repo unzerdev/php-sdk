@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify charges in general.
  *
@@ -24,26 +26,21 @@
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class ChargeTest extends BasePaymentTest
+class ChargeTest extends BaseIntegrationTest
 {
     /**
      * Verify charge can be performed using the id of a payment type.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeShouldWorkWithTypeId()
+    public function chargeShouldWorkWithTypeId(): void
     {
         $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
         $charge = $this->heidelpay->charge(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
@@ -57,11 +54,8 @@ class ChargeTest extends BasePaymentTest
      * Verify charging with payment type.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeShouldWorkWithTypeObject()
+    public function chargeShouldWorkWithTypeObject(): void
     {
         $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
         $charge = $this->heidelpay->charge(100.0, 'EUR', $paymentType, self::RETURN_URL);
@@ -75,11 +69,8 @@ class ChargeTest extends BasePaymentTest
      * Verify transaction status.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeStatusIsSetCorrectly()
+    public function chargeStatusIsSetCorrectly(): void
     {
         $this->assertSuccess($this->createCharge());
     }
@@ -88,11 +79,8 @@ class ChargeTest extends BasePaymentTest
      * Verify charge accepts all parameters.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeShouldAcceptAllParameters()
+    public function chargeShouldAcceptAllParameters(): void
     {
         // prepare test data
         /** @var Card $paymentType */
@@ -137,11 +125,8 @@ class ChargeTest extends BasePaymentTest
      * Verify charge accepts all parameters.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeWithCustomerShouldAcceptAllParameters()
+    public function chargeWithCustomerShouldAcceptAllParameters(): void
     {
         // prepare test data
         /** @var InvoiceGuaranteed $ivg */

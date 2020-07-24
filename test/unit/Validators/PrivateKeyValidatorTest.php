@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the private key validator.
  *
@@ -22,11 +24,10 @@
  *
  * @package  heidelpayPHP\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace heidelpayPHP\test\unit\Validators;
 
 use heidelpayPHP\test\BasePaymentTest;
 use heidelpayPHP\Validators\PrivateKeyValidator;
-use PHPUnit\Framework\Exception;
 
 class PrivateKeyValidatorTest extends BasePaymentTest
 {
@@ -38,10 +39,8 @@ class PrivateKeyValidatorTest extends BasePaymentTest
      *
      * @param string $key
      * @param bool   $expectedResult
-     *
-     * @throws Exception
      */
-    public function validateShouldReturnTrueIfPrivateKeyHasCorrectFormat($key, $expectedResult)
+    public function validateShouldReturnTrueIfPrivateKeyHasCorrectFormat($key, $expectedResult): void
     {
         $this->assertEquals($expectedResult, PrivateKeyValidator::validate($key));
     }

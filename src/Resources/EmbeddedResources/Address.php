@@ -51,7 +51,7 @@ class Address extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -70,7 +70,7 @@ class Address extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getStreet()
+    public function getStreet(): ?string
     {
         return $this->street;
     }
@@ -89,7 +89,7 @@ class Address extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getState()
+    public function getState(): ?string
     {
         return $this->state;
     }
@@ -108,7 +108,7 @@ class Address extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getZip()
+    public function getZip(): ?string
     {
         return $this->zip;
     }
@@ -127,7 +127,7 @@ class Address extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCity()
+    public function getCity(): ?string
     {
         return $this->city;
     }
@@ -146,7 +146,7 @@ class Address extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCountry()
+    public function getCountry(): ?string
     {
         return $this->country;
     }

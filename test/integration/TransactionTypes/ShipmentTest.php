@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and functionality of shipment.
  *
@@ -24,22 +26,17 @@
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class ShipmentTest extends BasePaymentTest
+class ShipmentTest extends BaseIntegrationTest
 {
     /**
      * Verify shipment transaction can be called.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function shipmentShouldBeCreatableAndFetchable()
+    public function shipmentShouldBeCreatableAndFetchable(): void
     {
         $ivg      = new InvoiceGuaranteed();
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
@@ -61,11 +58,8 @@ class ShipmentTest extends BasePaymentTest
      * Verify shipment transaction can be called on the payment object.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function shipmentCanBeCalledOnThePaymentObject()
+    public function shipmentCanBeCalledOnThePaymentObject(): void
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
@@ -91,11 +85,8 @@ class ShipmentTest extends BasePaymentTest
      * Verify shipment can be performed with payment object.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function shipmentShouldBePossibleWithPaymentObject()
+    public function shipmentShouldBePossibleWithPaymentObject(): void
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
@@ -111,11 +102,8 @@ class ShipmentTest extends BasePaymentTest
      * Verify transaction status.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function shipmentStatusIsSetCorrectly()
+    public function shipmentStatusIsSetCorrectly(): void
     {
         $invoiceGuaranteed = new InvoiceGuaranteed();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());

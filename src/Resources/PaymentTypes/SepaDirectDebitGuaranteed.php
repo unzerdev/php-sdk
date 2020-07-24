@@ -56,7 +56,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getIban()
+    public function getIban(): ?string
     {
         return $this->iban;
     }
@@ -75,7 +75,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getBic()
+    public function getBic(): ?string
     {
         return $this->bic;
     }
@@ -94,7 +94,7 @@ class SepaDirectDebitGuaranteed extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getHolder()
+    public function getHolder(): ?string
     {
         return $this->holder;
     }

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of SepaDirectDebit payment type.
  *
@@ -26,7 +28,6 @@ namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
 
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 
 class SepaDirectDebitTest extends BasePaymentTest
 {
@@ -34,9 +35,8 @@ class SepaDirectDebitTest extends BasePaymentTest
      * Verify constructor sets iban.
      *
      * @test
-     *
      */
-    public function ibanShouldBeSetByConstructor()
+    public function ibanShouldBeSetByConstructor(): void
     {
         $sdd = new SepaDirectDebit(null);
         $this->assertNull($sdd->getIban());
@@ -46,10 +46,8 @@ class SepaDirectDebitTest extends BasePaymentTest
      * Verify setter and getter work.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function getterAndSetterWorkAsExpected()
+    public function getterAndSetterWorkAsExpected(): void
     {
         $sdd = new SepaDirectDebit('DE89370400440532013000');
         $this->assertEquals('DE89370400440532013000', $sdd->getIban());

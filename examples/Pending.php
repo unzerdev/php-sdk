@@ -31,14 +31,13 @@ session_start();
     <body>
         <h1 id="result">Pending</h1>
         <p>
-            The payment transaction has been completed, however the payment is pending.<br>
-            In some cases (e. g. authorization transaction or invoice payments) this is normal.<br>
-            In other cases the status of the payment is not definite at the moment.<br>
+            The payment transaction has been completed, however it has the state pending.<br>
+            The status of the payment is not definite at the moment.<br>
             You can create the Order in your shop but should set its status to <i>pending payment</i>.
         </p>
         <p>
             Please use the webhook feature to be informed about later changes of the payment.
-            You should ship only if the payment changes to completed.
+            You should ship only if the status changes to success.
             <?php
             if (isset($_SESSION['ShortId']) && !empty($_SESSION['ShortId'])) {
                 echo '<p>Please look for ShortId ' . $_SESSION['ShortId'] . ' in hIP (heidelpay Intelligence Platform) to see the transaction.</p>';

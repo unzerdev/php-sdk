@@ -38,7 +38,7 @@ class EPS extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getBic()
+    public function getBic(): ?string
     {
         return $this->bic;
     }

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the Webhooks resource.
  *
@@ -29,8 +31,6 @@ use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Webhook;
 use heidelpayPHP\Resources\Webhooks;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
-use RuntimeException;
 use stdClass;
 
 class WebhooksTest extends BasePaymentTest
@@ -39,10 +39,8 @@ class WebhooksTest extends BasePaymentTest
      * Verify the constructor of the webhooks resource behaves as expected.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function mandatoryConstructorParametersShouldDefaultToEmptyString()
+    public function mandatoryConstructorParametersShouldDefaultToEmptyString(): void
     {
         $webhooks = new Webhooks();
         $this->assertEquals('', $webhooks->getUrl());
@@ -54,29 +52,25 @@ class WebhooksTest extends BasePaymentTest
      * Verify the getters and setters of the webhooks resource.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function gettersAndSettersOfWebhookShouldBehaveAsExpected()
+    public function gettersAndSettersOfWebhookShouldBehaveAsExpected(): void
     {
         $webhook = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::PAYMENT_COMPLETED]);
         $this->assertEquals('https://dev.heidelpay.com', $webhook->getUrl());
-        $this->assertArraySubset([WebhookEvents::PAYMENT_COMPLETED], $webhook->getEventList());
+        $this->assertEquals([WebhookEvents::PAYMENT_COMPLETED], $webhook->getEventList());
 
         $webhook->setUrl('https://docs.heidelpay.com');
         $webhook->addEvent(WebhookEvents::CHARGE);
         $this->assertEquals('https://docs.heidelpay.com', $webhook->getUrl());
-        $this->assertArraySubset([WebhookEvents::PAYMENT_COMPLETED, WebhookEvents::CHARGE], $webhook->getEventList());
+        $this->assertEquals([WebhookEvents::PAYMENT_COMPLETED, WebhookEvents::CHARGE], $webhook->getEventList());
     }
 
     /**
      * Verify the event adder of the webhooks resource does only allow valid webhook events.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function adderOfWebhookEventsOnlyAllowsValidEvents()
+    public function adderOfWebhookEventsOnlyAllowsValidEvents(): void
     {
         $webhooks = new Webhooks('https://dev.heidelpay.com', []);
         $this->assertIsEmptyArray($webhooks->getEventList());
@@ -91,11 +85,8 @@ class WebhooksTest extends BasePaymentTest
      * Verify response handling for more then one event in a webhooks request.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws RuntimeException
      */
-    public function responseHandlingForEventsShouldBehaveAsExpected()
+    public function responseHandlingForEventsShouldBehaveAsExpected(): void
     {
         $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE]);
         $webhooks->setParentResource(new Heidelpay('s-priv-123'));
@@ -122,7 +113,7 @@ class WebhooksTest extends BasePaymentTest
          * @var Webhook $webhookA
          * @var Webhook $webhookB
          */
-        list($webhookA, $webhookB) = $webhookList;
+        [$webhookA, $webhookB] = $webhookList;
         $this->assertInstanceOf(Webhook::class, $webhookA);
         $this->assertInstanceOf(Webhook::class, $webhookB);
         $this->assertEquals(
@@ -139,11 +130,8 @@ class WebhooksTest extends BasePaymentTest
      * Verify response handling of one event in a webhooks request.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws RuntimeException
      */
-    public function responseHandlingForOneEventShouldBehaveAsExpected()
+    public function responseHandlingForOneEventShouldBehaveAsExpected(): void
     {
         $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE]);
         $webhooks->setParentResource(new Heidelpay('s-priv-123'));
@@ -160,7 +148,7 @@ class WebhooksTest extends BasePaymentTest
         $this->assertCount(1, $webhookList);
 
         /** @var Webhook $webhook*/
-        list($webhook) = $webhookList;
+        [$webhook] = $webhookList;
         $this->assertInstanceOf(Webhook::class, $webhook);
         $this->assertEquals(
             ['event' => 'authorize', 'id' => 's-whk-1085', 'url' => 'https://docs.heidelpay.de'],

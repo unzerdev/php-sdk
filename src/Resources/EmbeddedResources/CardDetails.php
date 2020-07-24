@@ -54,7 +54,7 @@ class CardDetails extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCardType()
+    public function getCardType(): ?string
     {
         return $this->cardType;
     }
@@ -73,7 +73,7 @@ class CardDetails extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getAccount()
+    public function getAccount(): ?string
     {
         return $this->account;
     }
@@ -92,7 +92,7 @@ class CardDetails extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCountryIsoA2()
+    public function getCountryIsoA2(): ?string
     {
         return $this->countryIsoA2;
     }
@@ -111,7 +111,7 @@ class CardDetails extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCountryName()
+    public function getCountryName(): ?string
     {
         return $this->countryName;
     }
@@ -130,7 +130,7 @@ class CardDetails extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getIssuerName()
+    public function getIssuerName(): ?string
     {
         return $this->issuerName;
     }
@@ -149,7 +149,7 @@ class CardDetails extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getIssuerUrl()
+    public function getIssuerUrl(): ?string
     {
         return $this->issuerUrl;
     }
@@ -168,7 +168,7 @@ class CardDetails extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getIssuerPhoneNumber()
+    public function getIssuerPhoneNumber(): ?string
     {
         return $this->issuerPhoneNumber;
     }

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
  * functionality of the payment method sepa direct debit.
@@ -28,20 +30,16 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class SepaDirectDebitTest extends BasePaymentTest
+class SepaDirectDebitTest extends BaseIntegrationTest
 {
     /**
      * Verify sepa direct debit can be created.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly()
+    public function sepaDirectDebitShouldBeCreatableWithMandatoryFieldsOnly(): void
     {
         $directDebit = new SepaDirectDebit('DE89370400440532013000');
         /** @var SepaDirectDebit $directDebit */
@@ -58,11 +56,8 @@ class SepaDirectDebitTest extends BasePaymentTest
      * Verify sepa direct debit can be created.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function sepaDirectDebitShouldBeCreatable()
+    public function sepaDirectDebitShouldBeCreatable(): void
     {
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
         /** @var SepaDirectDebit $sdd */
@@ -79,14 +74,11 @@ class SepaDirectDebitTest extends BasePaymentTest
      * Verify authorization is not allowed for sepa direct debit.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizeShouldThrowException()
+    public function authorizeShouldThrowException(): void
     {
-        /** @var SepaDirectDebit $sdd */
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
+        /** @var SepaDirectDebit $sdd */
         $sdd = $this->heidelpay->createPaymentType($sdd);
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
@@ -96,14 +88,11 @@ class SepaDirectDebitTest extends BasePaymentTest
 
     /**
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function directDebitShouldBeChargeable()
+    public function directDebitShouldBeChargeable(): void
     {
-        /** @var SepaDirectDebit $sdd */
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
+        /** @var SepaDirectDebit $sdd */
         $sdd = $this->heidelpay->createPaymentType($sdd);
         $charge = $sdd->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
@@ -114,14 +103,11 @@ class SepaDirectDebitTest extends BasePaymentTest
      * Verify sdd charge is refundable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function directDebitChargeShouldBeRefundable()
+    public function directDebitChargeShouldBeRefundable(): void
     {
-        /** @var SepaDirectDebit $sdd */
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
+        /** @var SepaDirectDebit $sdd */
         $sdd = $this->heidelpay->createPaymentType($sdd);
         $charge = $sdd->charge(100.0, 'EUR', self::RETURN_URL);
 

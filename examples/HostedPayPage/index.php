@@ -27,6 +27,7 @@
 require_once __DIR__ . '/Constants.php';
 
 /** @noinspection PhpIncludeInspection */
+
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 ?>
@@ -71,6 +72,12 @@ require_once __DIR__ . '/../../../../autoload.php';
     Therefore we redirect to the controller without doing anything here. -->
     <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
+
+<script>
+    // Create a heidelpay instance with your public key
+    // This is not actually needed for this example but we want the sandbox banner to show on the page.
+    let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
+</script
 
 </body>
 </html>

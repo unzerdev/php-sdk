@@ -61,7 +61,7 @@ try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $recurring = $heidelpay->activateRecurringPayment($paymentTypeId, RETURN_CONTROLLER_URL);
+    $recurring = $heidelpay->activateRecurringPayment($paymentTypeId, MY_RETURN_CONTROLLER_URL);
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
     $_SESSION['PaymentTypeId'] = $paymentTypeId;

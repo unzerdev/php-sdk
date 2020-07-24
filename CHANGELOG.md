@@ -3,6 +3,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.8.0][1.2.8.0]
+
+### Add
+*   Curl error string to debug log.
+*   Environment variable to enable/disable verbose curl output.
+*   Method to get the initial transaction from a payment.
+*   Parameter `css` to `Paypage` to enable custom styling. Special thanks to github user [bleenders](https://github.com/bleenders).
+
+### Change
+*   Mask auth header in debug log.
+*   Refactor test logging.
+*   Replace test environment variable.
+*   Apply minor changes.
+*   Refactor tests due to disabled default keypair.
+*   Refactor all files to reflect PHP 7.1 standards.
+*   Replace `codacy/coverage` with `codacy/codacy-coverage-reporter`.
+*   Update examples.
+
+### Fix
+*   Change TravisCI config to use default linux distribution in VM to fix certificate errors during integration tests.
+*   Remove invalid PHPUnit config parameters.
+
+### Remove
+*   Disabled key pair from examples and tests.
+*   Remove deprecated method `authorizeWithPayment`.
+*   Remove return value from `deleteCustomer` method.
+
 ## [1.2.7.2][1.2.7.2]
 
 ### Fix
@@ -20,6 +47,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Description to zgReferenceId setter/getter.
 *   Added geolocation to Card resource.
 *   Payout webhook events.
+
+### Changed
+*   Fixed some minor issues.
 
 ## [1.2.7.1][1.2.7.1]
 
@@ -413,3 +443,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [1.2.7.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.6.0..1.2.7.0
 [1.2.7.1]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.7.0..1.2.7.1
 [1.2.7.2]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.7.1..1.2.7.2
+[1.2.8.0]: https://github.com/heidelpay/heidelpayPHP/compare/1.2.7.2..1.2.8.0

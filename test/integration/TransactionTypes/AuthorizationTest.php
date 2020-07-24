@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
  * functionality of the authorization transaction type.
@@ -25,28 +27,22 @@
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\AbstractHeidelpayResource;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class AuthorizationTest extends BasePaymentTest
+class AuthorizationTest extends BaseIntegrationTest
 {
     /**
      * Verify heidelpay object can perform an authorization based on the paymentTypeId.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizeWithTypeId()
+    public function authorizeWithTypeId(): void
     {
         $paymentType = $this->heidelpay->createPaymentType(new Paypal());
         $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
@@ -64,11 +60,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify heidelpay object can perform an authorization based on the paymentType object.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizeWithType()
+    public function authorizeWithType(): void
     {
         $paymentType = $this->heidelpay->createPaymentType(new Paypal());
         $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL);
@@ -80,11 +73,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify authorization produces Payment and Customer.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizationProducesPaymentAndCustomer()
+    public function authorizationProducesPaymentAndCustomer(): void
     {
         $paymentType = $this->heidelpay->createPaymentType(new Paypal());
         $customer = $this->getMinimalCustomer();
@@ -106,9 +96,6 @@ class AuthorizationTest extends BasePaymentTest
      * @test
      *
      * @return Authorization
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function authorizationWithCustomerId(): Authorization
     {
@@ -134,12 +121,8 @@ class AuthorizationTest extends BasePaymentTest
      * @test
      *
      * @param Authorization $authorization
-     *
-     * @throws HeidelpayApiException
-     * @throws Exception
-     * @throws RuntimeException
      */
-    public function authorizationCanBeFetched(Authorization $authorization)
+    public function authorizationCanBeFetched(Authorization $authorization): void
     {
         $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPaymentId());
         $this->assertEquals($authorization->expose(), $fetchedAuthorization->expose());
@@ -153,11 +136,8 @@ class AuthorizationTest extends BasePaymentTest
      *
      * @param BasePaymentType|AbstractHeidelpayResource $paymentType
      * @param string                                    $expectedState The state the transaction is expected to be in.
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState)
+    public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState): void
     {
         $paymentType = $this->heidelpay->createPaymentType($paymentType);
         $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
@@ -170,11 +150,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify authorize accepts all parameters.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizeShouldAcceptAllParameters()
+    public function authorizeShouldAcceptAllParameters(): void
     {
         /** @var Card $card */
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
@@ -220,8 +197,6 @@ class AuthorizationTest extends BasePaymentTest
 
     /**
      * @return array
-     *
-     * @throws RuntimeException
      */
     public function authorizeHasExpectedStatesDP(): array
     {

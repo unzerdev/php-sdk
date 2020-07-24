@@ -81,7 +81,7 @@ trait HasCancellations
      *
      * @return Cancellation|null The cancellation or null if none could be found.
      */
-    public function getCancellation($cancellationId, $lazy = false)
+    public function getCancellation($cancellationId, $lazy = false): ?Cancellation
     {
         /** @var Cancellation $cancellation */
         foreach ($this->cancellations as $cancellation) {

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines a dummy http adapter used for unit tests.
  *
@@ -31,7 +33,7 @@ class DummyAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET)
+    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET): void
     {
         // do nothing
     }
@@ -55,7 +57,7 @@ class DummyAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function close()
+    public function close(): void
     {
         // do nothing
     }
@@ -63,7 +65,7 @@ class DummyAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): void
     {
         // do nothing
     }
@@ -71,7 +73,7 @@ class DummyAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent($userAgent): void
     {
         // do nothing
     }

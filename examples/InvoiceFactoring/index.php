@@ -39,8 +39,6 @@ require_once __DIR__ . '/../../../../autoload.php';
     <title>
         Heidelpay UI Examples
     </title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
     <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
@@ -51,6 +49,12 @@ require_once __DIR__ . '/../../../../autoload.php';
 <form id="payment-form" action="<?php echo CONTROLLER_URL; ?>" class="heidelpayUI form" novalidate>
     <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
+
+<script>
+    // Create a heidelpay instance with your public key
+    // This is not actually needed for this example but we want the sandbox banner to show on the page.
+    let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
+</script
 
 </body>
 </html>

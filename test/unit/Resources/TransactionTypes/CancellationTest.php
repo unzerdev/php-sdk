@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the Cancellation transaction type.
  *
@@ -25,16 +27,12 @@
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
 use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionException;
-use RuntimeException;
 
 class CancellationTest extends BasePaymentTest
 {
@@ -42,10 +40,8 @@ class CancellationTest extends BasePaymentTest
      * Verify getters and setters.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function gettersAndSettersShouldWorkProperly()
+    public function gettersAndSettersShouldWorkProperly(): void
     {
         $cancellation = new Cancellation();
         $this->assertNull($cancellation->getAmount());
@@ -83,13 +79,8 @@ class CancellationTest extends BasePaymentTest
      * Verify expose will translate amount to amountGross if payment type is Hire Purchase.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws ReflectionException
      */
-    public function exposeWillReplaceAmountWithAmountGross()
+    public function exposeWillReplaceAmountWithAmountGross(): void
     {
         /** @var Cancellation|MockObject $cancelMock */
         $cancelMock = $this->getMockBuilder(Cancellation::class)->setMethods(['getLinkedResources'])->getMock();

@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
  * functionality of the payment method sepa direct debit guaranteed.
@@ -28,20 +30,16 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class SepaDirectDebitGuaranteedTest extends BasePaymentTest
+class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
 {
     /**
      * Verify sepa direct debit guaranteed can be created with mandatory fields only.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly()
+    public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly(): void
     {
         $directDebitGuaranteed = new SepaDirectDebitGuaranteed('DE89370400440532013000');
         /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
@@ -60,9 +58,6 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @return SepaDirectDebitGuaranteed
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
     {
@@ -85,12 +80,9 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * @test
      *
      * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
-    public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitGuaranteed $directDebitGuaranteed)
+    public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitGuaranteed $directDebitGuaranteed): void
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
@@ -102,11 +94,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * Verify direct debit guaranteed can be charged.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function directDebitGuaranteedShouldAllowCharge()
+    public function directDebitGuaranteedShouldAllowCharge(): void
     {
         $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
         $this->heidelpay->createPaymentType($directDebitGuaranteed);
@@ -120,11 +109,8 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      * Verify ddg will throw error if addresses do not match.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function ddgShouldThrowErrorIfAddressesDoNotMatch()
+    public function ddgShouldThrowErrorIfAddressesDoNotMatch(): void
     {
         $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
         $this->heidelpay->createPaymentType($directDebitGuaranteed);

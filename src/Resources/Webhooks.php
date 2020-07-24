@@ -113,7 +113,7 @@ class Webhooks extends AbstractHeidelpayResource
      *
      * @throws RuntimeException
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 
@@ -135,7 +135,7 @@ class Webhooks extends AbstractHeidelpayResource
      *
      * @throws RuntimeException
      */
-    private function handleRegisteredWebhooks(array $responseArray = [])
+    private function handleRegisteredWebhooks(array $responseArray = []): void
     {
         $registeredWebhooks = [];
 

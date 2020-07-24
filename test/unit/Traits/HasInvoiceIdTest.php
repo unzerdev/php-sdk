@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the HasInvoiceId trait.
  *
@@ -25,7 +27,6 @@
 namespace heidelpayPHP\test\unit\Traits;
 
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 
 class HasInvoiceIdTest extends BasePaymentTest
 {
@@ -33,10 +34,8 @@ class HasInvoiceIdTest extends BasePaymentTest
      * Verify getters and setters.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function gettersAndSettersShouldWorkAsExpected()
+    public function gettersAndSettersShouldWorkAsExpected(): void
     {
         $dummy = new TraitDummyHasInvoiceId();
         $this->assertNull($dummy->getInvoiceId());

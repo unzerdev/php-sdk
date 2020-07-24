@@ -25,6 +25,7 @@
 namespace heidelpayPHP\Services;
 
 use function is_float;
+use function strlen;
 
 class ValueService
 {
@@ -39,5 +40,18 @@ class ValueService
             $value = round($value, 4);
         }
         return $value;
+    }
+
+    /**
+     * Mask a value.
+     *
+     * @param $value
+     * @param string $maskSymbol
+     *
+     * @return string
+     */
+    public static function maskValue($value, $maskSymbol = '*'): string
+    {
+        return substr($value, 0, 6) . str_repeat($maskSymbol, strlen($value) - 10) . substr($value, -4);
     }
 }

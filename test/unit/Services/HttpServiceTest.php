@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the HttpService.
  *
@@ -22,7 +24,7 @@
  *
  * @package  heidelpayPHP\test\unit
  */
-namespace heidelpayPHP\test\unit;
+namespace heidelpayPHP\test\unit\Services;
 
 use heidelpayPHP\Adapter\CurlAdapter;
 use heidelpayPHP\Adapter\HttpAdapterInterface;
@@ -32,11 +34,11 @@ use heidelpayPHP\Interfaces\DebugHandlerInterface;
 use heidelpayPHP\Services\EnvironmentService;
 use heidelpayPHP\Services\HttpService;
 use heidelpayPHP\test\BasePaymentTest;
-use heidelpayPHP\test\unit\Services\DummyAdapter;
-use heidelpayPHP\test\unit\Services\DummyDebugHandler;
-use PHPUnit\Framework\Exception;
-use ReflectionException;
+use heidelpayPHP\test\unit\DummyResource;
 use RuntimeException;
+
+use function array_key_exists;
+
 use const PHP_VERSION;
 
 class HttpServiceTest extends BasePaymentTest
@@ -45,10 +47,8 @@ class HttpServiceTest extends BasePaymentTest
      * Verify getAdapter will return a CurlAdapter if none has been set.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function getAdapterShouldReturnDefaultAdapterIfNonHasBeenSet()
+    public function getAdapterShouldReturnDefaultAdapterIfNonHasBeenSet(): void
     {
         $httpService = new HttpService();
         $this->assertInstanceOf(CurlAdapter::class, $httpService->getAdapter());
@@ -58,10 +58,8 @@ class HttpServiceTest extends BasePaymentTest
      * Verify getAdapter will return custom adapter if it has been set.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function getAdapterShouldReturnCustomAdapterIfItHasBeenSet()
+    public function getAdapterShouldReturnCustomAdapterIfItHasBeenSet(): void
     {
         $dummyAdapter = new DummyAdapter();
         $httpService = (new HttpService())->setHttpAdapter($dummyAdapter);
@@ -73,7 +71,7 @@ class HttpServiceTest extends BasePaymentTest
      *
      * @test
      */
-    public function environmentServiceShouldBeInjectable()
+    public function environmentServiceShouldBeInjectable(): void
     {
         $envService = new EnvironmentService();
         $httpService = new HttpService();
@@ -86,11 +84,8 @@ class HttpServiceTest extends BasePaymentTest
      * Verify send will throw exception if resource is null.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function sendShouldThrowExceptionIfResourceIsNotSet()
+    public function sendShouldThrowExceptionIfResourceIsNotSet(): void
     {
         $httpService = new HttpService();
         $this->expectException(RuntimeException::class);
@@ -102,12 +97,8 @@ class HttpServiceTest extends BasePaymentTest
      * Verify send calls methods to setup and send request.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function sendShouldInitAndSendRequest()
+    public function sendShouldInitAndSendRequest(): void
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
 
@@ -116,6 +107,7 @@ class HttpServiceTest extends BasePaymentTest
         )->getMock();
 
         $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
+        /** @noinspection PhpParamsInspection */
         $adapterMock->expects($this->once())->method('init')->with(
             $this->callback(
                 static function ($url) {
@@ -124,6 +116,7 @@ class HttpServiceTest extends BasePaymentTest
             '{"dummyResource": "JsonSerialized"}',
             'GET'
         );
+        /** @noinspection PhpParamsInspection */
         $adapterMock->expects($this->once())->method('setUserAgent')->with('heidelpayPHP');
         $headers = [
             'Authorization' => 'Basic cy1wcml2LU15VGVzdEtleTo=',
@@ -152,12 +145,8 @@ class HttpServiceTest extends BasePaymentTest
      * @dataProvider languageShouldOnlyBeSetIfSpecificallyDefinedDP
      *
      * @param $locale
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function languageShouldOnlyBeSetIfSpecificallyDefined($locale)
+    public function languageShouldOnlyBeSetIfSpecificallyDefined($locale): void
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['setHeaders', 'execute'])->getMock();
@@ -165,6 +154,7 @@ class HttpServiceTest extends BasePaymentTest
 
         $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey', $locale));
 
+        /** @noinspection PhpParamsInspection */
         $adapterMock->expects($this->once())->method('setHeaders')->with(
             $this->callback(
                 static function ($headers) use ($locale) {
@@ -181,12 +171,8 @@ class HttpServiceTest extends BasePaymentTest
      * Verify debugLog logs to debug handler if debug mode and a handler are set.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function sendShouldLogDebugMessagesIfDebugModeAndHandlerAreSet()
+    public function sendShouldLogDebugMessagesIfDebugModeAndHandlerAreSet(): void
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
 
@@ -199,7 +185,7 @@ class HttpServiceTest extends BasePaymentTest
         $loggerMock->expects($this->exactly(7))->method('log')->withConsecutive(
             [ $this->callback(
                     static function ($string) {
-                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (string)(getmypid()) . ') GET: https://api.heidelpay.com/v1/my/uri/123';
+                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') GET: https://api.heidelpay.com/v1/my/uri/123';
                     })
             ],
             [ $this->callback(
@@ -211,10 +197,10 @@ class HttpServiceTest extends BasePaymentTest
                            array_key_exists('SDK-TYPE', $elements) && array_key_exists('SDK-VERSION', $elements);
                 })
             ],
-            ['(' . (string)(getmypid()) . ') Response: (200) {"response":"myResponseString"}'],
+            ['(' . (getmypid()) . ') Response: (200) {"response":"myResponseString"}'],
             [ $this->callback(
                 static function ($string) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (string)(getmypid()) . ') POST: https://api.heidelpay.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') POST: https://api.heidelpay.com/v1/my/uri/123';
                 })
             ],
             [ $this->callback(
@@ -226,8 +212,8 @@ class HttpServiceTest extends BasePaymentTest
                         array_key_exists('SDK-TYPE', $elements) && array_key_exists('SDK-VERSION', $elements);
                 })
             ],
-            ['(' . (string)(getmypid()) . ') Request: {"dummyResource": "JsonSerialized"}'],
-            ['(' . (string)(getmypid()) . ') Response: (201) {"response":"myResponseString"}']
+            ['(' . (getmypid()) . ') Request: {"dummyResource": "JsonSerialized"}'],
+            ['(' . (getmypid()) . ') Response: (201) {"response":"myResponseString"}']
         );
 
         /** @var DebugHandlerInterface $loggerMock */
@@ -246,12 +232,8 @@ class HttpServiceTest extends BasePaymentTest
      * Verify handleErrors will throw Exception if response string is null.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function handleErrorsShouldThrowExceptionIfResponseIsEmpty()
+    public function handleErrorsShouldThrowExceptionIfResponseIsEmpty(): void
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
 
@@ -278,12 +260,8 @@ class HttpServiceTest extends BasePaymentTest
      * @dataProvider responseCodeProvider
      *
      * @param string $responseCode
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function handleErrorsShouldThrowExceptionIfResponseCodeIsGoE400($responseCode)
+    public function handleErrorsShouldThrowExceptionIfResponseCodeIsGoE400($responseCode): void
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
 
@@ -308,11 +286,8 @@ class HttpServiceTest extends BasePaymentTest
      * Verify handleErrors will throw Exception if response contains errors field.
      *
      * @test
-     *
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function handleErrorsShouldThrowExceptionIfResponseContainsErrorField()
+    public function handleErrorsShouldThrowExceptionIfResponseContainsErrorField(): void
     {
         $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(
@@ -402,15 +377,11 @@ class HttpServiceTest extends BasePaymentTest
      *
      * @param $environment
      * @param $apiUrl
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
-     * @throws Exception
      */
-    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl)
+    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl): void
     {
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close'])->getMock();
+        /** @noinspection PhpParamsInspection */
         $adapterMock->expects($this->once())->method('init')->with($apiUrl, self::anything(), self::anything());
         $resource = (new DummyResource())->setParentResource(new Heidelpay('s-priv-MyTestKey'));
         $adapterMock->method('execute')->willReturn('myResponseString');

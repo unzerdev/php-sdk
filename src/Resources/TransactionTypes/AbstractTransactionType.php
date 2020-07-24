@@ -61,7 +61,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      *
      * @return Payment|null
      */
-    public function getPayment()
+    public function getPayment(): ?Payment
     {
         return $this->payment;
     }
@@ -85,7 +85,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      *
      * @return null|string The Id of the payment object or null if nothing is found.
      */
-    public function getPaymentId()
+    public function getPaymentId(): ?string
     {
         if ($this->payment instanceof Payment) {
             return $this->payment->getId();
@@ -99,7 +99,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      *
      * @return string|null
      */
-    public function getRedirectUrl()
+    public function getRedirectUrl(): ?string
     {
         return $this->payment->getRedirectUrl();
     }
@@ -114,7 +114,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 
@@ -164,7 +164,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchPayment()
+    public function fetchPayment(): void
     {
         $payment = $this->getPayment();
         if ($payment instanceof AbstractHeidelpayResource) {

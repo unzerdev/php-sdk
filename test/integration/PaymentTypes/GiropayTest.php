@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and functionality of the payment method GiroPay.
  *
@@ -27,23 +29,19 @@ namespace heidelpayPHP\test\integration\PaymentTypes;
 use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class GiropayTest extends BasePaymentTest
+class GiropayTest extends BaseIntegrationTest
 {
     /**
      * Verify a GiroPay resource can be created.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function giroPayShouldBeCreatable()
+    public function giroPayShouldBeCreatable(): void
     {
-        /** @var Giropay $giropay */
         $giropay = new Giropay();
+        /** @var Giropay $giropay */
         $giropay = $this->heidelpay->createPaymentType($giropay);
         $this->assertInstanceOf(Giropay::class, $giropay);
         $this->assertNotNull($giropay->getId());
@@ -53,11 +51,8 @@ class GiropayTest extends BasePaymentTest
      * Verify that an exception is thrown when giropay authorize is called.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function giroPayShouldThrowExceptionOnAuthorize()
+    public function giroPayShouldThrowExceptionOnAuthorize(): void
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
@@ -70,11 +65,8 @@ class GiropayTest extends BasePaymentTest
      * Verify that GiroPay is chargeable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function giroPayShouldBeChargeable()
+    public function giroPayShouldBeChargeable(): void
     {
         /** @var Giropay $giropay */
         $giropay = $this->heidelpay->createPaymentType(new Giropay());
@@ -91,11 +83,8 @@ class GiropayTest extends BasePaymentTest
      * Verify a GiroPay object can be fetched from the api.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function giroPayCanBeFetched()
+    public function giroPayCanBeFetched(): void
     {
         $giropay = $this->heidelpay->createPaymentType(new Giropay());
         $fetchedGiropay = $this->heidelpay->fetchPaymentType($giropay->getId());

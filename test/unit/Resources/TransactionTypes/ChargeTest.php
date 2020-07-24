@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the Authorization transaction type.
  *
@@ -24,7 +26,6 @@
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\Payment;
@@ -32,9 +33,7 @@ use heidelpayPHP\Resources\PaymentTypes\Sofort;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionException;
 use RuntimeException;
 use stdClass;
 
@@ -44,10 +43,8 @@ class ChargeTest extends BasePaymentTest
      * Verify getters and setters.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function gettersAndSettersShouldWorkProperly()
+    public function gettersAndSettersShouldWorkProperly(): void
     {
         $charge = new Charge();
         $this->assertNull($charge->getAmount());
@@ -79,11 +76,8 @@ class ChargeTest extends BasePaymentTest
      * Verify that a Charge can be updated on handle response.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function aChargeShouldBeUpdatedThroughResponseHandling()
+    public function aChargeShouldBeUpdatedThroughResponseHandling(): void
     {
         $charge = new Charge();
         $this->assertNull($charge->getAmount());
@@ -122,10 +116,8 @@ class ChargeTest extends BasePaymentTest
      * Verify getLinkedResources throws exception if the paymentType is not set.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
+    public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payment type is missing!');
@@ -137,11 +129,8 @@ class ChargeTest extends BasePaymentTest
      * Verify linked resource.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getLinkedResourceShouldReturnResourcesBelongingToCharge()
+    public function getLinkedResourceShouldReturnResourcesBelongingToCharge(): void
     {
         $heidelpayObj    = new Heidelpay('s-priv-123345');
         $paymentType     = (new Sofort())->setId('123');
@@ -162,12 +151,8 @@ class ChargeTest extends BasePaymentTest
      * Verify cancel() calls cancelCharge() on heidelpay object with the given amount.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function cancelShouldCallCancelChargeOnHeidelpayObject()
+    public function cancelShouldCallCancelChargeOnHeidelpayObject(): void
     {
         $charge =  new Charge();
         $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
@@ -191,10 +176,8 @@ class ChargeTest extends BasePaymentTest
      * Verify getter for cancelled amount.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function getCancelledAmountReturnsTheCancelledAmount()
+    public function getCancelledAmountReturnsTheCancelledAmount(): void
     {
         $charge = new Charge();
         $this->assertEquals(0.0, $charge->getCancelledAmount());
@@ -215,12 +198,8 @@ class ChargeTest extends BasePaymentTest
      * Verify getter for total amount.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws ReflectionException
-     * @throws \PHPUnit\Framework\MockObject\RuntimeException
      */
-    public function getTotalAmountReturnsAmountMinusCancelledAmount()
+    public function getTotalAmountReturnsAmountMinusCancelledAmount(): void
     {
         /** @var MockObject|Charge $chargeMock */
         $chargeMock = $this->getMockBuilder(Charge::class)

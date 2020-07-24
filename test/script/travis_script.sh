@@ -7,6 +7,7 @@ trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit
 ./vendor/bin/php-cs-fixer fix --dry-run --diff --verbose
 
 ## enable xdebug again
+# shellcheck disable=SC2046
 mv ~/.phpenv/versions/$(phpenv version-name)/xdebug.ini.bak ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
 
 ## run the unit tests

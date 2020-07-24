@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines a dummy implementing CanRecur trait.
  *
@@ -31,7 +33,7 @@ class TraitDummyCanRecur extends BasePaymentType
 {
     use CanRecur;
 
-    public function getId()
+    public function getId(): ?string
     {
         return 'myId';
     }

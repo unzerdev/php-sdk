@@ -102,7 +102,7 @@ class Card extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getExpiryDate()
+    public function getExpiryDate(): ?string
     {
         return $this->expiryDate;
     }
@@ -133,7 +133,7 @@ class Card extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getCvc()
+    public function getCvc(): ?string
     {
         return $this->cvc;
     }
@@ -152,7 +152,7 @@ class Card extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getCardHolder()
+    public function getCardHolder(): ?string
     {
         return $this->cardHolder;
     }
@@ -173,7 +173,7 @@ class Card extends BasePaymentType
      *
      * @deprecated since 1.2.7.2
      */
-    public function getHolder()
+    public function getHolder(): ?string
     {
         return $this->getCardHolder();
     }
@@ -193,7 +193,7 @@ class Card extends BasePaymentType
     /**
      * @return bool|null
      */
-    public function get3ds()
+    public function get3ds(): ?bool
     {
         return $this->card3ds;
     }
@@ -234,7 +234,7 @@ class Card extends BasePaymentType
     /**
      * @return CardDetails|null
      */
-    public function getCardDetails()
+    public function getCardDetails(): ?CardDetails
     {
         return $this->cardDetails;
     }
@@ -261,7 +261,7 @@ class Card extends BasePaymentType
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

@@ -42,7 +42,7 @@ class Metadata extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getShopType()
+    public function getShopType(): ?string
     {
         return $this->shopType;
     }
@@ -61,7 +61,7 @@ class Metadata extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getShopVersion()
+    public function getShopVersion(): ?string
     {
         return $this->shopVersion;
     }
@@ -124,7 +124,7 @@ class Metadata extends AbstractHeidelpayResource
      * Add custom properties (i. e. properties without setter) to the metadata array.
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

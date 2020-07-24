@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify charge after authorization.
  *
@@ -24,21 +26,16 @@
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class ChargeAfterAuthorizationTest extends BasePaymentTest
+class ChargeAfterAuthorizationTest extends BaseIntegrationTest
 {
     /**
      * Validate full charge after authorization.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizationShouldBeFullyChargeable()
+    public function authorizationShouldBeFullyChargeable(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
@@ -57,11 +54,8 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      * Validate full charge after authorization.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizationShouldBeFullyChargeableViaHeidelpayObject()
+    public function authorizationShouldBeFullyChargeableViaHeidelpayObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
@@ -80,11 +74,8 @@ class ChargeAfterAuthorizationTest extends BasePaymentTest
      * Verify authorization is partly chargeable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizationShouldBePartlyChargeable()
+    public function authorizationShouldBePartlyChargeable(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();

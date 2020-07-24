@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify cancellation of authorizations.
  *
@@ -24,22 +26,17 @@
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class CancelAfterAuthorizationTest extends BasePaymentTest
+class CancelAfterAuthorizationTest extends BaseIntegrationTest
 {
     /**
      * Verify that a full cancel on an authorization results in a cancelled payment.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fullCancelOnAuthorization()
+    public function fullCancelOnAuthorization(): void
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
@@ -66,11 +63,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * Verify part cancel on an authorization.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partCancelOnPayment()
+    public function partCancelOnPayment(): void
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
@@ -87,11 +81,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * Verify part cancel after authorization.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partCancelOnAuthorize()
+    public function partCancelOnAuthorize(): void
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
@@ -112,11 +103,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * Verify a cancel can be fetched.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function anAuthorizationsFullReversalShallBeFetchable()
+    public function anAuthorizationsFullReversalShallBeFetchable(): void
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
@@ -150,11 +138,8 @@ class CancelAfterAuthorizationTest extends BasePaymentTest
      * Verify cancels can be fetched.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function anAuthorizationsReversalsShouldBeFetchable()
+    public function anAuthorizationsReversalsShouldBeFetchable(): void
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);

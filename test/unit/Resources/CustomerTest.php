@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the Customer resource.
  *
@@ -24,11 +26,9 @@
  */
 namespace heidelpayPHP\test\unit\Resources;
 
-use DateTime;
 use heidelpayPHP\Constants\CompanyCommercialSectorItems;
 use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Interfaces\ResourceServiceInterface;
 use heidelpayPHP\Resources\Customer;
@@ -37,9 +37,6 @@ use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
 use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
 use heidelpayPHP\Services\ResourceService;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
-use ReflectionException;
-use RuntimeException;
 
 class CustomerTest extends BasePaymentTest
 {
@@ -49,11 +46,8 @@ class CustomerTest extends BasePaymentTest
      * Verify setter and getter functionality.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws \Exception
      */
-    public function settersAndGettersShouldWork()
+    public function settersAndGettersShouldWork(): void
     {
         $customer = new Customer();
         $this->assertNull($customer->getCustomerId());
@@ -77,8 +71,8 @@ class CustomerTest extends BasePaymentTest
         $customer->setLastname('Universum');
         $this->assertEquals('Universum', $customer->getLastname());
 
-        $customer->setBirthDate(new DateTime('1982-11-25'));
-        $this->assertEquals(new DateTime('1982-11-25'), $customer->getBirthDate());
+        $customer->setBirthDate('1982-11-25');
+        $this->assertEquals('1982-11-25', $customer->getBirthDate());
 
         $customer->setPhone('1234567890');
         $this->assertEquals('1234567890', $customer->getPhone());
@@ -97,10 +91,8 @@ class CustomerTest extends BasePaymentTest
      * Verify setter and getter of the billing address.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function settersAndGettersOfBillingAddressShouldWork()
+    public function settersAndGettersOfBillingAddressShouldWork(): void
     {
         $address = (new Address())
             ->setState('billing_state')
@@ -133,10 +125,8 @@ class CustomerTest extends BasePaymentTest
      * Verify setter and getter of the shipping address.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function settersAndGettersOfShippingAddressShouldWork()
+    public function settersAndGettersOfShippingAddressShouldWork(): void
     {
         $address = (new Address())
             ->setState('shipping_state')
@@ -169,10 +159,8 @@ class CustomerTest extends BasePaymentTest
      * Verify getters and setters of CompanyInfo
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function gettersAndSettersOfCompanyInfoShouldWork()
+    public function gettersAndSettersOfCompanyInfoShouldWork(): void
     {
         $companyInfo = new CompanyInfo();
         $this->assertEquals(CompanyCommercialSectorItems::OTHER, $companyInfo->getCommercialSector());
@@ -205,12 +193,10 @@ class CustomerTest extends BasePaymentTest
      *
      * @dataProvider removeRestrictedSymbolsMethodShouldReturnTheCorrectValueDP
      *
-     * @throws Exception
-     *
      * @param mixed $value
      * @param mixed $expected
      */
-    public function removeRestrictedSymbolsMethodShouldReturnTheCorrectValue($value, $expected)
+    public function removeRestrictedSymbolsMethodShouldReturnTheCorrectValue($value, $expected): void
     {
         $companyInfo = new CompanyInfo();
         $this->assertNull($companyInfo->getFunction());
@@ -223,10 +209,8 @@ class CustomerTest extends BasePaymentTest
      * Verify salutation only uses the given values.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function salutationShouldOnlyTakeTheAllowedValues()
+    public function salutationShouldOnlyTakeTheAllowedValues(): void
     {
         $customer = new Customer();
         $this->assertEquals(Salutations::UNKNOWN, $customer->getSalutation());
@@ -242,10 +226,8 @@ class CustomerTest extends BasePaymentTest
      * Verify a Customer is fetched by customerId if the id is not set.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet()
+    public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet(): void
     {
         $customerId = str_replace(' ', '', microtime());
         $customer = (new Customer())->setParentResource(new Heidelpay('s-priv-123'))->setCustomerId($customerId);
@@ -257,15 +239,12 @@ class CustomerTest extends BasePaymentTest
      * Verify fetchCustomerByExtCustomerId method will create a customer object set its customerId and call fetch with it.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function fetchCustomerByOrderIdShouldCreateCustomerObjectWithCustomerIdAndCallFetch()
+    public function fetchCustomerByOrderIdShouldCreateCustomerObjectWithCustomerIdAndCallFetch(): void
     {
         $heidelpay = new Heidelpay('s-priv-1234');
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('fetchResource')
             ->with($this->callback(static function ($customer) use ($heidelpay) {
                 return $customer instanceof Customer &&
@@ -281,10 +260,8 @@ class CustomerTest extends BasePaymentTest
      * Verify customer can be updated.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function customerShouldBeUpdateable()
+    public function customerShouldBeUpdateable(): void
     {
         // when
         $customer = new Customer();

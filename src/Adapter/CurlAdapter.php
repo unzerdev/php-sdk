@@ -51,9 +51,10 @@ class CurlAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET)
+    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET): void
     {
         $timeout = EnvironmentService::getTimeout();
+        $curlVerbose = EnvironmentService::isCurlVerbose();
 
         $this->request = curl_init($url);
         $this->setOption(CURLOPT_HEADER, 0);
@@ -65,7 +66,8 @@ class CurlAdapter implements HttpAdapterInterface
         $this->setOption(CURLOPT_RETURNTRANSFER, 1);
         $this->setOption(CURLOPT_SSL_VERIFYPEER, 1);
         $this->setOption(CURLOPT_SSL_VERIFYHOST, 2);
-        $this->setOption(CURLOPT_SSLVERSION, 6);       // CURL_SSLVERSION_TLSv1_2
+        $this->setOption(CURLOPT_VERBOSE, $curlVerbose);
+        $this->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
 
         if (in_array($httpMethod, [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT], true)) {
             $this->setOption(CURLOPT_POSTFIELDS, $payload);
@@ -75,12 +77,13 @@ class CurlAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function execute()
+    public function execute(): ?string
     {
         $response = curl_exec($this->request);
-        $error    = curl_errno($this->request);
+        $error    = curl_error($this->request);
+        $errorNo  = curl_errno($this->request);
 
-        switch ($error) {
+        switch ($errorNo) {
             case 0:
                 return $response;
                 break;
@@ -88,7 +91,7 @@ class CurlAdapter implements HttpAdapterInterface
                 $errorMessage = 'Timeout: The Payment API seems to be not available at the moment!';
                 break;
             default:
-                $errorMessage = 'An error occurred sending the request (curl_errno: '. $error . ').';
+                $errorMessage = $error . ' (curl_errno: '. $errorNo . ').';
                 break;
         }
         throw new HeidelpayApiException($errorMessage);
@@ -105,7 +108,7 @@ class CurlAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function close()
+    public function close(): void
     {
         curl_close($this->request);
     }
@@ -113,7 +116,7 @@ class CurlAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): void
     {
         array_walk($headers, static function (&$value, $key) {
             $value = $key . ': ' . $value;
@@ -125,7 +128,7 @@ class CurlAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent($userAgent): void
     {
         $this->setOption(CURLOPT_USERAGENT, Heidelpay::SDK_TYPE);
     }
@@ -136,7 +139,7 @@ class CurlAdapter implements HttpAdapterInterface
      * @param $name
      * @param $value
      */
-    private function setOption($name, $value)
+    private function setOption($name, $value): void
     {
         curl_setopt($this->request, $name, $value);
     }

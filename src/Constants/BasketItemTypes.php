@@ -26,10 +26,10 @@ namespace heidelpayPHP\Constants;
 
 class BasketItemTypes
 {
-    const GOODS    = 'goods';
-    const SHIPMENT = 'shipment';
-    const VOUCHER  = 'voucher';
-    const DIGITAL  = 'digital';
+    public const GOODS    = 'goods';
+    public const SHIPMENT = 'shipment';
+    public const VOUCHER  = 'voucher';
+    public const DIGITAL  = 'digital';
 
-    const ARRAY = [self::GOODS, self::SHIPMENT, self::DIGITAL, self::VOUCHER];
+    public const ARRAY = [self::GOODS, self::SHIPMENT, self::DIGITAL, self::VOUCHER];
 }

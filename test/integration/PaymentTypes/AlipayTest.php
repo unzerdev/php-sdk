@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
  * functionality of the payment method Alipay.
@@ -29,10 +31,9 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Alipay;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class AlipayTest extends BasePaymentTest
+class AlipayTest extends BaseIntegrationTest
 {
     /**
      * Verify alipay can be created.
@@ -40,9 +41,6 @@ class AlipayTest extends BasePaymentTest
      * @test
      *
      * @return Alipay
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function alipayShouldBeCreatableAndFetchable(): Alipay
     {
@@ -66,9 +64,6 @@ class AlipayTest extends BasePaymentTest
      * @param Alipay $alipay
      *
      * @return Charge
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends alipayShouldBeCreatableAndFetchable
      */
     public function alipayShouldBeAbleToCharge(Alipay $alipay): Charge
@@ -87,12 +82,9 @@ class AlipayTest extends BasePaymentTest
      * @test
      *
      * @param Alipay $alipay
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends alipayShouldBeCreatableAndFetchable
      */
-    public function alipayShouldNotBeAuthorizable(Alipay $alipay)
+    public function alipayShouldNotBeAuthorizable(Alipay $alipay): void
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);

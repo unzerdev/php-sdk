@@ -123,7 +123,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getOrderDate()
+    public function getOrderDate(): ?string
     {
         return $this->orderDate;
     }
@@ -142,7 +142,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return int|null
      */
-    public function getNumberOfRates()
+    public function getNumberOfRates(): ?int
     {
         return $this->numberOfRates;
     }
@@ -161,7 +161,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getDayOfPurchase()
+    public function getDayOfPurchase(): ?string
     {
         return $this->dayOfPurchase;
     }
@@ -180,7 +180,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getTotalPurchaseAmount()
+    public function getTotalPurchaseAmount(): ?float
     {
         return $this->totalPurchaseAmount;
     }
@@ -199,7 +199,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getTotalInterestAmount()
+    public function getTotalInterestAmount(): ?float
     {
         return $this->totalInterestAmount;
     }
@@ -218,7 +218,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getTotalAmount()
+    public function getTotalAmount(): ?float
     {
         return $this->totalAmount;
     }
@@ -237,7 +237,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getEffectiveInterestRate()
+    public function getEffectiveInterestRate(): ?float
     {
         return $this->effectiveInterestRate;
     }
@@ -256,7 +256,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getNominalInterestRate()
+    public function getNominalInterestRate(): ?float
     {
         return $this->nominalInterestRate;
     }
@@ -275,7 +275,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getFeeFirstRate()
+    public function getFeeFirstRate(): ?float
     {
         return $this->feeFirstRate;
     }
@@ -294,7 +294,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getFeePerRate()
+    public function getFeePerRate(): ?float
     {
         return $this->feePerRate;
     }
@@ -313,7 +313,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getMonthlyRate()
+    public function getMonthlyRate(): ?float
     {
         return $this->monthlyRate;
     }
@@ -332,7 +332,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getLastRate()
+    public function getLastRate(): ?float
     {
         return $this->lastRate;
     }
@@ -351,7 +351,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getInvoiceDate()
+    public function getInvoiceDate(): ?string
     {
         return $this->invoiceDate;
     }
@@ -370,7 +370,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getInvoiceDueDate()
+    public function getInvoiceDueDate(): ?string
     {
         return $this->invoiceDueDate;
     }
@@ -390,7 +390,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * @return stdClass[]|null
      */
-    public function getInstallmentRates()
+    public function getInstallmentRates(): ?array
     {
         return $this->installmentRates;
     }
@@ -426,7 +426,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

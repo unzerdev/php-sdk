@@ -39,7 +39,7 @@ class GeoLocation extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getClientIp()
+    public function getClientIp(): ?string
     {
         return $this->clientIp;
     }
@@ -58,7 +58,7 @@ class GeoLocation extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCountryCode()
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }

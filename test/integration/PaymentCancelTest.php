@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify functionality of the Payment charge method.
  *
@@ -25,14 +27,10 @@
 namespace heidelpayPHP\test\integration;
 
 use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\Invoice;
-use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class PaymentCancelTest extends BasePaymentTest
+class PaymentCancelTest extends BaseIntegrationTest
 {
     //<editor-fold desc="Tests">
 
@@ -40,11 +38,8 @@ class PaymentCancelTest extends BasePaymentTest
      * Verify full cancel on cancelled authorize returns empty array.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function doubleCancelOnAuthorizeShouldReturnEmptyArray()
+    public function doubleCancelOnAuthorizeShouldReturnEmptyArray(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -67,11 +62,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 1 + double cancel
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function cancelOnChargeAndDoubleCancel()
+    public function cancelOnChargeAndDoubleCancel(): void
     {
         $charge = $this->createCharge(123.44);
         $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
@@ -95,11 +87,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 2
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fullCancelOnPaymentWithAuthorizeAndMultipleChargesShouldBePossible()
+    public function fullCancelOnPaymentWithAuthorizeAndMultipleChargesShouldBePossible(): void
     {
         $authorization = $this->createCardAuthorization(123.44);
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -131,11 +120,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 3
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partialCancelAndFullCancelOnSingleCharge()
+    public function partialCancelAndFullCancelOnSingleCharge(): void
     {
         $charge = $this->createCharge(222.33);
         $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
@@ -161,13 +147,8 @@ class PaymentCancelTest extends BasePaymentTest
      *
      * @param float $amount
      * @param int   $numberCancels
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partialCancelOnMultipleChargedAuthorization($amount, $numberCancels)
+    public function partialCancelOnMultipleChargedAuthorization($amount, $numberCancels): void
     {
         $authorizeAmount = 123.44;
         $authorization = $this->createCardAuthorization($authorizeAmount);
@@ -196,13 +177,8 @@ class PaymentCancelTest extends BasePaymentTest
      * @dataProvider fullCancelDataProvider
      *
      * @param float $amount
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fullCancelOnAuthorize($amount)
+    public function fullCancelOnAuthorize($amount): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -219,11 +195,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 7
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fullCancelOnPartCanceledAuthorize()
+    public function fullCancelOnPartCanceledAuthorize(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -253,13 +226,8 @@ class PaymentCancelTest extends BasePaymentTest
      * @dataProvider fullCancelDataProvider
      *
      * @param float $amount The amount to be cancelled.
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fullCancelOnFullyChargedAuthorize($amount)
+    public function fullCancelOnFullyChargedAuthorize($amount): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -284,13 +252,8 @@ class PaymentCancelTest extends BasePaymentTest
      * @dataProvider fullCancelDataProvider
      *
      * @param $amount
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fullCancelOnPartlyChargedAuthorizeShouldBePossible($amount)
+    public function fullCancelOnPartlyChargedAuthorizeShouldBePossible($amount): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -312,13 +275,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 10
      *
      * @test
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partCancelOnUnchargedAuthorize()
+    public function partCancelOnUnchargedAuthorize(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -335,13 +293,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 11
      *
      * @test
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partCancelOnPartlyChargedAuthorizeWithAmountLtCharged()
+    public function partCancelOnPartlyChargedAuthorizeWithAmountLtCharged(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -363,13 +316,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 12
      *
      * @test
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partCancelOnPartlyChargedAuthorizeWithAmountGtCharged()
+    public function partCancelOnPartlyChargedAuthorizeWithAmountGtCharged(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -394,13 +342,8 @@ class PaymentCancelTest extends BasePaymentTest
      * @dataProvider fullCancelDataProvider
      *
      * @param float $amount
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fullCancelOnInitialInvoiceCharge($amount)
+    public function fullCancelOnInitialInvoiceCharge($amount): void
     {
         /** @var Invoice $invoice */
         $invoice = $this->heidelpay->createPaymentType(new Invoice());
@@ -419,13 +362,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 14
      *
      * @test
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partCancelOnInitialInvoiceChargeShouldBePossible()
+    public function partCancelOnInitialInvoiceChargeShouldBePossible(): void
     {
         /** @var Invoice $invoice */
         $invoice = $this->heidelpay->createPaymentType(new Invoice());
@@ -444,13 +382,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 15
      *
      * @test
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function cancelMoreThanWasCharged()
+    public function cancelMoreThanWasCharged(): void
     {
         $charge = $this->createCharge(50.0);
         $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
@@ -467,13 +400,8 @@ class PaymentCancelTest extends BasePaymentTest
      * PHPLIB-228 - Case 16
      *
      * @test
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function secondCancelExceedsRemainderOfPartlyCancelledCharge()
+    public function secondCancelExceedsRemainderOfPartlyCancelledCharge(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
@@ -504,11 +432,8 @@ class PaymentCancelTest extends BasePaymentTest
      * Verify cancellation with all parameters set.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function cancellationShouldWorkWithAllParametersSet()
+    public function cancellationShouldWorkWithAllParametersSet(): void
     {
         $authorization = $this->createCardAuthorization(119.0);
         $payment = $authorization->getPayment();

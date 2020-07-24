@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify keypair functionalities.
  *
@@ -24,12 +26,11 @@
  */
 namespace heidelpayPHP\test\integration;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
-use heidelpayPHP\test\BasePaymentTest;
+use heidelpayPHP\test\BaseIntegrationTest;
 use RuntimeException;
 
-class KeypairTest extends BasePaymentTest
+class KeypairTest extends BaseIntegrationTest
 {
     /**
      * Validate valid keys are accepted.
@@ -38,10 +39,8 @@ class KeypairTest extends BasePaymentTest
      * @dataProvider validKeysDataProvider
      *
      * @param string $key
-     *
-     * @throws RuntimeException
      */
-    public function validKeysShouldBeExcepted($key)
+    public function validKeysShouldBeExcepted($key): void
     {
         $heidelpay = new Heidelpay($key);
         $this->assertEquals($key, $heidelpay->getKey());
@@ -54,10 +53,8 @@ class KeypairTest extends BasePaymentTest
      * @dataProvider invalidKeysDataProvider
      *
      * @param string $key
-     *
-     * @throws RuntimeException
      */
-    public function invalidKeysShouldResultInException($key)
+    public function invalidKeysShouldResultInException($key): void
     {
         $this->expectException(RuntimeException::class);
         new Heidelpay($key);
@@ -67,11 +64,8 @@ class KeypairTest extends BasePaymentTest
      * Verify key pair config can be fetched.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function keypairShouldReturnExpectedValues()
+    public function keypairShouldReturnExpectedValues(): void
     {
         $keypair = $this->heidelpay->fetchKeypair();
         $this->assertNotNull($keypair);
@@ -85,11 +79,8 @@ class KeypairTest extends BasePaymentTest
      * Verify key pair config can be fetched with details.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function keypairShouldBeFetchableWithDetails()
+    public function keypairShouldBeFetchableWithDetails(): void
     {
         $keypair = $this->heidelpay->fetchKeypair(true);
         $this->assertNotNull($keypair);

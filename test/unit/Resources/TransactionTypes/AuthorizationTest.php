@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the Authorization transaction type.
  *
@@ -24,7 +26,6 @@
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\Payment;
@@ -33,8 +34,6 @@ use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
-use ReflectionException;
 use RuntimeException;
 
 class AuthorizationTest extends BasePaymentTest
@@ -43,10 +42,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify getters and setters.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function gettersAndSettersShouldWorkProperly()
+    public function gettersAndSettersShouldWorkProperly(): void
     {
         $authorization = new Authorization();
         $this->assertNull($authorization->getAmount());
@@ -76,11 +73,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify that an Authorization can be updated on handle response.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function anAuthorizationShouldBeUpdatedThroughResponseHandling()
+    public function anAuthorizationShouldBeUpdatedThroughResponseHandling(): void
     {
         $authorization = new Authorization();
         $this->assertNull($authorization->getAmount());
@@ -120,10 +114,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify getLinkedResources throws exception if the paymentType is not set.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet()
+    public function getLinkedResourcesShouldThrowExceptionWhenThePaymentTypeIsNotSet(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payment type is missing!');
@@ -135,12 +127,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify linked resource.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getLinkedResourceShouldReturnResourcesBelongingToAuthorization()
+    public function getLinkedResourceShouldReturnResourcesBelongingToAuthorization(): void
     {
         $heidelpayObj    = new Heidelpay('s-priv-123345');
         $paymentType     = (new Sofort())->setId('123');
@@ -161,12 +149,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify cancel() calls cancelAuthorization() on heidelpay object with the given amount.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function cancelShouldCallCancelAuthorizationOnHeidelpayObject()
+    public function cancelShouldCallCancelAuthorizationOnHeidelpayObject(): void
     {
         $authorization =  new Authorization();
         $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
@@ -193,11 +177,8 @@ class AuthorizationTest extends BasePaymentTest
      * @dataProvider chargeValueProvider
      *
      * @param float|null $value
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeShouldThrowExceptionIfPaymentIsNotSet($value)
+    public function chargeShouldThrowExceptionIfPaymentIsNotSet($value): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payment object is missing. Try fetching the object first!');
@@ -210,12 +191,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify charge() calls chargeAuthorization() on heidelpay object with the given amount.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws ReflectionException
-     * @throws RuntimeException
      */
-    public function chargeShouldCallChargeAuthorizationOnHeidelpayObject()
+    public function chargeShouldCallChargeAuthorizationOnHeidelpayObject(): void
     {
         $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
             ->disableOriginalConstructor()
@@ -240,10 +217,8 @@ class AuthorizationTest extends BasePaymentTest
      * Verify getter for cancelled amount.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function getCancelledAmountReturnsTheCancelledAmount()
+    public function getCancelledAmountReturnsTheCancelledAmount(): void
     {
         $authorization = new Authorization();
         $this->assertEquals(0.0, $authorization->getCancelledAmount());

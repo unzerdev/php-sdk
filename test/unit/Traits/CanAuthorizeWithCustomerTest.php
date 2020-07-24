@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the CanAuthorizeWithCustomer trait.
  *
@@ -24,13 +26,11 @@
  */
 namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\test\BasePaymentTest;
-use ReflectionException;
 use RuntimeException;
 
 class CanAuthorizeWithCustomerTest extends BasePaymentTest
@@ -39,11 +39,8 @@ class CanAuthorizeWithCustomerTest extends BasePaymentTest
      * Verify authorize method throws exception if the class does not implement the HeidelpayParentInterface.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizeShouldThrowExceptionIfTheClassDoesNotImplementParentInterface()
+    public function authorizeShouldThrowExceptionIfTheClassDoesNotImplementParentInterface(): void
     {
         $dummy = new TraitDummyWithCustomerWithoutParentIF();
 
@@ -57,12 +54,8 @@ class CanAuthorizeWithCustomerTest extends BasePaymentTest
      * Verify authorize method propagates authorize method to heidelpay object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function authorizeShouldPropagateAuthorizeToHeidelpay()
+    public function authorizeShouldPropagateAuthorizeToHeidelpay(): void
     {
         $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
         $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();

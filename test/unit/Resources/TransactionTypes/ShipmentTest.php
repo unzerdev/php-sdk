@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the Shipment transaction type.
  *
@@ -24,11 +26,8 @@
  */
 namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Shipment;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
-use RuntimeException;
 use stdClass;
 
 class ShipmentTest extends BasePaymentTest
@@ -37,8 +36,6 @@ class ShipmentTest extends BasePaymentTest
      * Verify getters and setters.
      *
      * @test
-     *
-     * @throws Exception
      */
     public function gettersAndSettersShouldWorkProperly(): Shipment
     {
@@ -60,13 +57,9 @@ class ShipmentTest extends BasePaymentTest
      * @test
      *
      * @param Shipment $shipment
-     *
-     * @throws Exception
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends gettersAndSettersShouldWorkProperly
      */
-    public function aShipmentShouldBeUpdatedThroughResponseHandling(Shipment $shipment)
+    public function aShipmentShouldBeUpdatedThroughResponseHandling(Shipment $shipment): void
     {
         $testResponse = new stdClass();
         $testResponse->amount = '987.6543';

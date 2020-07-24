@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify cancellation in general.
  *
@@ -24,21 +26,16 @@
  */
 namespace heidelpayPHP\test\integration\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class CancelTest extends BasePaymentTest
+class CancelTest extends BaseIntegrationTest
 {
     /**
      * Verify reversal is fetchable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function reversalShouldBeFetchableViaHeidelpayObject()
+    public function reversalShouldBeFetchableViaHeidelpayObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
@@ -51,11 +48,8 @@ class CancelTest extends BasePaymentTest
      * Verify reversal is fetchable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function reversalShouldBeFetchableViaPaymentObject()
+    public function reversalShouldBeFetchableViaPaymentObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
@@ -68,11 +62,8 @@ class CancelTest extends BasePaymentTest
      * Verify refund is fetchable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function refundShouldBeFetchableViaHeidelpayObject()
+    public function refundShouldBeFetchableViaHeidelpayObject(): void
     {
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
@@ -85,11 +76,8 @@ class CancelTest extends BasePaymentTest
      * Verify refund is fetchable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function refundShouldBeFetchableViaPaymentObject()
+    public function refundShouldBeFetchableViaPaymentObject(): void
     {
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
@@ -102,11 +90,8 @@ class CancelTest extends BasePaymentTest
      * Verify reversal is fetchable via payment object.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizationCancellationsShouldBeFetchableViaPaymentObject()
+    public function authorizationCancellationsShouldBeFetchableViaPaymentObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $reversal = $authorization->cancel();
@@ -121,11 +106,8 @@ class CancelTest extends BasePaymentTest
      * Verify refund is fetchable via payment object.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeCancellationsShouldBeFetchableViaPaymentObject()
+    public function chargeCancellationsShouldBeFetchableViaPaymentObject(): void
     {
         $charge = $this->createCharge();
         $reversal = $charge->cancel();
@@ -140,11 +122,8 @@ class CancelTest extends BasePaymentTest
      * Verify transaction status.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function cancelStatusIsSetCorrectly()
+    public function cancelStatusIsSetCorrectly(): void
     {
         $charge = $this->createCharge();
         $reversal = $charge->cancel();

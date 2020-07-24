@@ -34,9 +34,6 @@ define('HEIDELPAY_PHP_PAYMENT_API_URL', 'http://'.$_SERVER['HTTP_HOST']);
 /* Please enter the path from root directory to the example folder */
 define('HEIDELPAY_PHP_PAYMENT_API_FOLDER', '/vendor/heidelpay/heidelpay-php/examples/');
 
-define('DEFAULT_PRIVATE_KEY', 's-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n');
-define('DEFAULT_PUBLIC_KEY', 's-pub-2a10ifVINFAjpQJ9qW8jBe5OJPBx6Gxa');
-
 /* Please provide your own sandbox-keypair here. */
-define('HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY', DEFAULT_PRIVATE_KEY);
-define('HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY', DEFAULT_PUBLIC_KEY);
+define('HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY', 's-priv-***');
+define('HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY', 's-pub-***');

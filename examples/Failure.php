@@ -34,10 +34,10 @@ session_start();
             There has been an error completing the payment.
             <?php
             if (isset($_SESSION['merchantMessage']) && !empty($_SESSION['merchantMessage'])) {
-                echo '<p><strong>Merchant message:</strong> ' . $_SESSION['merchantMessage'] . '</p>';
+                echo '<p><strong>Merchant message (don\'t show this to the customer):</strong> ' . $_SESSION['merchantMessage'] . '</p>';
             }
             if (isset($_SESSION['clientMessage']) && !empty($_SESSION['clientMessage'])) {
-                echo '<p><strong>Client message:</strong> ' . $_SESSION['clientMessage'] . '</p>';
+                echo '<p><strong>Client message (this is the error message for the customer):</strong> ' . $_SESSION['clientMessage'] . '</p>';
             }
             if (isset($_SESSION['ShortId']) && !empty($_SESSION['ShortId'])) {
                 echo '<p>Please look for ShortId ' . $_SESSION['ShortId'] . ' in hIP (heidelpay Intelligence Platform) to see the transaction.</p>';

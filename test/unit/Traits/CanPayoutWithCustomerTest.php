@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the CanPayoutWithCustomer trait.
  *
@@ -24,13 +26,11 @@
  */
 namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Heidelpay;
 use heidelpayPHP\Resources\Customer;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\TransactionTypes\Payout;
 use heidelpayPHP\test\BasePaymentTest;
-use ReflectionException;
 use RuntimeException;
 
 class CanPayoutWithCustomerTest extends BasePaymentTest
@@ -39,11 +39,8 @@ class CanPayoutWithCustomerTest extends BasePaymentTest
      * Verify payout method throws exception if the class does not implement the HeidelpayParentInterface.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function payoutShouldThrowExceptionIfTheClassDoesNotImplementParentInterface()
+    public function payoutShouldThrowExceptionIfTheClassDoesNotImplementParentInterface(): void
     {
         $dummy = new TraitDummyWithCustomerWithoutParentIF();
 
@@ -57,12 +54,8 @@ class CanPayoutWithCustomerTest extends BasePaymentTest
      * Verify payout method propagates payout method to heidelpay object.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function payoutShouldPropagatePayoutToHeidelpay()
+    public function payoutShouldPropagatePayoutToHeidelpay(): void
     {
         $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['payout'])->disableOriginalConstructor()->getMock();
         $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();

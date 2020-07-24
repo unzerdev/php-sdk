@@ -185,7 +185,7 @@ class Basket extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getNote()
+    public function getNote(): ?string
     {
         return $this->note;
     }
@@ -265,7 +265,7 @@ class Basket extends AbstractHeidelpayResource
      *
      * @return BasketItem|null
      */
-    public function getBasketItemByIndex($index)
+    public function getBasketItemByIndex($index): ?BasketItem
     {
         return $this->basketItems[$index] ?? null;
     }
@@ -315,7 +315,7 @@ class Basket extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

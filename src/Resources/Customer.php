@@ -96,7 +96,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getFirstname()
+    public function getFirstname(): ?string
     {
         return $this->firstname;
     }
@@ -115,7 +115,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getLastname()
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
@@ -154,7 +154,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getBirthDate()
+    public function getBirthDate(): ?string
     {
         return $this->birthDate;
     }
@@ -173,7 +173,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCompany()
+    public function getCompany(): ?string
     {
         return $this->company;
     }
@@ -192,7 +192,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -211,7 +211,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -230,7 +230,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getMobile()
+    public function getMobile(): ?string
     {
         return $this->mobile;
     }
@@ -287,7 +287,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCustomerId()
+    public function getCustomerId(): ?string
     {
         return $this->customerId;
     }
@@ -306,7 +306,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * @return CompanyInfo|null
      */
-    public function getCompanyInfo()
+    public function getCompanyInfo(): ?CompanyInfo
     {
         return $this->companyInfo;
     }
@@ -341,7 +341,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function getExternalId()
+    public function getExternalId(): ?string
     {
         return $this->getCustomerId();
     }
@@ -349,7 +349,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         if (isset($response->companyInfo) && $this->companyInfo === null) {
             $this->companyInfo = new CompanyInfo();

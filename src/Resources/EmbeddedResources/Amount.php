@@ -117,7 +117,7 @@ class Amount extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCurrency()
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }

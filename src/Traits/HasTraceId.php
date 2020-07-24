@@ -35,7 +35,7 @@ trait HasTraceId
     /**
      * @return string|null
      */
-    public function getTraceId()
+    public function getTraceId(): ?string
     {
         return $this->traceId;
     }

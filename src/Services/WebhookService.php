@@ -156,9 +156,9 @@ class WebhookService implements WebhookServiceInterface
      */
     public function fetchAllWebhooks(): array
     {
-        /** @var Webhooks $webhooks */
         $webhooks = new Webhooks();
         $webhooks->setParentResource($this->heidelpay);
+        /** @var Webhooks $webhooks */
         $webhooks = $this->resourceService->fetchResource($webhooks);
 
         return $webhooks->getWebhookList();
@@ -167,7 +167,7 @@ class WebhookService implements WebhookServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function deleteAllWebhooks()
+    public function deleteAllWebhooks(): void
     {
         $webhooks = new Webhooks();
         $webhooks->setParentResource($this->heidelpay);
@@ -179,9 +179,9 @@ class WebhookService implements WebhookServiceInterface
      */
     public function registerMultipleWebhooks(string $url, array $events): array
     {
-        /** @var Webhooks $webhooks */
         $webhooks = new Webhooks($url, $events);
         $webhooks->setParentResource($this->heidelpay);
+        /** @var Webhooks $webhooks */
         $webhooks = $this->resourceService->createResource($webhooks);
 
         return $webhooks->getWebhookList();

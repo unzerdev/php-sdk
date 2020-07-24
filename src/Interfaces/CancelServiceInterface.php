@@ -144,5 +144,5 @@ interface CancelServiceInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
      */
-    public function cancelPaymentAuthorization($payment, float $amount = null);
+    public function cancelPaymentAuthorization($payment, float $amount = null): ?Cancellation;
 }

@@ -92,7 +92,7 @@ class BasketItem extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getBasketItemReferenceId()
+    public function getBasketItemReferenceId(): ?string
     {
         return $this->basketItemReferenceId;
     }
@@ -244,7 +244,7 @@ class BasketItem extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getUnit()
+    public function getUnit(): ?string
     {
         return $this->unit;
     }
@@ -282,7 +282,7 @@ class BasketItem extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getImageUrl()
+    public function getImageUrl(): ?string
     {
         return $this->imageUrl;
     }
@@ -301,7 +301,7 @@ class BasketItem extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getSubTitle()
+    public function getSubTitle(): ?string
     {
         return $this->subTitle;
     }
@@ -320,7 +320,7 @@ class BasketItem extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }

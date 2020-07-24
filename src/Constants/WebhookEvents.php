@@ -27,53 +27,53 @@ namespace heidelpayPHP\Constants;
 class WebhookEvents
 {
     // all events
-    const ALL = 'all';
+    public const ALL = 'all';
 
     // authorize events
-    const AUTHORIZE = 'authorize';
-    const AUTHORIZE_SUCCEEDED = 'authorize.succeeded';
-    const AUTHORIZE_FAILED = 'authorize.failed';
-    const AUTHORIZE_PENDING = 'authorize.pending';
-    const AUTHORIZE_EXPIRED = 'authorize.expired';
-    const AUTHORIZE_CANCELED = 'authorize.canceled';
+    public const AUTHORIZE = 'authorize';
+    public const AUTHORIZE_SUCCEEDED = 'authorize.succeeded';
+    public const AUTHORIZE_FAILED = 'authorize.failed';
+    public const AUTHORIZE_PENDING = 'authorize.pending';
+    public const AUTHORIZE_EXPIRED = 'authorize.expired';
+    public const AUTHORIZE_CANCELED = 'authorize.canceled';
 
     // charge events
-    const CHARGE = 'charge';
-    const CHARGE_SUCCEEDED = 'charge.succeeded';
-    const CHARGE_FAILED = 'charge.failed';
-    const CHARGE_PENDING = 'charge.pending';
-    const CHARGE_EXPIRED = 'charge.expired';
-    const CHARGE_CANCELED = 'charge.canceled';
+    public const CHARGE = 'charge';
+    public const CHARGE_SUCCEEDED = 'charge.succeeded';
+    public const CHARGE_FAILED = 'charge.failed';
+    public const CHARGE_PENDING = 'charge.pending';
+    public const CHARGE_EXPIRED = 'charge.expired';
+    public const CHARGE_CANCELED = 'charge.canceled';
 
     // chargeback events
-    const CHARGEBACK = 'chargeback';
+    public const CHARGEBACK = 'chargeback';
 
     // payout events
-    const PAYOUT = 'payout';
-    const PAYOUT_SUCCEEDED = 'payout.succeeded';
-    const PAYOUT_FAILED = 'payout.failed';
+    public const PAYOUT = 'payout';
+    public const PAYOUT_SUCCEEDED = 'payout.succeeded';
+    public const PAYOUT_FAILED = 'payout.failed';
 
     // types events
-    const TYPES = 'types';
+    public const TYPES = 'types';
 
     // customer events
-    const CUSTOMER = 'customer';
-    const CUSTOMER_CREATED = 'customer.created';
-    const CUSTOMER_DELETED = 'customer.deleted';
-    const CUSTOMER_UPDATED = 'customer.updated';
+    public const CUSTOMER = 'customer';
+    public const CUSTOMER_CREATED = 'customer.created';
+    public const CUSTOMER_DELETED = 'customer.deleted';
+    public const CUSTOMER_UPDATED = 'customer.updated';
 
     // payment events
-    const PAYMENT_PENDING = 'payment.pending';
-    const PAYMENT_COMPLETED = 'payment.completed';
-    const PAYMENT_CANCELED = 'payment.canceled';
-    const PAYMENT_PARTLY = 'payment.partly';
-    const PAYMENT_PAYMENT_REVIEW = 'payment.payment_review';
-    const PAYMENT_CHARGEBACK = 'payment.chargeback';
+    public const PAYMENT_PENDING = 'payment.pending';
+    public const PAYMENT_COMPLETED = 'payment.completed';
+    public const PAYMENT_CANCELED = 'payment.canceled';
+    public const PAYMENT_PARTLY = 'payment.partly';
+    public const PAYMENT_PAYMENT_REVIEW = 'payment.payment_review';
+    public const PAYMENT_CHARGEBACK = 'payment.chargeback';
 
     // shipment events
-    const SHIPMENT = 'shipment';
+    public const SHIPMENT = 'shipment';
 
-    const ALLOWED_WEBHOOKS = [
+    public const ALLOWED_WEBHOOKS = [
         self::ALL,
         self::AUTHORIZE,
         self::AUTHORIZE_SUCCEEDED,

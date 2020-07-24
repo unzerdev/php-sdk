@@ -15,8 +15,8 @@ Please refer to the following documentation for installation instructions and us
 
 *   [API Documentation](https://docs.heidelpay.com/docs/introduction)
 *   [PHP SDK Documentation](https://docs.heidelpay.com/docs/php-sdk)
-*   [How to use the examples](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-using-the-example-implementations)
-*   [Debugging](https://docs.heidelpay.com/v1.0/docs/php-sdk#section-debugging)
+*   [How to use the examples](https://docs.heidelpay.com/docs/example-implementations)
+*   [Debugging](https://docs.heidelpay.com/docs/logging-and-debugging)
 
 ## Supported payment types
 *   Card (credit card and debit card) + Recurring
@@ -45,13 +45,13 @@ Please refer to the following documentation for installation instructions and us
 For any issues or questions please get in touch with our support team.
 
 ### Web page
-[https://dev.heidelpay.com/](https://dev.heidelpay.com/)
+[https://docs.heidelpay.com/](https://docs.heidelpay.com/)
  
 ### Email
-support@heidelpay.com
+[support@heidelpay.com](mailto:support@heidelpay.com)
  
 ### Phone
-+49 (0)6221/6471-100
+[+49 (0)6221/6471-100](tel:+49-62216471-100)
 
 ### Twitter
-@devHeidelpay
+[@devHeidelpay](https://twitter.com/devHeidelpay)

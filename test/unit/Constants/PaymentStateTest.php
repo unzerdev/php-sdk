@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the resource name service.
  *
@@ -38,10 +40,8 @@ class PaymentStateTest extends BasePaymentTest
      *
      * @param integer $code
      * @param string  $name
-     *
-     * @throws RuntimeException
      */
-    public function shouldMapCodeToName($code, $name)
+    public function shouldMapCodeToName($code, $name): void
     {
         $this->assertEquals($name, PaymentState::mapStateCodeToName($code));
     }
@@ -54,10 +54,8 @@ class PaymentStateTest extends BasePaymentTest
      *
      * @param integer $code
      * @param string  $name
-     *
-     * @throws RuntimeException
      */
-    public function shouldMapNameToCode($name, $code)
+    public function shouldMapNameToCode($name, $code): void
     {
         $this->assertEquals($code, PaymentState::mapStateNameToCode($name));
     }
@@ -66,10 +64,8 @@ class PaymentStateTest extends BasePaymentTest
      * This verifies that an exception is thrown when the code to map is unknown.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function mapCodeToNameShouldThrowAnExceptionIfTheCodeIsUnknown()
+    public function mapCodeToNameShouldThrowAnExceptionIfTheCodeIsUnknown(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -80,10 +76,8 @@ class PaymentStateTest extends BasePaymentTest
      * This verifies that an exception is thrown when the name to map is unknown.
      *
      * @test
-     *
-     * @throws RuntimeException
      */
-    public function mapNameToCodeShouldThrowAnExceptionIfTheNameIsUnknown()
+    public function mapNameToCodeShouldThrowAnExceptionIfTheNameIsUnknown(): void
     {
         $this->expectException(RuntimeException::class);
 

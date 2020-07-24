@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the embedded GeoLocation resource.
  *
@@ -22,11 +24,10 @@
  *
  * @package  heidelpayPHP\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace heidelpayPHP\test\unit\Resources\EmbeddedResources;
 
 use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\Exception;
 
 class GeoLocationTest extends BasePaymentTest
 {
@@ -34,10 +35,8 @@ class GeoLocationTest extends BasePaymentTest
      * Verify setter and getter functionalities.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function settersAndGettersShouldWork()
+    public function settersAndGettersShouldWork(): void
     {
         $geoLocation = new GeoLocation();
         $this->assertNull($geoLocation->getCountryCode());

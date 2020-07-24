@@ -61,7 +61,7 @@ class Payout extends AbstractTransactionType
     /**
      * @return float|null
      */
-    public function getAmount()
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
@@ -80,7 +80,7 @@ class Payout extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getCurrency()
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
@@ -99,7 +99,7 @@ class Payout extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getReturnUrl()
+    public function getReturnUrl(): ?string
     {
         return $this->returnUrl;
     }
@@ -118,7 +118,7 @@ class Payout extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getPaymentReference()
+    public function getPaymentReference(): ?string
     {
         return $this->paymentReference;
     }

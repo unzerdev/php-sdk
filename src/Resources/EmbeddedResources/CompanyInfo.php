@@ -47,7 +47,7 @@ class CompanyInfo extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getRegistrationType()
+    public function getRegistrationType(): ?string
     {
         return $this->registrationType;
     }
@@ -66,7 +66,7 @@ class CompanyInfo extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getCommercialRegisterNumber()
+    public function getCommercialRegisterNumber(): ?string
     {
         return $this->commercialRegisterNumber;
     }
@@ -86,7 +86,7 @@ class CompanyInfo extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getFunction()
+    public function getFunction(): ?string
     {
         return $this->function;
     }

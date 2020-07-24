@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
  * functionality of the Payment resource.
@@ -31,18 +33,14 @@ use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class PaymentTest extends BasePaymentTest
+class PaymentTest extends BaseIntegrationTest
 {
     /**
      * Verify fetching payment by authorization.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function paymentShouldBeFetchableById(): void
     {
@@ -62,11 +60,8 @@ class PaymentTest extends BasePaymentTest
      * Verify full charge on payment with authorization.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fullChargeShouldBePossibleOnPaymentObject()
+    public function fullChargeShouldBePossibleOnPaymentObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
@@ -88,11 +83,8 @@ class PaymentTest extends BasePaymentTest
      * Verify payment can be fetched with charges.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function paymentShouldBeFetchableWithCharges()
+    public function paymentShouldBeFetchableWithCharges(): void
     {
         $authorize = $this->createCardAuthorization();
         $payment = $authorize->getPayment();
@@ -118,11 +110,8 @@ class PaymentTest extends BasePaymentTest
      * Verify partial charge after authorization.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function partialChargeAfterAuthorization()
+    public function partialChargeAfterAuthorization(): void
     {
         $authorization = $this->createCardAuthorization();
         $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
@@ -136,11 +125,8 @@ class PaymentTest extends BasePaymentTest
      * Verify authorization on payment.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizationShouldBePossibleOnHeidelpayObject()
+    public function authorizationShouldBePossibleOnHeidelpayObject(): void
     {
         /** @var Paypal $paypal */
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
@@ -153,11 +139,8 @@ class PaymentTest extends BasePaymentTest
      * Verify heidelpay payment charge is possible using a paymentId.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function paymentChargeOnAuthorizeShouldBePossibleUsingPaymentId()
+    public function paymentChargeOnAuthorizeShouldBePossibleUsingPaymentId(): void
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
@@ -170,11 +153,8 @@ class PaymentTest extends BasePaymentTest
      * Verify heidelpay payment charge is possible using a paymentId and optional ids.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function paymentChargeOnAuthorizeShouldTakeResourceIds()
+    public function paymentChargeOnAuthorizeShouldTakeResourceIds(): void
     {
         $card = $this->heidelpay->createPaymentType($this->createCardObject());
         $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
@@ -187,11 +167,8 @@ class PaymentTest extends BasePaymentTest
      * Verify heidelpay payment charge throws an error if the id does not belong to a payment.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargePaymentShouldThrowErrorOnNonPaymentId()
+    public function chargePaymentShouldThrowErrorOnNonPaymentId(): void
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
@@ -202,11 +179,8 @@ class PaymentTest extends BasePaymentTest
      * Verify a payment is fetched by orderId if the id is not set.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet()
+    public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet(): void
     {
         $orderId = str_replace(' ', '', microtime());
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
@@ -222,11 +196,8 @@ class PaymentTest extends BasePaymentTest
      * Verify orderId does not need to be unique.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
      */
-    public function shouldAllowNonUniqueOrderId()
+    public function shouldAllowNonUniqueOrderId(): void
     {
         $orderId = 'o' . self::generateRandomId();
 
@@ -248,11 +219,8 @@ class PaymentTest extends BasePaymentTest
      * Verify invoiceId does not need to be unique.
      *
      * @test
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
      */
-    public function shouldAllowNonUniqueInvoiceId()
+    public function shouldAllowNonUniqueInvoiceId(): void
     {
         $invoiceId = 'i' . self::generateRandomId();
 

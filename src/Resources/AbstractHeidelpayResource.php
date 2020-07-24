@@ -76,7 +76,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @return string|null
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -121,7 +121,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * @return DateTime|null
      */
-    public function getFetchedAt()
+    public function getFetchedAt(): ?DateTime
     {
         return $this->fetchedAt;
     }
@@ -239,7 +239,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param $object
      * @param stdClass $response
      */
-    private static function updateValues($object, stdClass $response)
+    private static function updateValues($object, stdClass $response): void
     {
         foreach ($response as $key => $value) {
             // set empty string to null (workaround)
@@ -307,7 +307,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    protected function fetchResource(AbstractHeidelpayResource $resource)
+    protected function fetchResource(AbstractHeidelpayResource $resource): void
     {
         $this->getResourceService()->fetchResource($resource);
     }
@@ -443,7 +443,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param $key
      * @param $value
      */
-    private static function setItemProperty($item, $key, $value)
+    private static function setItemProperty($item, $key, $value): void
     {
         $setter = 'set' . ucfirst($key);
         if (!is_callable([$item, $setter])) {
@@ -486,8 +486,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @param stdClass $response
      * @param string   $method
+     * @noinspection PhpUnusedParameterInspection
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         self::updateValues($this, $response);
 
@@ -509,7 +510,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      *
      * @return string|null
      */
-    public function getExternalId()
+    public function getExternalId(): ?string
     {
         return null;
     }

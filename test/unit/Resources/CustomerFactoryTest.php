@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the customer factory.
  *
@@ -29,7 +31,6 @@ use heidelpayPHP\Constants\CompanyRegistrationTypes;
 use heidelpayPHP\Resources\CustomerFactory;
 use heidelpayPHP\Resources\EmbeddedResources\Address;
 use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 class CustomerFactoryTest extends TestCase
@@ -38,10 +39,8 @@ class CustomerFactoryTest extends TestCase
      * Verify that the factory creates the B2C customer object as desired.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function b2cCustomerIsCreatedAsExpected()
+    public function b2cCustomerIsCreatedAsExpected(): void
     {
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
         $this->assertEquals('Max', $customer->getFirstname());
@@ -53,10 +52,8 @@ class CustomerFactoryTest extends TestCase
      * Verify that the factory creates the registered B2B customer object as desired.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function registeredB2bCustomerIsCreatedAsExpected()
+    public function registeredB2bCustomerIsCreatedAsExpected(): void
     {
         $address = new Address();
 
@@ -80,10 +77,8 @@ class CustomerFactoryTest extends TestCase
      * Verify that the factory creates the not registered B2B customer object as desired.
      *
      * @test
-     *
-     * @throws Exception
      */
-    public function notRegisteredB2bCustomerIsCreatedAsExpected()
+    public function notRegisteredB2bCustomerIsCreatedAsExpected(): void
     {
         $address = new Address();
 

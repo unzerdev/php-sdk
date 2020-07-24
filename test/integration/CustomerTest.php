@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
  * functionality of the Customer resource.
@@ -29,13 +31,11 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Constants\Salutations;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 use function microtime;
 
-class CustomerTest extends BasePaymentTest
+class CustomerTest extends BaseIntegrationTest
 {
     //<editor-fold desc="General Customer">
 
@@ -45,9 +45,6 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @return Customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function minCustomerCanBeCreatedAndFetched(): Customer
     {
@@ -78,9 +75,6 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @return Customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function maxCustomerCanBeCreatedAndFetched(): Customer
     {
@@ -89,7 +83,6 @@ class CustomerTest extends BasePaymentTest
         $this->heidelpay->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
 
@@ -98,25 +91,20 @@ class CustomerTest extends BasePaymentTest
 
     /**
      * @param Customer $customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
-    public function customerCanBeFetchedById(Customer $customer)
+    public function customerCanBeFetchedById(Customer $customer): void
     {
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
     }
 
     /**
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
-    public function customerCanBeFetchedByCustomerId()
+    public function customerCanBeFetchedByCustomerId(): void
     {
         $customerId = 'c' . self::generateRandomId();
         $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
@@ -128,13 +116,10 @@ class CustomerTest extends BasePaymentTest
 
     /**
      * @param Customer $customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
-    public function customerCanBeFetchedByObject(Customer $customer)
+    public function customerCanBeFetchedByObject(Customer $customer): void
     {
         $customerToFetch = (new Customer())->setId($customer->getId());
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customerToFetch);
@@ -143,13 +128,10 @@ class CustomerTest extends BasePaymentTest
 
     /**
      * @param Customer $customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test
      */
-    public function customerCanBeFetchedByObjectWithData(Customer $customer)
+    public function customerCanBeFetchedByObjectWithData(Customer $customer): void
     {
         $customerToFetch = $this->getMinimalCustomer()->setId($customer->getId());
         $this->assertNotEquals($customer->getFirstname(), $customerToFetch->getFirstname());
@@ -162,11 +144,8 @@ class CustomerTest extends BasePaymentTest
      * Customer can be referenced by payment.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet()
+    public function transactionShouldCreateAndReferenceCustomerIfItDoesNotExistYet(): void
     {
         $customerId = 'c' . self::generateRandomId();
         $customer   = $this->getMaximumCustomerInclShippingAddress()->setCustomerId($customerId);
@@ -175,7 +154,6 @@ class CustomerTest extends BasePaymentTest
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
         $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
-        /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
@@ -188,11 +166,8 @@ class CustomerTest extends BasePaymentTest
      * Customer can be referenced by payment.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function transactionShouldReferenceCustomerIfItExist()
+    public function transactionShouldReferenceCustomerIfItExist(): void
     {
         $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
@@ -201,7 +176,6 @@ class CustomerTest extends BasePaymentTest
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
         $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
-        /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
@@ -214,11 +188,8 @@ class CustomerTest extends BasePaymentTest
      * Customer can be referenced by payment.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function transactionShouldReferenceCustomerIfItExistAndItsIdHasBeenPassed()
+    public function transactionShouldReferenceCustomerIfItExistAndItsIdHasBeenPassed(): void
     {
         $customer = $this->getMaximumCustomer();
         $this->heidelpay->createCustomer($customer);
@@ -227,7 +198,6 @@ class CustomerTest extends BasePaymentTest
         $paypal = $this->heidelpay->createPaymentType(new Paypal());
         $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer->getId());
 
-        /** @var Payment $secPayment */
         $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
@@ -243,18 +213,14 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @param Customer $customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function customerShouldBeUpdatable(Customer $customer)
+    public function customerShouldBeUpdateable(Customer $customer): void
     {
-        $this->assertEquals($customer->getFirstname(), 'Peter');
+        $this->assertEquals('Peter', $customer->getFirstname());
         $customer->setFirstname('Not Peter');
         $this->heidelpay->updateCustomer($customer);
-        $this->assertEquals($customer->getFirstname(), 'Not Peter');
+        $this->assertEquals('Not Peter', $customer->getFirstname());
 
-        /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
         $this->assertEquals('Not Peter', $fetchedCustomer->getFirstname());
@@ -267,11 +233,8 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @param Customer $customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function customerShouldBeDeletableById(Customer $customer)
+    public function customerShouldBeDeletableById(Customer $customer): void
     {
         $this->assertNotNull($customer);
         $this->assertNotNull($customer->getId());
@@ -287,11 +250,8 @@ class CustomerTest extends BasePaymentTest
      * Customer can be deleted.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function customerShouldBeDeletableByObject()
+    public function customerShouldBeDeletableByObject(): void
     {
         $customer = $this->heidelpay->createCustomer($this->getMaximumCustomer());
 
@@ -310,11 +270,8 @@ class CustomerTest extends BasePaymentTest
      * Verify an Exception is thrown if the customerId already exists.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function apiShouldReturnErrorIfCustomerAlreadyExists()
+    public function apiShouldReturnErrorIfCustomerAlreadyExists(): void
     {
         $customerId = str_replace(' ', '', microtime());
 
@@ -333,11 +290,8 @@ class CustomerTest extends BasePaymentTest
      * Verify a Customer is fetched and updated when its customerId already exist.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function customerShouldBeFetchedByCustomerIdAndUpdatedIfItAlreadyExists()
+    public function customerShouldBeFetchedByCustomerIdAndUpdatedIfItAlreadyExists(): void
     {
         $customerId = str_replace(' ', '', microtime());
 
@@ -346,7 +300,7 @@ class CustomerTest extends BasePaymentTest
             $this->heidelpay->fetchCustomerByExtCustomerId($customerId);
             $this->assertTrue(false, 'Exception should be thrown here.');
         } catch (HeidelpayApiException $e) {
-            $this->assertEquals($e->getCode(), ApiResponseCodes::API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND);
+            $this->assertEquals(ApiResponseCodes::API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND, $e->getCode());
             $this->assertNotNull($e->getErrorId());
         }
 
@@ -368,11 +322,8 @@ class CustomerTest extends BasePaymentTest
      * Verify customer address can take a name as long as both first and lastname concatenated.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function addressNameCanHoldFirstAndLastNameConcatenated()
+    public function addressNameCanHoldFirstAndLastNameConcatenated(): void
     {
         $customerId = 'c' . self::generateRandomId();
         $customer   = $this->getMaximumCustomerInclShippingAddress()->setCustomerId($customerId);
@@ -398,19 +349,14 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @return Customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function minNotRegisteredB2bCustomerCanBeCreatedAndFetched(): Customer
     {
-        /** @var Customer $customer */
         $customer = $this->getMinimalNotRegisteredB2bCustomer();
         $this->assertEmpty($customer->getId());
         $this->heidelpay->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $exposeArray     = $customer->expose();
         $exposeArray['salutation'] = Salutations::UNKNOWN;
@@ -423,19 +369,14 @@ class CustomerTest extends BasePaymentTest
      * Max not registered customer should be creatable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function maxNotRegisteredB2bCustomerCanBeCreatedAndFetched()
+    public function maxNotRegisteredB2bCustomerCanBeCreatedAndFetched(): void
     {
-        /** @var Customer $customer */
         $customer = $this->getMaximalNotRegisteredB2bCustomer();
         $this->assertEmpty($customer->getId());
         $this->heidelpay->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
     }
@@ -450,19 +391,14 @@ class CustomerTest extends BasePaymentTest
      * @test
      *
      * @return Customer
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function minRegisteredB2bCustomerCanBeCreatedAndFetched(): Customer
     {
-        /** @var Customer $customer */
         $customer = $this->getMinimalRegisteredB2bCustomer();
         $this->assertEmpty($customer->getId());
         $this->heidelpay->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $exposeArray     = $customer->expose();
         $exposeArray['salutation'] = Salutations::UNKNOWN;
@@ -475,19 +411,14 @@ class CustomerTest extends BasePaymentTest
      * Max registered customer should be creatable.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function maxRegisteredB2bCustomerCanBeCreatedAndFetched()
+    public function maxRegisteredB2bCustomerCanBeCreatedAndFetched(): void
     {
-        /** @var Customer $customer */
         $customer = $this->getMaximalRegisteredB2bCustomer();
         $this->assertEmpty($customer->getId());
         $this->heidelpay->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        /** @var Customer $fetchedCustomer */
         $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
     }

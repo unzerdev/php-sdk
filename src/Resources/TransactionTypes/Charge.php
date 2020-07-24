@@ -80,7 +80,7 @@ class Charge extends AbstractTransactionType
     /**
      * @return float|null
      */
-    public function getAmount()
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
@@ -99,7 +99,7 @@ class Charge extends AbstractTransactionType
     /**
      * @return float|null
      */
-    public function getCancelledAmount()
+    public function getCancelledAmount(): ?float
     {
         $amount = 0.0;
         foreach ($this->getCancellations() as $cancellation) {
@@ -113,7 +113,7 @@ class Charge extends AbstractTransactionType
     /**
      * @return float|null
      */
-    public function getTotalAmount()
+    public function getTotalAmount(): ?float
     {
         return $this->getAmount() - $this->getCancelledAmount();
     }
@@ -121,7 +121,7 @@ class Charge extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getCurrency()
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
@@ -140,7 +140,7 @@ class Charge extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getReturnUrl()
+    public function getReturnUrl(): ?string
     {
         return $this->returnUrl;
     }
@@ -162,7 +162,7 @@ class Charge extends AbstractTransactionType
      *
      * @return string|null
      */
-    public function getIban()
+    public function getIban(): ?string
     {
         return $this->iban;
     }
@@ -184,7 +184,7 @@ class Charge extends AbstractTransactionType
      *
      * @return string|null
      */
-    public function getBic()
+    public function getBic(): ?string
     {
         return $this->bic;
     }
@@ -206,7 +206,7 @@ class Charge extends AbstractTransactionType
      *
      * @return string|null
      */
-    public function getHolder()
+    public function getHolder(): ?string
     {
         return $this->holder;
     }
@@ -228,7 +228,7 @@ class Charge extends AbstractTransactionType
      *
      * @return string|null
      */
-    public function getDescriptor()
+    public function getDescriptor(): ?string
     {
         return $this->descriptor;
     }
@@ -247,7 +247,7 @@ class Charge extends AbstractTransactionType
     /**
      * @return string|null
      */
-    public function getPaymentReference()
+    public function getPaymentReference(): ?string
     {
         return $this->paymentReference;
     }
@@ -266,7 +266,7 @@ class Charge extends AbstractTransactionType
     /**
      * @return bool|null
      */
-    public function isCard3ds()
+    public function isCard3ds(): ?bool
     {
         return $this->card3ds;
     }

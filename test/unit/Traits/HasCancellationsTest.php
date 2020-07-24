@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of the HasCancellations trait.
  *
@@ -24,12 +26,9 @@
  */
 namespace heidelpayPHP\test\unit\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\TransactionTypes\Authorization;
 use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\test\BasePaymentTest;
-use ReflectionException;
-use RuntimeException;
 
 class HasCancellationsTest extends BasePaymentTest
 {
@@ -37,11 +36,8 @@ class HasCancellationsTest extends BasePaymentTest
      * Verify getters setters.
      *
      * @test
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function hasCancellationGettersAndSettersShouldWorkProperly()
+    public function hasCancellationGettersAndSettersShouldWorkProperly(): void
     {
         $dummy = new TraitDummyHasCancellationsHasPaymentState();
         $this->assertIsEmptyArray($dummy->getCancellations());
@@ -56,7 +52,7 @@ class HasCancellationsTest extends BasePaymentTest
         $dummy->addCancellation($cancellation1);
         $dummy->addCancellation($cancellation2);
         $dummy->addCancellation($cancellation3);
-        $this->assertArraySubset([$cancellation1, $cancellation2, $cancellation3], $dummy->getCancellations());
+        $this->assertEquals([$cancellation1, $cancellation2, $cancellation3], $dummy->getCancellations());
 
         // assert getCancellation
         $this->assertSame($cancellation3, $dummy->getCancellation('3', true));
@@ -66,22 +62,19 @@ class HasCancellationsTest extends BasePaymentTest
         $cancellation5 = (new Cancellation())->setId('5');
         $cancellation6 = (new Cancellation())->setId('6');
         $dummy->setCancellations([$cancellation4, $cancellation5, $cancellation6]);
-        $this->assertArraySubset([$cancellation4, $cancellation5, $cancellation6], $dummy->getCancellations());
+        $this->assertEquals([$cancellation4, $cancellation5, $cancellation6], $dummy->getCancellations());
     }
 
     /**
      * Verify getCancellation will call getResource with the selected Cancellation if it is not lazy loaded.
      *
      * @test
-     *
-     * @throws RuntimeException
-     * @throws ReflectionException
-     * @throws HeidelpayApiException
      */
-    public function getCancellationShouldCallGetResourceIfItIsNotLazyLoaded()
+    public function getCancellationShouldCallGetResourceIfItIsNotLazyLoaded(): void
     {
         $cancel = (new Cancellation())->setId('myCancelId');
         $authorizeMock = $this->getMockBuilder(Authorization::class)->setMethods(['getResource'])->getMock();
+        /** @noinspection PhpParamsInspection */
         $authorizeMock->expects($this->once())->method('getResource')->with($cancel);
 
         /** @var Authorization $authorizeMock */

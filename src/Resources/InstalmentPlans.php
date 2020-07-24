@@ -148,7 +148,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
     /**
      * @return string|null
      */
-    public function getOrderDate()
+    public function getOrderDate(): ?string
     {
         return $this->orderDate;
     }
@@ -211,7 +211,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

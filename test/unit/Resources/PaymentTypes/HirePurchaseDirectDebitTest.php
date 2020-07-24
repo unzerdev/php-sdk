@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines unit tests to verify functionality of FlexiPay Rate Direct Debit (Hire Purchase) payment type.
  *
@@ -29,11 +31,7 @@ use DateTime;
 use heidelpayPHP\Resources\InstalmentPlan;
 use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use heidelpayPHP\test\BasePaymentTest;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\RuntimeException;
-use ReflectionException;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest
 {
@@ -41,11 +39,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * Verify setter and getter work.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws \Exception
      */
-    public function getterAndSetterWorkAsExpected()
+    public function getterAndSetterWorkAsExpected(): void
     {
         $hdd = new HirePurchaseDirectDebit();
         $this->assertEmpty($hdd->getTransactionParams());
@@ -170,12 +165,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * Verify handle response is called with the exposed data of the selected instalment plan.
      *
      * @test
-     *
-     * @throws Exception
-     * @throws RuntimeException
-     * @throws ReflectionException
      */
-    public function selectedInstalmentPlanDataIsUsedToUpdateInstalmentPlanInformation()
+    public function selectedInstalmentPlanDataIsUsedToUpdateInstalmentPlanInformation(): void
     {
         /** @var HirePurchaseDirectDebit|MockObject $hddMock */
         $hddMock = $this->getMockBuilder(HirePurchaseDirectDebit::class)->setMethods(['handleResponse'])->getMock();
@@ -186,6 +177,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $exposedObject = (object)['data' => 'I am exposed'];
 
         $instalmentPlanMock->expects($this->once())->method('expose')->willReturn($exposedObject);
+        /** @noinspection PhpParamsInspection */
         $hddMock->expects($this->once())->method('handleResponse')->with($exposedObject);
 
         $hddMock->selectInstalmentPlan($instalmentPlanMock);
@@ -195,11 +187,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      * Verify instalment plan fetch can update instalment plan properties.
      *
      * @test
-     *
-     * @throws AssertionFailedError
-     * @throws Exception
      */
-    public function instalmentPlanPropertiesShouldBeUpdateable()
+    public function instalmentPlanPropertiesShouldBeUpdateable(): void
     {
         $plan = new InstalmentPlan();
         $this->assertEmpty($plan->getInstallmentRates());
@@ -212,6 +201,6 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
         $planData = (object)['installmentRates' => $rates];
 
         $plan->handleResponse($planData);
-        $this->assertArraySubset($rates, $plan->getInstallmentRates());
+        $this->assertEquals($rates, $plan->getInstallmentRates());
     }
 }

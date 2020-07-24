@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and functionality
  * of the payment method Przelewy24.
@@ -29,10 +31,9 @@ use heidelpayPHP\Constants\ApiResponseCodes;
 use heidelpayPHP\Exceptions\HeidelpayApiException;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
-use heidelpayPHP\test\BasePaymentTest;
-use RuntimeException;
+use heidelpayPHP\test\BaseIntegrationTest;
 
-class Przelewy24Test extends BasePaymentTest
+class Przelewy24Test extends BaseIntegrationTest
 {
     /**
      * Verify Przelewy24 payment type can be created and fetched.
@@ -40,9 +41,6 @@ class Przelewy24Test extends BasePaymentTest
      * @test
      *
      * @return BasePaymentType
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function przelewy24ShouldBeCreatableAndFetchable(): BasePaymentType
     {
@@ -65,11 +63,8 @@ class Przelewy24Test extends BasePaymentTest
      * @depends przelewy24ShouldBeCreatableAndFetchable
      *
      * @param Przelewy24 $przelewy24
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24)
+    public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24): void
     {
         $charge = $przelewy24->charge(100.0, 'PLN', self::RETURN_URL);
         $this->assertNotNull($charge);
@@ -88,11 +83,8 @@ class Przelewy24Test extends BasePaymentTest
      * @depends przelewy24ShouldBeCreatableAndFetchable
      *
      * @param Przelewy24 $przelewy24
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24)
+    public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24): void
     {
         $this->expectException(HeidelpayApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
@@ -108,11 +100,8 @@ class Przelewy24Test extends BasePaymentTest
      * @dataProvider przelewy24CurrencyCodeProvider
      *
      * @param string $currencyCode
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function przelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode)
+    public function przelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode): void
     {
         /** @var Przelewy24 $przelewy24 */
         $przelewy24 = $this->heidelpay->createPaymentType(new Przelewy24());

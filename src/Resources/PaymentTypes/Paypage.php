@@ -99,6 +99,9 @@ class Paypage extends BasePaymentType
     /** @var bool $card3ds */
     protected $card3ds;
 
+    /** @var array|null $css */
+    protected $css;
+
     /**
      * Paypage constructor.
      *
@@ -175,7 +178,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getLogoImage()
+    public function getLogoImage(): ?string
     {
         return $this->logoImage;
     }
@@ -194,7 +197,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getFullPageImage()
+    public function getFullPageImage(): ?string
     {
         return $this->fullPageImage;
     }
@@ -213,7 +216,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getShopName()
+    public function getShopName(): ?string
     {
         return $this->shopName;
     }
@@ -232,7 +235,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getShopDescription()
+    public function getShopDescription(): ?string
     {
         return $this->shopDescription;
     }
@@ -251,7 +254,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getTagline()
+    public function getTagline(): ?string
     {
         return $this->tagline;
     }
@@ -270,7 +273,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getTermsAndConditionUrl()
+    public function getTermsAndConditionUrl(): ?string
     {
         return $this->termsAndConditionUrl;
     }
@@ -289,7 +292,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getPrivacyPolicyUrl()
+    public function getPrivacyPolicyUrl(): ?string
     {
         return $this->privacyPolicyUrl;
     }
@@ -308,7 +311,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getImprintUrl()
+    public function getImprintUrl(): ?string
     {
         return $this->imprintUrl;
     }
@@ -327,7 +330,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getHelpUrl()
+    public function getHelpUrl(): ?string
     {
         return $this->helpUrl;
     }
@@ -346,7 +349,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getContactUrl()
+    public function getContactUrl(): ?string
     {
         return $this->contactUrl;
     }
@@ -387,7 +390,7 @@ class Paypage extends BasePaymentType
     /**
      * @return Payment|null
      */
-    public function getPayment()
+    public function getPayment(): ?Payment
     {
         return $this->payment;
     }
@@ -406,7 +409,7 @@ class Paypage extends BasePaymentType
     /**
      * @return Basket|null
      */
-    public function getBasket()
+    public function getBasket(): ?Basket
     {
         if (!$this->payment instanceof Payment) {
             return null;
@@ -417,7 +420,7 @@ class Paypage extends BasePaymentType
     /**
      * @return Customer|null
      */
-    public function getCustomer()
+    public function getCustomer(): ?Customer
     {
         if (!$this->payment instanceof Payment) {
             return null;
@@ -428,7 +431,7 @@ class Paypage extends BasePaymentType
     /**
      * @return Metadata|null
      */
-    public function getMetadata()
+    public function getMetadata(): ?Metadata
     {
         if (!$this->payment instanceof Payment) {
             return null;
@@ -439,7 +442,7 @@ class Paypage extends BasePaymentType
     /**
      * @return string|null
      */
-    public function getRedirectUrl()
+    public function getRedirectUrl(): ?string
     {
         $payment = $this->getPayment();
         if ($payment instanceof Payment) {
@@ -470,7 +473,7 @@ class Paypage extends BasePaymentType
      *
      * @return null|string The Id of the payment object or null if nothing is found.
      */
-    public function getPaymentId()
+    public function getPaymentId(): ?string
     {
         if ($this->payment instanceof Payment) {
             return $this->payment->getId();
@@ -520,7 +523,7 @@ class Paypage extends BasePaymentType
     /**
      * @return bool|null
      */
-    public function isCard3ds()
+    public function isCard3ds(): ?bool
     {
         return $this->card3ds;
     }
@@ -533,6 +536,25 @@ class Paypage extends BasePaymentType
     public function setCard3ds($card3ds): Paypage
     {
         $this->card3ds = $card3ds;
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getCss(): ?array
+    {
+        return $this->css;
+    }
+
+    /**
+     * @param array|null $styles
+     *
+     * @return Paypage
+     */
+    public function setCss($styles): Paypage
+    {
+        $this->css = empty($styles) ? null : $styles;
         return $this;
     }
 
@@ -550,7 +572,7 @@ class Paypage extends BasePaymentType
     /**
      * @return float|null
      */
-    public function getEffectiveInterestRate()
+    public function getEffectiveInterestRate(): ?float
     {
         return $this->getAdditionalAttribute('effectiveInterestRate');
     }
@@ -584,7 +606,7 @@ class Paypage extends BasePaymentType
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET)
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
         if (isset($response->impressumUrl)) {
             $response->imprintUrl = $response->impressumUrl;
@@ -641,7 +663,7 @@ class Paypage extends BasePaymentType
      * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function fetchPayment()
+    private function fetchPayment(): void
     {
         $payment = $this->getPayment();
         if ($payment instanceof AbstractHeidelpayResource) {

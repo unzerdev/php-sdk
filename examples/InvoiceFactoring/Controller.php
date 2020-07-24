@@ -83,36 +83,32 @@ try {
 
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();
+    $_SESSION['PaymentId'] = $transaction->getPaymentId();
+    $_SESSION['additionalPaymentInformation'] =
+        sprintf(
+            "Please transfer the amount of %f %s to the following account:<br /><br />"
+            . "Holder: %s<br/>"
+            . "IBAN: %s<br/>"
+            . "BIC: %s<br/><br/>"
+            . "<i>Please use only this identification number as the descriptor: </i><br/>"
+            . "%s",
+            $transaction->getAmount(),
+            $transaction->getCurrency(),
+            $transaction->getHolder(),
+            $transaction->getIban(),
+            $transaction->getBic(),
+            $transaction->getDescriptor()
+        );
 
-    // Redirect to the success or failure page depending on the state of the transaction
-    $payment = $transaction->getPayment();
+    // To avoid redundant code this example redirects to the general ReturnController which contains the code example to handle payment results.
+    redirect(RETURN_CONTROLLER_URL);
 
-    if ($payment->isCompleted()) {
-        // The payment process has been successful.
-        // You can create the order and show a success page.
-        redirect(SUCCESS_URL);
-    } elseif ($payment->isPending()) {
-        // In case of authorization this is normal since you will later charge the payment.
-        // You can create the order with status pending payment and show a success page to the customer if you want.
-
-        // In cases of redirection to an external service (e.g. 3D secure, PayPal, etc) it sometimes takes time for
-        // the payment to update it's status. In this case it might be pending at first and change to cancel or success later.
-        // Use the webhooks feature to stay informed about changes of the payment (e.g. cancel, success)
-        // then you can cancel the order later or mark it paid as soon as the event is triggered.
-
-        // In any case, the payment is not done when the payment is pending and you should ship until it changes to success.
-        redirect(PENDING_URL);
-    }
-    // If the payment is neither success nor pending something went wrong.
-    // In this case do not create the order.
-    // Redirect to an error page in your shop and show an message if you want.
-
-    // Check the result message of the transaction to find out what went wrong.
-    $merchantMessage = $transaction->getMessage()->getCustomer();
 } catch (HeidelpayApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
+// Write the merchant message to your log.
+// Show the client message to the customer (it is localized).
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);

@@ -35,6 +35,7 @@ use heidelpayPHP\Resources\TransactionTypes\Cancellation;
 use heidelpayPHP\Resources\TransactionTypes\Charge;
 use RuntimeException;
 use function in_array;
+use function is_string;
 
 class CancelService implements CancelServiceInterface
 {
@@ -209,7 +210,7 @@ class CancelService implements CancelServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function cancelPaymentAuthorization($payment, float $amount = null)
+    public function cancelPaymentAuthorization($payment, float $amount = null): ?Cancellation
     {
         $cancellation   = null;
         $completeCancel = $amount === null;
@@ -300,7 +301,7 @@ class CancelService implements CancelServiceInterface
      *
      * @throws HeidelpayApiException
      */
-    private function isExceptionAllowed(HeidelpayApiException $exception)
+    private function isExceptionAllowed(HeidelpayApiException $exception): void
     {
         $allowedErrors = [
             ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,
@@ -323,7 +324,7 @@ class CancelService implements CancelServiceInterface
      *
      * @return float|null
      */
-    private function updateCancelAmount($remainingToCancel, float $amount)
+    private function updateCancelAmount($remainingToCancel, float $amount): ?float
     {
         $cancelWholePayment = $remainingToCancel === null;
         if (!$cancelWholePayment) {

@@ -37,7 +37,7 @@ trait HasUniqueAndShortId
     /**
      * @return string|null
      */
-    public function getUniqueId()
+    public function getUniqueId(): ?string
     {
         return $this->uniqueId;
     }
@@ -56,7 +56,7 @@ trait HasUniqueAndShortId
     /**
      * @return string|null
      */
-    public function getShortId()
+    public function getShortId(): ?string
     {
         return $this->shortId;
     }
