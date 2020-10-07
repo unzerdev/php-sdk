@@ -75,7 +75,9 @@ try {
 
     // ... a Basket is mandatory for HirePurchase
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
-    $basketItem = new BasketItem('Hat', 100.0, 119.0, 1);
+    $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
+        ->setAmountGross(119.0)
+        ->setAmountVat(19.0);
     $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
     if ($transactionType === 'charge') {

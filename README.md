@@ -13,10 +13,10 @@ This SDK provides for an easy way to connect to the heidelpay Rest API.
 
 Please refer to the following documentation for installation instructions and usage information.
 
-*   [API Documentation](https://docs.heidelpay.com/docs/introduction)
-*   [PHP SDK Documentation](https://docs.heidelpay.com/docs/php-sdk)
-*   [How to use the examples](https://docs.heidelpay.com/docs/example-implementations)
-*   [Debugging](https://docs.heidelpay.com/docs/logging-and-debugging)
+*   [API Documentation](https://docs.unzer.com/docs/introduction)
+*   [PHP SDK Documentation](https://docs.unzer.com/docs/php-sdk)
+*   [How to use the examples](https://docs.unzer.com/docs/example-implementations)
+*   [Debugging](https://docs.unzer.com/docs/logging-and-debugging)
 
 ## Supported payment types
 *   Card (credit card and debit card) + Recurring
@@ -45,13 +45,13 @@ Please refer to the following documentation for installation instructions and us
 For any issues or questions please get in touch with our support team.
 
 ### Web page
-[https://docs.heidelpay.com/](https://docs.heidelpay.com/)
- 
+[https://docs.unzer.com/](https://docs.unzer.com/)
+
 ### Email
-[support@heidelpay.com](mailto:support@heidelpay.com)
- 
+[support@unzer.com](mailto:support@unzer.com)
+
 ### Phone
-[+49 (0)6221/6471-100](tel:+49-62216471-100)
+[+49 6221 43101-00](tel:+49-6221 43101 00)
 
 ### Twitter
 [@devHeidelpay](https://twitter.com/devHeidelpay)

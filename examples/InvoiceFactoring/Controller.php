@@ -76,7 +76,9 @@ try {
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // A Basket is mandatory for Invoice Factoring payment type
-    $basketItem = new BasketItem('Hat', 100.0, 119.0, 1);
+    $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
+        ->setAmountGross(119.0)
+        ->setAmountVat(19.0);
     $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
     $transaction = $invoiceFactoring->charge(119.0, 'EUR', CONTROLLER_URL, $customer, $orderId, null, $basket);

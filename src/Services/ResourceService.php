@@ -39,6 +39,7 @@ use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Alipay;
+use heidelpayPHP\Resources\PaymentTypes\Bancontact;
 use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
@@ -562,6 +563,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
                 $paymentType = new HirePurchaseDirectDebit();
+                break;
+            case IdStrings::BANCONTACT:
+                $paymentType = new Bancontact();
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');

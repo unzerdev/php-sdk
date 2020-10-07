@@ -40,6 +40,7 @@ use heidelpayPHP\Resources\Keypair;
 use heidelpayPHP\Resources\Metadata;
 use heidelpayPHP\Resources\Payment;
 use heidelpayPHP\Resources\PaymentTypes\Alipay;
+use heidelpayPHP\Resources\PaymentTypes\Bancontact;
 use heidelpayPHP\Resources\PaymentTypes\Card;
 use heidelpayPHP\Resources\PaymentTypes\EPS;
 use heidelpayPHP\Resources\PaymentTypes\Giropay;
@@ -1158,7 +1159,8 @@ class ResourceServiceTest extends BasePaymentTest
             'ALIPAY'                       => ['s-ali-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/alipay/s-ali-xen2ybcovn56/'],
             'WECHATPAY'                    => ['s-wcp-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'],
             'INVOICE_FACTORING'            => ['s-ivf-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'],
-            'HIRE_PURCHASE_DIRECT_DEBIT'   => ['s-hdd-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/hire-purchase-direct-debit/s-hdd-xen2ybcovn56/']
+            'HIRE_PURCHASE_DIRECT_DEBIT'   => ['s-hdd-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/hire-purchase-direct-debit/s-hdd-xen2ybcovn56/'],
+            'BANCONTACT'                   => ['s-bct-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/bancontact/s-bct-xen2ybcovn56/']
         ];
     }
 
@@ -1233,6 +1235,7 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType Wechatpay sandbox' => ['fetchPaymentType', ['s-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
             'PaymentType Invoice factoring sandbox' => ['fetchPaymentType', ['s-ivf-12345678'], $getPaymentTypeCB(InvoiceFactoring::class)],
             'PaymentType HirePurchaseDirectDebit sandbox' => ['fetchPaymentType', ['s-hdd-12345678'], $getPaymentTypeCB(HirePurchaseDirectDebit::class)],
+            'PaymentType Bancontact sandbox' => ['fetchPaymentType', ['s-bct-12345678'], $getPaymentTypeCB(Bancontact::class)],
             'PaymentType Card production' => ['fetchPaymentType', ['p-crd-12345678'], $getPaymentTypeCB(Card::class)],
             'PaymentType Giropay production' => ['fetchPaymentType', ['p-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
             'PaymentType Ideal production' => ['fetchPaymentType', ['p-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
@@ -1248,7 +1251,8 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType Alipay production' => ['fetchPaymentType', ['p-ali-12345678'], $getPaymentTypeCB(Alipay::class)],
             'PaymentType Wechatpay production' => ['fetchPaymentType', ['p-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
             'PaymentType Invoice factoring production' => ['fetchPaymentType', ['p-ivf-12345678'], $getPaymentTypeCB(InvoiceFactoring::class)],
-            'PaymentType HirePurchaseDirectDebit production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(HirePurchaseDirectDebit::class)]
+            'PaymentType HirePurchaseDirectDebit production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(HirePurchaseDirectDebit::class)],
+            'PaymentType Bancontact production' => ['fetchPaymentType', ['p-bct-12345678'], $getPaymentTypeCB(Bancontact::class)],
         ];
     }
 

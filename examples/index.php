@@ -340,6 +340,18 @@ function printMessage($type, $title, $text)
                         Try
                     </div>
                 </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Bancontact
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div id="tryBancontactExample" class="ui bottom attached green button" onclick="location.href='Bancontact/';">
+                        Try
+                    </div>
+                </div>
             </div>
         </div>
 
