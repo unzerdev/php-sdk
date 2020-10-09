@@ -18,9 +18,9 @@
  *
  * @link  https://docs.heidelpay.com/
  *
- * @author  David Owusu <development@heidelpay.com>
- * @author  Florian Evertz <development@heidelpay.com>
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  David Owusu <development@unzer.com>
+ * @author  Florian Evertz <development@unzer.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
  * @package  heidelpayPHP\PaymentTypes
  */

@@ -18,7 +18,7 @@
  *
  * @link  https://docs.heidelpay.com/
  *
- * @author  David Owusu <development@heidelpay.com>
+ * @author  David Owusu <development@unzer.com>
  *
  * @package  heidelpayPHP\examples
  */

@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the payment method sofort.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today unzer GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
  *
  * @link  https://docs.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
  * @package  heidelpayPHP\test\integration\PaymentTypes
  */
