@@ -28,7 +28,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
@@ -101,7 +101,7 @@ class HirePurchaseDirectDebitTest extends BaseIntegrationTest
                 $this->assertTrue(false, 'Expected error for negative ranking test.');
             }
             $this->assertNotEmpty($authorize->getId());
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             if ($errorCode !== null) {
                 $this->assertEquals($errorCode, $e->getCode());
             } else {

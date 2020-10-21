@@ -29,7 +29,7 @@ use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use stdClass;
 use function count;
 
-class Basket extends AbstractHeidelpayResource
+class Basket extends AbstractUnzerResource
 {
     /** @var float $amountTotalGross */
     protected $amountTotalGross = 0.0;

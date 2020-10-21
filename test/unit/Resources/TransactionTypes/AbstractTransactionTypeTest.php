@@ -28,7 +28,7 @@ namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
 use DateTime;
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Services\ResourceService;
@@ -197,7 +197,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payment);
 
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $heidelpayObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment->setParentResource($heidelpayObj);
 
         $transactionType = (new DummyTransactionType())->setPayment($payment);

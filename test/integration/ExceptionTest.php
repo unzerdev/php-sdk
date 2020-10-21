@@ -28,7 +28,7 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Giropay;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -48,8 +48,8 @@ class ExceptionTest extends BaseIntegrationTest
 
         try {
             $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
-        } catch (HeidelpayApiException $e) {
-            $this->assertInstanceOf(HeidelpayApiException::class, $e);
+        } catch (UnzerApiException $e) {
+            $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
             $this->assertNotNull($e->getErrorId());
             $firstClientMessage = $e->getClientMessage();
@@ -60,8 +60,8 @@ class ExceptionTest extends BaseIntegrationTest
         try {
             $this->heidelpay->setLocale('de-DE');
             $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
-        } catch (HeidelpayApiException $e) {
-            $this->assertInstanceOf(HeidelpayApiException::class, $e);
+        } catch (UnzerApiException $e) {
+            $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
             $this->assertNotNull($e->getErrorId());
             $secondClientMessage = $e->getClientMessage();

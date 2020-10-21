@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\Payout;
@@ -112,7 +112,7 @@ class PayoutTest extends BasePaymentTest
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToPayout(): void
     {
-        $heidelpayObj = new Heidelpay('s-priv-123345');
+        $heidelpayObj = new Unzer('s-priv-123345');
         $paymentType = $this->createCardObject()->setId('123');
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment = new Payment();

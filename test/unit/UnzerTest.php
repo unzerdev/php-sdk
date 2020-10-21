@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\unit;
 
 use DateTime;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Metadata;
@@ -48,7 +48,7 @@ use UnzerSDK\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 
-class HeidelpayTest extends BasePaymentTest
+class UnzerTest extends BasePaymentTest
 {
     /**
      * Verify constructor works properly.
@@ -57,7 +57,7 @@ class HeidelpayTest extends BasePaymentTest
      */
     public function constructorShouldInitPropertiesProperly(): void
     {
-        $heidelpay = new Heidelpay('s-priv-1234');
+        $heidelpay = new Unzer('s-priv-1234');
         $paymentService = $heidelpay->getPaymentService();
         $this->assertInstanceOf(PaymentService::class, $paymentService);
         $this->assertInstanceOf(WebhookService::class, $heidelpay->getWebhookService());
@@ -66,10 +66,10 @@ class HeidelpayTest extends BasePaymentTest
         $this->assertEquals('s-priv-1234', $heidelpay->getKey());
         $this->assertEquals(null, $heidelpay->getLocale());
 
-        $heidelpaySwiss = new Heidelpay('s-priv-1234', 'de-CH');
+        $heidelpaySwiss = new Unzer('s-priv-1234', 'de-CH');
         $this->assertEquals('de-CH', $heidelpaySwiss->getLocale());
 
-        $heidelpayGerman = new Heidelpay('s-priv-1234', 'de-DE');
+        $heidelpayGerman = new Unzer('s-priv-1234', 'de-DE');
         $this->assertEquals('de-DE', $heidelpayGerman->getLocale());
     }
 
@@ -80,7 +80,7 @@ class HeidelpayTest extends BasePaymentTest
      */
     public function gettersAndSettersShouldWorkProperly(): void
     {
-        $heidelpay = new Heidelpay('s-priv-1234');
+        $heidelpay = new Unzer('s-priv-1234');
         $heidelpay->setLocale('myLocale');
         $this->assertEquals('myLocale', $heidelpay->getLocale());
 
@@ -142,7 +142,7 @@ class HeidelpayTest extends BasePaymentTest
         /** @var ResourceService|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $resourceSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = (new Heidelpay('s-priv-234'))->setResourceService($resourceSrvMock);
+        $heidelpay = (new Unzer('s-priv-234'))->setResourceService($resourceSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
@@ -167,7 +167,7 @@ class HeidelpayTest extends BasePaymentTest
         /** @var PaymentService|MockObject $paymentSrvMock */
         $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $paymentSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = (new Heidelpay('s-priv-234'))->setPaymentService($paymentSrvMock);
+        $heidelpay = (new Unzer('s-priv-234'))->setPaymentService($paymentSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
@@ -192,7 +192,7 @@ class HeidelpayTest extends BasePaymentTest
         /** @var WebhookService|MockObject $webhookSrvMock */
         $webhookSrvMock = $this->getMockBuilder(WebhookService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $webhookSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = (new Heidelpay('s-priv-234'))->setWebhookService($webhookSrvMock);
+        $heidelpay = (new Unzer('s-priv-234'))->setWebhookService($webhookSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }
@@ -217,7 +217,7 @@ class HeidelpayTest extends BasePaymentTest
         /** @var CancelService|MockObject $cancelSrvMock */
         $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $cancelSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = (new Heidelpay('s-priv-234'))->setCancelService($cancelSrvMock);
+        $heidelpay = (new Unzer('s-priv-234'))->setCancelService($cancelSrvMock);
 
         $heidelpay->$heidelpayMethod(...$heidelpayParams);
     }

@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\TransactionTypes\Charge;
@@ -57,13 +57,13 @@ class CanDirectChargeTest extends BasePaymentTest
      */
     public function directChargeShouldPropagateToHeidelpay(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
-        $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
+        $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $charge = new Charge();
         $metadata  = new Metadata();
         $customer = (new Customer())->setId('123');
-        $dummyMock->expects($this->exactly(4))->method('getHeidelpayObject')->willReturn($heidelpayMock);
+        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($heidelpayMock);
         $heidelpayMock->expects($this->exactly(4))->method('charge')
             ->withConsecutive(
                 [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],

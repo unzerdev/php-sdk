@@ -32,7 +32,7 @@ use RuntimeException;
 use stdClass;
 use function in_array;
 
-class Webhooks extends AbstractHeidelpayResource
+class Webhooks extends AbstractUnzerResource
 {
     /** @var string $url */
     protected $url;
@@ -141,7 +141,7 @@ class Webhooks extends AbstractHeidelpayResource
 
         foreach ($responseArray as $event) {
             $webhook = new Webhook();
-            $webhook->setParentResource($this->getHeidelpayObject());
+            $webhook->setParentResource($this->getUnzerObject());
             $webhook->handleResponse($event);
             $registeredWebhooks[] = $webhook;
         }

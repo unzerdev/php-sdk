@@ -24,9 +24,9 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class GeoLocation extends AbstractHeidelpayResource
+class GeoLocation extends AbstractUnzerResource
 {
     /** @var string|null $clientIp */
     private $clientIp;

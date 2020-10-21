@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Sofort;
@@ -130,7 +130,7 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToAuthorization(): void
     {
-        $heidelpayObj    = new Heidelpay('s-priv-123345');
+        $heidelpayObj    = new Unzer('s-priv-123345');
         $paymentType     = (new Sofort())->setId('123');
         $customer        = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment         = new Payment();
@@ -153,7 +153,7 @@ class AuthorizationTest extends BasePaymentTest
     public function cancelShouldCallCancelAuthorizationOnHeidelpayObject(): void
     {
         $authorization =  new Authorization();
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['cancelAuthorization'])
             ->getMock();
@@ -164,7 +164,7 @@ class AuthorizationTest extends BasePaymentTest
                 [$this->identicalTo($authorization), 321.9]
             );
 
-        /** @var Heidelpay $heidelpayMock */
+        /** @var Unzer $heidelpayMock */
         $authorization->setParentResource($heidelpayMock);
         $authorization->cancel();
         $authorization->cancel(321.9);
@@ -194,11 +194,11 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function chargeShouldCallChargeAuthorizationOnHeidelpayObject(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['chargeAuthorization'])
             ->getMock();
-        /** @var Heidelpay $heidelpayMock */
+        /** @var Unzer $heidelpayMock */
         $payment = (new Payment())->setParentResource($heidelpayMock)->setId('myPayment');
         $heidelpayMock->expects($this->exactly(2))
             ->method('chargeAuthorization')->willReturn(new Charge())

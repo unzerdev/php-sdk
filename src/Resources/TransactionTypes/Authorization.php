@@ -24,7 +24,7 @@
  */
 namespace UnzerSDK\Resources\TransactionTypes;
 
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasInvoiceId;
@@ -266,12 +266,12 @@ class Authorization extends AbstractTransactionType
      *
      * @return Cancellation
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancel($amount = null): Cancellation
     {
-        return $this->getHeidelpayObject()->cancelAuthorization($this, $amount);
+        return $this->getUnzerObject()->cancelAuthorization($this, $amount);
     }
 
     /**
@@ -281,7 +281,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return Charge
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function charge($amount = null): Charge
@@ -290,6 +290,6 @@ class Authorization extends AbstractTransactionType
         if (!$payment instanceof Payment) {
             throw new RuntimeException('Payment object is missing. Try fetching the object first!');
         }
-        return $this->getHeidelpayObject()->chargeAuthorization($payment, $amount);
+        return $this->getUnzerObject()->chargeAuthorization($payment, $amount);
     }
 }

@@ -24,8 +24,8 @@
  */
 namespace UnzerSDK\Traits;
 
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Recurring;
 use RuntimeException;
 
@@ -41,13 +41,13 @@ trait CanRecur
      *
      * @return Recurring
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function activateRecurring($returnUrl): Recurring
     {
-        if ($this instanceof AbstractHeidelpayResource) {
-            return $this->getHeidelpayObject()->activateRecurringPayment($this, $returnUrl);
+        if ($this instanceof AbstractUnzerResource) {
+            return $this->getUnzerObject()->activateRecurringPayment($this, $returnUrl);
         }
         throw new RuntimeException('Error: Recurring can not be enabled on this type.');
     }

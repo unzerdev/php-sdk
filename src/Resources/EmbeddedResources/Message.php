@@ -24,9 +24,9 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class Message extends AbstractHeidelpayResource
+class Message extends AbstractUnzerResource
 {
     /** @var string $code */
     private $code = '';

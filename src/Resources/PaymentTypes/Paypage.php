@@ -27,8 +27,8 @@ namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\TransactionTypes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Metadata;
@@ -456,7 +456,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setRedirectUrl(string $redirectUrl): Paypage
@@ -603,7 +603,7 @@ class Paypage extends BasePaymentType
      * {@inheritDoc}
      * Map external name of property to internal name of property.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
@@ -660,13 +660,13 @@ class Paypage extends BasePaymentType
      * Updates the referenced payment object if it exists and if this is not the payment object itself.
      * This is called from the crud methods to update the payments state whenever anything happens.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function fetchPayment(): void
     {
         $payment = $this->getPayment();
-        if ($payment instanceof AbstractHeidelpayResource) {
+        if ($payment instanceof AbstractUnzerResource) {
             $this->fetchResource($payment);
         }
     }

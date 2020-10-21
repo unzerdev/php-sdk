@@ -25,10 +25,10 @@
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use function is_string;
 
-class CompanyInfo extends AbstractHeidelpayResource
+class CompanyInfo extends AbstractUnzerResource
 {
     /** @var string $registrationType */
     protected $registrationType;

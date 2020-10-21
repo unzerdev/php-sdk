@@ -24,9 +24,9 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class Address extends AbstractHeidelpayResource
+class Address extends AbstractUnzerResource
 {
     /** @var string $name */
     protected $name;

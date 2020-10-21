@@ -32,7 +32,7 @@ use UnzerSDK\Traits\HasGeoLocation;
 use stdClass;
 use function in_array;
 
-class Customer extends AbstractHeidelpayResource
+class Customer extends AbstractUnzerResource
 {
     use HasGeoLocation;
 

@@ -26,11 +26,11 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasPaymentState;
 
-class TraitDummyHasCancellationsHasPaymentState extends AbstractHeidelpayResource
+class TraitDummyHasCancellationsHasPaymentState extends AbstractUnzerResource
 {
     use HasCancellations;
     use HasPaymentState;

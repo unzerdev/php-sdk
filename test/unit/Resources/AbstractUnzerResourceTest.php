@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This class defines unit tests to verify functionality of the AbstractHeidelpayResource.
+ * This class defines unit tests to verify functionality of the AbstractUnzerResource.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -31,8 +31,8 @@ use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Constants\Salutations;
 use UnzerSDK\Constants\TransactionTypes;
-use UnzerSDK\Heidelpay;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
@@ -63,7 +63,7 @@ use UnzerSDK\test\unit\DummyResource;
 use RuntimeException;
 use stdClass;
 
-class AbstractHeidelpayResourceTest extends BasePaymentTest
+class AbstractUnzerResourceTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter functionality.
@@ -98,31 +98,31 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
     }
 
     /**
-     * Verify getHeidelpayObject calls getParentResource.
+     * Verify getUnzerObject calls getParentResource.
      *
      * @test
      */
-    public function getHeidelpayObjectShouldCallGetParentResourceOnce(): void
+    public function getUnzerObjectShouldCallGetParentResourceOnce(): void
     {
         $customerMock = $this->getMockBuilder(Customer::class)->setMethods(['getParentResource'])->getMock();
         $customerMock->expects($this->once())->method('getParentResource');
 
         /** @var Customer $customerMock */
-        $customerMock->getHeidelpayObject();
+        $customerMock->getUnzerObject();
     }
 
     /**
-     * Verify getter/setter of ParentResource and Heidelpay object.
+     * Verify getter/setter of ParentResource and Unzer object.
      *
      * @test
      */
-    public function parentResourceAndHeidelpayGetterSetterShouldWork(): void
+    public function parentResourceAndUnzerGetterSetterShouldWork(): void
     {
-        $heidelpayObj = new Heidelpay('s-priv-123');
+        $unzerObj = new Unzer('s-priv-123');
         $customer     = new Customer();
-        $customer->setParentResource($heidelpayObj);
-        $this->assertSame($heidelpayObj, $customer->getParentResource());
-        $this->assertSame($heidelpayObj, $customer->getHeidelpayObject());
+        $customer->setParentResource($unzerObj);
+        $this->assertSame($unzerObj, $customer->getParentResource());
+        $this->assertSame($unzerObj, $customer->getUnzerObject());
     }
 
     /**
@@ -132,14 +132,14 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
      */
     public function getUriWillCallGetUriOnItsParentResource(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+        $unzerMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUri'])
             ->getMock();
-        $heidelpayMock->expects($this->once())->method('getUri')->willReturn('parent/resource/path/');
+        $unzerMock->expects($this->once())->method('getUri')->willReturn('parent/resource/path/');
 
-        /** @var Customer $heidelpayMock */
-        $customer = (new Customer())->setParentResource($heidelpayMock);
+        /** @var Customer $unzerMock */
+        $customer = (new Customer())->setParentResource($unzerMock);
         $this->assertEquals('parent/resource/path/customers', $customer->getUri());
     }
 
@@ -150,16 +150,16 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
      *
      * @dataProvider uriDataProvider
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractUnzerResource $resource
      * @param string                    $resourcePath
      */
-    public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractHeidelpayResource$resource, $resourcePath): void
+    public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractUnzerResource$resource, $resourcePath): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
-        $heidelpayMock->method('getUri')->willReturn('parent/resource/path/');
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
+        $unzerMock->method('getUri')->willReturn('parent/resource/path/');
 
-        /** @var Heidelpay $heidelpayMock */
-        $resource->setParentResource($heidelpayMock)->setId('myId');
+        /** @var Unzer $unzerMock */
+        $resource->setParentResource($unzerMock)->setId('myId');
         $this->assertEquals($resourcePath . '/myId', $resource->getUri());
         $this->assertEquals($resourcePath, $resource->getUri(false));
     }
@@ -171,18 +171,18 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
      */
     public function getUriWillAddExternalIdToTheUriIfTheIdIsNotSetButAppendIdIs(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+        $unzerMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUri'])
             ->getMock();
-        $heidelpayMock->method('getUri')->willReturn('parent/resource/path/');
+        $unzerMock->method('getUri')->willReturn('parent/resource/path/');
 
         $customerMock = $this->getMockBuilder(Customer::class)->setMethods(['getExternalId'])->getMock();
         $customerMock->expects($this->atLeast(1))->method('getExternalId')->willReturn('myExternalId');
 
         /** @var Customer $customerMock */
-        /** @var Heidelpay $heidelpayMock */
-        $customerMock->setParentResource($heidelpayMock);
+        /** @var Unzer $unzerMock */
+        $customerMock->setParentResource($unzerMock);
         $this->assertEquals('parent/resource/path/customers/myExternalId', $customerMock->getUri());
         $this->assertEquals('parent/resource/path/customers', $customerMock->getUri(false));
     }
@@ -258,7 +258,7 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
      */
     public function jsonSerializeShouldTranslateResourceIntoJson(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
         $address   = (new Address())
             ->setName('Peter Universum')
             ->setStreet('Hugo-Junkers-Str. 5')
@@ -272,20 +272,20 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
             ->setFirstname('Peter')
             ->setLastname('Universum')
             ->setSalutation(Salutations::MR)
-            ->setCompany('heidelpay GmbH')
+            ->setCompany('unzer GmbH')
             ->setBirthDate('1989-12-24')
             ->setEmail('peter.universum@universum-group.de')
             ->setMobile('+49172123456')
             ->setPhone('+4962216471100')
             ->setBillingAddress($address)
             ->setShippingAddress($address)
-            ->setParentResource($heidelpay);
+            ->setParentResource($unzer);
 
         $customer->setSpecialParams(['param1' => 'value1', 'param2' => 'value2']);
 
         $expectedJson = '{"billingAddress":{"city":"Frankfurt am Main","country":"DE","name":"Peter Universum",' .
             '"state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"},"birthDate":"1989-12-24",' .
-            '"company":"heidelpay GmbH","customerId":"CustomerId","email":"peter.universum@universum-group.de",' .
+            '"company":"unzer GmbH","customerId":"CustomerId","email":"peter.universum@universum-group.de",' .
             '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","param1":"value1","param2":"value2",' .
             '"phone":"+4962216471100","salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE",' .
             '"name":"Peter Universum","state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
@@ -316,7 +316,7 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
     {
         $customer = CustomerFactory::createCustomer('Max', ' Mustermann');
         $customer->setId('MyTestId');
-        $dummy      = new DummyHeidelpayResource($customer);
+        $dummy      = new DummyUnzerResource($customer);
         $dummyArray = $dummy->expose();
         $this->assertArrayHasKey('resources', $dummyArray);
         $this->assertArrayHasKey('customerId', $dummyArray['resources']);
@@ -332,7 +332,7 @@ class AbstractHeidelpayResourceTest extends BasePaymentTest
     {
         $customer = CustomerFactory::createCustomer('Max', ' Mustermann');
         $customer->setId('MyTestId');
-        $dummy = new DummyHeidelPayResource($customer);
+        $dummy = new DummyUnzerResource($customer);
         $this->assertNull($dummy->getExternalId());
     }
 

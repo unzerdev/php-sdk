@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\unit\Resources;
 
 use UnzerSDK\Constants\WebhookEvents;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Webhook;
 use UnzerSDK\Resources\Webhooks;
 use UnzerSDK\test\BasePaymentTest;
@@ -89,7 +89,7 @@ class WebhooksTest extends BasePaymentTest
     public function responseHandlingForEventsShouldBehaveAsExpected(): void
     {
         $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE]);
-        $webhooks->setParentResource(new Heidelpay('s-priv-123'));
+        $webhooks->setParentResource(new Unzer('s-priv-123'));
         $this->assertEquals('https://dev.heidelpay.com', $webhooks->getUrl());
         $this->assertEquals([WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE], $webhooks->getEventList());
 
@@ -134,7 +134,7 @@ class WebhooksTest extends BasePaymentTest
     public function responseHandlingForOneEventShouldBehaveAsExpected(): void
     {
         $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE]);
-        $webhooks->setParentResource(new Heidelpay('s-priv-123'));
+        $webhooks->setParentResource(new Unzer('s-priv-123'));
         $this->assertEquals('https://dev.heidelpay.com', $webhooks->getUrl());
         $this->assertEquals([WebhookEvents::CHARGE], $webhooks->getEventList());
 

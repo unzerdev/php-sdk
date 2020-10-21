@@ -29,10 +29,10 @@ use Exception;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\IdStrings;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Keypair;
@@ -71,35 +71,35 @@ use function is_string;
 
 class ResourceService implements ResourceServiceInterface
 {
-    /** @var Heidelpay */
-    private $heidelpay;
+    /** @var Unzer */
+    private $unzer;
 
     /**
      * ResourceService constructor.
      *
-     * @param Heidelpay $heidelpay
+     * @param Unzer $unzer
      */
-    public function __construct(Heidelpay $heidelpay)
+    public function __construct(Unzer $unzer)
     {
-        $this->heidelpay = $heidelpay;
+        $this->unzer = $unzer;
     }
 
     //<editor-fold desc="Getters/Setters"
 
-    /** @return Heidelpay */
-    public function getHeidelpay(): Heidelpay
+    /** @return Unzer */
+    public function getUnzer(): Unzer
     {
-        return $this->heidelpay;
+        return $this->unzer;
     }
 
     /**
-     * @param Heidelpay $heidelpay
+     * @param Unzer $unzer
      *
      * @return ResourceServiceInterface
      */
-    public function setHeidelpay(Heidelpay $heidelpay): ResourceServiceInterface
+    public function setUnzer(Unzer $unzer): ResourceServiceInterface
     {
-        $this->heidelpay = $heidelpay;
+        $this->unzer = $unzer;
         return $this;
     }
 
@@ -110,35 +110,35 @@ class ResourceService implements ResourceServiceInterface
     /**
      * Send request to API.
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractUnzerResource $resource
      * @param string                    $httpMethod
      *
      * @return stdClass
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function send(
-        AbstractHeidelpayResource $resource,
+        AbstractUnzerResource $resource,
         $httpMethod = HttpAdapterInterface::REQUEST_GET
     ): stdClass {
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri          = $resource->getUri($appendId);
-        $responseJson = $resource->getHeidelpayObject()->getHttpService()->send($uri, $resource, $httpMethod);
+        $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod);
         return json_decode($responseJson, false);
     }
 
     /**
      * Fetches the Resource if necessary.
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractUnzerResource $resource
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractUnzerResource
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function getResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         if ($resource->getFetchedAt() === null && $resource->getId() !== null) {
             $this->fetchResource($resource);
@@ -149,30 +149,30 @@ class ResourceService implements ResourceServiceInterface
     /**
      * @param $url
      *
-     * @return AbstractHeidelpayResource|null
+     * @return AbstractUnzerResource|null
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchResourceByUrl($url)
     {
         $resource = null;
-        $heidelpay    = $this->heidelpay;
+        $unzer    = $this->unzer;
 
         $resourceId   = IdService::getLastResourceIdFromUrlString($url);
         $resourceType = IdService::getResourceTypeFromIdString($resourceId);
         switch (true) {
             case $resourceType === IdStrings::AUTHORIZE:
-                $resource = $heidelpay->fetchAuthorization(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
+                $resource = $unzer->fetchAuthorization(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
                 break;
             case $resourceType === IdStrings::CHARGE:
-                $resource = $heidelpay->fetchChargeById(
+                $resource = $unzer->fetchChargeById(
                     IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT),
                     $resourceId
                 );
                 break;
             case $resourceType === IdStrings::SHIPMENT:
-                $resource = $heidelpay->fetchShipment(
+                $resource = $unzer->fetchShipment(
                     IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT),
                     $resourceId
                 );
@@ -181,25 +181,25 @@ class ResourceService implements ResourceServiceInterface
                 $paymentId  = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
                 $chargeId   = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
                 if ($chargeId !== null) {
-                    $resource = $heidelpay->fetchRefundById($paymentId, $chargeId, $resourceId);
+                    $resource = $unzer->fetchRefundById($paymentId, $chargeId, $resourceId);
                     break;
                 }
-                $resource = $heidelpay->fetchReversal($paymentId, $resourceId);
+                $resource = $unzer->fetchReversal($paymentId, $resourceId);
                 break;
             case $resourceType === IdStrings::PAYOUT:
-                $resource = $heidelpay->fetchPayout(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
+                $resource = $unzer->fetchPayout(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
                 break;
             case $resourceType === IdStrings::PAYMENT:
-                $resource = $heidelpay->fetchPayment($resourceId);
+                $resource = $unzer->fetchPayment($resourceId);
                 break;
             case $resourceType === IdStrings::METADATA:
-                $resource = $heidelpay->fetchMetadata($resourceId);
+                $resource = $unzer->fetchMetadata($resourceId);
                 break;
             case $resourceType === IdStrings::CUSTOMER:
-                $resource = $heidelpay->fetchCustomer($resourceId);
+                $resource = $unzer->fetchCustomer($resourceId);
                 break;
             case $resourceType === IdStrings::BASKET:
-                $resource = $heidelpay->fetchBasket($resourceId);
+                $resource = $unzer->fetchBasket($resourceId);
                 break;
             case in_array($resourceType, IdStrings::PAYMENT_TYPES, true):
                 $resource = $this->fetchPaymentType($resourceId);
@@ -218,14 +218,14 @@ class ResourceService implements ResourceServiceInterface
     /**
      * Create the resource on the api.
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractUnzerResource $resource
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractUnzerResource
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function createResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function createResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_POST;
         $response = $this->send($resource, $method);
@@ -246,15 +246,15 @@ class ResourceService implements ResourceServiceInterface
     /**
      * Update the resource on the api.
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractUnzerResource $resource
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractUnzerResource
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
-    public function updateResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function updateResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_PUT;
         $response = $this->send($resource, $method);
@@ -269,14 +269,14 @@ class ResourceService implements ResourceServiceInterface
     }
 
     /**
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractUnzerResource $resource
      *
-     * @return AbstractHeidelpayResource|null
+     * @return AbstractUnzerResource|null
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function deleteResource(AbstractHeidelpayResource &$resource): ?AbstractHeidelpayResource
+    public function deleteResource(AbstractUnzerResource &$resource): ?AbstractUnzerResource
     {
         $response = $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
 
@@ -294,15 +294,15 @@ class ResourceService implements ResourceServiceInterface
     /**
      * Updates the given local resource object (id must be set)
      *
-     * @param AbstractHeidelpayResource $resource The local resource object to update.
+     * @param AbstractUnzerResource $resource The local resource object to update.
      *
-     * @return AbstractHeidelpayResource The updated resource object.
+     * @return AbstractUnzerResource The updated resource object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
-    public function fetchResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function fetchResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_GET;
         $response = $this->send($resource, $method);
@@ -325,7 +325,7 @@ class ResourceService implements ResourceServiceInterface
      *
      * @return Payout The Payout object of the given Payment.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchPayout($payment): Payout
@@ -353,7 +353,7 @@ class ResourceService implements ResourceServiceInterface
         // make sure recurring is allowed for the given payment type.
         if (in_array(CanRecur::class, class_uses($paymentTypeObject), true)) {
             $recurring = new Recurring($paymentTypeObject->getId(), $returnUrl);
-            $recurring->setParentResource($this->heidelpay);
+            $recurring->setParentResource($this->unzer);
             $this->createResource($recurring);
             return $recurring;
         }
@@ -371,9 +371,9 @@ class ResourceService implements ResourceServiceInterface
      *
      * @param $payment
      *
-     * @return AbstractHeidelpayResource|Payment
+     * @return AbstractUnzerResource|Payment
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getPaymentResource($payment): Payment
@@ -397,7 +397,7 @@ class ResourceService implements ResourceServiceInterface
             $paymentObject->setId($payment);
         }
 
-        $this->fetchResource($paymentObject->setParentResource($this->heidelpay));
+        $this->fetchResource($paymentObject->setParentResource($this->unzer));
         return $paymentObject;
     }
 
@@ -406,7 +406,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function fetchPaymentByOrderId($orderId): Payment
     {
-        $paymentObject = (new Payment($this->heidelpay))->setOrderId($orderId);
+        $paymentObject = (new Payment($this->unzer))->setOrderId($orderId);
         $this->fetchResource($paymentObject);
         return $paymentObject;
     }
@@ -420,7 +420,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function fetchKeypair($detailed = false): Keypair
     {
-        $keyPair = (new Keypair())->setParentResource($this->heidelpay)->setDetailed($detailed);
+        $keyPair = (new Keypair())->setParentResource($this->unzer)->setDetailed($detailed);
         $this->fetchResource($keyPair);
         return $keyPair;
     }
@@ -434,7 +434,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function createMetadata(Metadata $metadata): Metadata
     {
-        $metadata->setParentResource($this->heidelpay);
+        $metadata->setParentResource($this->unzer);
         $this->createResource($metadata);
         return $metadata;
     }
@@ -449,7 +449,7 @@ class ResourceService implements ResourceServiceInterface
             $metadataObject = (new Metadata())->setId($metadata);
         }
 
-        $this->fetchResource($metadataObject->setParentResource($this->heidelpay));
+        $this->fetchResource($metadataObject->setParentResource($this->unzer));
         return $metadataObject;
     }
 
@@ -462,7 +462,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function createBasket(Basket $basket): Basket
     {
-        $basket->setParentResource($this->heidelpay);
+        $basket->setParentResource($this->unzer);
         $this->createResource($basket);
         return $basket;
     }
@@ -476,7 +476,7 @@ class ResourceService implements ResourceServiceInterface
         if (is_string($basket)) {
             $basketObj = (new Basket())->setId($basket);
         }
-        $basketObj->setParentResource($this->heidelpay);
+        $basketObj->setParentResource($this->unzer);
 
         $this->fetchResource($basketObj);
         return $basketObj;
@@ -487,7 +487,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function updateBasket(Basket $basket): Basket
     {
-        $basket->setParentResource($this->heidelpay);
+        $basket->setParentResource($this->unzer);
         $this->updateResource($basket);
         return $basket;
     }
@@ -501,7 +501,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function createPaymentType(BasePaymentType $paymentType): BasePaymentType
     {
-        $paymentType->setParentResource($this->heidelpay);
+        $paymentType->setParentResource($this->unzer);
         $this->createResource($paymentType);
         return $paymentType;
     }
@@ -573,7 +573,7 @@ class ResourceService implements ResourceServiceInterface
         }
 
         /** @var BasePaymentType $paymentType */
-        $paymentType = $paymentType->setParentResource($this->heidelpay)->setId($typeId);
+        $paymentType = $paymentType->setParentResource($this->unzer)->setId($typeId);
         $this->fetchResource($paymentType);
         return $paymentType;
     }
@@ -597,7 +597,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function createCustomer(Customer $customer): Customer
     {
-        $customer->setParentResource($this->heidelpay);
+        $customer->setParentResource($this->unzer);
         $this->createResource($customer);
         return $customer;
     }
@@ -609,7 +609,7 @@ class ResourceService implements ResourceServiceInterface
     {
         try {
             $this->createCustomer($customer);
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             if (ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS !== $e->getCode()) {
                 throw $e;
             }
@@ -635,7 +635,7 @@ class ResourceService implements ResourceServiceInterface
             $customerObject = (new Customer())->setId($customer);
         }
 
-        $this->fetchResource($customerObject->setParentResource($this->heidelpay));
+        $this->fetchResource($customerObject->setParentResource($this->unzer));
         return $customerObject;
     }
 
@@ -645,7 +645,7 @@ class ResourceService implements ResourceServiceInterface
     public function fetchCustomerByExtCustomerId($customerId): Customer
     {
         $customerObject = (new Customer())->setCustomerId($customerId);
-        $this->fetchResource($customerObject->setParentResource($this->heidelpay));
+        $this->fetchResource($customerObject->setParentResource($this->unzer));
         return $customerObject;
     }
 

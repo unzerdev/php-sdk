@@ -28,7 +28,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\EmbeddedResources\CardDetails;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
@@ -65,7 +65,7 @@ class CardTest extends BaseIntegrationTest
 
         $this->assertInstanceOf(Card::class, $card);
         $this->assertNotNull($card->getId());
-        $this->assertSame($this->heidelpay, $card->getHeidelpayObject());
+        $this->assertSame($this->heidelpay, $card->getUnzerObject());
         $this->assertEquals($expectedCardDetails, $card->getCardDetails());
 
         $geoLocation = $card->getGeoLocation();
@@ -292,7 +292,7 @@ class CardTest extends BaseIntegrationTest
         $this->assertAmounts($payment1, 50.0, 50.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
         $this->heidelpay->chargeAuthorization($payment->getId(), 70);
     }

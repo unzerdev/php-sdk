@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -57,13 +57,13 @@ class CanAuthorizeTest extends BasePaymentTest
      */
     public function authorizeShouldPropagateAuthorizeToHeidelpay(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
-        $dummyMock     = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
+        $dummyMock     = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $authorize = new Authorization();
         $customer  = (new Customer())->setId('123');
         $metadata  = new Metadata();
-        $dummyMock->expects($this->exactly(4))->method('getHeidelpayObject')->willReturn($heidelpayMock);
+        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($heidelpayMock);
         $heidelpayMock->expects($this->exactly(4))->method('authorize')
             ->withConsecutive(
                 [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],

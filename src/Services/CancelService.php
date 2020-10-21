@@ -26,8 +26,8 @@ namespace UnzerSDK\Services;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\CancelReasonCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\CancelServiceInterface;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -39,15 +39,15 @@ use function is_string;
 
 class CancelService implements CancelServiceInterface
 {
-    /** @var Heidelpay */
+    /** @var Unzer */
     private $heidelpay;
 
     /**
      * PaymentService constructor.
      *
-     * @param Heidelpay $heidelpay
+     * @param Unzer $heidelpay
      */
-    public function __construct(Heidelpay $heidelpay)
+    public function __construct(Unzer $heidelpay)
     {
         $this->heidelpay = $heidelpay;
     }
@@ -55,19 +55,19 @@ class CancelService implements CancelServiceInterface
     //<editor-fold desc="Getters/Setters"
 
     /**
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function getHeidelpay(): Heidelpay
+    public function getHeidelpay(): Unzer
     {
         return $this->heidelpay;
     }
 
     /**
-     * @param Heidelpay $heidelpay
+     * @param Unzer $heidelpay
      *
      * @return CancelService
      */
-    public function setHeidelpay(Heidelpay $heidelpay): CancelService
+    public function setHeidelpay(Unzer $heidelpay): CancelService
     {
         $this->heidelpay = $heidelpay;
         return $this;
@@ -230,7 +230,7 @@ class CancelService implements CancelServiceInterface
 
             try {
                 $cancellation = $authorize->cancel($cancelAmount);
-            } catch (HeidelpayApiException $e) {
+            } catch (UnzerApiException $e) {
                 $this->isExceptionAllowed($e);
             }
         }
@@ -248,7 +248,7 @@ class CancelService implements CancelServiceInterface
      *
      * @return array
      *
-     * @throws HeidelpayApiException
+     * @throws UnzerApiException
      * @throws RuntimeException
      */
     public function cancelPaymentCharges(
@@ -271,7 +271,7 @@ class CancelService implements CancelServiceInterface
 
             try {
                 $cancellation = $charge->cancel($cancelAmount, $reasonCode, $referenceText, $amountNet, $amountVat);
-            } catch (HeidelpayApiException $e) {
+            } catch (UnzerApiException $e) {
                 $this->isExceptionAllowed($e);
                 continue;
             }
@@ -299,9 +299,9 @@ class CancelService implements CancelServiceInterface
      *
      * @param $exception
      *
-     * @throws HeidelpayApiException
+     * @throws UnzerApiException
      */
-    private function isExceptionAllowed(HeidelpayApiException $exception): void
+    private function isExceptionAllowed(UnzerApiException $exception): void
     {
         $allowedErrors = [
             ApiResponseCodes::API_ERROR_ALREADY_CANCELLED,

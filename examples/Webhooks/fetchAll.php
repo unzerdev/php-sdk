@@ -31,8 +31,8 @@ require_once __DIR__ . '/Constants.php';
 require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
 
 function printMessage($type, $title, $text)
 {
@@ -79,11 +79,11 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+            $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
             $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
             $webhooks = $heidelpay->fetchAllWebhooks();
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             printError($e->getMessage());
             $heidelpay->debugLog('Error: ' . $e->getMessage());
         } catch (RuntimeException $e) {

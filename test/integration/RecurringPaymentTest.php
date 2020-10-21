@@ -27,8 +27,8 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
@@ -83,7 +83,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
         if (empty($privateKey)) {
             $this->markTestIncomplete('No non 3ds private key set');
         }
-        $heidelpay = new Heidelpay($privateKey);
+        $heidelpay = new Unzer($privateKey);
 
         $heidelpay->setDebugMode(true)->setDebugHandler($this->heidelpay->getDebugHandler());
 
@@ -127,7 +127,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
         $dd = $this->heidelpay->fetchPaymentType($dd->getId());
         $this->assertTrue($dd->isRecurring());
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
         $this->heidelpay->activateRecurringPayment($dd, self::RETURN_URL);
     }
@@ -148,7 +148,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
         $ddg = $this->heidelpay->fetchPaymentType($ddg->getId());
         $this->assertTrue($ddg->isRecurring());
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
         $this->heidelpay->activateRecurringPayment($ddg, self::RETURN_URL);
     }

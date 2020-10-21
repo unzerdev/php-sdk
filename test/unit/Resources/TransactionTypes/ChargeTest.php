@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Sofort;
@@ -132,7 +132,7 @@ class ChargeTest extends BasePaymentTest
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToCharge(): void
     {
-        $heidelpayObj    = new Heidelpay('s-priv-123345');
+        $heidelpayObj    = new Unzer('s-priv-123345');
         $paymentType     = (new Sofort())->setId('123');
         $customer        = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment         = new Payment();
@@ -155,7 +155,7 @@ class ChargeTest extends BasePaymentTest
     public function cancelShouldCallCancelChargeOnHeidelpayObject(): void
     {
         $charge =  new Charge();
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['cancelCharge'])
             ->getMock();
@@ -166,7 +166,7 @@ class ChargeTest extends BasePaymentTest
                 [$this->identicalTo($charge), 321.9]
             );
 
-        /** @var Heidelpay $heidelpayMock */
+        /** @var Unzer $heidelpayMock */
         $charge->setParentResource($heidelpayMock);
         $charge->cancel();
         $charge->cancel(321.9);

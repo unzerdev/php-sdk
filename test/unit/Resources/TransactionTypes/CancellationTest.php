@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
 use UnzerSDK\Constants\CancelReasonCodes;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -88,7 +88,7 @@ class CancellationTest extends BasePaymentTest
         $this->assertEquals(['amount' => 123.4], $cancelMock->expose());
 
         $paymentType = (new HirePurchaseDirectDebit())->setId('id');
-        $cancelMock->setPayment((new Payment(new Heidelpay('s-priv-1234')))->setPaymentType($paymentType));
+        $cancelMock->setPayment((new Payment(new Unzer('s-priv-1234')))->setPaymentType($paymentType));
         $this->assertEquals(['amountGross' => 123.4], $cancelMock->expose());
     }
 }

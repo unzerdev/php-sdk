@@ -28,7 +28,7 @@ namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\WebhookEvents;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Webhook;
 use UnzerSDK\test\BaseIntegrationTest;
 use function count;
@@ -109,7 +109,7 @@ class WebhookTest extends BaseIntegrationTest
 
         $this->assertNull($this->heidelpay->deleteWebhook($webhook));
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND);
         $this->heidelpay->fetchWebhook($webhook->getId());
     }
@@ -124,7 +124,7 @@ class WebhookTest extends BaseIntegrationTest
         $url = $this->generateUniqueUrl();
         $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED);
         $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
     }

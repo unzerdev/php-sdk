@@ -32,8 +32,8 @@ require_once __DIR__ . '/Constants.php';
 require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
 
 $clientMessage = 'Something went wrong. Please try again later.';
 
@@ -60,7 +60,7 @@ $paymentTypeId   = $_POST['resourceId'];
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
-    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+    $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge to get the redirectUrl.
@@ -77,7 +77,7 @@ try {
 
     // Check the result message of the charge to find out what went wrong.
     $merchantMessage = $charge->getMessage()->getCustomer();
-} catch (HeidelpayApiException $e) {
+} catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {

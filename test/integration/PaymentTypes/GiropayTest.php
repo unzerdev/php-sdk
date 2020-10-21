@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Giropay;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -54,7 +54,7 @@ class GiropayTest extends BaseIntegrationTest
      */
     public function giroPayShouldThrowExceptionOnAuthorize(): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $giropay = $this->heidelpay->createPaymentType(new Giropay());

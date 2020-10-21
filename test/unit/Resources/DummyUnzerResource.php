@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This dummy class is used to verify certain behaviour of the AbstractHeidelpayResource.
+ * This dummy class is used to verify certain behaviour of the AbstractUnzerResource.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -26,16 +26,16 @@
  */
 namespace UnzerSDK\test\unit\Resources;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Customer;
 
-class DummyHeidelpayResource extends AbstractHeidelpayResource
+class DummyUnzerResource extends AbstractUnzerResource
 {
     /** @var Customer $customer */
     private $customer;
 
     /**
-     * DummyHeidelpayResource constructor.
+     * DummyUnzerResource constructor.
      *
      * @param Customer $customer
      */

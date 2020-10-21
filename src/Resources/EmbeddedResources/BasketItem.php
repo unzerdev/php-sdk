@@ -24,9 +24,9 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class BasketItem extends AbstractHeidelpayResource
+class BasketItem extends AbstractUnzerResource
 {
     /** @var string $basketItemReferenceId */
     protected $basketItemReferenceId;

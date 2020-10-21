@@ -27,8 +27,8 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -41,7 +41,7 @@ class PrepaymentTest extends BaseIntegrationTest
      * @return Prepayment
      * @test
      */
-    public function prepaymentShouldBeCreatableAndFetchable(): AbstractHeidelpayResource
+    public function prepaymentShouldBeCreatableAndFetchable(): AbstractUnzerResource
     {
         $prepayment = $this->heidelpay->createPaymentType(new Prepayment());
         $this->assertInstanceOf(Prepayment::class, $prepayment);
@@ -89,7 +89,7 @@ class PrepaymentTest extends BaseIntegrationTest
      */
     public function prepaymentTypeShouldNotBeAuthorizable(Prepayment $prepayment): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $this->heidelpay->authorize(100.0, 'EUR', $prepayment, self::RETURN_URL);
@@ -106,7 +106,7 @@ class PrepaymentTest extends BaseIntegrationTest
      */
     public function prepaymentTypeShouldNotBeShippable(Charge $charge): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
         $this->heidelpay->ship($charge->getPayment());

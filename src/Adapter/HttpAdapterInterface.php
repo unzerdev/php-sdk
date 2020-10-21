@@ -24,7 +24,7 @@
  */
 namespace UnzerSDK\Adapter;
 
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 
 interface HttpAdapterInterface
 {
@@ -47,7 +47,7 @@ interface HttpAdapterInterface
      *
      * @return string|null
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      */
     public function execute(): ?string;
 

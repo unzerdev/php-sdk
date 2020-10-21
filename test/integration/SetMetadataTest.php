@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -131,7 +131,7 @@ class SetMetadataTest extends BaseIntegrationTest
     public function emptyMetaDataShouldLeadToError(): void
     {
         $metadata = new Metadata();
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_REQUEST_DATA_IS_INVALID);
         $this->heidelpay->createMetadata($metadata);
     }

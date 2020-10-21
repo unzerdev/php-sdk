@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\TransactionTypes\Payout;
@@ -57,13 +57,13 @@ class CanPayoutWithCustomerTest extends BasePaymentTest
      */
     public function payoutShouldPropagatePayoutToHeidelpay(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['payout'])->disableOriginalConstructor()->getMock();
-        $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['payout'])->disableOriginalConstructor()->getMock();
+        $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $payout = new Payout();
         $customer  = (new Customer())->setId('123');
         $metadata  = new Metadata();
-        $dummyMock->expects($this->exactly(3))->method('getHeidelpayObject')->willReturn($heidelpayMock);
+        $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($heidelpayMock);
         $heidelpayMock->expects($this->exactly(3))->method('payout')
             ->withConsecutive(
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],

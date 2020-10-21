@@ -26,7 +26,7 @@ namespace UnzerSDK\Exceptions;
 
 use Exception;
 
-class HeidelpayApiException extends Exception
+class UnzerApiException extends Exception
 {
     public const MESSAGE = 'The payment api returned an error!';
     public const CLIENT_MESSAGE = 'The payment api returned an error!';

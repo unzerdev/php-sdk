@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\integration;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\test\BaseIntegrationTest;
 use RuntimeException;
 
@@ -42,7 +42,7 @@ class KeypairTest extends BaseIntegrationTest
      */
     public function validKeysShouldBeExcepted($key): void
     {
-        $heidelpay = new Heidelpay($key);
+        $heidelpay = new Unzer($key);
         $this->assertEquals($key, $heidelpay->getKey());
     }
 
@@ -57,7 +57,7 @@ class KeypairTest extends BaseIntegrationTest
     public function invalidKeysShouldResultInException($key): void
     {
         $this->expectException(RuntimeException::class);
-        new Heidelpay($key);
+        new Unzer($key);
     }
 
     /**

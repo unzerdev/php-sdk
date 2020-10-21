@@ -27,13 +27,13 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
-use UnzerSDK\Heidelpay;
-use UnzerSDK\Interfaces\HeidelpayParentInterface;
+use UnzerSDK\Unzer;
+use UnzerSDK\Interfaces\UnzerParentInterface;
 use UnzerSDK\Traits\CanAuthorizeWithCustomer;
 use UnzerSDK\Traits\CanDirectChargeWithCustomer;
 use UnzerSDK\Traits\CanPayoutWithCustomer;
 
-class TraitDummyWithCustomerWithParentIF implements HeidelpayParentInterface
+class TraitDummyWithCustomerWithParentIF implements UnzerParentInterface
 {
     use CanAuthorizeWithCustomer;
     use CanDirectChargeWithCustomer;
@@ -42,11 +42,11 @@ class TraitDummyWithCustomerWithParentIF implements HeidelpayParentInterface
     /**
      * Returns the heidelpay root object.
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function getHeidelpayObject(): Heidelpay
+    public function getUnzerObject(): Unzer
     {
-        return new Heidelpay('s-priv-123');
+        return new Unzer('s-priv-123');
     }
 
     /**

@@ -24,9 +24,9 @@
  */
 namespace UnzerSDK\Traits;
 
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Interfaces\HeidelpayParentInterface;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Interfaces\UnzerParentInterface;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use RuntimeException;
 
@@ -63,7 +63,7 @@ trait HasCancellations
      */
     public function addCancellation(Cancellation $cancellation): self
     {
-        if ($this instanceof HeidelpayParentInterface) {
+        if ($this instanceof UnzerParentInterface) {
             $cancellation->setParentResource($this);
         }
         $this->cancellations[] = $cancellation;
@@ -76,18 +76,18 @@ trait HasCancellations
      * @param string  $cancellationId The id of the cancellation object
      * @param boolean $lazy
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     *
      * @return Cancellation|null The cancellation or null if none could be found.
+     *@throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     *
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      */
     public function getCancellation($cancellationId, $lazy = false): ?Cancellation
     {
         /** @var Cancellation $cancellation */
         foreach ($this->cancellations as $cancellation) {
             if ($cancellation->getId() === $cancellationId) {
-                if (!$lazy && $this instanceof HeidelpayParentInterface) {
-                    /** @var AbstractHeidelpayResource $this*/
+                if (!$lazy && $this instanceof UnzerParentInterface) {
+                    /** @var AbstractUnzerResource $this*/
                     $this->getResource($cancellation);
                 }
                 return $cancellation;

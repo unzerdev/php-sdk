@@ -26,10 +26,10 @@ namespace UnzerSDK\Services;
 
 use DateTime;
 use UnzerSDK\Constants\TransactionTypes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\PaymentServiceInterface;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\InstalmentPlans;
@@ -46,15 +46,15 @@ use RuntimeException;
 
 class PaymentService implements PaymentServiceInterface
 {
-    /** @var Heidelpay */
+    /** @var Unzer */
     private $heidelpay;
 
     /**
      * PaymentService constructor.
      *
-     * @param Heidelpay $heidelpay
+     * @param Unzer $heidelpay
      */
-    public function __construct(Heidelpay $heidelpay)
+    public function __construct(Unzer $heidelpay)
     {
         $this->heidelpay       = $heidelpay;
     }
@@ -62,19 +62,19 @@ class PaymentService implements PaymentServiceInterface
     //<editor-fold desc="Getters/Setters"
 
     /**
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function getHeidelpay(): Heidelpay
+    public function getHeidelpay(): Unzer
     {
         return $this->heidelpay;
     }
 
     /**
-     * @param Heidelpay $heidelpay
+     * @param Unzer $heidelpay
      *
      * @return PaymentService
      */
-    public function setHeidelpay(Heidelpay $heidelpay): PaymentService
+    public function setHeidelpay(Unzer $heidelpay): PaymentService
     {
         $this->heidelpay = $heidelpay;
         return $this;
@@ -317,7 +317,7 @@ class PaymentService implements PaymentServiceInterface
      *
      * @return Paypage The updated PayPage resource.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function initPayPage(
@@ -340,10 +340,10 @@ class PaymentService implements PaymentServiceInterface
      *
      * @return Payment The resulting Payment object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function createPayment($paymentType): AbstractHeidelpayResource
+    private function createPayment($paymentType): AbstractUnzerResource
     {
         return (new Payment($this->heidelpay))->setPaymentType($paymentType);
     }

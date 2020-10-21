@@ -24,9 +24,9 @@
  */
 namespace UnzerSDK\Resources\PaymentTypes;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-abstract class BasePaymentType extends AbstractHeidelpayResource
+abstract class BasePaymentType extends AbstractUnzerResource
 {
     /**
      * Return true for invoice types.

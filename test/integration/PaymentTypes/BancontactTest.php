@@ -29,7 +29,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Bancontact;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -58,7 +58,7 @@ class BancontactTest extends BaseIntegrationTest
      */
     public function bancontactShouldThrowExceptionOnAuthorize(): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $bancontact = $this->heidelpay->createPaymentType(new Bancontact());

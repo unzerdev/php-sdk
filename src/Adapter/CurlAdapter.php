@@ -25,10 +25,10 @@
  */
 namespace UnzerSDK\Adapter;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Services\EnvironmentService;
 use function extension_loaded;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use RuntimeException;
 use function in_array;
 
@@ -94,7 +94,7 @@ class CurlAdapter implements HttpAdapterInterface
                 $errorMessage = $error . ' (curl_errno: '. $errorNo . ').';
                 break;
         }
-        throw new HeidelpayApiException($errorMessage);
+        throw new UnzerApiException($errorMessage);
     }
 
     /**
@@ -130,7 +130,7 @@ class CurlAdapter implements HttpAdapterInterface
      */
     public function setUserAgent($userAgent): void
     {
-        $this->setOption(CURLOPT_USERAGENT, Heidelpay::SDK_TYPE);
+        $this->setOption(CURLOPT_USERAGENT, Unzer::SDK_TYPE);
     }
 
     /**

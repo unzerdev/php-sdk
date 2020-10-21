@@ -28,7 +28,7 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -171,7 +171,7 @@ class PaymentTest extends BaseIntegrationTest
      */
     public function chargePaymentShouldThrowErrorOnNonPaymentId(): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
         $this->heidelpay->chargePayment('s-crd-xlj0qhdiw40k');
     }
@@ -211,7 +211,7 @@ class PaymentTest extends BaseIntegrationTest
             $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
             $card2->charge(1023, 'EUR', self::RETURN_URL, null, $orderId);
             $this->assertTrue(true);
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
         }
     }
@@ -234,7 +234,7 @@ class PaymentTest extends BaseIntegrationTest
             $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
             $card2->charge(1023, 'EUR', self::RETURN_URL, null, null, null, null, null, $invoiceId);
             $this->assertTrue(true);
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
         }
     }

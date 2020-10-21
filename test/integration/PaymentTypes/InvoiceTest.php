@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -55,7 +55,7 @@ class InvoiceTest extends BaseIntegrationTest
     {
         /** @var Invoice $invoice */
         $invoice = $this->heidelpay->createPaymentType(new Invoice());
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $this->heidelpay->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
@@ -92,7 +92,7 @@ class InvoiceTest extends BaseIntegrationTest
 
         $payment = $charge->getPayment();
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
         $this->heidelpay->ship($payment);

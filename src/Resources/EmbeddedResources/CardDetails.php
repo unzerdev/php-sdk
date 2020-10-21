@@ -24,9 +24,9 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class CardDetails extends AbstractHeidelpayResource
+class CardDetails extends AbstractUnzerResource
 {
     /** @var string|null $cardType */
     protected $cardType;

@@ -26,9 +26,9 @@ namespace UnzerSDK\Resources;
 
 use DateTime;
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Heidelpay;
-use UnzerSDK\Interfaces\HeidelpayParentInterface;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Interfaces\UnzerParentInterface;
 use UnzerSDK\Services\ResourceNameService;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\Services\ValueService;
@@ -42,12 +42,12 @@ use function is_callable;
 use function is_float;
 use function is_object;
 
-abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
+abstract class AbstractUnzerResource implements UnzerParentInterface
 {
     /** @var string $id */
     protected $id;
 
-    /** @var HeidelpayParentInterface */
+    /** @var UnzerParentInterface */
     private $parentResource;
 
     /** @var DateTime */
@@ -95,7 +95,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * @param HeidelpayParentInterface $parentResource
+     * @param UnzerParentInterface $parentResource
      *
      * @return $this
      */
@@ -106,13 +106,13 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * @return HeidelpayParentInterface
+     * @return UnzerParentInterface
      *
      * @throws RuntimeException
      */
-    public function getParentResource(): HeidelpayParentInterface
+    public function getParentResource(): UnzerParentInterface
     {
-        if (!$this->parentResource instanceof HeidelpayParentInterface) {
+        if (!$this->parentResource instanceof UnzerParentInterface) {
             throw new RuntimeException('Parent resource reference is not set!');
         }
         return $this->parentResource;
@@ -163,9 +163,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * @param array $additionalAttributes
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractUnzerResource
      */
-    protected function setAdditionalAttributes(array $additionalAttributes): AbstractHeidelpayResource
+    protected function setAdditionalAttributes(array $additionalAttributes): AbstractUnzerResource
     {
         $this->additionalAttributes = $additionalAttributes;
         return $this;
@@ -178,9 +178,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      * @param string $attribute
      * @param mixed  $value
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractUnzerResource
      */
-    protected function setAdditionalAttribute(string $attribute, $value): AbstractHeidelpayResource
+    protected function setAdditionalAttribute(string $attribute, $value): AbstractUnzerResource
     {
         $this->additionalAttributes[$attribute] = $value;
         return $this;
@@ -205,9 +205,9 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * {@inheritDoc}
      */
-    public function getHeidelpayObject(): Heidelpay
+    public function getUnzerObject(): Unzer
     {
-        return $this->getParentResource()->getHeidelpayObject();
+        return $this->getParentResource()->getUnzerObject();
     }
 
     /**
@@ -281,20 +281,20 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
      */
     private function getResourceService(): ResourceService
     {
-        return $this->getHeidelpayObject()->getResourceService();
+        return $this->getUnzerObject()->getResourceService();
     }
 
     /**
      * Fetches the Resource if it has not been fetched yet and the id is set.
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractUnzerResource $resource
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractUnzerResource
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    protected function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    protected function getResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         return $this->getResourceService()->getResource($resource);
     }
@@ -302,12 +302,12 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     /**
      * Fetch the given resource object.
      *
-     * @param AbstractHeidelpayResource $resource
+     * @param AbstractUnzerResource $resource
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    protected function fetchResource(AbstractHeidelpayResource $resource): void
+    protected function fetchResource(AbstractUnzerResource $resource): void
     {
         $this->getResourceService()->fetchResource($resource);
     }
@@ -330,7 +330,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
     }
 
     /**
-     * Creates an array containing all properties to be exposed to the heidelpay api as resource parameters.
+     * Creates an array containing all properties to be exposed to the Unzer api as resource parameters.
      *
      * @return array|stdClass
      */
@@ -372,7 +372,7 @@ abstract class AbstractHeidelpayResource implements HeidelpayParentInterface
         $resources = [];
         /**
          * @var string                    $attributeName
-         * @var AbstractHeidelpayResource $linkedResource
+         * @var AbstractUnzerResource $linkedResource
          */
         foreach ($this->getLinkedResources() as $attributeName => $linkedResource) {
             $resources[$attributeName . 'Id'] = $linkedResource ? $linkedResource->getId() : '';

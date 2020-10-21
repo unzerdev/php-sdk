@@ -27,7 +27,7 @@
  */
 namespace UnzerSDK\test\integration\TransactionTypes;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
@@ -134,7 +134,7 @@ class AuthorizationTest extends BaseIntegrationTest
      * @test
      * @dataProvider authorizeHasExpectedStatesDP
      *
-     * @param BasePaymentType|AbstractHeidelpayResource $paymentType
+     * @param BasePaymentType|AbstractUnzerResource $paymentType
      * @param string                                    $expectedState The state the transaction is expected to be in.
      */
     public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState): void

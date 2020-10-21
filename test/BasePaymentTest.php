@@ -28,7 +28,7 @@ namespace UnzerSDK\test;
 
 use DateInterval;
 use DateTime;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\Payment;
@@ -49,7 +49,7 @@ class BasePaymentTest extends TestCase
 
     use CustomerFixtureTrait;
 
-    /** @var Heidelpay $heidelpay */
+    /** @var Unzer $heidelpay */
     protected $heidelpay;
 
     /**
@@ -58,14 +58,14 @@ class BasePaymentTest extends TestCase
      *
      * @param string $privateKey
      *
-     * @return Heidelpay
+     * @return Unzer
      *
      * @throws RuntimeException
      */
-    protected function getHeidelpayObject($privateKey = 's-priv-1234'): Heidelpay
+    protected function getHeidelpayObject($privateKey = 's-priv-1234'): Unzer
     {
-        if (!$this->heidelpay instanceof Heidelpay) {
-            $this->heidelpay = (new Heidelpay($privateKey))
+        if (!$this->heidelpay instanceof Unzer) {
+            $this->heidelpay = (new Unzer($privateKey))
                 ->setDebugHandler(new TestDebugHandler())
                 ->setDebugMode(true);
         }

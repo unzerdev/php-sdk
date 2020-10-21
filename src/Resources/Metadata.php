@@ -30,7 +30,7 @@ use function in_array;
 use function is_callable;
 use stdClass;
 
-class Metadata extends AbstractHeidelpayResource
+class Metadata extends AbstractUnzerResource
 {
     private $metadata = [];
 

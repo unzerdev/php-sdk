@@ -25,8 +25,8 @@
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Traits\HasCustomerMessage;
@@ -38,7 +38,7 @@ use UnzerSDK\Traits\HasUniqueAndShortId;
 use RuntimeException;
 use stdClass;
 
-abstract class AbstractTransactionType extends AbstractHeidelpayResource
+abstract class AbstractTransactionType extends AbstractUnzerResource
 {
     use HasOrderId;
     use HasStates;
@@ -111,7 +111,7 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
@@ -161,13 +161,13 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * Updates the referenced payment object if it exists and if this is not the payment object itself.
      * This is called from the crud methods to update the payments state whenever anything happens.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchPayment(): void
     {
         $payment = $this->getPayment();
-        if ($payment instanceof AbstractHeidelpayResource) {
+        if ($payment instanceof AbstractUnzerResource) {
             $this->fetchResource($payment);
         }
     }

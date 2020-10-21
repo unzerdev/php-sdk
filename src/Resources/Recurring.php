@@ -29,7 +29,7 @@ use UnzerSDK\Traits\HasDate;
 use UnzerSDK\Traits\HasStates;
 use UnzerSDK\Traits\HasUniqueAndShortId;
 
-class Recurring extends AbstractHeidelpayResource
+class Recurring extends AbstractUnzerResource
 {
     use HasStates;
     use HasUniqueAndShortId;

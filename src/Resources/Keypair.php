@@ -27,7 +27,7 @@ namespace UnzerSDK\Resources;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use stdClass;
 
-class Keypair extends AbstractHeidelpayResource
+class Keypair extends AbstractUnzerResource
 {
     /** @var string $publicKey */
     private $publicKey;

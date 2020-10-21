@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This class defines unit tests to verify functionality of the HeidelpayApiException.
+ * This class defines unit tests to verify functionality of the UnzerApiException.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -26,21 +26,21 @@
  */
 namespace UnzerSDK\test\unit\Exceptions;
 
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\test\BasePaymentTest;
 
-class HeidelpayApiExceptionTest extends BasePaymentTest
+class UnzerApiExceptionTest extends BasePaymentTest
 {
     /**
      * Verify the exception stores the given data.
      *
      * @test
      */
-    public function heidelpayApiExceptionShouldReturnDefaultDataWhenNoneIsSet(): void
+    public function unzerApiExceptionShouldReturnDefaultDataWhenNoneIsSet(): void
     {
-        $exception = new HeidelpayApiException();
-        $this->assertEquals(HeidelpayApiException::CLIENT_MESSAGE, $exception->getClientMessage());
-        $this->assertEquals(HeidelpayApiException::MESSAGE, $exception->getMerchantMessage());
+        $exception = new UnzerApiException();
+        $this->assertEquals(UnzerApiException::CLIENT_MESSAGE, $exception->getClientMessage());
+        $this->assertEquals(UnzerApiException::MESSAGE, $exception->getMerchantMessage());
         $this->assertEquals('No error id provided', $exception->getErrorId());
         $this->assertEquals('No error code provided', $exception->getCode());
     }
@@ -54,9 +54,9 @@ class HeidelpayApiExceptionTest extends BasePaymentTest
      * @param array $expected
      * @param array $testData
      */
-    public function heidelpayApiExceptionShouldReturnTheGivenData(array $testData, array $expected): void
+    public function unzerApiExceptionShouldReturnTheGivenData(array $testData, array $expected): void
     {
-        $exception = new HeidelpayApiException($testData['message'], $testData['clientMessage'], $testData['code'], $testData['errorId']);
+        $exception = new UnzerApiException($testData['message'], $testData['clientMessage'], $testData['code'], $testData['errorId']);
         $this->assertEquals($expected['message'], $exception->getMerchantMessage());
         $this->assertEquals($expected['clientMessage'], $exception->getClientMessage());
         $this->assertEquals($expected['errorId'], $exception->getErrorId());
@@ -73,11 +73,11 @@ class HeidelpayApiExceptionTest extends BasePaymentTest
         return [
             'default' => [
                     'testData' => ['message' => null, 'clientMessage' => null, 'code' => null, 'errorId' => null],
-                    'expected' => ['message' => HeidelpayApiException::MESSAGE, 'clientMessage' => HeidelpayApiException::CLIENT_MESSAGE, 'code' => 'No error code provided', 'errorId' => 'No error id provided']
+                    'expected' => ['message' => UnzerApiException::MESSAGE, 'clientMessage' => UnzerApiException::CLIENT_MESSAGE, 'code' => 'No error code provided', 'errorId' => 'No error id provided']
                 ],
             'message' => [
                     'testData' => ['message' => 'myMessage', 'clientMessage' => null, 'code' => null, 'errorId' => ''],
-                    'expected' => ['message' => 'myMessage', 'clientMessage' => HeidelpayApiException::CLIENT_MESSAGE, 'code' => 'No error code provided', 'errorId' => 'No error id provided']
+                    'expected' => ['message' => 'myMessage', 'clientMessage' => UnzerApiException::CLIENT_MESSAGE, 'code' => 'No error code provided', 'errorId' => 'No error id provided']
                 ],
             'clientMessage' => [
                     'testData' => ['message' => 'myMessage', 'clientMessage' => 'myClientMessage', 'code' => null, 'errorId' => null],

@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -69,7 +69,7 @@ class EPSTest extends BaseIntegrationTest
      */
     public function epsShouldThrowExceptionOnAuthorize(EPS $eps): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $this->heidelpay->authorize(1.0, 'EUR', $eps, self::RETURN_URL);

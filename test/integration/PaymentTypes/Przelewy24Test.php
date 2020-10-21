@@ -28,7 +28,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Przelewy24;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -86,7 +86,7 @@ class Przelewy24Test extends BaseIntegrationTest
      */
     public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $this->heidelpay->authorize(100.0, 'PLN', $przelewy24, self::RETURN_URL);
@@ -105,7 +105,7 @@ class Przelewy24Test extends BaseIntegrationTest
     {
         /** @var Przelewy24 $przelewy24 */
         $przelewy24 = $this->heidelpay->createPaymentType(new Przelewy24());
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CURRENCY_IS_NOT_SUPPORTED);
         $przelewy24->charge(100.0, $currencyCode, self::RETURN_URL);
     }

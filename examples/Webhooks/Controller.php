@@ -31,16 +31,16 @@ require_once __DIR__ . '/Constants.php';
 require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
 
 try {
-    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+    $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     $resource = $heidelpay->fetchResourceFromEvent(file_get_contents('php://input'));
     $heidelpay->debugLog('Fetched resource from Event: ' . $resource->jsonSerialize());
-} catch (HeidelpayApiException $e) {
+} catch (UnzerApiException $e) {
     $heidelpay->debugLog('Error: ' . $e->getMessage());
 } catch (RuntimeException $e) {
     $heidelpay->debugLog('Error: ' . $e->getMessage());

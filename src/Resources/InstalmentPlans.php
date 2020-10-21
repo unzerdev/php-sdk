@@ -30,7 +30,7 @@ use DateTime;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use stdClass;
 
-class InstalmentPlans extends AbstractHeidelpayResource
+class InstalmentPlans extends AbstractUnzerResource
 {
     /** @var float */
     private $amount;

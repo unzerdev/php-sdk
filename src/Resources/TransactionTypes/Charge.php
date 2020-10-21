@@ -24,7 +24,7 @@
  */
 namespace UnzerSDK\Resources\TransactionTypes;
 
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasInvoiceId;
 use RuntimeException;
@@ -310,7 +310,7 @@ class Charge extends AbstractTransactionType
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancel(
@@ -320,7 +320,7 @@ class Charge extends AbstractTransactionType
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation {
-        return $this->getHeidelpayObject()->cancelCharge(
+        return $this->getUnzerObject()->cancelCharge(
             $this,
             $amount,
             $reasonCode,

@@ -29,7 +29,7 @@ namespace UnzerSDK\test\unit\Resources;
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Constants\Salutations;
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\EmbeddedResources\Address;
@@ -230,7 +230,7 @@ class CustomerTest extends BasePaymentTest
     public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet(): void
     {
         $customerId = str_replace(' ', '', microtime());
-        $customer = (new Customer())->setParentResource(new Heidelpay('s-priv-123'))->setCustomerId($customerId);
+        $customer = (new Customer())->setParentResource(new Unzer('s-priv-123'))->setCustomerId($customerId);
         $lastElement      = explode('/', rtrim($customer->getUri(), '/'));
         $this->assertEquals($customerId, end($lastElement));
     }
@@ -242,14 +242,14 @@ class CustomerTest extends BasePaymentTest
      */
     public function fetchCustomerByOrderIdShouldCreateCustomerObjectWithCustomerIdAndCallFetch(): void
     {
-        $heidelpay = new Heidelpay('s-priv-1234');
+        $heidelpay = new Unzer('s-priv-1234');
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('fetchResource')
             ->with($this->callback(static function ($customer) use ($heidelpay) {
                 return $customer instanceof Customer &&
                     $customer->getCustomerId() === 'myCustomerId' &&
-                    $customer->getHeidelpayObject() === $heidelpay;
+                    $customer->getUnzerObject() === $heidelpay;
             }));
 
         /** @var ResourceServiceInterface $resourceSrvMock */

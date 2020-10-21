@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
@@ -115,7 +115,7 @@ class BasketTest extends BaseIntegrationTest
                 $expectException,
                 'Failed asserting that exception of type "UnzerSDK\Exceptions\HeidelpayApiException" is thrown.'
             );
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue($expectException);
             $this->assertEquals($exceptionCode, $e->getCode());
             $this->assertNotNull($e->getErrorId());

@@ -24,8 +24,8 @@
  */
 namespace UnzerSDK\Traits;
 
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Interfaces\HeidelpayParentInterface;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Interfaces\UnzerParentInterface;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Metadata;
@@ -54,7 +54,7 @@ trait CanAuthorize
      *
      * @return Authorization
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function authorize(
@@ -69,8 +69,8 @@ trait CanAuthorize
         $invoiceId = null,
         $paymentReference = null
     ): Authorization {
-        if ($this instanceof HeidelpayParentInterface) {
-            return $this->getHeidelpayObject()->authorize(
+        if ($this instanceof UnzerParentInterface) {
+            return $this->getUnzerObject()->authorize(
                 $amount,
                 $currency,
                 $this,

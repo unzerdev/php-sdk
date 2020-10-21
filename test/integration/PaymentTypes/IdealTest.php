@@ -27,7 +27,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -60,7 +60,7 @@ class IdealTest extends BaseIntegrationTest
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $this->heidelpay->authorize(1.0, 'EUR', $ideal, self::RETURN_URL);

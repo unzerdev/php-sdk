@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
@@ -69,9 +69,9 @@ class CanRecurTest extends BasePaymentTest
      */
     public function activateRecurringWillCallHeidelpayMethod(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['activateRecurringPayment'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['activateRecurringPayment'])->getMock();
 
-        /** @var Heidelpay $heidelpayMock */
+        /** @var Unzer $heidelpayMock */
         $dummy = (new TraitDummyCanRecur())->setParentResource($heidelpayMock);
         /** @noinspection PhpParamsInspection */
         $heidelpayMock->expects(self::once())->method('activateRecurringPayment')->with($dummy, 'return url')->willReturn(new Recurring('', ''));

@@ -26,9 +26,9 @@
  */
 namespace UnzerSDK\test\unit;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class DummyResource extends AbstractHeidelpayResource
+class DummyResource extends AbstractUnzerResource
 {
     /** @var float $testFloat */
     protected $testFloat = 0.0;

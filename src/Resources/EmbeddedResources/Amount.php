@@ -24,9 +24,9 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class Amount extends AbstractHeidelpayResource
+class Amount extends AbstractUnzerResource
 {
     private $total = 0.0;
     private $charged = 0.0;

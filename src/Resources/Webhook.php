@@ -24,7 +24,7 @@
  */
 namespace UnzerSDK\Resources;
 
-class Webhook extends AbstractHeidelpayResource
+class Webhook extends AbstractUnzerResource
 {
     /** @var string $url */
     protected $url;

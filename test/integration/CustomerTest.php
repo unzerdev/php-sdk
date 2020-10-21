@@ -29,7 +29,7 @@ namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\Salutations;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -241,7 +241,7 @@ class CustomerTest extends BaseIntegrationTest
 
         $this->heidelpay->deleteCustomer($customer->getId());
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
         $this->heidelpay->fetchCustomer($customer->getId());
     }
@@ -261,7 +261,7 @@ class CustomerTest extends BaseIntegrationTest
 
         $this->heidelpay->deleteCustomer($customer);
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
         $this->heidelpay->fetchCustomer($fetchedCustomer->getId());
     }
@@ -279,7 +279,7 @@ class CustomerTest extends BaseIntegrationTest
         $customer = $this->heidelpay->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
         $this->assertNotEmpty($customer->getCustomerId());
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS);
 
         // create new customer with the same customerId
@@ -299,7 +299,7 @@ class CustomerTest extends BaseIntegrationTest
             // fetch non-existing customer by customerId
             $this->heidelpay->fetchCustomerByExtCustomerId($customerId);
             $this->assertTrue(false, 'Exception should be thrown here.');
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertEquals(ApiResponseCodes::API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND, $e->getCode());
             $this->assertNotNull($e->getErrorId());
         }
@@ -334,7 +334,7 @@ class CustomerTest extends BaseIntegrationTest
 
         $veryLongName   = $longName . 'X';
         $customer->getShippingAddress()->setName($veryLongName);
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESS_NAME_TO_LONG);
         $this->heidelpay->updateCustomer($customer);
     }

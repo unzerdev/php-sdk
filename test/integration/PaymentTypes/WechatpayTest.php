@@ -28,7 +28,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Wechatpay;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -74,7 +74,7 @@ class WechatpayTest extends BaseIntegrationTest
     public function wechatpayShouldNotBeAuthorizable(): void
     {
         $wechatpay = $this->heidelpay->createPaymentType(new Wechatpay());
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $this->heidelpay->authorize(100.0, 'EUR', $wechatpay, self::RETURN_URL);

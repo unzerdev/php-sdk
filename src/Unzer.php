@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the heidelpay object which is the base object providing all functionalities needed to
+ * This is the Unzer object which is the base object providing all functionalities needed to
  * access the api.
  *
  * Copyright (C) 2019 heidelpay GmbH
@@ -27,14 +27,14 @@ namespace UnzerSDK;
 
 use DateTime;
 use UnzerSDK\Constants\CancelReasonCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Interfaces\CancelServiceInterface;
 use UnzerSDK\Interfaces\DebugHandlerInterface;
-use UnzerSDK\Interfaces\HeidelpayParentInterface;
+use UnzerSDK\Interfaces\UnzerParentInterface;
 use UnzerSDK\Interfaces\PaymentServiceInterface;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Interfaces\WebhookServiceInterface;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\InstalmentPlans;
@@ -58,7 +58,7 @@ use UnzerSDK\Services\WebhookService;
 use UnzerSDK\Validators\PrivateKeyValidator;
 use RuntimeException;
 
-class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface, CancelServiceInterface
+class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface, CancelServiceInterface
 {
     public const BASE_URL = 'api.heidelpay.com';
     public const API_VERSION = 'v1';
@@ -93,9 +93,9 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     private $debugMode = false;
 
     /**
-     * Construct a new heidelpay object.
+     * Construct a new Unzer object.
      *
-     * @param string $key    The private key your received from your heidelpay contact person.
+     * @param string $key    The private key your received from your Unzer contact person.
      * @param string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
      * @link https://docs.heidelpay.com/docs/web-integration#section-localization-and-languages
@@ -131,11 +131,11 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      *
      * @param string $key The private key.
      *
-     * @return Heidelpay This heidelpay object.
+     * @return Unzer This Unzer object.
      *
      * @throws RuntimeException Throws a RuntimeException when the key is invalid.
      */
-    public function setKey($key): Heidelpay
+    public function setKey($key): Unzer
     {
         if (!PrivateKeyValidator::validate($key)) {
             throw new RuntimeException('Illegal key: Use a valid private key with this SDK!');
@@ -162,9 +162,9 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * @param string|null $locale The customer locale to set.
      *                            Ref. https://docs.heidelpay.com for a list of supported values.
      *
-     * @return Heidelpay This heidelpay object.
+     * @return Unzer This Unzer object.
      */
-    public function setLocale($locale): Heidelpay
+    public function setLocale($locale): Unzer
     {
         $this->locale = str_replace('_', '-', $locale);
         return $this;
@@ -173,18 +173,18 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * @param ResourceService $resourceService
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function setResourceService(ResourceService $resourceService): Heidelpay
+    public function setResourceService(ResourceService $resourceService): Unzer
     {
-        $this->resourceService = $resourceService->setHeidelpay($this);
+        $this->resourceService = $resourceService->setUnzer($this);
         return $this;
     }
 
     /**
      * Returns the ResourceService object.
      *
-     * @return ResourceService The resource service object of this heidelpay instance.
+     * @return ResourceService The resource service object of this Unzer instance.
      */
     public function getResourceService(): ResourceService
     {
@@ -194,9 +194,9 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * @param PaymentService $paymentService
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function setPaymentService(PaymentService $paymentService): Heidelpay
+    public function setPaymentService(PaymentService $paymentService): Unzer
     {
         $this->paymentService = $paymentService->setHeidelpay($this);
         return $this;
@@ -221,9 +221,9 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * @param WebhookServiceInterface $webhookService
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function setWebhookService(WebhookServiceInterface $webhookService): Heidelpay
+    public function setWebhookService(WebhookServiceInterface $webhookService): Unzer
     {
         $this->webhookService = $webhookService;
         return $this;
@@ -240,9 +240,9 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * @param CancelService $cancelService
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function setCancelService(CancelService $cancelService): Heidelpay
+    public function setCancelService(CancelService $cancelService): Unzer
     {
         $this->cancelService = $cancelService->setHeidelpay($this);
         return $this;
@@ -259,13 +259,13 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * Enable debug output.
      * You need to setter inject a custom handler implementing the DebugOutputHandlerInterface via
-     * Heidelpay::setDebugHandler() for this to work.
+     * Unzer::setDebugHandler() for this to work.
      *
      * @param bool $debugMode
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function setDebugMode(bool $debugMode): Heidelpay
+    public function setDebugMode(bool $debugMode): Unzer
     {
         $this->debugMode = $debugMode;
         return $this;
@@ -281,13 +281,13 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
 
     /**
      * Use this method to inject a custom handler for debug messages from the http-adapter.
-     * Remember to enable debug output using Heidelpay::setDebugMode(true).
+     * Remember to enable debug output using Unzer::setDebugMode(true).
      *
      * @param DebugHandlerInterface $debugHandler
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function setDebugHandler(DebugHandlerInterface $debugHandler): Heidelpay
+    public function setDebugHandler(DebugHandlerInterface $debugHandler): Unzer
     {
         $this->debugHandler = $debugHandler;
         return $this;
@@ -304,9 +304,9 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * @param HttpService $httpService
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function setHttpService(HttpService $httpService): Heidelpay
+    public function setHttpService(HttpService $httpService): Unzer
     {
         $this->httpService = $httpService;
         return $this;
@@ -317,11 +317,11 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     //<editor-fold desc="ParentIF">
 
     /**
-     * Returns this heidelpay instance.
+     * Returns this Unzer instance.
      *
-     * @return Heidelpay This heidelpay object.
+     * @return Unzer This Unzer object.
      */
-    public function getHeidelpayObject(): Heidelpay
+    public function getUnzerObject(): Unzer
     {
         return $this;
     }
@@ -342,16 +342,16 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
      * Updates the given local resource object if it has not been fetched before.
      * If you are looking to update a local resource even if it has been fetched before please call fetchResource().
      *
-     * @param AbstractHeidelpayResource $resource The local resource object to update.
+     * @param AbstractUnzerResource $resource The local resource object to update.
      *
-     * @return AbstractHeidelpayResource The updated resource object.
+     * @return AbstractUnzerResource The updated resource object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.6.0
      */
-    public function getResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function getResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         return $this->resourceService->getResource($resource);
     }
@@ -359,16 +359,16 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * Updates the given local resource object.
      *
-     * @param AbstractHeidelpayResource $resource The local resource object to update.
+     * @param AbstractUnzerResource $resource The local resource object to update.
      *
-     * @return AbstractHeidelpayResource The updated resource object.
+     * @return AbstractUnzerResource The updated resource object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.6.0
      */
-    public function fetchResource(AbstractHeidelpayResource $resource): AbstractHeidelpayResource
+    public function fetchResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         return $this->resourceService->fetchResource($resource);
     }
@@ -698,7 +698,7 @@ class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, Re
     /**
      * {@inheritDoc}
      */
-    public function fetchResourceFromEvent($eventJson = null): AbstractHeidelpayResource
+    public function fetchResourceFromEvent($eventJson = null): AbstractUnzerResource
     {
         return $this->webhookService->fetchResourceFromEvent($eventJson);
     }

@@ -28,7 +28,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\CancelReasonCodes;
-use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\InvoiceFactoring;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -66,7 +66,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
      */
     public function verifyInvoiceIsNotAuthorizable(InvoiceFactoring $invoice): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $this->heidelpay->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
@@ -82,7 +82,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
      */
     public function invoiceFactoringShouldRequiresCustomer(InvoiceFactoring $invoiceFactoring): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVF_REQUIRES_CUSTOMER);
         $this->heidelpay->charge(1.0, 'EUR', $invoiceFactoring, self::RETURN_URL);
     }
@@ -100,7 +100,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVF_REQUIRES_BASKET);
 
         $invoiceFactoring->charge(1.0, 'EUR', self::RETURN_URL, $customer);
@@ -153,7 +153,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
 
         // perform shipment
         $payment = $charge->getPayment();
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_SHIPPING_REQUIRES_INVOICE_ID);
         $this->heidelpay->ship($payment);
     }
@@ -178,7 +178,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
 
         // perform shipment
         $payment = $charge->getPayment();
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_SHIPPING_REQUIRES_INVOICE_ID);
         $payment->ship();
     }
@@ -282,7 +282,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
      */
     public function verifyInvoiceChargeCanNotBeCancelledWoAmount(Charge $charge): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_AMOUNT_IS_MISSING);
         $charge->cancel();
     }
@@ -297,7 +297,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
      */
     public function verifyInvoiceChargeCanNotBeCancelledWoReasonCode(Charge $charge): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CANCEL_REASON_CODE_IS_MISSING);
         $charge->cancel(100.0);
     }

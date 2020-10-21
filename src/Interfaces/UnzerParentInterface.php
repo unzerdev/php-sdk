@@ -1,6 +1,6 @@
 <?php
 /**
- * This interface defines the methods for a parent heidelpay object.
+ * This interface defines the methods for a parent Unzer object.
  *
  * Copyright (C) 2018 heidelpay GmbH
  *
@@ -24,19 +24,19 @@
  */
 namespace UnzerSDK\Interfaces;
 
-use UnzerSDK\Heidelpay;
+use UnzerSDK\Unzer;
 use RuntimeException;
 
-interface HeidelpayParentInterface
+interface UnzerParentInterface
 {
     /**
-     * Returns the heidelpay root object.
+     * Returns the Unzer root object.
      *
-     * @return Heidelpay
+     * @return Unzer
      *
      * @throws RuntimeException
      */
-    public function getHeidelpayObject(): Heidelpay;
+    public function getUnzerObject(): Unzer;
 
     /**
      * Returns the url string for this resource.

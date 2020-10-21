@@ -24,8 +24,8 @@
  */
 namespace UnzerSDK\Interfaces;
 
-use UnzerSDK\Exceptions\HeidelpayApiException;
-use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Webhook;
 use RuntimeException;
 
@@ -39,7 +39,7 @@ interface WebhookServiceInterface
      *
      * @return Webhook The newly created webhook resource.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createWebhook(string $url, string $event): Webhook;
@@ -52,7 +52,7 @@ interface WebhookServiceInterface
      *
      * @return Webhook The fetched webhook object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchWebhook($webhook): Webhook;
@@ -64,7 +64,7 @@ interface WebhookServiceInterface
      *
      * @return Webhook The webhook object returned after update.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function updateWebhook($webhook): Webhook;
@@ -74,9 +74,9 @@ interface WebhookServiceInterface
      *
      * @param Webhook|string $webhook The webhook object or the id of the webhook to be deleted.
      *
-     * @return Webhook|AbstractHeidelpayResource|null Null if delete succeeded or the webhook object if not.
+     * @return Webhook|AbstractUnzerResource|null Null if delete succeeded or the webhook object if not.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function deleteWebhook($webhook);
@@ -86,7 +86,7 @@ interface WebhookServiceInterface
      *
      * @return array An array containing all registered webhooks.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchAllWebhooks(): array;
@@ -94,7 +94,7 @@ interface WebhookServiceInterface
     /**
      * Deletes all registered webhooks.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function deleteAllWebhooks();
@@ -107,7 +107,7 @@ interface WebhookServiceInterface
      *
      * @return array
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function registerMultipleWebhooks(string $url, array $events): array;
@@ -117,10 +117,10 @@ interface WebhookServiceInterface
      *
      * @param string|null $eventJson
      *
-     * @return AbstractHeidelpayResource
+     * @return AbstractUnzerResource
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchResourceFromEvent($eventJson = null): AbstractHeidelpayResource;
+    public function fetchResourceFromEvent($eventJson = null): AbstractUnzerResource;
 }
