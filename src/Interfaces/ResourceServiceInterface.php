@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -171,7 +171,7 @@ interface ResourceServiceInterface
     /**
      * Creates a PaymentType resource from the given PaymentType object.
      * This is used to create the payment object prior to any transaction.
-     * Usually this will be done by the heidelpayUI components (https://docs.heidelpay.com/docs/heidelpay-ui-components)
+     * Usually this will be done by the heidelpayUI components (https://docs.unzer.com/docs/heidelpay-ui-components)
      *
      * @param BasePaymentType $paymentType
      *

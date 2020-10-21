@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
@@ -98,7 +98,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * @param string $key    The private key your received from your Unzer contact person.
      * @param string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
-     * @link https://docs.heidelpay.com/docs/web-integration#section-localization-and-languages
+     * @link https://docs.unzer.com/docs/web-integration#section-localization-and-languages
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      */
