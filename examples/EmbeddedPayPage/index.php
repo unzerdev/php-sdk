@@ -50,7 +50,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <body>
 
 <form id="payment-form" class="heidelpayUI form" novalidate style="margin: 70px 70px 0;">
-    <p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
+    <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
     <!-- This is just for the example - Start -->
     <div class="fields inline">
         <label for="transaction_type">Chose the transaction type you want to test:</label>

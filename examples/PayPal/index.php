@@ -53,7 +53,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 </ul>
 <strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com" target="_blank">here</a>.
 
-<p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
+<p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form" class="heidelpayUI form" novalidate>
     <!-- This is just for the example - Start -->
