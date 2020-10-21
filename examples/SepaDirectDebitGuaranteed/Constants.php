@@ -2,7 +2,7 @@
 /**
  * This file defines the constants needed for the SEPA direct debit guaranteed example.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

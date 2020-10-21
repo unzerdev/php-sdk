@@ -3,7 +3,7 @@
  * This is the return controller for the Card recurring example.
  * It is called when the client is redirected back to the shop from the external page.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -4,7 +4,7 @@
 /**
  * This test is verifying that the set environment variables will lead to the correct configuration.
  *
- * Copyright (C) 2020 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

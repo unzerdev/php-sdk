@@ -4,7 +4,7 @@
  * You can switch the constant 'HEIDELPAY_PHP_PAYMENT_API_EXAMPLES' to true to make the examples executable.
  * But you should always set it false on productive environments.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
