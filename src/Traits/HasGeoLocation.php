@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
-use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
+use UnzerSDK\Resources\EmbeddedResources\GeoLocation;
 
 trait HasGeoLocation
 {

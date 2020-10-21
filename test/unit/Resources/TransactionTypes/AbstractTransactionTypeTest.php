@@ -22,17 +22,17 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
+namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
 use DateTime;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 

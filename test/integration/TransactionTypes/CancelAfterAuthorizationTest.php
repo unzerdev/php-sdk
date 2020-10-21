@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class CancelAfterAuthorizationTest extends BaseIntegrationTest
 {

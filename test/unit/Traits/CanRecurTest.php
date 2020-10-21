@@ -22,13 +22,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Recurring;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 use stdClass;
 

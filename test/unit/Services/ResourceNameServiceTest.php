@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Services;
+namespace UnzerSDK\test\unit\Services;
 
-use heidelpayPHP\Services\ResourceNameService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Services\ResourceNameService;
+use UnzerSDK\test\BasePaymentTest;
 
 class ResourceNameServiceTest extends BasePaymentTest
 {

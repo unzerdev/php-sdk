@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanDirectCharge;
+use UnzerSDK\Traits\CanDirectCharge;
 
 class Prepayment extends BasePaymentType
 {

@@ -20,15 +20,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
-use heidelpayPHP\Traits\HasGeoLocation;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
+use UnzerSDK\Traits\HasGeoLocation;
 use stdClass;
 use function in_array;
 

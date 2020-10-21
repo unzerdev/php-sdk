@@ -20,14 +20,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Traits\HasCustomerMessage;
-use heidelpayPHP\Traits\HasDate;
-use heidelpayPHP\Traits\HasStates;
-use heidelpayPHP\Traits\HasUniqueAndShortId;
+use UnzerSDK\Traits\HasCustomerMessage;
+use UnzerSDK\Traits\HasDate;
+use UnzerSDK\Traits\HasStates;
+use UnzerSDK\Traits\HasUniqueAndShortId;
 
 class Recurring extends AbstractHeidelpayResource
 {

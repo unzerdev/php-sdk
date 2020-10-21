@@ -22,24 +22,24 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test;
+namespace UnzerSDK\test;
 
 use DateInterval;
 use DateTime;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\Recurring;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 

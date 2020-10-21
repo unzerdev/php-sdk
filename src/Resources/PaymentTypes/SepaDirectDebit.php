@@ -20,13 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanDirectCharge;
-use heidelpayPHP\Traits\CanPayout;
-use heidelpayPHP\Traits\CanRecur;
+use UnzerSDK\Traits\CanDirectCharge;
+use UnzerSDK\Traits\CanPayout;
+use UnzerSDK\Traits\CanRecur;
 
 class SepaDirectDebit extends BasePaymentType
 {

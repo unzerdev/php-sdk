@@ -22,15 +22,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\Fixtures
+ * @package  UnzerSDK\test\Fixtures
  */
-namespace heidelpayPHP\test\Fixtures;
+namespace UnzerSDK\test\Fixtures;
 
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
 
 trait CustomerFixtureTrait
 {

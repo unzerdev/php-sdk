@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources\EmbeddedResources
+ * @package  UnzerSDK\Resources\EmbeddedResources
  */
-namespace heidelpayPHP\Resources\EmbeddedResources;
+namespace UnzerSDK\Resources\EmbeddedResources;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
 
 class BasketItem extends AbstractHeidelpayResource
 {
@@ -327,7 +327,7 @@ class BasketItem extends AbstractHeidelpayResource
 
     /**
      * The type of the basket item.
-     * Please refer to heidelpayPHP\Constants\BasketItemTypes for available type constants.
+     * Please refer to UnzerSDK\Constants\BasketItemTypes for available type constants.
      *
      * @param string|null $type
      *

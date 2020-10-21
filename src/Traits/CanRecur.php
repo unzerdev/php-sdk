@@ -20,13 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Recurring;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Recurring;
 use RuntimeException;
 
 trait CanRecur

@@ -23,17 +23,17 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Services\ValueService;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\EmbeddedResources\CardDetails;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Services\ValueService;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class CardTest extends BaseIntegrationTest
 {

@@ -22,11 +22,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit\Services
+ * @package  UnzerSDK\test\unit\Services
  */
-namespace heidelpayPHP\test\unit\Services;
+namespace UnzerSDK\test\unit\Services;
 
-use heidelpayPHP\Services\EnvironmentService;
+use UnzerSDK\Services\EnvironmentService;
 use PHPUnit\Framework\TestCase;
 
 class EnvironmentServiceTest extends TestCase

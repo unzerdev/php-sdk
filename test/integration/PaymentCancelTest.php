@@ -22,13 +22,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Resources\PaymentTypes\Invoice;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PaymentCancelTest extends BaseIntegrationTest
 {

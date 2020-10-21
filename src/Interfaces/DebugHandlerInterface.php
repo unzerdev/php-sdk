@@ -20,9 +20,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Interfaces
+ * @package  UnzerSDK\Interfaces
  */
-namespace heidelpayPHP\Interfaces;
+namespace UnzerSDK\Interfaces;
 
 interface DebugHandlerInterface
 {

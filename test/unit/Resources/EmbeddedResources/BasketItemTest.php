@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\EmbeddedResources;
+namespace UnzerSDK\test\unit\Resources\EmbeddedResources;
 
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\test\BasePaymentTest;
 
 class BasketItemTest extends BasePaymentTest
 {

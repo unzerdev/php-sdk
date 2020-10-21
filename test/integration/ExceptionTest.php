@@ -23,14 +23,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class ExceptionTest extends BaseIntegrationTest
 {

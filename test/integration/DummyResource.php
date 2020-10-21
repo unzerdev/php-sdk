@@ -22,11 +22,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Traits\CanRecur;
+use UnzerSDK\Traits\CanRecur;
 
 class DummyResource
 {

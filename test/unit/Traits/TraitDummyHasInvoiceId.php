@@ -22,11 +22,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Traits\HasInvoiceId;
+use UnzerSDK\Traits\HasInvoiceId;
 
 class TraitDummyHasInvoiceId
 {

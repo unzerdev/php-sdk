@@ -22,13 +22,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\test\BasePaymentTest;
 
 class HasCancellationsTest extends BasePaymentTest
 {

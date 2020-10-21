@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -30,11 +30,11 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\Constants\WebhookEvents;
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Webhook;
+use UnzerSDK\Constants\WebhookEvents;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Webhook;
 
 function printMessage($type, $title, $text)
 {

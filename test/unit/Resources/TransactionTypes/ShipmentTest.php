@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
+namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\test\BasePaymentTest;
 use stdClass;
 
 class ShipmentTest extends BasePaymentTest

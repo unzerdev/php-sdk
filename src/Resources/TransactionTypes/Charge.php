@@ -20,13 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\TransactionTypes
+ * @package  UnzerSDK\TransactionTypes
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace UnzerSDK\Resources\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Traits\HasCancellations;
-use heidelpayPHP\Traits\HasInvoiceId;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Traits\HasCancellations;
+use UnzerSDK\Traits\HasInvoiceId;
 use RuntimeException;
 
 class Charge extends AbstractTransactionType
@@ -303,7 +303,7 @@ class Charge extends AbstractTransactionType
      *
      * @param float|null  $amount           The amount to be canceled.
      *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
      * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
      * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).

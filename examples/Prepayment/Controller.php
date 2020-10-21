@@ -21,7 +21,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -31,11 +31,11 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\PaymentTypes\Prepayment;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\PaymentTypes\Prepayment;
 
 session_start();
 session_unset();

@@ -11,14 +11,14 @@
  *
  * @package  heidelpay/${Package}
  */
-namespace heidelpayPHP\Interfaces;
+namespace UnzerSDK\Interfaces;
 
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use RuntimeException;
 
 interface CancelServiceInterface
@@ -59,7 +59,7 @@ interface CancelServiceInterface
      * @param string         $chargeId      The id of the Charge to be canceled.
      * @param float|null     $amount        The amount to be canceled.
      *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null    $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null    $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null    $referenceText A reference string for the payment.
      * @param float|null     $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
      * @param float|null     $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
@@ -86,7 +86,7 @@ interface CancelServiceInterface
      * @param Charge      $charge        The Charge object to create the Cancellation for.
      * @param float|null  $amount        The amount to be canceled.
      *                                   This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null $referenceText A reference string for the payment.
      * @param float|null  $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
      * @param float|null  $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
@@ -112,7 +112,7 @@ interface CancelServiceInterface
      * @param Payment|string $payment       The Payment object or the id of the Payment to be cancelled.
      * @param float|null     $amount        The amount to be canceled.
      *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null    $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null    $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null    $referenceText A reference string for the payment.
      * @param float|null     $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
      * @param float|null     $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).

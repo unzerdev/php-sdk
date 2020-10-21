@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test;
+namespace UnzerSDK\test;
 
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
-use heidelpayPHP\Services\EnvironmentService;
+use UnzerSDK\Interfaces\DebugHandlerInterface;
+use UnzerSDK\Services\EnvironmentService;
 
 class TestDebugHandler implements DebugHandlerInterface
 {

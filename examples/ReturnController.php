@@ -24,7 +24,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -34,12 +34,12 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../autoload.php';
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\PaymentTypes\Prepayment;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\PaymentTypes\Prepayment;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';

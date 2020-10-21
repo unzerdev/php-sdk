@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Constants;
+namespace UnzerSDK\test\unit\Constants;
 
-use heidelpayPHP\Constants\PaymentState;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\PaymentState;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 
 class PaymentStateTest extends BasePaymentTest

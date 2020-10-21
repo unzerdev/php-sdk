@@ -22,7 +22,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /* Set to true if you want to enable the examples */

@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\Recurring;
+use UnzerSDK\test\BasePaymentTest;
 
 class RecurringTest extends BasePaymentTest
 {

@@ -22,15 +22,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PaypageTest extends BaseIntegrationTest
 {

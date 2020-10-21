@@ -20,16 +20,16 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\ResourceServiceInterface;
-use heidelpayPHP\Interfaces\WebhookServiceInterface;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\Resources\Webhooks;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Interfaces\ResourceServiceInterface;
+use UnzerSDK\Interfaces\WebhookServiceInterface;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\Resources\Webhooks;
 use function is_string;
 use RuntimeException;
 

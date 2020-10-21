@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use stdClass;
 
 class Keypair extends AbstractHeidelpayResource

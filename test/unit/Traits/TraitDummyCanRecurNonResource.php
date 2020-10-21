@@ -22,11 +22,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Traits\CanRecur;
+use UnzerSDK\Traits\CanRecur;
 
 class TraitDummyCanRecurNonResource
 {

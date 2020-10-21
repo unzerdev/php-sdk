@@ -22,16 +22,16 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class ChargeTest extends BaseIntegrationTest
 {

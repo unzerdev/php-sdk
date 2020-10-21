@@ -20,28 +20,28 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
 use DateTime;
-use heidelpayPHP\Constants\TransactionTypes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\PaymentServiceInterface;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\InstalmentPlans;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Interfaces\PaymentServiceInterface;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\InstalmentPlans;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
 use RuntimeException;
 
 class PaymentService implements PaymentServiceInterface

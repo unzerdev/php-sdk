@@ -22,13 +22,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
+namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\EmbeddedResources\CardDetails;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 use stdClass;
 

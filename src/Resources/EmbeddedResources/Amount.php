@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources\EmbeddedResources
+ * @package  UnzerSDK\Resources\EmbeddedResources
  */
-namespace heidelpayPHP\Resources\EmbeddedResources;
+namespace UnzerSDK\Resources\EmbeddedResources;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
 
 class Amount extends AbstractHeidelpayResource
 {

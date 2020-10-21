@@ -23,15 +23,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\tests/integration/payment_types
+ * @package  UnzerSDK\tests/integration/payment_types
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\PIS;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\PaymentTypes\PIS;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PISTest extends BaseIntegrationTest
 {

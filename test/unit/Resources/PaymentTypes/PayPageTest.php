@@ -22,22 +22,22 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
+namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\TransactionTypes;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 

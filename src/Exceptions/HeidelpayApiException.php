@@ -20,9 +20,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Exceptions
+ * @package  UnzerSDK\Exceptions
  */
-namespace heidelpayPHP\Exceptions;
+namespace UnzerSDK\Exceptions;
 
 use Exception;
 

@@ -20,9 +20,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
 class Webhook extends AbstractHeidelpayResource
 {

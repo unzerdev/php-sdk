@@ -22,27 +22,27 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Constants\PaymentState;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Amount;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Sofort;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\PaymentState;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Amount;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 use stdClass;

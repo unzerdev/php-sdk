@@ -20,14 +20,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Constants\CompanyRegistrationTypes;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Constants\CompanyRegistrationTypes;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
 
 class CustomerFactory
 {

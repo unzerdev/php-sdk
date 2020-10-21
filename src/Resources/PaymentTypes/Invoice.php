@@ -20,12 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanDirectCharge;
-use heidelpayPHP\Traits\IsInvoiceType;
+use UnzerSDK\Traits\CanDirectCharge;
+use UnzerSDK\Traits\IsInvoiceType;
 
 class Invoice extends BasePaymentType
 {

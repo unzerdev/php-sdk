@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\WebhookEvents;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\WebhookEvents;
 use RuntimeException;
 use stdClass;
 use function in_array;

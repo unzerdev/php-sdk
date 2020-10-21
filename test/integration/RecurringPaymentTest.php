@@ -22,19 +22,19 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpayPHP\Services\EnvironmentService;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use UnzerSDK\Services\EnvironmentService;
+use UnzerSDK\test\BaseIntegrationTest;
 use RuntimeException;
 
 class RecurringPaymentTest extends BaseIntegrationTest

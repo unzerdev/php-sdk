@@ -22,14 +22,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
 use DateTime;
-use heidelpayPHP\Resources\InstalmentPlan;
-use heidelpayPHP\Resources\InstalmentPlans;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\InstalmentPlan;
+use UnzerSDK\Resources\InstalmentPlans;
+use UnzerSDK\test\BasePaymentTest;
 
 class InstalmentPlanTest extends BasePaymentTest
 {

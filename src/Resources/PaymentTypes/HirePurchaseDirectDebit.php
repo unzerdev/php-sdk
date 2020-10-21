@@ -20,12 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
 use DateTime;
-use heidelpayPHP\Resources\InstalmentPlan;
+use UnzerSDK\Resources\InstalmentPlan;
 
 class HirePurchaseDirectDebit extends InstalmentPlan
 {

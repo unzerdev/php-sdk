@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\test\BaseIntegrationTest;
 use RuntimeException;
 
 class KeypairTest extends BaseIntegrationTest

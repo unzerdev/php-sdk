@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Interfaces
+ * @package  UnzerSDK\Interfaces
  */
-namespace heidelpayPHP\Interfaces;
+namespace UnzerSDK\Interfaces;
 
-use heidelpayPHP\Heidelpay;
+use UnzerSDK\Heidelpay;
 use RuntimeException;
 
 interface HeidelpayParentInterface

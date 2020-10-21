@@ -20,14 +20,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
 use DateTime;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Traits\CanAuthorizeWithCustomer;
 use stdClass;
 
 class InstalmentPlan extends BasePaymentType

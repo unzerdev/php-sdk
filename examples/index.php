@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
-use heidelpayPHP\Validators\PrivateKeyValidator;
-use heidelpayPHP\Validators\PublicKeyValidator;
+use UnzerSDK\Validators\PrivateKeyValidator;
+use UnzerSDK\Validators\PublicKeyValidator;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';

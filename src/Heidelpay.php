@@ -21,41 +21,41 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP
+ * @package  UnzerSDK
  */
-namespace heidelpayPHP;
+namespace UnzerSDK;
 
 use DateTime;
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Interfaces\CancelServiceInterface;
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
-use heidelpayPHP\Interfaces\HeidelpayParentInterface;
-use heidelpayPHP\Interfaces\PaymentServiceInterface;
-use heidelpayPHP\Interfaces\ResourceServiceInterface;
-use heidelpayPHP\Interfaces\WebhookServiceInterface;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\InstalmentPlans;
-use heidelpayPHP\Resources\Keypair;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\Services\CancelService;
-use heidelpayPHP\Services\HttpService;
-use heidelpayPHP\Services\PaymentService;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\Services\WebhookService;
-use heidelpayPHP\Validators\PrivateKeyValidator;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Interfaces\CancelServiceInterface;
+use UnzerSDK\Interfaces\DebugHandlerInterface;
+use UnzerSDK\Interfaces\HeidelpayParentInterface;
+use UnzerSDK\Interfaces\PaymentServiceInterface;
+use UnzerSDK\Interfaces\ResourceServiceInterface;
+use UnzerSDK\Interfaces\WebhookServiceInterface;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\InstalmentPlans;
+use UnzerSDK\Resources\Keypair;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\Recurring;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\Services\CancelService;
+use UnzerSDK\Services\HttpService;
+use UnzerSDK\Services\PaymentService;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\Services\WebhookService;
+use UnzerSDK\Validators\PrivateKeyValidator;
 use RuntimeException;
 
 class Heidelpay implements HeidelpayParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface, CancelServiceInterface

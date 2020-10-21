@@ -22,21 +22,21 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Constants\CompanyRegistrationTypes;
-use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\ResourceServiceInterface;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
-use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Constants\CompanyRegistrationTypes;
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Interfaces\ResourceServiceInterface;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
+use UnzerSDK\Resources\EmbeddedResources\GeoLocation;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 
 class CustomerTest extends BasePaymentTest
 {

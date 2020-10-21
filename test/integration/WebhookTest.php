@@ -22,15 +22,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Constants\WebhookEvents;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\WebhookEvents;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\test\BaseIntegrationTest;
 use function count;
 use function in_array;
 

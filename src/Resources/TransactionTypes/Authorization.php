@@ -20,14 +20,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\TransactionTypes
+ * @package  UnzerSDK\TransactionTypes
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace UnzerSDK\Resources\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Traits\HasCancellations;
-use heidelpayPHP\Traits\HasInvoiceId;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Traits\HasCancellations;
+use UnzerSDK\Traits\HasInvoiceId;
 use RuntimeException;
 
 class Authorization extends AbstractTransactionType

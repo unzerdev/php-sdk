@@ -22,14 +22,14 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Invoice;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class InvoiceTest extends BaseIntegrationTest
 {

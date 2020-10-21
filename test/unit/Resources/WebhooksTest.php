@@ -22,15 +22,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Constants\WebhookEvents;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\Resources\Webhooks;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\WebhookEvents;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\Resources\Webhooks;
+use UnzerSDK\test\BasePaymentTest;
 use stdClass;
 
 class WebhooksTest extends BasePaymentTest

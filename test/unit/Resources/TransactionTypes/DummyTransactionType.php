@@ -22,11 +22,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
+namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 
 class DummyTransactionType extends AbstractTransactionType
 {

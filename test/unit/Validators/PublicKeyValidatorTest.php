@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Validators;
+namespace UnzerSDK\test\unit\Validators;
 
-use heidelpayPHP\test\BasePaymentTest;
-use heidelpayPHP\Validators\PublicKeyValidator;
+use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\Validators\PublicKeyValidator;
 
 class PublicKeyValidatorTest extends BasePaymentTest
 {

@@ -20,30 +20,30 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Constants\IdStrings;
-use heidelpayPHP\Constants\TransactionTypes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\EmbeddedResources\Amount;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\Services\IdService;
-use heidelpayPHP\Traits\HasInvoiceId;
-use heidelpayPHP\Traits\HasOrderId;
-use heidelpayPHP\Traits\HasPaymentState;
-use heidelpayPHP\Traits\HasTraceId;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Constants\IdStrings;
+use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\EmbeddedResources\Amount;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Services\IdService;
+use UnzerSDK\Traits\HasInvoiceId;
+use UnzerSDK\Traits\HasOrderId;
+use UnzerSDK\Traits\HasPaymentState;
+use UnzerSDK\Traits\HasTraceId;
 use RuntimeException;
 use stdClass;
 
@@ -674,7 +674,7 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param float|null  $amount           The amount to be canceled.
      *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
      * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
      * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).

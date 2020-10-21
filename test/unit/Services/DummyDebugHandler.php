@@ -22,11 +22,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Services;
+namespace UnzerSDK\test\unit\Services;
 
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
+use UnzerSDK\Interfaces\DebugHandlerInterface;
 
 class DummyDebugHandler implements DebugHandlerInterface
 {

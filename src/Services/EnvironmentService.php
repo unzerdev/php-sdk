@@ -20,9 +20,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
 use function in_array;
 use function is_bool;

@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
-namespace heidelpayPHP\examples;
+namespace UnzerSDK\examples;
 
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
+use UnzerSDK\Interfaces\DebugHandlerInterface;
 
 class ExampleDebugHandler implements DebugHandlerInterface
 {

@@ -22,13 +22,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PaypalTest extends BaseIntegrationTest
 {

@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\TransactionTypes
+ * @package  UnzerSDK\TransactionTypes
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace UnzerSDK\Resources\TransactionTypes;
 
-use heidelpayPHP\Traits\HasInvoiceId;
+use UnzerSDK\Traits\HasInvoiceId;
 
 class Shipment extends AbstractTransactionType
 {

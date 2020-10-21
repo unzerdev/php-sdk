@@ -20,7 +20,7 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -30,9 +30,9 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
 
 try {
     $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);

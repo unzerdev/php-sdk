@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Resources\Keypair;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\Keypair;
+use UnzerSDK\test\BasePaymentTest;
 
 class KeypairTest extends BasePaymentTest
 {

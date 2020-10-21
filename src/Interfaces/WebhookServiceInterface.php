@@ -20,13 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Interfaces
+ * @package  UnzerSDK\Interfaces
  */
-namespace heidelpayPHP\Interfaces;
+namespace UnzerSDK\Interfaces;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Webhook;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Webhook;
 use RuntimeException;
 
 interface WebhookServiceInterface

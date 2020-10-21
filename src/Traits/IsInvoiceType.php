@@ -20,9 +20,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
 trait IsInvoiceType
 {

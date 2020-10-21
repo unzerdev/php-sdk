@@ -22,29 +22,29 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit;
+namespace UnzerSDK\test\unit;
 
 use DateTime;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\PaymentTypes\Sofort;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\Services\CancelService;
-use heidelpayPHP\Services\HttpService;
-use heidelpayPHP\Services\PaymentService;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\Services\WebhookService;
-use heidelpayPHP\test\BasePaymentTest;
-use heidelpayPHP\test\unit\Services\DummyDebugHandler;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\Services\CancelService;
+use UnzerSDK\Services\HttpService;
+use UnzerSDK\Services\PaymentService;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\Services\WebhookService;
+use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\test\unit\Services\DummyDebugHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 

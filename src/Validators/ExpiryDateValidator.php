@@ -20,9 +20,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Validators
+ * @package  UnzerSDK\Validators
  */
-namespace heidelpayPHP\Validators;
+namespace UnzerSDK\Validators;
 
 class ExpiryDateValidator
 {

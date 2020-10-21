@@ -22,15 +22,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
+namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 use stdClass;
 

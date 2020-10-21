@@ -22,15 +22,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Constants\CompanyRegistrationTypes;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Constants\CompanyRegistrationTypes;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
 use PHPUnit\Framework\TestCase;
 
 class CustomerFactoryTest extends TestCase

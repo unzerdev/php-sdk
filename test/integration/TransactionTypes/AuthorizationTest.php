@@ -23,17 +23,17 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class AuthorizationTest extends BaseIntegrationTest
 {

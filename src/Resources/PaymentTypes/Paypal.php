@@ -20,13 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanRecur;
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
+use UnzerSDK\Traits\CanRecur;
+use UnzerSDK\Traits\CanAuthorize;
+use UnzerSDK\Traits\CanDirectCharge;
 
 class Paypal extends BasePaymentType
 {

@@ -20,9 +20,9 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Constants
+ * @package  UnzerSDK\Constants
  */
-namespace heidelpayPHP\Constants;
+namespace UnzerSDK\Constants;
 
 use RuntimeException;
 

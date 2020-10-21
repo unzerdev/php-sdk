@@ -20,16 +20,16 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Interfaces\HeidelpayParentInterface;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Interfaces\HeidelpayParentInterface;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use RuntimeException;
 
 trait CanAuthorizeWithCustomer

@@ -23,16 +23,16 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\test\BaseIntegrationTest;
 use function microtime;
 
 class CustomerTest extends BaseIntegrationTest

@@ -23,15 +23,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\HeidelpayParentInterface;
-use heidelpayPHP\Traits\CanAuthorizeWithCustomer;
-use heidelpayPHP\Traits\CanDirectChargeWithCustomer;
-use heidelpayPHP\Traits\CanPayoutWithCustomer;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Interfaces\HeidelpayParentInterface;
+use UnzerSDK\Traits\CanAuthorizeWithCustomer;
+use UnzerSDK\Traits\CanDirectChargeWithCustomer;
+use UnzerSDK\Traits\CanPayoutWithCustomer;
 
 class TraitDummyWithCustomerWithParentIF implements HeidelpayParentInterface
 {

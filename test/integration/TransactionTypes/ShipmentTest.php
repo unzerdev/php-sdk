@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class ShipmentTest extends BaseIntegrationTest
 {

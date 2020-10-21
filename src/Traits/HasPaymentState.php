@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
-use heidelpayPHP\Constants\PaymentState;
+use UnzerSDK\Constants\PaymentState;
 use RuntimeException;
 
 trait HasPaymentState

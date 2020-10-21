@@ -21,13 +21,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';

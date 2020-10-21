@@ -22,19 +22,19 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Services;
+namespace UnzerSDK\test\unit\Services;
 
-use heidelpayPHP\Adapter\CurlAdapter;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
-use heidelpayPHP\Services\EnvironmentService;
-use heidelpayPHP\Services\HttpService;
-use heidelpayPHP\test\BasePaymentTest;
-use heidelpayPHP\test\unit\DummyResource;
+use UnzerSDK\Adapter\CurlAdapter;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Interfaces\DebugHandlerInterface;
+use UnzerSDK\Services\EnvironmentService;
+use UnzerSDK\Services\HttpService;
+use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\test\unit\DummyResource;
 use RuntimeException;
 
 use function array_key_exists;

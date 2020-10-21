@@ -22,12 +22,12 @@
  *
  * @author  David Owusu <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
+namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\Bancontact;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\PaymentTypes\Bancontact;
+use UnzerSDK\test\BasePaymentTest;
 
 class BancontactTest extends BasePaymentTest
 {

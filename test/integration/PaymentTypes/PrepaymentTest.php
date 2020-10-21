@@ -22,16 +22,16 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\PaymentTypes\Prepayment;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\PaymentTypes\Prepayment;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PrepaymentTest extends BaseIntegrationTest
 {

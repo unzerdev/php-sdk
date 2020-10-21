@@ -22,44 +22,44 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
 use DateTime;
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Constants\CompanyRegistrationTypes;
-use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Constants\TransactionTypes;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
-use heidelpayPHP\Resources\Keypair;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Alipay;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\EPS;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\Ideal;
-use heidelpayPHP\Resources\PaymentTypes\Invoice;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\test\BasePaymentTest;
-use heidelpayPHP\test\unit\DummyResource;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Constants\CompanyRegistrationTypes;
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
+use UnzerSDK\Resources\Keypair;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Alipay;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\EPS;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use UnzerSDK\Resources\Recurring;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\test\unit\DummyResource;
 use RuntimeException;
 use stdClass;
 

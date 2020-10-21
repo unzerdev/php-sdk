@@ -22,18 +22,18 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
+namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Sofort;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 
 class AuthorizationTest extends BasePaymentTest

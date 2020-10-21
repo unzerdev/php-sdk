@@ -22,17 +22,17 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class BasketTest extends BaseIntegrationTest
 {
@@ -113,7 +113,7 @@ class BasketTest extends BaseIntegrationTest
             $this->heidelpay->createBasket($basket);
             $this->assertFalse(
                 $expectException,
-                'Failed asserting that exception of type "heidelpayPHP\Exceptions\HeidelpayApiException" is thrown.'
+                'Failed asserting that exception of type "UnzerSDK\Exceptions\HeidelpayApiException" is thrown.'
             );
         } catch (HeidelpayApiException $e) {
             $this->assertTrue($expectException);

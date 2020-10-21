@@ -22,13 +22,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class CancelAfterChargeTest extends BaseIntegrationTest
 {

@@ -23,18 +23,18 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\InstalmentPlan;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\InstalmentPlan;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\test\BaseIntegrationTest;
 use function count;
 
 class HirePurchaseDirectDebitTest extends BaseIntegrationTest

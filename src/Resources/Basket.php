@@ -20,12 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use stdClass;
 use function count;
 

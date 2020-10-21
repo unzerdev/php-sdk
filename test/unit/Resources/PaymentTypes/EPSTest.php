@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
+namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\EPS;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\PaymentTypes\EPS;
+use UnzerSDK\test\BasePaymentTest;
 
 class EPSTest extends BasePaymentTest
 {

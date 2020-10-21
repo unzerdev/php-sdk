@@ -20,21 +20,21 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\TransactionTypes
+ * @package  UnzerSDK\TransactionTypes
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace UnzerSDK\Resources\TransactionTypes;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Traits\HasCustomerMessage;
-use heidelpayPHP\Traits\HasDate;
-use heidelpayPHP\Traits\HasOrderId;
-use heidelpayPHP\Traits\HasStates;
-use heidelpayPHP\Traits\HasTraceId;
-use heidelpayPHP\Traits\HasUniqueAndShortId;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Traits\HasCustomerMessage;
+use UnzerSDK\Traits\HasDate;
+use UnzerSDK\Traits\HasOrderId;
+use UnzerSDK\Traits\HasStates;
+use UnzerSDK\Traits\HasTraceId;
+use UnzerSDK\Traits\HasUniqueAndShortId;
 use RuntimeException;
 use stdClass;
 

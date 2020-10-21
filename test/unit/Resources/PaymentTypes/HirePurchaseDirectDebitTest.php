@@ -22,15 +22,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
+namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
 use DateInterval;
 use DateTime;
-use heidelpayPHP\Resources\InstalmentPlan;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\InstalmentPlan;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class HirePurchaseDirectDebitTest extends BasePaymentTest

@@ -20,18 +20,18 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
 use DateTime;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\HeidelpayParentInterface;
-use heidelpayPHP\Services\ResourceNameService;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\Services\ValueService;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Interfaces\HeidelpayParentInterface;
+use UnzerSDK\Services\ResourceNameService;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\Services\ValueService;
 use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;

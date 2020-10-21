@@ -20,11 +20,11 @@
  *
  * @author  Simon Gabriel <simon.gabriel@heidelpay.com>
  *
- * @package  heidelpayPHP\Adapter
+ * @package  UnzerSDK\Adapter
  */
-namespace heidelpayPHP\Adapter;
+namespace UnzerSDK\Adapter;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\HeidelpayApiException;
 
 interface HttpAdapterInterface
 {

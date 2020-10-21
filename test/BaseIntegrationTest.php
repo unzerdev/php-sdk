@@ -22,11 +22,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test;
+namespace UnzerSDK\test;
 
-use heidelpayPHP\Services\EnvironmentService;
+use UnzerSDK\Services\EnvironmentService;
 use PHPUnit\Runner\BaseTestRunner;
 
 class BaseIntegrationTest extends BasePaymentTest

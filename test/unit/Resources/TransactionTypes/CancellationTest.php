@@ -22,16 +22,16 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
+namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class CancellationTest extends BasePaymentTest

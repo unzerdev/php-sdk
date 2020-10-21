@@ -20,18 +20,18 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
-use heidelpayPHP\Traits\CanPayout;
-use heidelpayPHP\Traits\CanRecur;
-use heidelpayPHP\Traits\HasGeoLocation;
-use heidelpayPHP\Validators\ExpiryDateValidator;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Resources\EmbeddedResources\CardDetails;
+use UnzerSDK\Traits\CanAuthorize;
+use UnzerSDK\Traits\CanDirectCharge;
+use UnzerSDK\Traits\CanPayout;
+use UnzerSDK\Traits\CanRecur;
+use UnzerSDK\Traits\HasGeoLocation;
+use UnzerSDK\Validators\ExpiryDateValidator;
 use RuntimeException;
 use stdClass;
 

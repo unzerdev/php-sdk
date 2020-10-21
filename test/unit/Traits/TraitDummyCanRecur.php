@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Traits\CanRecur;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Traits\CanRecur;
 
 class TraitDummyCanRecur extends BasePaymentType
 {

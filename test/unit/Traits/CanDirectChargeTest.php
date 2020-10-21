@@ -22,15 +22,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 
 class CanDirectChargeTest extends BasePaymentTest

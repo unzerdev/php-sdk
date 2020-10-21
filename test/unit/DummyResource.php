@@ -22,11 +22,11 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit;
+namespace UnzerSDK\test\unit;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
 
 class DummyResource extends AbstractHeidelpayResource
 {

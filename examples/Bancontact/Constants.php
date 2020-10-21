@@ -20,7 +20,7 @@
  *
  * @author  David Owusu <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 require_once __DIR__ . '/../Constants.php';

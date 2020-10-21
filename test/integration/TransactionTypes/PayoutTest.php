@@ -22,18 +22,18 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PayoutTest extends BaseIntegrationTest
 {

@@ -22,13 +22,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Traits\HasCancellations;
-use heidelpayPHP\Traits\HasPaymentState;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Traits\HasCancellations;
+use UnzerSDK\Traits\HasPaymentState;
 
 class TraitDummyHasCancellationsHasPaymentState extends AbstractHeidelpayResource
 {

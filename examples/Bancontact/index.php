@@ -20,7 +20,7 @@
  *
  * @author  David Owusu <development@heidelpay.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */

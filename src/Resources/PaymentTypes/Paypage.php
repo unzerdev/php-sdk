@@ -21,22 +21,22 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\TransactionTypes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
-use heidelpayPHP\Traits\HasInvoiceId;
-use heidelpayPHP\Traits\HasOrderId;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Traits\CanAuthorize;
+use UnzerSDK\Traits\CanDirectCharge;
+use UnzerSDK\Traits\HasInvoiceId;
+use UnzerSDK\Traits\HasOrderId;
 use RuntimeException;
 use stdClass;
 use function in_array;

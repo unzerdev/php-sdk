@@ -22,12 +22,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Exceptions;
+namespace UnzerSDK\test\unit\Exceptions;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\test\BasePaymentTest;
 
 class HeidelpayApiExceptionTest extends BasePaymentTest
 {

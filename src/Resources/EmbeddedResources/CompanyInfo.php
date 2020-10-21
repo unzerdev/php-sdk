@@ -20,12 +20,12 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Resources\EmbeddedResources
+ * @package  UnzerSDK\Resources\EmbeddedResources
  */
-namespace heidelpayPHP\Resources\EmbeddedResources;
+namespace UnzerSDK\Resources\EmbeddedResources;
 
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
 use function is_string;
 
 class CompanyInfo extends AbstractHeidelpayResource

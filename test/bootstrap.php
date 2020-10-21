@@ -22,6 +22,6 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\tests
+ * @package  UnzerSDK\tests
  */
 require_once __DIR__ . '/../vendor/autoload.php';

@@ -20,13 +20,13 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\TransactionTypes
+ * @package  UnzerSDK\TransactionTypes
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace UnzerSDK\Resources\TransactionTypes;
 
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
 use function in_array;
 
 class Cancellation extends AbstractTransactionType

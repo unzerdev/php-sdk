@@ -21,14 +21,14 @@
  *
  * @author Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Adapter
+ * @package  UnzerSDK\Adapter
  */
-namespace heidelpayPHP\Adapter;
+namespace UnzerSDK\Adapter;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Services\EnvironmentService;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Services\EnvironmentService;
 use function extension_loaded;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\HeidelpayApiException;
 use RuntimeException;
 use function in_array;
 

@@ -22,18 +22,18 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Services;
+namespace UnzerSDK\test\unit\Services;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\ResourceServiceInterface;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\Resources\Webhooks;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\Services\WebhookService;
-use heidelpayPHP\test\BasePaymentTest;
-use heidelpayPHP\test\unit\DummyResource;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Interfaces\ResourceServiceInterface;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\Resources\Webhooks;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\Services\WebhookService;
+use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\test\unit\DummyResource;
 use RuntimeException;
 use stdClass;
 

@@ -20,19 +20,19 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\CancelServiceInterface;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Interfaces\CancelServiceInterface;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use RuntimeException;
 use function in_array;
 use function is_string;

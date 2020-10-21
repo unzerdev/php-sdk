@@ -20,15 +20,15 @@
  *
  * @author  Simon Gabriel <development@heidelpay.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
-use heidelpayPHP\Adapter\CurlAdapter;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Adapter\CurlAdapter;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Exceptions\HeidelpayApiException;
+use UnzerSDK\Heidelpay;
+use UnzerSDK\Resources\AbstractHeidelpayResource;
 use RuntimeException;
 use function in_array;
 use const PHP_VERSION;
