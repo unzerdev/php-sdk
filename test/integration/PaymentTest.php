@@ -104,9 +104,7 @@ class PaymentTest extends BaseIntegrationTest
         $this->assertEquals($charge->getId(), $fetchedCharge->getId());
         $this->assertEquals($charge->getReturnUrl(), $fetchedCharge->getReturnUrl());
 
-        $exposedCharge = $fetchedCharge->expose();
-        unset($exposedCharge['card3ds']);
-        $this->assertEquals($charge->expose(), $exposedCharge);
+        $this->assertEquals($charge->expose(), $fetchedCharge->expose());
     }
 
     /**
