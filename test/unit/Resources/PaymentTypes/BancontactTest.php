@@ -20,7 +20,7 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@heidelpay.com>
+ * @author  David Owusu <development@unzer.com>
  *
  * @package  UnzerSDK\test\unit
  */

@@ -19,7 +19,7 @@
  *
  * @link http://dev.heidelpay.com/
  *
- * @author Simon Gabriel <development@heidelpay.com>
+ * @author Simon Gabriel <development@unzer.com>
  *
  * @package  UnzerSDK\Adapter
  */

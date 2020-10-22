@@ -18,7 +18,7 @@
  *
  * @link  https://docs.unzer.com/heidelpay-php-payment-api/
  *
- * @author  Simon Gabriel <simon.gabriel@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
  * @package  UnzerSDK\Adapter
  */

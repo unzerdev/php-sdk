@@ -7,7 +7,7 @@
  *
  * @link  http://dev.heidelpay.com/
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * @author  Simon Gabriel <development@unzer.com>
  *
  * @package  heidelpay/${Package}
  */
