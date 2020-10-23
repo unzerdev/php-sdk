@@ -134,7 +134,7 @@ class Payment extends AbstractUnzerResource
      * @return Authorization|AbstractUnzerResource|null The Authorization object if it exists.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getAuthorization($lazy = false)
     {
@@ -170,7 +170,7 @@ class Payment extends AbstractUnzerResource
      * @return Payout|AbstractUnzerResource|null The Payout object if it exists.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getPayout($lazy = false)
     {
@@ -231,7 +231,7 @@ class Payment extends AbstractUnzerResource
      * @return Charge|null The retrieved Charge object or null if it does not exist.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getCharge($chargeId, $lazy = false): ?Charge
     {
@@ -259,7 +259,7 @@ class Payment extends AbstractUnzerResource
      * @return AbstractUnzerResource|Charge|null The retrieved Charge object or null if it could not be found.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getChargeByIndex($index, $lazy = false)
     {
@@ -283,7 +283,7 @@ class Payment extends AbstractUnzerResource
      * @return Payment This Payment object.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setCustomer($customer): Payment
     {
@@ -338,7 +338,7 @@ class Payment extends AbstractUnzerResource
      * @return Payment This Payment object.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setPaymentType($paymentType): Payment
     {
@@ -376,7 +376,7 @@ class Payment extends AbstractUnzerResource
      * @return Payment
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setMetadata($metadata): Payment
     {
@@ -409,7 +409,7 @@ class Payment extends AbstractUnzerResource
      * @return Payment
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setBasket($basket): Payment
     {
@@ -441,7 +441,7 @@ class Payment extends AbstractUnzerResource
      * @return Cancellation|null The retrieved Cancellation object.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getCancellation($cancellationId, $lazy = false): ?Cancellation
     {
@@ -465,7 +465,7 @@ class Payment extends AbstractUnzerResource
      * @return array The array containing all Cancellation objects of this Payment object.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getCancellations(): array
     {
@@ -514,7 +514,7 @@ class Payment extends AbstractUnzerResource
      * @return Shipment|null The retrieved Shipment object.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getShipment($shipmentId, $lazy = false): ?Shipment
     {
@@ -610,7 +610,7 @@ class Payment extends AbstractUnzerResource
      * {@inheritDoc}
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
@@ -652,7 +652,7 @@ class Payment extends AbstractUnzerResource
      *                           If more then one cancellation is performed the last one will be returned.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.3.0
      * @see Payment::cancelAmount()
@@ -682,7 +682,7 @@ class Payment extends AbstractUnzerResource
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAmount(
         float $amount = null,
@@ -761,7 +761,7 @@ class Payment extends AbstractUnzerResource
      * @return Cancellation|null The resulting cancellation object.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAuthorizationAmount(float $amount = null): ?Cancellation
     {
@@ -777,7 +777,7 @@ class Payment extends AbstractUnzerResource
      * @return Charge|AbstractUnzerResource The resulting Charge object.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function charge($amount = null, $currency = null): Charge
     {
@@ -793,7 +793,7 @@ class Payment extends AbstractUnzerResource
      * @return AbstractUnzerResource|Shipment The resulting Shipment object.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function ship($invoiceId = null, $orderId = null)
     {
@@ -808,7 +808,7 @@ class Payment extends AbstractUnzerResource
      * @param array $transactions
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateResponseTransactions(array $transactions = []): void
     {
@@ -849,7 +849,7 @@ class Payment extends AbstractUnzerResource
      * @param $resources
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateResponseResources($resources): void
     {
@@ -891,7 +891,7 @@ class Payment extends AbstractUnzerResource
      * @param stdClass $transaction The transaction from the Payment response containing the Authorization data.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateAuthorizationTransaction($transaction): void
     {
@@ -911,7 +911,7 @@ class Payment extends AbstractUnzerResource
      * @param stdClass $transaction The transaction from the Payment response containing the Charge data.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateChargeTransaction($transaction): void
     {
@@ -931,7 +931,7 @@ class Payment extends AbstractUnzerResource
      * @param stdClass $transaction The transaction from the Payment response containing the Cancellation data.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateReversalTransaction($transaction): void
     {
@@ -956,7 +956,7 @@ class Payment extends AbstractUnzerResource
      * @param stdClass $transaction The transaction from the Payment response containing the Cancellation data.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateRefundTransaction($transaction): void
     {
@@ -983,7 +983,7 @@ class Payment extends AbstractUnzerResource
      * @param stdClass $transaction The transaction from the Payment response containing the Shipment data.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateShipmentTransaction($transaction): void
     {
@@ -1003,7 +1003,7 @@ class Payment extends AbstractUnzerResource
      * @param stdClass $transaction The transaction from the Payment response containing the Payout data.
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updatePayoutTransaction($transaction): void
     {

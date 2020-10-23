@@ -55,7 +55,7 @@ trait CanAuthorize
      * @return Authorization
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function authorize(
         $amount,

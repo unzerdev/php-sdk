@@ -347,7 +347,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * @return AbstractUnzerResource The updated resource object.
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.6.0
      */
@@ -364,7 +364,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * @return AbstractUnzerResource The updated resource object.
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.6.0
      */

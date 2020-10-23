@@ -102,12 +102,12 @@ class HttpService
      *
      * @param $uri string url of the target system
      * @param AbstractUnzerResource $resource
-     * @param string                    $httpMethod
+     * @param string                $httpMethod
      *
      * @return string
      *
      * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function send(
         $uri = null,
@@ -196,7 +196,7 @@ class HttpService
     }
 
     /**
-     * @param Unzer   $heidelpayObj
+     * @param Unzer       $heidelpayObj
      * @param string      $payload
      * @param mixed       $headers
      * @param int         $responseCode

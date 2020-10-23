@@ -111,12 +111,12 @@ class ResourceService implements ResourceServiceInterface
      * Send request to API.
      *
      * @param AbstractUnzerResource $resource
-     * @param string                    $httpMethod
+     * @param string                $httpMethod
      *
      * @return stdClass
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function send(
         AbstractUnzerResource $resource,
@@ -136,7 +136,7 @@ class ResourceService implements ResourceServiceInterface
      * @return AbstractUnzerResource
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
@@ -152,7 +152,7 @@ class ResourceService implements ResourceServiceInterface
      * @return AbstractUnzerResource|null
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchResourceByUrl($url)
     {
@@ -223,7 +223,7 @@ class ResourceService implements ResourceServiceInterface
      * @return AbstractUnzerResource
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function createResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
@@ -251,7 +251,7 @@ class ResourceService implements ResourceServiceInterface
      * @return AbstractUnzerResource
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function updateResource(AbstractUnzerResource $resource): AbstractUnzerResource
@@ -274,7 +274,7 @@ class ResourceService implements ResourceServiceInterface
      * @return AbstractUnzerResource|null
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function deleteResource(AbstractUnzerResource &$resource): ?AbstractUnzerResource
     {
@@ -299,7 +299,7 @@ class ResourceService implements ResourceServiceInterface
      * @return AbstractUnzerResource The updated resource object.
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
     public function fetchResource(AbstractUnzerResource $resource): AbstractUnzerResource
@@ -326,7 +326,7 @@ class ResourceService implements ResourceServiceInterface
      * @return Payout The Payout object of the given Payment.
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchPayout($payment): Payout
     {
@@ -374,7 +374,7 @@ class ResourceService implements ResourceServiceInterface
      * @return AbstractUnzerResource|Payment
      *
      * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getPaymentResource($payment): Payment
     {

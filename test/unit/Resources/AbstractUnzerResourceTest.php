@@ -151,7 +151,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
      * @dataProvider uriDataProvider
      *
      * @param AbstractUnzerResource $resource
-     * @param string                    $resourcePath
+     * @param string                $resourcePath
      */
     public function getUriWillAddIdToTheUriIfItIsSetAndAppendIdIsSet(AbstractUnzerResource$resource, $resourcePath): void
     {

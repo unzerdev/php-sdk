@@ -135,7 +135,7 @@ class AuthorizationTest extends BaseIntegrationTest
      * @dataProvider authorizeHasExpectedStatesDP
      *
      * @param BasePaymentType|AbstractUnzerResource $paymentType
-     * @param string                                    $expectedState The state the transaction is expected to be in.
+     * @param string                                $expectedState The state the transaction is expected to be in.
      */
     public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState): void
     {
