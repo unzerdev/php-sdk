@@ -148,26 +148,26 @@ class ChargeTest extends BasePaymentTest
     }
 
     /**
-     * Verify cancel() calls cancelCharge() on heidelpay object with the given amount.
+     * Verify cancel() calls cancelCharge() on Unzer object with the given amount.
      *
      * @test
      */
-    public function cancelShouldCallCancelChargeOnHeidelpayObject(): void
+    public function cancelShouldCallCancelChargeOnUnzerObject(): void
     {
         $charge =  new Charge();
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)
+        $unzerMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['cancelCharge'])
             ->getMock();
-        $heidelpayMock->expects($this->exactly(2))
+        $unzerMock->expects($this->exactly(2))
             ->method('cancelCharge')->willReturn(new Cancellation())
             ->withConsecutive(
                 [$this->identicalTo($charge), $this->isNull()],
                 [$this->identicalTo($charge), 321.9]
             );
 
-        /** @var Unzer $heidelpayMock */
-        $charge->setParentResource($heidelpayMock);
+        /** @var Unzer $unzerMock */
+        $charge->setParentResource($unzerMock);
         $charge->cancel();
         $charge->cancel(321.9);
     }

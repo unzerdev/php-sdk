@@ -63,18 +63,18 @@ class CanRecurTest extends BasePaymentTest
     }
 
     /**
-     * Verify activation on object will call heidelpay.
+     * Verify activation on object will call Unzer.
      *
      * @test
      */
-    public function activateRecurringWillCallHeidelpayMethod(): void
+    public function activateRecurringWillCallUnzerMethod(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['activateRecurringPayment'])->getMock();
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['activateRecurringPayment'])->getMock();
 
-        /** @var Unzer $heidelpayMock */
-        $dummy = (new TraitDummyCanRecur())->setParentResource($heidelpayMock);
+        /** @var Unzer $unzerMock */
+        $dummy = (new TraitDummyCanRecur())->setParentResource($unzerMock);
         /** @noinspection PhpParamsInspection */
-        $heidelpayMock->expects(self::once())->method('activateRecurringPayment')->with($dummy, 'return url')->willReturn(new Recurring('', ''));
+        $unzerMock->expects(self::once())->method('activateRecurringPayment')->with($dummy, 'return url')->willReturn(new Recurring('', ''));
 
         $dummy->activateRecurring('return url');
     }

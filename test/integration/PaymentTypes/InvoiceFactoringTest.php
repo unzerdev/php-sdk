@@ -134,11 +134,11 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring is not shippable on heidelpay object.
+     * Verify Invoice Factoring is not shippable on Unzer object.
      *
      * @test
      */
-    public function verifyInvoiceFactoringIsNotShippableWoInvoiceIdOnHeidelpayObject(): void
+    public function verifyInvoiceFactoringIsNotShippableWoInvoiceIdOnUnzerObject(): void
     {
         // create payment type
         /** @var InvoiceFactoring $invoiceFactoring */
@@ -184,11 +184,11 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring shipment with invoice id on heidelpay object.
+     * Verify Invoice Factoring shipment with invoice id on Unzer object.
      *
      * @test
      */
-    public function verifyInvoiceFactoringShipmentWithInvoiceIdOnHeidelpayObject(): void
+    public function verifyInvoiceFactoringShipmentWithInvoiceIdOnUnzerObject(): void
     {
         // create payment type
         /** @var InvoiceFactoring $invoiceFactoring */

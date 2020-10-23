@@ -51,20 +51,20 @@ class CanAuthorizeWithCustomerTest extends BasePaymentTest
     }
 
     /**
-     * Verify authorize method propagates authorize method to heidelpay object.
+     * Verify authorize method propagates authorize method to Unzer object.
      *
      * @test
      */
-    public function authorizeShouldPropagateAuthorizeToHeidelpay(): void
+    public function authorizeShouldPropagateAuthorizeToUnzer(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
+        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
         $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $authorize = new Authorization();
         $customer  = (new Customer())->setId('123');
         $metadata  = new Metadata();
-        $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($heidelpayMock);
-        $heidelpayMock->expects($this->exactly(3))->method('authorize')
+        $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($unzerMock);
+        $unzerMock->expects($this->exactly(3))->method('authorize')
             ->withConsecutive(
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
                 [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId'],

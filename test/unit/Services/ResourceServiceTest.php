@@ -427,20 +427,20 @@ class ResourceServiceTest extends BasePaymentTest
     //<editor-fold desc="PaymentType">
 
     /**
-     * Verify createPaymentType method will set parentResource to heidelpay object and call create.
+     * Verify createPaymentType method will set parentResource to Unzer object and call create.
      *
      * @test
      */
-    public function createPaymentTypeShouldSetHeidelpayObjectAndCallCreate(): void
+    public function createPaymentTypeShouldSetUnzerObjectAndCallCreate(): void
     {
-        $heidelpay = new Unzer('s-priv-1234');
+        $unzer = new Unzer('s-priv-1234');
         $paymentType = new Sofort();
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('createResource')
-            ->with($this->callback(static function ($type) use ($heidelpay, $paymentType) {
-                return $type === $paymentType && $type->getUnzerObject() === $heidelpay;
+            ->with($this->callback(static function ($type) use ($unzer, $paymentType) {
+                return $type === $paymentType && $type->getUnzerObject() === $unzer;
             }));
 
         /** @var ResourceServiceInterface $resourceSrvMock */
@@ -493,20 +493,20 @@ class ResourceServiceTest extends BasePaymentTest
     //<editor-fold desc="Customer">
 
     /**
-     * Verify createCustomer calls create with customer object and the heidelpay resource is set.
+     * Verify createCustomer calls create with customer object and the Unzer resource is set.
      *
      * @test
      */
-    public function createCustomerShouldCallCreateWithCustomerObjectAndSetHeidelpayReference(): void
+    public function createCustomerShouldCallCreateWithCustomerObjectAndSetUnzerReference(): void
     {
-        $heidelpay = new Unzer('s-priv-1234');
+        $unzer = new Unzer('s-priv-1234');
         $customer = new Customer();
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('createResource')
-            ->with($this->callback(static function ($resource) use ($heidelpay, $customer) {
-                return $resource === $customer && $resource->getUnzerObject() === $heidelpay;
+            ->with($this->callback(static function ($resource) use ($unzer, $customer) {
+                return $resource === $customer && $resource->getUnzerObject() === $unzer;
             }));
 
         /** @var ResourceServiceInterface $resourceSrvMock */
@@ -589,12 +589,12 @@ class ResourceServiceTest extends BasePaymentTest
      *
      * @test
      */
-    public function fetchCustomerShouldCallFetchWithTheGivenCustomerAndSetHeidelpayReference(): void
+    public function fetchCustomerShouldCallFetchWithTheGivenCustomerAndSetUnzerReference(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
         $customer = (new Customer())->setId('myCustomerId');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('fetchResource')->with($customer);
 
@@ -609,7 +609,7 @@ class ResourceServiceTest extends BasePaymentTest
         /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->fetchCustomer($customer);
         $this->assertSame($customer, $returnedCustomer);
-        $this->assertSame($heidelpay, $customer->getUnzerObject());
+        $this->assertSame($unzer, $customer->getUnzerObject());
     }
 
     /**

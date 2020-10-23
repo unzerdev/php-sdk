@@ -55,7 +55,7 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function authorizationShouldBeFullyChargeableViaHeidelpayObject(): void
+    public function authorizationShouldBeFullyChargeableViaUnzerObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();

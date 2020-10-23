@@ -35,7 +35,7 @@ class CancelTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function reversalShouldBeFetchableViaHeidelpayObject(): void
+    public function reversalShouldBeFetchableViaUnzerObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
@@ -63,7 +63,7 @@ class CancelTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function refundShouldBeFetchableViaHeidelpayObject(): void
+    public function refundShouldBeFetchableViaUnzerObject(): void
     {
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
