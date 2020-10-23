@@ -61,7 +61,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
     public function recurringForCardWith3dsShouldReturnAttributes(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject()->set3ds(true));
+        $card = $this->unzer->createPaymentType($this->createCardObject()->set3ds(true));
         $recurring = $card->activateRecurring('https://dev.heidelpay.com');
         $this->assertPending($recurring);
         $this->assertEquals('https://dev.heidelpay.com', $recurring->getReturnUrl());
@@ -85,7 +85,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
         }
         $heidelpay = new Unzer($privateKey);
 
-        $heidelpay->setDebugMode(true)->setDebugHandler($this->heidelpay->getDebugHandler());
+        $heidelpay->setDebugMode(true)->setDebugHandler($this->unzer->getDebugHandler());
 
         /** @var Card $card */
         $card = $heidelpay->createPaymentType($this->createCardObject()->set3ds(false));
@@ -107,7 +107,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
     public function paypalShouldBeAbleToActivateRecurringPayments(): void
     {
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $recurring = $paypal->activateRecurring('https://dev.heidelpay.com');
         $this->assertPending($recurring);
         $this->assertNotEmpty($recurring->getReturnUrl());
@@ -121,15 +121,15 @@ class RecurringPaymentTest extends BaseIntegrationTest
     public function sepaDirectDebitShouldBeAbleToActivateRecurringPayments(): void
     {
         /** @var SepaDirectDebit $dd */
-        $dd = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $dd = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
         $this->assertFalse($dd->isRecurring());
         $dd->charge(10.0, 'EUR', self::RETURN_URL);
-        $dd = $this->heidelpay->fetchPaymentType($dd->getId());
+        $dd = $this->unzer->fetchPaymentType($dd->getId());
         $this->assertTrue($dd->isRecurring());
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
-        $this->heidelpay->activateRecurringPayment($dd, self::RETURN_URL);
+        $this->unzer->activateRecurringPayment($dd, self::RETURN_URL);
     }
 
     /**
@@ -140,16 +140,16 @@ class RecurringPaymentTest extends BaseIntegrationTest
     public function sepaDirectDebitGuaranteedShouldBeAbleToActivateRecurringPayments(): void
     {
         /** @var SepaDirectDebitGuaranteed $ddg */
-        $ddg = $this->heidelpay->createPaymentType(new SepaDirectDebitGuaranteed('DE89370400440532013000'));
+        $ddg = $this->unzer->createPaymentType(new SepaDirectDebitGuaranteed('DE89370400440532013000'));
         $this->assertFalse($ddg->isRecurring());
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
         $ddg->charge(10.0, 'EUR', self::RETURN_URL, $customer);
-        $ddg = $this->heidelpay->fetchPaymentType($ddg->getId());
+        $ddg = $this->unzer->fetchPaymentType($ddg->getId());
         $this->assertTrue($ddg->isRecurring());
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
-        $this->heidelpay->activateRecurringPayment($ddg, self::RETURN_URL);
+        $this->unzer->activateRecurringPayment($ddg, self::RETURN_URL);
     }
 }

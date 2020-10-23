@@ -1414,9 +1414,9 @@ class PaymentTest extends BasePaymentTest
         $charge = new Charge();
 
         return [
-            'charge' => [$charge, (new Payment($this->getHeidelpayObject()))->addCharge($charge)],
-            'authorize' => [$authorize, (new Payment($this->getHeidelpayObject()))->setAuthorization($authorize)],
-            'authorize and charge' => [$authorize, (new Payment($this->getHeidelpayObject()))->addCharge($charge)->setAuthorization($authorize)]
+            'charge' => [$charge, (new Payment($this->getUnzerObject()))->addCharge($charge)],
+            'authorize' => [$authorize, (new Payment($this->getUnzerObject()))->setAuthorization($authorize)],
+            'authorize and charge' => [$authorize, (new Payment($this->getUnzerObject()))->addCharge($charge)->setAuthorization($authorize)]
         ];
     }
 

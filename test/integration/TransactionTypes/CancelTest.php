@@ -39,7 +39,7 @@ class CancelTest extends BaseIntegrationTest
     {
         $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
-        $fetchedCancel = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
+        $fetchedCancel = $this->unzer->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
         $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
@@ -67,7 +67,7 @@ class CancelTest extends BaseIntegrationTest
     {
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
-        $fetchedCancel = $this->heidelpay->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
+        $fetchedCancel = $this->unzer->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
         $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
@@ -95,7 +95,7 @@ class CancelTest extends BaseIntegrationTest
     {
         $authorization = $this->createCardAuthorization();
         $reversal = $authorization->cancel();
-        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $fetchedPayment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
 
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
         $this->assertTransactionResourceHasBeenCreated($cancellation);
@@ -111,7 +111,7 @@ class CancelTest extends BaseIntegrationTest
     {
         $charge = $this->createCharge();
         $reversal = $charge->cancel();
-        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
+        $fetchedPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
 
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
         $this->assertTransactionResourceHasBeenCreated($cancellation);

@@ -45,11 +45,11 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     public function invoiceFactoringTypeShouldBeCreatableAndFetchable(): InvoiceFactoring
     {
         /** @var InvoiceFactoring $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new InvoiceFactoring());
+        $invoice = $this->unzer->createPaymentType(new InvoiceFactoring());
         $this->assertInstanceOf(InvoiceFactoring::class, $invoice);
         $this->assertNotNull($invoice->getId());
 
-        $fetchedInvoice = $this->heidelpay->fetchPaymentType($invoice->getId());
+        $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
         $this->assertInstanceOf(InvoiceFactoring::class, $fetchedInvoice);
         $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
 
@@ -69,7 +69,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
+        $this->unzer->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
     }
 
     /**
@@ -84,7 +84,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     {
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVF_REQUIRES_CUSTOMER);
-        $this->heidelpay->charge(1.0, 'EUR', $invoiceFactoring, self::RETURN_URL);
+        $this->unzer->charge(1.0, 'EUR', $invoiceFactoring, self::RETURN_URL);
     }
 
     /**
@@ -142,7 +142,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     {
         // create payment type
         /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->heidelpay->createPaymentType(new InvoiceFactoring());
+        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
 
         // perform charge
         $customer = $this->getMaximumCustomer();
@@ -155,7 +155,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
         $payment = $charge->getPayment();
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_SHIPPING_REQUIRES_INVOICE_ID);
-        $this->heidelpay->ship($payment);
+        $this->unzer->ship($payment);
     }
 
     /**
@@ -167,7 +167,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     {
         // create payment type
         /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->heidelpay->createPaymentType(new InvoiceFactoring());
+        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
 
         // perform charge
         $customer = $this->getMaximumCustomer();
@@ -192,7 +192,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     {
         // create payment type
         /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->heidelpay->createPaymentType(new InvoiceFactoring());
+        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
 
         // perform charge
         $customer = $this->getMaximumCustomer();
@@ -204,7 +204,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
         // perform shipment
         $payment   = $charge->getPayment();
         $invoiceId = 'i' . self::generateRandomId();
-        $shipment  = $this->heidelpay->ship($payment, $invoiceId);
+        $shipment  = $this->unzer->ship($payment, $invoiceId);
         $this->assertNotNull($shipment->getId());
         $this->assertEquals($invoiceId, $shipment->getInvoiceId());
     }
@@ -218,7 +218,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     {
         // create payment type
         /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->heidelpay->createPaymentType(new InvoiceFactoring());
+        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
 
         // perform charge
         $customer = $this->getMaximumCustomer();
@@ -242,7 +242,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     public function verifyInvoiceFactoringShipmentWithPreSetInvoiceId(): void
     {
         /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->heidelpay->createPaymentType(new InvoiceFactoring());
+        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
 
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
@@ -252,7 +252,7 @@ class InvoiceFactoringTest extends BaseIntegrationTest
         $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
 
         $payment   = $charge->getPayment();
-        $shipment  = $this->heidelpay->ship($payment);
+        $shipment  = $this->unzer->ship($payment);
         $this->assertNotNull($shipment->getId());
         $this->assertEquals($invoiceId, $shipment->getInvoiceId());
     }

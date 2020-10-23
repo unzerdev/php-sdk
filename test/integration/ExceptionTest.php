@@ -42,12 +42,12 @@ class ExceptionTest extends BaseIntegrationTest
      */
     public function apiExceptionShouldHoldClientMessage(): void
     {
-        $giropay             = $this->heidelpay->createPaymentType(new Giropay());
+        $giropay             = $this->unzer->createPaymentType(new Giropay());
         $firstClientMessage  = '';
         $secondClientMessage = '';
 
         try {
-            $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+            $this->unzer->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
         } catch (UnzerApiException $e) {
             $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
@@ -58,8 +58,8 @@ class ExceptionTest extends BaseIntegrationTest
         }
 
         try {
-            $this->heidelpay->setLocale('de-DE');
-            $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+            $this->unzer->setLocale('de-DE');
+            $this->unzer->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
         } catch (UnzerApiException $e) {
             $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());

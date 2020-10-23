@@ -42,7 +42,7 @@ class GiropayTest extends BaseIntegrationTest
     {
         $giropay = new Giropay();
         /** @var Giropay $giropay */
-        $giropay = $this->heidelpay->createPaymentType($giropay);
+        $giropay = $this->unzer->createPaymentType($giropay);
         $this->assertInstanceOf(Giropay::class, $giropay);
         $this->assertNotNull($giropay->getId());
     }
@@ -57,8 +57,8 @@ class GiropayTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $giropay = $this->heidelpay->createPaymentType(new Giropay());
-        $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+        $giropay = $this->unzer->createPaymentType(new Giropay());
+        $this->unzer->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
     }
 
     /**
@@ -69,13 +69,13 @@ class GiropayTest extends BaseIntegrationTest
     public function giroPayShouldBeChargeable(): void
     {
         /** @var Giropay $giropay */
-        $giropay = $this->heidelpay->createPaymentType(new Giropay());
+        $giropay = $this->unzer->createPaymentType(new Giropay());
         $charge = $giropay->charge(1.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
 
-        $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
+        $fetchCharge = $this->unzer->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertEquals($charge->expose(), $fetchCharge->expose());
     }
 
@@ -86,8 +86,8 @@ class GiropayTest extends BaseIntegrationTest
      */
     public function giroPayCanBeFetched(): void
     {
-        $giropay = $this->heidelpay->createPaymentType(new Giropay());
-        $fetchedGiropay = $this->heidelpay->fetchPaymentType($giropay->getId());
+        $giropay = $this->unzer->createPaymentType(new Giropay());
+        $fetchedGiropay = $this->unzer->fetchPaymentType($giropay->getId());
         $this->assertInstanceOf(Giropay::class, $fetchedGiropay);
         $this->assertEquals($giropay->getId(), $fetchedGiropay->getId());
     }

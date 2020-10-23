@@ -35,8 +35,8 @@ use RuntimeException;
 
 class WebhookService implements WebhookServiceInterface
 {
-    /** @var Unzer $heidelpay */
-    private $heidelpay;
+    /** @var Unzer $unzer */
+    private $unzer;
 
     /** @var ResourceServiceInterface $resourceService */
     private $resourceService;
@@ -44,12 +44,12 @@ class WebhookService implements WebhookServiceInterface
     /**
      * PaymentService constructor.
      *
-     * @param Unzer $heidelpay
+     * @param Unzer $unzer
      */
-    public function __construct(Unzer $heidelpay)
+    public function __construct(Unzer $unzer)
     {
-        $this->heidelpay = $heidelpay;
-        $this->resourceService = $heidelpay->getResourceService();
+        $this->unzer = $unzer;
+        $this->resourceService = $unzer->getResourceService();
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -57,19 +57,19 @@ class WebhookService implements WebhookServiceInterface
     /**
      * @return Unzer
      */
-    public function getHeidelpay(): Unzer
+    public function getUnzer(): Unzer
     {
-        return $this->heidelpay;
+        return $this->unzer;
     }
 
     /**
-     * @param Unzer $heidelpay
+     * @param Unzer $unzer
      *
      * @return WebhookService
      */
-    public function setHeidelpay(Unzer $heidelpay): WebhookService
+    public function setUnzer(Unzer $unzer): WebhookService
     {
-        $this->heidelpay = $heidelpay;
+        $this->unzer = $unzer;
         return $this;
     }
 
@@ -102,7 +102,7 @@ class WebhookService implements WebhookServiceInterface
     public function createWebhook(string $url, string $event): Webhook
     {
         $webhook = new Webhook($url, $event);
-        $webhook->setParentResource($this->heidelpay);
+        $webhook->setParentResource($this->unzer);
         $this->resourceService->createResource($webhook);
         return $webhook;
     }
@@ -118,7 +118,7 @@ class WebhookService implements WebhookServiceInterface
             $webhookObject->setId($webhook);
         }
 
-        $webhookObject->setParentResource($this->heidelpay);
+        $webhookObject->setParentResource($this->unzer);
         $this->resourceService->fetchResource($webhookObject);
         return $webhookObject;
     }
@@ -128,7 +128,7 @@ class WebhookService implements WebhookServiceInterface
      */
     public function updateWebhook($webhook): Webhook
     {
-        $webhook->setParentResource($this->heidelpay);
+        $webhook->setParentResource($this->unzer);
         $this->resourceService->updateResource($webhook);
         return $webhook;
     }
@@ -157,7 +157,7 @@ class WebhookService implements WebhookServiceInterface
     public function fetchAllWebhooks(): array
     {
         $webhooks = new Webhooks();
-        $webhooks->setParentResource($this->heidelpay);
+        $webhooks->setParentResource($this->unzer);
         /** @var Webhooks $webhooks */
         $webhooks = $this->resourceService->fetchResource($webhooks);
 
@@ -170,7 +170,7 @@ class WebhookService implements WebhookServiceInterface
     public function deleteAllWebhooks(): void
     {
         $webhooks = new Webhooks();
-        $webhooks->setParentResource($this->heidelpay);
+        $webhooks->setParentResource($this->unzer);
         $this->resourceService->deleteResource($webhooks);
     }
 
@@ -180,7 +180,7 @@ class WebhookService implements WebhookServiceInterface
     public function registerMultipleWebhooks(string $url, array $events): array
     {
         $webhooks = new Webhooks($url, $events);
-        $webhooks->setParentResource($this->heidelpay);
+        $webhooks->setParentResource($this->unzer);
         /** @var Webhooks $webhooks */
         $webhooks = $this->resourceService->createResource($webhooks);
 
@@ -201,7 +201,7 @@ class WebhookService implements WebhookServiceInterface
         $retrieveUrl = $eventData->retrieveUrl ?? null;
 
         if (!empty($retrieveUrl)) {
-            $this->heidelpay->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
+            $this->unzer->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
             $resourceObject = $this->resourceService->fetchResourceByUrl($retrieveUrl);
         }
 

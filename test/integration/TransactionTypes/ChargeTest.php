@@ -42,8 +42,8 @@ class ChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldWorkWithTypeId(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->heidelpay->charge(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
+        $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->unzer->charge(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
         $this->assertTransactionResourceHasBeenCreated($charge);
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
         $this->assertNotEmpty($charge->getPayment()->getId());
@@ -57,8 +57,8 @@ class ChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldWorkWithTypeObject(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->heidelpay->charge(100.0, 'EUR', $paymentType, self::RETURN_URL);
+        $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->unzer->charge(100.0, 'EUR', $paymentType, self::RETURN_URL);
         $this->assertTransactionResourceHasBeenCreated($charge);
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
         $this->assertNotEmpty($charge->getPayment()->getId());
@@ -84,7 +84,7 @@ class ChargeTest extends BaseIntegrationTest
     {
         // prepare test data
         /** @var Card $paymentType */
-        $paymentType = $this->heidelpay->createPaymentType($this->createCardObject());
+        $paymentType = $this->unzer->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
         $orderId = 'o'. self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
@@ -110,7 +110,7 @@ class ChargeTest extends BaseIntegrationTest
         $this->assertEquals($paymentReference, $charge->getPaymentReference());
 
         // fetch the charge
-        $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPaymentId(), $charge->getId());
+        $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
 
         // verify the fetched transaction matches the initial transaction
         $this->assertEquals($charge->expose(), $fetchedCharge->expose());
@@ -130,7 +130,7 @@ class ChargeTest extends BaseIntegrationTest
     {
         // prepare test data
         /** @var InvoiceGuaranteed $ivg */
-        $ivg = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
+        $ivg = $this->unzer->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
         $orderId = 'o'. self::generateRandomId();
@@ -155,7 +155,7 @@ class ChargeTest extends BaseIntegrationTest
         $this->assertEquals($invoiceId, $charge->getInvoiceId());
         $this->assertEquals($paymentReference, $charge->getPaymentReference());
 
-        $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPaymentId(), $charge->getId());
+        $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
         $this->assertEquals($charge->expose(), $fetchedCharge->expose());
     }
 }

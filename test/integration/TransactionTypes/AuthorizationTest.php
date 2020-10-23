@@ -44,8 +44,8 @@ class AuthorizationTest extends BaseIntegrationTest
      */
     public function authorizeWithTypeId(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
+        $paymentType = $this->unzer->createPaymentType(new Paypal());
+        $authorize = $this->unzer->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
         $this->assertNotEmpty($authorize->getUniqueId());
@@ -63,8 +63,8 @@ class AuthorizationTest extends BaseIntegrationTest
      */
     public function authorizeWithType(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL);
+        $paymentType = $this->unzer->createPaymentType(new Paypal());
+        $authorize = $this->unzer->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotNull($authorize->getId());
     }
@@ -76,11 +76,11 @@ class AuthorizationTest extends BaseIntegrationTest
      */
     public function authorizationProducesPaymentAndCustomer(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $paymentType = $this->unzer->createPaymentType(new Paypal());
         $customer = $this->getMinimalCustomer();
         $this->assertNull($customer->getId());
 
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL, $customer);
+        $authorize = $this->unzer->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL, $customer);
         $payment = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -99,10 +99,10 @@ class AuthorizationTest extends BaseIntegrationTest
      */
     public function authorizationWithCustomerId(): Authorization
     {
-        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
-        $customerId  = $this->heidelpay->createCustomer($this->getMinimalCustomer())->getId();
+        $paymentType = $this->unzer->createPaymentType(new Paypal());
+        $customerId  = $this->unzer->createCustomer($this->getMinimalCustomer())->getId();
         $orderId     = microtime(true);
-        $authorize   = $this->heidelpay->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL, $customerId, $orderId);
+        $authorize   = $this->unzer->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL, $customerId, $orderId);
         $payment     = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -124,7 +124,7 @@ class AuthorizationTest extends BaseIntegrationTest
      */
     public function authorizationCanBeFetched(Authorization $authorization): void
     {
-        $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPaymentId());
+        $fetchedAuthorization = $this->unzer->fetchAuthorization($authorization->getPaymentId());
         $this->assertEquals($authorization->expose(), $fetchedAuthorization->expose());
     }
 
@@ -139,8 +139,8 @@ class AuthorizationTest extends BaseIntegrationTest
      */
     public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState): void
     {
-        $paymentType = $this->heidelpay->createPaymentType($paymentType);
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
+        $paymentType = $this->unzer->createPaymentType($paymentType);
+        $authorize = $this->unzer->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
 
         $stateCheck = 'assert' . ucfirst($expectedState);
         $this->$stateCheck($authorize);
@@ -154,7 +154,7 @@ class AuthorizationTest extends BaseIntegrationTest
     public function authorizeShouldAcceptAllParameters(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
         $orderId = 'o' . self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
@@ -177,7 +177,7 @@ class AuthorizationTest extends BaseIntegrationTest
         $this->assertEquals($invoiceId, $authorize->getInvoiceId());
         $this->assertEquals($paymentReference, $authorize->getPaymentReference());
 
-        $fetchedAuthorize = $this->heidelpay->fetchAuthorization($authorize->getPaymentId());
+        $fetchedAuthorize = $this->unzer->fetchAuthorization($authorize->getPaymentId());
         $fetchedPayment = $fetchedAuthorize->getPayment();
 
         $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());

@@ -50,11 +50,11 @@ class WebhookTest extends BaseIntegrationTest
     public function webhookResourceCanBeRegisteredAndFetched($event): void
     {
         $url = $this->generateUniqueUrl();
-        $webhook = $this->heidelpay->createWebhook($url, $event);
+        $webhook = $this->unzer->createWebhook($url, $event);
         $this->assertNotNull($webhook->getId());
         $this->assertEquals($event, $webhook->getEvent());
 
-        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $fetchedWebhook = $this->unzer->fetchWebhook($webhook->getId());
         $this->assertEquals($webhook->expose(), $fetchedWebhook->expose());
     }
 
@@ -66,15 +66,15 @@ class WebhookTest extends BaseIntegrationTest
     public function webhookUrlShouldBeUpdateable(): void
     {
         $url     = $this->generateUniqueUrl();
-        $webhook = $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
-        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $webhook = $this->unzer->createWebhook($url, WebhookEvents::ALL);
+        $fetchedWebhook = $this->unzer->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
 
         $url = $this->generateUniqueUrl();
         $webhook->setUrl($url);
-        $this->heidelpay->updateWebhook($webhook);
+        $this->unzer->updateWebhook($webhook);
 
-        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $fetchedWebhook = $this->unzer->fetchWebhook($webhook->getId());
         $this->assertEquals($url, $fetchedWebhook->getUrl());
     }
 
@@ -85,14 +85,14 @@ class WebhookTest extends BaseIntegrationTest
      */
     public function webhookEventShouldNotBeUpdateable(): void
     {
-        $webhook = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::ALL);
-        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $webhook = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::ALL);
+        $fetchedWebhook = $this->unzer->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
 
         $webhook->setEvent(WebhookEvents::CUSTOMER);
-        $this->heidelpay->updateWebhook($webhook);
+        $this->unzer->updateWebhook($webhook);
 
-        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $fetchedWebhook = $this->unzer->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
     }
 
@@ -103,15 +103,15 @@ class WebhookTest extends BaseIntegrationTest
      */
     public function webhookResourceShouldBeDeletable(): void
     {
-        $webhook = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::ALL);
-        $fetchedWebhook = $this->heidelpay->fetchWebhook($webhook->getId());
+        $webhook = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::ALL);
+        $fetchedWebhook = $this->unzer->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
 
-        $this->assertNull($this->heidelpay->deleteWebhook($webhook));
+        $this->assertNull($this->unzer->deleteWebhook($webhook));
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND);
-        $this->heidelpay->fetchWebhook($webhook->getId());
+        $this->unzer->fetchWebhook($webhook->getId());
     }
 
     /**
@@ -122,11 +122,11 @@ class WebhookTest extends BaseIntegrationTest
     public function webhookCreateShouldThrowErrorWhenEventIsAlreadyRegistered(): void
     {
         $url = $this->generateUniqueUrl();
-        $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
+        $this->unzer->createWebhook($url, WebhookEvents::ALL);
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED);
-        $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
+        $this->unzer->createWebhook($url, WebhookEvents::ALL);
     }
 
     //</editor-fold>
@@ -142,20 +142,20 @@ class WebhookTest extends BaseIntegrationTest
     {
         // --- Prepare --> remove all existing webhooks
         // start workaround - avoid error deleting non existing webhooks
-        $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
+        $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
         // end workaround - avoid error deleting non existing webhooks
 
-        $this->heidelpay->deleteAllWebhooks();
-        $webhooks = $this->heidelpay->fetchAllWebhooks();
+        $this->unzer->deleteAllWebhooks();
+        $webhooks = $this->unzer->fetchAllWebhooks();
         $this->assertCount(0, $webhooks);
 
         // --- Create some test webhooks ---
-        $webhook1 = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
-        $webhook2 = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::CHARGE);
-        $webhook3 = $this->heidelpay->createWebhook($this->generateUniqueUrl(), WebhookEvents::AUTHORIZE);
+        $webhook1 = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
+        $webhook2 = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::CHARGE);
+        $webhook3 = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::AUTHORIZE);
 
         // --- Verify webhooks have been registered ---
-        $fetchedWebhooks = $this->heidelpay->fetchAllWebhooks();
+        $fetchedWebhooks = $this->unzer->fetchAllWebhooks();
         $this->assertCount(3, $fetchedWebhooks);
 
         $this->assertTrue($this->arrayContainsWebhook($fetchedWebhooks, $webhook1));
@@ -173,12 +173,12 @@ class WebhookTest extends BaseIntegrationTest
     public function allWebhooksShouldBeRemovableAtOnce(): void
     {
         // --- Verify webhooks have been registered ---
-        $webhooks = $this->heidelpay->fetchAllWebhooks();
+        $webhooks = $this->unzer->fetchAllWebhooks();
         $this->assertGreaterThan(0, count($webhooks));
 
         // --- Verify all webhooks can be removed at once ---
-        $this->heidelpay->deleteAllWebhooks();
-        $webhooks = $this->heidelpay->fetchAllWebhooks();
+        $this->unzer->deleteAllWebhooks();
+        $webhooks = $this->unzer->fetchAllWebhooks();
         $this->assertCount(0, $webhooks);
     }
 
@@ -192,7 +192,7 @@ class WebhookTest extends BaseIntegrationTest
     {
         $webhookEvents      = [WebhookEvents::AUTHORIZE, WebhookEvents::CHARGE, WebhookEvents::SHIPMENT];
         $url                = $this->generateUniqueUrl();
-        $registeredWebhooks = $this->heidelpay->registerMultipleWebhooks($url, $webhookEvents);
+        $registeredWebhooks = $this->unzer->registerMultipleWebhooks($url, $webhookEvents);
 
         // check whether the webhooks have the correct url
         $registeredEvents = [];
@@ -218,10 +218,10 @@ class WebhookTest extends BaseIntegrationTest
     public function bulkSettingOnlyOneWebhookShouldBePossible(): void
     {
         // remove all existing webhooks a avoid errors here
-        $this->heidelpay->deleteAllWebhooks();
+        $this->unzer->deleteAllWebhooks();
 
         $url                = $this->generateUniqueUrl();
-        $registeredWebhooks = $this->heidelpay->registerMultipleWebhooks($url, [WebhookEvents::AUTHORIZE]);
+        $registeredWebhooks = $this->unzer->registerMultipleWebhooks($url, [WebhookEvents::AUTHORIZE]);
 
         $this->assertCount(1, $registeredWebhooks);
 

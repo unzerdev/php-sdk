@@ -48,21 +48,21 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function gettersAndSettersShouldWorkProperly(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
-        $this->assertSame($heidelpay, $webhookService->getHeidelpay());
-        $this->assertSame($heidelpay->getResourceService(), $webhookService->getResourceService());
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
+        $this->assertSame($unzer, $webhookService->getUnzer());
+        $this->assertSame($unzer->getResourceService(), $webhookService->getResourceService());
 
-        $heidelpay2 = new Unzer('s-priv-1234');
-        $resourceService2 = new ResourceService($heidelpay2);
+        $unzer2 = new Unzer('s-priv-1234');
+        $resourceService2 = new ResourceService($unzer2);
         $webhookService->setResourceService($resourceService2);
-        $this->assertSame($heidelpay, $webhookService->getHeidelpay());
-        $this->assertNotSame($heidelpay2->getResourceService(), $webhookService->getResourceService());
+        $this->assertSame($unzer, $webhookService->getUnzer());
+        $this->assertNotSame($unzer2->getResourceService(), $webhookService->getResourceService());
         $this->assertSame($resourceService2, $webhookService->getResourceService());
 
-        $webhookService->setHeidelpay($heidelpay2);
-        $this->assertSame($heidelpay2, $webhookService->getHeidelpay());
-        $this->assertNotSame($heidelpay2->getResourceService(), $webhookService->getResourceService());
+        $webhookService->setUnzer($unzer2);
+        $this->assertSame($unzer2, $webhookService->getUnzer());
+        $this->assertNotSame($unzer2->getResourceService(), $webhookService->getResourceService());
     }
 
     //</editor-fold>

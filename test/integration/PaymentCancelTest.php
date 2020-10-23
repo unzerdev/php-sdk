@@ -42,7 +42,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function doubleCancelOnAuthorizeShouldReturnEmptyArray(): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -66,7 +66,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function cancelOnChargeAndDoubleCancel(): void
     {
         $charge = $this->createCharge(123.44);
-        $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
@@ -75,7 +75,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
         $this->assertCount(1, $cancellations);
 
-        $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $newCancellations = $payment->cancelAmount();
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
@@ -91,7 +91,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function fullCancelOnPaymentWithAuthorizeAndMultipleChargesShouldBePossible(): void
     {
         $authorization = $this->createCardAuthorization(123.44);
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 123.44, 0.0, 123.44, 0.0);
 
@@ -99,12 +99,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 23.0, 100.44, 123.44, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $charge2 = $payment->charge(23.00);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(2, $payment->cancelAmount());
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 123.44, 123.44);
@@ -124,7 +124,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function partialCancelAndFullCancelOnSingleCharge(): void
     {
         $charge = $this->createCharge(222.33);
-        $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 222.33, 222.33, 0.0);
 
@@ -132,7 +132,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 99.21, 222.33, 123.12);
 
-        $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertCount(1, $payment->cancelAmount(99.21));
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 222.33, 222.33);
@@ -152,18 +152,18 @@ class PaymentCancelTest extends BaseIntegrationTest
     {
         $authorizeAmount = 123.44;
         $authorization = $this->createCardAuthorization($authorizeAmount);
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
 
         $payment->charge(23.00);
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 100.44, 23.0, $authorizeAmount, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $payment->charge(100.44);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, $authorizeAmount, $authorizeAmount, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount($numberCancels, $payment->cancelAmount($amount));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, $authorizeAmount - $amount, $authorizeAmount, $amount);
@@ -181,7 +181,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function fullCancelOnAuthorize($amount): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -199,7 +199,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function fullCancelOnPartCanceledAuthorize(): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -207,12 +207,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 90.0, 0.0, 90.0, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(1, $payment->cancelAmount(10.0));
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 80.0, 0.0, 80.0, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(1, $payment->cancelAmount());
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
@@ -230,7 +230,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function fullCancelOnFullyChargedAuthorize($amount): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -238,7 +238,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(1, $payment->cancelAmount($amount));
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 100.0, 100.0);
@@ -256,7 +256,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function fullCancelOnPartlyChargedAuthorizeShouldBePossible($amount): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -264,7 +264,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(2, $payment->cancelAmount($amount));
         $this->assertTrue($payment->isCanceled());
         $this->assertAmounts($payment, 0.0, 0.0, 50.0, 50.0);
@@ -279,7 +279,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function partCancelOnUnchargedAuthorize(): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -297,7 +297,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function partCancelOnPartlyChargedAuthorizeWithAmountLtCharged(): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -305,7 +305,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 75.0, 25.0, 100.0, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(1, $payment->cancelAmount(20.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 55.0, 25.0, 80.0, 0.0);
@@ -320,7 +320,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function partCancelOnPartlyChargedAuthorizeWithAmountGtCharged(): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -328,7 +328,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(2, $payment->cancelAmount(80.0));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 20.0, 40.0, 20.0);
@@ -346,9 +346,9 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function fullCancelOnInitialInvoiceCharge($amount): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $invoice = $this->unzer->createPaymentType(new Invoice());
         $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
-        $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -366,9 +366,9 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function partCancelOnInitialInvoiceChargeShouldBePossible(): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $invoice = $this->unzer->createPaymentType(new Invoice());
         $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
-        $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -386,7 +386,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function cancelMoreThanWasCharged(): void
     {
         $charge = $this->createCharge(50.0);
-        $payment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 50.0, 50.0, 0.0);
 
@@ -404,7 +404,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     public function secondCancelExceedsRemainderOfPartlyCancelledCharge(): void
     {
         $authorization = $this->createCardAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
@@ -412,17 +412,17 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $payment->charge(50.0);
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(1, $payment->cancelAmount(40.0));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 60.0, 100.0, 40.0);
 
-        $payment = $this->heidelpay->fetchPayment($authorization->getPaymentId());
+        $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
         $this->assertCount(2, $payment->cancelAmount(30.0));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 30.0, 100.0, 70.0);

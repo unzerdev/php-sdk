@@ -49,8 +49,8 @@ class BasePaymentTest extends TestCase
 
     use CustomerFixtureTrait;
 
-    /** @var Unzer $heidelpay */
-    protected $heidelpay;
+    /** @var Unzer $unzer */
+    protected $unzer;
 
     /**
      * Creates and returns a Heidelpay object if it does not exist yet.
@@ -62,14 +62,14 @@ class BasePaymentTest extends TestCase
      *
      * @throws RuntimeException
      */
-    protected function getHeidelpayObject($privateKey = 's-priv-1234'): Unzer
+    protected function getUnzerObject($privateKey = 's-priv-1234'): Unzer
     {
-        if (!$this->heidelpay instanceof Unzer) {
-            $this->heidelpay = (new Unzer($privateKey))
+        if (!$this->unzer instanceof Unzer) {
+            $this->unzer = (new Unzer($privateKey))
                 ->setDebugHandler(new TestDebugHandler())
                 ->setDebugMode(true);
         }
-        return $this->heidelpay;
+        return $this->unzer;
     }
 
     /**
@@ -77,7 +77,7 @@ class BasePaymentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->getHeidelpayObject();
+        $this->getUnzerObject();
     }
 
     //<editor-fold desc="Custom asserts">
@@ -182,7 +182,7 @@ class BasePaymentTest extends TestCase
             ->setAmountGross(119.0)
             ->setImageUrl('https://hpp-images.s3.amazonaws.com/7/bsk_0_6377B5798E5C55C6BF8B5BECA59529130226E580B050B913EAC3606DA0FF4F68.jpg');
         $basket->addBasketItem($basketItem);
-        $this->heidelpay->createBasket($basket);
+        $this->unzer->createBasket($basket);
         return $basket;
     }
 
@@ -210,9 +210,9 @@ class BasePaymentTest extends TestCase
      */
     public function createCardAuthorization($amount = 100.0): Authorization
     {
-        $card    = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card    = $this->unzer->createPaymentType($this->createCardObject());
         $orderId = microtime(true);
-        return $this->heidelpay->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
+        return $this->unzer->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
     }
 
     /**
@@ -223,9 +223,9 @@ class BasePaymentTest extends TestCase
     public function createPaypalAuthorization(): Authorization
     {
         /** @var Paypal $paypal */
-        $paypal  = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal  = $this->unzer->createPaymentType(new Paypal());
         $orderId = microtime(true);
-        return $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
+        return $this->unzer->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
     }
 
     /**
@@ -237,8 +237,8 @@ class BasePaymentTest extends TestCase
      */
     public function createCharge($amount = 100.0): Charge
     {
-        $card = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        return $this->heidelpay->charge($amount, 'EUR', $card, self::RETURN_URL);
+        $card = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        return $this->unzer->charge($amount, 'EUR', $card, self::RETURN_URL);
     }
 
     /**

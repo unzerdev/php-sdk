@@ -51,15 +51,15 @@ class SetMetadataTest extends BaseIntegrationTest
         $metadata->addMetadata('MyCustomData', 'my custom information');
         $this->assertNull($metadata->getId());
 
-        $this->heidelpay->createMetadata($metadata);
+        $this->unzer->createMetadata($metadata);
         $this->assertNotNull($metadata->getId());
 
-        $fetchedMetadata = (new Metadata())->setParentResource($this->heidelpay)->setId($metadata->getId());
+        $fetchedMetadata = (new Metadata())->setParentResource($this->unzer)->setId($metadata->getId());
         $this->assertNull($fetchedMetadata->getShopType());
         $this->assertNull($fetchedMetadata->getShopVersion());
         $this->assertNull($fetchedMetadata->getMetadata('MyCustomData'));
 
-        $this->heidelpay->fetchMetadata($fetchedMetadata);
+        $this->unzer->fetchMetadata($fetchedMetadata);
         $this->assertEquals('my awesome shop', $fetchedMetadata->getShopType());
         $this->assertEquals('v2.0.0', $fetchedMetadata->getShopVersion());
         $this->assertEquals('my custom information', $fetchedMetadata->getMetadata('MyCustomData'));
@@ -79,8 +79,8 @@ class SetMetadataTest extends BaseIntegrationTest
         $metadata->addMetadata('ModuleVersion', '18.3.12');
         $this->assertEmpty($metadata->getId());
 
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
-        $this->heidelpay->authorize(1.23, 'EUR', $paypal, 'https://heidelpay.com', null, null, $metadata);
+        $paypal = $this->unzer->createPaymentType(new Paypal());
+        $this->unzer->authorize(1.23, 'EUR', $paypal, 'https://heidelpay.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -98,8 +98,8 @@ class SetMetadataTest extends BaseIntegrationTest
         $metadata->addMetadata('ModuleVersion', '18.3.12');
         $this->assertEmpty($metadata->getId());
 
-        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
-        $this->heidelpay->charge(1.23, 'EUR', $paymentType, 'https://heidelpay.com', null, null, $metadata);
+        $paymentType = $this->unzer->createPaymentType(new Paypal());
+        $this->unzer->charge(1.23, 'EUR', $paymentType, 'https://heidelpay.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -113,12 +113,12 @@ class SetMetadataTest extends BaseIntegrationTest
         $metadata = (new Metadata())->addMetadata('key', 'value');
 
         /** @var Paypal $paymentType */
-        $paymentType = $this->heidelpay->createPaymentType(new Paypal());
+        $paymentType = $this->unzer->createPaymentType(new Paypal());
         $authorize = $paymentType->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, $metadata);
         $payment = $authorize->getPayment();
         $this->assertSame($metadata, $payment->getMetadata());
 
-        $fetchedPayment = $this->heidelpay->fetchPayment($payment->getId());
+        $fetchedPayment = $this->unzer->fetchPayment($payment->getId());
         $fetchedMetadata = $fetchedPayment->getMetadata();
         $this->assertEquals($metadata->expose(), $fetchedMetadata->expose());
     }
@@ -133,6 +133,6 @@ class SetMetadataTest extends BaseIntegrationTest
         $metadata = new Metadata();
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_REQUEST_DATA_IS_INVALID);
-        $this->heidelpay->createMetadata($metadata);
+        $this->unzer->createMetadata($metadata);
     }
 }

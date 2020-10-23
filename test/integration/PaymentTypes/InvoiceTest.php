@@ -41,7 +41,7 @@ class InvoiceTest extends BaseIntegrationTest
     public function invoiceTypeShouldBeCreatable(): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $invoice = $this->unzer->createPaymentType(new Invoice());
         $this->assertInstanceOf(Invoice::class, $invoice);
         $this->assertNotNull($invoice->getId());
     }
@@ -54,11 +54,11 @@ class InvoiceTest extends BaseIntegrationTest
     public function verifyInvoiceIsNotAuthorizable(): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $invoice = $this->unzer->createPaymentType(new Invoice());
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
+        $this->unzer->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
     }
 
     /**
@@ -69,8 +69,8 @@ class InvoiceTest extends BaseIntegrationTest
     public function verifyInvoiceIsChargeable(): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
-        $charge = $this->heidelpay->charge(20.0, 'EUR', $invoice, self::RETURN_URL);
+        $invoice = $this->unzer->createPaymentType(new Invoice());
+        $charge = $this->unzer->charge(20.0, 'EUR', $invoice, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
     }
@@ -83,7 +83,7 @@ class InvoiceTest extends BaseIntegrationTest
     public function verifyInvoiceIsNotShippable(): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $invoice = $this->unzer->createPaymentType(new Invoice());
         $charge = $invoice->charge(1.0, 'EUR', self::RETURN_URL);
         $this->assertNotEmpty($charge->getIban());
         $this->assertNotEmpty($charge->getBic());
@@ -95,7 +95,7 @@ class InvoiceTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
-        $this->heidelpay->ship($payment);
+        $this->unzer->ship($payment);
     }
 
     /**
@@ -106,7 +106,7 @@ class InvoiceTest extends BaseIntegrationTest
     public function verifyInvoiceChargeCanBeCanceled(): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $invoice = $this->unzer->createPaymentType(new Invoice());
         $charge = $invoice->charge(1.0, 'EUR', self::RETURN_URL);
         $cancellation = $charge->cancel();
         $this->assertNotNull($cancellation);
@@ -123,7 +123,7 @@ class InvoiceTest extends BaseIntegrationTest
     public function verifyInvoiceChargeCanBePartlyCanceled(): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
+        $invoice = $this->unzer->createPaymentType(new Invoice());
         $charge = $invoice->charge(1.0, 'EUR', self::RETURN_URL);
         $cancellation = $charge->cancel(0.5);
         $this->assertNotNull($cancellation);
@@ -146,8 +146,8 @@ class InvoiceTest extends BaseIntegrationTest
     public function invoiceTypeCanBeFetched(): void
     {
         /** @var Invoice $invoice */
-        $invoice = $this->heidelpay->createPaymentType(new Invoice());
-        $fetchedInvoice = $this->heidelpay->fetchPaymentType($invoice->getId());
+        $invoice = $this->unzer->createPaymentType(new Invoice());
+        $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
         $this->assertInstanceOf(Invoice::class, $fetchedInvoice);
         $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
     }

@@ -198,7 +198,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      */
     public function setPaymentService(PaymentService $paymentService): Unzer
     {
-        $this->paymentService = $paymentService->setHeidelpay($this);
+        $this->paymentService = $paymentService->setUnzer($this);
         return $this;
     }
 
@@ -244,7 +244,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      */
     public function setCancelService(CancelService $cancelService): Unzer
     {
-        $this->cancelService = $cancelService->setHeidelpay($this);
+        $this->cancelService = $cancelService->setUnzer($this);
         return $this;
     }
 

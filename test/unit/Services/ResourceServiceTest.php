@@ -84,13 +84,13 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function gettersAndSettersShouldWorkProperly(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $resourceService = $heidelpay->getResourceService();
-        $this->assertSame($heidelpay, $resourceService->getUnzer());
+        $unzer = new Unzer('s-priv-123');
+        $resourceService = $unzer->getResourceService();
+        $this->assertSame($unzer, $resourceService->getUnzer());
 
-        $heidelpay2 = new Unzer('s-priv-1234');
-        $resourceService->setUnzer($heidelpay2);
-        $this->assertSame($heidelpay2, $resourceService->getUnzer());
+        $unzer2 = new Unzer('s-priv-1234');
+        $resourceService->setUnzer($unzer2);
+        $this->assertSame($unzer2, $resourceService->getUnzer());
     }
 
     /**

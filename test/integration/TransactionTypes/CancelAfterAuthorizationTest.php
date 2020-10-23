@@ -38,18 +38,18 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
      */
     public function fullCancelOnAuthorization(): void
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $card = $this->unzer->createPaymentType($this->createCardObject());
+        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
 
         /** @var Authorization $fetchedAuthorization */
-        $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
+        $fetchedAuthorization = $this->unzer->fetchAuthorization($authorization->getPayment()->getId());
         $payment = $fetchedAuthorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertEquals('EUR', $payment->getCurrency());
         $this->assertTrue($payment->isPending());
 
         $cancellation = $fetchedAuthorization->cancel();
-        $secPayment = $this->heidelpay->fetchPayment($payment->getId());
+        $secPayment = $this->unzer->fetchPayment($payment->getId());
         $this->assertNotEmpty($cancellation);
         $this->assertAmounts($secPayment, 0.0, 0.0, 0.0, 0.0);
         $this->assertTrue($secPayment->isCanceled());
@@ -66,9 +66,9 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
      */
     public function partCancelOnPayment(): void
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
-        $payment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
+        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $payment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
 
         $cancelArray = $payment->cancelAmount(10.0);
 
@@ -84,17 +84,17 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
      */
     public function partCancelOnAuthorize(): void
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $card = $this->unzer->createPaymentType($this->createCardObject());
+        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
 
         /** @var Authorization $fetchedAuthorization */
-        $fetchedAuthorization = $this->heidelpay->fetchAuthorization($authorization->getPayment()->getId());
+        $fetchedAuthorization = $this->unzer->fetchAuthorization($authorization->getPayment()->getId());
 
         $cancel = $fetchedAuthorization->cancel(10.0);
         $this->assertTransactionResourceHasBeenCreated($cancel);
         $this->assertEquals(10.0, $cancel->getAmount());
 
-        $payment = $this->heidelpay->fetchPayment($fetchedAuthorization->getPayment()->getId());
+        $payment = $this->unzer->fetchPayment($fetchedAuthorization->getPayment()->getId());
         $this->assertAmounts($payment, 90.0, 0.0, 90.0, 0.0);
         $this->assertTrue($payment->isPending());
     }
@@ -106,13 +106,13 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
      */
     public function anAuthorizationsFullReversalShallBeFetchable(): void
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $card = $this->unzer->createPaymentType($this->createCardObject());
+        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
         $this->assertTrue($payment->isPending());
 
-        $cancel = $this->heidelpay->cancelAuthorization($authorization);
+        $cancel = $this->unzer->cancelAuthorization($authorization);
         $this->assertTransactionResourceHasBeenCreated($cancel);
         $this->assertEquals(100.0, $cancel->getAmount());
         $secondPayment = $cancel->getPayment();
@@ -120,13 +120,13 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertTrue($secondPayment->isCanceled());
 
 
-        $fetchedCancel = $this->heidelpay->fetchReversalByAuthorization($authorization, $cancel->getId());
+        $fetchedCancel = $this->unzer->fetchReversalByAuthorization($authorization, $cancel->getId());
         $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $thirdPayment = $authorization->getPayment();
         $this->assertAmounts($thirdPayment, 0, 0, 0, 0);
         $this->assertTrue($thirdPayment->isCanceled());
 
-        $fetchedCancelSecond = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
+        $fetchedCancelSecond = $this->unzer->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
         $this->assertTransactionResourceHasBeenCreated($fetchedCancelSecond);
         $this->assertEquals($fetchedCancel->expose(), $fetchedCancelSecond->expose());
         $fourthPayment = $fetchedCancelSecond->getPayment();
@@ -141,13 +141,13 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
      */
     public function anAuthorizationsReversalsShouldBeFetchable(): void
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $card = $this->unzer->createPaymentType($this->createCardObject());
+        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
         $this->assertTrue($payment->isPending());
 
-        $firstCancel = $this->heidelpay->cancelAuthorization($authorization, 50.0);
+        $firstCancel = $this->unzer->cancelAuthorization($authorization, 50.0);
         $this->assertNotNull($firstCancel);
         $this->assertNotNull($firstCancel->getId());
         $this->assertEquals(50.0, $firstCancel->getAmount());
@@ -156,7 +156,7 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertTrue($secondPayment->isPending());
         $this->assertCount(1, $authorization->getCancellations());
 
-        $secondCancel = $this->heidelpay->cancelAuthorization($authorization, 20.0);
+        $secondCancel = $this->unzer->cancelAuthorization($authorization, 20.0);
         $this->assertNotNull($secondCancel);
         $this->assertNotNull($secondCancel->getId());
         $this->assertEquals(20.0, $secondCancel->getAmount());
@@ -165,11 +165,11 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertTrue($thirdPayment->isPending());
         $this->assertCount(2, $authorization->getCancellations());
 
-        $firstCancelFetched = $this->heidelpay->fetchReversalByAuthorization($authorization, $firstCancel->getId());
+        $firstCancelFetched = $this->unzer->fetchReversalByAuthorization($authorization, $firstCancel->getId());
         $this->assertNotNull($firstCancelFetched);
         $this->assertEquals($firstCancel->expose(), $firstCancelFetched->expose());
 
-        $secondCancelFetched = $this->heidelpay->fetchReversalByAuthorization($authorization, $secondCancel->getId());
+        $secondCancelFetched = $this->unzer->fetchReversalByAuthorization($authorization, $secondCancel->getId());
         $this->assertNotNull($secondCancelFetched);
         $this->assertEquals($secondCancel->expose(), $secondCancelFetched->expose());
     }
