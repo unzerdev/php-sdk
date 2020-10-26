@@ -9,7 +9,7 @@
  *
  * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpay/${Package}
+ * @package  UnzerSDK\Interfaces
  */
 namespace UnzerSDK\Interfaces;
 

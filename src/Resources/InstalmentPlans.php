@@ -1,8 +1,8 @@
 <?php
 /**
  * Resource used to fetch instalment plans for hire purchase (FlexiPay Rate) payment method specified as parent resource.
- * Please use Heidelpay methods to fetch the list of instalment plans
- * (e.g. Heidelpay::fetchDirectDebitInstalmentPlans(...)).
+ * Please use Unzer methods to fetch the list of instalment plans
+ * (e.g. Unzer::fetchDirectDebitInstalmentPlans(...)).
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *

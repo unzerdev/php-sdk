@@ -38,7 +38,7 @@ use UnzerSDK\test\BaseIntegrationTest;
 class AuthorizationTest extends BaseIntegrationTest
 {
     /**
-     * Verify heidelpay object can perform an authorization based on the paymentTypeId.
+     * Verify Unzer object can perform an authorization based on the paymentTypeId.
      *
      * @test
      */
@@ -57,7 +57,7 @@ class AuthorizationTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify heidelpay object can perform an authorization based on the paymentType object.
+     * Verify Unzer object can perform an authorization based on the paymentType object.
      *
      * @test
      */

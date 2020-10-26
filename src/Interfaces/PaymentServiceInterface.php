@@ -210,7 +210,7 @@ interface PaymentServiceInterface
     /**
      * Initializes a PayPage for charge transaction and returns the PayPage resource.
      * Use the id of the PayPage resource to render the embedded PayPage.
-     * Or redirect the client to the redirectUrl of the PayPage to show him the PayPage hosted by heidelpay.
+     * Or redirect the client to the redirectUrl of the PayPage to show him the PayPage hosted by Unzer.
      * Please keep in mind, that payment types requiring an authorization will not be shown on the PayPage when
      * initialized for charge.
      *
@@ -238,7 +238,7 @@ interface PaymentServiceInterface
     /**
      * Initializes a PayPage for authorize transaction and returns the PayPage resource.
      * Use the id of the PayPage resource to render the embedded PayPage.
-     * Or redirect the client to the redirectUrl of the PayPage to show him the PayPage hosted by heidelpay.
+     * Or redirect the client to the redirectUrl of the PayPage to show him the PayPage hosted by Unzer.
      * Please keep in mind, that payment types requiring a charge transaction will not be shown on the PayPage when
      * initialized for authorize.
      *

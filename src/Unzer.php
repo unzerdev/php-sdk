@@ -149,7 +149,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * Returns the set customer locale.
      *
      * @return string|null The locale of the customer.
-     *                     Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
+     *                     Refer to the documentation under https://docs.unzer.com for a list of supported values.
      */
     public function getLocale(): ?string
     {
@@ -160,7 +160,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * Sets the customer locale.
      *
      * @param string|null $locale The customer locale to set.
-     *                            Ref. https://docs.heidelpay.com for a list of supported values.
+     *                            Ref. https://docs.unzer.com for a list of supported values.
      *
      * @return Unzer This Unzer object.
      */

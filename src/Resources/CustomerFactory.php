@@ -33,7 +33,7 @@ class CustomerFactory
 {
     /**
      * Creates a local Customer object for B2C transactions.
-     * Please use Heidelpay::createCustomer(...) to create the customer resource on the API side.
+     * Please use Unzer::createCustomer(...) to create the customer resource on the API side.
      *
      * @param string $firstname Firstname is a mandatory for customer.
      * @param string $lastname  Lastname is a mandatory for customer.
@@ -47,7 +47,7 @@ class CustomerFactory
 
     /**
      * Creates a local not registered B2B Customer object for B2C transactions.
-     * Please use Heidelpay::createCustomer(...) to create the customer resource on the API side.
+     * Please use Unzer::createCustomer(...) to create the customer resource on the API side.
      *
      * @param string  $firstname        Firstname is a mandatory for registered B2B customer.
      * @param string  $lastname         Lastname is a mandatory for registered B2B customer.

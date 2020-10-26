@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This class defines unit tests to verify functionality of the heidelpay class.
+ * This class defines unit tests to verify functionality of the Unzer class.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *

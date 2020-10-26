@@ -139,7 +139,7 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify 'Accept-Language' header only set when a locale is defined in the heidelpay object.
+     * Verify 'Accept-Language' header only set when a locale is defined in the Unzer object.
      *
      * @test
      * @dataProvider languageShouldOnlyBeSetIfSpecificallyDefinedDP

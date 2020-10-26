@@ -137,7 +137,7 @@ class PaymentTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify heidelpay payment charge is possible using a paymentId.
+     * Verify Unzer payment charge is possible using a paymentId.
      *
      * @test
      */
@@ -151,7 +151,7 @@ class PaymentTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify heidelpay payment charge is possible using a paymentId and optional ids.
+     * Verify Unzer payment charge is possible using a paymentId and optional ids.
      *
      * @test
      */
@@ -165,7 +165,7 @@ class PaymentTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify heidelpay payment charge throws an error if the id does not belong to a payment.
+     * Verify Unzer payment charge throws an error if the id does not belong to a payment.
      *
      * @test
      */

@@ -184,7 +184,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
     }
 
     /**
-     * Verify payment object is fetched on fetchPayment call using the heidelpays resource service object.
+     * Verify payment object is fetched on fetchPayment call using the Unzer resource service object.
      *
      * @test
      */
