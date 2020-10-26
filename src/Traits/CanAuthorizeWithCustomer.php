@@ -82,7 +82,7 @@ trait CanAuthorizeWithCustomer
         }
 
         throw new RuntimeException(
-            self::class . ' must implement HeidelpayParentInterface to enable ' . __METHOD__ . ' transaction.'
+            self::class . ' must implement UnzerParentInterface to enable ' . __METHOD__ . ' transaction.'
         );
     }
 }

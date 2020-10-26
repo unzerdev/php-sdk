@@ -36,7 +36,7 @@ use RuntimeException;
 class CanPayoutTest extends BasePaymentTest
 {
     /**
-     * Verify payout method throws exception if the class does not implement the HeidelpayParentInterface.
+     * Verify payout method throws exception if the class does not implement the UnzerParentInterface.
      *
      * @test
      */

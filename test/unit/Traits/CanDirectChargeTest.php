@@ -36,7 +36,7 @@ use RuntimeException;
 class CanDirectChargeTest extends BasePaymentTest
 {
     /**
-     * Verify direct charge throws exception if the class does not implement the HeidelpayParentInterface.
+     * Verify direct charge throws exception if the class does not implement the UnzerParentInterface.
      *
      * @test
      */

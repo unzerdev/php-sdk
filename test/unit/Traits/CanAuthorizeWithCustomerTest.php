@@ -36,7 +36,7 @@ use RuntimeException;
 class CanAuthorizeWithCustomerTest extends BasePaymentTest
 {
     /**
-     * Verify authorize method throws exception if the class does not implement the HeidelpayParentInterface.
+     * Verify authorize method throws exception if the class does not implement the UnzerParentInterface.
      *
      * @test
      */
