@@ -62,7 +62,7 @@ interface PaymentServiceInterface
      *
      * @return Authorization The resulting object of the Authorization resource.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function authorize(
@@ -99,7 +99,7 @@ interface PaymentServiceInterface
      *
      * @return Charge The resulting object of the Charge resource.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function charge(
@@ -127,7 +127,7 @@ interface PaymentServiceInterface
      *
      * @return Charge The resulting object of the Charge resource.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargeAuthorization(
@@ -148,7 +148,7 @@ interface PaymentServiceInterface
      *
      * @return Charge The resulting Charge object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function chargePayment(
@@ -177,7 +177,7 @@ interface PaymentServiceInterface
      *
      * @return Payout|AbstractUnzerResource The resulting object of the Payout resource.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payout(
@@ -202,7 +202,7 @@ interface PaymentServiceInterface
      *
      * @return Shipment The resulting Shipment object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment;
@@ -225,7 +225,7 @@ interface PaymentServiceInterface
      *
      * @return Paypage The updated PayPage resource.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function initPayPageCharge(
@@ -253,7 +253,7 @@ interface PaymentServiceInterface
      *
      * @return Paypage The updated PayPage resource.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function initPayPageAuthorize(
@@ -273,7 +273,7 @@ interface PaymentServiceInterface
      *
      * @return InstalmentPlans|AbstractUnzerResource The object containing all possible instalment plans.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchDirectDebitInstalmentPlans(

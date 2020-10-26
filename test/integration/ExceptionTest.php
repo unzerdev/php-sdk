@@ -35,7 +35,7 @@ use UnzerSDK\test\BaseIntegrationTest;
 class ExceptionTest extends BaseIntegrationTest
 {
     /**
-     * Verify that the HeidelpayApiException holds a special message for for the client.
+     * Verify that the UnzerApiException holds a special message for for the client.
      * Verify that there are different messages for different languages.
      *
      * @test

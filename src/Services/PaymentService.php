@@ -317,7 +317,7 @@ class PaymentService implements PaymentServiceInterface
      *
      * @return Paypage The updated PayPage resource.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function initPayPage(
@@ -340,7 +340,7 @@ class PaymentService implements PaymentServiceInterface
      *
      * @return Payment The resulting Payment object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function createPayment($paymentType): AbstractUnzerResource

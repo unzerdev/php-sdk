@@ -47,7 +47,7 @@ interface HttpAdapterInterface
      *
      * @return string|null
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      */
     public function execute(): ?string;
 

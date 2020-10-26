@@ -113,7 +113,7 @@ class BasketTest extends BaseIntegrationTest
             $this->unzer->createBasket($basket);
             $this->assertFalse(
                 $expectException,
-                'Failed asserting that exception of type "UnzerSDK\Exceptions\HeidelpayApiException" is thrown.'
+                'Failed asserting that exception of type "UnzerSDK\Exceptions\UnzerApiException" is thrown.'
             );
         } catch (UnzerApiException $e) {
             $this->assertTrue($expectException);

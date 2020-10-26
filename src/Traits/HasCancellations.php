@@ -79,7 +79,7 @@ trait HasCancellations
      * @return Cancellation|null The cancellation or null if none could be found.
      *
      *@throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      */
     public function getCancellation($cancellationId, $lazy = false): ?Cancellation
     {

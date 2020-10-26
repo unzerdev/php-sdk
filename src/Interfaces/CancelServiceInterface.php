@@ -32,7 +32,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAuthorization(Authorization $authorization, float $amount = null): Cancellation;
@@ -46,7 +46,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation Resulting Cancellation object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAuthorizationByPayment($payment, float $amount = null): Cancellation;
@@ -66,7 +66,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelChargeById(
@@ -93,7 +93,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelCharge(
@@ -119,7 +119,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function cancelPayment(
@@ -141,7 +141,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation|null The resulting cancellation.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function cancelPaymentAuthorization($payment, float $amount = null): ?Cancellation;
