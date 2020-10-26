@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify metadata functionalities.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class SetMetadataTest extends BaseIntegrationTest
 {
@@ -131,7 +131,7 @@ class SetMetadataTest extends BaseIntegrationTest
     public function emptyMetaDataShouldLeadToError(): void
     {
         $metadata = new Metadata();
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_REQUEST_DATA_IS_INVALID);
         $this->heidelpay->createMetadata($metadata);
     }

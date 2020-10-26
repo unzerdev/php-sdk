@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify functionality of the Payment charge method.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Resources\PaymentTypes\Invoice;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PaymentCancelTest extends BaseIntegrationTest
 {

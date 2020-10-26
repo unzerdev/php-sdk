@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the CanPayoutWithCustomer trait.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 
 class CanPayoutWithCustomerTest extends BasePaymentTest
@@ -57,13 +57,13 @@ class CanPayoutWithCustomerTest extends BasePaymentTest
      */
     public function payoutShouldPropagatePayoutToHeidelpay(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['payout'])->disableOriginalConstructor()->getMock();
-        $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['payout'])->disableOriginalConstructor()->getMock();
+        $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $payout = new Payout();
         $customer  = (new Customer())->setId('123');
         $metadata  = new Metadata();
-        $dummyMock->expects($this->exactly(3))->method('getHeidelpayObject')->willReturn($heidelpayMock);
+        $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($heidelpayMock);
         $heidelpayMock->expects($this->exactly(3))->method('payout')
             ->withConsecutive(
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],

@@ -5,7 +5,7 @@
  * This class defines a dummy implementing traits without customer dependency and without implementing the parent
  * interface.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
-use heidelpayPHP\Traits\CanPayout;
+use UnzerSDK\Traits\CanAuthorize;
+use UnzerSDK\Traits\CanDirectCharge;
+use UnzerSDK\Traits\CanPayout;
 
 class TraitDummyWithoutCustomerWithoutParentIF
 {

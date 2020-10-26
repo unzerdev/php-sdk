@@ -4,7 +4,7 @@
 /**
  * This test is verifying that the set environment variables will lead to the correct configuration.
  *
- * Copyright (C) 2020 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit\Services
+ * @package  UnzerSDK\test\unit\Services
  */
-namespace heidelpayPHP\test\unit\Services;
+namespace UnzerSDK\test\unit\Services;
 
-use heidelpayPHP\Services\EnvironmentService;
+use UnzerSDK\Services\EnvironmentService;
 use PHPUnit\Framework\TestCase;
 
 class EnvironmentServiceTest extends TestCase

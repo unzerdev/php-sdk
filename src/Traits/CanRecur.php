@@ -2,7 +2,7 @@
 /**
  * This trait allows a payment type to activate recurring payments.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Recurring;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\Recurring;
 use RuntimeException;
 
 trait CanRecur
@@ -41,13 +41,13 @@ trait CanRecur
      *
      * @return Recurring
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function activateRecurring($returnUrl): Recurring
     {
-        if ($this instanceof AbstractHeidelpayResource) {
-            return $this->getHeidelpayObject()->activateRecurringPayment($this, $returnUrl);
+        if ($this instanceof AbstractUnzerResource) {
+            return $this->getUnzerObject()->activateRecurringPayment($this, $returnUrl);
         }
         throw new RuntimeException('Error: Recurring can not be enabled on this type.');
     }

@@ -3,7 +3,7 @@
  * This is the controller for the Invoice Factoring example.
  * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -31,14 +31,14 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\PaymentTypes\InvoiceFactoring;
 
 session_start();
 session_unset();
@@ -57,7 +57,7 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
-    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+    $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     /** @var InvoiceFactoring $invoiceFactoring */
@@ -105,7 +105,7 @@ try {
     // To avoid redundant code this example redirects to the general ReturnController which contains the code example to handle payment results.
     redirect(RETURN_CONTROLLER_URL);
 
-} catch (HeidelpayApiException $e) {
+} catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {

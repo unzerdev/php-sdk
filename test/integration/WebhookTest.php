@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify Webhook features.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Constants\WebhookEvents;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\WebhookEvents;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\test\BaseIntegrationTest;
 use function count;
 use function in_array;
 
@@ -109,7 +109,7 @@ class WebhookTest extends BaseIntegrationTest
 
         $this->assertNull($this->heidelpay->deleteWebhook($webhook));
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND);
         $this->heidelpay->fetchWebhook($webhook->getId());
     }
@@ -124,7 +124,7 @@ class WebhookTest extends BaseIntegrationTest
         $url = $this->generateUniqueUrl();
         $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED);
         $this->heidelpay->createWebhook($url, WebhookEvents::ALL);
     }

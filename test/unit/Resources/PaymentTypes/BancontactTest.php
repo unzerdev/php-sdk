@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of Bancontact payment type.
  *
- * Copyright (C) 2020 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@heidelpay.com>
+ * @author  David Owusu <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
+namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\Bancontact;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\PaymentTypes\Bancontact;
+use UnzerSDK\test\BasePaymentTest;
 
 class BancontactTest extends BasePaymentTest
 {

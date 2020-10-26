@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the Basket resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\test\BasePaymentTest;
 use stdClass;
 
 class BasketTest extends BasePaymentTest

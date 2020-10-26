@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the CanAuthorizeWithCustomer trait.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 
 class CanAuthorizeWithCustomerTest extends BasePaymentTest
@@ -57,13 +57,13 @@ class CanAuthorizeWithCustomerTest extends BasePaymentTest
      */
     public function authorizeShouldPropagateAuthorizeToHeidelpay(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
-        $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
+        $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $authorize = new Authorization();
         $customer  = (new Customer())->setId('123');
         $metadata  = new Metadata();
-        $dummyMock->expects($this->exactly(3))->method('getHeidelpayObject')->willReturn($heidelpayMock);
+        $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($heidelpayMock);
         $heidelpayMock->expects($this->exactly(3))->method('authorize')
             ->withConsecutive(
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],

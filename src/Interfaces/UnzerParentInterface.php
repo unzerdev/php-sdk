@@ -1,8 +1,8 @@
 <?php
 /**
- * This interface defines the methods for a parent heidelpay object.
+ * This interface defines the methods for a parent Unzer object.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Interfaces
+ * @package  UnzerSDK\Interfaces
  */
-namespace heidelpayPHP\Interfaces;
+namespace UnzerSDK\Interfaces;
 
-use heidelpayPHP\Heidelpay;
+use UnzerSDK\Unzer;
 use RuntimeException;
 
-interface HeidelpayParentInterface
+interface UnzerParentInterface
 {
     /**
-     * Returns the heidelpay root object.
+     * Returns the Unzer root object.
      *
-     * @return Heidelpay
+     * @return Unzer
      *
      * @throws RuntimeException
      */
-    public function getHeidelpayObject(): Heidelpay;
+    public function getUnzerObject(): Unzer;
 
     /**
      * Returns the url string for this resource.

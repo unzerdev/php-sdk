@@ -2,7 +2,7 @@
 /**
  * This service provides for functionalities concerning http transactions.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
-use heidelpayPHP\Adapter\CurlAdapter;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Adapter\CurlAdapter;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use RuntimeException;
 use function in_array;
 use const PHP_VERSION;
@@ -101,23 +101,23 @@ class HttpService
      * send post request to payment server
      *
      * @param $uri string url of the target system
-     * @param AbstractHeidelpayResource $resource
-     * @param string                    $httpMethod
+     * @param AbstractUnzerResource $resource
+     * @param string                $httpMethod
      *
      * @return string
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function send(
         $uri = null,
-        AbstractHeidelpayResource $resource = null,
+        AbstractUnzerResource $resource = null,
         $httpMethod = HttpAdapterInterface::REQUEST_GET
     ): string {
-        if (!$resource instanceof AbstractHeidelpayResource) {
+        if (!$resource instanceof AbstractUnzerResource) {
             throw new RuntimeException('Transfer object is empty!');
         }
-        $heidelpayObj = $resource->getHeidelpayObject();
+        $heidelpayObj = $resource->getUnzerObject();
 
         // perform request
         $url     = $this->getEnvironmentUrl($uri);
@@ -153,7 +153,7 @@ class HttpService
     {
         $httpAdapter = $this->getAdapter();
         $httpAdapter->init($uri, $payload, $httpMethod);
-        $httpAdapter->setUserAgent(Heidelpay::SDK_TYPE);
+        $httpAdapter->setUserAgent(Unzer::SDK_TYPE);
         $httpAdapter->setHeaders($httpHeaders);
     }
 
@@ -164,12 +164,12 @@ class HttpService
      * @param string      $responseCode
      * @param string|null $response
      *
-     * @throws HeidelpayApiException
+     * @throws UnzerApiException
      */
     private function handleErrors($responseCode, $response): void
     {
         if ($response === null) {
-            throw new HeidelpayApiException('The Request returned a null response!');
+            throw new UnzerApiException('The Request returned a null response!');
         }
 
         $responseObject = json_decode($response, false);
@@ -191,12 +191,12 @@ class HttpService
                 }
             }
 
-            throw new HeidelpayApiException($merchantMessage, $customerMessage, $code, $errorId);
+            throw new UnzerApiException($merchantMessage, $customerMessage, $code, $errorId);
         }
     }
 
     /**
-     * @param Heidelpay   $heidelpayObj
+     * @param Unzer       $heidelpayObj
      * @param string      $payload
      * @param mixed       $headers
      * @param int         $responseCode
@@ -205,7 +205,7 @@ class HttpService
      * @param string|null $response
      */
     public function debugLog(
-        Heidelpay $heidelpayObj,
+        Unzer $heidelpayObj,
         $payload,
         $headers,
         $responseCode,
@@ -250,24 +250,24 @@ class HttpService
             default:
                 break;
         }
-        $envUrl[] = Heidelpay::BASE_URL;
-        return 'https://' . implode('-', $envUrl) . '/' . Heidelpay::API_VERSION . $uri;
+        $envUrl[] = Unzer::BASE_URL;
+        return 'https://' . implode('-', $envUrl) . '/' . Unzer::API_VERSION . $uri;
     }
 
     /**
-     * @param Heidelpay $heidelpay
+     * @param Unzer $heidelpay
      *
      * @return array
      */
-    public function composerHttpHeaders(Heidelpay $heidelpay): array
+    public function composerHttpHeaders(Unzer $heidelpay): array
     {
         $locale      = $heidelpay->getLocale();
         $key         = $heidelpay->getKey();
         $httpHeaders = [
             'Authorization' => 'Basic ' . base64_encode($key . ':'),
             'Content-Type'  => 'application/json',
-            'SDK-VERSION'   => Heidelpay::SDK_VERSION,
-            'SDK-TYPE'      => Heidelpay::SDK_TYPE,
+            'SDK-VERSION'   => Unzer::SDK_VERSION,
+            'SDK-TYPE'      => Unzer::SDK_TYPE,
             'PHP-VERSION'   => PHP_VERSION
         ];
         if (!empty($locale)) {

@@ -2,7 +2,7 @@
 /**
  * This file defines the constants needed for the Bancontact example.
  *
- * Copyright (C) 2020 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@heidelpay.com>
+ * @author  David Owusu <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 require_once __DIR__ . '/../Constants.php';

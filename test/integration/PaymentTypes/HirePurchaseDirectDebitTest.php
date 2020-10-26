@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the payment method hire purchase direct debit.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\InstalmentPlan;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\InstalmentPlan;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\test\BaseIntegrationTest;
 use function count;
 
 class HirePurchaseDirectDebitTest extends BaseIntegrationTest
@@ -101,7 +101,7 @@ class HirePurchaseDirectDebitTest extends BaseIntegrationTest
                 $this->assertTrue(false, 'Expected error for negative ranking test.');
             }
             $this->assertNotEmpty($authorize->getId());
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             if ($errorCode !== null) {
                 $this->assertEquals($errorCode, $e->getCode());
             } else {

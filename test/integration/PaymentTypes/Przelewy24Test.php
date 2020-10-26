@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and functionality
  * of the payment method Przelewy24.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Przelewy24;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class Przelewy24Test extends BaseIntegrationTest
 {
@@ -86,7 +86,7 @@ class Przelewy24Test extends BaseIntegrationTest
      */
     public function przelewy24ShouldNotBeAuthorizable(Przelewy24 $przelewy24): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $this->heidelpay->authorize(100.0, 'PLN', $przelewy24, self::RETURN_URL);
@@ -105,7 +105,7 @@ class Przelewy24Test extends BaseIntegrationTest
     {
         /** @var Przelewy24 $przelewy24 */
         $przelewy24 = $this->heidelpay->createPaymentType(new Przelewy24());
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CURRENCY_IS_NOT_SUPPORTED);
         $przelewy24->charge(100.0, $currencyCode, self::RETURN_URL);
     }

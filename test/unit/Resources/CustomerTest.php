@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the Customer resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Constants\CompanyRegistrationTypes;
-use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\ResourceServiceInterface;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
-use heidelpayPHP\Resources\EmbeddedResources\GeoLocation;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Constants\CompanyRegistrationTypes;
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Unzer;
+use UnzerSDK\Interfaces\ResourceServiceInterface;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
+use UnzerSDK\Resources\EmbeddedResources\GeoLocation;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 
 class CustomerTest extends BasePaymentTest
 {
@@ -230,7 +230,7 @@ class CustomerTest extends BasePaymentTest
     public function customerShouldBeFetchedByCustomerIdIfIdIsNotSet(): void
     {
         $customerId = str_replace(' ', '', microtime());
-        $customer = (new Customer())->setParentResource(new Heidelpay('s-priv-123'))->setCustomerId($customerId);
+        $customer = (new Customer())->setParentResource(new Unzer('s-priv-123'))->setCustomerId($customerId);
         $lastElement      = explode('/', rtrim($customer->getUri(), '/'));
         $this->assertEquals($customerId, end($lastElement));
     }
@@ -242,14 +242,14 @@ class CustomerTest extends BasePaymentTest
      */
     public function fetchCustomerByOrderIdShouldCreateCustomerObjectWithCustomerIdAndCallFetch(): void
     {
-        $heidelpay = new Heidelpay('s-priv-1234');
+        $heidelpay = new Unzer('s-priv-1234');
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('fetchResource')
             ->with($this->callback(static function ($customer) use ($heidelpay) {
                 return $customer instanceof Customer &&
                     $customer->getCustomerId() === 'myCustomerId' &&
-                    $customer->getHeidelpayObject() === $heidelpay;
+                    $customer->getUnzerObject() === $heidelpay;
             }));
 
         /** @var ResourceServiceInterface $resourceSrvMock */

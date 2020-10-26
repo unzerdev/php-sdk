@@ -2,7 +2,7 @@
 /**
  * This represents the authorization transaction.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\TransactionTypes
+ * @package  UnzerSDK\TransactionTypes
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace UnzerSDK\Resources\TransactionTypes;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Traits\HasCancellations;
-use heidelpayPHP\Traits\HasInvoiceId;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Traits\HasCancellations;
+use UnzerSDK\Traits\HasInvoiceId;
 use RuntimeException;
 
 class Authorization extends AbstractTransactionType
@@ -266,12 +266,12 @@ class Authorization extends AbstractTransactionType
      *
      * @return Cancellation
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancel($amount = null): Cancellation
     {
-        return $this->getHeidelpayObject()->cancelAuthorization($this, $amount);
+        return $this->getUnzerObject()->cancelAuthorization($this, $amount);
     }
 
     /**
@@ -281,8 +281,8 @@ class Authorization extends AbstractTransactionType
      *
      * @return Charge
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function charge($amount = null): Charge
     {
@@ -290,6 +290,6 @@ class Authorization extends AbstractTransactionType
         if (!$payment instanceof Payment) {
             throw new RuntimeException('Payment object is missing. Try fetching the object first!');
         }
-        return $this->getHeidelpayObject()->chargeAuthorization($payment, $amount);
+        return $this->getUnzerObject()->chargeAuthorization($payment, $amount);
     }
 }

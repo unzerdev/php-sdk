@@ -2,7 +2,7 @@
 /**
  * This is the base class for all transaction types.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\TransactionTypes
+ * @package  UnzerSDK\TransactionTypes
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace UnzerSDK\Resources\TransactionTypes;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Traits\HasCustomerMessage;
-use heidelpayPHP\Traits\HasDate;
-use heidelpayPHP\Traits\HasOrderId;
-use heidelpayPHP\Traits\HasStates;
-use heidelpayPHP\Traits\HasTraceId;
-use heidelpayPHP\Traits\HasUniqueAndShortId;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Traits\HasCustomerMessage;
+use UnzerSDK\Traits\HasDate;
+use UnzerSDK\Traits\HasOrderId;
+use UnzerSDK\Traits\HasStates;
+use UnzerSDK\Traits\HasTraceId;
+use UnzerSDK\Traits\HasUniqueAndShortId;
 use RuntimeException;
 use stdClass;
 
-abstract class AbstractTransactionType extends AbstractHeidelpayResource
+abstract class AbstractTransactionType extends AbstractUnzerResource
 {
     use HasOrderId;
     use HasStates;
@@ -111,8 +111,8 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
@@ -161,13 +161,13 @@ abstract class AbstractTransactionType extends AbstractHeidelpayResource
      * Updates the referenced payment object if it exists and if this is not the payment object itself.
      * This is called from the crud methods to update the payments state whenever anything happens.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchPayment(): void
     {
         $payment = $this->getPayment();
-        if ($payment instanceof AbstractHeidelpayResource) {
+        if ($payment instanceof AbstractUnzerResource) {
             $this->fetchResource($payment);
         }
     }

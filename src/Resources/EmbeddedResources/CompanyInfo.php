@@ -2,7 +2,7 @@
 /**
  * Company info class for B2B customer classes.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Resources\EmbeddedResources
+ * @package  UnzerSDK\Resources\EmbeddedResources
  */
-namespace heidelpayPHP\Resources\EmbeddedResources;
+namespace UnzerSDK\Resources\EmbeddedResources;
 
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use function is_string;
 
-class CompanyInfo extends AbstractHeidelpayResource
+class CompanyInfo extends AbstractUnzerResource
 {
     /** @var string $registrationType */
     protected $registrationType;

@@ -2,7 +2,7 @@
 /**
  * This represents the Bancontact payment type.
  *
- * Copyright (C) 2020 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@heidelpay.com>
- * @author  Florian Evertz <development@heidelpay.com>
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  David Owusu <development@unzer.com>
+ * @author  Florian Evertz <development@unzer.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Traits\CanDirectCharge;
+use UnzerSDK\Traits\CanDirectCharge;
 
 class Bancontact extends BasePaymentType
 {

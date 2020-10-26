@@ -4,7 +4,7 @@
  * It is a pseudo resource used to manage bulk operations on webhooks.
  * It will never receive an id from the API.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\WebhookEvents;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\WebhookEvents;
 use RuntimeException;
 use stdClass;
 use function in_array;
 
-class Webhooks extends AbstractHeidelpayResource
+class Webhooks extends AbstractUnzerResource
 {
     /** @var string $url */
     protected $url;
@@ -141,7 +141,7 @@ class Webhooks extends AbstractHeidelpayResource
 
         foreach ($responseArray as $event) {
             $webhook = new Webhook();
-            $webhook->setParentResource($this->getHeidelpayObject());
+            $webhook->setParentResource($this->getUnzerObject());
             $webhook->handleResponse($event);
             $registeredWebhooks[] = $webhook;
         }

@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the Webhooks resource.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Constants\WebhookEvents;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\Resources\Webhooks;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\WebhookEvents;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\Resources\Webhooks;
+use UnzerSDK\test\BasePaymentTest;
 use stdClass;
 
 class WebhooksTest extends BasePaymentTest
@@ -89,7 +89,7 @@ class WebhooksTest extends BasePaymentTest
     public function responseHandlingForEventsShouldBehaveAsExpected(): void
     {
         $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE]);
-        $webhooks->setParentResource(new Heidelpay('s-priv-123'));
+        $webhooks->setParentResource(new Unzer('s-priv-123'));
         $this->assertEquals('https://dev.heidelpay.com', $webhooks->getUrl());
         $this->assertEquals([WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE], $webhooks->getEventList());
 
@@ -134,7 +134,7 @@ class WebhooksTest extends BasePaymentTest
     public function responseHandlingForOneEventShouldBehaveAsExpected(): void
     {
         $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE]);
-        $webhooks->setParentResource(new Heidelpay('s-priv-123'));
+        $webhooks->setParentResource(new Unzer('s-priv-123'));
         $this->assertEquals('https://dev.heidelpay.com', $webhooks->getUrl());
         $this->assertEquals([WebhookEvents::CHARGE], $webhooks->getEventList());
 

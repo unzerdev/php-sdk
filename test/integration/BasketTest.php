@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify Basket functionalities.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class BasketTest extends BaseIntegrationTest
 {
@@ -113,9 +113,9 @@ class BasketTest extends BaseIntegrationTest
             $this->heidelpay->createBasket($basket);
             $this->assertFalse(
                 $expectException,
-                'Failed asserting that exception of type "heidelpayPHP\Exceptions\HeidelpayApiException" is thrown.'
+                'Failed asserting that exception of type "UnzerSDK\Exceptions\HeidelpayApiException" is thrown.'
             );
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue($expectException);
             $this->assertEquals($exceptionCode, $e->getCode());
             $this->assertNotNull($e->getErrorId());

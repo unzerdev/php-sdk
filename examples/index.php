@@ -2,7 +2,7 @@
 /**
  * This file provides a list of the example implementations.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
-use heidelpayPHP\Validators\PrivateKeyValidator;
-use heidelpayPHP\Validators\PublicKeyValidator;
+use UnzerSDK\Validators\PrivateKeyValidator;
+use UnzerSDK\Validators\PublicKeyValidator;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
@@ -316,7 +316,7 @@ function printMessage($type, $title, $text)
                             server and redirected to a given RedirectUrl.
                         </div>
                     </div>
-                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/docs/payment-page/';">
                         Documentation
                     </div>
                     <div id="tryHostedPayPageExample" class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
@@ -333,7 +333,7 @@ function printMessage($type, $title, $text)
                             The Payment Page will be shown as an Overlay in your own shop.
                         </div>
                     </div>
-                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/docs/payment-page/';">
                         Documentation
                     </div>
                     <div id="tryEmbeddedPayPageExample" class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">

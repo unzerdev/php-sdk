@@ -4,7 +4,7 @@
 /**
  * This class is the base class for all tests of this SDK.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,28 +18,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test;
+namespace UnzerSDK\test;
 
 use DateInterval;
 use DateTime;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\Fixtures\CustomerFixtureTrait;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\Recurring;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\Fixtures\CustomerFixtureTrait;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -49,7 +49,7 @@ class BasePaymentTest extends TestCase
 
     use CustomerFixtureTrait;
 
-    /** @var Heidelpay $heidelpay */
+    /** @var Unzer $heidelpay */
     protected $heidelpay;
 
     /**
@@ -58,14 +58,14 @@ class BasePaymentTest extends TestCase
      *
      * @param string $privateKey
      *
-     * @return Heidelpay
+     * @return Unzer
      *
      * @throws RuntimeException
      */
-    protected function getHeidelpayObject($privateKey = 's-priv-1234'): Heidelpay
+    protected function getHeidelpayObject($privateKey = 's-priv-1234'): Unzer
     {
-        if (!$this->heidelpay instanceof Heidelpay) {
-            $this->heidelpay = (new Heidelpay($privateKey))
+        if (!$this->heidelpay instanceof Unzer) {
+            $this->heidelpay = (new Unzer($privateKey))
                 ->setDebugHandler(new TestDebugHandler())
                 ->setDebugMode(true);
         }

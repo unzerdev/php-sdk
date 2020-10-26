@@ -2,7 +2,7 @@
 /**
  * This custom debug handler will echo out debug messages.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
-namespace heidelpayPHP\examples;
+namespace UnzerSDK\examples;
 
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
+use UnzerSDK\Interfaces\DebugHandlerInterface;
 
 class ExampleDebugHandler implements DebugHandlerInterface
 {

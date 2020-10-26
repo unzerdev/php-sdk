@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the Payment resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PaymentTest extends BaseIntegrationTest
 {
@@ -104,9 +104,7 @@ class PaymentTest extends BaseIntegrationTest
         $this->assertEquals($charge->getId(), $fetchedCharge->getId());
         $this->assertEquals($charge->getReturnUrl(), $fetchedCharge->getReturnUrl());
 
-        $exposedCharge = $fetchedCharge->expose();
-        unset($exposedCharge['card3ds']);
-        $this->assertEquals($charge->expose(), $exposedCharge);
+        $this->assertEquals($charge->expose(), $fetchedCharge->expose());
     }
 
     /**
@@ -173,7 +171,7 @@ class PaymentTest extends BaseIntegrationTest
      */
     public function chargePaymentShouldThrowErrorOnNonPaymentId(): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
         $this->heidelpay->chargePayment('s-crd-xlj0qhdiw40k');
     }
@@ -213,7 +211,7 @@ class PaymentTest extends BaseIntegrationTest
             $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
             $card2->charge(1023, 'EUR', self::RETURN_URL, null, $orderId);
             $this->assertTrue(true);
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
         }
     }
@@ -236,7 +234,7 @@ class PaymentTest extends BaseIntegrationTest
             $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
             $card2->charge(1023, 'EUR', self::RETURN_URL, null, null, null, null, null, $invoiceId);
             $this->assertTrue(true);
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
         }
     }

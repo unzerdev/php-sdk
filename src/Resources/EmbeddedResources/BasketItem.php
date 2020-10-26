@@ -2,7 +2,7 @@
 /**
  * This trait adds amount properties to a class.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Resources\EmbeddedResources
+ * @package  UnzerSDK\Resources\EmbeddedResources
  */
-namespace heidelpayPHP\Resources\EmbeddedResources;
+namespace UnzerSDK\Resources\EmbeddedResources;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class BasketItem extends AbstractHeidelpayResource
+class BasketItem extends AbstractUnzerResource
 {
     /** @var string $basketItemReferenceId */
     protected $basketItemReferenceId;
@@ -327,7 +327,7 @@ class BasketItem extends AbstractHeidelpayResource
 
     /**
      * The type of the basket item.
-     * Please refer to heidelpayPHP\Constants\BasketItemTypes for available type constants.
+     * Please refer to UnzerSDK\Constants\BasketItemTypes for available type constants.
      *
      * @param string|null $type
      *

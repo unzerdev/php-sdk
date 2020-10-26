@@ -2,7 +2,7 @@
 /**
  * This exception is thrown whenever the api returns an error.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Exceptions
+ * @package  UnzerSDK\Exceptions
  */
-namespace heidelpayPHP\Exceptions;
+namespace UnzerSDK\Exceptions;
 
 use Exception;
 
-class HeidelpayApiException extends Exception
+class UnzerApiException extends Exception
 {
     public const MESSAGE = 'The payment api returned an error!';
     public const CLIENT_MESSAGE = 'The payment api returned an error!';

@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify interface and functionality of the payment method invoice guaranteed.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class InvoiceGuaranteedTest extends BaseIntegrationTest
 {
@@ -108,7 +108,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
         $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
 
         $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $this->getMaximumCustomerInclShippingAddress());

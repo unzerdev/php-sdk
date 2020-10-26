@@ -22,13 +22,13 @@
   },
   "autoload": {
     "psr-4": {
-      "heidelpayPHP\\": "src",
-      "heidelpayPHP\\examples\\": "examples"
+      "UnzerSDK\\": "src",
+      "UnzerSDK\\examples\\": "examples"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "heidelpayPHP\\test\\": "test"
+      "UnzerSDK\\test\\": "test"
     }
   },
   "support": {

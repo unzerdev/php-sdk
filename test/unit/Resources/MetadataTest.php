@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify metadata functionalities.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\test\BasePaymentTest;
 use stdClass;
 
 class MetadataTest extends BasePaymentTest

@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the authorization transaction type.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class AuthorizationTest extends BaseIntegrationTest
 {
@@ -134,8 +134,8 @@ class AuthorizationTest extends BaseIntegrationTest
      * @test
      * @dataProvider authorizeHasExpectedStatesDP
      *
-     * @param BasePaymentType|AbstractHeidelpayResource $paymentType
-     * @param string                                    $expectedState The state the transaction is expected to be in.
+     * @param BasePaymentType|AbstractUnzerResource $paymentType
+     * @param string                                $expectedState The state the transaction is expected to be in.
      */
     public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState): void
     {

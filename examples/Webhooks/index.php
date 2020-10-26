@@ -2,7 +2,7 @@
 /**
  * This is the index controller for the Webhook tests.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -30,11 +30,11 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\Constants\WebhookEvents;
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Webhook;
+use UnzerSDK\Constants\WebhookEvents;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Webhook;
 
 function printMessage($type, $title, $text)
 {
@@ -86,7 +86,7 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+            $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
             $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
             $webhooks = $heidelpay->registerMultipleWebhooks(CONTROLLER_URL, [WebhookEvents::ALL]);
@@ -102,7 +102,7 @@ function printInfo($title, $text)
 
             printInfo('You are ready to trigger events', 'Now Perform payments <a href="..">>> HERE <<</a> to trigger events!');
 
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             printError($e->getMessage());
             $heidelpay->debugLog('Error: ' . $e->getMessage());
         } catch (RuntimeException $e) {

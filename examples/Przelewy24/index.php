@@ -2,7 +2,7 @@
 /**
  * This file provides an example implementation of the Przelewy24 (P24) payment type.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP/examples
+ * @package  UnzerSDK/examples
  */
 
 /** Require the constants of this example */
@@ -47,7 +47,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <body style="margin: 70px 70px 0;">
 
-<p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
+<p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form" class="heidelpayUI form" novalidate>
     <div id="example-przelewy24" class="field"></div>

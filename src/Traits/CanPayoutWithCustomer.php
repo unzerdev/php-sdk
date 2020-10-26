@@ -2,7 +2,7 @@
 /**
  * Adds payout capability to payment types.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Interfaces\HeidelpayParentInterface;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Interfaces\UnzerParentInterface;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\TransactionTypes\Payout;
 use RuntimeException;
 
 trait CanPayoutWithCustomer
@@ -50,8 +50,8 @@ trait CanPayoutWithCustomer
      *
      * @return Payout The resulting payout object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payout(
         $amount,
@@ -62,8 +62,8 @@ trait CanPayoutWithCustomer
         $metadata = null,
         $basket = null
     ): Payout {
-        if ($this instanceof HeidelpayParentInterface) {
-            return $this->getHeidelpayObject()->payout(
+        if ($this instanceof UnzerParentInterface) {
+            return $this->getUnzerObject()->payout(
                 $amount,
                 $currency,
                 $this,

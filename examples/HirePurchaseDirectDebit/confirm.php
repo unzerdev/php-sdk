@@ -3,7 +3,7 @@
  * This file provides an example implementation of the Hire Purchase direct debit payment type.
  * It shows the selected payment plan to the customer who can approve the plan to perform the payment.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
@@ -57,7 +57,7 @@ if ($paymentId === null) {
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create a heidelpay object using your private key and register a debug handler if you want to.
-    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+    $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     $payment = $heidelpay->fetchPayment($paymentId);
@@ -69,7 +69,7 @@ try {
     $totalPurchaseAmount = $type->getTotalPurchaseAmount();
     $totalInterestAmount = $type->getTotalInterestAmount();
     $currency = $payment->getAmount()->getCurrency();
-} catch (HeidelpayApiException $e) {
+} catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
     redirect(FAILURE_URL, $merchantMessage, $clientMessage);

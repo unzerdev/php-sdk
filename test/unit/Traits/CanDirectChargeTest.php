@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the CanDirectCharge trait.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 
 class CanDirectChargeTest extends BasePaymentTest
@@ -57,13 +57,13 @@ class CanDirectChargeTest extends BasePaymentTest
      */
     public function directChargeShouldPropagateToHeidelpay(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
-        $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
+        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
+        $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $charge = new Charge();
         $metadata  = new Metadata();
         $customer = (new Customer())->setId('123');
-        $dummyMock->expects($this->exactly(4))->method('getHeidelpayObject')->willReturn($heidelpayMock);
+        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($heidelpayMock);
         $heidelpayMock->expects($this->exactly(4))->method('charge')
             ->withConsecutive(
                 [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],
