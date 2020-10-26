@@ -291,20 +291,20 @@ class Payment extends AbstractUnzerResource
             return $this;
         }
 
-        $heidelpay = $this->getUnzerObject();
+        $unzer = $this->getUnzerObject();
 
         /** @var Customer $customerObject */
         $customerObject = $customer;
 
         if (is_string($customer)) {
-            $customerObject = $heidelpay->fetchCustomer($customer);
+            $customerObject = $unzer->fetchCustomer($customer);
         } elseif ($customerObject instanceof Customer) {
             if ($customerObject->getId() === null) {
-                $heidelpay->createCustomer($customerObject);
+                $unzer->createCustomer($customerObject);
             }
         }
 
-        $customerObject->setParentResource($heidelpay);
+        $customerObject->setParentResource($unzer);
         $this->customer = $customerObject;
         return $this;
     }
@@ -346,15 +346,15 @@ class Payment extends AbstractUnzerResource
             return $this;
         }
 
-        $heidelpay = $this->getUnzerObject();
+        $unzer = $this->getUnzerObject();
 
         /** @var BasePaymentType $paymentTypeObject */
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
-            $paymentTypeObject = $heidelpay->fetchPaymentType($paymentType);
+            $paymentTypeObject = $unzer->fetchPaymentType($paymentType);
         } elseif ($paymentTypeObject instanceof BasePaymentType && !$paymentTypeObject instanceof Paypage) {
             if ($paymentTypeObject->getId() === null) {
-                $heidelpay->createPaymentType($paymentType);
+                $unzer->createPaymentType($paymentType);
             }
         }
 
@@ -385,9 +385,9 @@ class Payment extends AbstractUnzerResource
         }
         $this->metadata = $metadata;
 
-        $heidelpay = $this->getUnzerObject();
+        $unzer = $this->getUnzerObject();
         if ($this->metadata->getId() === null) {
-            $heidelpay->getResourceService()->createResource($this->metadata->setParentResource($heidelpay));
+            $unzer->getResourceService()->createResource($this->metadata->setParentResource($unzer));
         }
 
         return $this;
@@ -419,9 +419,9 @@ class Payment extends AbstractUnzerResource
             return $this;
         }
 
-        $heidelpay = $this->getUnzerObject();
+        $unzer = $this->getUnzerObject();
         if ($this->basket->getId() === null) {
-            $heidelpay->getResourceService()->createResource($this->basket->setParentResource($heidelpay));
+            $unzer->getResourceService()->createResource($this->basket->setParentResource($unzer));
         }
 
         return $this;

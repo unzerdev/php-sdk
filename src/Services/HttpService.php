@@ -117,12 +117,12 @@ class HttpService
         if (!$resource instanceof AbstractUnzerResource) {
             throw new RuntimeException('Transfer object is empty!');
         }
-        $heidelpayObj = $resource->getUnzerObject();
+        $unzerObj = $resource->getUnzerObject();
 
         // perform request
         $url     = $this->getEnvironmentUrl($uri);
         $payload = $resource->jsonSerialize();
-        $headers = $this->composerHttpHeaders($heidelpayObj);
+        $headers = $this->composerHttpHeaders($unzerObj);
         $this->initRequest($url, $payload, $httpMethod, $headers);
         $httpAdapter  = $this->getAdapter();
         $response     = $httpAdapter->execute();
@@ -133,7 +133,7 @@ class HttpService
         try {
             $this->handleErrors($responseCode, $response);
         } finally {
-            $this->debugLog($heidelpayObj, $payload, $headers, $responseCode, $httpMethod, $url, $response);
+            $this->debugLog($unzerObj, $payload, $headers, $responseCode, $httpMethod, $url, $response);
         }
 
         return $response;
@@ -196,7 +196,7 @@ class HttpService
     }
 
     /**
-     * @param Unzer       $heidelpayObj
+     * @param Unzer       $unzerObj
      * @param string      $payload
      * @param mixed       $headers
      * @param int         $responseCode
@@ -205,7 +205,7 @@ class HttpService
      * @param string|null $response
      */
     public function debugLog(
-        Unzer $heidelpayObj,
+        Unzer $unzerObj,
         $payload,
         $headers,
         $responseCode,
@@ -218,13 +218,13 @@ class HttpService
         $authHeader[1] = ValueService::maskValue($authHeader[1]);
         $headers['Authorization'] = implode(' ', $authHeader);
 
-        $heidelpayObj->debugLog($httpMethod . ': ' . $url);
+        $unzerObj->debugLog($httpMethod . ': ' . $url);
         $writingOperations = [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT];
-        $heidelpayObj->debugLog('Headers: ' . json_encode($headers, JSON_UNESCAPED_SLASHES));
+        $unzerObj->debugLog('Headers: ' . json_encode($headers, JSON_UNESCAPED_SLASHES));
         if (in_array($httpMethod, $writingOperations, true)) {
-            $heidelpayObj->debugLog('Request: ' . $payload);
+            $unzerObj->debugLog('Request: ' . $payload);
         }
-        $heidelpayObj->debugLog(
+        $unzerObj->debugLog(
             'Response: (' . $responseCode . ') ' .
             json_encode(json_decode($response, false), JSON_UNESCAPED_SLASHES)
         );
@@ -255,14 +255,14 @@ class HttpService
     }
 
     /**
-     * @param Unzer $heidelpay
+     * @param Unzer $unzer
      *
      * @return array
      */
-    public function composerHttpHeaders(Unzer $heidelpay): array
+    public function composerHttpHeaders(Unzer $unzer): array
     {
-        $locale      = $heidelpay->getLocale();
-        $key         = $heidelpay->getKey();
+        $locale      = $unzer->getLocale();
+        $key         = $unzer->getKey();
         $httpHeaders = [
             'Authorization' => 'Basic ' . base64_encode($key . ':'),
             'Content-Type'  => 'application/json',
