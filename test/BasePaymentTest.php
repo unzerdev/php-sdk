@@ -45,7 +45,7 @@ use RuntimeException;
 
 class BasePaymentTest extends TestCase
 {
-    protected const RETURN_URL = 'http://dev.heidelpay.com';
+    protected const RETURN_URL = 'https://dev.heidelpay.com';
 
     use CustomerFixtureTrait;
 
