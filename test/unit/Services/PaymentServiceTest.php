@@ -565,7 +565,7 @@ class PaymentServiceTest extends BasePaymentTest
     {
         $unzer = new Unzer('s-priv-1234');
         /** @var MockObject|ResourceService $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs(['heidelpay' => $unzer])->setMethods(['fetchResource'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs(['unzer' => $unzer])->setMethods(['fetchResource'])->getMock();
         $unzer->setResourceService($resourceSrvMock);
 
         $date = $this->getYesterdaysTimestamp();

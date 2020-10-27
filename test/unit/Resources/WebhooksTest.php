@@ -140,7 +140,7 @@ class WebhooksTest extends BasePaymentTest
 
         $response = new stdClass();
         $response->id = 's-whk-1085';
-        $response->url = 'https://docs.heidelpay.de';
+        $response->url = 'https://docs.unzer.com';
         $response->event = 'authorize';
 
         $webhooks->handleResponse($response);
@@ -151,7 +151,7 @@ class WebhooksTest extends BasePaymentTest
         [$webhook] = $webhookList;
         $this->assertInstanceOf(Webhook::class, $webhook);
         $this->assertEquals(
-            ['event' => 'authorize', 'id' => 's-whk-1085', 'url' => 'https://docs.heidelpay.de'],
+            ['event' => 'authorize', 'id' => 's-whk-1085', 'url' => 'https://docs.unzer.com'],
             $webhook->expose()
         );
     }
