@@ -144,7 +144,7 @@ class PaymentTest extends BaseIntegrationTest
     public function paymentChargeOnAuthorizeShouldBePossibleUsingPaymentId(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
+        $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://unzer.com', null, null, null, null, false);
         $charge = $this->unzer->chargePayment($authorization->getPaymentId());
 
         $this->assertNotEmpty($charge->getId());
@@ -158,7 +158,7 @@ class PaymentTest extends BaseIntegrationTest
     public function paymentChargeOnAuthorizeShouldTakeResourceIds(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
+        $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://unzer.com', null, null, null, null, false);
         $charge = $this->unzer->chargePayment($authorization->getPaymentId(), null, 'EUR', 'o' . self::generateRandomId(), 'i' . self::generateRandomId());
 
         $this->assertNotEmpty($charge->getId());
@@ -185,7 +185,7 @@ class PaymentTest extends BaseIntegrationTest
     {
         $orderId = str_replace(' ', '', microtime());
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $authorization = $this->unzer->authorize(100.00, 'EUR', $paypal, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $authorization = $this->unzer->authorize(100.00, 'EUR', $paypal, 'https://unzer.com', null, $orderId, null, null, false);
         $payment = $authorization->getPayment();
         $fetchedPayment = $this->unzer->fetchPaymentByOrderId($orderId);
 
