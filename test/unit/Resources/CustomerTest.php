@@ -83,8 +83,8 @@ class CustomerTest extends BasePaymentTest
         $customer->setEmail('peter.universum@universum-group.de');
         $this->assertEquals('peter.universum@universum-group.de', $customer->getEmail());
 
-        $customer->setCompany('heidelpay GmbH');
-        $this->assertEquals('heidelpay GmbH', $customer->getCompany());
+        $customer->setCompany('Unzer GmbH');
+        $this->assertEquals('Unzer GmbH', $customer->getCompany());
     }
 
     /**
