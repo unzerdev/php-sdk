@@ -75,7 +75,7 @@ class BasketTest extends BaseIntegrationTest
             ->setVat(19)
             ->setUnit('ert')
             ->setAmountDiscount(1234.9)
-            ->setImageUrl('https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.jpg')
+            ->setImageUrl('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
             ->setSubTitle('This is some subtitle for this item')
             ->setType('this is some type');
         $basket->addBasketItem($basketItem);
@@ -168,7 +168,7 @@ class BasketTest extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $paypal->authorize(123.4, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        $authorize = $paypal->authorize(123.4, 'EUR', 'https://unzer.com', null, null, null, $basket);
 
         $fetchedPayment = $this->unzer->fetchPayment($authorize->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
@@ -210,7 +210,7 @@ class BasketTest extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $paypal->authorize(123.4, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        $authorize = $paypal->authorize(123.4, 'EUR', 'https://unzer.com', null, null, null, $basket);
         $this->assertNotEmpty($basket->getId());
 
         $fetchedPayment = $this->unzer->fetchPayment($authorize->getPaymentId());
@@ -234,7 +234,7 @@ class BasketTest extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $charge = $paypal->charge(123.4, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
+        $charge = $paypal->charge(123.4, 'EUR', 'https://unzer.com', null, null, null, $basket);
         $this->assertNotEmpty($basket->getId());
 
         $fetchedPayment = $this->unzer->fetchPayment($charge->getPaymentId());
@@ -249,7 +249,7 @@ class BasketTest extends BaseIntegrationTest
     public function basketItemWithInvalidUrlWillThrowAnErrorDP(): array
     {
         return [
-            'valid ' => [false, 'https://files.readme.io/9f556bd-small-Heidelpay-Logo_mitUnterzeile-orange_RGB.jpg'],
+            'valid ' => [false, 'https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png'],
             'valid null' => [false, null],
             'valid empty' => [false, ''],
             'invalid not available' => [true, 'https://files.readme.io/does-not-exist.jpg', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL]
