@@ -135,7 +135,7 @@ class KeypairTest extends BasePaymentTest
             'privateKey' => 's-priv-4321',
             'secureLevel' => 'SAQ-D',
             'alias' => 'Readme.io user',
-            'merchantName' => 'Heidelpay GmbH',
+            'merchantName' => 'Unzer GmbH',
             'merchantAddress' => 'Vangerowstraße 18, 69115 Heidelberg',
             'paymentTypes' => $paymentTypes
             ];
@@ -147,7 +147,7 @@ class KeypairTest extends BasePaymentTest
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
         $this->assertEquals('SAQ-D', $keypair->getSecureLevel());
         $this->assertEquals('Readme.io user', $keypair->getAlias());
-        $this->assertEquals('Heidelpay GmbH', $keypair->getMerchantName());
+        $this->assertEquals('Unzer GmbH', $keypair->getMerchantName());
         $this->assertEquals('Vangerowstraße 18, 69115 Heidelberg', $keypair->getMerchantAddress());
     }
 }
