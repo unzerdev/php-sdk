@@ -197,8 +197,8 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payment);
 
-        $heidelpayObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $transactionType = (new DummyTransactionType())->setPayment($payment);
         $transactionType->fetchPayment();

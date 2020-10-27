@@ -130,11 +130,11 @@ class AuthorizationTest extends BasePaymentTest
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToAuthorization(): void
     {
-        $heidelpayObj    = new Unzer('s-priv-123345');
+        $unzerObj    = new Unzer('s-priv-123345');
         $paymentType     = (new Sofort())->setId('123');
         $customer        = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment         = new Payment();
-        $payment->setParentResource($heidelpayObj)->setPaymentType($paymentType)->setCustomer($customer);
+        $payment->setParentResource($unzerObj)->setPaymentType($paymentType)->setCustomer($customer);
 
         $authorize       = (new Authorization())->setPayment($payment);
         $linkedResources = $authorize->getLinkedResources();

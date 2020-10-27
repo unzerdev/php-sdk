@@ -112,11 +112,11 @@ class PayoutTest extends BasePaymentTest
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToPayout(): void
     {
-        $heidelpayObj = new Unzer('s-priv-123345');
+        $unzerObj = new Unzer('s-priv-123345');
         $paymentType = $this->createCardObject()->setId('123');
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment = new Payment();
-        $payment->setParentResource($heidelpayObj)->setPaymentType($paymentType)->setCustomer($customer);
+        $payment->setParentResource($unzerObj)->setPaymentType($paymentType)->setCustomer($customer);
 
         $payout = (new Payout())->setPayment($payment);
         $linkedResources = $payout->getLinkedResources();

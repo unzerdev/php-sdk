@@ -242,14 +242,14 @@ class CustomerTest extends BasePaymentTest
      */
     public function fetchCustomerByOrderIdShouldCreateCustomerObjectWithCustomerIdAndCallFetch(): void
     {
-        $heidelpay = new Unzer('s-priv-1234');
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $unzer = new Unzer('s-priv-1234');
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('fetchResource')
-            ->with($this->callback(static function ($customer) use ($heidelpay) {
+            ->with($this->callback(static function ($customer) use ($unzer) {
                 return $customer instanceof Customer &&
                     $customer->getCustomerId() === 'myCustomerId' &&
-                    $customer->getUnzerObject() === $heidelpay;
+                    $customer->getUnzerObject() === $unzer;
             }));
 
         /** @var ResourceServiceInterface $resourceSrvMock */
