@@ -57,14 +57,14 @@ class CanDirectChargeTest extends BasePaymentTest
      */
     public function directChargeShouldPropagateToUnzer(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
+        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
         $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $charge = new Charge();
         $metadata  = new Metadata();
         $customer = (new Customer())->setId('123');
-        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($heidelpayMock);
-        $heidelpayMock->expects($this->exactly(4))->method('charge')
+        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($unzerMock);
+        $unzerMock->expects($this->exactly(4))->method('charge')
             ->withConsecutive(
                 [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],

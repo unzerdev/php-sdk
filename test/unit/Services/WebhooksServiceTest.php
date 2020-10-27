@@ -76,19 +76,19 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function createWebhookShouldCallResourceServiceWithWebhookObject(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['createResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('createResource')->with($this->callback(
-            static function ($param) use ($heidelpay) {
+            static function ($param) use ($unzer) {
                 return $param instanceof Webhook &&
                        $param->getUrl() === 'myUrlString' &&
                        $param->getEvent() === 'TestEvent' &&
-                       $param->getUnzerObject() === $heidelpay;
+                       $param->getUnzerObject() === $unzer;
             }
         ));
 
@@ -102,16 +102,16 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function fetchWebhookShouldCallResourceServiceWithTheGivenWebhookObject(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['fetchResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
-            static function ($param) use ($heidelpay) {
-                return $param instanceof Webhook && $param->getUnzerObject() === $heidelpay;
+            static function ($param) use ($unzer) {
+                return $param instanceof Webhook && $param->getUnzerObject() === $unzer;
             }
         ));
 
@@ -126,17 +126,17 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function fetchWebhookShouldCallResourceServiceWithANewWebhookObjectWithTheGivenId(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['fetchResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
-            static function ($param) use ($heidelpay) {
+            static function ($param) use ($unzer) {
                 return $param instanceof Webhook &&
-                       $param->getUnzerObject() === $heidelpay &&
+                       $param->getUnzerObject() === $unzer &&
                        $param->getId() === 'WebhookId';
             }
         ));
@@ -151,19 +151,19 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function updateWebhookShouldCallResourceServiceWithTheGivenWebhookObject(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['updateResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('updateResource')->with($this->callback(
-            static function ($param) use ($heidelpay) {
+            static function ($param) use ($unzer) {
                 return $param instanceof Webhook &&
                     $param->getUrl() === 'myUrlString' &&
                     $param->getEvent() === 'TestEvent' &&
-                    $param->getUnzerObject() === $heidelpay;
+                    $param->getUnzerObject() === $unzer;
             }
         ));
 
@@ -178,8 +178,8 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function deleteWebhookShouldCallResourceServiceWithTheGivenWebhookObject(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['deleteResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
@@ -204,8 +204,8 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function deleteWebhookShouldCallResourceServiceFetchingAndDeletingTheWebhookWithTheGivenId(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookServiceMock = $this->getMockBuilder(WebhookService::class)->setConstructorArgs([$heidelpay])
+        $unzer = new Unzer('s-priv-123');
+        $webhookServiceMock = $this->getMockBuilder(WebhookService::class)->setConstructorArgs([$unzer])
             ->setMethods(['fetchWebhook'])->getMock();
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['fetchResource', 'deleteResource'])->getMock();
@@ -242,8 +242,8 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function fetchWebhooksShouldCallResourceService(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['fetchResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
@@ -256,8 +256,8 @@ class WebhooksServiceTest extends BasePaymentTest
 
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($this->callback(
-            static function ($param) use ($heidelpay) {
-                return $param instanceof Webhooks && $param->getUnzerObject() === $heidelpay;
+            static function ($param) use ($unzer) {
+                return $param instanceof Webhooks && $param->getUnzerObject() === $unzer;
             }
         ))->willReturn($webhooksMock);
 
@@ -271,16 +271,16 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function deleteWebhooksShouldCallResourceServiceWithANewWebhooksObject(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['deleteResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
         $webhookService->setResourceService($resourceServiceMock);
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('deleteResource')->with($this->callback(
-            static function ($param) use ($heidelpay) {
-                return $param instanceof Webhooks && $param->getUnzerObject() === $heidelpay;
+            static function ($param) use ($unzer) {
+                return $param instanceof Webhooks && $param->getUnzerObject() === $unzer;
             }
         ));
 
@@ -294,8 +294,8 @@ class WebhooksServiceTest extends BasePaymentTest
      */
     public function createWebhooksShouldCallResourceServiceWithNewWebhooksObject(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
-        $webhookService = new WebhookService($heidelpay);
+        $unzer = new Unzer('s-priv-123');
+        $webhookService = new WebhookService($unzer);
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()
             ->setMethods(['createResource'])->getMock();
         /** @var ResourceServiceInterface $resourceServiceMock */
@@ -306,11 +306,11 @@ class WebhooksServiceTest extends BasePaymentTest
         $webhooksMock->expects($this->once())->method('getWebhookList')->willReturn($webhookList);
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('createResource')->with($this->callback(
-            static function ($param) use ($heidelpay) {
+            static function ($param) use ($unzer) {
                 return $param instanceof Webhooks &&
                     $param->getUrl() === 'myUrlString' &&
                     $param->getEventList() === ['TestEvent1', 'TestEvent2'] &&
-                    $param->getUnzerObject() === $heidelpay;
+                    $param->getUnzerObject() === $unzer;
             }
         ))->willReturn($webhooksMock);
 

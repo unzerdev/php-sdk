@@ -132,11 +132,11 @@ class ChargeTest extends BasePaymentTest
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToCharge(): void
     {
-        $heidelpayObj    = new Unzer('s-priv-123345');
+        $unzerObj    = new Unzer('s-priv-123345');
         $paymentType     = (new Sofort())->setId('123');
         $customer        = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment         = new Payment();
-        $payment->setParentResource($heidelpayObj)->setPaymentType($paymentType)->setCustomer($customer);
+        $payment->setParentResource($unzerObj)->setPaymentType($paymentType)->setCustomer($customer);
 
         $charge          = (new Charge())->setPayment($payment);
         $linkedResources = $charge->getLinkedResources();
