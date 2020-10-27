@@ -55,13 +55,13 @@ class WebhooksTest extends BasePaymentTest
      */
     public function gettersAndSettersOfWebhookShouldBehaveAsExpected(): void
     {
-        $webhook = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::PAYMENT_COMPLETED]);
-        $this->assertEquals('https://dev.heidelpay.com', $webhook->getUrl());
+        $webhook = new Webhooks('https://dev.unzer.com', [WebhookEvents::PAYMENT_COMPLETED]);
+        $this->assertEquals('https://dev.unzer.com', $webhook->getUrl());
         $this->assertEquals([WebhookEvents::PAYMENT_COMPLETED], $webhook->getEventList());
 
-        $webhook->setUrl('https://docs.heidelpay.com');
+        $webhook->setUrl('https://dev.unzer.com');
         $webhook->addEvent(WebhookEvents::CHARGE);
-        $this->assertEquals('https://docs.heidelpay.com', $webhook->getUrl());
+        $this->assertEquals('https://dev.unzer.com', $webhook->getUrl());
         $this->assertEquals([WebhookEvents::PAYMENT_COMPLETED, WebhookEvents::CHARGE], $webhook->getEventList());
     }
 
@@ -72,12 +72,12 @@ class WebhooksTest extends BasePaymentTest
      */
     public function adderOfWebhookEventsOnlyAllowsValidEvents(): void
     {
-        $webhooks = new Webhooks('https://dev.heidelpay.com', []);
+        $webhooks = new Webhooks('https://dev.unzer.com', []);
         $this->assertIsEmptyArray($webhooks->getEventList());
 
-        $webhooks->setUrl('https://docs.heidelpay.com');
+        $webhooks->setUrl('https://dev.unzer.com');
         $webhooks->addEvent('invalidEvent');
-        $this->assertEquals('https://docs.heidelpay.com', $webhooks->getUrl());
+        $this->assertEquals('https://dev.unzer.com', $webhooks->getUrl());
         $this->assertIsEmptyArray($webhooks->getEventList());
     }
 
@@ -88,19 +88,19 @@ class WebhooksTest extends BasePaymentTest
      */
     public function responseHandlingForEventsShouldBehaveAsExpected(): void
     {
-        $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE]);
+        $webhooks = new Webhooks('https://dev.unzer.com', [WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE]);
         $webhooks->setParentResource(new Unzer('s-priv-123'));
-        $this->assertEquals('https://dev.heidelpay.com', $webhooks->getUrl());
+        $this->assertEquals('https://dev.unzer.com', $webhooks->getUrl());
         $this->assertEquals([WebhookEvents::CHARGE, WebhookEvents::AUTHORIZE], $webhooks->getEventList());
 
         $response = new stdClass();
         $eventA = new stdClass();
         $eventA->id = 's-whk-1084';
-        $eventA->url = 'https://dev.heidelpay.com';
+        $eventA->url = 'https://dev.unzer.com';
         $eventA->event = 'charge';
         $eventB = new stdClass();
         $eventB->id = 's-whk-1085';
-        $eventB->url = 'https://dev.heidelpay.com';
+        $eventB->url = 'https://dev.unzer.com';
         $eventB->event = 'authorize';
         $events = [$eventA, $eventB];
 
@@ -117,11 +117,11 @@ class WebhooksTest extends BasePaymentTest
         $this->assertInstanceOf(Webhook::class, $webhookA);
         $this->assertInstanceOf(Webhook::class, $webhookB);
         $this->assertEquals(
-            ['event' => 'charge', 'id' => 's-whk-1084', 'url' => 'https://dev.heidelpay.com'],
+            ['event' => 'charge', 'id' => 's-whk-1084', 'url' => 'https://dev.unzer.com'],
             $webhookA->expose()
         );
         $this->assertEquals(
-            ['event' => 'authorize', 'id' => 's-whk-1085', 'url' => 'https://dev.heidelpay.com'],
+            ['event' => 'authorize', 'id' => 's-whk-1085', 'url' => 'https://dev.unzer.com'],
             $webhookB->expose()
         );
     }
@@ -133,9 +133,9 @@ class WebhooksTest extends BasePaymentTest
      */
     public function responseHandlingForOneEventShouldBehaveAsExpected(): void
     {
-        $webhooks = new Webhooks('https://dev.heidelpay.com', [WebhookEvents::CHARGE]);
+        $webhooks = new Webhooks('https://dev.unzer.com', [WebhookEvents::CHARGE]);
         $webhooks->setParentResource(new Unzer('s-priv-123'));
-        $this->assertEquals('https://dev.heidelpay.com', $webhooks->getUrl());
+        $this->assertEquals('https://dev.unzer.com', $webhooks->getUrl());
         $this->assertEquals([WebhookEvents::CHARGE], $webhooks->getEventList());
 
         $response = new stdClass();
