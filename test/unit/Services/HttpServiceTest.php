@@ -117,7 +117,7 @@ class HttpServiceTest extends BasePaymentTest
             'GET'
         );
         /** @noinspection PhpParamsInspection */
-        $adapterMock->expects($this->once())->method('setUserAgent')->with('heidelpayPHP');
+        $adapterMock->expects($this->once())->method('setUserAgent')->with('UnzerPHP');
         $headers = [
             'Authorization' => 'Basic cy1wcml2LU15VGVzdEtleTo=',
             'Content-Type'  => 'application/json',
