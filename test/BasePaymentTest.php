@@ -53,7 +53,7 @@ class BasePaymentTest extends TestCase
     protected $unzer;
 
     /**
-     * Creates and returns a Unzer object if it does not exist yet.
+     * Creates and returns an Unzer object if it does not exist yet.
      * Uses an invalid but well formed default key if no key is given.
      *
      * @param string $privateKey

@@ -52,7 +52,7 @@ trait CanPayout
      *
      * @return Payout The resulting payout object.
      *
-     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payout(

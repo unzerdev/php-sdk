@@ -106,7 +106,7 @@ class HttpService
      *
      * @return string
      *
-     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function send(
@@ -158,7 +158,7 @@ class HttpService
     }
 
     /**
-     * Handles error responses by throwing a UnzerApiException with the returned messages and error code.
+     * Handles error responses by throwing an UnzerApiException with the returned messages and error code.
      * Returns doing nothing if no error occurred.
      *
      * @param string      $responseCode
