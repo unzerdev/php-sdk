@@ -32,7 +32,7 @@ define('UNZER_SDK_PAYMENT_API_EXAMPLES', false);
 define('UNZER_SDK_PAYMENT_API_URL', 'http://'.$_SERVER['HTTP_HOST']);
 
 /* Please enter the path from root directory to the example folder */
-define('UNZER_SDK_PAYMENT_API_FOLDER', '/vendor/heidelpay/heidelpay-php/examples/');
+define('UNZER_SDK_PAYMENT_API_FOLDER', '/vendor/unzer/php-sdk/examples/');
 
 /* Please provide your own sandbox-keypair here. */
 define('UNZER_SDK_PAYMENT_API_PRIVATE_KEY', 's-priv-***');
