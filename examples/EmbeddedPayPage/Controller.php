@@ -54,8 +54,8 @@ $transactionType = $_POST['transaction_type'] ?? 'authorize';
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
-    $heidelpay = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge/authorize transaction
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
@@ -64,7 +64,7 @@ try {
     $paypage = new Paypage(119.00, 'EUR', RETURN_CONTROLLER_URL);
 
     // ... however you can customize the Payment Page using additional parameters.
-    $paypage->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
+    $paypage->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
             ->setShopName('My Test Shop')
             ->setTagline('Try and stop us from being awesome!')
             ->setOrderId('o' . microtime(true))
@@ -81,9 +81,9 @@ try {
     $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
     if ($transactionType === 'charge') {
-        $heidelpay->initPayPageCharge($paypage, $customer, $basket);
+        $unzer->initPayPageCharge($paypage, $customer, $basket);
     } else {
-        $heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
+        $unzer->initPayPageAuthorize($paypage, $customer, $basket);
     }
 
     $_SESSION['PaymentId'] = $paypage->getPaymentId();

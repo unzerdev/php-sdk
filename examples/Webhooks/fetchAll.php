@@ -77,16 +77,16 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $heidelpay = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
-            $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+            $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+            $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-            $webhooks = $heidelpay->fetchAllWebhooks();
+            $webhooks = $unzer->fetchAllWebhooks();
         } catch (UnzerApiException $e) {
             printError($e->getMessage());
-            $heidelpay->debugLog('Error: ' . $e->getMessage());
+            $unzer->debugLog('Error: ' . $e->getMessage());
         } catch (RuntimeException $e) {
             printError($e->getMessage());
-            $heidelpay->debugLog('Error: ' . $e->getMessage());
+            $unzer->debugLog('Error: ' . $e->getMessage());
         }
 
         printInfo('Back to the payment selection', 'Now Perform payments <a href="..">>> HERE <<</a> to trigger events!');

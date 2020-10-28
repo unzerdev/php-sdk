@@ -63,8 +63,8 @@ $use3Ds          = isset($_POST['3dsecure']) && ($_POST['3dsecure'] === '1');
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
-    $heidelpay = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge/authorize transaction
     // The 3D secured flag can be used to switch between 3ds and non-3ds.
@@ -72,13 +72,13 @@ try {
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
     switch ($transactionType) {
         case 'charge':
-            $transaction = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+            $transaction = $unzer->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
             break;
         case 'payout':
-            $transaction = $heidelpay->payout(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+            $transaction = $unzer->payout(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
             break;
         default:
-            $transaction = $heidelpay->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+            $transaction = $unzer->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
             break;
     }
 

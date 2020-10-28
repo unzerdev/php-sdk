@@ -64,14 +64,14 @@ $paymentTypeId   = $_POST['paymentTypeId'];
 /** @noinspection BadExceptionsProcessingInspection */
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
-    $heidelpay = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Use the quote or order id from your shop
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     /** @var HirePurchaseDirectDebit $paymentType */
-    $paymentType = $heidelpay->fetchPaymentType($paymentTypeId);
+    $paymentType = $unzer->fetchPaymentType($paymentTypeId);
 
     // A customer with matching addresses is mandatory for Invoice Factoring payment type
     $address  = (new Address())
@@ -93,7 +93,7 @@ try {
     $basket = (new Basket($orderId, 119.0, 'EUR', [$basketItem]))->setAmountTotalVat(19.0);
 
     // initialize the payment
-    $authorize = $heidelpay->authorize(
+    $authorize = $unzer->authorize(
         $paymentType->getTotalPurchaseAmount(),
         'EUR',
         $paymentType,

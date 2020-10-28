@@ -60,14 +60,14 @@ $transactionType = $_POST['transaction_type'] ?? 'authorize';
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
-    $heidelpay = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge/authorize transaction to get the redirectUrl.
     if ($transactionType === 'charge') {
-        $transaction = $heidelpay->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+        $transaction = $unzer->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
     } else {
-        $transaction = $heidelpay->authorize(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+        $transaction = $unzer->authorize(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
     }
 
     // You'll need to remember the paymentId for later in the ReturnController
