@@ -79,7 +79,7 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+            $heidelpay = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
             $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
             $webhooks = $heidelpay->fetchAllWebhooks();

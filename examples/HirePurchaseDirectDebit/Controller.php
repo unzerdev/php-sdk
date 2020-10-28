@@ -64,7 +64,7 @@ $paymentTypeId   = $_POST['paymentTypeId'];
 /** @noinspection BadExceptionsProcessingInspection */
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
-    $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+    $heidelpay = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Use the quote or order id from your shop

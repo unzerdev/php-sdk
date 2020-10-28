@@ -1,7 +1,7 @@
 <?php
 /**
  * For security reasons all examples are disabled by default
- * You can switch the constant 'HEIDELPAY_PHP_PAYMENT_API_EXAMPLES' to true to make the examples executable.
+ * You can switch the constant 'UNZER_SDK_PAYMENT_API_EXAMPLES' to true to make the examples executable.
  * But you should always set it false on productive environments.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
@@ -26,14 +26,14 @@
  */
 
 /* Set to true if you want to enable the examples */
-define('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES', false);
+define('UNZER_SDK_PAYMENT_API_EXAMPLES', false);
 
 /* Please set this to your url. It must be reachable over the net*/
-define('HEIDELPAY_PHP_PAYMENT_API_URL', 'http://'.$_SERVER['HTTP_HOST']);
+define('UNZER_SDK_PAYMENT_API_URL', 'http://'.$_SERVER['HTTP_HOST']);
 
 /* Please enter the path from root directory to the example folder */
-define('HEIDELPAY_PHP_PAYMENT_API_FOLDER', '/vendor/heidelpay/heidelpay-php/examples/');
+define('UNZER_SDK_PAYMENT_API_FOLDER', '/vendor/heidelpay/heidelpay-php/examples/');
 
 /* Please provide your own sandbox-keypair here. */
-define('HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY', 's-priv-***');
-define('HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY', 's-pub-***');
+define('UNZER_SDK_PAYMENT_API_PRIVATE_KEY', 's-priv-***');
+define('UNZER_SDK_PAYMENT_API_PUBLIC_KEY', 's-pub-***');

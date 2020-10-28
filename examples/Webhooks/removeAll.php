@@ -84,13 +84,13 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
+            $heidelpay = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
             $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
             $heidelpay->deleteAllWebhooks();
             printSuccess(
                 'De-registered all existing events for the given private key',
-                'Unsubscribed all events registered for the private key: "' . HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY . '".'
+                'Unsubscribed all events registered for the private key: "' . UNZER_SDK_PAYMENT_API_PRIVATE_KEY . '".'
             );
 
         } catch (UnzerApiException $e) {

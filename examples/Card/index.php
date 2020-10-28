@@ -121,8 +121,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 </form>
 
 <script>
-    // Create a heidelpay instance with your public key
-    let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
+    // Create an Unzer instance with your public key
+    let heidelpayInstance = new heidelpay('<?php echo UNZER_SDK_PAYMENT_API_PUBLIC_KEY; ?>');
 
     // Create a Card instance and render the input fields
     let Card = heidelpayInstance.Card();
