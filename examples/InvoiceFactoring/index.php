@@ -36,9 +36,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>
-        Heidelpay UI Examples
-    </title>
+    <title>Unzer UI Examples</title>
 
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
     <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>

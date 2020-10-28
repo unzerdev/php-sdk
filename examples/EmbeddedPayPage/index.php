@@ -36,9 +36,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>
-        Heidelpay UI Examples
-    </title>
+    <title>Unzer UI Examples</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" crossorigin="anonymous"></script>
 

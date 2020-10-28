@@ -46,9 +46,7 @@ function printMessage($type, $title, $text)
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>
-            Heidelpay UI Examples
-        </title>
+        <title>Unzer UI Examples</title>
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"
                 integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
