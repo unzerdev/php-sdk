@@ -39,20 +39,14 @@ class EnvironmentServiceTest extends TestCase
      * @test
      * @dataProvider envVarsShouldBeInterpretedAsExpectedDP
      *
-     * @param mixed $logDisabled
      * @param mixed $verboseLog
      * @param bool  $expectedLogEnabled
      */
-    public function envVarsShouldBeInterpretedAsExpected($logDisabled, $verboseLog, $expectedLogEnabled): void
+    public function envVarsShouldBeInterpretedAsExpected($verboseLog, $expectedLogEnabled): void
     {
         unset(
-            $_SERVER[EnvironmentService::ENV_VAR_NAME_DISABLE_TEST_LOGGING],
             $_SERVER[EnvironmentService::ENV_VAR_NAME_VERBOSE_TEST_LOGGING]
         );
-
-        if ($logDisabled !== null) {
-            $_SERVER[EnvironmentService::ENV_VAR_NAME_DISABLE_TEST_LOGGING] = $logDisabled;
-        }
 
         if ($verboseLog !== null) {
             $_SERVER[EnvironmentService::ENV_VAR_NAME_VERBOSE_TEST_LOGGING] = $verboseLog;
@@ -133,47 +127,19 @@ class EnvironmentServiceTest extends TestCase
     public function envVarsShouldBeInterpretedAsExpectedDP(): array
     {
         return [
-            '#0' => [null, null, true],
-            '#1' => [0, null, true],
-            '#2' => [1, null, false],
-            '#3' => [null, 0, false],
-            '#4' => [null, 1, true],
-            '#5' => [0, 0, false],
-            '#6' => [0, 1, true],
-            '#7' => [1, 0, false],
-            '#8' => [1, 1, true],
-            '#9' => ["false", null, true],
-            '#10' => ["true", null, false],
-            '#11' => [null, "false", false],
-            '#12' => [null, "true", true],
-            '#13' => ["false", "false", false],
-            '#14' => ["false", "true", true],
-            '#15' => ["true", "false", false],
-            '#16' => ["true", "true", true],
-            '#17' => [false, null, true],
-            '#18' => [true, null, false],
-            '#19' => [null, false, false],
-            '#20' => [null, true, true],
-            '#21' => [false, false, false],
-            '#22' => [false, true, true],
-            '#23' => [true, false, false],
-            '#24' => [true, true, true],
-            '#25' => ['fals', null, true],
-            '#26' => ['tru', null, true],
-            '#27' => [null, 'fals', false],
-            '#28' => [null, 'tru', false],
-            '#29' => ['fals', 'fals', false],
-            '#30' => ['fals', 'tru', false],
-            '#31' => ['tru', 'fals', false],
-            '#32' => ['tru', 'tru', false],
-            '#33' => ['false', 'fals', false],
-            '#34' => ['false', 'tru', false],
-            '#35' => ['true', 'fals', false],
-            '#36' => ['true', 'tru', false],
-            '#37' => ['fals', 'false', false],
-            '#38' => ['fals', 'true', true],
-            '#39' => ['tru', 'false', false],
-            '#40' => ['tru', 'true', true],
+            '#0' =>     [null, false],
+            '#1' =>     [0, false],
+            '#2' =>     [1, true],
+            '#3' =>     [false, false],
+            '#4' =>     [true, true],
+            '#5' =>     ["false", false],
+            '#6' =>     ["true", true],
+            '#7' =>     ['fals', false],
+            '#8' =>     ['tru', false],
+            '#9' =>     [010, false],
+            '#10' =>    ['1', true],
+            '#11' =>    ['100', false],
+            '#12' =>    ['0', false],
         ];
     }
 

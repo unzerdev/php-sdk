@@ -82,10 +82,7 @@ class EnvironmentService
      */
     public static function isTestLoggingActive(): bool
     {
-        if (isset($_SERVER[self::ENV_VAR_NAME_VERBOSE_TEST_LOGGING])) {
-            return self::getBoolEnvValue(self::ENV_VAR_NAME_VERBOSE_TEST_LOGGING);
-        }
-        return !self::getBoolEnvValue(self::ENV_VAR_NAME_DISABLE_TEST_LOGGING);
+        return self::getBoolEnvValue(self::ENV_VAR_NAME_VERBOSE_TEST_LOGGING);
     }
 
     /**
