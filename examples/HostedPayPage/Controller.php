@@ -78,9 +78,9 @@ try {
             ->setTagline('Try and stop us from being awesome!')
             ->setOrderId('OrderNr' . $orderId)
             ->setTermsAndConditionUrl('https://www.unzer.com/en/')
-            ->setPrivacyPolicyUrl('https://www.e/')
-            ->setImprintUrl('https://www.unzer.com/it/')
-            ->setHelpUrl('https://www.unzer.com/at/')
+            ->setPrivacyPolicyUrl('https://www.unzer.com/de/datenschutz/')
+            ->setImprintUrl('https://www.unzer.com/de/impressum')
+            ->setHelpUrl('https://www.unzer.com/de/support')
             ->setContactUrl('https://www.unzer.com/en/ueber-unzer')
             ->setInvoiceId('i' . microtime(true));
 

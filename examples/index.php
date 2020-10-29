@@ -77,7 +77,7 @@ function printMessage($type, $title, $text)
                         'yellow',
                         'Attention: You need to provide a valid key pair!',
                         "The key pair provided in file _enableExamples.php does not seem to be valid.\n".
-                        'Please contact our support to get a test key pair <a href="mailto:support@heidelpay.com">support@heidelpay.com</a>'
+                        'Please contact our support to get a test key pair <a href="mailto:support@unzer.com">support@unzer.com</a>'
                     );
                 }
             ?>
