@@ -74,19 +74,9 @@ class Customer extends AbstractUnzerResource
 
     /**
      * Customer constructor.
-     *
-     * @param string|null $firstname
-     * @param string|null $lastname
-     *
-     * @deprecated since Version 1.1.5.0
-     * @see CustomerFactory::createCustomer()
-     * @see CustomerFactory::createNotRegisteredB2bCustomer()
-     * @see CustomerFactory::createRegisteredB2bCustomer()
      */
-    public function __construct(string $firstname = null, string $lastname = null)
+    public function __construct()
     {
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
         $this->billingAddress = new Address();
         $this->shippingAddress = new Address();
     }
