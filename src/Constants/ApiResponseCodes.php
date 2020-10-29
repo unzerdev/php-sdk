@@ -49,21 +49,7 @@ class ApiResponseCodes
     public const API_ERROR_IVF_REQUIRES_BASKET                         = 'API.330.100.023';
     public const API_ERROR_ADDRESSES_DO_NOT_MATCH                      = 'API.330.100.106';
     public const API_ERROR_CURRENCY_IS_NOT_SUPPORTED                   = 'API.330.100.202';
-    /**
-     * API_ERROR_AUTHORIZE_ALREADY_CANCELLED
-     *
-     * @deprecated since 1.2.3.0
-     * @see ApiResponseCodes::API_ERROR_ALREADY_CANCELLED
-     */
-    public const API_ERROR_AUTHORIZE_ALREADY_CANCELLED                 = 'API.340.100.014';
     public const API_ERROR_ALREADY_CANCELLED                           = 'API.340.100.014';
-    /**
-     * API_ERROR_CHARGE_ALREADY_CHARGED_BACK
-     *
-     * @deprecated since 1.2.3.0
-     * @see ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK
-     */
-    public const API_ERROR_CHARGE_ALREADY_CHARGED_BACK                 = 'API.340.100.015';
     public const API_ERROR_ALREADY_CHARGED_BACK                        = 'API.340.100.015';
     public const API_ERROR_ALREADY_CHARGED                             = 'API.340.100.018';
     public const API_ERROR_CANCEL_REASON_CODE_IS_MISSING               = 'API.340.100.024';
@@ -77,12 +63,6 @@ class ApiResponseCodes
     public const API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED            = 'API.510.310.009';
     public const API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND                    = 'API.510.310.008';
     public const API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL               = 'API.600.630.004';
-    /**
-     * API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION
-     *
-     * @deprecated since 1.2.5.0 Will be removed in next major version.
-     */
-    public const API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION         = 'API.600.630.005';
     public const API_ERROR_RECURRING_ALREADY_ACTIVE                    = 'API.640.550.006';
     public const API_ERROR_INVALID_KEY                                 = 'API.710.000.002';
     public const API_ERROR_INSUFFICIENT_PERMISSION                     = 'API.710.000.005';
