@@ -43,11 +43,11 @@ class PrepaymentTest extends BaseIntegrationTest
      */
     public function prepaymentShouldBeCreatableAndFetchable(): AbstractUnzerResource
     {
-        $prepayment = $this->heidelpay->createPaymentType(new Prepayment());
+        $prepayment = $this->unzer->createPaymentType(new Prepayment());
         $this->assertInstanceOf(Prepayment::class, $prepayment);
         $this->assertNotEmpty($prepayment->getId());
 
-        $fetchedPrepayment = $this->heidelpay->fetchPaymentType($prepayment->getId());
+        $fetchedPrepayment = $this->unzer->fetchPaymentType($prepayment->getId());
         $this->assertInstanceOf(Prepayment::class, $fetchedPrepayment);
         $this->assertEquals($prepayment->expose(), $fetchedPrepayment->expose());
 
@@ -92,7 +92,7 @@ class PrepaymentTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'EUR', $prepayment, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $prepayment, self::RETURN_URL);
     }
 
     /**
@@ -109,7 +109,7 @@ class PrepaymentTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
-        $this->heidelpay->ship($charge->getPayment());
+        $this->unzer->ship($charge->getPayment());
     }
 
     /**

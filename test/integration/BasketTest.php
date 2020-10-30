@@ -52,10 +52,10 @@ class BasketTest extends BaseIntegrationTest
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
-        $this->heidelpay->createBasket($basket);
+        $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
-        $fetchedBasket = $this->heidelpay->fetchBasket($basket->getId());
+        $fetchedBasket = $this->unzer->fetchBasket($basket->getId());
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
         $this->assertEquals('This basket is creatable!', $basket->getNote());
     }
@@ -81,10 +81,10 @@ class BasketTest extends BaseIntegrationTest
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
-        $this->heidelpay->createBasket($basket);
+        $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
-        $fetchedBasket = $this->heidelpay->fetchBasket($basket->getId());
+        $fetchedBasket = $this->unzer->fetchBasket($basket->getId());
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
         $this->assertEquals(
             $basket->getBasketItemByIndex(0)->expose(),
@@ -110,10 +110,10 @@ class BasketTest extends BaseIntegrationTest
         $basket->addBasketItem($basketItem);
 
         try {
-            $this->heidelpay->createBasket($basket);
+            $this->unzer->createBasket($basket);
             $this->assertFalse(
                 $expectException,
-                'Failed asserting that exception of type "UnzerSDK\Exceptions\HeidelpayApiException" is thrown.'
+                'Failed asserting that exception of type "UnzerSDK\Exceptions\UnzerApiException" is thrown.'
             );
         } catch (UnzerApiException $e) {
             $this->assertTrue($expectException);
@@ -134,16 +134,16 @@ class BasketTest extends BaseIntegrationTest
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
-        $this->heidelpay->createBasket($basket);
+        $this->unzer->createBasket($basket);
 
-        $fetchedBasket = $this->heidelpay->fetchBasket($basket->getId());
+        $fetchedBasket = $this->unzer->fetchBasket($basket->getId());
         $fetchedBasket->setAmountTotalGross(4321);
         $fetchedBasket->setAmountTotalDiscount(5432);
         $fetchedBasket->setNote('This basket is updateable!');
         $fetchedBasket->getBasketItemByIndex(0)->setTitle('This item can also be updated!');
-        $this->heidelpay->updateBasket($fetchedBasket);
+        $this->unzer->updateBasket($fetchedBasket);
 
-        $this->heidelpay->fetchBasket($basket);
+        $this->unzer->fetchBasket($basket);
         $this->assertEquals($orderId, $basket->getOrderId());
         $this->assertEquals(4321, $basket->getAmountTotalGross());
         $this->assertEquals(5432, $basket->getAmountTotalDiscount());
@@ -163,14 +163,14 @@ class BasketTest extends BaseIntegrationTest
         $basket->setNote('This basket is creatable!');
         $basketItem = (new BasketItem('myItem', 123.4, 234.5, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
-        $this->heidelpay->createBasket($basket);
+        $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $authorize = $paypal->authorize(123.4, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
 
-        $fetchedPayment = $this->heidelpay->fetchPayment($authorize->getPaymentId());
+        $fetchedPayment = $this->unzer->fetchPayment($authorize->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
     }
 
@@ -185,12 +185,12 @@ class BasketTest extends BaseIntegrationTest
         $this->assertNotEmpty($basket->getId());
 
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setBic('COBADEFFXXX');
-        $this->heidelpay->createPaymentType($sdd);
+        $this->unzer->createPaymentType($sdd);
 
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
         $charge   = $sdd->charge(119.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
 
-        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $fetchedPayment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
     }
 
@@ -209,11 +209,11 @@ class BasketTest extends BaseIntegrationTest
         $this->assertEmpty($basket->getId());
 
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $authorize = $paypal->authorize(123.4, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
         $this->assertNotEmpty($basket->getId());
 
-        $fetchedPayment = $this->heidelpay->fetchPayment($authorize->getPaymentId());
+        $fetchedPayment = $this->unzer->fetchPayment($authorize->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
     }
 
@@ -233,11 +233,11 @@ class BasketTest extends BaseIntegrationTest
         $this->assertEmpty($basket->getId());
 
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $charge = $paypal->charge(123.4, 'EUR', 'https://heidelpay.com', null, null, null, $basket);
         $this->assertNotEmpty($basket->getId());
 
-        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPaymentId());
+        $fetchedPayment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
     }
 

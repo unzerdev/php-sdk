@@ -41,12 +41,12 @@ class WechatpayTest extends BaseIntegrationTest
      */
     public function wechatpayShouldBeCreatableAndFetchable(): void
     {
-        $wechatpay = $this->heidelpay->createPaymentType(new Wechatpay());
+        $wechatpay = $this->unzer->createPaymentType(new Wechatpay());
         $this->assertInstanceOf(Wechatpay::class, $wechatpay);
         $this->assertNotNull($wechatpay->getId());
 
         /** @var Wechatpay $fetchedWechatpay */
-        $fetchedWechatpay = $this->heidelpay->fetchPaymentType($wechatpay->getId());
+        $fetchedWechatpay = $this->unzer->fetchPaymentType($wechatpay->getId());
         $this->assertInstanceOf(Wechatpay::class, $fetchedWechatpay);
         $this->assertEquals($wechatpay->expose(), $fetchedWechatpay->expose());
     }
@@ -59,7 +59,7 @@ class WechatpayTest extends BaseIntegrationTest
     public function wechatpayShouldBeAbleToCharge(): void
     {
         /** @var Wechatpay $wechatpay */
-        $wechatpay = $this->heidelpay->createPaymentType(new Wechatpay());
+        $wechatpay = $this->unzer->createPaymentType(new Wechatpay());
         $charge = $wechatpay->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
@@ -73,10 +73,10 @@ class WechatpayTest extends BaseIntegrationTest
      */
     public function wechatpayShouldNotBeAuthorizable(): void
     {
-        $wechatpay = $this->heidelpay->createPaymentType(new Wechatpay());
+        $wechatpay = $this->unzer->createPaymentType(new Wechatpay());
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'EUR', $wechatpay, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $wechatpay, self::RETURN_URL);
     }
 }

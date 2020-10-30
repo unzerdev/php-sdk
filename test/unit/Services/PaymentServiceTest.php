@@ -65,15 +65,15 @@ class PaymentServiceTest extends BasePaymentTest
      */
     public function gettersAndSettersShouldWorkProperly(): void
     {
-        $heidelpay      = new Unzer('s-priv-123');
+        $unzer          = new Unzer('s-priv-123');
         /** @var PaymentService $paymentService */
-        $paymentService = $heidelpay->getPaymentService();
-        $this->assertSame($heidelpay, $paymentService->getHeidelpay());
-        $this->assertSame($heidelpay->getResourceService(), $paymentService->getResourceService());
+        $paymentService = $unzer->getPaymentService();
+        $this->assertSame($unzer, $paymentService->getUnzer());
+        $this->assertSame($unzer->getResourceService(), $paymentService->getResourceService());
 
-        $heidelpay2       = new Unzer('s-priv-1234');
-        $paymentService->setHeidelpay($heidelpay2);
-        $this->assertSame($heidelpay2, $paymentService->getHeidelpay());
+        $unzer2       = new Unzer('s-priv-1234');
+        $paymentService->setUnzer($unzer2);
+        $this->assertSame($unzer2, $paymentService->getUnzer());
     }
 
     //</editor-fold>
@@ -176,7 +176,7 @@ class PaymentServiceTest extends BasePaymentTest
         $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['chargePayment'])->disableOriginalConstructor()->getMock();
         $paymentSrvMock->expects($this->exactly(2))->method('chargePayment')->withConsecutive([$paymentObject, null], [$paymentObject, 1.234]);
 
-        $paymentSrvMock->setHeidelpay((new Unzer('s-priv-123'))->setPaymentService($paymentSrvMock));
+        $paymentSrvMock->setUnzer((new Unzer('s-priv-123'))->setPaymentService($paymentSrvMock));
         $paymentSrvMock->chargeAuthorization($paymentObject);
         $paymentSrvMock->chargeAuthorization($paymentObject, 1.234);
     }

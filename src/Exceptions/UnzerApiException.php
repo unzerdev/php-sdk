@@ -38,7 +38,7 @@ class UnzerApiException extends Exception
     private $errorId;
 
     /**
-     * HeidelpayApiException constructor.
+     * UnzerApiException constructor.
      *
      * @param string $merchantMessage
      * @param string $clientMessage

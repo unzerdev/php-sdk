@@ -62,8 +62,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
 {
     public const BASE_URL = 'api.heidelpay.com';
     public const API_VERSION = 'v1';
-    public const SDK_TYPE = 'heidelpayPHP';
-    public const SDK_VERSION = '1.2.9.0';
+    public const SDK_TYPE = 'UnzerPHP';
+    public const SDK_VERSION = '1.1.0.0';
 
     /** @var string $key */
     private $key;
@@ -149,7 +149,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * Returns the set customer locale.
      *
      * @return string|null The locale of the customer.
-     *                     Refer to the documentation under https://docs.heidelpay.com for a list of supported values.
+     *                     Refer to the documentation under https://docs.unzer.com for a list of supported values.
      */
     public function getLocale(): ?string
     {
@@ -160,7 +160,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * Sets the customer locale.
      *
      * @param string|null $locale The customer locale to set.
-     *                            Ref. https://docs.heidelpay.com for a list of supported values.
+     *                            Ref. https://docs.unzer.com for a list of supported values.
      *
      * @return Unzer This Unzer object.
      */
@@ -198,7 +198,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      */
     public function setPaymentService(PaymentService $paymentService): Unzer
     {
-        $this->paymentService = $paymentService->setHeidelpay($this);
+        $this->paymentService = $paymentService->setUnzer($this);
         return $this;
     }
 
@@ -244,7 +244,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      */
     public function setCancelService(CancelService $cancelService): Unzer
     {
-        $this->cancelService = $cancelService->setHeidelpay($this);
+        $this->cancelService = $cancelService->setUnzer($this);
         return $this;
     }
 
@@ -346,7 +346,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      *
      * @return AbstractUnzerResource The updated resource object.
      *
-     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.6.0
@@ -363,7 +363,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      *
      * @return AbstractUnzerResource The updated resource object.
      *
-     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      *
      * @deprecated since 1.2.6.0

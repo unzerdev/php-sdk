@@ -45,7 +45,7 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutCanBeCalledForCardType(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $payout = $card->payout(100.0, 'EUR', self::RETURN_URL);
         $this->assertTransactionResourceHasBeenCreated($payout);
 
@@ -69,7 +69,7 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutCanBeCalledForSepaDirectDebitType(): void
     {
         $sepa = new SepaDirectDebit('DE89370400440532013000');
-        $this->heidelpay->createPaymentType($sepa);
+        $this->unzer->createPaymentType($sepa);
         $payout = $sepa->payout(100.0, 'EUR', self::RETURN_URL);
         $this->assertTransactionResourceHasBeenCreated($payout);
 
@@ -88,7 +88,7 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutCanBeCalledForSepaDirectDebitGuaranteedType(): void
     {
         $sepa = new SepaDirectDebitGuaranteed('DE89370400440532013000');
-        $this->heidelpay->createPaymentType($sepa);
+        $this->unzer->createPaymentType($sepa);
         $customer = $this->getMaximumCustomer()->setShippingAddress($this->getBillingAddress());
         $payout   = $sepa->payout(100.0, 'EUR', self::RETURN_URL, $customer);
         $this->assertTransactionResourceHasBeenCreated($payout);
@@ -108,10 +108,10 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutShouldBeFetchedWhenItsPaymentResourceIsFetched(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $payout = $card->payout(100.0, 'EUR', self::RETURN_URL);
 
-        $fetchedPayment = $this->heidelpay->fetchPayment($payout->getPaymentId());
+        $fetchedPayment = $this->unzer->fetchPayment($payout->getPaymentId());
         $this->assertInstanceOf(Payout::class, $fetchedPayment->getPayout());
         $this->assertEquals(100, $payout->getAmount());
         $this->assertEquals('EUR', $payout->getCurrency());
@@ -126,10 +126,10 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutShouldBeFetchableViaItsUrl(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $payout = $card->payout(100.0, 'EUR', self::RETURN_URL);
 
-        $resourceSrv = new ResourceService($this->heidelpay);
+        $resourceSrv = new ResourceService($this->unzer);
         $fetchedPayout = $resourceSrv->fetchResourceByUrl($payout->getUri());
         $this->assertEquals($payout->expose(), $fetchedPayout->expose());
     }
@@ -142,7 +142,7 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutShouldAcceptAllParameters(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
         $orderId = 'o'. self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
@@ -164,7 +164,7 @@ class PayoutTest extends BaseIntegrationTest
         $this->assertEquals($invoiceId, $payout->getInvoiceId());
         $this->assertEquals($paymentReference, $payout->getPaymentReference());
 
-        $fetchedPayout = $this->heidelpay->fetchPayout($payout->getPaymentId());
+        $fetchedPayout = $this->unzer->fetchPayout($payout->getPaymentId());
         $fetchedPayment = $fetchedPayout->getPayment();
 
         $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());

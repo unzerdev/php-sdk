@@ -1,15 +1,26 @@
 <?php
 /**
- * Description
+ * The interface for the CancelService.
  *
- * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
- * @link  http://dev.heidelpay.com/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @link  https://docs.unzer.com/
  *
  * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpay/${Package}
+ * @package  UnzerSDK\Interfaces
  */
 namespace UnzerSDK\Interfaces;
 
@@ -32,7 +43,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAuthorization(Authorization $authorization, float $amount = null): Cancellation;
@@ -46,7 +57,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation Resulting Cancellation object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAuthorizationByPayment($payment, float $amount = null): Cancellation;
@@ -66,7 +77,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelChargeById(
@@ -93,7 +104,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelCharge(
@@ -119,7 +130,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function cancelPayment(
@@ -141,7 +152,7 @@ interface CancelServiceInterface
      *
      * @return Cancellation|null The resulting cancellation.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function cancelPaymentAuthorization($payment, float $amount = null): ?Cancellation;

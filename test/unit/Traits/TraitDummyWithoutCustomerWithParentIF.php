@@ -40,7 +40,7 @@ class TraitDummyWithoutCustomerWithParentIF implements UnzerParentInterface
     use CanPayout;
 
     /**
-     * Returns the heidelpay root object.
+     * Returns the Unzer root object.
      *
      * @return Unzer
      */

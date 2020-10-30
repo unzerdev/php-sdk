@@ -59,7 +59,7 @@ trait CustomerFixtureTrait
             ->setMobile('+49172123456')
             ->setPhone('+4962216471100')
             ->setBillingAddress($this->getBillingAddress())
-            ->setParentResource($this->heidelpay);
+            ->setParentResource($this->unzer);
     }
 
     /**

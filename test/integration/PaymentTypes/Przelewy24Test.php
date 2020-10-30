@@ -44,11 +44,11 @@ class Przelewy24Test extends BaseIntegrationTest
      */
     public function przelewy24ShouldBeCreatableAndFetchable(): BasePaymentType
     {
-        $przelewy24 = $this->heidelpay->createPaymentType(new Przelewy24());
+        $przelewy24 = $this->unzer->createPaymentType(new Przelewy24());
         $this->assertInstanceOf(Przelewy24::class, $przelewy24);
         $this->assertNotEmpty($przelewy24->getId());
 
-        $fetchedPrzelewy24 = $this->heidelpay->fetchPaymentType($przelewy24->getId());
+        $fetchedPrzelewy24 = $this->unzer->fetchPaymentType($przelewy24->getId());
         $this->assertInstanceOf(Przelewy24::class, $fetchedPrzelewy24);
         $this->assertNotSame($przelewy24, $fetchedPrzelewy24);
         $this->assertEquals($przelewy24->expose(), $fetchedPrzelewy24->expose());
@@ -89,7 +89,7 @@ class Przelewy24Test extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'PLN', $przelewy24, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'PLN', $przelewy24, self::RETURN_URL);
     }
 
     /**
@@ -104,7 +104,7 @@ class Przelewy24Test extends BaseIntegrationTest
     public function przelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode): void
     {
         /** @var Przelewy24 $przelewy24 */
-        $przelewy24 = $this->heidelpay->createPaymentType(new Przelewy24());
+        $przelewy24 = $this->unzer->createPaymentType(new Przelewy24());
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CURRENCY_IS_NOT_SUPPORTED);
         $przelewy24->charge(100.0, $currencyCode, self::RETURN_URL);

@@ -299,7 +299,7 @@ class PayPageTest extends BasePaymentTest
 
         // when
         $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
-        $payment = (new Payment())->setParentResource($this->heidelpay->setResourceService($resourceSrvMock));
+        $payment = (new Payment())->setParentResource($this->unzer->setResourceService($resourceSrvMock));
         $paypage->setPayment($payment)->setParentResource($payment);
 
         // should
@@ -325,7 +325,7 @@ class PayPageTest extends BasePaymentTest
         $customer = (new Customer())->setId('customerId');
         $metadata = (new Metadata())->setId('metadataId');
         $payment = (new Payment())
-            ->setParentResource($this->heidelpay)
+            ->setParentResource($this->unzer)
             ->setId('my payment id')
             ->setBasket($basket)
             ->setMetadata($metadata)
@@ -399,7 +399,7 @@ class PayPageTest extends BasePaymentTest
         $basket = (new Basket())->setId('basketId');
         $customer = (new Customer())->setId('customerId');
         $metadata = (new Metadata())->setId('metadataId');
-        $payment = (new Payment())->setParentResource($this->heidelpay)->setBasket($basket)->setMetadata($metadata)->setCustomer($customer);
+        $payment = (new Payment())->setParentResource($this->unzer)->setBasket($basket)->setMetadata($metadata)->setCustomer($customer);
         $paypage->setPayment($payment);
 
         // then

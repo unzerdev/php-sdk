@@ -36,7 +36,7 @@ use RuntimeException;
 class CanDirectChargeWithCustomerTest extends BasePaymentTest
 {
     /**
-     * Verify direct charge throws exception if the class does not implement the HeidelpayParentInterface.
+     * Verify direct charge throws exception if the class does not implement the UnzerParentInterface.
      *
      * @test
      */
@@ -51,20 +51,20 @@ class CanDirectChargeWithCustomerTest extends BasePaymentTest
     }
 
     /**
-     * Verify direct charge propagates to heidelpay object.
+     * Verify direct charge propagates to Unzer object.
      *
      * @test
      */
-    public function directChargeShouldPropagateToHeidelpay(): void
+    public function directChargeShouldPropagateToUnzer(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
+        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
         $dummyMock = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $charge = new Charge();
         $metadata  = new Metadata();
         $customer = (new Customer())->setId('123');
-        $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($heidelpayMock);
-        $heidelpayMock->expects($this->exactly(3))->method('charge')
+        $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($unzerMock);
+        $unzerMock->expects($this->exactly(3))->method('charge')
             ->withConsecutive(
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
                 [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId'],

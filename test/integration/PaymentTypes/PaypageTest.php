@@ -43,7 +43,7 @@ class PaypageTest extends BaseIntegrationTest
     {
         $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageCharge($paypage);
+        $paypage = $this->unzer->initPayPageCharge($paypage);
         $this->assertNotEmpty($paypage->getId());
     }
 
@@ -80,7 +80,7 @@ class PaypageTest extends BaseIntegrationTest
                 'contactUrl' => 'color: green',
             ]);
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageCharge($paypage, $customer, $basket);
+        $paypage = $this->unzer->initPayPageCharge($paypage, $customer, $basket);
         $this->assertNotEmpty($paypage->getId());
         $this->assertEquals(4.99, $paypage->getEffectiveInterestRate());
         $payment = $paypage->getPayment();
@@ -98,7 +98,7 @@ class PaypageTest extends BaseIntegrationTest
     {
         $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageAuthorize($paypage);
+        $paypage = $this->unzer->initPayPageAuthorize($paypage);
         $this->assertNotEmpty($paypage->getId());
     }
 
@@ -136,7 +136,7 @@ class PaypageTest extends BaseIntegrationTest
             ]);
         $paypage->addExcludeType(Card::getResourceName());
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
+        $paypage = $this->unzer->initPayPageAuthorize($paypage, $customer, $basket);
         $this->assertNotEmpty($paypage->getId());
         $this->assertEquals(4.99, $paypage->getEffectiveInterestRate());
         $this->assertEquals([Card::getResourceName()], $paypage->getExcludeTypes());
@@ -155,7 +155,7 @@ class PaypageTest extends BaseIntegrationTest
     {
         $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageAuthorize($paypage->setCss([]));
+        $paypage = $this->unzer->initPayPageAuthorize($paypage->setCss([]));
         $this->assertNotEmpty($paypage->getId());
     }
 }

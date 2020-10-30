@@ -1179,23 +1179,23 @@ class PaymentTest extends BasePaymentTest
     //</editor-fold>
 
     /**
-     * Verify charge will call chargePayment on heidelpay object.
+     * Verify charge will call chargePayment on Unzer object.
      *
      * @test
      */
-    public function chargeMethodShouldPropagateToHeidelpayChargePaymentMethod(): void
+    public function chargeMethodShouldPropagateToUnzerChargePaymentMethod(): void
     {
         $payment = new Payment();
 
-        /** @var Unzer|MockObject $heidelpayMock */
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['chargePayment'])->getMock();
-        $heidelpayMock->expects($this->exactly(3))->method('chargePayment')
+        /** @var Unzer|MockObject $unzerMock */
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['chargePayment'])->getMock();
+        $unzerMock->expects($this->exactly(3))->method('chargePayment')
             ->withConsecutive(
                 [$payment, null, null],
                 [$payment, 1.1, null],
                 [$payment, 2.2, 'MyCurrency']
             )->willReturn(new Charge());
-        $payment->setParentResource($heidelpayMock);
+        $payment->setParentResource($unzerMock);
 
         $payment->charge();
         $payment->charge(1.1);
@@ -1203,19 +1203,19 @@ class PaymentTest extends BasePaymentTest
     }
 
     /**
-     * Verify ship will call ship method on heidelpay object.
+     * Verify ship will call ship method on Unzer object.
      *
      * @test
      */
-    public function shipMethodShouldPropagateToHeidelpayChargePaymentMethod(): void
+    public function shipMethodShouldPropagateToUnzerChargePaymentMethod(): void
     {
         $payment = new Payment();
 
-        /** @var Unzer|MockObject $heidelpayMock */
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['ship'])->getMock();
-        $heidelpayMock->expects($this->once())->method('ship')->willReturn(new Shipment());
+        /** @var Unzer|MockObject $unzerMock */
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['ship'])->getMock();
+        $unzerMock->expects($this->once())->method('ship')->willReturn(new Shipment());
 
-        $payment->setParentResource($heidelpayMock);
+        $payment->setParentResource($unzerMock);
         $payment->ship();
     }
 
@@ -1414,9 +1414,9 @@ class PaymentTest extends BasePaymentTest
         $charge = new Charge();
 
         return [
-            'charge' => [$charge, (new Payment($this->getHeidelpayObject()))->addCharge($charge)],
-            'authorize' => [$authorize, (new Payment($this->getHeidelpayObject()))->setAuthorization($authorize)],
-            'authorize and charge' => [$authorize, (new Payment($this->getHeidelpayObject()))->addCharge($charge)->setAuthorization($authorize)]
+            'charge' => [$charge, (new Payment($this->getUnzerObject()))->addCharge($charge)],
+            'authorize' => [$authorize, (new Payment($this->getUnzerObject()))->setAuthorization($authorize)],
+            'authorize and charge' => [$authorize, (new Payment($this->getUnzerObject()))->addCharge($charge)->setAuthorization($authorize)]
         ];
     }
 

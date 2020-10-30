@@ -291,7 +291,7 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      *
      * @return AbstractUnzerResource
      *
-     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     protected function getResource(AbstractUnzerResource $resource): AbstractUnzerResource
@@ -304,7 +304,7 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      *
      * @param AbstractUnzerResource $resource
      *
-     * @throws UnzerApiException A UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     protected function fetchResource(AbstractUnzerResource $resource): void

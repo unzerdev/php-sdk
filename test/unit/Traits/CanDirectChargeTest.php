@@ -36,7 +36,7 @@ use RuntimeException;
 class CanDirectChargeTest extends BasePaymentTest
 {
     /**
-     * Verify direct charge throws exception if the class does not implement the HeidelpayParentInterface.
+     * Verify direct charge throws exception if the class does not implement the UnzerParentInterface.
      *
      * @test
      */
@@ -51,11 +51,11 @@ class CanDirectChargeTest extends BasePaymentTest
     }
 
     /**
-     * Verify direct charge propagates to heidelpay object.
+     * Verify direct charge propagates to Unzer object.
      *
      * @test
      */
-    public function directChargeShouldPropagateToHeidelpay(): void
+    public function directChargeShouldPropagateToUnzer(): void
     {
         $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
         $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();

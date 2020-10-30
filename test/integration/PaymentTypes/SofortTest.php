@@ -44,12 +44,12 @@ class SofortTest extends BaseIntegrationTest
      */
     public function sofortShouldBeCreatableAndFetchable(): Sofort
     {
-        $sofort = $this->heidelpay->createPaymentType(new Sofort());
+        $sofort = $this->unzer->createPaymentType(new Sofort());
         $this->assertInstanceOf(Sofort::class, $sofort);
         $this->assertNotNull($sofort->getId());
 
         /** @var Sofort $fetchedSofort */
-        $fetchedSofort = $this->heidelpay->fetchPaymentType($sofort->getId());
+        $fetchedSofort = $this->unzer->fetchPaymentType($sofort->getId());
         $this->assertInstanceOf(Sofort::class, $fetchedSofort);
         $this->assertEquals($sofort->expose(), $fetchedSofort->expose());
 
@@ -89,6 +89,6 @@ class SofortTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'EUR', $sofort, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $sofort, self::RETURN_URL);
     }
 }

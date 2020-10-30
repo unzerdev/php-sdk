@@ -146,26 +146,26 @@ class AuthorizationTest extends BasePaymentTest
     }
 
     /**
-     * Verify cancel() calls cancelAuthorization() on heidelpay object with the given amount.
+     * Verify cancel() calls cancelAuthorization() on Unzer object with the given amount.
      *
      * @test
      */
-    public function cancelShouldCallCancelAuthorizationOnHeidelpayObject(): void
+    public function cancelShouldCallCancelAuthorizationOnUnzerObject(): void
     {
         $authorization =  new Authorization();
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)
+        $unzerMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['cancelAuthorization'])
             ->getMock();
-        $heidelpayMock->expects($this->exactly(2))
+        $unzerMock->expects($this->exactly(2))
             ->method('cancelAuthorization')->willReturn(new Cancellation())
             ->withConsecutive(
                 [$this->identicalTo($authorization), $this->isNull()],
                 [$this->identicalTo($authorization), 321.9]
             );
 
-        /** @var Unzer $heidelpayMock */
-        $authorization->setParentResource($heidelpayMock);
+        /** @var Unzer $unzerMock */
+        $authorization->setParentResource($unzerMock);
         $authorization->cancel();
         $authorization->cancel(321.9);
     }
@@ -188,19 +188,19 @@ class AuthorizationTest extends BasePaymentTest
     }
 
     /**
-     * Verify charge() calls chargeAuthorization() on heidelpay object with the given amount.
+     * Verify charge() calls chargeAuthorization() on Unzer object with the given amount.
      *
      * @test
      */
-    public function chargeShouldCallChargeAuthorizationOnHeidelpayObject(): void
+    public function chargeShouldCallChargeAuthorizationOnUnzerObject(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)
+        $unzerMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['chargeAuthorization'])
             ->getMock();
-        /** @var Unzer $heidelpayMock */
-        $payment = (new Payment())->setParentResource($heidelpayMock)->setId('myPayment');
-        $heidelpayMock->expects($this->exactly(2))
+        /** @var Unzer $unzerMock */
+        $payment = (new Payment())->setParentResource($unzerMock)->setId('myPayment');
+        $unzerMock->expects($this->exactly(2))
             ->method('chargeAuthorization')->willReturn(new Charge())
             ->withConsecutive(
                 [$this->identicalTo($payment), $this->isNull()],

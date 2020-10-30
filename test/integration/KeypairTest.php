@@ -67,7 +67,7 @@ class KeypairTest extends BaseIntegrationTest
      */
     public function keypairShouldReturnExpectedValues(): void
     {
-        $keypair = $this->heidelpay->fetchKeypair();
+        $keypair = $this->unzer->fetchKeypair();
         $this->assertNotNull($keypair);
         $this->assertNotEmpty($keypair->getPublicKey());
         $this->assertNotEmpty($keypair->getPrivateKey());
@@ -82,7 +82,7 @@ class KeypairTest extends BaseIntegrationTest
      */
     public function keypairShouldBeFetchableWithDetails(): void
     {
-        $keypair = $this->heidelpay->fetchKeypair(true);
+        $keypair = $this->unzer->fetchKeypair(true);
         $this->assertNotNull($keypair);
         $this->assertNotEmpty($keypair->getPublicKey());
         $this->assertNotEmpty($keypair->getPrivateKey());

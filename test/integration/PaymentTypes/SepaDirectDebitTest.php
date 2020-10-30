@@ -43,12 +43,12 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     {
         $directDebit = new SepaDirectDebit('DE89370400440532013000');
         /** @var SepaDirectDebit $directDebit */
-        $directDebit = $this->heidelpay->createPaymentType($directDebit);
+        $directDebit = $this->unzer->createPaymentType($directDebit);
         $this->assertInstanceOf(SepaDirectDebit::class, $directDebit);
         $this->assertNotNull($directDebit->getId());
 
         /** @var SepaDirectDebit $fetchedDirectDebit */
-        $fetchedDirectDebit = $this->heidelpay->fetchPaymentType($directDebit->getId());
+        $fetchedDirectDebit = $this->unzer->fetchPaymentType($directDebit->getId());
         $this->assertEquals($directDebit->expose(), $fetchedDirectDebit->expose());
     }
 
@@ -61,12 +61,12 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     {
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
         /** @var SepaDirectDebit $sdd */
-        $sdd = $this->heidelpay->createPaymentType($sdd);
+        $sdd = $this->unzer->createPaymentType($sdd);
         $this->assertInstanceOf(SepaDirectDebit::class, $sdd);
         $this->assertNotNull($sdd->getId());
 
         /** @var SepaDirectDebit $fetchedDirectDebit */
-        $fetchedDirectDebit = $this->heidelpay->fetchPaymentType($sdd->getId());
+        $fetchedDirectDebit = $this->unzer->fetchPaymentType($sdd->getId());
         $this->assertEquals($sdd->expose(), $fetchedDirectDebit->expose());
     }
 
@@ -79,11 +79,11 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     {
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
         /** @var SepaDirectDebit $sdd */
-        $sdd = $this->heidelpay->createPaymentType($sdd);
+        $sdd = $this->unzer->createPaymentType($sdd);
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(1.0, 'EUR', $sdd, self::RETURN_URL);
+        $this->unzer->authorize(1.0, 'EUR', $sdd, self::RETURN_URL);
     }
 
     /**
@@ -93,7 +93,7 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     {
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
         /** @var SepaDirectDebit $sdd */
-        $sdd = $this->heidelpay->createPaymentType($sdd);
+        $sdd = $this->unzer->createPaymentType($sdd);
         $charge = $sdd->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
@@ -108,7 +108,7 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     {
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setHolder('Max Mustermann')->setBic('COBADEFFXXX');
         /** @var SepaDirectDebit $sdd */
-        $sdd = $this->heidelpay->createPaymentType($sdd);
+        $sdd = $this->unzer->createPaymentType($sdd);
         $charge = $sdd->charge(100.0, 'EUR', self::RETURN_URL);
 
         // when

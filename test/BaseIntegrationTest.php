@@ -36,7 +36,7 @@ class BaseIntegrationTest extends BasePaymentTest
      */
     protected function setUp(): void
     {
-        $this->getHeidelpayObject(EnvironmentService::getTestPrivateKey());
+        $this->getUnzerObject(EnvironmentService::getTestPrivateKey());
     }
 
     /**
@@ -47,7 +47,7 @@ class BaseIntegrationTest extends BasePaymentTest
     protected function tearDown(): void
     {
         /** @var TestDebugHandler $debugHandler */
-        $debugHandler = $this->heidelpay->getDebugHandler();
+        $debugHandler = $this->unzer->getDebugHandler();
 
         if ($this->getStatus() === BaseTestRunner::STATUS_PASSED) {
             $debugHandler->clearTempLog();

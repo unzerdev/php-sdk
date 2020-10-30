@@ -40,16 +40,16 @@ use function is_string;
 class CancelService implements CancelServiceInterface
 {
     /** @var Unzer */
-    private $heidelpay;
+    private $unzer;
 
     /**
      * PaymentService constructor.
      *
-     * @param Unzer $heidelpay
+     * @param Unzer $unzer
      */
-    public function __construct(Unzer $heidelpay)
+    public function __construct(Unzer $unzer)
     {
-        $this->heidelpay = $heidelpay;
+        $this->unzer = $unzer;
     }
 
     //<editor-fold desc="Getters/Setters"
@@ -57,19 +57,19 @@ class CancelService implements CancelServiceInterface
     /**
      * @return Unzer
      */
-    public function getHeidelpay(): Unzer
+    public function getUnzer(): Unzer
     {
-        return $this->heidelpay;
+        return $this->unzer;
     }
 
     /**
-     * @param Unzer $heidelpay
+     * @param Unzer $unzer
      *
      * @return CancelService
      */
-    public function setHeidelpay(Unzer $heidelpay): CancelService
+    public function setUnzer(Unzer $unzer): CancelService
     {
-        $this->heidelpay = $heidelpay;
+        $this->unzer = $unzer;
         return $this;
     }
 
@@ -78,7 +78,7 @@ class CancelService implements CancelServiceInterface
      */
     public function getResourceService(): ResourceService
     {
-        return $this->getHeidelpay()->getResourceService();
+        return $this->getUnzer()->getResourceService();
     }
 
     //</editor-fold>

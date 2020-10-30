@@ -44,12 +44,12 @@ class AlipayTest extends BaseIntegrationTest
      */
     public function alipayShouldBeCreatableAndFetchable(): Alipay
     {
-        $alipay = $this->heidelpay->createPaymentType(new Alipay());
+        $alipay = $this->unzer->createPaymentType(new Alipay());
         $this->assertInstanceOf(Alipay::class, $alipay);
         $this->assertNotNull($alipay->getId());
 
         /** @var Alipay $fetchedAlipay */
-        $fetchedAlipay = $this->heidelpay->fetchPaymentType($alipay->getId());
+        $fetchedAlipay = $this->unzer->fetchPaymentType($alipay->getId());
         $this->assertInstanceOf(Alipay::class, $fetchedAlipay);
         $this->assertEquals($alipay->expose(), $fetchedAlipay->expose());
 
@@ -89,6 +89,6 @@ class AlipayTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'EUR', $alipay, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $alipay, self::RETURN_URL);
     }
 }

@@ -36,7 +36,7 @@ trait CanDirectCharge
 {
     /**
      * Charge an amount with the given currency.
-     * Throws HeidelpayApiException if the transaction could not be performed (e. g. increased risk etc.).
+     * Throws UnzerApiException if the transaction could not be performed (e. g. increased risk etc.).
      *
      * @param $amount
      * @param $currency
@@ -54,7 +54,7 @@ trait CanDirectCharge
      *
      * @return Charge The resulting charge object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function charge(
@@ -86,7 +86,7 @@ trait CanDirectCharge
         }
 
         throw new RuntimeException(
-            self::class . ' must implement HeidelpayParentInterface to enable ' . __METHOD__ . ' transaction.'
+            self::class . ' must implement UnzerParentInterface to enable ' . __METHOD__ . ' transaction.'
         );
     }
 }

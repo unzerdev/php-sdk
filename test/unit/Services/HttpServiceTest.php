@@ -117,7 +117,7 @@ class HttpServiceTest extends BasePaymentTest
             'GET'
         );
         /** @noinspection PhpParamsInspection */
-        $adapterMock->expects($this->once())->method('setUserAgent')->with('heidelpayPHP');
+        $adapterMock->expects($this->once())->method('setUserAgent')->with('UnzerPHP');
         $headers = [
             'Authorization' => 'Basic cy1wcml2LU15VGVzdEtleTo=',
             'Content-Type'  => 'application/json',
@@ -139,7 +139,7 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify 'Accept-Language' header only set when a locale is defined in the heidelpay object.
+     * Verify 'Accept-Language' header only set when a locale is defined in the Unzer object.
      *
      * @test
      * @dataProvider languageShouldOnlyBeSetIfSpecificallyDefinedDP

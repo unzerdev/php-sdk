@@ -43,10 +43,10 @@ class BancontactTest extends BaseIntegrationTest
     public function bancontactShouldBeCreatableAndFetchable(): void
     {
         $bancontact = new Bancontact();
-        $this->heidelpay->createPaymentType($bancontact);
+        $this->unzer->createPaymentType($bancontact);
         $this->assertNotNull($bancontact->getId());
 
-        $this->heidelpay->fetchPaymentType($bancontact->getId());
+        $this->unzer->fetchPaymentType($bancontact->getId());
         $this->assertInstanceOf(Bancontact::class, $bancontact);
         $this->assertNull($bancontact->getHolder());
     }
@@ -61,8 +61,8 @@ class BancontactTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $bancontact = $this->heidelpay->createPaymentType(new Bancontact());
-        $this->heidelpay->authorize(100.0, 'EUR', $bancontact, self::RETURN_URL);
+        $bancontact = $this->unzer->createPaymentType(new Bancontact());
+        $this->unzer->authorize(100.0, 'EUR', $bancontact, self::RETURN_URL);
     }
     
     /**
@@ -73,7 +73,7 @@ class BancontactTest extends BaseIntegrationTest
     public function bancontactShouldBeChargeable(): void
     {
         /** @var Bancontact $bancontact */
-        $bancontact = $this->heidelpay->createPaymentType(new Bancontact());
+        $bancontact = $this->unzer->createPaymentType(new Bancontact());
         $charge = $bancontact->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
@@ -88,9 +88,9 @@ class BancontactTest extends BaseIntegrationTest
     {
         $bancontact = new Bancontact();
         $bancontact->setHolder('test');
-        $bancontact = $this->heidelpay->createPaymentType($bancontact);
+        $bancontact = $this->unzer->createPaymentType($bancontact);
         /** @var Bancontact $fetchedBancontact */
-        $fetchedBancontact = $this->heidelpay->fetchPaymentType($bancontact->getId());
+        $fetchedBancontact = $this->unzer->fetchPaymentType($bancontact->getId());
 
         $this->assertEquals('test', $fetchedBancontact->getHolder());
     }

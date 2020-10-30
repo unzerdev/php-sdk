@@ -44,12 +44,12 @@ class PISTest extends BaseIntegrationTest
      */
     public function pisShouldBeCreatableAndFetchable(): PIS
     {
-        $pis = $this->heidelpay->createPaymentType(new PIS());
+        $pis = $this->unzer->createPaymentType(new PIS());
         $this->assertInstanceOf(PIS::class, $pis);
         $this->assertNotNull($pis->getId());
 
         /** @var PIS $fetchedPIS */
-        $fetchedPIS = $this->heidelpay->fetchPaymentType($pis->getId());
+        $fetchedPIS = $this->unzer->fetchPaymentType($pis->getId());
         $this->assertInstanceOf(PIS::class, $fetchedPIS);
         $this->assertEquals($pis->expose(), $fetchedPIS->expose());
 
@@ -89,6 +89,6 @@ class PISTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'EUR', $pis, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $pis, self::RETURN_URL);
     }
 }

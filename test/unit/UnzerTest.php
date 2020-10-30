@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This class defines unit tests to verify functionality of the heidelpay class.
+ * This class defines unit tests to verify functionality of the Unzer class.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -57,20 +57,20 @@ class UnzerTest extends BasePaymentTest
      */
     public function constructorShouldInitPropertiesProperly(): void
     {
-        $heidelpay = new Unzer('s-priv-1234');
-        $paymentService = $heidelpay->getPaymentService();
+        $unzer = new Unzer('s-priv-1234');
+        $paymentService = $unzer->getPaymentService();
         $this->assertInstanceOf(PaymentService::class, $paymentService);
-        $this->assertInstanceOf(WebhookService::class, $heidelpay->getWebhookService());
+        $this->assertInstanceOf(WebhookService::class, $unzer->getWebhookService());
         /** @var PaymentService $paymentService */
-        $this->assertSame($heidelpay, $paymentService->getHeidelpay());
-        $this->assertEquals('s-priv-1234', $heidelpay->getKey());
-        $this->assertEquals(null, $heidelpay->getLocale());
+        $this->assertSame($unzer, $paymentService->getUnzer());
+        $this->assertEquals('s-priv-1234', $unzer->getKey());
+        $this->assertEquals(null, $unzer->getLocale());
 
-        $heidelpaySwiss = new Unzer('s-priv-1234', 'de-CH');
-        $this->assertEquals('de-CH', $heidelpaySwiss->getLocale());
+        $unzerSwiss = new Unzer('s-priv-1234', 'de-CH');
+        $this->assertEquals('de-CH', $unzerSwiss->getLocale());
 
-        $heidelpayGerman = new Unzer('s-priv-1234', 'de-DE');
-        $this->assertEquals('de-DE', $heidelpayGerman->getLocale());
+        $unzerGerman = new Unzer('s-priv-1234', 'de-DE');
+        $this->assertEquals('de-DE', $unzerGerman->getLocale());
     }
 
     /**
@@ -80,152 +80,152 @@ class UnzerTest extends BasePaymentTest
      */
     public function gettersAndSettersShouldWorkProperly(): void
     {
-        $heidelpay = new Unzer('s-priv-1234');
-        $heidelpay->setLocale('myLocale');
-        $this->assertEquals('myLocale', $heidelpay->getLocale());
+        $unzer = new Unzer('s-priv-1234');
+        $unzer->setLocale('myLocale');
+        $this->assertEquals('myLocale', $unzer->getLocale());
 
         try {
-            $heidelpay->setKey('this is not a valid key');
+            $unzer->setKey('this is not a valid key');
             $this->assertTrue(false, 'This exception should have been thrown');
         } catch (RuntimeException $e) {
             $this->assertEquals('Illegal key: Use a valid private key with this SDK!', $e->getMessage());
         }
 
         $httpService = new HttpService();
-        $this->assertNotSame($httpService, $heidelpay->getHttpService());
-        $heidelpay->setHttpService($httpService);
-        $this->assertSame($httpService, $heidelpay->getHttpService());
+        $this->assertNotSame($httpService, $unzer->getHttpService());
+        $unzer->setHttpService($httpService);
+        $this->assertSame($httpService, $unzer->getHttpService());
 
-        $resourceSrv = new ResourceService($heidelpay);
-        $heidelpay->setResourceService($resourceSrv);
-        $this->assertSame($resourceSrv, $heidelpay->getResourceService());
+        $resourceSrv = new ResourceService($unzer);
+        $unzer->setResourceService($resourceSrv);
+        $this->assertSame($resourceSrv, $unzer->getResourceService());
 
-        $paymentSrv = new PaymentService($heidelpay);
-        $heidelpay->setPaymentService($paymentSrv);
-        $this->assertSame($paymentSrv, $heidelpay->getPaymentService());
+        $paymentSrv = new PaymentService($unzer);
+        $unzer->setPaymentService($paymentSrv);
+        $this->assertSame($paymentSrv, $unzer->getPaymentService());
 
-        $webhookSrv = new WebhookService($heidelpay);
-        $heidelpay->setWebhookService($webhookSrv);
-        $this->assertSame($webhookSrv, $heidelpay->getWebhookService());
+        $webhookSrv = new WebhookService($unzer);
+        $unzer->setWebhookService($webhookSrv);
+        $this->assertSame($webhookSrv, $unzer->getWebhookService());
 
-        $this->assertFalse($heidelpay->isDebugMode());
-        $heidelpay->setDebugMode(true);
-        $this->assertTrue($heidelpay->isDebugMode());
-        $heidelpay->setDebugMode(false);
-        $this->assertFalse($heidelpay->isDebugMode());
+        $this->assertFalse($unzer->isDebugMode());
+        $unzer->setDebugMode(true);
+        $this->assertTrue($unzer->isDebugMode());
+        $unzer->setDebugMode(false);
+        $this->assertFalse($unzer->isDebugMode());
 
-        $this->assertNull($heidelpay->getDebugHandler());
+        $this->assertNull($unzer->getDebugHandler());
         $dummyDebugHandler = new DummyDebugHandler();
-        $heidelpay->setDebugHandler($dummyDebugHandler);
-        $this->assertSame($dummyDebugHandler, $heidelpay->getDebugHandler());
+        $unzer->setDebugHandler($dummyDebugHandler);
+        $this->assertSame($dummyDebugHandler, $unzer->getDebugHandler());
 
-        $this->assertEquals('', $heidelpay->getUri());
+        $this->assertEquals('', $unzer->getUri());
     }
 
     /**
-     * Verify heidelpay propagates resource actions to the resource service.
+     * Verify Unzer propagates resource actions to the resource service.
      *
      * @test
      * @dataProvider resourceServiceDP
      *
-     * @param string $heidelpayMethod
-     * @param array  $heidelpayParams
+     * @param string $unzerMethod
+     * @param array  $unzerParams
      * @param string $serviceMethod
      * @param array  $serviceParams
      */
-    public function heidelpayShouldForwardResourceActionCallsToTheResourceService(
-        $heidelpayMethod,
-        array $heidelpayParams,
+    public function unzerShouldForwardResourceActionCallsToTheResourceService(
+        $unzerMethod,
+        array $unzerParams,
         $serviceMethod,
         array $serviceParams
     ): void {
         /** @var ResourceService|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $resourceSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = (new Unzer('s-priv-234'))->setResourceService($resourceSrvMock);
+        $unzer = (new Unzer('s-priv-234'))->setResourceService($resourceSrvMock);
 
-        $heidelpay->$heidelpayMethod(...$heidelpayParams);
+        $unzer->$unzerMethod(...$unzerParams);
     }
 
     /**
-     * Verify heidelpay propagates payment actions to the payment service.
+     * Verify Unzer propagates payment actions to the payment service.
      *
      * @test
      * @dataProvider paymentServiceDP
      *
-     * @param string $heidelpayMethod
-     * @param array  $heidelpayParams
+     * @param string $unzerMethod
+     * @param array  $unzerParams
      * @param string $serviceMethod
      * @param array  $serviceParams
      */
-    public function heidelpayShouldForwardPaymentActionCallsToThePaymentService(
-        $heidelpayMethod,
-        array $heidelpayParams,
+    public function unzerShouldForwardPaymentActionCallsToThePaymentService(
+        $unzerMethod,
+        array $unzerParams,
         $serviceMethod,
         array $serviceParams
     ): void {
         /** @var PaymentService|MockObject $paymentSrvMock */
         $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $paymentSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = (new Unzer('s-priv-234'))->setPaymentService($paymentSrvMock);
+        $unzer = (new Unzer('s-priv-234'))->setPaymentService($paymentSrvMock);
 
-        $heidelpay->$heidelpayMethod(...$heidelpayParams);
+        $unzer->$unzerMethod(...$unzerParams);
     }
 
     /**
-     * Verify heidelpay propagates webhook actions to the webhook service.
+     * Verify Unzer propagates webhook actions to the webhook service.
      *
      * @test
-     * @dataProvider heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP
+     * @dataProvider UnzerShouldForwardWebhookActionCallsToTheWebhookServiceDP
      *
-     * @param string $heidelpayMethod
-     * @param array  $heidelpayParams
+     * @param string $unzerMethod
+     * @param array  $unzerParams
      * @param string $serviceMethod
      * @param array  $serviceParams
      */
-    public function heidelpayShouldForwardWebhookActionCallsToTheWebhookService(
-        $heidelpayMethod,
-        array $heidelpayParams,
+    public function unzerShouldForwardWebhookActionCallsToTheWebhookService(
+        $unzerMethod,
+        array $unzerParams,
         $serviceMethod,
         array $serviceParams
     ): void {
         /** @var WebhookService|MockObject $webhookSrvMock */
         $webhookSrvMock = $this->getMockBuilder(WebhookService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $webhookSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = (new Unzer('s-priv-234'))->setWebhookService($webhookSrvMock);
+        $unzer = (new Unzer('s-priv-234'))->setWebhookService($webhookSrvMock);
 
-        $heidelpay->$heidelpayMethod(...$heidelpayParams);
+        $unzer->$unzerMethod(...$unzerParams);
     }
 
     /**
-     * Verify heidelpay propagates cancel actions to the cancel service.
+     * Verify Unzer propagates cancel actions to the cancel service.
      *
      * @test
      * @dataProvider cancelServiceDP
      *
-     * @param string $heidelpayMethod
-     * @param array  $heidelpayParams
+     * @param string $unzerMethod
+     * @param array  $unzerParams
      * @param string $serviceMethod
      * @param array  $serviceParams
      */
-    public function heidelpayShouldForwardCancelActionCallsToTheCancelService(
-        $heidelpayMethod,
-        array $heidelpayParams,
+    public function unzerShouldForwardCancelActionCallsToTheCancelService(
+        $unzerMethod,
+        array $unzerParams,
         $serviceMethod,
         array $serviceParams
     ): void {
         /** @var CancelService|MockObject $cancelSrvMock */
         $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods([$serviceMethod])->getMock();
         $cancelSrvMock->expects($this->once())->method($serviceMethod)->with(...$serviceParams);
-        $heidelpay = (new Unzer('s-priv-234'))->setCancelService($cancelSrvMock);
+        $unzer = (new Unzer('s-priv-234'))->setCancelService($cancelSrvMock);
 
-        $heidelpay->$heidelpayMethod(...$heidelpayParams);
+        $unzer->$unzerMethod(...$unzerParams);
     }
 
     //<editor-fold desc="DataProviders">
 
     /**
-     * Provide test data for heidelpayShouldForwardResourceActionCallsToTheResourceService.
+     * Provide test data for unzerShouldForwardResourceActionCallsToTheResourceService.
      *
      * @return array
      */
@@ -289,7 +289,7 @@ class UnzerTest extends BasePaymentTest
     }
 
     /**
-     * Provide test data for heidelpayShouldForwardPaymentActionCallsToThePaymentService.
+     * Provide test data for unzerShouldForwardPaymentActionCallsToThePaymentService.
      *
      * @return array
      */
@@ -329,11 +329,11 @@ class UnzerTest extends BasePaymentTest
     }
 
     /**
-     * Provide test data for heidelpayShouldForwardWebhookActionCallsToTheWebhookService.
+     * Provide test data for unzerShouldForwardWebhookActionCallsToTheWebhookService.
      *
      * @return array
      */
-    public static function heidelpayShouldForwardWebhookActionCallsToTheWebhookServiceDP(): array
+    public static function unzerShouldForwardWebhookActionCallsToTheWebhookServiceDP(): array
     {
         $url       = 'https://dev.heidelpay.com';
         $webhookId = 'webhookId';

@@ -41,11 +41,11 @@ class PaypalTest extends BaseIntegrationTest
      */
     public function paypalShouldBeCreatableAndFetchable(): BasePaymentType
     {
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $this->assertInstanceOf(Paypal::class, $paypal);
         $this->assertNotEmpty($paypal->getId());
 
-        $fetchedPaypal = $this->heidelpay->fetchPaymentType($paypal->getId());
+        $fetchedPaypal = $this->unzer->fetchPaymentType($paypal->getId());
         $this->assertInstanceOf(Paypal::class, $fetchedPaypal);
         $this->assertNotSame($paypal, $fetchedPaypal);
         $this->assertEquals($paypal->expose(), $fetchedPaypal->expose());
@@ -63,10 +63,10 @@ class PaypalTest extends BaseIntegrationTest
     public function paypalShouldBeCreatableAndFetchableWithEmail(): BasePaymentType
     {
         $paypal = (new Paypal())->setEmail('max@mustermann.de');
-        $this->heidelpay->createPaymentType($paypal);
+        $this->unzer->createPaymentType($paypal);
         $this->assertNotEmpty($paypal->getId());
 
-        $fetchedPaypal = $this->heidelpay->fetchPaymentType($paypal->getId());
+        $fetchedPaypal = $this->unzer->fetchPaymentType($paypal->getId());
         $this->assertInstanceOf(Paypal::class, $fetchedPaypal);
         $this->assertNotSame($paypal, $fetchedPaypal);
         $this->assertEquals($paypal->expose(), $fetchedPaypal->expose());

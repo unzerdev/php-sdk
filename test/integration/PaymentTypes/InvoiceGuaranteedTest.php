@@ -41,7 +41,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
     public function invoiceGuaranteedTypeShouldBeCreatable(): void
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
-        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
+        $invoiceGuaranteed = $this->unzer->createPaymentType(new InvoiceGuaranteed());
         $this->assertInstanceOf(InvoiceGuaranteed::class, $invoiceGuaranteed);
         $this->assertNotNull($invoiceGuaranteed->getId());
     }
@@ -54,7 +54,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
     public function verifyInvoiceGuaranteedShipment(): void
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
-        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
+        $invoiceGuaranteed = $this->unzer->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
         $charge   = $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
         $this->assertTransactionResourceHasBeenCreated($charge);
@@ -64,7 +64,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
         $this->assertNotEmpty($charge->getHolder());
         $this->assertNotEmpty($charge->getDescriptor());
 
-        $shipment = $this->heidelpay->ship($charge->getPayment(), 'i' . self::generateRandomId(), 'o' . self::generateRandomId());
+        $shipment = $this->unzer->ship($charge->getPayment(), 'i' . self::generateRandomId(), 'o' . self::generateRandomId());
         $this->assertTransactionResourceHasBeenCreated($shipment);
     }
 
@@ -76,7 +76,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
     public function verifyInvoiceGuaranteedCanBeChargedAndCancelled(): void
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
-        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
+        $invoiceGuaranteed = $this->unzer->createPaymentType(new InvoiceGuaranteed());
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
         $charge   = $invoiceGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
         $this->assertPending($charge);
@@ -93,8 +93,8 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
     public function invoiceGuaranteedTypeCanBeFetched(): void
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
-        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
-        $fetchedInvoiceGuaranteed = $this->heidelpay->fetchPaymentType($invoiceGuaranteed->getId());
+        $invoiceGuaranteed = $this->unzer->createPaymentType(new InvoiceGuaranteed());
+        $fetchedInvoiceGuaranteed = $this->unzer->fetchPaymentType($invoiceGuaranteed->getId());
         $this->assertInstanceOf(InvoiceGuaranteed::class, $fetchedInvoiceGuaranteed);
         $this->assertEquals($invoiceGuaranteed->getId(), $fetchedInvoiceGuaranteed->getId());
     }
@@ -107,7 +107,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
     public function ivgShouldThrowErrorIfAddressesDoNotMatch(): void
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
-        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
+        $invoiceGuaranteed = $this->unzer->createPaymentType(new InvoiceGuaranteed());
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
 
@@ -123,7 +123,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
     public function verifyInvoiceIdInShipmentWillOverrideTheOneFromCharge(): void
     {
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
-        $invoiceGuaranteed = $this->heidelpay->createPaymentType(new InvoiceGuaranteed());
+        $invoiceGuaranteed = $this->unzer->createPaymentType(new InvoiceGuaranteed());
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
 
         $invoiceId  = 'i' . self::generateRandomId();
@@ -131,7 +131,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
         $chargeInvoiceId = $charge->getPayment()->getInvoiceId();
 
         $newInvoiceId = $invoiceId . 'X';
-        $shipment = $this->heidelpay->ship($charge->getPayment(), $newInvoiceId);
+        $shipment = $this->unzer->ship($charge->getPayment(), $newInvoiceId);
         $shipmentInvoiceId = $shipment->getPayment()->getInvoiceId();
 
         $this->assertNotEquals($chargeInvoiceId, $shipmentInvoiceId);

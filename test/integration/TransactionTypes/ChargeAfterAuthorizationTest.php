@@ -43,7 +43,7 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
 
         $charge = $authorization->charge();
-        $this->heidelpay->fetchPayment($payment);
+        $this->unzer->fetchPayment($payment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertAmounts($payment, 0, 100, 100, 0);
@@ -55,15 +55,15 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function authorizationShouldBeFullyChargeableViaHeidelpayObject(): void
+    public function authorizationShouldBeFullyChargeableViaUnzerObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId());
-        $this->heidelpay->fetchPayment($payment);
+        $charge = $this->unzer->chargeAuthorization($payment->getId());
+        $this->unzer->fetchPayment($payment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertAmounts($payment, 0, 100, 100, 0);
@@ -82,8 +82,8 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 10);
-        $this->heidelpay->fetchPayment($payment);
+        $charge = $this->unzer->chargeAuthorization($payment->getId(), 10);
+        $this->unzer->fetchPayment($payment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertAmounts($payment, 90, 10, 100, 0);

@@ -60,7 +60,7 @@ $customerId  = $_POST['customerId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
-    // Create a heidelpay object using your private key and register a debug handler if you want to.
+    // Create an Unzer object using your private key and register a debug handler if you want to.
     $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
     $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 

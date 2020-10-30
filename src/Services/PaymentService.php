@@ -47,16 +47,16 @@ use RuntimeException;
 class PaymentService implements PaymentServiceInterface
 {
     /** @var Unzer */
-    private $heidelpay;
+    private $unzer;
 
     /**
      * PaymentService constructor.
      *
-     * @param Unzer $heidelpay
+     * @param Unzer $unzer
      */
-    public function __construct(Unzer $heidelpay)
+    public function __construct(Unzer $unzer)
     {
-        $this->heidelpay       = $heidelpay;
+        $this->unzer       = $unzer;
     }
 
     //<editor-fold desc="Getters/Setters"
@@ -64,19 +64,19 @@ class PaymentService implements PaymentServiceInterface
     /**
      * @return Unzer
      */
-    public function getHeidelpay(): Unzer
+    public function getUnzer(): Unzer
     {
-        return $this->heidelpay;
+        return $this->unzer;
     }
 
     /**
-     * @param Unzer $heidelpay
+     * @param Unzer $unzer
      *
      * @return PaymentService
      */
-    public function setHeidelpay(Unzer $heidelpay): PaymentService
+    public function setUnzer(Unzer $unzer): PaymentService
     {
-        $this->heidelpay = $heidelpay;
+        $this->unzer = $unzer;
         return $this;
     }
 
@@ -85,7 +85,7 @@ class PaymentService implements PaymentServiceInterface
      */
     public function getResourceService(): ResourceService
     {
-        return $this->getHeidelpay()->getResourceService();
+        return $this->getUnzer()->getResourceService();
     }
 
     //</editor-fold>
@@ -290,10 +290,10 @@ class PaymentService implements PaymentServiceInterface
         $effectiveInterest,
         DateTime $orderDate = null
     ): InstalmentPlans {
-        $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
+        $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->unzer);
         $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
         /** @var InstalmentPlans $plans */
-        $plans = $this->heidelpay->getResourceService()->fetchResource($plans);
+        $plans = $this->unzer->getResourceService()->fetchResource($plans);
         return $plans;
     }
 
@@ -317,7 +317,7 @@ class PaymentService implements PaymentServiceInterface
      *
      * @return Paypage The updated PayPage resource.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function initPayPage(
@@ -327,7 +327,7 @@ class PaymentService implements PaymentServiceInterface
         Basket $basket = null,
         Metadata $metadata = null
     ): Paypage {
-        $paypage->setAction($action)->setParentResource($this->heidelpay);
+        $paypage->setAction($action)->setParentResource($this->unzer);
         $payment = $this->createPayment($paypage)->setBasket($basket)->setCustomer($customer)->setMetadata($metadata);
         $this->getResourceService()->createResource($paypage->setPayment($payment));
         return $paypage;
@@ -340,12 +340,12 @@ class PaymentService implements PaymentServiceInterface
      *
      * @return Payment The resulting Payment object.
      *
-     * @throws UnzerApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function createPayment($paymentType): AbstractUnzerResource
     {
-        return (new Payment($this->heidelpay))->setPaymentType($paymentType);
+        return (new Payment($this->unzer))->setPaymentType($paymentType);
     }
 
     //</editor-fold>

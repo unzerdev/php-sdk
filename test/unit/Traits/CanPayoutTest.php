@@ -36,7 +36,7 @@ use RuntimeException;
 class CanPayoutTest extends BasePaymentTest
 {
     /**
-     * Verify payout method throws exception if the class does not implement the HeidelpayParentInterface.
+     * Verify payout method throws exception if the class does not implement the UnzerParentInterface.
      *
      * @test
      */
@@ -51,20 +51,20 @@ class CanPayoutTest extends BasePaymentTest
     }
 
     /**
-     * Verify payout method propagates payout method to heidelpay object.
+     * Verify payout method propagates payout method to Unzer object.
      *
      * @test
      */
-    public function payoutShouldPropagatePayoutToHeidelpay(): void
+    public function payoutShouldPropagatePayoutToUnzer(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)->setMethods(['payout'])->disableOriginalConstructor()->getMock();
+        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['payout'])->disableOriginalConstructor()->getMock();
         $dummyMock     = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $payout = new Payout();
         $customer  = (new Customer())->setId('123');
         $metadata  = new Metadata();
-        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($heidelpayMock);
-        $heidelpayMock->expects($this->exactly(4))->method('payout')
+        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($unzerMock);
+        $unzerMock->expects($this->exactly(4))->method('payout')
             ->withConsecutive(
                 [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
