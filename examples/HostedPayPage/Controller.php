@@ -84,7 +84,7 @@ try {
             ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
             ->setInvoiceId('i' . microtime(true));
 
-    // ... in order to enable FlexiPay Rate (Hire Purchase) you will need to set the effectiveInterestRate as well.
+    // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.
     $paypage->setEffectiveInterestRate(4.99);
 
     // ... a Basket is mandatory for HirePurchase

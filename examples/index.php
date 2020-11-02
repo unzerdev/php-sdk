@@ -250,7 +250,7 @@ function printMessage($type, $title, $text)
                             PayPal Recurring
                         </div>
                         <div class="description">
-                            You can set a Pay Pal type to recurring in order to register it and charge later as well as implement recurring payments.
+                            You can set a PayPal type to recurring in order to register it and charge later as well as implement recurring payments.
                         </div>
                     </div>
                     <div id="tryPayPalRecurringExample" class="ui bottom attached green button" onclick="location.href='PayPalRecurring/';">
@@ -284,7 +284,7 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            FlexiPay Rate Direct Debit (Hire Purchase)
+                            Unzer Instalment (Hire Purchase)
                         </div>
                         <div class="description">
                         </div>
@@ -296,12 +296,12 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            FlexiPay Direct (PIS)
+                            Unzer Bank Transfer (PIS)
                         </div>
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryFlexiPayDirectExample" class="ui bottom attached green button" onclick="location.href='FlexiPayDirect/';">
+                    <div id="tryUnzerBankTransfer" class="ui bottom attached green button" onclick="location.href='BankTransfer/';">
                         Try
                     </div>
                 </div>

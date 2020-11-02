@@ -1,6 +1,6 @@
 <?php
 /**
- * This is a the controller for the hire purchase direct debit (FlexiPay Rate) example.
+ * This is the controller for the Unzer Instalment example.
  * It is called when the instalment plan is confirmed and places the order.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH

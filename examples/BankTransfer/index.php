@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the FlexiPay Direct (PIS) payment type.
+ * This file provides an example implementation of the Unzer bank transfer payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -58,14 +58,14 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create a heidelpay instance with your public key
     let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
 
-    // Create an FlexiPay Direct instance
+    // Create an Unzer bank transfer instance
     let flexiPayDirect = heidelpayInstance.FlexiPayDirect();
 
     // Handle payment form submission
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a FlexiPay Direct resource
+        // Creating a Unzer bank transfer resource
         flexiPayDirect.createResource()
             .then(function(result) {
                 let hiddenInput = document.createElement('input');
