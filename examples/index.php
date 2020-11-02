@@ -284,7 +284,7 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Instalment (Hire Purchase)
+                            Unzer Instalment (Hire Purchase Direct Debit)
                         </div>
                         <div class="description">
                         </div>
