@@ -77,9 +77,9 @@ class CancelServiceTest extends BasePaymentTest
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('This Payment could not be cancelled.');
 
-        $heidelpay = new Unzer('s-priv-1234');
-        $heidelpay->setCancelService($cancelSrvMock);
-        $payment = (new Payment())->setParentResource($heidelpay);
+        $unzer = new Unzer('s-priv-1234');
+        $unzer->setCancelService($cancelSrvMock);
+        $payment = (new Payment())->setParentResource($unzer);
 
         $payment->cancel();
     }

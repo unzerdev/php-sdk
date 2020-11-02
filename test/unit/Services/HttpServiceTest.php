@@ -217,8 +217,8 @@ class HttpServiceTest extends BasePaymentTest
         );
 
         /** @var DebugHandlerInterface $loggerMock */
-        $heidelpay = (new Unzer('s-priv-MyTestKey'))->setDebugMode(true)->setDebugHandler($loggerMock);
-        $resource  = (new DummyResource())->setParentResource($heidelpay);
+        $unzer = (new Unzer('s-priv-MyTestKey'))->setDebugMode(true)->setDebugHandler($loggerMock);
+        $resource  = (new DummyResource())->setParentResource($unzer);
 
         /** @var HttpService $httpServiceMock*/
         $response = $httpServiceMock->send('/my/uri/123', $resource);

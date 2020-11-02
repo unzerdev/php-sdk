@@ -105,16 +105,16 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function sendShouldCallSendOnHttpService(string $method, string $uri, bool $appendId): void
     {
-        $heidelpay = new Unzer('s-priv-1234');
+        $unzer = new Unzer('s-priv-1234');
         $resourceMock = $this->getMockBuilder(DummyResource::class)->setMethods(['getUri', 'getUnzerObject'])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceMock->expects($this->once())->method('getUri')->with($appendId)->willReturn($uri);
-        $resourceMock->method('getUnzerObject')->willReturn($heidelpay);
+        $resourceMock->method('getUnzerObject')->willReturn($unzer);
         $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
-        $resourceSrv = new ResourceService($heidelpay);
+        $resourceSrv = new ResourceService($unzer);
 
         /** @var HttpService $httpSrvMock */
-        $heidelpay->setHttpService($httpSrvMock);
+        $unzer->setHttpService($httpSrvMock);
         /** @noinspection PhpParamsInspection */
         $httpSrvMock->expects($this->once())->method('send')->with($uri, $resourceMock, $method)->willReturn('{"response": "This is the response"}');
 
@@ -351,10 +351,10 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchResourceByUrlShouldFetchTheDesiredResource($fetchMethod, $arguments, $resourceUrl): void
     {
-        /** @var Unzer|MockObject $heidelpayMock */
-        $heidelpayMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods([$fetchMethod])->getMock();
-        $heidelpayMock->expects($this->once())->method($fetchMethod)->with(...$arguments);
-        $resourceService = new ResourceService($heidelpayMock);
+        /** @var Unzer|MockObject $unzerMock */
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods([$fetchMethod])->getMock();
+        $unzerMock->expects($this->once())->method($fetchMethod)->with(...$arguments);
+        $resourceService = new ResourceService($unzerMock);
 
         $resourceService->fetchResourceByUrl($resourceUrl);
     }
@@ -404,22 +404,22 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchShouldCallFetchResource(string $fetchMethod, array $arguments, $callback): void
     {
-        $heidelpay = new Unzer('s-priv-1234');
+        $unzer = new Unzer('s-priv-1234');
 
         /** @var ResourceService|MockObject $resourceServiceMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('fetchResource')->with($this->callback(
-            static function ($resource) use ($callback, $heidelpay) {
+            static function ($resource) use ($callback, $unzer) {
                 /** @var AbstractUnzerResource $resource */
-                return $callback($resource) && $resource->getUnzerObject() === $heidelpay;
+                return $callback($resource) && $resource->getUnzerObject() === $unzer;
             }
         ));
 
         /** @var AbstractUnzerResource $resource */
         $resource = $resourceSrvMock->$fetchMethod(...$arguments);
-        $this->assertEquals($heidelpay, $resource->getParentResource());
-        $this->assertEquals($heidelpay, $resource->getUnzerObject());
+        $this->assertEquals($unzer, $resource->getParentResource());
+        $this->assertEquals($unzer, $resource->getUnzerObject());
     }
 
     //</editor-fold>
@@ -951,9 +951,9 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function createBasketShouldSetTheParentResourceAndCallCreateWithTheGivenBasket(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
         /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['createResource'])->getMock();
         $resourceSrvMock->expects($this->once())->method('createResource');
 
         $basket = new Basket();
@@ -965,7 +965,7 @@ class ResourceServiceTest extends BasePaymentTest
         }
 
         $this->assertSame($basket, $resourceSrvMock->createBasket($basket));
-        $this->assertSame($heidelpay, $basket->getParentResource());
+        $this->assertSame($unzer, $basket->getParentResource());
     }
 
     /**
@@ -975,9 +975,9 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function updateBasketShouldCallUpdateAndReturnTheGivenBasket(): void
     {
-        $heidelpay = new Unzer('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
         /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['updateResource'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['updateResource'])->getMock();
         $basket = new Basket();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('updateResource')->with($basket);
@@ -985,8 +985,8 @@ class ResourceServiceTest extends BasePaymentTest
         $returnedBasket = $resourceSrvMock->updateBasket($basket);
 
         $this->assertSame($basket, $returnedBasket);
-        $this->assertEquals($heidelpay, $basket->getParentResource());
-        $this->assertEquals($heidelpay, $basket->getUnzerObject());
+        $this->assertEquals($unzer, $basket->getParentResource());
+        $this->assertEquals($unzer, $basket->getUnzerObject());
     }
 
     //</editor-fold>

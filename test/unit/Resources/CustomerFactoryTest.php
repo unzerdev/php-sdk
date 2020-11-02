@@ -87,7 +87,7 @@ class CustomerFactoryTest extends TestCase
             'Mustermann',
             '2000-12-12',
             $address,
-            'test@heidelpay.com',
+            'test@unzer.com',
             'abc GmbH',
             CompanyCommercialSectorItems::ACCOMMODATION
         );
@@ -96,7 +96,7 @@ class CustomerFactoryTest extends TestCase
         $this->assertEquals('Max', $customer->getFirstname());
         $this->assertEquals('Mustermann', $customer->getLastname());
         $this->assertEquals('2000-12-12', $customer->getBirthDate());
-        $this->assertEquals('test@heidelpay.com', $customer->getEmail());
+        $this->assertEquals('test@unzer.com', $customer->getEmail());
         $this->assertEquals('abc GmbH', $customer->getCompany());
         $companyInfo = $customer->getCompanyInfo();
         $this->assertInstanceOf(CompanyInfo::class, $companyInfo);

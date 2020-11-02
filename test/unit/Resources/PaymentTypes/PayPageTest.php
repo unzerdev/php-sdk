@@ -51,12 +51,12 @@ class PayPageTest extends BasePaymentTest
     public function getterAndSetterWorkAsExpected(): void
     {
         // ----------- SET initial values ------------
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
 
         // ----------- VERIFY initial values ------------
         $this->assertEquals(123.4, $paypage->getAmount());
         $this->assertEquals('EUR', $paypage->getCurrency());
-        $this->assertEquals('https://docs.heidelpay.com', $paypage->getReturnUrl());
+        $this->assertEquals('https://dev.unzer.com', $paypage->getReturnUrl());
 
         // meta
         $this->assertNull($paypage->getPaymentId());
@@ -161,14 +161,14 @@ class PayPageTest extends BasePaymentTest
     public function responseHandlingShouldWorkProperly(): void
     {
         // when
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
         $payment = new Payment();
         $paypage->setPayment($payment);
 
         // then
         $this->assertEquals(123.4, $paypage->getAmount());
         $this->assertEquals('EUR', $paypage->getCurrency());
-        $this->assertEquals('https://docs.heidelpay.com', $paypage->getReturnUrl());
+        $this->assertEquals('https://dev.unzer.com', $paypage->getReturnUrl());
 
         $this->assertNull($paypage->getPaymentId());
         $this->assertSame($payment, $paypage->getPayment());
@@ -239,7 +239,7 @@ class PayPageTest extends BasePaymentTest
     public function paymentObjectShouldBeUpdatedProperly(): void
     {
         // when
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
         $payment = new Payment();
         $paypage->setPayment($payment);
 
@@ -271,7 +271,7 @@ class PayPageTest extends BasePaymentTest
     public function responseHandlingShouldMapSpecialFieldsProperly(): void
     {
         // when
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
 
         $response = new stdClass();
         $response->impressumUrl = 'impressum url';
@@ -298,7 +298,7 @@ class PayPageTest extends BasePaymentTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
 
         // when
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
         $payment = (new Payment())->setParentResource($this->unzer->setResourceService($resourceSrvMock));
         $paypage->setPayment($payment)->setParentResource($payment);
 

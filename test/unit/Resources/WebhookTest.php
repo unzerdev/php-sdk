@@ -50,13 +50,13 @@ class WebhookTest extends BasePaymentTest
      */
     public function gettersAndSettersOfWebhookShouldBehaveAsExpected(): void
     {
-        $webhook = new Webhook('https://dev.heidelpay.com', 'anEventIMadeUp');
-        $this->assertEquals('https://dev.heidelpay.com', $webhook->getUrl());
+        $webhook = new Webhook('https://dev.unzer.com', 'anEventIMadeUp');
+        $this->assertEquals('https://dev.unzer.com', $webhook->getUrl());
         $this->assertEquals('anEventIMadeUp', $webhook->getEvent());
 
-        $webhook->setUrl('https://docs.heidelpay.com');
+        $webhook->setUrl('https://dev.unzer.com');
         $webhook->setEvent('aDifferentEventIMadeUp');
-        $this->assertEquals('https://docs.heidelpay.com', $webhook->getUrl());
+        $this->assertEquals('https://dev.unzer.com', $webhook->getUrl());
         $this->assertEquals('aDifferentEventIMadeUp', $webhook->getEvent());
     }
 }

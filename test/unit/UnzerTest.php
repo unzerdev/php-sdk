@@ -295,7 +295,7 @@ class UnzerTest extends BasePaymentTest
      */
     public static function paymentServiceDP(): array
     {
-        $url           = 'https://dev.heidelpay.com';
+        $url           = 'https://dev.unzer.com';
         $orderId       = 'orderId';
         $paymentTypeId = 'paymentTypeId';
         $customerId    = 'customerId';
@@ -335,7 +335,7 @@ class UnzerTest extends BasePaymentTest
      */
     public static function unzerShouldForwardWebhookActionCallsToTheWebhookServiceDP(): array
     {
-        $url       = 'https://dev.heidelpay.com';
+        $url       = 'https://dev.unzer.com';
         $webhookId = 'webhookId';
         $webhook   = new Webhook();
         $event     = ['event1', 'event2'];
