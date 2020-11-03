@@ -47,7 +47,7 @@ function printMessage($type, $title, $text)
     <head>
         <meta charset="UTF-8">
         <title>Unzer UI Examples</title>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
                 integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
@@ -70,8 +70,8 @@ function printMessage($type, $title, $text)
             <?php
                 // Show info message if the key pair is invalid
                 if (
-                    !PrivateKeyValidator::validate(UNZER_SDK_PAYMENT_API_PRIVATE_KEY) ||
-                    !PublicKeyValidator::validate(UNZER_SDK_PAYMENT_API_PUBLIC_KEY)
+                    !PrivateKeyValidator::validate(UNZER_PAPI_PRIVATE_KEY) ||
+                    !PublicKeyValidator::validate(UNZER_PAPI_PUBLIC_KEY)
                 ) {
                     printMessage(
                         'yellow',

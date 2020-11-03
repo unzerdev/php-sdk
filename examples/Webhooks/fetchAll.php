@@ -59,7 +59,7 @@ function printInfo($title, $text)
 <head>
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
             integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
@@ -77,7 +77,7 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+            $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
             $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
             $webhooks = $unzer->fetchAllWebhooks();

@@ -37,7 +37,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <head>
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
@@ -77,7 +77,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <script>
     // Create an Unzer instance with your public key
     // This is not actually needed for this example but we want the sandbox banner to show on the page.
-    let heidelpayInstance = new heidelpay('<?php echo UNZER_SDK_PAYMENT_API_PUBLIC_KEY; ?>');
+    let heidelpayInstance = new heidelpay('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
     let $errorHolder = $('#error-holder');
     let $submitButton = $('#submit-button');
