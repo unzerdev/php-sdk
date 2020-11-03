@@ -37,7 +37,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <head>
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
