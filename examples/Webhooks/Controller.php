@@ -35,13 +35,13 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
 
 try {
-    $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $resource = $heidelpay->fetchResourceFromEvent(file_get_contents('php://input'));
-    $heidelpay->debugLog('Fetched resource from Event: ' . $resource->jsonSerialize());
+    $resource = $unzer->fetchResourceFromEvent(file_get_contents('php://input'));
+    $unzer->debugLog('Fetched resource from Event: ' . $resource->jsonSerialize());
 } catch (UnzerApiException $e) {
-    $heidelpay->debugLog('Error: ' . $e->getMessage());
+    $unzer->debugLog('Error: ' . $e->getMessage());
 } catch (RuntimeException $e) {
-    $heidelpay->debugLog('Error: ' . $e->getMessage());
+    $unzer->debugLog('Error: ' . $e->getMessage());
 }

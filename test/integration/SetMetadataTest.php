@@ -80,7 +80,7 @@ class SetMetadataTest extends BaseIntegrationTest
         $this->assertEmpty($metadata->getId());
 
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $this->unzer->authorize(1.23, 'EUR', $paypal, 'https://heidelpay.com', null, null, $metadata);
+        $this->unzer->authorize(1.23, 'EUR', $paypal, 'https://unzer.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -99,7 +99,7 @@ class SetMetadataTest extends BaseIntegrationTest
         $this->assertEmpty($metadata->getId());
 
         $paymentType = $this->unzer->createPaymentType(new Paypal());
-        $this->unzer->charge(1.23, 'EUR', $paymentType, 'https://heidelpay.com', null, null, $metadata);
+        $this->unzer->charge(1.23, 'EUR', $paymentType, 'https://unzer.com', null, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -114,7 +114,7 @@ class SetMetadataTest extends BaseIntegrationTest
 
         /** @var Paypal $paymentType */
         $paymentType = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $paymentType->authorize(10.0, 'EUR', 'https://heidelpay.com', null, null, $metadata);
+        $authorize = $paymentType->authorize(10.0, 'EUR', 'https://unzer.com', null, null, $metadata);
         $payment = $authorize->getPayment();
         $this->assertSame($metadata, $payment->getMetadata());
 

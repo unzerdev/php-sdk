@@ -63,10 +63,8 @@ function printInfo($title, $text)
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>
-        Heidelpay UI Examples
-    </title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    <title>Unzer UI Examples</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
             integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
@@ -84,21 +82,21 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
-            $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+            $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+            $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-            $heidelpay->deleteAllWebhooks();
+            $unzer->deleteAllWebhooks();
             printSuccess(
                 'De-registered all existing events for the given private key',
-                'Unsubscribed all events registered for the private key: "' . HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY . '".'
+                'Unsubscribed all events registered for the private key: "' . UNZER_PAPI_PRIVATE_KEY . '".'
             );
 
         } catch (UnzerApiException $e) {
             printError($e->getMessage());
-            $heidelpay->debugLog('Error: ' . $e->getMessage());
+            $unzer->debugLog('Error: ' . $e->getMessage());
         } catch (RuntimeException $e) {
             printError($e->getMessage());
-            $heidelpay->debugLog('Error: ' . $e->getMessage());
+            $unzer->debugLog('Error: ' . $e->getMessage());
         }
 
         printInfo('Back to the payment selection', 'Now Perform payments <a href="..">>> HERE <<</a> to trigger events!');

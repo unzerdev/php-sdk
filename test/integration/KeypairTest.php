@@ -42,8 +42,8 @@ class KeypairTest extends BaseIntegrationTest
      */
     public function validKeysShouldBeExcepted($key): void
     {
-        $heidelpay = new Unzer($key);
-        $this->assertEquals($key, $heidelpay->getKey());
+        $unzer = new Unzer($key);
+        $this->assertEquals($key, $unzer->getKey());
     }
 
     /**

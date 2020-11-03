@@ -46,10 +46,8 @@ function printMessage($type, $title, $text)
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>
-            Heidelpay UI Examples
-        </title>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        <title>Unzer UI Examples</title>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
                 integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
@@ -72,14 +70,14 @@ function printMessage($type, $title, $text)
             <?php
                 // Show info message if the key pair is invalid
                 if (
-                    !PrivateKeyValidator::validate(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY) ||
-                    !PublicKeyValidator::validate(HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY)
+                    !PrivateKeyValidator::validate(UNZER_PAPI_PRIVATE_KEY) ||
+                    !PublicKeyValidator::validate(UNZER_PAPI_PUBLIC_KEY)
                 ) {
                     printMessage(
                         'yellow',
                         'Attention: You need to provide a valid key pair!',
                         "The key pair provided in file _enableExamples.php does not seem to be valid.\n".
-                        'Please contact our support to get a test key pair <a href="mailto:support@heidelpay.com">support@heidelpay.com</a>'
+                        'Please contact our support to get a test key pair <a href="mailto:support@unzer.com">support@unzer.com</a>'
                     );
                 }
             ?>

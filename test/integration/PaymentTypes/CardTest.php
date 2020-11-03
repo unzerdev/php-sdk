@@ -87,7 +87,7 @@ class CardTest extends BaseIntegrationTest
         $card = $this->unzer->createPaymentType($card);
         $this->assertFalse($card->get3ds());
 
-        $charge = $card->charge(12.34, 'EUR', 'https://docs.heidelpay.com');
+        $charge = $card->charge(12.34, 'EUR', 'https://docs.unzer.com');
         $this->assertFalse($charge->isCard3ds());
     }
 

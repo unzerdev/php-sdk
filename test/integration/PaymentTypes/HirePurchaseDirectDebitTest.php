@@ -249,7 +249,7 @@ class HirePurchaseDirectDebitTest extends BaseIntegrationTest
         $customer
             ->setBillingAddress($address)
             ->setBirthDate('2000-12-12')
-            ->setEmail('manuel-weissmann@heidelpay.com');
+            ->setEmail('manuel-weissmann@unzer.com');
 
         return $customer;
     }

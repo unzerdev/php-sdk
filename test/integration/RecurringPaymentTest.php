@@ -62,9 +62,9 @@ class RecurringPaymentTest extends BaseIntegrationTest
     {
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($this->createCardObject()->set3ds(true));
-        $recurring = $card->activateRecurring('https://dev.heidelpay.com');
+        $recurring = $card->activateRecurring('https://dev.unzer.com');
         $this->assertPending($recurring);
-        $this->assertEquals('https://dev.heidelpay.com', $recurring->getReturnUrl());
+        $this->assertEquals('https://dev.unzer.com', $recurring->getReturnUrl());
         $this->assertNotEmpty($recurring->getDate());
 
         $message = $recurring->getMessage();
@@ -83,19 +83,19 @@ class RecurringPaymentTest extends BaseIntegrationTest
         if (empty($privateKey)) {
             $this->markTestIncomplete('No non 3ds private key set');
         }
-        $heidelpay = new Unzer($privateKey);
+        $unzer = new Unzer($privateKey);
 
-        $heidelpay->setDebugMode(true)->setDebugHandler($this->unzer->getDebugHandler());
+        $unzer->setDebugMode(true)->setDebugHandler($this->unzer->getDebugHandler());
 
         /** @var Card $card */
-        $card = $heidelpay->createPaymentType($this->createCardObject()->set3ds(false));
+        $card = $unzer->createPaymentType($this->createCardObject()->set3ds(false));
         $this->assertFalse($card->isRecurring());
 
-        $recurring = $card->activateRecurring('https://dev.heidelpay.com');
+        $recurring = $card->activateRecurring('https://dev.unzer.com');
         $this->assertSuccess($recurring);
 
         /** @var Card $fetchedCard */
-        $fetchedCard = $heidelpay->fetchPaymentType($card->getId());
+        $fetchedCard = $unzer->fetchPaymentType($card->getId());
         $this->assertTrue($fetchedCard->isRecurring());
     }
 
@@ -108,7 +108,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
     {
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $recurring = $paypal->activateRecurring('https://dev.heidelpay.com');
+        $recurring = $paypal->activateRecurring('https://dev.unzer.com');
         $this->assertPending($recurring);
         $this->assertNotEmpty($recurring->getReturnUrl());
     }

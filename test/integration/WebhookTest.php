@@ -243,7 +243,7 @@ class WebhookTest extends BaseIntegrationTest
      */
     private function generateUniqueUrl(): string
     {
-        return 'https://www.heidelpay.de?test=' . str_replace([' ', '.'], '', microtime());
+        return 'https://www.unzer.com?test=' . str_replace([' ', '.'], '', microtime());
     }
 
     /**

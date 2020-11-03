@@ -59,8 +59,8 @@ $transactionType = $_POST['transaction_type'] ?? 'authorize';
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
-    $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge/authorize transaction
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
@@ -71,17 +71,17 @@ try {
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // ... however you can customize the Payment Page using additional parameters.
-    $paypage->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
-            ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')
+    $paypage->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
+            ->setFullPageImage('https://dev.unzer.com/wp-content/uploads/2020/09/01_Unzer_Ambitious_RGB_LoRes.jpg')
             ->setShopName('My Test Shop')
             ->setShopDescription('Best shop in the whole world!')
             ->setTagline('Try and stop us from being awesome!')
             ->setOrderId('OrderNr' . $orderId)
-            ->setTermsAndConditionUrl('https://www.heidelpay.com/en/')
-            ->setPrivacyPolicyUrl('https://www.heidelpay.com/de/')
-            ->setImprintUrl('https://www.heidelpay.com/it/')
-            ->setHelpUrl('https://www.heidelpay.com/at/')
-            ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
+            ->setTermsAndConditionUrl('https://www.unzer.com/en/')
+            ->setPrivacyPolicyUrl('https://www.unzer.com/de/datenschutz/')
+            ->setImprintUrl('https://www.unzer.com/de/impressum')
+            ->setHelpUrl('https://www.unzer.com/de/support')
+            ->setContactUrl('https://www.unzer.com/en/ueber-unzer')
             ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable FlexiPay Rate (Hire Purchase) you will need to set the effectiveInterestRate as well.
@@ -94,9 +94,9 @@ try {
     $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
     if ($transactionType === 'charge') {
-        $heidelpay->initPayPageCharge($paypage, $customer, $basket);
+        $unzer->initPayPageCharge($paypage, $customer, $basket);
     } else {
-        $heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
+        $unzer->initPayPageAuthorize($paypage, $customer, $basket);
     }
 
     $_SESSION['PaymentId'] = $paypage->getPaymentId();
