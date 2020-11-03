@@ -63,7 +63,7 @@ $paymentId = $_SESSION['PaymentId'];
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
-    $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+    $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Redirect to success if the payment has been successfully completed.

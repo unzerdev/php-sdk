@@ -77,7 +77,7 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+            $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
             $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
             $webhooks = $unzer->fetchAllWebhooks();

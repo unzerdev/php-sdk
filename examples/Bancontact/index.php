@@ -57,7 +57,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <script>
     // Create an Unzer instance with your public key
-    let heidelpayInstance = new heidelpay('<?php echo UNZER_SDK_PAYMENT_API_PUBLIC_KEY; ?>');
+    let heidelpayInstance = new heidelpay('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
     // Create an Bancontact instance
     let Bancontact = heidelpayInstance.Bancontact();

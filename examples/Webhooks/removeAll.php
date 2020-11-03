@@ -82,13 +82,13 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $unzer = new Unzer(UNZER_SDK_PAYMENT_API_PRIVATE_KEY);
+            $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
             $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
             $unzer->deleteAllWebhooks();
             printSuccess(
                 'De-registered all existing events for the given private key',
-                'Unsubscribed all events registered for the private key: "' . UNZER_SDK_PAYMENT_API_PRIVATE_KEY . '".'
+                'Unsubscribed all events registered for the private key: "' . UNZER_PAPI_PRIVATE_KEY . '".'
             );
 
         } catch (UnzerApiException $e) {
