@@ -182,29 +182,6 @@ class CardTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify that a card object can be fetched from the api using its id.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.7.2
-     */
-    public function cardCanBeFetchedOld(): void
-    {
-        $card = $this->createCardObject();
-        $this->unzer->createPaymentType($card);
-        $this->assertNotNull($card->getId());
-        $this->assertNotEmpty($card->getHolder());
-
-        /** @var Card $fetchedCard */
-        $fetchedCard = $this->unzer->fetchPaymentType($card->getId());
-        $this->assertNotNull($fetchedCard->getId());
-        $this->assertEquals(ValueService::maskValue($card->getNumber()), $fetchedCard->getNumber());
-        $this->assertEquals($card->getExpiryDate(), $fetchedCard->getExpiryDate());
-        $this->assertEquals('***', $fetchedCard->getCvc());
-        $this->assertEquals($card->getHolder(), $fetchedCard->getHolder());
-    }
-
-    /**
      * Verify the card can charge the full amount of the authorization and the payment state is updated accordingly.
      *
      * @test

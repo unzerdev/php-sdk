@@ -182,41 +182,6 @@ class CardTest extends BasePaymentTest
     }
 
     /**
-     * Verify setting holder.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.7.2
-     */
-    public function verifyHolderCanBeSetAndChangedOld(): void
-    {
-        $this->assertEquals(null, $this->card->getHolder());
-        $this->card->setHolder('Julia Heideich');
-        $this->assertEquals('Julia Heideich', $this->card->getHolder());
-        $this->card->setHolder(self::TEST_HOLDER);
-        $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
-    }
-
-    /**
-     * Verify setting holder.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.7.2
-     */
-    public function verifyHolderSettersPropagate(): void
-    {
-        $cardMock = $this->getMockBuilder(Card::class)->disableOriginalConstructor()->setMethods(['setCardHolder', 'getCardHolder'])->getMock();
-        /** @noinspection PhpParamsInspection */
-        $cardMock->expects($this->once())->method('setCardHolder')->with('set my CardHolder');
-        $cardMock->expects($this->once())->method('getCardHolder')->willReturn('get my CardHolder');
-
-        /** @var Card $cardMock */
-        $cardMock->setHolder('set my CardHolder');
-        $this->assertSame('get my CardHolder', $cardMock->getHolder());
-    }
-
-    /**
      * Verify card3ds flag.
      *
      * @test

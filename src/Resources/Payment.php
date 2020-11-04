@@ -25,7 +25,6 @@
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Constants\TransactionTypes;
@@ -47,8 +46,6 @@ use UnzerSDK\Traits\HasTraceId;
 use RuntimeException;
 use stdClass;
 
-use function count;
-use function in_array;
 use function is_string;
 
 class Payment extends AbstractUnzerResource
@@ -645,33 +642,6 @@ class Payment extends AbstractUnzerResource
      * Performs a Cancellation transaction on the Payment.
      * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
      *
-     * @param float|null $amount The amount to canceled.
-     * @param string     $reason
-     *
-     * @return Cancellation|null The resulting Cancellation object.
-     *                           If more then one cancellation is performed the last one will be returned.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 1.2.3.0
-     * @see Payment::cancelAmount()
-     */
-    public function cancel($amount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL): ?Cancellation
-    {
-        $cancellations = $this->cancelAmount($amount, $reason);
-
-        if (count($cancellations) > 0) {
-            return $cancellations[0];
-        }
-
-        throw new RuntimeException('This Payment could not be cancelled.');
-    }
-
-    /**
-     * Performs a Cancellation transaction on the Payment.
-     * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
-     *
      * @param float|null  $amount           The amount to be canceled.
      *                                      This will be sent as amountGross in case of Hire Purchase payment method.
      * @param string|null $reasonCode       Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
@@ -692,63 +662,6 @@ class Payment extends AbstractUnzerResource
         float $amountVat = null
     ): array {
         return $this->getUnzerObject()->cancelPayment($this, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
-    }
-
-    /**
-     * Cancels all charges of the payment and returns an array of the cancellations and exceptions that occur.
-     *
-     * @return array
-     *
-     * @throws UnzerApiException
-     * @throws RuntimeException
-     *
-     * @deprecated since 1.2.3.0
-     * @see Payment::cancelAmount()
-     */
-    public function cancelAllCharges(): array
-    {
-        $cancels    = [];
-        $exceptions = [];
-
-        /** @var Charge $charge */
-        foreach ($this->getCharges() as $charge) {
-            try {
-                $cancels[] = $charge->cancel();
-            } catch (UnzerApiException $e) {
-                $allowedErrors = [
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK,
-                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED
-                ];
-                if (!in_array($e->getCode(), $allowedErrors, true)) {
-                    throw $e;
-                }
-                $exceptions[] = $e;
-            }
-        }
-        return array($cancels, $exceptions);
-    }
-
-    /**
-     * @param float|null $amount
-     *
-     * @return array
-     *
-     * @throws UnzerApiException
-     * @throws RuntimeException
-     *
-     * @deprecated since 1.2.3.0
-     * @see Payment::cancelAuthorizationAmount()
-     */
-    public function cancelAuthorization($amount = null): array
-    {
-        $cancels = [];
-        $cancel  = $this->cancelAuthorizationAmount($amount);
-
-        if ($cancel instanceof Cancellation) {
-            $cancels[] = $cancel;
-        }
-
-        return array($cancels, []);
     }
 
     /**
