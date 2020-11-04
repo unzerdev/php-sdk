@@ -57,11 +57,11 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
-    $heidelpay = new Unzer(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     /** @var InvoiceFactoring $invoiceFactoring */
-    $invoiceFactoring = $heidelpay->createPaymentType(new InvoiceFactoring());
+    $invoiceFactoring = $unzer->createPaymentType(new InvoiceFactoring());
 
     // A customer with matching addresses is mandatory for Invoice Factoring payment type
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');

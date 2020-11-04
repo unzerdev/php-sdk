@@ -1,12 +1,12 @@
 {
-  "name": "heidelpay/heidelpay-php",
-  "description": "This is the php sdk to connect to the heidelpay rest api.",
+  "name": "unzer/php-sdk",
+  "description": "This is the php sdk to connect to the Unzer rest api.",
   "minimum-stability": "stable",
   "license": "Apache-2.0",
   "authors": [
     {
       "name": "Simon Gabriel",
-      "email": "development@heidelpay.com"
+      "email": "development@unzer.com"
     }
   ],
   "require": {
@@ -32,6 +32,6 @@
     }
   },
   "support": {
-    "email": "support@heidelpay.com"
+    "email": "support@unzer.com"
   }
 }

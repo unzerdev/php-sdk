@@ -36,9 +36,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>
-        Heidelpay UI Examples
-    </title>
+    <title>Unzer UI Examples</title>
 
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
     <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
@@ -51,9 +49,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 </form>
 
 <script>
-    // Create a heidelpay instance with your public key
+    // Create an Unzer instance with your public key
     // This is not actually needed for this example but we want the sandbox banner to show on the page.
-    let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
+    let heidelpayInstance = new heidelpay('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 </script
 
 </body>

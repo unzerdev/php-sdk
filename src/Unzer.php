@@ -27,7 +27,6 @@ namespace UnzerSDK;
 
 use DateTime;
 use UnzerSDK\Constants\CancelReasonCodes;
-use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Interfaces\CancelServiceInterface;
 use UnzerSDK\Interfaces\DebugHandlerInterface;
 use UnzerSDK\Interfaces\UnzerParentInterface;
@@ -337,41 +336,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     //</editor-fold>
 
     //<editor-fold desc="Resources">
-
-    /**
-     * Updates the given local resource object if it has not been fetched before.
-     * If you are looking to update a local resource even if it has been fetched before please call fetchResource().
-     *
-     * @param AbstractUnzerResource $resource The local resource object to update.
-     *
-     * @return AbstractUnzerResource The updated resource object.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 1.2.6.0
-     */
-    public function getResource(AbstractUnzerResource $resource): AbstractUnzerResource
-    {
-        return $this->resourceService->getResource($resource);
-    }
-
-    /**
-     * Updates the given local resource object.
-     *
-     * @param AbstractUnzerResource $resource The local resource object to update.
-     *
-     * @return AbstractUnzerResource The updated resource object.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 1.2.6.0
-     */
-    public function fetchResource(AbstractUnzerResource $resource): AbstractUnzerResource
-    {
-        return $this->resourceService->fetchResource($resource);
-    }
 
     //<editor-fold desc="Recurring">
 

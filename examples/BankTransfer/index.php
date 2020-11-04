@@ -35,10 +35,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>
-        Heidelpay UI Examples
-    </title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    <title>Unzer UI Examples</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
             integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
@@ -55,8 +53,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 </form>
 
 <script>
-    // Create a heidelpay instance with your public key
-    let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
+    // Create an Unzer instance with your public key
+    let heidelpayInstance = new heidelpay('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
     // Create an Unzer bank transfer instance
     let flexiPayDirect = heidelpayInstance.FlexiPayDirect();

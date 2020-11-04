@@ -39,7 +39,7 @@ class TestDebugHandler implements DebugHandlerInterface
      */
     public function log(string $message): void
     {
-        $logMessage = 'heidelpay debug message: ' . $message . "\n";
+        $logMessage = 'Unzer debug message: ' . $message . "\n";
 
         if (EnvironmentService::isTestLoggingActive()) {
             // Echo log messages directly.

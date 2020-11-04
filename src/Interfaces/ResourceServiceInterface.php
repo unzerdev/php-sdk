@@ -171,7 +171,7 @@ interface ResourceServiceInterface
     /**
      * Creates a PaymentType resource from the given PaymentType object.
      * This is used to create the payment object prior to any transaction.
-     * Usually this will be done by the heidelpayUI components (https://docs.unzer.com/docs/heidelpay-ui-components)
+     * Usually this will be done by the heidelpayUI components (https://docs.unzer.com/docs/web-integration#step-3-create-your-payment-method)
      *
      * @param BasePaymentType $paymentType
      *

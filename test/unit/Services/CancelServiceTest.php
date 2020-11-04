@@ -28,7 +28,6 @@ namespace UnzerSDK\test\unit\Services;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Unzer;
 use UnzerSDK\Resources\EmbeddedResources\Amount;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -38,133 +37,9 @@ use UnzerSDK\Services\CancelService;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
-use RuntimeException;
 
 class CancelServiceTest extends BasePaymentTest
 {
-    //<editor-fold desc="Deprecated since 1.2.3.0">
-
-    /**
-     * Verify payment:cancel calls cancelAllCharges and cancelAuthorizationAmount and returns first charge cancellation
-     * object.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.3.0
-     */
-    public function cancelShouldCallCancelAllChargesAndCancelAuthorizationAndReturnFirstChargeCancellationObject(): void
-    {
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['cancelAmount'])->getMock();
-        $cancellation = new Cancellation(1.0);
-        $paymentMock->expects($this->once())->method('cancelAmount')->willReturn([$cancellation]);
-
-        /** @var Payment $paymentMock */
-        $this->assertSame($cancellation, $paymentMock->cancel());
-    }
-
-    /**
-     * Verify payment:cancel throws Exception if no cancellation and no auth existed to be cancelled.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.3.0
-     */
-    public function cancelShouldThrowExceptionIfNoTransactionExistsToBeCancelled(): void
-    {
-        /** @var CancelService|MockObject $cancelSrvMock */
-        $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods(['cancelAllCharges', 'cancelAuthorization'])->getMock();
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('This Payment could not be cancelled.');
-
-        $unzer = new Unzer('s-priv-1234');
-        $unzer->setCancelService($cancelSrvMock);
-        $payment = (new Payment())->setParentResource($unzer);
-
-        $payment->cancel();
-    }
-
-    /**
-     * Verify cancel all charges will call cancel on each existing charge of the payment and will return a list of
-     * cancels and exceptions.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.3.0
-     */
-    public function cancelAllChargesShouldCallCancelOnAllChargesAndReturnCancelsAndExceptions(): void
-    {
-        $cancellation1 = new Cancellation(1.0);
-        $cancellation2 = new Cancellation(2.0);
-        $cancellation3 = new Cancellation(3.0);
-        $exception1 = new UnzerApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK);
-        $exception2 = new UnzerApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK);
-
-        $chargeMock1 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock1->expects($this->once())->method('cancel')->willReturn($cancellation1);
-
-        $chargeMock2 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock2->expects($this->once())->method('cancel')->willThrowException($exception1);
-
-        $chargeMock3 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock3->expects($this->once())->method('cancel')->willReturn($cancellation2);
-
-        $chargeMock4 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock4->expects($this->once())->method('cancel')->willThrowException($exception2);
-
-        $chargeMock5 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock5->expects($this->once())->method('cancel')->willReturn($cancellation3);
-
-        /**
-         * @var Charge $chargeMock1
-         * @var Charge $chargeMock2
-         * @var Charge $chargeMock3
-         * @var Charge $chargeMock4
-         * @var Charge $chargeMock5
-         */
-        $payment = new Payment();
-        $payment->addCharge($chargeMock1)->addCharge($chargeMock2)->addCharge($chargeMock3)->addCharge($chargeMock4)->addCharge($chargeMock5);
-
-        [$cancellations, $exceptions] = $payment->cancelAllCharges();
-        $this->assertEquals([$cancellation1, $cancellation2, $cancellation3], $cancellations);
-        $this->assertEquals([$exception1, $exception2], $exceptions);
-    }
-
-    /**
-     * Verify cancelAllCharges will throw any exception with Code different to
-     * ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.3.0
-     */
-    public function cancelAllChargesShouldThrowChargeCancelExceptionsOtherThanAlreadyCharged(): void
-    {
-        $ex1 = new UnzerApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK);
-        $ex2 = new UnzerApiException('', '', ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
-
-        $chargeMock1 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock1->expects($this->once())->method('cancel')->willThrowException($ex1);
-
-        $chargeMock2 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock2->expects($this->once())->method('cancel')->willThrowException($ex2);
-
-        /**
-         * @var Charge $chargeMock1
-         * @var Charge $chargeMock2
-         */
-        $payment = (new Payment())->addCharge($chargeMock1)->addCharge($chargeMock2);
-
-        try {
-            $payment->cancelAllCharges();
-            $this->assertFalse(true, 'The expected exception has not been thrown.');
-        } catch (UnzerApiException $e) {
-            $this->assertSame($ex2, $e);
-        }
-    }
-
-    //</editor-fold>
-
     /**
      * Verify cancelAmount will call cancelAuthorizationAmount with the amountToCancel.
      * When cancelAmount is <= the value of the cancellation it Will return auth cancellation only.

@@ -24,11 +24,11 @@
  */
 
 require_once __DIR__ . '/_enableExamples.php';
-if (defined('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES') && HEIDELPAY_PHP_PAYMENT_API_EXAMPLES !== true) {
+if (defined('UNZER_PAPI_EXAMPLES') && UNZER_PAPI_EXAMPLES !== true) {
     exit();
 }
 
-const EXAMPLE_BASE_FOLDER = HEIDELPAY_PHP_PAYMENT_API_URL . HEIDELPAY_PHP_PAYMENT_API_FOLDER;
+const EXAMPLE_BASE_FOLDER = UNZER_PAPI_URL . UNZER_PAPI_FOLDER;
 define('SUCCESS_URL', EXAMPLE_BASE_FOLDER . 'Success.php');
 define('PENDING_URL', EXAMPLE_BASE_FOLDER . 'Pending.php');
 define('FAILURE_URL', EXAMPLE_BASE_FOLDER . 'Failure.php');

@@ -53,7 +53,7 @@ trait CustomerFixtureTrait
     {
         return CustomerFactory::createCustomer('Peter', 'Universum')
             ->setSalutation(Salutations::MR)
-            ->setCompany('heidelpay GmbH')
+            ->setCompany('Unzer GmbH')
             ->setBirthDate('1989-12-24')
             ->setEmail('peter.universum@universum-group.de')
             ->setMobile('+49172123456')
@@ -85,7 +85,7 @@ trait CustomerFixtureTrait
             '2001-12-12',
             $this->getBillingAddress(),
             'test@test.de',
-            'heidelpay GmbH',
+            'Unzer GmbH',
             CompanyCommercialSectorItems::WAREHOUSING_AND_SUPPORT_ACTIVITIES_FOR_TRANSPORTATION
         );
     }
@@ -112,7 +112,7 @@ trait CustomerFixtureTrait
      */
     public function getMinimalRegisteredB2bCustomer(): Customer
     {
-        return CustomerFactory::createRegisteredB2bCustomer($this->getBillingAddress(), '123456789', 'heidelpay GmbH');
+        return CustomerFactory::createRegisteredB2bCustomer($this->getBillingAddress(), '123456789', 'Unzer GmbH');
     }
 
     /**
