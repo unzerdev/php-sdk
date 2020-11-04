@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the Unzer bank transfer example.
+ * This file defines the constants needed for the Unzer Bank Transfer example.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
