@@ -1,4 +1,4 @@
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/unzer/php-sdk.svg?style=flat-square)](https://packagist.org/packages/unzer/php-sdk)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/unzerdev/php-sdk.svg?style=flat-square)](https://packagist.org/packages/unzer/php-sdk)
 [![PHP 7.1](https://img.shields.io/badge/php-7.1-blue.svg)](http://www.php.net)
 [![PHP 7.2](https://img.shields.io/badge/php-7.2-blue.svg)](http://www.php.net)
 [![PHP 7.3](https://img.shields.io/badge/php-7.3-blue.svg)](http://www.php.net)
