@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the FlexiPay Direct (PIS) example.
+ * This is the controller for the Unzer Bank Transfer example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
