@@ -1,5 +1,5 @@
 {
-  "name": "unzer/php-sdk",
+  "name": "unzerdev/php-sdk",
   "description": "This is the php sdk to connect to the Unzer rest api.",
   "minimum-stability": "stable",
   "license": "Apache-2.0",
