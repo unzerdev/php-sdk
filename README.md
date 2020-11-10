@@ -49,4 +49,5 @@ For any issues or questions please get in touch with our support team.
 [support@unzer.com](mailto:support@unzer.com)
 
 ### Phone
-[+49 6221 43101-00](tel:+49-6221 43101 00)
+* DE: [+49 6221 43101-00](tel:+4962214310100)
+* AT: [+43 1 513 66 33 669](tel:+4315136633669)
