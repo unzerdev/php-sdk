@@ -48,13 +48,13 @@ function printMessage($type, $title, $text)
         <meta charset="UTF-8">
         <title>Unzer UI Examples</title>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+                integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
 
-        <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
-        <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
+        <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
+        <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
     </head>
 
     <body style="margin: 70px 70px 0;">
@@ -310,7 +310,7 @@ function printMessage($type, $title, $text)
                         </div>
                         <div class="description">
                             This example shows how to use the Payment Page hosted externally.
-                            The customer will be redirected to a Payment Page on a heidelpay
+                            The customer will be redirected to a Payment Page on a Unzer
                             server and redirected to a given RedirectUrl.
                         </div>
                     </div>
