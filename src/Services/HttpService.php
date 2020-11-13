@@ -240,7 +240,7 @@ class HttpService
     private function getEnvironmentUrl($uri): string
     {
         $envUrl = [];
-        switch ($this->getEnvironmentService()->getMgwEnvironment()) {
+        switch ($this->getEnvironmentService()->getPapiEnvironment()) {
             case EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT:
                 $envUrl[] = self::URL_PART_STAGING_ENVIRONMENT;
                 break;

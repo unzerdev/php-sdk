@@ -1,6 +1,6 @@
 <?php
 /**
- * This service provides for functionalities concerning the mgw environment.
+ * This service provides for functionalities concerning the PAPI environment.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -29,22 +29,22 @@ use function is_bool;
 
 class EnvironmentService
 {
-    private const ENV_VAR_NAME_ENVIRONMENT = 'UNZER_MGW_ENV';
+    private const ENV_VAR_NAME_ENVIRONMENT = 'UNZER_PAPI_ENV';
     public const ENV_VAR_VALUE_STAGING_ENVIRONMENT = 'STG';
     public const ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT = 'DEV';
     public const ENV_VAR_VALUE_PROD_ENVIRONMENT = 'PROD';
 
-    public const ENV_VAR_NAME_VERBOSE_TEST_LOGGING = 'UNZER_MGW_VERBOSE_TEST_LOGGING';
+    public const ENV_VAR_NAME_VERBOSE_TEST_LOGGING = 'UNZER_PAPI_VERBOSE_TEST_LOGGING';
 
-    public const ENV_VAR_TEST_PRIVATE_KEY = 'UNZER_MGW_TEST_PRIVATE_KEY';
-    public const ENV_VAR_TEST_PUBLIC_KEY = 'UNZER_MGW_TEST_PUBLIC_KEY';
-    public const ENV_VAR_TEST_PRIVATE_KEY_NON_3DS = 'UNZER_MGW_TEST_PRIVATE_KEY_NON_3DS';
-    public const ENV_VAR_TEST_PUBLIC_KEY_NON_3DS = 'UNZER_MGW_TEST_PUBLIC_KEY_NON_3DS';
+    public const ENV_VAR_TEST_PRIVATE_KEY = 'UNZER_PAPI_TEST_PRIVATE_KEY';
+    public const ENV_VAR_TEST_PUBLIC_KEY = 'UNZER_PAPI_TEST_PUBLIC_KEY';
+    public const ENV_VAR_TEST_PRIVATE_KEY_NON_3DS = 'UNZER_PAPI_TEST_PRIVATE_KEY_NON_3DS';
+    public const ENV_VAR_TEST_PUBLIC_KEY_NON_3DS = 'UNZER_PAPI_TEST_PUBLIC_KEY_NON_3DS';
 
-    private const ENV_VAR_NAME_TIMEOUT = 'UNZER_MGW_TIMEOUT';
+    private const ENV_VAR_NAME_TIMEOUT = 'UNZER_PAPI_TIMEOUT';
     private const DEFAULT_TIMEOUT = 60;
 
-    private const ENV_VAR_NAME_CURL_VERBOSE = 'UNZER_MGW_CURL_VERBOSE';
+    private const ENV_VAR_NAME_CURL_VERBOSE = 'UNZER_PAPI_CURL_VERBOSE';
 
     /**
      * Returns the value of the given env var as bool.
@@ -64,11 +64,11 @@ class EnvironmentService
     }
 
     /**
-     * Returns the MGW environment set via environment variable or PROD es default.
+     * Returns the PAPI environment set via environment variable or PROD es default.
      *
      * @return string
      */
-    public function getMgwEnvironment(): string
+    public function getPapiEnvironment(): string
     {
         return stripslashes($_SERVER[self::ENV_VAR_NAME_ENVIRONMENT] ?? self::ENV_VAR_VALUE_PROD_ENVIRONMENT);
     }
