@@ -47,18 +47,18 @@ require_once __DIR__ . '/../../../../autoload.php';
 <body style="margin: 70px 70px 0;">
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form" class="heidelpayUI form" action="<?php echo CONTROLLER_URL; ?>" method="POST" novalidate>
+<form id="payment-form" class="unzerUI form" action="<?php echo CONTROLLER_URL; ?>" method="POST" novalidate>
     <!-- This is just for the example - Start -->
     <div class="fields inline">
         <label for="transaction_type">Chose the transaction type you want to test:</label>
         <div class="field">
-            <div class="heidelpayUI radio checkbox">
+            <div class="unzerUI radio checkbox">
                 <input type="radio" name="transaction_type" value="authorize" checked="">
                 <label>Authorize</label>
             </div>
         </div>
         <div class="field">
-            <div class="heidelpayUI radio checkbox">
+            <div class="unzerUI radio checkbox">
                 <input type="radio" name="transaction_type" value="charge">
                 <label>Charge</label>
             </div>
@@ -68,7 +68,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     <!-- The Payment Page needs to be initialized using the private key, that means it can only be done with a Server-To-Server call.
     Therefore we redirect to the controller without doing anything here. -->
-    <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
 <script>
