@@ -59,7 +59,7 @@ use RuntimeException;
 
 class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface, CancelServiceInterface
 {
-    public const BASE_URL = 'api.heidelpay.com';
+    public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
     public const SDK_VERSION = '1.1.0.0';
