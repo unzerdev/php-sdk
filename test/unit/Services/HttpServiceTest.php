@@ -111,7 +111,7 @@ class HttpServiceTest extends BasePaymentTest
         $adapterMock->expects($this->once())->method('init')->with(
             $this->callback(
                 static function ($url) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $url) === 'https://api.heidelpay.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'api', $url) === 'https://api.unzer.com/v1/my/uri/123';
                 }),
             '{"dummyResource": "JsonSerialized"}',
             'GET'
@@ -185,7 +185,7 @@ class HttpServiceTest extends BasePaymentTest
         $loggerMock->expects($this->exactly(7))->method('log')->withConsecutive(
             [ $this->callback(
                     static function ($string) {
-                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') GET: https://api.heidelpay.com/v1/my/uri/123';
+                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') GET: https://api.unzer.com/v1/my/uri/123';
                     })
             ],
             [ $this->callback(
@@ -200,7 +200,7 @@ class HttpServiceTest extends BasePaymentTest
             ['(' . (getmypid()) . ') Response: (200) {"response":"myResponseString"}'],
             [ $this->callback(
                 static function ($string) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') POST: https://api.heidelpay.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') POST: https://api.unzer.com/v1/my/uri/123';
                 })
             ],
             [ $this->callback(
@@ -369,7 +369,7 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify environment switches when environment variable defines mgw environment.
+     * Verify environment switches when environment variable defines PAPI environment.
      *
      * @test
      *
@@ -387,8 +387,8 @@ class HttpServiceTest extends BasePaymentTest
         $adapterMock->method('execute')->willReturn('myResponseString');
         $adapterMock->method('getResponseCode')->willReturn('myResponseCode');
 
-        $envSrvMock = $this->getMockBuilder(EnvironmentService::class)->setMethods(['getMgwEnvironment'])->getMock();
-        $envSrvMock->method('getMgwEnvironment')->willReturn($environment);
+        $envSrvMock = $this->getMockBuilder(EnvironmentService::class)->setMethods(['getPapiEnvironment'])->getMock();
+        $envSrvMock->method('getPapiEnvironment')->willReturn($environment);
 
         /**
          * @var CurlAdapter        $adapterMock
@@ -439,11 +439,11 @@ class HttpServiceTest extends BasePaymentTest
     public function environmentUrlSwitchesWithEnvironmentVariableDP(): array
     {
         return [
-            'Dev' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, 'https://dev-api.heidelpay.com/v1'],
-            'Prod' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, 'https://api.heidelpay.com/v1'],
-            'Stg' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, 'https://stg-api.heidelpay.com/v1'],
-            'else' => ['something else', 'https://api.heidelpay.com/v1'],
-            'undefined' => [false, 'https://api.heidelpay.com/v1']
+            'Dev' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, 'https://dev-api.unzer.com/v1'],
+            'Prod' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, 'https://api.unzer.com/v1'],
+            'Stg' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, 'https://stg-api.unzer.com/v1'],
+            'else' => ['something else', 'https://api.unzer.com/v1'],
+            'undefined' => [false, 'https://api.unzer.com/v1']
         ];
     }
 
