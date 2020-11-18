@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 * Release for rebranded SDK.
 
+### Changed
+* Resource path when fetching payment types changed. Removed type name from path.
+
 ### Remove
 * Remove deprecated methods.
     * getAmountTotal

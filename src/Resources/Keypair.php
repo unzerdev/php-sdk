@@ -291,9 +291,9 @@ class Keypair extends AbstractUnzerResource
     /**
      * @inheritDoc
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
-        return parent::getResourcePath() . ($this->isDetailed() ? '/types' : '');
+        return parent::getResourcePath($httpMethod) . ($this->isDetailed() ? '/types' : '');
     }
 
     //</editor-fold>

@@ -26,6 +26,7 @@ namespace UnzerSDK\Interfaces;
 
 use UnzerSDK\Unzer;
 use RuntimeException;
+use UnzerSDK\Adapter\HttpAdapterInterface;
 
 interface UnzerParentInterface
 {
@@ -41,9 +42,10 @@ interface UnzerParentInterface
     /**
      * Returns the url string for this resource.
      *
-     * @param bool $appendId
+     * @param bool   $appendId
+     * @param string $httpMethod
      *
      * @return string
      */
-    public function getUri($appendId = true): string;
+    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string;
 }

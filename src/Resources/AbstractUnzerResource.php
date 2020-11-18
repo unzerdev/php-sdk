@@ -219,9 +219,9 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      *
      * @throws RuntimeException
      */
-    public function getUri($appendId = true): string
+    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
-        $uri = [rtrim($this->getParentResource()->getUri(), '/'), $this->getResourcePath()];
+        $uri = [rtrim($this->getParentResource()->getUri(), '/'), $this->getResourcePath($httpMethod)];
         if ($appendId) {
             if ($this->getId() !== null) {
                 $uri[] = $this->getId();
@@ -473,11 +473,13 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      * This returns the path of this resource within the parent resource.
      * Override this if the path does not match the class name.
      *
+     * @param string $httpMethod
+     *
      * @return string
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
-        return self::getResourceName();
+        return self::getResourceName($httpMethod);
     }
 
     /**

@@ -283,7 +283,7 @@ class Basket extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'baskets';
     }

@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\Resources\TransactionTypes;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasInvoiceId;
@@ -289,7 +290,7 @@ class Charge extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'charges';
     }

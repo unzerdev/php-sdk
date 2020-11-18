@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\Resources\TransactionTypes;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
@@ -209,7 +210,7 @@ class Cancellation extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'cancels';
     }
