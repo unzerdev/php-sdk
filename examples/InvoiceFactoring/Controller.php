@@ -38,7 +38,7 @@ use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
-use UnzerSDK\Resources\PaymentTypes\InvoiceFactoring;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 
 session_start();
 session_unset();
@@ -60,8 +60,8 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    /** @var InvoiceFactoring $invoiceFactoring */
-    $invoiceFactoring = $unzer->createPaymentType(new InvoiceFactoring());
+    /** @var InvoiceSecured $invoiceFactoring */
+    $invoiceFactoring = $unzer->createPaymentType(new InvoiceSecured());
 
     // A customer with matching addresses is mandatory for Invoice Factoring payment type
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');

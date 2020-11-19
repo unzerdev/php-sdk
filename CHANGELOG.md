@@ -10,9 +10,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Changed
 * Resource path when fetching payment types changed. Removed type name from path.
+* Replaced payment Classes:
+    * `InvoiceGuaranteed` and `InvoiceFactoring` replaced by `InvoiceSecured`
+        * basket implementation became mandatory.
+        * `reasonCode` became mandatory for cancel.
+    * `SepaDirectDebitGuaranteed` replaced by `SepaDirectDebitSecured`
+    * `HirePurchaseDirectDebit` replaced by `InstallmentSecured`
 
 ### Remove
-* Remove deprecated methods.
+* Remove deprecated methods:
     * getAmountTotal
     * setAmountTotal
     * getCardHolder
@@ -22,7 +28,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
     * cancelAuthorization
     * getResource
     * fetchResource
-* Remove deprecated constants.
+* Remove deprecated constants:
     * API_ERROR_AUTHORIZE_ALREADY_CANCELLED
     * API_ERROR_CHARGE_ALREADY_CHARGED_BACK
     * API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION

@@ -27,7 +27,7 @@ namespace UnzerSDK\Resources\PaymentTypes;
 use UnzerSDK\Traits\CanDirectChargeWithCustomer;
 use UnzerSDK\Traits\IsInvoiceType;
 
-class InvoiceFactoring extends BasePaymentType
+class InvoiceSecured extends BasePaymentType
 {
     use CanDirectChargeWithCustomer;
     use IsInvoiceType;

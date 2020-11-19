@@ -29,6 +29,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class InvoiceGuaranteedTest extends BaseIntegrationTest
@@ -95,7 +96,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
         /** @var InvoiceGuaranteed $invoiceGuaranteed */
         $invoiceGuaranteed = $this->unzer->createPaymentType(new InvoiceGuaranteed());
         $fetchedInvoiceGuaranteed = $this->unzer->fetchPaymentType($invoiceGuaranteed->getId());
-        $this->assertInstanceOf(InvoiceGuaranteed::class, $fetchedInvoiceGuaranteed);
+        $this->assertInstanceOf(InvoiceSecured::class, $fetchedInvoiceGuaranteed);
         $this->assertEquals($invoiceGuaranteed->getId(), $fetchedInvoiceGuaranteed->getId());
     }
 

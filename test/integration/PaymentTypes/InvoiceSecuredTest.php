@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This class defines integration tests to verify interface and functionality of the payment method Invoice Factoring.
+ * This class defines integration tests to verify interface and functionality of the payment method Invoice Secured.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -29,42 +29,61 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\PaymentTypes\InvoiceFactoring;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
-class InvoiceFactoringTest extends BaseIntegrationTest
+class InvoiceSecuredTest extends BaseIntegrationTest
 {
     /**
-     * Verifies Invoice Factoring payment type can be created.
+     * Verifies Invoice Secured payment type can be created.
      *
      * @test
      *
-     * @return InvoiceFactoring
+     * @return InvoiceSecured
      */
-    public function invoiceFactoringTypeShouldBeCreatableAndFetchable(): InvoiceFactoring
+    public function invoiceSecuredTypeShouldBeCreatableAndFetchable(): InvoiceSecured
     {
-        /** @var InvoiceFactoring $invoice */
-        $invoice = $this->unzer->createPaymentType(new InvoiceFactoring());
-        $this->assertInstanceOf(InvoiceFactoring::class, $invoice);
+        /** @var InvoiceSecured $invoice */
+        $invoice = $this->unzer->createPaymentType(new InvoiceSecured());
+        $this->assertInstanceOf(InvoiceSecured::class, $invoice);
         $this->assertNotNull($invoice->getId());
 
         $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
-        $this->assertInstanceOf(InvoiceFactoring::class, $fetchedInvoice);
+        $this->assertInstanceOf(InvoiceSecured::class, $fetchedInvoice);
         $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
 
         return $invoice;
     }
 
     /**
-     * Verify Invoice Factoring is not authorizable.
+     * Verify that deprecated guaranteed and factoring types can be fetched.
+     *
+     * @test
+     */
+    public function deprecatedTypesShouldBeFetchable()
+    {
+        /** @var InvoiceSecured $invoice */
+        $invoice = $this->unzer->createPaymentType(new InvoiceSecured());
+        $this->assertInstanceOf(InvoiceSecured::class, $invoice);
+        $this->assertNotNull($invoice->getId());
+
+        $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
+        $this->assertInstanceOf(InvoiceSecured::class, $fetchedInvoice);
+        $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
+
+        return $invoice;
+    }
+
+    /**
+     * Verify Invoice Secured is not authorizable.
      *
      * @test
      *
-     * @param InvoiceFactoring $invoice
-     * @depends invoiceFactoringTypeShouldBeCreatableAndFetchable
+     * @param InvoiceSecured $invoice
+     * @depends invoiceSecuredTypeShouldBeCreatableAndFetchable
      */
-    public function verifyInvoiceIsNotAuthorizable(InvoiceFactoring $invoice): void
+    public function verifyInvoiceIsNotAuthorizable(InvoiceSecured $invoice): void
     {
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
@@ -73,29 +92,29 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring needs a customer object
+     * Verify Invoice Secured needs a customer object
      *
      * @test
-     * @depends invoiceFactoringTypeShouldBeCreatableAndFetchable
+     * @depends invoiceSecuredTypeShouldBeCreatableAndFetchable
      *
-     * @param InvoiceFactoring $invoiceFactoring
+     * @param InvoiceSecured $invoiceSecured
      */
-    public function invoiceFactoringShouldRequiresCustomer(InvoiceFactoring $invoiceFactoring): void
+    public function invoiceSecuredShouldRequiresCustomer(InvoiceSecured $invoiceSecured): void
     {
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVF_REQUIRES_CUSTOMER);
-        $this->unzer->charge(1.0, 'EUR', $invoiceFactoring, self::RETURN_URL);
+        $this->unzer->charge(1.0, 'EUR', $invoiceSecured, self::RETURN_URL);
     }
 
     /**
-     * Verify Invoice Factoring is chargeable.
+     * Verify Invoice Secured is chargeable.
      *
      * @test
-     * @depends invoiceFactoringTypeShouldBeCreatableAndFetchable
+     * @depends invoiceSecuredTypeShouldBeCreatableAndFetchable
      *
-     * @param InvoiceFactoring $invoiceFactoring
+     * @param InvoiceSecured $invoiceSecured
      */
-    public function invoiceFactoringRequiresBasket(InvoiceFactoring $invoiceFactoring): void
+    public function invoiceSecuredRequiresBasket(InvoiceSecured $invoiceSecured): void
     {
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
@@ -103,26 +122,26 @@ class InvoiceFactoringTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVF_REQUIRES_BASKET);
 
-        $invoiceFactoring->charge(1.0, 'EUR', self::RETURN_URL, $customer);
+        $invoiceSecured->charge(1.0, 'EUR', self::RETURN_URL, $customer);
     }
 
     /**
-     * Verify Invoice Factoring is chargeable.
+     * Verify Invoice Secured is chargeable.
      *
      * @test
-     * @depends invoiceFactoringTypeShouldBeCreatableAndFetchable
+     * @depends invoiceSecuredTypeShouldBeCreatableAndFetchable
      *
-     * @param InvoiceFactoring $invoiceFactoring
+     * @param InvoiceSecured $invoiceSecured
      *
      * @return Charge
      */
-    public function invoiceFactoringShouldBeChargeable(InvoiceFactoring $invoiceFactoring): Charge
+    public function invoiceSecuredShouldBeChargeable(InvoiceSecured $invoiceSecured): Charge
     {
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getIban());
@@ -134,22 +153,22 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring is not shippable on Unzer object.
+     * Verify Invoice Secured is not shippable on Unzer object.
      *
      * @test
      */
-    public function verifyInvoiceFactoringIsNotShippableWoInvoiceIdOnUnzerObject(): void
+    public function verifyInvoiceSecuredIsNotShippableWoInvoiceIdOnUnzerObject(): void
     {
         // create payment type
-        /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
 
         // perform charge
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         // perform shipment
         $payment = $charge->getPayment();
@@ -159,22 +178,22 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring is not shippable on payment object.
+     * Verify Invoice Secured is not shippable on payment object.
      *
      * @test
      */
-    public function verifyInvoiceFactoringIsNotShippableWoInvoiceIdOnPaymentObject(): void
+    public function verifyInvoiceSecuredIsNotShippableWoInvoiceIdOnPaymentObject(): void
     {
         // create payment type
-        /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
 
         // perform charge
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         // perform shipment
         $payment = $charge->getPayment();
@@ -184,22 +203,22 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring shipment with invoice id on Unzer object.
+     * Verify Invoice Secured shipment with invoice id on Unzer object.
      *
      * @test
      */
-    public function verifyInvoiceFactoringShipmentWithInvoiceIdOnUnzerObject(): void
+    public function verifyInvoiceSecuredShipmentWithInvoiceIdOnUnzerObject(): void
     {
         // create payment type
-        /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
 
         // perform charge
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         // perform shipment
         $payment   = $charge->getPayment();
@@ -210,22 +229,22 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring shipment with invoice id on payment object.
+     * Verify Invoice Secured shipment with invoice id on payment object.
      *
      * @test
      */
-    public function verifyInvoiceFactoringShipmentWithInvoiceIdOnPaymentObject(): void
+    public function verifyInvoiceSecuredShipmentWithInvoiceIdOnPaymentObject(): void
     {
         // create payment type
-        /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
 
         // perform charge
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
-        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+        $charge = $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
 
         $payment   = $charge->getPayment();
         $invoiceId = 'i' . self::generateRandomId();
@@ -235,21 +254,21 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring shipment with pre set invoice id
+     * Verify Invoice Secured shipment with pre set invoice id
      *
      * @test
      */
-    public function verifyInvoiceFactoringShipmentWithPreSetInvoiceId(): void
+    public function verifyInvoiceSecuredShipmentWithPreSetInvoiceId(): void
     {
-        /** @var InvoiceFactoring $invoiceFactoring */
-        $invoiceFactoring = $this->unzer->createPaymentType(new InvoiceFactoring());
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
 
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $basket = $this->createBasket();
         $invoiceId = 'i' . self::generateRandomId();
-        $charge = $invoiceFactoring->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
+        $charge = $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
 
         $payment   = $charge->getPayment();
         $shipment  = $this->unzer->ship($payment);
@@ -258,42 +277,45 @@ class InvoiceFactoringTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify Invoice Factoring charge can canceled.
+     * Verify Invoice Secured charge can canceled.
      *
      * @test
      *
      * @param Charge $charge
-     * @depends invoiceFactoringShouldBeChargeable
+     * @depends invoiceSecuredShouldBeChargeable
      */
-    public function verifyInvoiceChargeCanBeCanceled(Charge $charge): void
+    public function verifyInvoiceChargeCanBeCanceled(Charge $charge): Charge
     {
-        $cancellation = $charge->cancel($charge->getAmount(), CancelReasonCodes::REASON_CODE_CANCEL);
+        $cancellation = $charge->cancel(100, CancelReasonCodes::REASON_CODE_CANCEL);
         $this->assertNotNull($cancellation);
         $this->assertNotNull($cancellation->getId());
+        return $charge;
     }
 
     /**
-     * Verify Invoice Factoring charge cancel throws exception if the amount is missing.
+     * Verify Invoice Secured charge cancel throws exception if the amount is missing.
      *
      * @test
      *
      * @param Charge $charge
-     * @depends invoiceFactoringShouldBeChargeable
+     * @depends verifyInvoiceChargeCanBeCanceled
      */
-    public function verifyInvoiceChargeCanNotBeCancelledWoAmount(Charge $charge): void
+    public function verifyInvoiceChargeCanBeCancelledWoAmount(Charge $charge): void
     {
-        $this->expectException(UnzerApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_AMOUNT_IS_MISSING);
-        $charge->cancel();
+        $cancellation = $charge->cancel(null, CancelReasonCodes::REASON_CODE_CANCEL);
+
+        $this->assertNotNull($cancellation);
+        $this->assertNotNull($cancellation->getId());
+        $this->assertEquals(19.0, $cancellation->getAmount());
     }
 
     /**
-     * Verify Invoice Factoring charge cancel throws exception if the reason is missing.
+     * Verify Invoice Secured charge cancel throws exception if the reason is missing.
      *
      * @test
      *
      * @param Charge $charge
-     * @depends invoiceFactoringShouldBeChargeable
+     * @depends invoiceSecuredShouldBeChargeable
      */
     public function verifyInvoiceChargeCanNotBeCancelledWoReasonCode(Charge $charge): void
     {
