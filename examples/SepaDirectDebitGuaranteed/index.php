@@ -37,10 +37,10 @@ require_once __DIR__ . '/../../../../autoload.php';
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
-    <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
+    <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
+    <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
 </head>
 
 <body style="margin: 70px 70px 0;">
@@ -60,16 +60,16 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <script>
     // Create an Unzer instance with your public key
-    let heidelpayInstance = new heidelpay('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
+    let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
     // Create a SEPA Direct Debit Guaranteed instance and render the form
-    let sepaDirectDebitGuaranteed = heidelpayInstance.SepaDirectDebitGuaranteed();
+    let sepaDirectDebitGuaranteed = unzerInstance.SepaDirectDebitGuaranteed();
     sepaDirectDebitGuaranteed.create('sepa-direct-debit-guaranteed', {
         containerId: 'sepa-guaranteed-IBAN'
     });
 
     // Creat a customer instance and render the form
-    let Customer = heidelpayInstance.Customer();
+    let Customer = unzerInstance.Customer();
     Customer.create({
         containerId: 'customer'
     });

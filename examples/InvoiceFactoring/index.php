@@ -38,8 +38,8 @@ require_once __DIR__ . '/../../../../autoload.php';
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
 
-    <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
-    <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
+    <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
+    <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
 </head>
 
 <body style="margin: 70px 70px 0;">
@@ -51,7 +51,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <script>
     // Create an Unzer instance with your public key
     // This is not actually needed for this example but we want the sandbox banner to show on the page.
-    let heidelpayInstance = new heidelpay('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
+    let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 </script
 
 </body>
