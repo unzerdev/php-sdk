@@ -42,27 +42,27 @@ class InstallmentSecuredTest extends BasePaymentTest
      */
     public function getterAndSetterWorkAsExpected(): void
     {
-        $hdd = new InstallmentSecured();
-        $this->assertEmpty($hdd->getTransactionParams());
-        $this->assertNull($hdd->getAccountHolder());
-        $this->assertNull($hdd->getIban());
-        $this->assertNull($hdd->getBic());
-        $this->assertNull($hdd->getOrderDate());
-        $this->assertNull($hdd->getNumberOfRates());
-        $this->assertNull($hdd->getDayOfPurchase());
-        $this->assertNull($hdd->getTotalPurchaseAmount());
-        $this->assertNull($hdd->getTotalInterestAmount());
-        $this->assertNull($hdd->getTotalAmount());
-        $this->assertNull($hdd->getEffectiveInterestRate());
-        $this->assertNull($hdd->getNominalInterestRate());
-        $this->assertNull($hdd->getFeeFirstRate());
-        $this->assertNull($hdd->getFeePerRate());
-        $this->assertNull($hdd->getMonthlyRate());
-        $this->assertNull($hdd->getLastRate());
-        $this->assertEmpty($hdd->getInvoiceDate());
-        $this->assertEmpty($hdd->getInvoiceDueDate());
+        $ins = new InstallmentSecured();
+        $this->assertEmpty($ins->getTransactionParams());
+        $this->assertNull($ins->getAccountHolder());
+        $this->assertNull($ins->getIban());
+        $this->assertNull($ins->getBic());
+        $this->assertNull($ins->getOrderDate());
+        $this->assertNull($ins->getNumberOfRates());
+        $this->assertNull($ins->getDayOfPurchase());
+        $this->assertNull($ins->getTotalPurchaseAmount());
+        $this->assertNull($ins->getTotalInterestAmount());
+        $this->assertNull($ins->getTotalAmount());
+        $this->assertNull($ins->getEffectiveInterestRate());
+        $this->assertNull($ins->getNominalInterestRate());
+        $this->assertNull($ins->getFeeFirstRate());
+        $this->assertNull($ins->getFeePerRate());
+        $this->assertNull($ins->getMonthlyRate());
+        $this->assertNull($ins->getLastRate());
+        $this->assertEmpty($ins->getInvoiceDate());
+        $this->assertEmpty($ins->getInvoiceDueDate());
 
-        $hdd->setAccountHolder(null)
+        $ins->setAccountHolder(null)
             ->setIban(null)
             ->setBic(null)
             ->setOrderDate(null)
@@ -80,26 +80,26 @@ class InstallmentSecuredTest extends BasePaymentTest
             ->setInvoiceDate(null)
             ->setInvoiceDueDate(null);
 
-        $this->assertEmpty($hdd->getTransactionParams());
-        $this->assertNull($hdd->getAccountHolder());
-        $this->assertNull($hdd->getIban());
-        $this->assertNull($hdd->getBic());
-        $this->assertNull($hdd->getOrderDate());
-        $this->assertNull($hdd->getNumberOfRates());
-        $this->assertNull($hdd->getDayOfPurchase());
-        $this->assertNull($hdd->getTotalPurchaseAmount());
-        $this->assertNull($hdd->getTotalInterestAmount());
-        $this->assertNull($hdd->getTotalAmount());
-        $this->assertNull($hdd->getEffectiveInterestRate());
-        $this->assertNull($hdd->getNominalInterestRate());
-        $this->assertNull($hdd->getFeeFirstRate());
-        $this->assertNull($hdd->getFeePerRate());
-        $this->assertNull($hdd->getMonthlyRate());
-        $this->assertNull($hdd->getLastRate());
-        $this->assertEmpty($hdd->getInvoiceDate());
-        $this->assertEmpty($hdd->getInvoiceDueDate());
+        $this->assertEmpty($ins->getTransactionParams());
+        $this->assertNull($ins->getAccountHolder());
+        $this->assertNull($ins->getIban());
+        $this->assertNull($ins->getBic());
+        $this->assertNull($ins->getOrderDate());
+        $this->assertNull($ins->getNumberOfRates());
+        $this->assertNull($ins->getDayOfPurchase());
+        $this->assertNull($ins->getTotalPurchaseAmount());
+        $this->assertNull($ins->getTotalInterestAmount());
+        $this->assertNull($ins->getTotalAmount());
+        $this->assertNull($ins->getEffectiveInterestRate());
+        $this->assertNull($ins->getNominalInterestRate());
+        $this->assertNull($ins->getFeeFirstRate());
+        $this->assertNull($ins->getFeePerRate());
+        $this->assertNull($ins->getMonthlyRate());
+        $this->assertNull($ins->getLastRate());
+        $this->assertEmpty($ins->getInvoiceDate());
+        $this->assertEmpty($ins->getInvoiceDueDate());
 
-        $hdd->setAccountHolder('My Name')
+        $ins->setAccountHolder('My Name')
             ->setIban('my IBAN')
             ->setBic('my BIC')
             ->setOrderDate($this->getYesterdaysTimestamp()->format('Y-m-d'))
@@ -117,48 +117,48 @@ class InstallmentSecuredTest extends BasePaymentTest
             ->setInvoiceDate($this->getTomorrowsTimestamp()->format('Y-m-d'))
             ->setInvoiceDueDate($this->getNextYearsTimestamp()->format('Y-m-d'));
 
-        $this->assertEquals('My Name', $hdd->getAccountHolder());
-        $this->assertEquals('my IBAN', $hdd->getIban());
-        $this->assertEquals('my BIC', $hdd->getBic());
-        $this->assertEquals($this->getYesterdaysTimestamp()->format('Y-m-d'), $hdd->getOrderDate());
-        $this->assertEquals(15, $hdd->getNumberOfRates());
-        $this->assertEquals($this->getTodaysDateString(), $hdd->getDayOfPurchase());
-        $this->assertEquals(119.0, $hdd->getTotalPurchaseAmount());
-        $this->assertEquals(0.96, $hdd->getTotalInterestAmount());
-        $this->assertEquals(119.96, $hdd->getTotalAmount());
-        $this->assertEquals(4.99, $hdd->getEffectiveInterestRate());
-        $this->assertEquals(4.92, $hdd->getNominalInterestRate());
-        $this->assertEquals(0, $hdd->getFeeFirstRate());
-        $this->assertEquals(0, $hdd->getFeePerRate());
-        $this->assertEquals(39.99, $hdd->getMonthlyRate());
-        $this->assertEquals(39.98, $hdd->getLastRate());
-        $this->assertEquals($this->getTomorrowsTimestamp()->format('Y-m-d'), $hdd->getInvoiceDate());
-        $this->assertEquals($this->getNextYearsTimestamp()->format('Y-m-d'), $hdd->getInvoiceDueDate());
-        $this->assertEquals(['effectiveInterestRate' => $hdd->getEffectiveInterestRate()], $hdd->getTransactionParams());
+        $this->assertEquals('My Name', $ins->getAccountHolder());
+        $this->assertEquals('my IBAN', $ins->getIban());
+        $this->assertEquals('my BIC', $ins->getBic());
+        $this->assertEquals($this->getYesterdaysTimestamp()->format('Y-m-d'), $ins->getOrderDate());
+        $this->assertEquals(15, $ins->getNumberOfRates());
+        $this->assertEquals($this->getTodaysDateString(), $ins->getDayOfPurchase());
+        $this->assertEquals(119.0, $ins->getTotalPurchaseAmount());
+        $this->assertEquals(0.96, $ins->getTotalInterestAmount());
+        $this->assertEquals(119.96, $ins->getTotalAmount());
+        $this->assertEquals(4.99, $ins->getEffectiveInterestRate());
+        $this->assertEquals(4.92, $ins->getNominalInterestRate());
+        $this->assertEquals(0, $ins->getFeeFirstRate());
+        $this->assertEquals(0, $ins->getFeePerRate());
+        $this->assertEquals(39.99, $ins->getMonthlyRate());
+        $this->assertEquals(39.98, $ins->getLastRate());
+        $this->assertEquals($this->getTomorrowsTimestamp()->format('Y-m-d'), $ins->getInvoiceDate());
+        $this->assertEquals($this->getNextYearsTimestamp()->format('Y-m-d'), $ins->getInvoiceDueDate());
+        $this->assertEquals(['effectiveInterestRate' => $ins->getEffectiveInterestRate()], $ins->getTransactionParams());
 
         // test dates with DateTime objects
         $today = new DateTime();
-        $hdd->setOrderDate($today->add(new DateInterval('P1D')))
+        $ins->setOrderDate($today->add(new DateInterval('P1D')))
             ->setDayOfPurchase($today->add(new DateInterval('P1D')))
             ->setInvoiceDate($today->add(new DateInterval('P1D')))
             ->setInvoiceDueDate($today->add(new DateInterval('P1D')));
 
         $today = new DateTime();
-        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $hdd->getOrderDate());
-        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $hdd->getDayOfPurchase());
-        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $hdd->getInvoiceDate());
-        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $hdd->getInvoiceDueDate());
+        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $ins->getOrderDate());
+        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $ins->getDayOfPurchase());
+        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $ins->getInvoiceDate());
+        $this->assertEquals($today->add(new DateInterval('P1D'))->format('Y-m-d'), $ins->getInvoiceDueDate());
 
         // test dates with null
-        $hdd->setOrderDate(null)
+        $ins->setOrderDate(null)
             ->setDayOfPurchase(null)
             ->setInvoiceDate(null)
             ->setInvoiceDueDate(null);
 
-        $this->assertNull($hdd->getOrderDate());
-        $this->assertNull($hdd->getDayOfPurchase());
-        $this->assertNull($hdd->getInvoiceDate());
-        $this->assertNull($hdd->getInvoiceDueDate());
+        $this->assertNull($ins->getOrderDate());
+        $this->assertNull($ins->getDayOfPurchase());
+        $this->assertNull($ins->getInvoiceDate());
+        $this->assertNull($ins->getInvoiceDueDate());
     }
 
     /**
@@ -168,8 +168,8 @@ class InstallmentSecuredTest extends BasePaymentTest
      */
     public function selectedInstalmentPlanDataIsUsedToUpdateInstalmentPlanInformation(): void
     {
-        /** @var InstallmentSecured|MockObject $hddMock */
-        $hddMock = $this->getMockBuilder(InstallmentSecured::class)->setMethods(['handleResponse'])->getMock();
+        /** @var InstallmentSecured|MockObject $Mock */
+        $Mock = $this->getMockBuilder(InstallmentSecured::class)->setMethods(['handleResponse'])->getMock();
 
         /** @var InstalmentPlan|MockObject $instalmentPlanMock */
         $instalmentPlanMock = $this->getMockBuilder(InstalmentPlan::class)->setMethods(['expose'])->getMock();
@@ -178,9 +178,9 @@ class InstallmentSecuredTest extends BasePaymentTest
 
         $instalmentPlanMock->expects($this->once())->method('expose')->willReturn($exposedObject);
         /** @noinspection PhpParamsInspection */
-        $hddMock->expects($this->once())->method('handleResponse')->with($exposedObject);
+        $Mock->expects($this->once())->method('handleResponse')->with($exposedObject);
 
-        $hddMock->selectInstalmentPlan($instalmentPlanMock);
+        $Mock->selectInstalmentPlan($instalmentPlanMock);
     }
 
     /**

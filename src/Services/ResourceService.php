@@ -53,7 +53,7 @@ use UnzerSDK\Resources\PaymentTypes\PIS;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
 use UnzerSDK\Resources\PaymentTypes\Przelewy24;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\PaymentTypes\Wechatpay;
 use UnzerSDK\Resources\Recurring;
@@ -558,7 +558,8 @@ class ResourceService implements ResourceServiceInterface
                 $paymentType = new SepaDirectDebit(null);
                 break;
             case IdStrings::SEPA_DIRECT_DEBIT_GUARANTEED:
-                $paymentType = new SepaDirectDebitGuaranteed(null);
+            case IdStrings::SEPA_DIRECT_DEBIT_SECURED:
+                $paymentType = new SepaDirectDebitSecured(null);
                 break;
             case IdStrings::SOFORT:
                 $paymentType = new Sofort();

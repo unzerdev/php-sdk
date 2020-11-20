@@ -57,21 +57,21 @@ class InstallmentSecuredTest extends BaseIntegrationTest
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[1];
 
-        $hdd = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
-        $this->unzer->createPaymentType($hdd);
-        $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
+        $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
+        $this->unzer->createPaymentType($ins);
+        $this->assertArraySubset($selectedPlan->expose(), $ins->expose());
 
-        $fetchedHdd = $this->unzer->fetchPaymentType($hdd->getId());
-        $this->assertEquals($hdd->expose(), $fetchedHdd->expose());
+        $fetchedIns = $this->unzer->fetchPaymentType($ins->getId());
+        $this->assertEquals($ins->expose(), $fetchedIns->expose());
 
-        $hdd->setIban('DE89370400440532013000')
+        $ins->setIban('DE89370400440532013000')
             ->setBic('COBADEFFXXX')
             ->setAccountHolder('Peter Universum')
             ->setInvoiceDate($this->getYesterdaysTimestamp())
             ->setInvoiceDueDate($this->getTomorrowsTimestamp());
-        $hddClone = clone $hdd;
-        $this->unzer->updatePaymentType($hdd);
-        $this->assertEquals($hddClone->expose(), $hdd->expose());
+        $insClone = clone $ins;
+        $this->unzer->updatePaymentType($ins);
+        $this->assertEquals($insClone->expose(), $ins->expose());
     }
 
     /**
@@ -89,14 +89,14 @@ class InstallmentSecuredTest extends BaseIntegrationTest
         $hpPlans = $this->unzer->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99);
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $hpPlans->getPlans()[0];
-        $hdd = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
-        $this->unzer->createPaymentType($hdd);
+        $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
+        $this->unzer->createPaymentType($ins);
 
         $customer = $this->getCustomer()->setFirstname($firstname)->setLastname($lastname);
         $basket = $this->createBasket();
 
         try {
-            $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+            $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
             if ($errorCode!== null) {
                 $this->assertTrue(false, 'Expected error for negative ranking test.');
             }
@@ -124,9 +124,9 @@ class InstallmentSecuredTest extends BaseIntegrationTest
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
         $this->assertCount($selectedPlan->getNumberOfRates(), $selectedPlan->getInstallmentRates(), 'The number of rates should equal the actual rate count.');
-        $hdd = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
-        $this->unzer->createPaymentType($hdd);
-        $this->assertArraySubset($selectedPlan->expose(), $hdd->expose());
+        $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
+        $this->unzer->createPaymentType($ins);
+        $this->assertArraySubset($selectedPlan->expose(), $ins->expose());
     }
 
     /**
@@ -142,10 +142,10 @@ class InstallmentSecuredTest extends BaseIntegrationTest
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
-        $hdd = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
-        $this->unzer->createPaymentType($hdd);
+        $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
+        $this->unzer->createPaymentType($ins);
 
-        $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
         $payment = $authorize->getPayment();
         $charge = $payment->charge();
         $this->assertNotNull($charge->getId());
@@ -165,10 +165,10 @@ class InstallmentSecuredTest extends BaseIntegrationTest
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
-        $hdd = new InstallmentSecured($selectedPlan, 'DE89370400440532013000', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $this->getTodaysDateString(), $this->getTomorrowsTimestamp());
-        $this->unzer->createPaymentType($hdd);
+        $ins = new InstallmentSecured($selectedPlan, 'DE89370400440532013000', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $this->getTodaysDateString(), $this->getTomorrowsTimestamp());
+        $this->unzer->createPaymentType($ins);
 
-        $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $this->createBasket());
+        $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $this->createBasket());
         $payment = $authorize->getPayment();
         $payment->charge();
         $shipment = $payment->ship();
@@ -194,10 +194,10 @@ class InstallmentSecuredTest extends BaseIntegrationTest
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
-        $hdd = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
-        $this->unzer->createPaymentType($hdd);
+        $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
+        $this->unzer->createPaymentType($ins);
 
-        $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
         $payment = $authorize->getPayment();
         $payment->charge();
         $cancel = $payment->cancelAmount();
@@ -219,10 +219,10 @@ class InstallmentSecuredTest extends BaseIntegrationTest
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
-        $hdd = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
-        $this->unzer->createPaymentType($hdd);
+        $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
+        $this->unzer->createPaymentType($ins);
 
-        $authorize = $hdd->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
         $payment = $authorize->getPayment();
         $payment->charge();
         $cancel = $payment->cancelAmount(59.5, null, null, 50.0, 9.5);

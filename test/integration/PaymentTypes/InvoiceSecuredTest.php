@@ -102,7 +102,7 @@ class InvoiceSecuredTest extends BaseIntegrationTest
     public function invoiceSecuredShouldRequiresCustomer(InvoiceSecured $invoiceSecured): void
     {
         $this->expectException(UnzerApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVF_REQUIRES_CUSTOMER);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_FACTORING_REQUIRES_CUSTOMER);
         $this->unzer->charge(1.0, 'EUR', $invoiceSecured, self::RETURN_URL);
     }
 
@@ -120,7 +120,7 @@ class InvoiceSecuredTest extends BaseIntegrationTest
         $customer->setShippingAddress($customer->getBillingAddress());
 
         $this->expectException(UnzerApiException::class);
-        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_IVF_REQUIRES_BASKET);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_FACTORING_REQUIRES_BASKET);
 
         $invoiceSecured->charge(1.0, 'EUR', self::RETURN_URL, $customer);
     }

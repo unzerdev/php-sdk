@@ -45,8 +45,8 @@ class ApiResponseCodes
     public const API_ERROR_ORDER_ID_ALREADY_IN_USE                     = 'API.320.200.138';
     public const API_ERROR_RESOURCE_DOES_NOT_BELONG_TO_MERCHANT        = 'API.320.200.145';
     public const API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED         = 'API.330.100.007';
-    public const API_ERROR_IVF_REQUIRES_CUSTOMER                       = 'API.330.100.008';
-    public const API_ERROR_IVF_REQUIRES_BASKET                         = 'API.330.100.023';
+    public const API_ERROR_FACTORING_REQUIRES_CUSTOMER                 = 'API.330.100.008';
+    public const API_ERROR_FACTORING_REQUIRES_BASKET                   = 'API.330.100.023';
     public const API_ERROR_ADDRESSES_DO_NOT_MATCH                      = 'API.330.100.106';
     public const API_ERROR_CURRENCY_IS_NOT_SUPPORTED                   = 'API.330.100.202';
     public const API_ERROR_ALREADY_CANCELLED                           = 'API.340.100.014';

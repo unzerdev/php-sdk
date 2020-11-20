@@ -53,6 +53,7 @@ class IdStrings
     public const PRZELEWY24 = 'p24';
     public const SEPA_DIRECT_DEBIT = 'sdd';
     public const SEPA_DIRECT_DEBIT_GUARANTEED = 'ddg';
+    public const SEPA_DIRECT_DEBIT_SECURED = 'dds';
     public const SOFORT = 'sft';
     public const WECHATPAY = 'wcp';
 
@@ -83,6 +84,7 @@ class IdStrings
         self::PRZELEWY24,
         self::SEPA_DIRECT_DEBIT,
         self::SEPA_DIRECT_DEBIT_GUARANTEED,
+        self::SEPA_DIRECT_DEBIT_SECURED,
         self::SOFORT,
         self::WECHATPAY,
     ];

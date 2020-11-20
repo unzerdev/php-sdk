@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the SEPA direct debit guaranteed example.
+ * This is the controller for the SEPA direct debit secured example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
@@ -66,7 +66,7 @@ try {
 
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
-    // A Basket is mandatory for SEPA direct debit guaranteed payment type
+    // A Basket is mandatory for SEPA direct debit secured payment type
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);

@@ -52,7 +52,7 @@ use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -445,7 +445,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'EPS' => [new EPS(), 'parent/resource/path/types/eps'],
             'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit'],
-            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types/sepa-direct-debit-guaranteed'],
+            'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types/sepa-direct-debit-secured'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice'],
             'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types/invoice-guaranteed'],
             'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels'],
@@ -474,7 +474,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'EPS' => [new EPS(), 'parent/resource/path/types'],
             'Alipay' => [new Alipay(), 'parent/resource/path/types'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types'],
-            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types'],
+            'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types'],
             'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types'],
             'InstallmentSecured' => [new InstallmentSecured(), 'parent/resource/path/types'],

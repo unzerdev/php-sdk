@@ -86,7 +86,7 @@ try {
         ->setShippingAddress($address)
         ->setEmail('linda.heideich@test.de');
 
-    // A Basket is mandatory for SEPA direct debit guaranteed payment type
+    // A Basket is mandatory for Installment Secured payment type
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);

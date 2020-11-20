@@ -29,7 +29,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
@@ -41,15 +41,15 @@ class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
      */
     public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly(): void
     {
-        $directDebitGuaranteed = new SepaDirectDebitGuaranteed('DE89370400440532013000');
-        /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
-        $directDebitGuaranteed = $this->unzer->createPaymentType($directDebitGuaranteed);
-        $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
-        $this->assertNotNull($directDebitGuaranteed->getId());
+        $directDebitSecured = new SepaDirectDebitSecured('DE89370400440532013000');
+        /** @var SepaDirectDebitSecured $directDebitSecured */
+        $directDebitSecured = $this->unzer->createPaymentType($directDebitSecured);
+        $this->assertInstanceOf(SepaDirectDebitSecured::class, $directDebitSecured);
+        $this->assertNotNull($directDebitSecured->getId());
 
-        /** @var SepaDirectDebitGuaranteed $fetchedDirectDebitGuaranteed */
-        $fetchedDirectDebitGuaranteed = $this->unzer->fetchPaymentType($directDebitGuaranteed->getId());
-        $this->assertEquals($directDebitGuaranteed->expose(), $fetchedDirectDebitGuaranteed->expose());
+        /** @var SepaDirectDebitSecured $fetchedDirectDebitGuaranteed */
+        $fetchedDirectDebitGuaranteed = $this->unzer->fetchPaymentType($directDebitSecured->getId());
+        $this->assertEquals($directDebitSecured->expose(), $fetchedDirectDebitGuaranteed->expose());
     }
 
     /**
@@ -57,19 +57,19 @@ class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
      *
      * @test
      *
-     * @return SepaDirectDebitGuaranteed
+     * @return SepaDirectDebitSecured
      */
-    public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitGuaranteed
+    public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitSecured
     {
-        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setHolder('John Doe')->setBic('COBADEFFXXX');
-        /** @var SepaDirectDebitGuaranteed $directDebitGuaranteed */
-        $directDebitGuaranteed = $this->unzer->createPaymentType($directDebitGuaranteed);
-        $this->assertInstanceOf(SepaDirectDebitGuaranteed::class, $directDebitGuaranteed);
-        $this->assertNotNull($directDebitGuaranteed->getId());
+        $directDebitSecured = (new SepaDirectDebitSecured('DE89370400440532013000'))->setHolder('John Doe')->setBic('COBADEFFXXX');
+        /** @var SepaDirectDebitSecured $directDebitSecured */
+        $directDebitSecured = $this->unzer->createPaymentType($directDebitSecured);
+        $this->assertInstanceOf(SepaDirectDebitSecured::class, $directDebitSecured);
+        $this->assertNotNull($directDebitSecured->getId());
 
-        /** @var SepaDirectDebitGuaranteed $fetchedDirectDebitGuaranteed */
-        $fetchedDirectDebitGuaranteed = $this->unzer->fetchPaymentType($directDebitGuaranteed->getId());
-        $this->assertEquals($directDebitGuaranteed->expose(), $fetchedDirectDebitGuaranteed->expose());
+        /** @var SepaDirectDebitSecured $fetchedDirectDebitGuaranteed */
+        $fetchedDirectDebitGuaranteed = $this->unzer->fetchPaymentType($directDebitSecured->getId());
+        $this->assertEquals($directDebitSecured->expose(), $fetchedDirectDebitGuaranteed->expose());
 
         return $fetchedDirectDebitGuaranteed;
     }
@@ -79,15 +79,15 @@ class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
      *
      * @test
      *
-     * @param SepaDirectDebitGuaranteed $directDebitGuaranteed
+     * @param SepaDirectDebitSecured $directDebitSecured
      * @depends sepaDirectDebitGuaranteedShouldBeCreatable
      */
-    public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitGuaranteed $directDebitGuaranteed): void
+    public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitSecured $directDebitSecured): void
     {
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(1.0, 'EUR', $directDebitGuaranteed, self::RETURN_URL);
+        $this->unzer->authorize(1.0, 'EUR', $directDebitSecured, self::RETURN_URL);
     }
 
     /**
@@ -97,11 +97,12 @@ class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
      */
     public function directDebitGuaranteedShouldAllowCharge(): void
     {
-        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
-        $this->unzer->createPaymentType($directDebitGuaranteed);
+        $directDebitSecured = (new SepaDirectDebitSecured('DE89370400440532013000'))->setBic('COBADEFFXXX');
+        $this->unzer->createPaymentType($directDebitSecured);
 
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge   = $directDebitGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge   = $directDebitSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
         $this->assertTransactionResourceHasBeenCreated($charge);
     }
 
@@ -112,13 +113,14 @@ class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
      */
     public function ddgShouldThrowErrorIfAddressesDoNotMatch(): void
     {
-        $directDebitGuaranteed = (new SepaDirectDebitGuaranteed('DE89370400440532013000'))->setBic('COBADEFFXXX');
-        $this->unzer->createPaymentType($directDebitGuaranteed);
+        $directDebitSecured = (new SepaDirectDebitSecured('DE89370400440532013000'))->setBic('COBADEFFXXX');
+        $this->unzer->createPaymentType($directDebitSecured);
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESSES_DO_NOT_MATCH);
 
         $customer = $this->getMaximumCustomerInclShippingAddress();
-        $directDebitGuaranteed->charge(100.0, 'EUR', self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $directDebitSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
     }
 }

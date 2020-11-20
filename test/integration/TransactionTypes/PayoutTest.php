@@ -30,7 +30,7 @@ use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -87,7 +87,7 @@ class PayoutTest extends BaseIntegrationTest
      */
     public function payoutCanBeCalledForSepaDirectDebitGuaranteedType(): void
     {
-        $sepa = new SepaDirectDebitGuaranteed('DE89370400440532013000');
+        $sepa = new SepaDirectDebitSecured('DE89370400440532013000');
         $this->unzer->createPaymentType($sepa);
         $customer = $this->getMaximumCustomer()->setShippingAddress($this->getBillingAddress());
         $payout   = $sepa->payout(100.0, 'EUR', self::RETURN_URL, $customer);

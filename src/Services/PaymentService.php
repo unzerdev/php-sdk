@@ -290,8 +290,8 @@ class PaymentService implements PaymentServiceInterface
         $effectiveInterest,
         DateTime $orderDate = null
     ): InstalmentPlans {
-        $hdd   = (new InstallmentSecured(null, null, null))->setParentResource($this->unzer);
-        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
+        $ins   = (new InstallmentSecured(null, null, null))->setParentResource($this->unzer);
+        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($ins);
         /** @var InstalmentPlans $plans */
         $plans = $this->unzer->getResourceService()->fetchResource($plans);
         return $plans;
