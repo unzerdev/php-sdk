@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the Invoice Factoring example.
+ * This is the controller for the Invoice Secured example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
@@ -60,10 +60,10 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    /** @var InvoiceSecured $invoiceFactoring */
-    $invoiceFactoring = $unzer->createPaymentType(new InvoiceSecured());
+    /** @var InvoiceSecured $invoiceSecured */
+    $invoiceSecured = $unzer->createPaymentType(new InvoiceSecured());
 
-    // A customer with matching addresses is mandatory for Invoice Factoring payment type
+    // A customer with matching addresses is mandatory for Invoice Secured payment type
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
     $address  = new Address();
     $address->setName('Max Mustermann')
@@ -75,13 +75,13 @@ try {
 
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
-    // A Basket is mandatory for Invoice Factoring payment type
+    // A Basket is mandatory for Invoice Secured payment type
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);
     $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
-    $transaction = $invoiceFactoring->charge(119.0, 'EUR', CONTROLLER_URL, $customer, $orderId, null, $basket);
+    $transaction = $invoiceSecured->charge(119.0, 'EUR', CONTROLLER_URL, $customer, $orderId, null, $basket);
 
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();

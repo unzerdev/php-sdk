@@ -29,7 +29,7 @@ namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Payment;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -76,7 +76,7 @@ class CancellationTest extends BasePaymentTest
     }
 
     /**
-     * Verify expose will translate amount to amountGross if payment type is Hire Purchase.
+     * Verify expose will translate amount to amountGross if payment type is Installment Secured.
      *
      * @test
      */
@@ -87,7 +87,7 @@ class CancellationTest extends BasePaymentTest
         $cancelMock->setAmount('123.4');
         $this->assertEquals(['amount' => 123.4], $cancelMock->expose());
 
-        $paymentType = (new HirePurchaseDirectDebit())->setId('id');
+        $paymentType = (new InstallmentSecured())->setId('id');
         $cancelMock->setPayment((new Payment(new Unzer('s-priv-1234')))->setPaymentType($paymentType));
         $this->assertEquals(['amountGross' => 123.4], $cancelMock->expose());
     }

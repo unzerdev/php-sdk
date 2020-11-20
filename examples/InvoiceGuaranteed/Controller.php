@@ -66,7 +66,7 @@ try {
 
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
-    // A Basket is mandatory for Invoice Factoring payment type
+    // A Basket is mandatory for Invoice Secured payment type
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the hire purchase direct debit example.
+ * This file defines the constants needed for the Installment Secured example.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -25,6 +25,6 @@
 
 require_once __DIR__ . '/../Constants.php';
 
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'HirePurchaseDirectDebit');
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'InstallmentSecured');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
 define('CONFIRM_URL', EXAMPLE_URL . '/confirm.php');

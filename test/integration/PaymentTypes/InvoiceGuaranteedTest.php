@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This class defines integration tests to verify interface and functionality of the payment method invoice guaranteed.
+ * This class defines integration tests to verify interface and functionality of the payment method invoice secured.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *

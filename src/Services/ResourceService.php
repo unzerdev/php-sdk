@@ -44,7 +44,7 @@ use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Giropay;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
@@ -528,7 +528,8 @@ class ResourceService implements ResourceServiceInterface
                 $paymentType = new Giropay();
                 break;
             case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
-                $paymentType = new HirePurchaseDirectDebit();
+            case IdStrings::INSTALLMENT_SECURED:
+                $paymentType = new InstallmentSecured();
                 break;
             case IdStrings::IDEAL:
                 $paymentType = new Ideal();

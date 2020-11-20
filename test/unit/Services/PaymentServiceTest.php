@@ -37,7 +37,7 @@ use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
@@ -554,7 +554,7 @@ class PaymentServiceTest extends BasePaymentTest
 
     //</editor-fold>
 
-    //<editor-fold desc="Hire Purchase">
+    //<editor-fold desc="Installment Secured">
 
     /**
      * Verify fetch hdd instalment plans.
@@ -577,7 +577,7 @@ class PaymentServiceTest extends BasePaymentTest
                     $param->getCurrency() === 'EUR' &&
                     $param->getEffectiveInterest() === 4.99 &&
                     $param->getOrderDate() === $date->format('Y-m-d') &&
-                    $param->getParentResource() instanceof HirePurchaseDirectDebit;
+                    $param->getParentResource() instanceof InstallmentSecured;
             }))->willReturn(new InstalmentPlans(12.23, 'EUR', 4.99, $date));
         $unzer->getPaymentService()->fetchDirectDebitInstalmentPlans(12.23, 'EUR', 4.99, $date);
     }

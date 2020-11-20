@@ -925,7 +925,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
 
     //</editor-fold>
 
-    //<editor-fold desc="Hire Purchase (FlexiPay Rate)">
+    //<editor-fold desc="HInstallment Secured">
 
     /**
      * {@inheritDoc}

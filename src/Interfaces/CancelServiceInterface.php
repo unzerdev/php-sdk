@@ -69,11 +69,11 @@ interface CancelServiceInterface
      * @param Payment|string $payment       The Payment object or the id of the Payment the charge belongs to.
      * @param string         $chargeId      The id of the Charge to be canceled.
      * @param float|null     $amount        The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     *                                      This will be sent as amountGross in case of Installment Secured payment method.
      * @param string|null    $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null    $referenceText A reference string for the payment.
-     * @param float|null     $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountNet     The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
@@ -96,11 +96,11 @@ interface CancelServiceInterface
      *
      * @param Charge      $charge        The Charge object to create the Cancellation for.
      * @param float|null  $amount        The amount to be canceled.
-     *                                   This will be sent as amountGross in case of Hire Purchase payment method.
+     *                                   This will be sent as amountGross in case of Installment Secured payment method.
      * @param string|null $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null $referenceText A reference string for the payment.
-     * @param float|null  $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null  $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountNet     The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null  $amountVat     The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
@@ -122,11 +122,11 @@ interface CancelServiceInterface
      *
      * @param Payment|string $payment       The Payment object or the id of the Payment to be cancelled.
      * @param float|null     $amount        The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     *                                      This will be sent as amountGross in case of Installment Secured payment method.
      * @param string|null    $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null    $referenceText A reference string for the payment.
-     * @param float|null     $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountNet     The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *

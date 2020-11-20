@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the Hire Purchase direct debit payment type.
+ * This file provides an example implementation of the Installment Secured direct debit payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -47,9 +47,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a><br/></p>
 
-<form id="payment-form-hirepurchase" class="unzerUI form unzerUI-hirepurchase__form" novalidate>
-    <div id="example-hire-purchase">
-        <!-- The Hire Purchase field UI Element will be inserted here -->
+<form id="payment-form-installmentsecured" class="unzerUI form unzerUI-hirepurchase__form" novalidate>
+    <div id="example-installment-secured">
+        <!-- The Installment Secured field UI Element will be inserted here -->
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button id="continue-button" class="unzerUI primary button fluid" type="submit" style="display: none" disabled>
@@ -61,10 +61,10 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
-    let HirePurchase = unzerInstance.HirePurchase();
+    let InstallmentSecured = unzerInstance.InstallmentSecured();
 
-    HirePurchase.create({
-        containerId: 'example-hire-purchase', // required
+    InstallmentSecured.create({
+        containerId: 'example-installment-secured', // required
         amount: 119.0, // required
         currency: 'EUR', // required
         effectiveInterest: 4.5, // required
@@ -83,7 +83,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     let continueButton = document.getElementById('continue-button');
 
-    HirePurchase.addEventListener('hirePurchaseEvent', function(e) {
+    InstallmentSecured.addEventListener('hirePurchaseEvent', function(e) {
         if (e.action === 'validate') {
             if (e.success) {
                 continueButton.removeAttribute('disabled')
@@ -102,10 +102,10 @@ require_once __DIR__ . '/../../../../autoload.php';
     });
 
     // Handling the form's submission.
-    let form = document.getElementById('payment-form-hirepurchase');
+    let form = document.getElementById('payment-form-installmentsecured');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        HirePurchase.createResource()
+        InstallmentSecured.createResource()
             .then(function(data) {
                 let hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');

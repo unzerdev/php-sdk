@@ -46,7 +46,7 @@ use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Alipay;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
@@ -188,7 +188,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
 
     /**
      * Verify that installment plans use the correct path for fetching. Special case, fetching Instalmentplans contains
-     * hire-purchase-direct-debit as parent resource that should appear in resource path.
+     * hinstallment-secured as parent resource that should appear in resource path.
      *
      * @test
      */
@@ -197,12 +197,12 @@ class AbstractUnzerResourceTest extends BasePaymentTest
         $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
         $unzerMock->method('getUri')->willReturn('parent/resource/path/');
 
-        $hirePurchaseDirectDebit = (new HirePurchaseDirectDebit())->setParentResource($unzerMock);
+        $installmentSecured = (new InstallmentSecured())->setParentResource($unzerMock);
         $instalmentPlans = (new InstalmentPlans(119.0, 'EUR', 4.99))
-            ->setParentResource($hirePurchaseDirectDebit);
+            ->setParentResource($installmentSecured);
 
         $this->assertEquals(
-            'parent/resource/path/types/hire-purchase-direct-debit/plans?amount=119&currency=EUR&effectiveInterest=4.99',
+            'parent/resource/path/types/installment-secured/plans?amount=119&currency=EUR&effectiveInterest=4.99',
             $instalmentPlans->getUri(false, HttpAdapterInterface::REQUEST_GET)
         );
     }
@@ -460,7 +460,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'Payout' => [new Payout(), 'parent/resource/path/payouts'],
             'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge'],
             'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize'],
-            'HirePurchaseDirectDebit' => [new HirePurchaseDirectDebit(), 'parent/resource/path/types/hire-purchase-direct-debit']
+            'InstallmentSecured' => [new InstallmentSecured(), 'parent/resource/path/types/installment-secured']
         ];
     }
 
@@ -477,7 +477,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types'],
             'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types'],
-            'HirePurchase' => [new HirePurchaseDirectDebit(), 'parent/resource/path/types'],
+            'InstallmentSecured' => [new InstallmentSecured(), 'parent/resource/path/types'],
 
             // Other resources Uris should behave as before.
             'Customer' => [new Customer(), 'parent/resource/path/customers'],

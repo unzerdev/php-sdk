@@ -1,6 +1,6 @@
 <?php
 /**
- * Resource representing the installment plan for hire purchase (FlexiPay Rate).
+ * Resource representing the installment plan for Installment Secured.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *

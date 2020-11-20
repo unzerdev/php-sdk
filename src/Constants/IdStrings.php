@@ -41,6 +41,7 @@ class IdStrings
     public const GIROPAY = 'gro';
     public const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
     public const IDEAL = 'idl';
+    public const INSTALLMENT_SECURED = 'ins';
     public const INVOICE = 'ivc';
     public const INVOICE_FACTORING = 'ivf';
     public const INVOICE_GUARANTEED = 'ivg';
@@ -60,8 +61,8 @@ class IdStrings
     public const CUSTOMER = 'cst';
     public const METADATA = 'mtd';
     public const PAYMENT = 'pay';
-    public const WEBHOOK = 'whk';
 
+    public const WEBHOOK = 'whk';
     public const PAYMENT_TYPES = [
         self::ALIPAY,
         self::BANCONTACT,
@@ -70,6 +71,7 @@ class IdStrings
         self::GIROPAY,
         self::HIRE_PURCHASE_DIRECT_DEBIT,
         self::IDEAL,
+        self::INSTALLMENT_SECURED,
         self::INVOICE,
         self::INVOICE_FACTORING,
         self::INVOICE_GUARANTEED,

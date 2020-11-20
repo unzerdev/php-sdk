@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the invoice factoring payment type.
+ * This represents the invoice secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *

@@ -208,7 +208,7 @@ function printMessage($type, $title, $text)
                         </div>
                         <div class="description">
                             This example adds the necessary customer data within the checkout form.
-                            Please refer to the example of <i>Invoice Factoring</i> if you don't want to add the customer via payment form.
+                            Please refer to the example of <i>Invoice Secured</i> if you don't want to add the customer via payment form.
                         </div>
                     </div>
                     <div id="tryInvoiceGuaranteedExample" class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
@@ -218,14 +218,14 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Invoice Factoring
+                            Invoice Secured
                         </div>
                         <div class="description">
                             This example adds the necessary customer data within the php controller.
                             Please refer to the example of <i>Invoice guaranteed</i> if you want to add the customer data withing the payment form.
                         </div>
                     </div>
-                    <div id="tryInvoiceFactoringExample" class="ui bottom attached green button" onclick="location.href='InvoiceFactoring/';">
+                    <div id="tryInvoiceSecuredExample" class="ui bottom attached green button" onclick="location.href='InvoiceSecured/';">
                         Try
                     </div>
                 </div>
@@ -282,12 +282,12 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Instalment (Hire Purchase Direct Debit)
+                            Unzer Installment
                         </div>
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryHirePurchaseDirectDebitExample" class="ui bottom attached green button" onclick="location.href='HirePurchaseDirectDebit/';">
+                    <div id="tryInstallmentSecuredExample" class="ui bottom attached green button" onclick="location.href='InstallmentSecured/';">
                         Try
                     </div>
                 </div>

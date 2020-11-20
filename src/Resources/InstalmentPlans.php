@@ -1,6 +1,6 @@
 <?php
 /**
- * Resource used to fetch instalment plans for hire purchase (FlexiPay Rate) payment method specified as parent resource.
+ * Resource used to fetch instalment plans for Installment Secured payment method specified as parent resource.
  * Please use Unzer methods to fetch the list of instalment plans
  * (e.g. Unzer::fetchDirectDebitInstalmentPlans(...)).
  *

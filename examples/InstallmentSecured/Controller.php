@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the hire purchase direct debit example.
+ * This is the controller for the Installment Secured example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
@@ -38,7 +38,7 @@ use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 
 session_start();
 session_unset();
@@ -70,10 +70,10 @@ try {
     // Use the quote or order id from your shop
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
-    /** @var HirePurchaseDirectDebit $paymentType */
+    /** @var InstallmentSecured $paymentType */
     $paymentType = $unzer->fetchPaymentType($paymentTypeId);
 
-    // A customer with matching addresses is mandatory for Invoice Factoring payment type
+    // A customer with matching addresses is mandatory for Installment 043801  payment type
     $address  = (new Address())
         ->setName('Linda Heideich')
         ->setStreet('Vangerowstr. 18')

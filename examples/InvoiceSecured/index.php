@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the Invoice Factoring payment type.
+ * This file provides an example implementation of the Invoice Secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *

@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This class defines unit tests to verify functionality of FlexiPay Rate Direct Debit (Hire Purchase) payment type.
+ * This class defines unit tests to verify functionality of Installment Secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -29,11 +29,11 @@ namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 use DateInterval;
 use DateTime;
 use UnzerSDK\Resources\InstalmentPlan;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class HirePurchaseDirectDebitTest extends BasePaymentTest
+class InstallmentSecuredTest extends BasePaymentTest
 {
     /**
      * Verify setter and getter work.
@@ -42,7 +42,7 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      */
     public function getterAndSetterWorkAsExpected(): void
     {
-        $hdd = new HirePurchaseDirectDebit();
+        $hdd = new InstallmentSecured();
         $this->assertEmpty($hdd->getTransactionParams());
         $this->assertNull($hdd->getAccountHolder());
         $this->assertNull($hdd->getIban());
@@ -168,8 +168,8 @@ class HirePurchaseDirectDebitTest extends BasePaymentTest
      */
     public function selectedInstalmentPlanDataIsUsedToUpdateInstalmentPlanInformation(): void
     {
-        /** @var HirePurchaseDirectDebit|MockObject $hddMock */
-        $hddMock = $this->getMockBuilder(HirePurchaseDirectDebit::class)->setMethods(['handleResponse'])->getMock();
+        /** @var InstallmentSecured|MockObject $hddMock */
+        $hddMock = $this->getMockBuilder(InstallmentSecured::class)->setMethods(['handleResponse'])->getMock();
 
         /** @var InstalmentPlan|MockObject $instalmentPlanMock */
         $instalmentPlanMock = $this->getMockBuilder(InstalmentPlan::class)->setMethods(['expose'])->getMock();
