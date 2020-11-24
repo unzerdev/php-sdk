@@ -29,7 +29,7 @@ namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\test\BasePaymentTest;
 
-class SepaDirectDebitGuaranteedTest extends BasePaymentTest
+class SepaDirectDebitSecuredTest extends BasePaymentTest
 {
     /**
      * Verify constructor sets iban.

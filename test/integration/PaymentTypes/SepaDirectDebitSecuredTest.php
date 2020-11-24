@@ -3,7 +3,7 @@
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
- * functionality of the payment method sepa direct debit guaranteed.
+ * functionality of the payment method sepa direct debit secured.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -32,14 +32,14 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\test\BaseIntegrationTest;
 
-class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
+class SepaDirectDebitSecuredTest extends BaseIntegrationTest
 {
     /**
-     * Verify sepa direct debit guaranteed can be created with mandatory fields only.
+     * Verify sepa direct debit secured can be created with mandatory fields only.
      *
      * @test
      */
-    public function sepaDirectDebitGuaranteedShouldBeCreatableWithMandatoryFieldsOnly(): void
+    public function sepaDirectDebitSecuredShouldBeCreatableWithMandatoryFieldsOnly(): void
     {
         $directDebitSecured = new SepaDirectDebitSecured('DE89370400440532013000');
         /** @var SepaDirectDebitSecured $directDebitSecured */
@@ -47,19 +47,19 @@ class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
         $this->assertInstanceOf(SepaDirectDebitSecured::class, $directDebitSecured);
         $this->assertNotNull($directDebitSecured->getId());
 
-        /** @var SepaDirectDebitSecured $fetchedDirectDebitGuaranteed */
-        $fetchedDirectDebitGuaranteed = $this->unzer->fetchPaymentType($directDebitSecured->getId());
-        $this->assertEquals($directDebitSecured->expose(), $fetchedDirectDebitGuaranteed->expose());
+        /** @var SepaDirectDebitSecured $fetchedDirectDebitSecured */
+        $fetchedDirectDebitSecured = $this->unzer->fetchPaymentType($directDebitSecured->getId());
+        $this->assertEquals($directDebitSecured->expose(), $fetchedDirectDebitSecured->expose());
     }
 
     /**
-     * Verify sepa direct debit guaranteed can be created.
+     * Verify sepa direct debit secured can be created.
      *
      * @test
      *
      * @return SepaDirectDebitSecured
      */
-    public function sepaDirectDebitGuaranteedShouldBeCreatable(): SepaDirectDebitSecured
+    public function sepaDirectDebitSecuredShouldBeCreatable(): SepaDirectDebitSecured
     {
         $directDebitSecured = (new SepaDirectDebitSecured('DE89370400440532013000'))->setHolder('John Doe')->setBic('COBADEFFXXX');
         /** @var SepaDirectDebitSecured $directDebitSecured */
@@ -67,22 +67,22 @@ class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
         $this->assertInstanceOf(SepaDirectDebitSecured::class, $directDebitSecured);
         $this->assertNotNull($directDebitSecured->getId());
 
-        /** @var SepaDirectDebitSecured $fetchedDirectDebitGuaranteed */
-        $fetchedDirectDebitGuaranteed = $this->unzer->fetchPaymentType($directDebitSecured->getId());
-        $this->assertEquals($directDebitSecured->expose(), $fetchedDirectDebitGuaranteed->expose());
+        /** @var SepaDirectDebitSecured $fetchedDirectDebitSecured */
+        $fetchedDirectDebitSecured = $this->unzer->fetchPaymentType($directDebitSecured->getId());
+        $this->assertEquals($directDebitSecured->expose(), $fetchedDirectDebitSecured->expose());
 
-        return $fetchedDirectDebitGuaranteed;
+        return $fetchedDirectDebitSecured;
     }
 
     /**
-     * Verify authorization is not allowed for sepa direct debit guaranteed.
+     * Verify authorization is not allowed for sepa direct debit secured.
      *
      * @test
      *
      * @param SepaDirectDebitSecured $directDebitSecured
-     * @depends sepaDirectDebitGuaranteedShouldBeCreatable
+     * @depends sepaDirectDebitSecuredShouldBeCreatable
      */
-    public function directDebitGuaranteedShouldProhibitAuthorization(SepaDirectDebitSecured $directDebitSecured): void
+    public function directDebitSecuredShouldProhibitAuthorization(SepaDirectDebitSecured $directDebitSecured): void
     {
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
@@ -91,11 +91,11 @@ class SepaDirectDebitGuaranteedTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify direct debit guaranteed can be charged.
+     * Verify direct debit secured can be charged.
      *
      * @test
      */
-    public function directDebitGuaranteedShouldAllowCharge(): void
+    public function directDebitSecuredShouldAllowCharge(): void
     {
         $directDebitSecured = (new SepaDirectDebitSecured('DE89370400440532013000'))->setBic('COBADEFFXXX');
         $this->unzer->createPaymentType($directDebitSecured);

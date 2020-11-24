@@ -81,16 +81,17 @@ class PayoutTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify payout can be performed for sepa direct debit guaranteed payment type.
+     * Verify payout can be performed for sepa direct debit secured payment type.
      *
      * @test
      */
-    public function payoutCanBeCalledForSepaDirectDebitGuaranteedType(): void
+    public function payoutCanBeCalledForSepaDirectDebitSecuredType(): void
     {
         $sepa = new SepaDirectDebitSecured('DE89370400440532013000');
         $this->unzer->createPaymentType($sepa);
         $customer = $this->getMaximumCustomer()->setShippingAddress($this->getBillingAddress());
-        $payout   = $sepa->payout(100.0, 'EUR', self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $payout   = $sepa->payout(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
         $this->assertTransactionResourceHasBeenCreated($payout);
 
         $payment = $payout->getPayment();

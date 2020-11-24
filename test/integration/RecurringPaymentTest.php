@@ -133,11 +133,11 @@ class RecurringPaymentTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify sepa direct debit guaranteed can activate recurring payments.
+     * Verify sepa direct debit secured can activate recurring payments.
      *
      * @test
      */
-    public function sepaDirectDebitGuaranteedShouldBeAbleToActivateRecurringPayments(): void
+    public function sepaDirectDebitSecuredShouldBeAbleToActivateRecurringPayments(): void
     {
         /** @var SepaDirectDebitSecured $ddg */
         $ddg = $this->unzer->createPaymentType(new SepaDirectDebitSecured('DE89370400440532013000'));

@@ -29,7 +29,7 @@ namespace UnzerSDK\test\integration\TransactionTypes;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
-use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -129,8 +129,8 @@ class ChargeTest extends BaseIntegrationTest
     public function chargeWithCustomerShouldAcceptAllParameters(): void
     {
         // prepare test data
-        /** @var InvoiceGuaranteed $ivg */
-        $ivg = $this->unzer->createPaymentType(new InvoiceGuaranteed());
+        /** @var InvoiceSecured $ivg */
+        $ivg = $this->unzer->createPaymentType(new InvoiceSecured());
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
         $orderId = 'o'. self::generateRandomId();

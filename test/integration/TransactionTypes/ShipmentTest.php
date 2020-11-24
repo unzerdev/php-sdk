@@ -26,7 +26,7 @@
  */
 namespace UnzerSDK\test\integration\TransactionTypes;
 
-use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class ShipmentTest extends BaseIntegrationTest
@@ -38,10 +38,11 @@ class ShipmentTest extends BaseIntegrationTest
      */
     public function shipmentShouldBeCreatableAndFetchable(): void
     {
-        $ivg      = new InvoiceGuaranteed();
+        $ivg      = new InvoiceSecured();
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
 
-        $charge   = $this->unzer->charge(100.0, 'EUR', $ivg, self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge   = $this->unzer->charge(100.0, 'EUR', $ivg, self::RETURN_URL, $customer, null, null, $basket);
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge);
 
@@ -61,9 +62,10 @@ class ShipmentTest extends BaseIntegrationTest
      */
     public function shipmentCanBeCalledOnThePaymentObject(): void
     {
-        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $invoiceSecured = new InvoiceSecured();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge            = $this->unzer->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge = $this->unzer->charge(100.0, 'EUR', $invoiceSecured, self::RETURN_URL, $customer, null, null, $basket);
 
         $payment  = $charge->getPayment();
         $shipment = $payment->ship('i'. self::generateRandomId(), 'o'. self::generateRandomId());
@@ -88,9 +90,10 @@ class ShipmentTest extends BaseIntegrationTest
      */
     public function shipmentShouldBePossibleWithPaymentObject(): void
     {
-        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $invoiceSecured = new InvoiceSecured();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge            = $this->unzer->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge = $this->unzer->charge(100.0, 'EUR', $invoiceSecured, self::RETURN_URL, $customer, null, null, $basket);
 
         $payment  = $charge->getPayment();
         $shipment = $this->unzer->ship($payment, 'i'. self::generateRandomId(), 'o'. self::generateRandomId());
@@ -105,9 +108,10 @@ class ShipmentTest extends BaseIntegrationTest
      */
     public function shipmentStatusIsSetCorrectly(): void
     {
-        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $invoiceSecured = new InvoiceSecured();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge            = $this->unzer->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge = $this->unzer->charge(100.0, 'EUR', $invoiceSecured, self::RETURN_URL, $customer, null, null, $basket);
 
         $payment  = $charge->getPayment();
         $shipment = $this->unzer->ship($payment, 'i'. self::generateRandomId(), 'o'. self::generateRandomId());

@@ -66,7 +66,7 @@ class KeypairTest extends BasePaymentTest
     {
         // when
         $keypair = new Keypair();
-        $paymentTypes = ['przelewy24', 'ideal', 'paypal', 'prepayment', 'invoice', 'sepa-direct-debit-guaranteed', 'card', 'sofort', 'invoice-guaranteed', 'sepa-direct-debit', 'giropay'];
+        $paymentTypes = ['przelewy24', 'ideal', 'paypal', 'prepayment', 'invoice', 'sepa-direct-debit-secured', 'card', 'sofort', 'invoice-secured', 'sepa-direct-debit', 'giropay'];
         $testResponse = (object)[
             'publicKey'             => 's-pub-1234',
             'privateKey'            => 's-priv-4321',

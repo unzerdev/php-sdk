@@ -49,7 +49,6 @@ use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
-use UnzerSDK\Resources\PaymentTypes\InvoiceGuaranteed;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
@@ -447,7 +446,6 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit'],
             'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types/sepa-direct-debit-secured'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice'],
-            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types/invoice-guaranteed'],
             'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels'],
             'Authorization' => [new Authorization(), 'parent/resource/path/authorize'],
             'Shipment' => [new Shipment(), 'parent/resource/path/shipments'],
@@ -476,7 +474,6 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types'],
             'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types'],
-            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types'],
             'InstallmentSecured' => [new InstallmentSecured(), 'parent/resource/path/types'],
 
             // Other resources Uris should behave as before.
