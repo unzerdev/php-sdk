@@ -204,25 +204,7 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Invoice guaranteed
-                        </div>
-                        <div class="description">
-                            This example adds the necessary customer data within the checkout form.
-                            Please refer to the example of <i>Invoice Secured</i> if you don't want to add the customer via payment form.
-                        </div>
-                    </div>
-                    <div id="tryInvoiceGuaranteedExample" class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
-                        Try
-                    </div>
-                </div>
-                <div class="card olive">
-                    <div class="content">
-                        <div class="header">
-                            Invoice Secured
-                        </div>
-                        <div class="description">
-                            This example adds the necessary customer data within the php controller.
-                            Please refer to the example of <i>Invoice guaranteed</i> if you want to add the customer data withing the payment form.
+                            Unzer Invoice (secured)
                         </div>
                     </div>
                     <div id="tryInvoiceSecuredExample" class="ui bottom attached green button" onclick="location.href='InvoiceSecured/';">
@@ -270,7 +252,7 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Direct Debit
+                            Unzer Direct Debit (secured)
                         </div>
                         <div class="description">
                         </div>
@@ -282,7 +264,7 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Installment
+                            Unzer Installment (secured)
                         </div>
                         <div class="description">
                         </div>
