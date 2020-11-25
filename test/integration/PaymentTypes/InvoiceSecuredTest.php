@@ -55,24 +55,23 @@ class InvoiceSecuredTest extends BaseIntegrationTest
 
         return $invoice;
     }
-
+    
     /**
-     * Verify that deprecated guaranteed and factoring types can be fetched.
+     * Verify, backwards compatibility regarding fetching payment type and map it to invoice secured class.
      *
      * @test
      */
-    public function deprecatedTypesShouldBeFetchable()
+    public function invoiceGuaranteedShouldBefetchable(): void
     {
-        /** @var InvoiceSecured $invoice */
-        $invoice = $this->unzer->createPaymentType(new InvoiceSecured());
-        $this->assertInstanceOf(InvoiceSecured::class, $invoice);
-        $this->assertNotNull($invoice->getId());
+        $guaranteedMock = $this->getMockBuilder(InvoiceSecured::class)->setMethods(['getUri'])->getMock();
+        $guaranteedMock->method('getUri')->willReturn('/types/invoice-guaranteed');
+        $invoiceGuaranteed = $this->unzer->createPaymentType($guaranteedMock);
 
-        $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
-        $this->assertInstanceOf(InvoiceSecured::class, $fetchedInvoice);
-        $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
+        $this->assertRegExp('/^s-ivg-[.]*/', $invoiceGuaranteed->getId());
 
-        return $invoice;
+        $fetchedType = $this->unzer->fetchPaymentType($invoiceGuaranteed->getId());
+        $this->assertInstanceOf(InvoiceSecured::class, $fetchedType);
+        $this->assertEquals($invoiceGuaranteed->getId(), $fetchedType->getId());
     }
 
     /**
