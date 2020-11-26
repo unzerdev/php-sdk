@@ -61,17 +61,57 @@ class InvoiceSecuredTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function invoiceGuaranteedShouldBefetchable(): void
+    public function ivgTypeShouldBeFechable(): InvoiceSecured
     {
-        $guaranteedMock = $this->getMockBuilder(InvoiceSecured::class)->setMethods(['getUri'])->getMock();
-        $guaranteedMock->method('getUri')->willReturn('/types/invoice-guaranteed');
-        $invoiceGuaranteed = $this->unzer->createPaymentType($guaranteedMock);
+        $ivgMock = $this->getMockBuilder(InvoiceSecured::class)->setMethods(['getUri'])->getMock();
+        $ivgMock->method('getUri')->willReturn('/types/invoice-guaranteed');
 
-        $this->assertRegExp('/^s-ivg-[.]*/', $invoiceGuaranteed->getId());
+        /** @var InvoiceSecured $ivgType */
+        $ivgType = $this->unzer->createPaymentType($ivgMock);
+        $this->assertInstanceOf(InvoiceSecured::class, $ivgType);
+        $this->assertRegExp('/^s-ivg-[.]*/', $ivgType->getId());
 
-        $fetchedType = $this->unzer->fetchPaymentType($invoiceGuaranteed->getId());
+        $fetchedType = $this->unzer->fetchPaymentType($ivgType->getId());
         $this->assertInstanceOf(InvoiceSecured::class, $fetchedType);
-        $this->assertEquals($invoiceGuaranteed->getId(), $fetchedType->getId());
+        $this->assertRegExp('/^s-ivg-[.]*/', $fetchedType->getId());
+
+        return $fetchedType;
+    }
+
+    /**
+     * Verify fetched ivg type can be charged
+     *
+     * @test
+     * @depends ivgTypeShouldBeFechable
+     *
+     * @param InvoiceSecured $ivgType fetched ivg type.
+     *
+     * @throws UnzerApiException
+     */
+    public function ivgTypeShouldBeChargable(InvoiceSecured $ivgType)
+    {
+        $customer = $this->getMaximumCustomer();
+        $charge = $ivgType->charge(100.00, 'EUR', 'https://unzer.com', $customer);
+
+        $this->assertNotNull($charge);
+        $this->assertNotEmpty($charge->getId());
+        $this->assertTrue($charge->isPending());
+
+        return $charge;
+    }
+
+    /**
+     * Verify fetched ivg type can be shipped.
+     *
+     * @test
+     * @depends ivgTypeShouldBeChargable
+     */
+    public function ivgTypeShouldBeShippable(Charge $ivgCharge)
+    {
+        $invoiceId = 'i' . self::generateRandomId();
+
+        $ship = $this->unzer->ship($ivgCharge->getPayment(), $invoiceId);
+        $this->assertNotNull($ship);
     }
 
     /**

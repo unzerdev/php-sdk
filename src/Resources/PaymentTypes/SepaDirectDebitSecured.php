@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the SEPA direct debit guaranteed payment type.
+ * This represents the SEPA direct debit secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
