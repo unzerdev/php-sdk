@@ -30,6 +30,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class SepaDirectDebitSecuredTest extends BaseIntegrationTest
@@ -122,5 +123,75 @@ class SepaDirectDebitSecuredTest extends BaseIntegrationTest
         $customer = $this->getMaximumCustomerInclShippingAddress();
         $basket = $this->createBasket();
         $directDebitSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+    }
+
+    /**
+     * Verify, backwards compatibility regarding fetching payment type and map it to direct debit secured class.
+     *
+     * @test
+     */
+    public function ddgTypeShouldBeFechable(): SepaDirectDebitSecured
+    {
+        // Mock a ddg Type
+        $ddgMock = $this->getMockBuilder(SepaDirectDebitSecured::class)
+            ->setMethods(['getUri'])
+            ->setConstructorArgs(['DE89370400440532013000'])
+            ->getMock();
+        $ddgMock->method('getUri')->willReturn('/types/sepa-direct-debit-guaranteed');
+
+        // When
+        /** @var SepaDirectDebitSecured $insType */
+        $this->unzer->createPaymentType($ddgMock);
+        $this->assertRegExp('/^s-ddg-[.]*/', $ddgMock->getId());
+
+        // Then
+        $fetchedType = $this->unzer->fetchPaymentType($ddgMock->getId());
+        $this->assertInstanceOf(SepaDirectDebitSecured::class, $fetchedType);
+        $this->assertRegExp('/^s-ddg-[.]*/', $fetchedType->getId());
+
+        return $fetchedType;
+    }
+
+    /**
+     * Verify fetched ddg type can be charged
+     *
+     * @test
+     * @depends ddgTypeShouldBeFechable
+     *
+     * @param SepaDirectDebitSecured $ddgType fetched ins type.
+     *
+     * @throws UnzerApiException
+     */
+    public function ddgTypeCharge(SepaDirectDebitSecured $ddgType)
+    {
+        $customer = $this->getMaximumCustomer();
+        $basket = $this->createBasket();
+
+        /** @var Charge $auth */
+        $charge = $ddgType->charge(119.00, 'EUR', 'https://unzer.com', $customer, null, null, $basket);
+        $this->assertNotNull($charge);
+        $this->assertNotEmpty($charge->getId());
+        $this->assertTrue($charge->isSuccess());
+
+        return $charge;
+    }
+
+    /**
+     * Verify fetched ddg payment throws an exception when being shipped.
+     *
+     * @test
+     * @depends ddgTypeCharge
+     *
+     * @param Charge $ddgCharge
+     *
+     * @throws UnzerApiException
+     */
+    public function insTypeShouldNotBeShippable(Charge $ddgCharge)
+    {
+        $invoiceId = 'i' . self::generateRandomId();
+
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::CORE_ERROR_INSURANCE_ALREADY_ACTIVATED);
+        $this->unzer->ship($ddgCharge->getPayment(), $invoiceId);
     }
 }
