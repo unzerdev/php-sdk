@@ -53,7 +53,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
      */
     public function instalmentPlanShouldBeSelectable(): void
     {
-        $plans = $this->unzer->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99);
+        $plans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -176,7 +176,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
      */
     public function installmentSecuredAuthorize($firstname, $lastname, $errorCode): void
     {
-        $hpPlans = $this->unzer->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99);
+        $hpPlans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99);
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $hpPlans->getPlans()[0];
         $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
@@ -208,7 +208,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
     public function instalmentPlanSelectionWithAllFieldsSet(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->unzer->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
+        $plans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -227,7 +227,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
     public function verifyChargingAnInitializedInstallmentSecured(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->unzer->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
+        $plans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -251,7 +251,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
     public function verifyShippingAChargedInstallmentSecured(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->unzer->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
+        $plans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99, $yesterday);
 
         /** @var InstalmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[0];
@@ -279,7 +279,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
     public function verifyChargeAndFullCancelAnInitializedInstallmentSecured(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->unzer->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
+        $plans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */
@@ -304,7 +304,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
     public function verifyPartlyCancelChargedInstallmentSecured(): void
     {
         $yesterday = $this->getYesterdaysTimestamp();
-        $plans = $this->unzer->fetchDirectDebitInstalmentPlans(119.0, 'EUR', 4.99, $yesterday);
+        $plans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99, $yesterday);
         $this->assertGreaterThan(0, count($plans->getPlans()));
 
         /** @var InstalmentPlan $selectedPlan */

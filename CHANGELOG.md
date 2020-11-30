@@ -12,10 +12,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 * Resource path when fetching payment types changed. Removed type name from path.
 * Replaced payment Classes:
     * `InvoiceGuaranteed` and `InvoiceFactoring` replaced by `InvoiceSecured`
-        * basket implementation became mandatory.
-        * `reasonCode` became mandatory for cancel.
     * `SepaDirectDebitGuaranteed` replaced by `SepaDirectDebitSecured`
     * `HirePurchaseDirectDebit` replaced by `InstallmentSecured`
+    * Basket is mandatory now for those they payment types.
 
 ### Remove
 * Remove deprecated methods:

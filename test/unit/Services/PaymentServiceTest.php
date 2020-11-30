@@ -579,7 +579,7 @@ class PaymentServiceTest extends BasePaymentTest
                     $param->getOrderDate() === $date->format('Y-m-d') &&
                     $param->getParentResource() instanceof InstallmentSecured;
             }))->willReturn(new InstalmentPlans(12.23, 'EUR', 4.99, $date));
-        $unzer->getPaymentService()->fetchDirectDebitInstalmentPlans(12.23, 'EUR', 4.99, $date);
+        $unzer->getPaymentService()->fetchInstallmentPlans(12.23, 'EUR', 4.99, $date);
     }
 
     //</editor-fold>

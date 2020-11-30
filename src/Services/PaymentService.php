@@ -284,7 +284,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchDirectDebitInstalmentPlans(
+    public function fetchInstallmentPlans(
         $amount,
         $currency,
         $effectiveInterest,

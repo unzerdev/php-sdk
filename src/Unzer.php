@@ -930,14 +930,14 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function fetchDirectDebitInstalmentPlans(
+    public function fetchInstallmentPlans(
         $amount,
         $currency,
         $effectiveInterest,
         DateTime $orderDate = null
     ): InstalmentPlans {
         return $this->paymentService
-            ->fetchDirectDebitInstalmentPlans($amount, $currency, $effectiveInterest, $orderDate);
+            ->fetchInstallmentPlans($amount, $currency, $effectiveInterest, $orderDate);
     }
 
     //</editor-fold>
