@@ -34,6 +34,8 @@ use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\InstalmentPlan;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 use function count;
 
@@ -72,6 +74,94 @@ class InstallmentSecuredTest extends BaseIntegrationTest
         $insClone = clone $ins;
         $this->unzer->updatePaymentType($ins);
         $this->assertEquals($insClone->expose(), $ins->expose());
+    }
+
+    /**
+     * Verify, backwards compatibility regarding fetching payment type and map it to invoice secured class.
+     *
+     * @test
+     */
+    public function hddTypeShouldBeFechable(): InstallmentSecured
+    {
+        // Mock a hdd Type
+        $date = $this->getTodaysDateString();
+        $requestData =
+            [
+                "iban" =>"DE89370400440532013000",
+                "bic" => "COBADEFFXXX",
+                "accountHolder" => "Max Mustermann",
+                "invoiceDueDate" => $date,
+                "numberOfRates" => 3,
+                "invoiceDate" => $date,
+                "dayOfPurchase" => $date,
+                "orderDate" => $date,
+                "totalPurchaseAmount" => 119,
+                "totalInterestAmount" => 0.96,
+                "totalAmount" => 119.96,
+                "effectiveInterestRate" => 4.99,
+                "nominalInterestRate" => 4.92,
+                "feeFirstRate" => 0,
+                "feePerRate" => 0,
+                "monthlyRate" => 39.99,
+                "lastRate" => 39.98,
+        ];
+
+        $payload = json_encode($requestData);
+        $hddMock = $this->getMockBuilder(InstallmentSecured::class)
+            ->setMethods(['getUri', 'jsonSerialize'])
+            ->getMock();
+        $hddMock->method('getUri')->willReturn('/types/hire-purchase-direct-debit');
+        $hddMock->method('jsonSerialize')->willReturn($payload);
+
+        // When
+        /** @var InstallmentSecured $insType */
+        $this->unzer->createPaymentType($hddMock);
+        $this->assertRegExp('/^s-hdd-[.]*/', $hddMock->getId());
+
+        // Then
+        $fetchedType = $this->unzer->fetchPaymentType($hddMock->getId());
+        $this->assertInstanceOf(InstallmentSecured::class, $fetchedType);
+        $this->assertRegExp('/^s-hdd-[.]*/', $fetchedType->getId());
+
+        return $fetchedType;
+    }
+
+    /**
+     * Verify fetched hdd type can be authorized and charged
+     *
+     * @test
+     * @depends hddTypeShouldBeFechable
+     *
+     * @param InvoiceSecured $hddType fetched ins type.
+     *
+     * @throws UnzerApiException
+     */
+    public function hddTypeAuthorizeAndCharge(InstallmentSecured $hddType)
+    {
+        $customer = $this->getMaximumCustomer();
+        $basket = $this->createBasket();
+        /** @var Authorization $auth */
+        $auth = $hddType->authorize(119.00, 'EUR', 'https://unzer.com', $customer, null, null, $basket);
+        $charge = $auth->getPayment()->charge();
+        $this->assertNotNull($auth);
+        $this->assertNotEmpty($auth->getId());
+        $this->assertTrue($auth->isSuccess());
+
+        return $charge;
+    }
+
+    /**
+     * Verify fetched hdd payment can be shipped.
+     *
+     * @test
+     * @depends hddTypeAuthorizeAndCharge
+     */
+    public function insTypeShouldBeShippable(Charge $hddCharge)
+    {
+        $invoiceId = 'i' . self::generateRandomId();
+        $ship = $this->unzer->ship($hddCharge->getPayment(), $invoiceId);
+
+        $this->assertNotNull($ship);
     }
 
     /**
