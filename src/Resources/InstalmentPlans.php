@@ -2,7 +2,7 @@
 /**
  * Resource used to fetch instalment plans for Installment Secured payment method specified as parent resource.
  * Please use Unzer methods to fetch the list of instalment plans
- * (e.g. Unzer::fetchDirectDebitInstalmentPlans(...)).
+ * (e.g. Unzer::fetchInstallmentPlans(...)).
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
