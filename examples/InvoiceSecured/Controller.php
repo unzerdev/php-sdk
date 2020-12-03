@@ -53,25 +53,15 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     header('Location: ' . $url);
     die();
 }
+$paymentTypeId   = $_POST['paymentTypeId'];
+$customerId  = $_POST['customerId'];
+
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
-
-    /** @var InvoiceSecured $invoiceSecured */
-    $invoiceSecured = $unzer->createPaymentType(new InvoiceSecured());
-
-    // A customer with matching addresses is mandatory for Invoice Secured payment type
-    $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    $address  = new Address();
-    $address->setName('Max Mustermann')
-        ->setStreet('Vangerowstr. 18')
-        ->setCity('Heidelberg')
-        ->setZip('69155')
-        ->setCountry('DE');
-    $customer->setBirthDate('2000-02-12')->setBillingAddress($address)->setShippingAddress($address);
 
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
@@ -81,7 +71,7 @@ try {
         ->setAmountVat(19.0);
     $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
-    $transaction = $invoiceSecured->charge(119.0, 'EUR', CONTROLLER_URL, $customer, $orderId, null, $basket);
+    $transaction = $unzer->charge(119.0, 'EUR', $paymentTypeId, CONTROLLER_URL, $customerId, $orderId, null, $basket);
 
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();
