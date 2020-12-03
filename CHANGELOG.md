@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
     * `InvoiceGuaranteed` and `InvoiceFactoring` replaced by `InvoiceSecured`
     * `SepaDirectDebitGuaranteed` replaced by `SepaDirectDebitSecured`
     * `HirePurchaseDirectDebit` replaced by `InstallmentSecured`
-    * Basket is mandatory now for those they payment types.
+    * Basket is now mandatory for those payment types above.
 
 ### Remove
 * Remove deprecated methods:

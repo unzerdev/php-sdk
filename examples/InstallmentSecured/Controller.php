@@ -73,7 +73,7 @@ try {
     /** @var InstallmentSecured $paymentType */
     $paymentType = $unzer->fetchPaymentType($paymentTypeId);
 
-    // A customer with matching addresses is mandatory for Installment 043801  payment type
+    // A customer with matching addresses is mandatory for Installment payment type
     $address  = (new Address())
         ->setName('Linda Heideich')
         ->setStreet('Vangerowstr. 18')
