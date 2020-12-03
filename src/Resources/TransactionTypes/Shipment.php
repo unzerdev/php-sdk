@@ -61,7 +61,7 @@ class Shipment extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'shipments';
     }

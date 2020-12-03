@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\Resources\TransactionTypes;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Traits\HasCancellations;
@@ -252,7 +253,7 @@ class Authorization extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'authorize';
     }

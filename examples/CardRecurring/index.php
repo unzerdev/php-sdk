@@ -62,26 +62,26 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form" class="heidelpayUI form" novalidate>
+<form id="payment-form" class="unzerUI form" novalidate>
     <div class="field">
-        <div id="card-element-id-number" class="heidelpayInput">
+        <div id="card-element-id-number" class="unzerInput">
             <!-- Card number UI Element will be inserted here. -->
         </div>
     </div>
     <div class="two fields">
         <div class="field ten wide">
-            <div id="card-element-id-expiry" class="heidelpayInput">
+            <div id="card-element-id-expiry" class="unzerInput">
                 <!-- Card expiry date UI Element will be inserted here. -->
             </div>
         </div>
         <div class="field six wide">
-            <div id="card-element-id-cvc" class="heidelpayInput">
+            <div id="card-element-id-cvc" class="unzerInput">
                 <!-- Card CVC UI Element will be inserted here. -->
             </div>
         </div>
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
 <script>

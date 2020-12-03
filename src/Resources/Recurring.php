@@ -121,12 +121,12 @@ class Recurring extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         $parts = [
             'types',
             $this->paymentTypeId,
-            parent::getResourcePath()
+            parent::getResourcePath($httpMethod)
         ];
 
         return implode('/', $parts);

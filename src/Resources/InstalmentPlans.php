@@ -203,7 +203,7 @@ class InstalmentPlans extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath(): string
+    public function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'plans' . $this->getQueryString();
     }

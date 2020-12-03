@@ -47,12 +47,12 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a><br/></p>
 
-<form id="payment-form-hirepurchase" class="heidelpayUI form heidelpayUI-hirepurchase__form" novalidate>
+<form id="payment-form-hirepurchase" class="unzerUI form unzerUI-hirepurchase__form" novalidate>
     <div id="example-hire-purchase">
         <!-- The Hire Purchase field UI Element will be inserted here -->
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button id="continue-button" class="heidelpayUI primary button fluid" type="submit" style="display: none" disabled>
+    <button id="continue-button" class="unzerUI primary button fluid" type="submit" style="display: none" disabled>
         Continue
     </button>
 </form>

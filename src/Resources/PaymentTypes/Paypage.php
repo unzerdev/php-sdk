@@ -585,7 +585,7 @@ class Paypage extends BasePaymentType
      * {@inheritDoc}
      * Change resource path.
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         switch ($this->action) {
             case TransactionTypes::AUTHORIZATION:

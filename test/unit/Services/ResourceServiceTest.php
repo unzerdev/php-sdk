@@ -106,9 +106,10 @@ class ResourceServiceTest extends BasePaymentTest
     public function sendShouldCallSendOnHttpService(string $method, string $uri, bool $appendId): void
     {
         $unzer = new Unzer('s-priv-1234');
+        $httpMethod = HttpAdapterInterface::REQUEST_POST;
         $resourceMock = $this->getMockBuilder(DummyResource::class)->setMethods(['getUri', 'getUnzerObject'])->getMock();
         /** @noinspection PhpParamsInspection */
-        $resourceMock->expects($this->once())->method('getUri')->with($appendId)->willReturn($uri);
+        $resourceMock->expects($this->once())->method('getUri')->with($appendId, $method)->willReturn($uri);
         $resourceMock->method('getUnzerObject')->willReturn($unzer);
         $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
         $resourceSrv = new ResourceService($unzer);

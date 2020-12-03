@@ -27,6 +27,7 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\UnzerParentInterface;
 use UnzerSDK\Traits\CanAuthorize;
@@ -52,11 +53,12 @@ class TraitDummyWithoutCustomerWithParentIF implements UnzerParentInterface
     /**
      * Returns the url string for this resource.
      *
-     * @param bool $appendId
+     * @param bool   $appendId
+     * @param string $httpMethod
      *
      * @return string
      */
-    public function getUri($appendId = true): string
+    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'test/uri/';
     }

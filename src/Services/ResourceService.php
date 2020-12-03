@@ -123,7 +123,7 @@ class ResourceService implements ResourceServiceInterface
         $httpMethod = HttpAdapterInterface::REQUEST_GET
     ): stdClass {
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
-        $uri          = $resource->getUri($appendId);
+        $uri          = $resource->getUri($appendId, $httpMethod);
         $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod);
         return json_decode($responseJson, false);
     }

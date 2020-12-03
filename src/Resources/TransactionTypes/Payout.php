@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\Resources\TransactionTypes;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Traits\HasInvoiceId;
 
 class Payout extends AbstractTransactionType
@@ -141,7 +142,7 @@ class Payout extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'payouts';
     }

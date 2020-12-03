@@ -53,10 +53,11 @@ class TraitDummyWithCustomerWithParentIF implements UnzerParentInterface
      * Returns the url string for this resource.
      *
      * @param bool $appendId
+     * @param $httpMethod
      *
      * @return string
      */
-    public function getUri($appendId = true): string
+    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'test/uri/';
     }

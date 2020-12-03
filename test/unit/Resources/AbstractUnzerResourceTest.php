@@ -27,10 +27,12 @@
 namespace UnzerSDK\test\unit\Resources;
 
 use DateTime;
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Constants\Salutations;
 use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
@@ -160,8 +162,49 @@ class AbstractUnzerResourceTest extends BasePaymentTest
 
         /** @var Unzer $unzerMock */
         $resource->setParentResource($unzerMock)->setId('myId');
-        $this->assertEquals($resourcePath . '/myId', $resource->getUri());
-        $this->assertEquals($resourcePath, $resource->getUri(false));
+        $this->assertEquals($resourcePath . '/myId', $resource->getUri(true, HttpAdapterInterface::REQUEST_POST));
+        $this->assertEquals($resourcePath, $resource->getUri(false, HttpAdapterInterface::REQUEST_POST));
+    }
+
+    /**
+     * Verify payment types use the path without payment resource name in uri for get request. Other resources should
+     * not be affected by that.
+     *
+     * @dataProvider fetchUriDataProvider
+     *
+     * @test
+     *
+     * @param mixed $resourcePath
+     */
+    public function fetchPaymentContainsNoTypeNameInUri(AbstractUnzerResource $resource, $resourcePath): void
+    {
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
+        $unzerMock->method('getUri')->willReturn('parent/resource/path/');
+        $resource->setParentResource($unzerMock)
+            ->setId('myId');
+        $this->assertEquals($resourcePath . '/myId', $resource->getUri(true, HttpAdapterInterface::REQUEST_GET));
+        $this->assertEquals($resourcePath, $resource->getUri(false, HttpAdapterInterface::REQUEST_GET));
+    }
+
+    /**
+     * Verify that installment plans use the correct path for fetching. Special case, fetching Instalmentplans contains
+     * hire-purchase-direct-debit as parent resource that should appear in resource path.
+     *
+     * @test
+     */
+    public function fetchInstalmentPlansShouldUseUriWithTypeName()
+    {
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
+        $unzerMock->method('getUri')->willReturn('parent/resource/path/');
+
+        $hirePurchaseDirectDebit = (new HirePurchaseDirectDebit())->setParentResource($unzerMock);
+        $instalmentPlans = (new InstalmentPlans(119.0, 'EUR', 4.99))
+            ->setParentResource($hirePurchaseDirectDebit);
+
+        $this->assertEquals(
+            'parent/resource/path/types/hire-purchase-direct-debit/plans?amount=119&currency=EUR&effectiveInterest=4.99',
+            $instalmentPlans->getUri(false, HttpAdapterInterface::REQUEST_GET)
+        );
     }
 
     /**
@@ -422,4 +465,36 @@ class AbstractUnzerResourceTest extends BasePaymentTest
     }
 
     //</editor-fold>
+    public function fetchUriDataProvider()
+    {
+        return [
+            // Payment types.
+            'Card' => [new Card('', '03/30'), 'parent/resource/path/types'],
+            'Ideal' => [new Ideal(), 'parent/resource/path/types'],
+            'EPS' => [new EPS(), 'parent/resource/path/types'],
+            'Alipay' => [new Alipay(), 'parent/resource/path/types'],
+            'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types'],
+            'SepaDirectDebitGuaranteed' => [new SepaDirectDebitGuaranteed(''), 'parent/resource/path/types'],
+            'Invoice' => [new Invoice(), 'parent/resource/path/types'],
+            'InvoiceGuaranteed' => [new InvoiceGuaranteed(), 'parent/resource/path/types'],
+            'HirePurchase' => [new HirePurchaseDirectDebit(), 'parent/resource/path/types'],
+
+            // Other resources Uris should behave as before.
+            'Customer' => [new Customer(), 'parent/resource/path/customers'],
+            'Keypair' => [new Keypair(), 'parent/resource/path/keypair'],
+            'Payment' => [new Payment(), 'parent/resource/path/payments'],
+            'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels'],
+            'Authorization' => [new Authorization(), 'parent/resource/path/authorize'],
+            'Shipment' => [new Shipment(), 'parent/resource/path/shipments'],
+            'Charge' => [new Charge(), 'parent/resource/path/charges'],
+            'Metadata' => [new Metadata(), 'parent/resource/path/metadata'],
+            'Basket' => [new Basket(), 'parent/resource/path/baskets'],
+            'Webhook' => [new Webhook(), 'parent/resource/path/webhooks'],
+            'Webhooks' => [new Webhook(), 'parent/resource/path/webhooks'],
+            'Recurring' => [new Recurring('s-crd-123', ''), 'parent/resource/path/types/s-crd-123/recurring'],
+            'Payout' => [new Payout(), 'parent/resource/path/payouts'],
+            'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge'],
+            'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize'],
+        ];
+    }
 }

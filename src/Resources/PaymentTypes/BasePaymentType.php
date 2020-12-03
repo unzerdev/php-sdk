@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\Resources\PaymentTypes;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 
 abstract class BasePaymentType extends AbstractUnzerResource
@@ -47,9 +48,14 @@ abstract class BasePaymentType extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
-        return 'types/' . parent::getResourcePath();
+        $path = 'types';
+        if ($httpMethod !== HttpAdapterInterface::REQUEST_GET || $this->id === null) {
+            $path .= '/' . parent::getResourcePath($httpMethod);
+        }
+
+        return $path;
     }
 
     /**

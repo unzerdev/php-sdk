@@ -53,18 +53,18 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form" class="heidelpayUI form" novalidate>
+<form id="payment-form" class="unzerUI form" novalidate>
     <!-- This is just for the example - Start -->
     <div class="fields inline">
         <label for="transaction_type">Chose the transaction type you want to test:</label>
         <div class="field">
-            <div class="heidelpayUI radio checkbox">
+            <div class="unzerUI radio checkbox">
                 <input type="radio" name="transaction_type" value="authorize" checked="">
                 <label>Authorize</label>
             </div>
         </div>
         <div class="field">
-            <div class="heidelpayUI radio checkbox">
+            <div class="unzerUI radio checkbox">
                 <input type="radio" name="transaction_type" value="charge">
                 <label>Charge</label>
             </div>
@@ -74,7 +74,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     <div id="container-example-paypal"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
 <script>

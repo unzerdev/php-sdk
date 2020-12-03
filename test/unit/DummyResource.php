@@ -26,6 +26,7 @@
  */
 namespace UnzerSDK\test\unit;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 
 class DummyResource extends AbstractUnzerResource
@@ -62,7 +63,7 @@ class DummyResource extends AbstractUnzerResource
         return '{"dummyResource": "JsonSerialized"}';
     }
 
-    public function getUri($appendId = true): string
+    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return '/my/uri' . ($appendId ? '/123' : '');
     }

@@ -26,6 +26,7 @@
 namespace UnzerSDK;
 
 use DateTime;
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Interfaces\CancelServiceInterface;
 use UnzerSDK\Interfaces\DebugHandlerInterface;
@@ -328,7 +329,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function getUri($appendId = true): string
+    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return '';
     }
