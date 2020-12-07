@@ -111,6 +111,8 @@ class InvoiceSecuredTest extends BaseIntegrationTest
         $invoiceId = 'i' . self::generateRandomId();
 
         $ship = $this->unzer->ship($ivgCharge->getPayment(), $invoiceId);
+        // expect Payment to be pending after shipment.
+        $this->assertTrue($ship->getPayment()->isPending());
         $this->assertNotNull($ship);
     }
 
@@ -263,6 +265,8 @@ class InvoiceSecuredTest extends BaseIntegrationTest
         $payment   = $charge->getPayment();
         $invoiceId = 'i' . self::generateRandomId();
         $shipment  = $this->unzer->ship($payment, $invoiceId);
+        // expect Payment to be completed after shipment.
+        $this->assertTrue($shipment->getPayment()->isCompleted());
         $this->assertNotNull($shipment->getId());
         $this->assertEquals($invoiceId, $shipment->getInvoiceId());
     }
