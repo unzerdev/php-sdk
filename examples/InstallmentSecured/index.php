@@ -47,7 +47,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a><br/></p>
 
-<form id="payment-form-installmentsecured" class="unzerUI form unzerUI-hirepurchase__form" novalidate>
+<form id="payment-form-installmentsecured" class="unzerUI form unzerUI-installmentsecured__form" novalidate>
     <div id="example-installment-secured">
         <!-- The Installment Secured field UI Element will be inserted here -->
     </div>
@@ -83,7 +83,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     let continueButton = document.getElementById('continue-button');
 
-    InstallmentSecured.addEventListener('hirePurchaseEvent', function(e) {
+    InstallmentSecured.addEventListener('installmentSecuredEvent', function(e) {
         if (e.action === 'validate') {
             if (e.success) {
                 continueButton.removeAttribute('disabled')
