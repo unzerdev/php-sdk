@@ -5,16 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.0.0][1.1.0.0]
 
-### Added
-* Release for rebranded SDK.
-
 ### Changed
-* Resource path when fetching payment types changed. Removed type name from path.
-* Replaced payment Classes:
+* Rebranding of the SDK.
+* Removed payment type string from URL when fetching a payment type resource.
+* Replace payment methods guaranteed/factoring by secured payment methods, i.e.:
     * `InvoiceGuaranteed` and `InvoiceFactoring` replaced by `InvoiceSecured`
     * `SepaDirectDebitGuaranteed` replaced by `SepaDirectDebitSecured`
     * `HirePurchaseDirectDebit` replaced by `InstallmentSecured`
-    * Basket is now mandatory for those payment types above.
+    * Basket is now mandatory for all those payment types above.
+* Added mapping of old payment type ids to the new payment type resources.
+* Several minor changes.
 
 ### Remove
 * Remove deprecated methods:
