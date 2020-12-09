@@ -22,6 +22,7 @@ Please refer to the following documentation for installation instructions and us
 *   EPS
 *   Giropay
 *   iDEAL
+*   Invoice
 *   PayPal + Recurring
 *   Prepayment
 *   Przelewy24
