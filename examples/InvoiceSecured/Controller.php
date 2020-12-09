@@ -53,9 +53,14 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     header('Location: ' . $url);
     die();
 }
+
+// You will need the id of the payment type created in the frontend (index.php)
+if (!isset($_POST['paymentTypeId'], $_POST['customerId'])) {
+    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
+}
+
 $paymentTypeId   = $_POST['paymentTypeId'];
 $customerId  = $_POST['customerId'];
-
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
