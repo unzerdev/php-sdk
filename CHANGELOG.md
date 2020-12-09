@@ -14,10 +14,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
     * `HirePurchaseDirectDebit` replaced by `InstallmentSecured`
     * Basket is now mandatory for all those payment types above.
 * Added mapping of old payment type ids to the new payment type resources.
-* Several minor changes.
-* Constant in \UnzerSDK\Constants\ApiResponseCodes got renamed:
+* Constant in `\UnzerSDK\Constants\ApiResponseCodes` got renamed:
     * `API_ERROR_IVF_REQUIRES_CUSTOMER` renamed to `API_ERROR_FACTORING_REQUIRES_CUSTOMER`.
     * `API_ERROR_IVF_REQUIRES_BASKET` renamed to `API_ERROR_FACTORING_REQUIRES_BASKET`.
+* Several minor changes.
 ### Remove
 * Remove deprecated methods:
     * getAmountTotal
