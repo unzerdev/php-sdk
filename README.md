@@ -26,6 +26,7 @@ Please refer to the following documentation for installation instructions and us
 *   PayPal + Recurring
 *   Prepayment
 *   Przelewy24
+*   SEPA direct debit + Recurring
 *   SOFORT
 *   Unzer Bank Transfer (PIS)
 *   Unzer Direct Debit (secured) + Recurring
