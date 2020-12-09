@@ -204,7 +204,7 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Invoice (secured)
+                            Unzer Invoice
                         </div>
                     </div>
                     <div id="tryInvoiceSecuredExample" class="ui bottom attached green button" onclick="location.href='InvoiceSecured/';">
