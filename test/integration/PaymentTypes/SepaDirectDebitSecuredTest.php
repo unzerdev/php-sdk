@@ -76,6 +76,37 @@ class SepaDirectDebitSecuredTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify Sepa Direct Debit Secured needs a basket object
+     *
+     * @test
+     * @depends sepaDirectDebitSecuredShouldBeCreatable
+     *
+     * @param sepaDirectDebitSecured $sepaDirectDebitSecured
+     */
+    public function sepaDirectDebitSecuredRequiresBasket(SepaDirectDebitSecured $sepaDirectDebitSecured): void
+    {
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_FACTORING_REQUIRES_BASKET);
+        $this->unzer->charge(1.0, 'EUR', $sepaDirectDebitSecured, self::RETURN_URL);
+    }
+
+    /**
+     * Verify Sepa Direct Debit Secured needs a customer object
+     *
+     * @test
+     * @depends sepaDirectDebitSecuredShouldBeCreatable
+     *
+     * @param sepaDirectDebitSecured $sepaDirectDebitSecured
+     */
+    public function sepaDirectDebitSecuredRequiresCustomer(SepaDirectDebitSecured $sepaDirectDebitSecured): void
+    {
+        $basket = $this->createBasket();
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_FACTORING_REQUIRES_CUSTOMER);
+        $this->unzer->charge(1.0, 'EUR', $sepaDirectDebitSecured, self::RETURN_URL, null, null, null, $basket);
+    }
+
+    /**
      * Verify authorization is not allowed for sepa direct debit secured.
      *
      * @test
