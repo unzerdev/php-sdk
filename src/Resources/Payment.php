@@ -643,11 +643,11 @@ class Payment extends AbstractUnzerResource
      * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
      *
      * @param float|null  $amount           The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     *                                      This will be sent as amountGross in case of Installment Secured payment method.
      * @param string|null $reasonCode       Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
-     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *

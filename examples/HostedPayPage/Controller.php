@@ -87,7 +87,7 @@ try {
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.
     $paypage->setEffectiveInterestRate(4.99);
 
-    // ... a Basket is mandatory for HirePurchase
+    // ... a Basket is mandatory for InstallmentSecured
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);

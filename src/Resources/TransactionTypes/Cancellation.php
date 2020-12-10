@@ -27,13 +27,13 @@ namespace UnzerSDK\Resources\TransactionTypes;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Resources\Payment;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use function in_array;
 
 class Cancellation extends AbstractTransactionType
 {
     /**
-     * The cancellation amount will be transferred as grossAmount in case of Hire Purchase payment type.
+     * The cancellation amount will be transferred as grossAmount in case of Installment Secured payment type.
      *
      * @var float $amount
      */
@@ -46,14 +46,14 @@ class Cancellation extends AbstractTransactionType
     protected $paymentReference;
 
     /**
-     * The net value of the cancellation amount (Hire Purchase only).
+     * The net value of the cancellation amount (Installment Secured only).
      *
      * @var float $amountNet
      */
     protected $amountNet;
 
     /**
-     * The vat value of the cancellation amount (Hire Purchase only).
+     * The vat value of the cancellation amount (Installment Secured only).
      *
      * @var float $amountVat
      */
@@ -62,7 +62,7 @@ class Cancellation extends AbstractTransactionType
     /**
      * Authorization constructor.
      *
-     * @param float $amount The amount to be cancelled, is transferred as grossAmount in case of Hire Purchase.
+     * @param float $amount The amount to be cancelled, is transferred as grossAmount in case of Installment Secured.
      */
     public function __construct($amount = null)
     {
@@ -72,7 +72,7 @@ class Cancellation extends AbstractTransactionType
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * Returns the cancellationAmount (equals grossAmount in case of Hire Purchase).
+     * Returns the cancellationAmount (equals grossAmount in case of Installment Secured).
      *
      * @return float|null
      */
@@ -82,7 +82,7 @@ class Cancellation extends AbstractTransactionType
     }
 
     /**
-     * Sets the cancellationAmount (equals grossAmount in case of Hire Purchase).
+     * Sets the cancellationAmount (equals grossAmount in case of Installment Secured).
      *
      * @param float $amount
      *
@@ -140,7 +140,7 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Returns the net value of the amount to be cancelled.
-     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     * This is needed for Installment Secured payment types only.
      *
      * @return float|null
      */
@@ -151,9 +151,9 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Sets the net value of the amount to be cancelled.
-     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     * This is needed for Installment Secured payment types only.
      *
-     * @param float|null $amountNet The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null $amountNet The net value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation The resulting cancellation object.
      */
@@ -165,7 +165,7 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Returns the vat value of the cancellation amount.
-     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     * This is needed for Installment Secured payment types only.
      *
      * @return float|null
      */
@@ -176,7 +176,7 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Sets the vat value of the cancellation amount.
-     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     * This is needed for Installment Secured payment types only.
      *
      * @param float|null $amountVat
      *
@@ -200,7 +200,7 @@ class Cancellation extends AbstractTransactionType
         $exposeArray = parent::expose();
         $payment = $this->getPayment();
         if (isset($exposeArray['amount'])
-            && $payment instanceof Payment && $payment->getPaymentType() instanceof HirePurchaseDirectDebit) {
+            && $payment instanceof Payment && $payment->getPaymentType() instanceof InstallmentSecured) {
             $exposeArray['amountGross'] = $exposeArray['amount'];
             unset($exposeArray['amount']);
         }

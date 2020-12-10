@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the SEPA direct debit guaranteed example.
+ * This represents the invoice secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -20,10 +20,15 @@
  *
  * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  UnzerSDK\examples
+ * @package  UnzerSDK\PaymentTypes
  */
+namespace UnzerSDK\Resources\PaymentTypes;
 
-require_once __DIR__ . '/../Constants.php';
+use UnzerSDK\Traits\CanDirectChargeWithCustomer;
+use UnzerSDK\Traits\IsInvoiceType;
 
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'SepaDirectDebitGuaranteed');
-define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
+class InvoiceSecured extends BasePaymentType
+{
+    use CanDirectChargeWithCustomer;
+    use IsInvoiceType;
+}

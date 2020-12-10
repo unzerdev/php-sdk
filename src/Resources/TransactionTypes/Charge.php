@@ -303,11 +303,11 @@ class Charge extends AbstractTransactionType
      * Creates and returns new cancellation object otherwise.
      *
      * @param float|null  $amount           The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
+     *                                      This will be sent as amountGross in case of Installment Secured payment method.
      * @param string|null $reasonCode       Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
-     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation The resulting Cancellation object.
      *

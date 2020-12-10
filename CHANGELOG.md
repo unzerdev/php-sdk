@@ -5,14 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.0.0][1.1.0.0]
 
-### Added
-* Release for rebranded SDK.
-
 ### Changed
-* Resource path when fetching payment types changed. Removed type name from path.
-
+* Rebranding of the SDK.
+* Removed payment type string from URL when fetching a payment type resource.
+* Replace payment methods guaranteed/factoring by secured payment methods, i.e.:
+    * `InvoiceGuaranteed` and `InvoiceFactoring` replaced by `InvoiceSecured`
+    * `SepaDirectDebitGuaranteed` replaced by `SepaDirectDebitSecured`
+    * `HirePurchaseDirectDebit` replaced by `InstallmentSecured`
+    * Basket is now mandatory for all those payment types above.
+* Added mapping of old payment type ids to the new payment type resources.
+* Constant in `\UnzerSDK\Constants\ApiResponseCodes` got renamed:
+    * `API_ERROR_IVF_REQUIRES_CUSTOMER` renamed to `API_ERROR_FACTORING_REQUIRES_CUSTOMER`.
+    * `API_ERROR_IVF_REQUIRES_BASKET` renamed to `API_ERROR_FACTORING_REQUIRES_BASKET`.
+* Several minor changes.
 ### Remove
-* Remove deprecated methods.
+* Remove deprecated methods:
     * getAmountTotal
     * setAmountTotal
     * getCardHolder
@@ -22,7 +29,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
     * cancelAuthorization
     * getResource
     * fetchResource
-* Remove deprecated constants.
+* Remove deprecated constants:
     * API_ERROR_AUTHORIZE_ALREADY_CANCELLED
     * API_ERROR_CHARGE_ALREADY_CHARGED_BACK
     * API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION

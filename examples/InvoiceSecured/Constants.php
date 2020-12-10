@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the invoice guaranteed payment type.
+ * This file defines the constants needed for the Invoice Secured example.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -20,15 +20,10 @@
  *
  * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  UnzerSDK\PaymentTypes
+ * @package  UnzerSDK\examples
  */
-namespace UnzerSDK\Resources\PaymentTypes;
 
-use UnzerSDK\Traits\CanDirectChargeWithCustomer;
-use UnzerSDK\Traits\IsInvoiceType;
+require_once __DIR__ . '/../Constants.php';
 
-class InvoiceGuaranteed extends BasePaymentType
-{
-    use CanDirectChargeWithCustomer;
-    use IsInvoiceType;
-}
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'InvoiceSecured');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');

@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the hire purchase direct debit example.
+ * This is the controller for the Invoice Secured example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
@@ -38,7 +38,7 @@ use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 
 session_start();
 session_unset();
@@ -55,69 +55,57 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 }
 
 // You will need the id of the payment type created in the frontend (index.php)
-if (!isset($_POST['paymentTypeId'])) {
-    redirect(FAILURE_URL, 'Payment type id is missing!', $clientMessage);
+if (!isset($_POST['paymentTypeId'], $_POST['customerId'])) {
+    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
+
 $paymentTypeId   = $_POST['paymentTypeId'];
+$customerId  = $_POST['customerId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
-/** @noinspection BadExceptionsProcessingInspection */
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // Use the quote or order id from your shop
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
-    /** @var HirePurchaseDirectDebit $paymentType */
-    $paymentType = $unzer->fetchPaymentType($paymentTypeId);
-
-    // A customer with matching addresses is mandatory for Invoice Factoring payment type
-    $address  = (new Address())
-        ->setName('Linda Heideich')
-        ->setStreet('Vangerowstr. 18')
-        ->setCity('Heidelberg')
-        ->setZip('69155')
-        ->setCountry('DE');
-    $customer = CustomerFactory::createCustomer('Linda', 'Heideich')
-        ->setBirthDate('2000-02-12')
-        ->setBillingAddress($address)
-        ->setShippingAddress($address)
-        ->setEmail('linda.heideich@test.de');
-
-    // A Basket is mandatory for SEPA direct debit guaranteed payment type
+    // A Basket is mandatory for Invoice Secured payment type
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);
-    $basket = (new Basket($orderId, 119.0, 'EUR', [$basketItem]))->setAmountTotalVat(19.0);
+    $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
-    // initialize the payment
-    $authorize = $unzer->authorize(
-        $paymentType->getTotalPurchaseAmount(),
-        'EUR',
-        $paymentType,
-        CONTROLLER_URL,
-        $customer,
-        $orderId,
-        null,
-        $basket
-    );
+    $transaction = $unzer->charge(119.0, 'EUR', $paymentTypeId, CONTROLLER_URL, $customerId, $orderId, null, $basket);
 
     // You'll need to remember the shortId to show it on the success or failure page
-    $_SESSION['PaymentId'] = $authorize->getPaymentId();
+    $_SESSION['ShortId'] = $transaction->getShortId();
+    $_SESSION['PaymentId'] = $transaction->getPaymentId();
+    $_SESSION['additionalPaymentInformation'] =
+        sprintf(
+            "Please transfer the amount of %f %s to the following account:<br /><br />"
+            . "Holder: %s<br/>"
+            . "IBAN: %s<br/>"
+            . "BIC: %s<br/><br/>"
+            . "<i>Please use only this identification number as the descriptor: </i><br/>"
+            . "%s",
+            $transaction->getAmount(),
+            $transaction->getCurrency(),
+            $transaction->getHolder(),
+            $transaction->getIban(),
+            $transaction->getBic(),
+            $transaction->getDescriptor()
+        );
 
-    // Redirect to the success or failure depending on the state of the transaction
-    if ($authorize->isSuccess()) {
-        redirect(CONFIRM_URL);
-    }
+    // To avoid redundant code this example redirects to the general ReturnController which contains the code example to handle payment results.
+    redirect(RETURN_CONTROLLER_URL);
 
-    // Check the result message of the transaction to find out what went wrong.
-    $merchantMessage = $authorize->getMessage()->getCustomer();
 } catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
+// Write the merchant message to your log.
+// Show the client message to the customer (it is localized).
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);

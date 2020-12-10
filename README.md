@@ -17,21 +17,22 @@ Please refer to the following documentation for installation instructions and us
 *   [Debugging](https://docs.unzer.com/docs/logging-and-debugging)
 
 ## Supported payment types
+*   Alipay
 *   Card (credit card and debit card) + Recurring
+*   EPS
 *   Giropay
 *   iDEAL
-*   Invoice (guaranteed)
+*   Invoice
 *   PayPal + Recurring
 *   Prepayment
 *   Przelewy24
-*   SEPA direct debit (guaranteed) + Recurring
+*   SEPA direct debit + Recurring
 *   SOFORT
-*   EPS
 *   Unzer Bank Transfer (PIS)
-*   Alipay
+*   Unzer Direct Debit (secured) + Recurring
+*   Unzer Instalment (secured)
+*   Unzer Invoice (secured)
 *   WeChat Pay
-*   Invoice Factoring
-*   Unzer Instalment (Hire Purchase Direct Debit)
 
 ## Supported features
 *   Webhooks and event handling

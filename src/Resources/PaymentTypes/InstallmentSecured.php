@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the Hire Purchase payment type.
+ * This represents the Installment Secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -27,7 +27,7 @@ namespace UnzerSDK\Resources\PaymentTypes;
 use DateTime;
 use UnzerSDK\Resources\InstalmentPlan;
 
-class HirePurchaseDirectDebit extends InstalmentPlan
+class InstallmentSecured extends InstalmentPlan
 {
     /** @var string $iban */
     protected $iban;

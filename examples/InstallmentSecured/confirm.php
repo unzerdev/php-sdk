@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the Hire Purchase direct debit payment type.
+ * This file provides an example implementation of the Installment Secured payment type.
  * It shows the selected payment plan to the customer who can approve the plan to perform the payment.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
@@ -27,7 +27,7 @@
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
@@ -63,7 +63,7 @@ try {
     $payment = $unzer->fetchPayment($paymentId);
 
     $PDFLink = $payment->getAuthorization()->getPDFLink();
-    /** @var HirePurchaseDirectDebit $type */
+    /** @var InstallmentSecured $type */
     $type = $payment->getPaymentType();
     $totalAmount = $type->getTotalAmount();
     $totalPurchaseAmount = $type->getTotalPurchaseAmount();

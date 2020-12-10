@@ -324,7 +324,7 @@ class UnzerTest extends BasePaymentTest
             'payout'                 => ['payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId'], 'payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, 'basketId']],
             'initPayPageCharge'      => ['initPayPageCharge', [$paypage, $customer, $basket, $metadata], 'initPayPageCharge', [$paypage, $customer, $basket, $metadata]],
             'initPayPageAuthorize'   => ['initPayPageAuthorize', [$paypage, $customer, $basket, $metadata], 'initPayPageAuthorize', [$paypage, $customer, $basket, $metadata]],
-            'fetchDDInstalmentPlans' => ['fetchDirectDebitInstalmentPlans', [123.4567, 'EUR', 4.99, $today], 'fetchDirectDebitInstalmentPlans', [123.4567, 'EUR', 4.99, $today]]
+            'fetchDDInstalmentPlans' => ['fetchInstallmentPlans', [123.4567, 'EUR', 4.99, $today], 'fetchInstallmentPlans', [123.4567, 'EUR', 4.99, $today]]
         ];
     }
 

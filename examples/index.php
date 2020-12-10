@@ -204,28 +204,10 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Invoice guaranteed
-                        </div>
-                        <div class="description">
-                            This example adds the necessary customer data within the checkout form.
-                            Please refer to the example of <i>Invoice Factoring</i> if you don't want to add the customer via payment form.
+                            Unzer Invoice
                         </div>
                     </div>
-                    <div id="tryInvoiceGuaranteedExample" class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
-                        Try
-                    </div>
-                </div>
-                <div class="card olive">
-                    <div class="content">
-                        <div class="header">
-                            Invoice Factoring
-                        </div>
-                        <div class="description">
-                            This example adds the necessary customer data within the php controller.
-                            Please refer to the example of <i>Invoice guaranteed</i> if you want to add the customer data withing the payment form.
-                        </div>
-                    </div>
-                    <div id="tryInvoiceFactoringExample" class="ui bottom attached green button" onclick="location.href='InvoiceFactoring/';">
+                    <div id="tryInvoiceSecuredExample" class="ui bottom attached green button" onclick="location.href='InvoiceSecured/';">
                         Try
                     </div>
                 </div>
@@ -270,24 +252,24 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            SEPA direct debit guaranteed
+                            Unzer Direct Debit
                         </div>
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryDirectDebitGuaranteedExample" class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
+                    <div id="tryDirectDebitSecuredExample" class="ui bottom attached green button" onclick="location.href='SepaDirectDebitSecured/';">
                         Try
                     </div>
                 </div>
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Instalment (Hire Purchase Direct Debit)
+                            Unzer Installment (secured)
                         </div>
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryHirePurchaseDirectDebitExample" class="ui bottom attached green button" onclick="location.href='HirePurchaseDirectDebit/';">
+                    <div id="tryInstallmentSecuredExample" class="ui bottom attached green button" onclick="location.href='InstallmentSecured/';">
                         Try
                     </div>
                 </div>
@@ -299,7 +281,7 @@ function printMessage($type, $title, $text)
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryUnzerBankTransfer" class="ui bottom attached green button" onclick="location.href='BankTransfer/';">
+                    <div id="tryUnzerBankTransferExample" class="ui bottom attached green button" onclick="location.href='BankTransfer/';">
                         Try
                     </div>
                 </div>
@@ -314,7 +296,7 @@ function printMessage($type, $title, $text)
                             server and redirected to a given RedirectUrl.
                         </div>
                     </div>
-                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/docs/payment-page/';">
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/docs/payment-pages/';">
                         Documentation
                     </div>
                     <div id="tryHostedPayPageExample" class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
@@ -331,7 +313,7 @@ function printMessage($type, $title, $text)
                             The Payment Page will be shown as an Overlay in your own shop.
                         </div>
                     </div>
-                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/docs/payment-page/';">
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/docs/payment-pages/';">
                         Documentation
                     </div>
                     <div id="tryEmbeddedPayPageExample" class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">

@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the SEPA direct debit guaranteed payment type.
+ * This represents the SEPA direct debit secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -28,7 +28,7 @@ use UnzerSDK\Traits\CanDirectChargeWithCustomer;
 use UnzerSDK\Traits\CanPayoutWithCustomer;
 use UnzerSDK\Traits\CanRecur;
 
-class SepaDirectDebitGuaranteed extends BasePaymentType
+class SepaDirectDebitSecured extends BasePaymentType
 {
     use CanDirectChargeWithCustomer;
     use CanPayoutWithCustomer;

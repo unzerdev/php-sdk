@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
- * This class defines unit tests to verify functionality of SepaDirectDebitGuaranteed payment type.
+ * This class defines unit tests to verify functionality of SepaDirectDebitSecured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -26,10 +26,10 @@
  */
 namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\test\BasePaymentTest;
 
-class SepaDirectDebitGuaranteedTest extends BasePaymentTest
+class SepaDirectDebitSecuredTest extends BasePaymentTest
 {
     /**
      * Verify constructor sets iban.
@@ -38,7 +38,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      */
     public function ibanShouldBeSetByConstructor(): void
     {
-        $sdd = new SepaDirectDebitGuaranteed(null);
+        $sdd = new SepaDirectDebitSecured(null);
         $this->assertNull($sdd->getIban());
     }
 
@@ -49,7 +49,7 @@ class SepaDirectDebitGuaranteedTest extends BasePaymentTest
      */
     public function getterAndSetterWorkAsExpected(): void
     {
-        $sdd = new SepaDirectDebitGuaranteed('DE89370400440532013000');
+        $sdd = new SepaDirectDebitSecured('DE89370400440532013000');
         $this->assertEquals('DE89370400440532013000', $sdd->getIban());
 
         $sdd->setIban('DE89370400440532013012');

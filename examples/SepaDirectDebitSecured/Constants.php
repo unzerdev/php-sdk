@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the Invoice Factoring example.
+ * This file defines the constants needed for the SEPA direct debit secured example.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -25,5 +25,5 @@
 
 require_once __DIR__ . '/../Constants.php';
 
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'InvoiceFactoring');
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'SepaDirectDebitSecured');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');

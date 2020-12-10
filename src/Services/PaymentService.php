@@ -36,7 +36,7 @@ use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
-use UnzerSDK\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
@@ -279,19 +279,19 @@ class PaymentService implements PaymentServiceInterface
 
     //</editor-fold>
 
-    //<editor-fold desc="Hire Purchase (FlexiPay Rate)">
+    //<editor-fold desc="Installment Secured">
 
     /**
      * {@inheritDoc}
      */
-    public function fetchDirectDebitInstalmentPlans(
+    public function fetchInstallmentPlans(
         $amount,
         $currency,
         $effectiveInterest,
         DateTime $orderDate = null
     ): InstalmentPlans {
-        $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->unzer);
-        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
+        $ins   = (new InstallmentSecured(null, null, null))->setParentResource($this->unzer);
+        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($ins);
         /** @var InstalmentPlans $plans */
         $plans = $this->unzer->getResourceService()->fetchResource($plans);
         return $plans;

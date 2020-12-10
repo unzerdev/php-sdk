@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the Invoice guaranteed payment type.
+ * This file provides an example implementation of the Invoice Secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -27,6 +27,7 @@
 require_once __DIR__ . '/Constants.php';
 
 /** @noinspection PhpIncludeInspection */
+
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 ?>
@@ -48,7 +49,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form">
-    <div id="example-invoice-guaranteed"></div>
+    <div id="example-invoice-secured"></div>
     <div id="customer" class="field">
         <!-- The customer form UI element will be inserted here -->
     </div>
@@ -60,8 +61,8 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
-    // Create an Invoice Guaranteed instance
-    let InvoiceGuaranteed = unzerInstance.InvoiceGuaranteed();
+    // Create an Invoice Secured instance
+    let InvoiceSecured = unzerInstance.InvoiceSecured();
 
     // Create a customer instance and render the customer form
     let Customer = unzerInstance.Customer();
@@ -73,9 +74,9 @@ require_once __DIR__ . '/../../../../autoload.php';
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        let InvoiceGuaranteedPromise = InvoiceGuaranteed.createResource();
+        let InvoiceSecuredPromise = InvoiceSecured.createResource();
         let customerPromise = Customer.createCustomer();
-        Promise.all([InvoiceGuaranteedPromise, customerPromise])
+        Promise.all([InvoiceSecuredPromise, customerPromise])
             .then(function(values) {
                 let paymentType = values[0];
                 let customer = values[1];

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file provides an example implementation of the SEPA direct debit guaranteed payment type.
+ * This file provides an example implementation of the SEPA direct debit secured payment type.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -48,7 +48,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form">
-    <div id="sepa-guaranteed-IBAN" class="field">
+    <div id="sepa-secured-IBAN" class="field">
         <!-- The IBAN field UI Element will be inserted here -->
     </div>
     <div id="customer" class="field">
@@ -62,10 +62,10 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
-    // Create a SEPA Direct Debit Guaranteed instance and render the form
-    let sepaDirectDebitGuaranteed = unzerInstance.SepaDirectDebitGuaranteed();
-    sepaDirectDebitGuaranteed.create('sepa-direct-debit-guaranteed', {
-        containerId: 'sepa-guaranteed-IBAN'
+    // Create a SEPA Direct Debit Secured instance and render the form
+    let SepaDirectDebitSecured = unzerInstance.SepaDirectDebitSecured();
+    SepaDirectDebitSecured.create('sepa-direct-debit-secured', {
+        containerId: 'sepa-secured-IBAN'
     });
 
     // Creat a customer instance and render the form
@@ -78,9 +78,9 @@ require_once __DIR__ . '/../../../../autoload.php';
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        let sepaDirectDebitGuaranteedPromise = sepaDirectDebitGuaranteed.createResource();
+        let sepaDirectDebitSecuredPromise = SepaDirectDebitSecured.createResource();
         let customerPromise = Customer.createCustomer();
-        Promise.all([sepaDirectDebitGuaranteedPromise, customerPromise])
+        Promise.all([sepaDirectDebitSecuredPromise, customerPromise])
             .then(function(values) {
                 let paymentType = values[0];
                 let customer = values[1];
