@@ -2,7 +2,7 @@
 /**
  * This service provides for functionalities concerning payment transactions.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,67 +16,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
 use DateTime;
-use heidelpayPHP\Constants\TransactionTypes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\PaymentServiceInterface;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\InstalmentPlans;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Interfaces\PaymentServiceInterface;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\InstalmentPlans;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
 use RuntimeException;
 
 class PaymentService implements PaymentServiceInterface
 {
-    /** @var Heidelpay */
-    private $heidelpay;
+    /** @var Unzer */
+    private $unzer;
 
     /**
      * PaymentService constructor.
      *
-     * @param Heidelpay $heidelpay
+     * @param Unzer $unzer
      */
-    public function __construct(Heidelpay $heidelpay)
+    public function __construct(Unzer $unzer)
     {
-        $this->heidelpay       = $heidelpay;
+        $this->unzer       = $unzer;
     }
 
     //<editor-fold desc="Getters/Setters"
 
     /**
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function getHeidelpay(): Heidelpay
+    public function getUnzer(): Unzer
     {
-        return $this->heidelpay;
+        return $this->unzer;
     }
 
     /**
-     * @param Heidelpay $heidelpay
+     * @param Unzer $unzer
      *
      * @return PaymentService
      */
-    public function setHeidelpay(Heidelpay $heidelpay): PaymentService
+    public function setUnzer(Unzer $unzer): PaymentService
     {
-        $this->heidelpay = $heidelpay;
+        $this->unzer = $unzer;
         return $this;
     }
 
@@ -85,7 +85,7 @@ class PaymentService implements PaymentServiceInterface
      */
     public function getResourceService(): ResourceService
     {
-        return $this->getHeidelpay()->getResourceService();
+        return $this->getUnzer()->getResourceService();
     }
 
     //</editor-fold>
@@ -279,21 +279,21 @@ class PaymentService implements PaymentServiceInterface
 
     //</editor-fold>
 
-    //<editor-fold desc="Hire Purchase (FlexiPay Rate)">
+    //<editor-fold desc="Installment Secured">
 
     /**
      * {@inheritDoc}
      */
-    public function fetchDirectDebitInstalmentPlans(
+    public function fetchInstallmentPlans(
         $amount,
         $currency,
         $effectiveInterest,
         DateTime $orderDate = null
     ): InstalmentPlans {
-        $hdd   = (new HirePurchaseDirectDebit(null, null, null))->setParentResource($this->heidelpay);
-        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($hdd);
+        $ins   = (new InstallmentSecured(null, null, null))->setParentResource($this->unzer);
+        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($ins);
         /** @var InstalmentPlans $plans */
-        $plans = $this->heidelpay->getResourceService()->fetchResource($plans);
+        $plans = $this->unzer->getResourceService()->fetchResource($plans);
         return $plans;
     }
 
@@ -317,8 +317,8 @@ class PaymentService implements PaymentServiceInterface
      *
      * @return Paypage The updated PayPage resource.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function initPayPage(
         Paypage $paypage,
@@ -327,7 +327,7 @@ class PaymentService implements PaymentServiceInterface
         Basket $basket = null,
         Metadata $metadata = null
     ): Paypage {
-        $paypage->setAction($action)->setParentResource($this->heidelpay);
+        $paypage->setAction($action)->setParentResource($this->unzer);
         $payment = $this->createPayment($paypage)->setBasket($basket)->setCustomer($customer)->setMetadata($metadata);
         $this->getResourceService()->createResource($paypage->setPayment($payment));
         return $paypage;
@@ -340,12 +340,12 @@ class PaymentService implements PaymentServiceInterface
      *
      * @return Payment The resulting Payment object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function createPayment($paymentType): AbstractHeidelpayResource
+    private function createPayment($paymentType): AbstractUnzerResource
     {
-        return (new Payment($this->heidelpay))->setPaymentType($paymentType);
+        return (new Payment($this->unzer))->setPaymentType($paymentType);
     }
 
     //</editor-fold>

@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the Keypair resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Resources\Keypair;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\Keypair;
+use UnzerSDK\test\BasePaymentTest;
 
 class KeypairTest extends BasePaymentTest
 {
@@ -66,7 +66,7 @@ class KeypairTest extends BasePaymentTest
     {
         // when
         $keypair = new Keypair();
-        $paymentTypes = ['przelewy24', 'ideal', 'paypal', 'prepayment', 'invoice', 'sepa-direct-debit-guaranteed', 'card', 'sofort', 'invoice-guaranteed', 'sepa-direct-debit', 'giropay'];
+        $paymentTypes = ['przelewy24', 'ideal', 'paypal', 'prepayment', 'invoice', 'sepa-direct-debit-secured', 'card', 'sofort', 'invoice-secured', 'sepa-direct-debit', 'giropay'];
         $testResponse = (object)[
             'publicKey'             => 's-pub-1234',
             'privateKey'            => 's-priv-4321',
@@ -135,7 +135,7 @@ class KeypairTest extends BasePaymentTest
             'privateKey' => 's-priv-4321',
             'secureLevel' => 'SAQ-D',
             'alias' => 'Readme.io user',
-            'merchantName' => 'Heidelpay GmbH',
+            'merchantName' => 'Unzer GmbH',
             'merchantAddress' => 'Vangerowstraße 18, 69115 Heidelberg',
             'paymentTypes' => $paymentTypes
             ];
@@ -147,7 +147,7 @@ class KeypairTest extends BasePaymentTest
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
         $this->assertEquals('SAQ-D', $keypair->getSecureLevel());
         $this->assertEquals('Readme.io user', $keypair->getAlias());
-        $this->assertEquals('Heidelpay GmbH', $keypair->getMerchantName());
+        $this->assertEquals('Unzer GmbH', $keypair->getMerchantName());
         $this->assertEquals('Vangerowstraße 18, 69115 Heidelberg', $keypair->getMerchantAddress());
     }
 }

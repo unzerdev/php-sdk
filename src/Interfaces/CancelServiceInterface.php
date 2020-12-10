@@ -1,24 +1,35 @@
 <?php
 /**
- * Description
+ * The interface for the CancelService.
  *
- * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
- * @link  http://dev.heidelpay.com/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * @author  Simon Gabriel <development@heidelpay.de>
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package  heidelpay/${Package}
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ * @author  Simon Gabriel <development@unzer.com>
+ *
+ * @package  UnzerSDK\Interfaces
  */
-namespace heidelpayPHP\Interfaces;
+namespace UnzerSDK\Interfaces;
 
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use RuntimeException;
 
 interface CancelServiceInterface
@@ -32,8 +43,8 @@ interface CancelServiceInterface
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAuthorization(Authorization $authorization, float $amount = null): Cancellation;
 
@@ -46,8 +57,8 @@ interface CancelServiceInterface
      *
      * @return Cancellation Resulting Cancellation object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAuthorizationByPayment($payment, float $amount = null): Cancellation;
 
@@ -58,16 +69,16 @@ interface CancelServiceInterface
      * @param Payment|string $payment       The Payment object or the id of the Payment the charge belongs to.
      * @param string         $chargeId      The id of the Charge to be canceled.
      * @param float|null     $amount        The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null    $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     *                                      This will be sent as amountGross in case of Installment Secured payment method.
+     * @param string|null    $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null    $referenceText A reference string for the payment.
-     * @param float|null     $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountNet     The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelChargeById(
         $payment,
@@ -85,16 +96,16 @@ interface CancelServiceInterface
      *
      * @param Charge      $charge        The Charge object to create the Cancellation for.
      * @param float|null  $amount        The amount to be canceled.
-     *                                   This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     *                                   This will be sent as amountGross in case of Installment Secured payment method.
+     * @param string|null $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null $referenceText A reference string for the payment.
-     * @param float|null  $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null  $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountNet     The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null  $amountVat     The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation The resulting Cancellation object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelCharge(
         Charge $charge,
@@ -111,16 +122,16 @@ interface CancelServiceInterface
      *
      * @param Payment|string $payment       The Payment object or the id of the Payment to be cancelled.
      * @param float|null     $amount        The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null    $reasonCode    Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     *                                      This will be sent as amountGross in case of Installment Secured payment method.
+     * @param string|null    $reasonCode    Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null    $referenceText A reference string for the payment.
-     * @param float|null     $amountNet     The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null     $amountNet     The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null     $amountVat     The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function cancelPayment(
         $payment,
@@ -141,8 +152,8 @@ interface CancelServiceInterface
      *
      * @return Cancellation|null The resulting cancellation.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is a error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
      */
     public function cancelPaymentAuthorization($payment, float $amount = null): ?Cancellation;
 }

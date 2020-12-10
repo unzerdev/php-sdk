@@ -4,7 +4,7 @@
 /**
  * This custom debug handler will echo out debug messages.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test;
+namespace UnzerSDK\test;
 
-use heidelpayPHP\Interfaces\DebugHandlerInterface;
-use heidelpayPHP\Services\EnvironmentService;
+use UnzerSDK\Interfaces\DebugHandlerInterface;
+use UnzerSDK\Services\EnvironmentService;
 
 class TestDebugHandler implements DebugHandlerInterface
 {
@@ -39,7 +39,7 @@ class TestDebugHandler implements DebugHandlerInterface
      */
     public function log(string $message): void
     {
-        $logMessage = 'heidelpay debug message: ' . $message . "\n";
+        $logMessage = 'Unzer debug message: ' . $message . "\n";
 
         if (EnvironmentService::isTestLoggingActive()) {
             // Echo log messages directly.

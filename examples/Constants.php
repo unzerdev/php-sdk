@@ -2,7 +2,7 @@
 /**
  * This file defines the constants needed for the card example.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 require_once __DIR__ . '/_enableExamples.php';
-if (defined('HEIDELPAY_PHP_PAYMENT_API_EXAMPLES') && HEIDELPAY_PHP_PAYMENT_API_EXAMPLES !== true) {
+if (defined('UNZER_PAPI_EXAMPLES') && UNZER_PAPI_EXAMPLES !== true) {
     exit();
 }
 
-const EXAMPLE_BASE_FOLDER = HEIDELPAY_PHP_PAYMENT_API_URL . HEIDELPAY_PHP_PAYMENT_API_FOLDER;
+const EXAMPLE_BASE_FOLDER = UNZER_PAPI_URL . UNZER_PAPI_FOLDER;
 define('SUCCESS_URL', EXAMPLE_BASE_FOLDER . 'Success.php');
 define('PENDING_URL', EXAMPLE_BASE_FOLDER . 'Pending.php');
 define('FAILURE_URL', EXAMPLE_BASE_FOLDER . 'Failure.php');

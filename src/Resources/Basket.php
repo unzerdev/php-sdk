@@ -2,7 +2,7 @@
 /**
  * This represents the basket resource.
  *
- * Copyright (C) 2018 Heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use stdClass;
 use function count;
 
-class Basket extends AbstractHeidelpayResource
+class Basket extends AbstractUnzerResource
 {
     /** @var float $amountTotalGross */
     protected $amountTotalGross = 0.0;
@@ -91,30 +91,6 @@ class Basket extends AbstractHeidelpayResource
     {
         $this->amountTotalGross = $amountTotalGross;
         return $this;
-    }
-
-    /**
-     * @return float
-     *
-     * @deprecated since 1.2.0.0
-     * @see Basket::getAmountTotalGross()
-     */
-    public function getAmountTotal(): float
-    {
-        return $this->getAmountTotalGross();
-    }
-
-    /**
-     * @param float $amountTotal
-     *
-     * @return Basket
-     *
-     * @deprecated since 1.2.0.0
-     * @see Basket::setAmountTotalGross()
-     */
-    public function setAmountTotal(float $amountTotal): Basket
-    {
-        return $this->setAmountTotalGross($amountTotal);
     }
 
     /**
@@ -307,7 +283,7 @@ class Basket extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'baskets';
     }

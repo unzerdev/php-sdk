@@ -2,7 +2,7 @@
 /**
  * This represents the payment resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,42 +16,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Constants\IdStrings;
-use heidelpayPHP\Constants\TransactionTypes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\EmbeddedResources\Amount;
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\Services\IdService;
-use heidelpayPHP\Traits\HasInvoiceId;
-use heidelpayPHP\Traits\HasOrderId;
-use heidelpayPHP\Traits\HasPaymentState;
-use heidelpayPHP\Traits\HasTraceId;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Constants\IdStrings;
+use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\Amount;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Services\IdService;
+use UnzerSDK\Traits\HasInvoiceId;
+use UnzerSDK\Traits\HasOrderId;
+use UnzerSDK\Traits\HasPaymentState;
+use UnzerSDK\Traits\HasTraceId;
 use RuntimeException;
 use stdClass;
 
-use function count;
-use function in_array;
 use function is_string;
 
-class Payment extends AbstractHeidelpayResource
+class Payment extends AbstractUnzerResource
 {
     use HasPaymentState;
     use HasOrderId;
@@ -131,10 +128,10 @@ class Payment extends AbstractHeidelpayResource
      * @param bool $lazy Enables lazy loading if set to true which results in the object not being updated via
      *                   API and possibly containing just the meta data known from the Payment object response.
      *
-     * @return Authorization|AbstractHeidelpayResource|null The Authorization object if it exists.
+     * @return Authorization|AbstractUnzerResource|null The Authorization object if it exists.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getAuthorization($lazy = false)
     {
@@ -167,10 +164,10 @@ class Payment extends AbstractHeidelpayResource
      * @param bool $lazy Enables lazy loading if set to true which results in the object not being updated via
      *                   API and possibly containing just the meta data known from the Payment object response.
      *
-     * @return Payout|AbstractHeidelpayResource|null The Payout object if it exists.
+     * @return Payout|AbstractUnzerResource|null The Payout object if it exists.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getPayout($lazy = false)
     {
@@ -230,8 +227,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Charge|null The retrieved Charge object or null if it does not exist.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getCharge($chargeId, $lazy = false): ?Charge
     {
@@ -256,10 +253,10 @@ class Payment extends AbstractHeidelpayResource
      * @param bool $lazy  Enables lazy loading if set to true which results in the object not being updated via
      *                    API and possibly containing just the meta data known from the Payment object response.
      *
-     * @return AbstractHeidelpayResource|Charge|null The retrieved Charge object or null if it could not be found.
+     * @return AbstractUnzerResource|Charge|null The retrieved Charge object or null if it could not be found.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getChargeByIndex($index, $lazy = false)
     {
@@ -282,8 +279,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Payment This Payment object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setCustomer($customer): Payment
     {
@@ -291,20 +288,20 @@ class Payment extends AbstractHeidelpayResource
             return $this;
         }
 
-        $heidelpay = $this->getHeidelpayObject();
+        $unzer = $this->getUnzerObject();
 
         /** @var Customer $customerObject */
         $customerObject = $customer;
 
         if (is_string($customer)) {
-            $customerObject = $heidelpay->fetchCustomer($customer);
+            $customerObject = $unzer->fetchCustomer($customer);
         } elseif ($customerObject instanceof Customer) {
             if ($customerObject->getId() === null) {
-                $heidelpay->createCustomer($customerObject);
+                $unzer->createCustomer($customerObject);
             }
         }
 
-        $customerObject->setParentResource($heidelpay);
+        $customerObject->setParentResource($unzer);
         $this->customer = $customerObject;
         return $this;
     }
@@ -337,8 +334,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Payment This Payment object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setPaymentType($paymentType): Payment
     {
@@ -346,15 +343,15 @@ class Payment extends AbstractHeidelpayResource
             return $this;
         }
 
-        $heidelpay = $this->getHeidelpayObject();
+        $unzer = $this->getUnzerObject();
 
         /** @var BasePaymentType $paymentTypeObject */
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
-            $paymentTypeObject = $heidelpay->fetchPaymentType($paymentType);
+            $paymentTypeObject = $unzer->fetchPaymentType($paymentType);
         } elseif ($paymentTypeObject instanceof BasePaymentType && !$paymentTypeObject instanceof Paypage) {
             if ($paymentTypeObject->getId() === null) {
-                $heidelpay->createPaymentType($paymentType);
+                $unzer->createPaymentType($paymentType);
             }
         }
 
@@ -375,8 +372,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Payment
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setMetadata($metadata): Payment
     {
@@ -385,9 +382,9 @@ class Payment extends AbstractHeidelpayResource
         }
         $this->metadata = $metadata;
 
-        $heidelpay = $this->getHeidelpayObject();
+        $unzer = $this->getUnzerObject();
         if ($this->metadata->getId() === null) {
-            $heidelpay->getResourceService()->createResource($this->metadata->setParentResource($heidelpay));
+            $unzer->getResourceService()->createResource($this->metadata->setParentResource($unzer));
         }
 
         return $this;
@@ -408,8 +405,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Payment
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function setBasket($basket): Payment
     {
@@ -419,9 +416,9 @@ class Payment extends AbstractHeidelpayResource
             return $this;
         }
 
-        $heidelpay = $this->getHeidelpayObject();
+        $unzer = $this->getUnzerObject();
         if ($this->basket->getId() === null) {
-            $heidelpay->getResourceService()->createResource($this->basket->setParentResource($heidelpay));
+            $unzer->getResourceService()->createResource($this->basket->setParentResource($unzer));
         }
 
         return $this;
@@ -440,8 +437,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Cancellation|null The retrieved Cancellation object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getCancellation($cancellationId, $lazy = false): ?Cancellation
     {
@@ -464,8 +461,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return array The array containing all Cancellation objects of this Payment object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getCancellations(): array
     {
@@ -513,8 +510,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Shipment|null The retrieved Shipment object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function getShipment($shipmentId, $lazy = false): ?Shipment
     {
@@ -573,7 +570,7 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return AbstractTransactionType|null
      *
-     * @throws HeidelpayApiException
+     * @throws UnzerApiException
      * @throws RuntimeException
      */
     public function getInitialTransaction($lazy = false): ?AbstractTransactionType
@@ -601,7 +598,7 @@ class Payment extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'payments';
     }
@@ -609,8 +606,8 @@ class Payment extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
     {
@@ -645,44 +642,17 @@ class Payment extends AbstractHeidelpayResource
      * Performs a Cancellation transaction on the Payment.
      * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
      *
-     * @param float|null $amount The amount to canceled.
-     * @param string     $reason
-     *
-     * @return Cancellation|null The resulting Cancellation object.
-     *                           If more then one cancellation is performed the last one will be returned.
-     *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 1.2.3.0
-     * @see Payment::cancelAmount()
-     */
-    public function cancel($amount = null, $reason = CancelReasonCodes::REASON_CODE_CANCEL): ?Cancellation
-    {
-        $cancellations = $this->cancelAmount($amount, $reason);
-
-        if (count($cancellations) > 0) {
-            return $cancellations[0];
-        }
-
-        throw new RuntimeException('This Payment could not be cancelled.');
-    }
-
-    /**
-     * Performs a Cancellation transaction on the Payment.
-     * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
-     *
      * @param float|null  $amount           The amount to be canceled.
-     *                                      This will be sent as amountGross in case of Hire Purchase payment method.
-     * @param string|null $reasonCode       Reason for the Cancellation ref \heidelpayPHP\Constants\CancelReasonCodes.
+     *                                      This will be sent as amountGross in case of Installment Secured payment method.
+     * @param string|null $reasonCode       Reason for the Cancellation ref \UnzerSDK\Constants\CancelReasonCodes.
      * @param string|null $paymentReference A reference string for the payment.
-     * @param float|null  $amountNet        The net value of the amount to be cancelled (Hire Purchase only).
-     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null  $amountNet        The net value of the amount to be cancelled (Installment Secured only).
+     * @param float|null  $amountVat        The vat value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation[] An array holding all Cancellation objects created with this cancel call.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAmount(
         float $amount = null,
@@ -691,64 +661,7 @@ class Payment extends AbstractHeidelpayResource
         float $amountNet = null,
         float $amountVat = null
     ): array {
-        return $this->getHeidelpayObject()->cancelPayment($this, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
-    }
-
-    /**
-     * Cancels all charges of the payment and returns an array of the cancellations and exceptions that occur.
-     *
-     * @return array
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     *
-     * @deprecated since 1.2.3.0
-     * @see Payment::cancelAmount()
-     */
-    public function cancelAllCharges(): array
-    {
-        $cancels    = [];
-        $exceptions = [];
-
-        /** @var Charge $charge */
-        foreach ($this->getCharges() as $charge) {
-            try {
-                $cancels[] = $charge->cancel();
-            } catch (HeidelpayApiException $e) {
-                $allowedErrors = [
-                    ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK,
-                    ApiResponseCodes::API_ERROR_ALREADY_CANCELLED
-                ];
-                if (!in_array($e->getCode(), $allowedErrors, true)) {
-                    throw $e;
-                }
-                $exceptions[] = $e;
-            }
-        }
-        return array($cancels, $exceptions);
-    }
-
-    /**
-     * @param float|null $amount
-     *
-     * @return array
-     *
-     * @throws HeidelpayApiException
-     * @throws RuntimeException
-     *
-     * @deprecated since 1.2.3.0
-     * @see Payment::cancelAuthorizationAmount()
-     */
-    public function cancelAuthorization($amount = null): array
-    {
-        $cancels = [];
-        $cancel  = $this->cancelAuthorizationAmount($amount);
-
-        if ($cancel instanceof Cancellation) {
-            $cancels[] = $cancel;
-        }
-
-        return array($cancels, []);
+        return $this->getUnzerObject()->cancelPayment($this, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
     }
 
     /**
@@ -760,12 +673,12 @@ class Payment extends AbstractHeidelpayResource
      *
      * @return Cancellation|null The resulting cancellation object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAuthorizationAmount(float $amount = null): ?Cancellation
     {
-        return $this->getHeidelpayObject()->cancelPaymentAuthorization($this, $amount);
+        return $this->getUnzerObject()->cancelPaymentAuthorization($this, $amount);
     }
 
     /**
@@ -774,14 +687,14 @@ class Payment extends AbstractHeidelpayResource
      * @param null $amount   The amount to be charged.
      * @param null $currency The currency of the charged amount.
      *
-     * @return Charge|AbstractHeidelpayResource The resulting Charge object.
+     * @return Charge|AbstractUnzerResource The resulting Charge object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function charge($amount = null, $currency = null): Charge
     {
-        return $this->getHeidelpayObject()->chargePayment($this, $amount, $currency);
+        return $this->getUnzerObject()->chargePayment($this, $amount, $currency);
     }
 
     /**
@@ -790,14 +703,14 @@ class Payment extends AbstractHeidelpayResource
      * @param string|null $invoiceId The id of the invoice in the shop.
      * @param string|null $orderId   The id of the order in the shop.
      *
-     * @return AbstractHeidelpayResource|Shipment The resulting Shipment object.
+     * @return AbstractUnzerResource|Shipment The resulting Shipment object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function ship($invoiceId = null, $orderId = null)
     {
-        return $this->getHeidelpayObject()->ship($this, $invoiceId, $orderId);
+        return $this->getUnzerObject()->ship($this, $invoiceId, $orderId);
     }
 
     //</editor-fold>
@@ -807,8 +720,8 @@ class Payment extends AbstractHeidelpayResource
     /**
      * @param array $transactions
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateResponseTransactions(array $transactions = []): void
     {
@@ -848,8 +761,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param $resources
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateResponseResources($resources): void
     {
@@ -862,12 +775,12 @@ class Payment extends AbstractHeidelpayResource
             if ($this->customer instanceof Customer && $this->customer->getId() === $customerId) {
                 $this->getResource($this->customer);
             } else {
-                $this->customer = $this->getHeidelpayObject()->fetchCustomer($customerId);
+                $this->customer = $this->getUnzerObject()->fetchCustomer($customerId);
             }
         }
 
         if (isset($resources->typeId) && !empty($resources->typeId) && !$this->paymentType instanceof BasePaymentType) {
-            $this->paymentType = $this->getHeidelpayObject()->fetchPaymentType($resources->typeId);
+            $this->paymentType = $this->getUnzerObject()->fetchPaymentType($resources->typeId);
         }
 
         $metadataId = $resources->metadataId ?? null;
@@ -875,12 +788,12 @@ class Payment extends AbstractHeidelpayResource
             if ($this->metadata instanceof Metadata && $this->metadata->getId() === $metadataId) {
                 $this->getResource($this->metadata);
             } else {
-                $this->metadata = $this->getHeidelpayObject()->fetchMetadata($resources->metadataId);
+                $this->metadata = $this->getUnzerObject()->fetchMetadata($resources->metadataId);
             }
         }
 
         if (isset($resources->basketId) && !empty($resources->basketId) && !$this->basket instanceof Basket) {
-            $this->basket = $this->getHeidelpayObject()->fetchBasket($resources->basketId);
+            $this->basket = $this->getUnzerObject()->fetchBasket($resources->basketId);
         }
     }
 
@@ -890,8 +803,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param stdClass $transaction The transaction from the Payment response containing the Authorization data.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateAuthorizationTransaction($transaction): void
     {
@@ -910,8 +823,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param stdClass $transaction The transaction from the Payment response containing the Charge data.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateChargeTransaction($transaction): void
     {
@@ -930,8 +843,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param stdClass $transaction The transaction from the Payment response containing the Cancellation data.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateReversalTransaction($transaction): void
     {
@@ -955,8 +868,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param stdClass $transaction The transaction from the Payment response containing the Cancellation data.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateRefundTransaction($transaction): void
     {
@@ -982,8 +895,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param stdClass $transaction The transaction from the Payment response containing the Shipment data.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updateShipmentTransaction($transaction): void
     {
@@ -1002,8 +915,8 @@ class Payment extends AbstractHeidelpayResource
      *
      * @param stdClass $transaction The transaction from the Payment response containing the Payout data.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     private function updatePayoutTransaction($transaction): void
     {

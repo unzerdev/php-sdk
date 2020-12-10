@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the payment method sofort.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Sofort;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class SofortTest extends BaseIntegrationTest
 {
@@ -44,12 +44,12 @@ class SofortTest extends BaseIntegrationTest
      */
     public function sofortShouldBeCreatableAndFetchable(): Sofort
     {
-        $sofort = $this->heidelpay->createPaymentType(new Sofort());
+        $sofort = $this->unzer->createPaymentType(new Sofort());
         $this->assertInstanceOf(Sofort::class, $sofort);
         $this->assertNotNull($sofort->getId());
 
         /** @var Sofort $fetchedSofort */
-        $fetchedSofort = $this->heidelpay->fetchPaymentType($sofort->getId());
+        $fetchedSofort = $this->unzer->fetchPaymentType($sofort->getId());
         $this->assertInstanceOf(Sofort::class, $fetchedSofort);
         $this->assertEquals($sofort->expose(), $fetchedSofort->expose());
 
@@ -86,9 +86,9 @@ class SofortTest extends BaseIntegrationTest
      */
     public function sofortShouldNotBeAuthorizable(Sofort $sofort): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'EUR', $sofort, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $sofort, self::RETURN_URL);
     }
 }

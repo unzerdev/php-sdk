@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify charge after authorization.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class ChargeAfterAuthorizationTest extends BaseIntegrationTest
 {
@@ -43,7 +43,7 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
 
         $charge = $authorization->charge();
-        $this->heidelpay->fetchPayment($payment);
+        $this->unzer->fetchPayment($payment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertAmounts($payment, 0, 100, 100, 0);
@@ -55,15 +55,15 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function authorizationShouldBeFullyChargeableViaHeidelpayObject(): void
+    public function authorizationShouldBeFullyChargeableViaUnzerObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId());
-        $this->heidelpay->fetchPayment($payment);
+        $charge = $this->unzer->chargeAuthorization($payment->getId());
+        $this->unzer->fetchPayment($payment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertAmounts($payment, 0, 100, 100, 0);
@@ -82,8 +82,8 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->heidelpay->chargeAuthorization($payment->getId(), 10);
-        $this->heidelpay->fetchPayment($payment);
+        $charge = $this->unzer->chargeAuthorization($payment->getId(), 10);
+        $this->unzer->fetchPayment($payment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertAmounts($payment, 90, 10, 100, 0);

@@ -2,7 +2,7 @@
 /**
  * Http adapters to be used by this api have to implement this interface.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/heidelpay-php-payment-api/
+ * @link  https://docs.unzer.com/docs/php-sdk/
  *
- * @author  Simon Gabriel <simon.gabriel@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Adapter
+ * @package  UnzerSDK\Adapter
  */
-namespace heidelpayPHP\Adapter;
+namespace UnzerSDK\Adapter;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 
 interface HttpAdapterInterface
 {
@@ -47,7 +47,7 @@ interface HttpAdapterInterface
      *
      * @return string|null
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      */
     public function execute(): ?string;
 

@@ -2,7 +2,7 @@
 /**
  * This file provides an example implementation of the Card recurring payment type.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -35,14 +35,12 @@ require_once __DIR__ . '/../../../../autoload.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>
-        Heidelpay UI Examples
-    </title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <title>Unzer UI Examples</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
-    <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
+    <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
+    <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
 </head>
 
 <body style="margin: 70px 70px 0;">
@@ -62,36 +60,36 @@ require_once __DIR__ . '/../../../../autoload.php';
     <li>Secret: secret3</li>
 </ul>
 
-<p><a href="https://docs.heidelpay.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
+<p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form" class="heidelpayUI form" novalidate>
+<form id="payment-form" class="unzerUI form" novalidate>
     <div class="field">
-        <div id="card-element-id-number" class="heidelpayInput">
+        <div id="card-element-id-number" class="unzerInput">
             <!-- Card number UI Element will be inserted here. -->
         </div>
     </div>
     <div class="two fields">
         <div class="field ten wide">
-            <div id="card-element-id-expiry" class="heidelpayInput">
+            <div id="card-element-id-expiry" class="unzerInput">
                 <!-- Card expiry date UI Element will be inserted here. -->
             </div>
         </div>
         <div class="field six wide">
-            <div id="card-element-id-cvc" class="heidelpayInput">
+            <div id="card-element-id-cvc" class="unzerInput">
                 <!-- Card CVC UI Element will be inserted here. -->
             </div>
         </div>
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button class="heidelpayUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
 
 <script>
-    // Create a heidelpay instance with your public key
-    let heidelpayInstance = new heidelpay('<?php echo HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY; ?>');
+    // Create an Unzer instance with your public key
+    let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
     // Create a Card instance and render the input fields
-    let Card = heidelpayInstance.Card();
+    let Card = unzerInstance.Card();
     Card.create('number', {
         containerId: 'card-element-id-number',
         onlyIframe: false

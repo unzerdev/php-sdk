@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify payout transactions.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +18,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PayoutTest extends BaseIntegrationTest
 {
@@ -45,7 +45,7 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutCanBeCalledForCardType(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $payout = $card->payout(100.0, 'EUR', self::RETURN_URL);
         $this->assertTransactionResourceHasBeenCreated($payout);
 
@@ -69,7 +69,7 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutCanBeCalledForSepaDirectDebitType(): void
     {
         $sepa = new SepaDirectDebit('DE89370400440532013000');
-        $this->heidelpay->createPaymentType($sepa);
+        $this->unzer->createPaymentType($sepa);
         $payout = $sepa->payout(100.0, 'EUR', self::RETURN_URL);
         $this->assertTransactionResourceHasBeenCreated($payout);
 
@@ -81,16 +81,17 @@ class PayoutTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify payout can be performed for sepa direct debit guaranteed payment type.
+     * Verify payout can be performed for sepa direct debit secured payment type.
      *
      * @test
      */
-    public function payoutCanBeCalledForSepaDirectDebitGuaranteedType(): void
+    public function payoutCanBeCalledForSepaDirectDebitSecuredType(): void
     {
-        $sepa = new SepaDirectDebitGuaranteed('DE89370400440532013000');
-        $this->heidelpay->createPaymentType($sepa);
+        $sepa = new SepaDirectDebitSecured('DE89370400440532013000');
+        $this->unzer->createPaymentType($sepa);
         $customer = $this->getMaximumCustomer()->setShippingAddress($this->getBillingAddress());
-        $payout   = $sepa->payout(100.0, 'EUR', self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $payout   = $sepa->payout(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
         $this->assertTransactionResourceHasBeenCreated($payout);
 
         $payment = $payout->getPayment();
@@ -108,10 +109,10 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutShouldBeFetchedWhenItsPaymentResourceIsFetched(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $payout = $card->payout(100.0, 'EUR', self::RETURN_URL);
 
-        $fetchedPayment = $this->heidelpay->fetchPayment($payout->getPaymentId());
+        $fetchedPayment = $this->unzer->fetchPayment($payout->getPaymentId());
         $this->assertInstanceOf(Payout::class, $fetchedPayment->getPayout());
         $this->assertEquals(100, $payout->getAmount());
         $this->assertEquals('EUR', $payout->getCurrency());
@@ -126,10 +127,10 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutShouldBeFetchableViaItsUrl(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $payout = $card->payout(100.0, 'EUR', self::RETURN_URL);
 
-        $resourceSrv = new ResourceService($this->heidelpay);
+        $resourceSrv = new ResourceService($this->unzer);
         $fetchedPayout = $resourceSrv->fetchResourceByUrl($payout->getUri());
         $this->assertEquals($payout->expose(), $fetchedPayout->expose());
     }
@@ -142,7 +143,7 @@ class PayoutTest extends BaseIntegrationTest
     public function payoutShouldAcceptAllParameters(): void
     {
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $customer = $this->getMinimalCustomer();
         $orderId = 'o'. self::generateRandomId();
         $metadata = (new Metadata())->addMetadata('key', 'value');
@@ -164,7 +165,7 @@ class PayoutTest extends BaseIntegrationTest
         $this->assertEquals($invoiceId, $payout->getInvoiceId());
         $this->assertEquals($paymentReference, $payout->getPaymentReference());
 
-        $fetchedPayout = $this->heidelpay->fetchPayout($payout->getPaymentId());
+        $fetchedPayout = $this->unzer->fetchPayout($payout->getPaymentId());
         $fetchedPayment = $fetchedPayout->getPayment();
 
         $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());

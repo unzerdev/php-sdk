@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the Payment resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,31 +18,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Constants\PaymentState;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Amount;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Sofort;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\PaymentState;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Amount;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 use stdClass;
@@ -57,7 +57,7 @@ class PaymentTest extends BasePaymentTest
     public function gettersAndSettersShouldWorkProperly(): void
     {
         // initial check
-        $payment = (new Payment())->setParentResource(new Heidelpay('s-priv-1234'));
+        $payment = (new Payment())->setParentResource(new Unzer('s-priv-1234'));
         $this->assertNull($payment->getRedirectUrl());
         $this->assertNull($payment->getCustomer());
         /** @noinspection UnnecessaryAssertionInspection */
@@ -87,7 +87,7 @@ class PaymentTest extends BasePaymentTest
     public function checkTraceIdWorkaround(): void
     {
         // initial check
-        $payment = (new Payment())->setParentResource(new Heidelpay('s-priv-1234'));
+        $payment = (new Payment())->setParentResource(new Unzer('s-priv-1234'));
         $this->assertNull($payment->getTraceId());
 
         // update
@@ -114,8 +114,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('getResource')->with($authorization);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->getAuthorization();
     }
@@ -134,8 +134,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->never())->method('getResource');
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->getAuthorization();
     }
@@ -189,8 +189,8 @@ class PaymentTest extends BasePaymentTest
             ->withConsecutive([$charge1], [$charge2]);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->getCharge('firstCharge');
         $payment->getCharge('secondCharge');
@@ -217,8 +217,8 @@ class PaymentTest extends BasePaymentTest
             ->withConsecutive([$charge1], [$charge2]);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->getChargeByIndex(0);
         $payment->getChargeByIndex(1);
@@ -262,8 +262,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('getResource')->with($payout);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->getPayout();
     }
@@ -281,8 +281,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->never())->method('getResource');
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->getPayout();
     }
@@ -294,8 +294,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function setCustomerShouldDoNothingIfTheCustomerIsEmpty(): void
     {
-        $heidelpayObj = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpayObj);
+        $unzerObj = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzerObj);
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('myCustomer');
         $payment->setCustomer($customer);
 
@@ -323,8 +323,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('fetchCustomer')->with('MyCustomerId');
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->setCustomer('MyCustomerId');
     }
@@ -345,8 +345,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('createCustomer')->with($customer);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->setCustomer($customer);
     }
@@ -358,8 +358,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function setPaymentTypeShouldDoNothingIfThePaymentTypeIsEmpty(): void
     {
-        $heidelpayObj = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpayObj);
+        $unzerObj = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzerObj);
         $paymentType = (new Sofort())->setId('123');
 
         $payment->setPaymentType($paymentType);
@@ -387,8 +387,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('fetchPaymentType')->with('MyPaymentId');
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->setPaymentType('MyPaymentId');
     }
@@ -409,8 +409,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('createPaymentType')->with($paymentType);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $payment->setPaymentType($paymentType);
     }
@@ -516,10 +516,10 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('getResource')->with($cancellation);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
 
         /** @var Payment $paymentMock */
-        $paymentMock->setParentResource($heidelpayObj);
+        $paymentMock->setParentResource($unzerObj);
 
         $this->assertSame($cancellation, $paymentMock->getCancellation('cancellation123'));
         $this->assertNull($paymentMock->getCancellation('cancellation1234'));
@@ -568,10 +568,10 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('getResource')->with($shipment);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
 
         /** @var Payment $paymentMock */
-        $paymentMock->setParentResource($heidelpayObj);
+        $paymentMock->setParentResource($unzerObj);
 
         $this->assertSame($shipment, $paymentMock->getShipment('shipment123'));
         $this->assertNull($paymentMock->getShipment('shipment1234'));
@@ -649,8 +649,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('fetchCustomer')->with('MyNewCustomerId');
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $this->assertNull($payment->getCustomer());
 
@@ -676,8 +676,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('getResource')->with($customer);
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
         $payment->setCustomer($customer);
 
         $response = new stdClass();
@@ -701,8 +701,8 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock->expects($this->once())->method('fetchPaymentType')->with('PaymentTypeId');
 
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $response = new stdClass();
         $response->resources = new stdClass();
@@ -721,8 +721,8 @@ class PaymentTest extends BasePaymentTest
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchMetadata')->with('MetadataId');
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment = (new Payment())->setId('myPaymentId')->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment = (new Payment())->setId('myPaymentId')->setParentResource($unzerObj);
 
         $response = new stdClass();
         $response->resources = new stdClass();
@@ -742,8 +742,8 @@ class PaymentTest extends BasePaymentTest
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('getResource')->with($metadata);
         /** @var ResourceService $resourceServiceMock */
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment = (new Payment())->setId('myPaymentId')->setParentResource($heidelpayObj)->setMetadata($metadata);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment = (new Payment())->setId('myPaymentId')->setParentResource($unzerObj)->setMetadata($metadata);
 
         $response = new stdClass();
         $response->resources = new stdClass();
@@ -781,8 +781,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldUpdateAuthorizationFromResponse(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
 
         $authorization = (new Authorization(11.98, 'EUR'))->setId('s-aut-1');
         $this->assertEquals(11.98, $authorization->getAmount());
@@ -810,8 +810,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldAddAuthorizationFromResponse(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $this->assertNull($payment->getAuthorization());
 
         $authorizationData = new stdClass();
@@ -838,8 +838,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldUpdateChargeFromResponseIfItExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
 
         $charge1 = (new Charge(11.98, 'EUR'))->setId('s-chg-1');
         $charge2 = (new Charge(22.98, 'EUR'))->setId('s-chg-2');
@@ -869,8 +869,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldAddChargeFromResponseIfItDoesNotExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
 
         $charge1 = (new Charge(11.98, 'EUR'))->setId('s-chg-1');
         $payment->addCharge($charge1);
@@ -899,8 +899,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldUpdateReversalFromResponseIfItExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $authorize = (new Authorization(23.55, 'EUR'))->setId('s-aut-1');
         $payment->setAuthorization($authorize);
         $reversal1 = (new Cancellation(1.98))->setId('s-cnl-1');
@@ -931,8 +931,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldAddReversalFromResponseIfItDoesNotExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $authorize = (new Authorization(23.55, 'EUR'))->setId('s-aut-1');
         $payment->setAuthorization($authorize);
         $reversal1 = (new Cancellation(1.98))->setId('s-cnl-1');
@@ -964,8 +964,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldThrowExceptionIfAnAuthorizeToAReversalDoesNotExist(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
 
         $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/authorize/s-aut-1/cancel/s-cnl-2';
@@ -987,8 +987,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldUpdateRefundsFromResponseIfItExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $charge = (new Charge(23.55, 'EUR'))->setId('s-chg-1');
         $payment->addCharge($charge);
         $refund1 = (new Cancellation(1.98))->setId('s-cnl-1');
@@ -1019,8 +1019,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldAddRefundFromResponseIfItDoesNotExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $charge = (new Charge(23.55, 'EUR'))->setId('s-chg-1');
         $payment->addCharge($charge);
         $reversal1 = (new Cancellation(1.98))->setId('s-cnl-1');
@@ -1052,8 +1052,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldThrowExceptionIfAChargeToARefundDoesNotExist(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
 
         $cancellation = new stdClass();
         $cancellation->url = 'https://api-url.test/payments/MyPaymentId/charge/s-chg-1/cancel/s-cnl-2';
@@ -1075,8 +1075,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldUpdateShipmentFromResponseIfItExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $shipment = (new Shipment())->setAmount('1.23')->setId('s-shp-1');
         $this->assertEquals('1.23', $shipment->getAmount());
         $payment->addShipment($shipment);
@@ -1103,8 +1103,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldAddShipmentFromResponseIfItDoesNotExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $this->assertNull($payment->getShipment('s-shp-1'));
         $this->assertCount(0, $payment->getShipments());
 
@@ -1130,8 +1130,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldUpdatePayoutFromResponseIfItExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $payout = (new Payout())->setAmount('1.23')->setId('s-out-1');
         $this->assertEquals('1.23', $payout->getAmount());
         $payment->setPayout($payout);
@@ -1158,8 +1158,8 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldAddPayoutFromResponseIfItDoesNotExists(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $payment = (new Payment())->setParentResource($heidelpay)->setId('MyPaymentId');
+        $unzer = new Unzer('s-priv-123');
+        $payment = (new Payment())->setParentResource($unzer)->setId('MyPaymentId');
         $this->assertNull($payment->getPayout('s-out-1'));
 
         $payoutResponse = new stdClass();
@@ -1179,23 +1179,23 @@ class PaymentTest extends BasePaymentTest
     //</editor-fold>
 
     /**
-     * Verify charge will call chargePayment on heidelpay object.
+     * Verify charge will call chargePayment on Unzer object.
      *
      * @test
      */
-    public function chargeMethodShouldPropagateToHeidelpayChargePaymentMethod(): void
+    public function chargeMethodShouldPropagateToUnzerChargePaymentMethod(): void
     {
         $payment = new Payment();
 
-        /** @var Heidelpay|MockObject $heidelpayMock */
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['chargePayment'])->getMock();
-        $heidelpayMock->expects($this->exactly(3))->method('chargePayment')
+        /** @var Unzer|MockObject $unzerMock */
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['chargePayment'])->getMock();
+        $unzerMock->expects($this->exactly(3))->method('chargePayment')
             ->withConsecutive(
                 [$payment, null, null],
                 [$payment, 1.1, null],
                 [$payment, 2.2, 'MyCurrency']
             )->willReturn(new Charge());
-        $payment->setParentResource($heidelpayMock);
+        $payment->setParentResource($unzerMock);
 
         $payment->charge();
         $payment->charge(1.1);
@@ -1203,19 +1203,19 @@ class PaymentTest extends BasePaymentTest
     }
 
     /**
-     * Verify ship will call ship method on heidelpay object.
+     * Verify ship will call ship method on Unzer object.
      *
      * @test
      */
-    public function shipMethodShouldPropagateToHeidelpayChargePaymentMethod(): void
+    public function shipMethodShouldPropagateToUnzerChargePaymentMethod(): void
     {
         $payment = new Payment();
 
-        /** @var Heidelpay|MockObject $heidelpayMock */
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['ship'])->getMock();
-        $heidelpayMock->expects($this->once())->method('ship')->willReturn(new Shipment());
+        /** @var Unzer|MockObject $unzerMock */
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['ship'])->getMock();
+        $unzerMock->expects($this->once())->method('ship')->willReturn(new Shipment());
 
-        $payment->setParentResource($heidelpayMock);
+        $payment->setParentResource($unzerMock);
         $payment->ship();
     }
 
@@ -1233,8 +1233,8 @@ class PaymentTest extends BasePaymentTest
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('createResource')->with($metadata);
 
-        $heidelpay = (new Heidelpay('s-priv-1234'))->setResourceService($resourceSrvMock);
-        $payment = new Payment($heidelpay);
+        $unzer = (new Unzer('s-priv-1234'))->setResourceService($resourceSrvMock);
+        $payment = new Payment($unzer);
 
         try {
             $metadata->getParentResource();
@@ -1245,7 +1245,7 @@ class PaymentTest extends BasePaymentTest
         }
 
         $payment->setMetadata($metadata);
-        $this->assertSame($heidelpay, $metadata->getParentResource());
+        $this->assertSame($unzer, $metadata->getParentResource());
     }
 
     /**
@@ -1261,10 +1261,10 @@ class PaymentTest extends BasePaymentTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->disableOriginalConstructor()->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('createResource')->with($metadata);
-        $heidelpay = (new Heidelpay('s-priv-1234'))->setResourceService($resourceSrvMock);
+        $unzer = (new Unzer('s-priv-1234'))->setResourceService($resourceSrvMock);
 
         // when
-        $payment = new Payment($heidelpay);
+        $payment = new Payment($unzer);
 
         // then
         $this->assertNull($payment->getMetadata());
@@ -1290,23 +1290,23 @@ class PaymentTest extends BasePaymentTest
      */
     public function setBasketShouldCallCreateIfTheGivenBasketObjectDoesNotExistYet(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
 
         /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
-        $heidelpay->setResourceService($resourceSrvMock);
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['createResource'])->getMock();
+        $unzer->setResourceService($resourceSrvMock);
 
         $basket = new Basket();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('createResource')->with(
             $this->callback(
-                static function ($object) use ($basket, $heidelpay) {
+                static function ($object) use ($basket, $unzer) {
                     /** @var Basket $object */
-                    return $object === $basket && $object->getParentResource() === $heidelpay;
+                    return $object === $basket && $object->getParentResource() === $unzer;
                 })
         );
 
-        $payment = new Payment($heidelpay);
+        $payment = new Payment($unzer);
         $payment->setBasket($basket);
     }
 
@@ -1317,16 +1317,16 @@ class PaymentTest extends BasePaymentTest
      */
     public function setBasketWontCallResourceServiceWhenBasketIsNull(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
 
         /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['createResource'])->getMock();
         $resourceSrvMock->expects($this->once())->method('createResource');
-        $heidelpay->setResourceService($resourceSrvMock);
+        $unzer->setResourceService($resourceSrvMock);
 
         // set basket first to prove the setter works both times
         $basket = new Basket();
-        $payment = new Payment($heidelpay);
+        $payment = new Payment($unzer);
         $payment->setBasket($basket);
         $this->assertSame($basket, $payment->getBasket());
 
@@ -1341,14 +1341,14 @@ class PaymentTest extends BasePaymentTest
      */
     public function updateResponseResourcesShouldFetchBasketIdIfItIsSetInResponse(): void
     {
-        /** @var Heidelpay|MockObject $heidelpayMock */
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['fetchBasket'])->getMock();
+        /** @var Unzer|MockObject $unzerMock */
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['fetchBasket'])->getMock();
 
         $basket = new Basket();
         /** @noinspection PhpParamsInspection */
-        $heidelpayMock->expects($this->once())->method('fetchBasket')->with('myResourcesBasketId')->willReturn($basket);
+        $unzerMock->expects($this->once())->method('fetchBasket')->with('myResourcesBasketId')->willReturn($basket);
 
-        $payment  = new Payment($heidelpayMock);
+        $payment  = new Payment($unzerMock);
         $response = new stdClass();
         $payment->handleResponse($response);
         $this->assertNull($payment->getBasket());
@@ -1366,7 +1366,7 @@ class PaymentTest extends BasePaymentTest
     public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet(): void
     {
         $orderId     = str_replace(' ', '', microtime());
-        $payment     = (new Payment())->setOrderId($orderId)->setParentResource(new Heidelpay('s-priv-123'));
+        $payment     = (new Payment())->setOrderId($orderId)->setParentResource(new Unzer('s-priv-123'));
         $lastElement = explode('/', rtrim($payment->getUri(), '/'));
         $this->assertEquals($orderId, end($lastElement));
     }
@@ -1414,9 +1414,9 @@ class PaymentTest extends BasePaymentTest
         $charge = new Charge();
 
         return [
-            'charge' => [$charge, (new Payment($this->getHeidelpayObject()))->addCharge($charge)],
-            'authorize' => [$authorize, (new Payment($this->getHeidelpayObject()))->setAuthorization($authorize)],
-            'authorize and charge' => [$authorize, (new Payment($this->getHeidelpayObject()))->addCharge($charge)->setAuthorization($authorize)]
+            'charge' => [$charge, (new Payment($this->getUnzerObject()))->addCharge($charge)],
+            'authorize' => [$authorize, (new Payment($this->getUnzerObject()))->setAuthorization($authorize)],
+            'authorize and charge' => [$authorize, (new Payment($this->getUnzerObject()))->addCharge($charge)->setAuthorization($authorize)]
         ];
     }
 

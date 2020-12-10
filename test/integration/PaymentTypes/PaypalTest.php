@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify interface and functionality of the payment method paypal.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\BasePaymentType;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PaypalTest extends BaseIntegrationTest
 {
@@ -41,11 +41,11 @@ class PaypalTest extends BaseIntegrationTest
      */
     public function paypalShouldBeCreatableAndFetchable(): BasePaymentType
     {
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $this->assertInstanceOf(Paypal::class, $paypal);
         $this->assertNotEmpty($paypal->getId());
 
-        $fetchedPaypal = $this->heidelpay->fetchPaymentType($paypal->getId());
+        $fetchedPaypal = $this->unzer->fetchPaymentType($paypal->getId());
         $this->assertInstanceOf(Paypal::class, $fetchedPaypal);
         $this->assertNotSame($paypal, $fetchedPaypal);
         $this->assertEquals($paypal->expose(), $fetchedPaypal->expose());
@@ -63,10 +63,10 @@ class PaypalTest extends BaseIntegrationTest
     public function paypalShouldBeCreatableAndFetchableWithEmail(): BasePaymentType
     {
         $paypal = (new Paypal())->setEmail('max@mustermann.de');
-        $this->heidelpay->createPaymentType($paypal);
+        $this->unzer->createPaymentType($paypal);
         $this->assertNotEmpty($paypal->getId());
 
-        $fetchedPaypal = $this->heidelpay->fetchPaymentType($paypal->getId());
+        $fetchedPaypal = $this->unzer->fetchPaymentType($paypal->getId());
         $this->assertInstanceOf(Paypal::class, $fetchedPaypal);
         $this->assertNotSame($paypal, $fetchedPaypal);
         $this->assertEquals($paypal->expose(), $fetchedPaypal->expose());

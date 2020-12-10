@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify interface and functionality of the Paypage.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PaypageTest extends BaseIntegrationTest
 {
@@ -43,7 +43,7 @@ class PaypageTest extends BaseIntegrationTest
     {
         $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageCharge($paypage);
+        $paypage = $this->unzer->initPayPageCharge($paypage);
         $this->assertNotEmpty($paypage->getId());
     }
 
@@ -59,17 +59,17 @@ class PaypageTest extends BaseIntegrationTest
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
         $invoiceId = 'i'. self::generateRandomId();
         $paypage = (new Paypage(119.0, 'EUR', self::RETURN_URL))
-            ->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
-            ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')
+            ->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
+            ->setFullPageImage('https://dev.unzer.com/wp-content/uploads/2020/09/01_Unzer_Ambitious_RGB_LoRes.jpg')
             ->setShopName('My Test Shop')
             ->setShopDescription('Best shop in the whole world!')
             ->setTagline('Try and stop us from being awesome!')
             ->setOrderId($orderId)
-            ->setTermsAndConditionUrl('https://www.heidelpay.com/en/')
-            ->setPrivacyPolicyUrl('https://www.heidelpay.com/de/')
-            ->setImprintUrl('https://www.heidelpay.com/it/')
-            ->setHelpUrl('https://www.heidelpay.com/at/')
-            ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
+            ->setTermsAndConditionUrl('https://www.unzer.com/en/')
+            ->setPrivacyPolicyUrl('https://www.unzer.com/de/')
+            ->setImprintUrl('https://www.unzer.com/it/')
+            ->setHelpUrl('https://www.unzer.com/at/')
+            ->setContactUrl('https://www.unzer.com/en/ueber-unzer/')
             ->setInvoiceId($invoiceId)
             ->setCard3ds(true)
             ->setEffectiveInterestRate(4.99)
@@ -80,7 +80,7 @@ class PaypageTest extends BaseIntegrationTest
                 'contactUrl' => 'color: green',
             ]);
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageCharge($paypage, $customer, $basket);
+        $paypage = $this->unzer->initPayPageCharge($paypage, $customer, $basket);
         $this->assertNotEmpty($paypage->getId());
         $this->assertEquals(4.99, $paypage->getEffectiveInterestRate());
         $payment = $paypage->getPayment();
@@ -98,7 +98,7 @@ class PaypageTest extends BaseIntegrationTest
     {
         $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageAuthorize($paypage);
+        $paypage = $this->unzer->initPayPageAuthorize($paypage);
         $this->assertNotEmpty($paypage->getId());
     }
 
@@ -114,17 +114,17 @@ class PaypageTest extends BaseIntegrationTest
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
         $invoiceId = 'i'. self::generateRandomId();
         $paypage = (new Paypage(119.0, 'EUR', self::RETURN_URL))
-            ->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
-            ->setFullPageImage('https://www.heidelpay.com/fileadmin/content/header-Imges-neu/Header_Phone_12.jpg')
+            ->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
+            ->setFullPageImage('https://dev.unzer.com/wp-content/uploads/2020/09/01_Unzer_Ambitious_RGB_LoRes.jpg')
             ->setShopName('My Test Shop')
             ->setShopDescription('Best shop in the whole world!')
             ->setTagline('Try and stop us from being awesome!')
             ->setOrderId($orderId)
-            ->setTermsAndConditionUrl('https://www.heidelpay.com/en/')
-            ->setPrivacyPolicyUrl('https://www.heidelpay.com/de/')
-            ->setImprintUrl('https://www.heidelpay.com/it/')
-            ->setHelpUrl('https://www.heidelpay.com/at/')
-            ->setContactUrl('https://www.heidelpay.com/en/about-us/about-heidelpay/')
+            ->setTermsAndConditionUrl('https://www.unzer.com/en/')
+            ->setPrivacyPolicyUrl('https://www.unzer.com/de/')
+            ->setImprintUrl('https://www.unzer.com/it/')
+            ->setHelpUrl('https://www.unzer.com/at/')
+            ->setContactUrl('https://www.unzer.com/en/ueber-unzer/')
             ->setInvoiceId($invoiceId)
             ->setCard3ds(true)
             ->setEffectiveInterestRate(4.99)
@@ -136,7 +136,7 @@ class PaypageTest extends BaseIntegrationTest
             ]);
         $paypage->addExcludeType(Card::getResourceName());
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
+        $paypage = $this->unzer->initPayPageAuthorize($paypage, $customer, $basket);
         $this->assertNotEmpty($paypage->getId());
         $this->assertEquals(4.99, $paypage->getEffectiveInterestRate());
         $this->assertEquals([Card::getResourceName()], $paypage->getExcludeTypes());
@@ -155,7 +155,7 @@ class PaypageTest extends BaseIntegrationTest
     {
         $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($paypage->getId());
-        $paypage = $this->heidelpay->initPayPageAuthorize($paypage->setCss([]));
+        $paypage = $this->unzer->initPayPageAuthorize($paypage->setCss([]));
         $this->assertNotEmpty($paypage->getId());
     }
 }

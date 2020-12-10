@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify interface and functionality of the payment method Bancontact.
  *
- * Copyright (C) 2020 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@heidelpay.com>
- * @author  Florian Evertz <development@heidelpay.com>
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  David Owusu <development@unzer.com>
+ * @author  Florian Evertz <development@unzer.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Bancontact;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Bancontact;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class BancontactTest extends BaseIntegrationTest
 {
@@ -43,10 +43,10 @@ class BancontactTest extends BaseIntegrationTest
     public function bancontactShouldBeCreatableAndFetchable(): void
     {
         $bancontact = new Bancontact();
-        $this->heidelpay->createPaymentType($bancontact);
+        $this->unzer->createPaymentType($bancontact);
         $this->assertNotNull($bancontact->getId());
 
-        $this->heidelpay->fetchPaymentType($bancontact->getId());
+        $this->unzer->fetchPaymentType($bancontact->getId());
         $this->assertInstanceOf(Bancontact::class, $bancontact);
         $this->assertNull($bancontact->getHolder());
     }
@@ -58,11 +58,11 @@ class BancontactTest extends BaseIntegrationTest
      */
     public function bancontactShouldThrowExceptionOnAuthorize(): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $bancontact = $this->heidelpay->createPaymentType(new Bancontact());
-        $this->heidelpay->authorize(100.0, 'EUR', $bancontact, self::RETURN_URL);
+        $bancontact = $this->unzer->createPaymentType(new Bancontact());
+        $this->unzer->authorize(100.0, 'EUR', $bancontact, self::RETURN_URL);
     }
     
     /**
@@ -73,7 +73,7 @@ class BancontactTest extends BaseIntegrationTest
     public function bancontactShouldBeChargeable(): void
     {
         /** @var Bancontact $bancontact */
-        $bancontact = $this->heidelpay->createPaymentType(new Bancontact());
+        $bancontact = $this->unzer->createPaymentType(new Bancontact());
         $charge = $bancontact->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
@@ -88,9 +88,9 @@ class BancontactTest extends BaseIntegrationTest
     {
         $bancontact = new Bancontact();
         $bancontact->setHolder('test');
-        $bancontact = $this->heidelpay->createPaymentType($bancontact);
+        $bancontact = $this->unzer->createPaymentType($bancontact);
         /** @var Bancontact $fetchedBancontact */
-        $fetchedBancontact = $this->heidelpay->fetchPaymentType($bancontact->getId());
+        $fetchedBancontact = $this->unzer->fetchPaymentType($bancontact->getId());
 
         $this->assertEquals('test', $fetchedBancontact->getHolder());
     }

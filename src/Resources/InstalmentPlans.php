@@ -1,10 +1,10 @@
 <?php
 /**
- * Resource used to fetch instalment plans for hire purchase (FlexiPay Rate) payment method specified as parent resource.
- * Please use Heidelpay methods to fetch the list of instalment plans
- * (e.g. Heidelpay::fetchDirectDebitInstalmentPlans(...)).
+ * Resource used to fetch instalment plans for Installment Secured payment method specified as parent resource.
+ * Please use Unzer methods to fetch the list of instalment plans
+ * (e.g. Unzer::fetchInstallmentPlans(...)).
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
 use DateTime;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use stdClass;
 
-class InstalmentPlans extends AbstractHeidelpayResource
+class InstalmentPlans extends AbstractUnzerResource
 {
     /** @var float */
     private $amount;
@@ -203,7 +203,7 @@ class InstalmentPlans extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath(): string
+    public function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'plans' . $this->getQueryString();
     }

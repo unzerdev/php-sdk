@@ -3,7 +3,7 @@
  * This is the controller for the iDeal example.
  * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -31,10 +31,10 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\CustomerFactory;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\CustomerFactory;
 
 $clientMessage = 'Something went wrong. Please try again later.';
 
@@ -60,13 +60,13 @@ $paymentTypeId   = $_POST['resourceId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
-    // Create a heidelpay object using your private key and register a debug handler if you want to.
-    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    // Create an Unzer object using your private key and register a debug handler if you want to.
+    $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge to get the redirectUrl.
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    $charge   = $heidelpay->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
+    $charge   = $unzer->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
 
     // You'll need to remember the paymentId for later in the ReturnController
     $_SESSION['PaymentId'] = $charge->getPaymentId();
@@ -79,7 +79,7 @@ try {
 
     // Check the result message of the charge to find out what went wrong.
     $merchantMessage = $charge->getMessage()->getCustomer();
-} catch (HeidelpayApiException $e) {
+} catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {

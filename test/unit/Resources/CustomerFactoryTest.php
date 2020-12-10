@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the customer factory.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Constants\CompanyCommercialSectorItems;
-use heidelpayPHP\Constants\CompanyRegistrationTypes;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
+use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Constants\CompanyRegistrationTypes;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
 use PHPUnit\Framework\TestCase;
 
 class CustomerFactoryTest extends TestCase
@@ -87,7 +87,7 @@ class CustomerFactoryTest extends TestCase
             'Mustermann',
             '2000-12-12',
             $address,
-            'test@heidelpay.com',
+            'test@unzer.com',
             'abc GmbH',
             CompanyCommercialSectorItems::ACCOMMODATION
         );
@@ -96,7 +96,7 @@ class CustomerFactoryTest extends TestCase
         $this->assertEquals('Max', $customer->getFirstname());
         $this->assertEquals('Mustermann', $customer->getLastname());
         $this->assertEquals('2000-12-12', $customer->getBirthDate());
-        $this->assertEquals('test@heidelpay.com', $customer->getEmail());
+        $this->assertEquals('test@unzer.com', $customer->getEmail());
         $this->assertEquals('abc GmbH', $customer->getCompany());
         $companyInfo = $customer->getCompanyInfo();
         $this->assertInstanceOf(CompanyInfo::class, $companyInfo);

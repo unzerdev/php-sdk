@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the PayPage feature.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
+namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\TransactionTypes;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 
@@ -51,12 +51,12 @@ class PayPageTest extends BasePaymentTest
     public function getterAndSetterWorkAsExpected(): void
     {
         // ----------- SET initial values ------------
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
 
         // ----------- VERIFY initial values ------------
         $this->assertEquals(123.4, $paypage->getAmount());
         $this->assertEquals('EUR', $paypage->getCurrency());
-        $this->assertEquals('https://docs.heidelpay.com', $paypage->getReturnUrl());
+        $this->assertEquals('https://dev.unzer.com', $paypage->getReturnUrl());
 
         // meta
         $this->assertNull($paypage->getPaymentId());
@@ -161,14 +161,14 @@ class PayPageTest extends BasePaymentTest
     public function responseHandlingShouldWorkProperly(): void
     {
         // when
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
         $payment = new Payment();
         $paypage->setPayment($payment);
 
         // then
         $this->assertEquals(123.4, $paypage->getAmount());
         $this->assertEquals('EUR', $paypage->getCurrency());
-        $this->assertEquals('https://docs.heidelpay.com', $paypage->getReturnUrl());
+        $this->assertEquals('https://dev.unzer.com', $paypage->getReturnUrl());
 
         $this->assertNull($paypage->getPaymentId());
         $this->assertSame($payment, $paypage->getPayment());
@@ -239,7 +239,7 @@ class PayPageTest extends BasePaymentTest
     public function paymentObjectShouldBeUpdatedProperly(): void
     {
         // when
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
         $payment = new Payment();
         $paypage->setPayment($payment);
 
@@ -271,7 +271,7 @@ class PayPageTest extends BasePaymentTest
     public function responseHandlingShouldMapSpecialFieldsProperly(): void
     {
         // when
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
 
         $response = new stdClass();
         $response->impressumUrl = 'impressum url';
@@ -298,8 +298,8 @@ class PayPageTest extends BasePaymentTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
 
         // when
-        $paypage = new Paypage(123.4, 'EUR', 'https://docs.heidelpay.com');
-        $payment = (new Payment())->setParentResource($this->heidelpay->setResourceService($resourceSrvMock));
+        $paypage = new Paypage(123.4, 'EUR', 'https://dev.unzer.com');
+        $payment = (new Payment())->setParentResource($this->unzer->setResourceService($resourceSrvMock));
         $paypage->setPayment($payment)->setParentResource($payment);
 
         // should
@@ -325,7 +325,7 @@ class PayPageTest extends BasePaymentTest
         $customer = (new Customer())->setId('customerId');
         $metadata = (new Metadata())->setId('metadataId');
         $payment = (new Payment())
-            ->setParentResource($this->heidelpay)
+            ->setParentResource($this->unzer)
             ->setId('my payment id')
             ->setBasket($basket)
             ->setMetadata($metadata)
@@ -399,7 +399,7 @@ class PayPageTest extends BasePaymentTest
         $basket = (new Basket())->setId('basketId');
         $customer = (new Customer())->setId('customerId');
         $metadata = (new Metadata())->setId('metadataId');
-        $payment = (new Payment())->setParentResource($this->heidelpay)->setBasket($basket)->setMetadata($metadata)->setCustomer($customer);
+        $payment = (new Payment())->setParentResource($this->unzer)->setBasket($basket)->setMetadata($metadata)->setCustomer($customer);
         $paypage->setPayment($payment);
 
         // then

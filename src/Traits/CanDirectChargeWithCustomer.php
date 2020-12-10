@@ -2,7 +2,7 @@
 /**
  * This trait makes a payment type chargeable with mandatory customer.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Interfaces\HeidelpayParentInterface;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Interfaces\UnzerParentInterface;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use RuntimeException;
 
 trait CanDirectChargeWithCustomer
 {
     /**
      * Charge an amount with the given currency.
-     * Throws HeidelpayApiException if the transaction could not be performed (e. g. increased risk etc.).
+     * Throws UnzerApiException if the transaction could not be performed (e. g. increased risk etc.).
      *
      * @param float           $amount
      * @param string          $currency
@@ -54,8 +54,8 @@ trait CanDirectChargeWithCustomer
      *
      * @return Charge The resulting charge object.
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function charge(
         $amount,
@@ -69,8 +69,8 @@ trait CanDirectChargeWithCustomer
         $invoiceId = null,
         $paymentReference = null
     ): Charge {
-        if ($this instanceof HeidelpayParentInterface) {
-            return $this->getHeidelpayObject()->charge(
+        if ($this instanceof UnzerParentInterface) {
+            return $this->getUnzerObject()->charge(
                 $amount,
                 $currency,
                 $this,
@@ -86,7 +86,7 @@ trait CanDirectChargeWithCustomer
         }
 
         throw new RuntimeException(
-            self::class . ' must implement HeidelpayParentInterface to enable ' . __METHOD__ . ' transaction.'
+            self::class . ' must implement UnzerParentInterface to enable ' . __METHOD__ . ' transaction.'
         );
     }
 }

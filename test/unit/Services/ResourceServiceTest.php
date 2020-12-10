@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the resource service.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,57 +18,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Services;
+namespace UnzerSDK\test\unit\Services;
 
 use DateTime;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\ResourceServiceInterface;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\Keypair;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Alipay;
-use heidelpayPHP\Resources\PaymentTypes\Bancontact;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\EPS;
-use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\Ideal;
-use heidelpayPHP\Resources\PaymentTypes\Invoice;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceFactoring;
-use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\PaymentTypes\PIS;
-use heidelpayPHP\Resources\PaymentTypes\Prepayment;
-use heidelpayPHP\Resources\PaymentTypes\Przelewy24;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebitGuaranteed;
-use heidelpayPHP\Resources\PaymentTypes\Sofort;
-use heidelpayPHP\Resources\PaymentTypes\Wechatpay;
-use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Resources\TransactionTypes\Payout;
-use heidelpayPHP\Resources\TransactionTypes\Shipment;
-use heidelpayPHP\Services\HttpService;
-use heidelpayPHP\Services\IdService;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
-use heidelpayPHP\test\unit\DummyResource;
-use heidelpayPHP\test\unit\Traits\TraitDummyCanRecur;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Interfaces\ResourceServiceInterface;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\Keypair;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Alipay;
+use UnzerSDK\Resources\PaymentTypes\Bancontact;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\EPS;
+use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
+use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\PaymentTypes\PIS;
+use UnzerSDK\Resources\PaymentTypes\Prepayment;
+use UnzerSDK\Resources\PaymentTypes\Przelewy24;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
+use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\PaymentTypes\Wechatpay;
+use UnzerSDK\Resources\Recurring;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Services\HttpService;
+use UnzerSDK\Services\IdService;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\test\unit\DummyResource;
+use UnzerSDK\test\unit\Traits\TraitDummyCanRecur;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 use stdClass;
@@ -77,20 +76,20 @@ class ResourceServiceTest extends BasePaymentTest
 {
     //<editor-fold desc="General">
 
-    /**
+    /**^^
      * Verify setters and getters work properly.
      *
      * @test
      */
     public function gettersAndSettersShouldWorkProperly(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
-        $resourceService = $heidelpay->getResourceService();
-        $this->assertSame($heidelpay, $resourceService->getHeidelpay());
+        $unzer = new Unzer('s-priv-123');
+        $resourceService = $unzer->getResourceService();
+        $this->assertSame($unzer, $resourceService->getUnzer());
 
-        $heidelpay2 = new Heidelpay('s-priv-1234');
-        $resourceService->setHeidelpay($heidelpay2);
-        $this->assertSame($heidelpay2, $resourceService->getHeidelpay());
+        $unzer2 = new Unzer('s-priv-1234');
+        $resourceService->setUnzer($unzer2);
+        $this->assertSame($unzer2, $resourceService->getUnzer());
     }
 
     /**
@@ -105,20 +104,21 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function sendShouldCallSendOnHttpService(string $method, string $uri, bool $appendId): void
     {
-        $heidelpay = new Heidelpay('s-priv-1234');
-        $resourceMock = $this->getMockBuilder(DummyResource::class)->setMethods(['getUri', 'getHeidelpayObject'])->getMock();
+        $unzer = new Unzer('s-priv-1234');
+        $httpMethod = HttpAdapterInterface::REQUEST_POST;
+        $resourceMock = $this->getMockBuilder(DummyResource::class)->setMethods(['getUri', 'getUnzerObject'])->getMock();
         /** @noinspection PhpParamsInspection */
-        $resourceMock->expects($this->once())->method('getUri')->with($appendId)->willReturn($uri);
-        $resourceMock->method('getHeidelpayObject')->willReturn($heidelpay);
+        $resourceMock->expects($this->once())->method('getUri')->with($appendId, $method)->willReturn($uri);
+        $resourceMock->method('getUnzerObject')->willReturn($unzer);
         $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
-        $resourceSrv = new ResourceService($heidelpay);
+        $resourceSrv = new ResourceService($unzer);
 
         /** @var HttpService $httpSrvMock */
-        $heidelpay->setHttpService($httpSrvMock);
+        $unzer->setHttpService($httpSrvMock);
         /** @noinspection PhpParamsInspection */
         $httpSrvMock->expects($this->once())->method('send')->with($uri, $resourceMock, $method)->willReturn('{"response": "This is the response"}');
 
-        /** @var AbstractHeidelpayResource $resourceMock */
+        /** @var AbstractUnzerResource $resourceMock */
         $response = $resourceSrv->send($resourceMock, $method);
         $this->assertEquals('This is the response', $response->response);
     }
@@ -321,7 +321,7 @@ class ResourceServiceTest extends BasePaymentTest
         $response = new stdClass();
         $response->test = '234';
 
-        /** @var AbstractHeidelpayResource|MockObject $resourceMock */
+        /** @var AbstractUnzerResource|MockObject $resourceMock */
         $resourceMock = $this->getMockBuilder(Customer::class)->setMethods(['handleResponse'])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceMock->expects($this->once())->method('handleResponse')->with($response);
@@ -351,10 +351,10 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchResourceByUrlShouldFetchTheDesiredResource($fetchMethod, $arguments, $resourceUrl): void
     {
-        /** @var Heidelpay|MockObject $heidelpayMock */
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods([$fetchMethod])->getMock();
-        $heidelpayMock->expects($this->once())->method($fetchMethod)->with(...$arguments);
-        $resourceService = new ResourceService($heidelpayMock);
+        /** @var Unzer|MockObject $unzerMock */
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods([$fetchMethod])->getMock();
+        $unzerMock->expects($this->once())->method($fetchMethod)->with(...$arguments);
+        $resourceService = new ResourceService($unzerMock);
 
         $resourceService->fetchResourceByUrl($resourceUrl);
     }
@@ -389,7 +389,7 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType'])->getMock();
         $resourceSrvMock->expects($this->never())->method('fetchPaymentType');
 
-        $this->assertNull($resourceSrvMock->fetchResourceByUrl('https://api.heidelpay.com/v1/types/card/s-unknown-xen2ybcovn56/'));
+        $this->assertNull($resourceSrvMock->fetchResourceByUrl('https://api.unzer.com/v1/types/card/s-unknown-xen2ybcovn56/'));
     }
 
     /**
@@ -404,22 +404,22 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function fetchShouldCallFetchResource(string $fetchMethod, array $arguments, $callback): void
     {
-        $heidelpay = new Heidelpay('s-priv-1234');
+        $unzer = new Unzer('s-priv-1234');
 
         /** @var ResourceService|MockObject $resourceServiceMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('fetchResource')->with($this->callback(
-            static function ($resource) use ($callback, $heidelpay) {
-                /** @var AbstractHeidelpayResource $resource */
-                return $callback($resource) && $resource->getHeidelpayObject() === $heidelpay;
+            static function ($resource) use ($callback, $unzer) {
+                /** @var AbstractUnzerResource $resource */
+                return $callback($resource) && $resource->getUnzerObject() === $unzer;
             }
         ));
 
-        /** @var AbstractHeidelpayResource $resource */
+        /** @var AbstractUnzerResource $resource */
         $resource = $resourceSrvMock->$fetchMethod(...$arguments);
-        $this->assertEquals($heidelpay, $resource->getParentResource());
-        $this->assertEquals($heidelpay, $resource->getHeidelpayObject());
+        $this->assertEquals($unzer, $resource->getParentResource());
+        $this->assertEquals($unzer, $resource->getUnzerObject());
     }
 
     //</editor-fold>
@@ -427,20 +427,20 @@ class ResourceServiceTest extends BasePaymentTest
     //<editor-fold desc="PaymentType">
 
     /**
-     * Verify createPaymentType method will set parentResource to heidelpay object and call create.
+     * Verify createPaymentType method will set parentResource to Unzer object and call create.
      *
      * @test
      */
-    public function createPaymentTypeShouldSetHeidelpayObjectAndCallCreate(): void
+    public function createPaymentTypeShouldSetUnzerObjectAndCallCreate(): void
     {
-        $heidelpay = new Heidelpay('s-priv-1234');
+        $unzer = new Unzer('s-priv-1234');
         $paymentType = new Sofort();
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('createResource')
-            ->with($this->callback(static function ($type) use ($heidelpay, $paymentType) {
-                return $type === $paymentType && $type->getHeidelpayObject() === $heidelpay;
+            ->with($this->callback(static function ($type) use ($unzer, $paymentType) {
+                return $type === $paymentType && $type->getUnzerObject() === $unzer;
             }));
 
         /** @var ResourceServiceInterface $resourceSrvMock */
@@ -476,7 +476,7 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function updatePaymentTypeShouldCallUpdateMethod(): void
     {
-        $paymentType = (new HirePurchaseDirectDebit())->setId('paymentTypeId');
+        $paymentType = (new InstallmentSecured())->setId('paymentTypeId');
 
         /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['updateResource'])->disableOriginalConstructor()->getMock();
@@ -493,20 +493,20 @@ class ResourceServiceTest extends BasePaymentTest
     //<editor-fold desc="Customer">
 
     /**
-     * Verify createCustomer calls create with customer object and the heidelpay resource is set.
+     * Verify createCustomer calls create with customer object and the Unzer resource is set.
      *
      * @test
      */
-    public function createCustomerShouldCallCreateWithCustomerObjectAndSetHeidelpayReference(): void
+    public function createCustomerShouldCallCreateWithCustomerObjectAndSetUnzerReference(): void
     {
-        $heidelpay = new Heidelpay('s-priv-1234');
+        $unzer = new Unzer('s-priv-1234');
         $customer = new Customer();
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('createResource')
-            ->with($this->callback(static function ($resource) use ($heidelpay, $customer) {
-                return $resource === $customer && $resource->getHeidelpayObject() === $heidelpay;
+            ->with($this->callback(static function ($resource) use ($unzer, $customer) {
+                return $resource === $customer && $resource->getUnzerObject() === $unzer;
             }));
 
         /** @var ResourceServiceInterface $resourceSrvMock */
@@ -532,7 +532,7 @@ class ResourceServiceTest extends BasePaymentTest
 
         // throw exception to indicate a customer with the given customerId already exists
         /** @noinspection PhpParamsInspection */
-        $resourceSrvMock->expects($this->once())->method('createCustomer')->with($customer)->willThrowException(new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS));
+        $resourceSrvMock->expects($this->once())->method('createCustomer')->with($customer)->willThrowException(new UnzerApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS));
 
         // Expect the customer to be fetched by its customerId if it already exists and has to be updated.
         /** @noinspection PhpParamsInspection */
@@ -571,13 +571,13 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createCustomer', 'fetchCustomer', 'updateCustomer'])->getMock();
 
-        $exc = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_REQUIRED);
+        $exc = new UnzerApiException('', '', ApiResponseCodes::API_ERROR_CUSTOMER_ID_REQUIRED);
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('createCustomer')->with($customer)->willThrowException($exc);
         $resourceSrvMock->expects($this->never())->method('fetchCustomer');
         $resourceSrvMock->expects($this->never())->method('updateCustomer');
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_REQUIRED);
 
         /** @var ResourceServiceInterface $resourceSrvMock */
@@ -589,17 +589,17 @@ class ResourceServiceTest extends BasePaymentTest
      *
      * @test
      */
-    public function fetchCustomerShouldCallFetchWithTheGivenCustomerAndSetHeidelpayReference(): void
+    public function fetchCustomerShouldCallFetchWithTheGivenCustomerAndSetUnzerReference(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
         $customer = (new Customer())->setId('myCustomerId');
 
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$heidelpay])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('fetchResource')->with($customer);
 
         try {
-            $customer->getHeidelpayObject();
+            $customer->getUnzerObject();
             $this->assertTrue(false, 'This exception should have been thrown!');
         } catch (RuntimeException $e) {
             $this->assertInstanceOf(RuntimeException::class, $e);
@@ -609,7 +609,7 @@ class ResourceServiceTest extends BasePaymentTest
         /** @var ResourceServiceInterface $resourceSrvMock */
         $returnedCustomer = $resourceSrvMock->fetchCustomer($customer);
         $this->assertSame($customer, $returnedCustomer);
-        $this->assertSame($heidelpay, $customer->getHeidelpayObject());
+        $this->assertSame($unzer, $customer->getUnzerObject());
     }
 
     /**
@@ -951,9 +951,9 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function createBasketShouldSetTheParentResourceAndCallCreateWithTheGivenBasket(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
         /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['createResource'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['createResource'])->getMock();
         $resourceSrvMock->expects($this->once())->method('createResource');
 
         $basket = new Basket();
@@ -965,7 +965,7 @@ class ResourceServiceTest extends BasePaymentTest
         }
 
         $this->assertSame($basket, $resourceSrvMock->createBasket($basket));
-        $this->assertSame($heidelpay, $basket->getParentResource());
+        $this->assertSame($unzer, $basket->getParentResource());
     }
 
     /**
@@ -975,9 +975,9 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function updateBasketShouldCallUpdateAndReturnTheGivenBasket(): void
     {
-        $heidelpay = new Heidelpay('s-priv-123');
+        $unzer = new Unzer('s-priv-123');
         /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$heidelpay])->setMethods(['updateResource'])->getMock();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['updateResource'])->getMock();
         $basket = new Basket();
         /** @noinspection PhpParamsInspection */
         $resourceSrvMock->expects($this->once())->method('updateResource')->with($basket);
@@ -985,8 +985,8 @@ class ResourceServiceTest extends BasePaymentTest
         $returnedBasket = $resourceSrvMock->updateBasket($basket);
 
         $this->assertSame($basket, $returnedBasket);
-        $this->assertEquals($heidelpay, $basket->getParentResource());
-        $this->assertEquals($heidelpay, $basket->getHeidelpayObject());
+        $this->assertEquals($unzer, $basket->getParentResource());
+        $this->assertEquals($unzer, $basket->getUnzerObject());
     }
 
     //</editor-fold>
@@ -1042,7 +1042,7 @@ class ResourceServiceTest extends BasePaymentTest
      */
     public function createRecurringShouldThrowExceptionWhenRecurringPaymentIsNotSupportedByType(): void
     {
-        $resourceService = new ResourceService(new Heidelpay('s-priv-123'));
+        $resourceService = new ResourceService(new Unzer('s-priv-123'));
         $this->expectException(RuntimeException::class);
 
         $resourceService->activateRecurringPayment(new Sofort(), 'returnUrl');
@@ -1122,16 +1122,16 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchResourceByUrlShouldFetchTheDesiredResourceDP(): array
     {
         return [
-            'Authorization' => ['fetchAuthorization', ['s-pay-100746'], 'https://api.heidelpay.com/v1/payments/s-pay-100746/authorize/s-aut-1/'],
-            'Charge'        => ['fetchChargeById', ['s-pay-100798', 's-chg-1'], 'https://api.heidelpay.com/v1/payments/s-pay-100798/charges/s-chg-1/'],
-            'Shipment'      => ['fetchShipment', ['s-pay-100801', 's-shp-1'], 'https://api.heidelpay.com/v1/payments/s-pay-100801/shipments/s-shp-1/'],
-            'Refund'        => ['fetchRefundById', ['s-pay-100802', 's-chg-1', 's-cnl-1'], 'https://api.heidelpay.com/v1/payments/s-pay-100802/charges/s-chg-1/cancels/s-cnl-1/'],
-            'Reversal'      => ['fetchReversal', ['s-pay-100803', 's-cnl-1'], 'https://api.heidelpay.com/v1/payments/s-pay-100803/authorize/s-aut-1/cancels/s-cnl-1/'],
-            'Payment'       => ['fetchPayment', ['s-pay-100801'], 'https://api.heidelpay.com/v1/payments/s-pay-100801'],
-            'Metadata'      => ['fetchMetadata', ['s-mtd-6glqv9axjpnc'], 'https://api.heidelpay.com/v1/metadata/s-mtd-6glqv9axjpnc/'],
-            'Customer'      => ['fetchCustomer', ['s-cst-50c14d49e2fe'], 'https://api.heidelpay.com/v1/customers/s-cst-50c14d49e2fe'],
-            'Basket'        => ['fetchBasket', ['s-bsk-1254'], 'https://api.heidelpay.com/v1/baskets/s-bsk-1254/'],
-            'Payout'        => ['fetchPayout', ['s-pay-100746'], 'https://api.heidelpay.com/v1/payments/s-pay-100746/payout/s-out-1/']
+            'Authorization' => ['fetchAuthorization', ['s-pay-100746'], 'https://api.unzer.com/v1/payments/s-pay-100746/authorize/s-aut-1/'],
+            'Charge'        => ['fetchChargeById', ['s-pay-100798', 's-chg-1'], 'https://api.unzer.com/v1/payments/s-pay-100798/charges/s-chg-1/'],
+            'Shipment'      => ['fetchShipment', ['s-pay-100801', 's-shp-1'], 'https://api.unzer.com/v1/payments/s-pay-100801/shipments/s-shp-1/'],
+            'Refund'        => ['fetchRefundById', ['s-pay-100802', 's-chg-1', 's-cnl-1'], 'https://api.unzer.com/v1/payments/s-pay-100802/charges/s-chg-1/cancels/s-cnl-1/'],
+            'Reversal'      => ['fetchReversal', ['s-pay-100803', 's-cnl-1'], 'https://api.unzer.com/v1/payments/s-pay-100803/authorize/s-aut-1/cancels/s-cnl-1/'],
+            'Payment'       => ['fetchPayment', ['s-pay-100801'], 'https://api.unzer.com/v1/payments/s-pay-100801'],
+            'Metadata'      => ['fetchMetadata', ['s-mtd-6glqv9axjpnc'], 'https://api.unzer.com/v1/metadata/s-mtd-6glqv9axjpnc/'],
+            'Customer'      => ['fetchCustomer', ['s-cst-50c14d49e2fe'], 'https://api.unzer.com/v1/customers/s-cst-50c14d49e2fe'],
+            'Basket'        => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v1/baskets/s-bsk-1254/'],
+            'Payout'        => ['fetchPayout', ['s-pay-100746'], 'https://api.unzer.com/v1/payments/s-pay-100746/payout/s-out-1/']
         ];
     }
 
@@ -1143,24 +1143,26 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP(): array
     {
         return [
-            'CARD'                         => ['s-crd-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/card/s-crd-xen2ybcovn56/'],
-            'GIROPAY'                      => ['s-gro-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/giropay/s-gro-xen2ybcovn56/'],
-            'IDEAL'                        => ['s-idl-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/ideal/s-idl-xen2ybcovn56/'],
-            'INVOICE'                      => ['s-ivc-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/invoice/s-ivc-xen2ybcovn56/'],
-            'INVOICE_GUARANTEED'           => ['s-ivg-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/invoice-guaranteed/s-ivg-xen2ybcovn56/'],
-            'PAYPAL'                       => ['s-ppl-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/paypal/s-ppl-xen2ybcovn56/'],
-            'PREPAYMENT'                   => ['s-ppy-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/prepayment/s-ppy-xen2ybcovn56/'],
-            'PRZELEWY24'                   => ['s-p24-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/przelewy24/s-p24-xen2ybcovn56/'],
-            'SEPA_DIRECT_DEBIT_GUARANTEED' => ['s-ddg-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'],
-            'SEPA_DIRECT_DEBIT'            => ['s-sdd-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/direct-debit/s-sdd-xen2ybcovn56/'],
-            'SOFORT'                       => ['s-sft-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/sofort/s-sft-xen2ybcovn56/'],
-            'PIS'                          => ['s-pis-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/pis/s-pis-xen2ybcovn56/'],
-            'EPS'                          => ['s-eps-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/eps/s-eps-xen2ybcovn56/'],
-            'ALIPAY'                       => ['s-ali-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/alipay/s-ali-xen2ybcovn56/'],
-            'WECHATPAY'                    => ['s-wcp-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'],
-            'INVOICE_FACTORING'            => ['s-ivf-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'],
-            'HIRE_PURCHASE_DIRECT_DEBIT'   => ['s-hdd-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/hire-purchase-direct-debit/s-hdd-xen2ybcovn56/'],
-            'BANCONTACT'                   => ['s-bct-xen2ybcovn56', 'https://api.heidelpay.com/v1/types/bancontact/s-bct-xen2ybcovn56/']
+            'CARD'                         => ['s-crd-xen2ybcovn56', 'https://api.unzer.com/v1/types/card/s-crd-xen2ybcovn56/'],
+            'GIROPAY'                      => ['s-gro-xen2ybcovn56', 'https://api.unzer.com/v1/types/giropay/s-gro-xen2ybcovn56/'],
+            'IDEAL'                        => ['s-idl-xen2ybcovn56', 'https://api.unzer.com/v1/types/ideal/s-idl-xen2ybcovn56/'],
+            'INVOICE'                      => ['s-ivc-xen2ybcovn56', 'https://api.unzer.com/v1/types/invoice/s-ivc-xen2ybcovn56/'],
+            'INVOICE_GUARANTEED'           => ['s-ivg-xen2ybcovn56', 'https://api.unzer.com/v1/types/invoice-guaranteed/s-ivg-xen2ybcovn56/'],
+            'INVOICE_SECURED'              => ['s-ivs-xen2ybcovn56', 'https://api.unzer.com/v1/types/invoice-secured/s-ivs-xen2ybcovn56/'],
+            'INVOICE_FACTORING'            => ['s-ivf-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'],
+            'PAYPAL'                       => ['s-ppl-xen2ybcovn56', 'https://api.unzer.com/v1/types/paypal/s-ppl-xen2ybcovn56/'],
+            'PREPAYMENT'                   => ['s-ppy-xen2ybcovn56', 'https://api.unzer.com/v1/types/prepayment/s-ppy-xen2ybcovn56/'],
+            'PRZELEWY24'                   => ['s-p24-xen2ybcovn56', 'https://api.unzer.com/v1/types/przelewy24/s-p24-xen2ybcovn56/'],
+            'SEPA_DIRECT_DEBIT_GUARANTEED' => ['s-ddg-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'],
+            'SEPA_DIRECT_DEBIT'            => ['s-sdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit/s-sdd-xen2ybcovn56/'],
+            'SOFORT'                       => ['s-sft-xen2ybcovn56', 'https://api.unzer.com/v1/types/sofort/s-sft-xen2ybcovn56/'],
+            'PIS'                          => ['s-pis-xen2ybcovn56', 'https://api.unzer.com/v1/types/pis/s-pis-xen2ybcovn56/'],
+            'EPS'                          => ['s-eps-xen2ybcovn56', 'https://api.unzer.com/v1/types/eps/s-eps-xen2ybcovn56/'],
+            'ALIPAY'                       => ['s-ali-xen2ybcovn56', 'https://api.unzer.com/v1/types/alipay/s-ali-xen2ybcovn56/'],
+            'WECHATPAY'                    => ['s-wcp-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'],
+            'HIRE_PURCHASE_DIRECT_DEBIT'   => ['s-hdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/hire-purchase-direct-debit/s-hdd-xen2ybcovn56/'],
+            'Installment_SECURED'          => ['s-ins-xen2ybcovn56', 'https://api.unzer.com/v1/types/installment-secured/s-ins-xen2ybcovn56/'],
+            'BANCONTACT'                   => ['s-bct-xen2ybcovn56', 'https://api.unzer.com/v1/types/bancontact/s-bct-xen2ybcovn56/']
         ];
     }
 
@@ -1222,36 +1224,41 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType Giropay sandbox' => ['fetchPaymentType', ['s-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
             'PaymentType Ideal sandbox' => ['fetchPaymentType', ['s-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
             'PaymentType Invoice sandbox' => ['fetchPaymentType', ['s-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
-            'PaymentType InvoiceGuaranteed sandbox' => ['fetchPaymentType', ['s-ivg-12345678'], $getPaymentTypeCB(InvoiceGuaranteed::class)],
+            'PaymentType InvoiceGuaranteed sandbox' => ['fetchPaymentType', ['s-ivg-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
+            'PaymentType InvoiceSecured sandbox' => ['fetchPaymentType', ['s-ivs-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
+            'PaymentType Invoie factoring sandbox' => ['fetchPaymentType', ['s-ivf-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
             'PaymentType Paypal sandbox' => ['fetchPaymentType', ['s-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
             'PaymentType Prepayment sandbox' => ['fetchPaymentType', ['s-ppy-12345678'], $getPaymentTypeCB(Prepayment::class)],
             'PaymentType Przelewy24 sandbox' => ['fetchPaymentType', ['s-p24-12345678'], $getPaymentTypeCB(Przelewy24::class)],
             'PaymentType SepaDirectDebit sandbox' => ['fetchPaymentType', ['s-sdd-12345678'], $getPaymentTypeCB(SepaDirectDebit::class)],
-            'PaymentType SepaDirectDebitGuaranteed sandbox' => ['fetchPaymentType', ['s-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitGuaranteed::class)],
+            'PaymentType SepaDirectDebitGuaranteed sandbox' => ['fetchPaymentType', ['s-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
+            'PaymentType SepaDirectDebitSecured sandbox' => ['fetchPaymentType', ['s-dds-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
             'PaymentType Sofort sandbox' => ['fetchPaymentType', ['s-sft-12345678'], $getPaymentTypeCB(Sofort::class)],
             'PaymentType PIS sandbox' => ['fetchPaymentType', ['s-pis-12345678'], $getPaymentTypeCB(PIS::class)],
             'PaymentType EPS sandbox' => ['fetchPaymentType', ['s-eps-12345678'], $getPaymentTypeCB(EPS::class)],
             'PaymentType Alipay sandbox' => ['fetchPaymentType', ['s-ali-12345678'], $getPaymentTypeCB(Alipay::class)],
             'PaymentType Wechatpay sandbox' => ['fetchPaymentType', ['s-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
-            'PaymentType Invoice factoring sandbox' => ['fetchPaymentType', ['s-ivf-12345678'], $getPaymentTypeCB(InvoiceFactoring::class)],
-            'PaymentType HirePurchaseDirectDebit sandbox' => ['fetchPaymentType', ['s-hdd-12345678'], $getPaymentTypeCB(HirePurchaseDirectDebit::class)],
+            'PaymentType HirePurchaseDirectDebit sandbox' => ['fetchPaymentType', ['s-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
+            'PaymentType InstallmentSecured sandbox' => ['fetchPaymentType', ['s-ins-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
             'PaymentType Bancontact sandbox' => ['fetchPaymentType', ['s-bct-12345678'], $getPaymentTypeCB(Bancontact::class)],
             'PaymentType Card production' => ['fetchPaymentType', ['p-crd-12345678'], $getPaymentTypeCB(Card::class)],
             'PaymentType Giropay production' => ['fetchPaymentType', ['p-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
             'PaymentType Ideal production' => ['fetchPaymentType', ['p-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
             'PaymentType Invoice production' => ['fetchPaymentType', ['p-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
-            'PaymentType InvoiceGuaranteed production' => ['fetchPaymentType', ['p-ivg-12345678'], $getPaymentTypeCB(InvoiceGuaranteed::class)],
+            'PaymentType InvoiceGuaranteed production' => ['fetchPaymentType', ['p-ivg-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
+            'PaymentType Invoice factoring production' => ['fetchPaymentType', ['p-ivf-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
             'PaymentType Paypal production' => ['fetchPaymentType', ['p-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
             'PaymentType Prepayment production' => ['fetchPaymentType', ['p-ppy-12345678'], $getPaymentTypeCB(Prepayment::class)],
             'PaymentType Przelewy24 production' => ['fetchPaymentType', ['p-p24-12345678'], $getPaymentTypeCB(Przelewy24::class)],
             'PaymentType SepaDirectDebit production' => ['fetchPaymentType', ['p-sdd-12345678'], $getPaymentTypeCB(SepaDirectDebit::class)],
-            'PaymentType SepaDirectDebitGuaranteed production' => ['fetchPaymentType', ['p-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitGuaranteed::class)],
+            'PaymentType SepaDirectDebitGuaranteed production' => ['fetchPaymentType', ['p-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
+            'PaymentType SepaDirectDebitSecured production' => ['fetchPaymentType', ['p-dds-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
             'PaymentType Sofort production' => ['fetchPaymentType', ['p-sft-12345678'], $getPaymentTypeCB(Sofort::class)],
             'PaymentType EPS production' => ['fetchPaymentType', ['p-eps-12345678'], $getPaymentTypeCB(EPS::class)],
             'PaymentType Alipay production' => ['fetchPaymentType', ['p-ali-12345678'], $getPaymentTypeCB(Alipay::class)],
             'PaymentType Wechatpay production' => ['fetchPaymentType', ['p-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
-            'PaymentType Invoice factoring production' => ['fetchPaymentType', ['p-ivf-12345678'], $getPaymentTypeCB(InvoiceFactoring::class)],
-            'PaymentType HirePurchaseDirectDebit production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(HirePurchaseDirectDebit::class)],
+            'PaymentType HirePurchaseDirectDebit production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
+            'PaymentType InstallmentSecured production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
             'PaymentType Bancontact production' => ['fetchPaymentType', ['p-bct-12345678'], $getPaymentTypeCB(Bancontact::class)],
         ];
     }

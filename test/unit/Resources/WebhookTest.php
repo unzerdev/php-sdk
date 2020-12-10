@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the Webhook resource.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources;
+namespace UnzerSDK\test\unit\Resources;
 
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\test\BasePaymentTest;
 
 class WebhookTest extends BasePaymentTest
 {
@@ -50,13 +50,13 @@ class WebhookTest extends BasePaymentTest
      */
     public function gettersAndSettersOfWebhookShouldBehaveAsExpected(): void
     {
-        $webhook = new Webhook('https://dev.heidelpay.com', 'anEventIMadeUp');
-        $this->assertEquals('https://dev.heidelpay.com', $webhook->getUrl());
+        $webhook = new Webhook('https://dev.unzer.com', 'anEventIMadeUp');
+        $this->assertEquals('https://dev.unzer.com', $webhook->getUrl());
         $this->assertEquals('anEventIMadeUp', $webhook->getEvent());
 
-        $webhook->setUrl('https://docs.heidelpay.com');
+        $webhook->setUrl('https://dev.unzer.com');
         $webhook->setEvent('aDifferentEventIMadeUp');
-        $this->assertEquals('https://docs.heidelpay.com', $webhook->getUrl());
+        $this->assertEquals('https://dev.unzer.com', $webhook->getUrl());
         $this->assertEquals('aDifferentEventIMadeUp', $webhook->getEvent());
     }
 }

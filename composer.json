@@ -1,14 +1,8 @@
 {
-  "name": "heidelpay/heidelpay-php",
-  "description": "This is the php sdk to connect to the heidelpay rest api.",
+  "name": "unzerdev/php-sdk",
+  "description": "This is the php sdk to connect to the Unzer rest api.",
   "minimum-stability": "stable",
   "license": "Apache-2.0",
-  "authors": [
-    {
-      "name": "Simon Gabriel",
-      "email": "development@heidelpay.com"
-    }
-  ],
   "require": {
     "php": "~7.1.0|~7.2.0|~7.3.0|~7.4.0",
     "ext-json": "*"
@@ -22,16 +16,16 @@
   },
   "autoload": {
     "psr-4": {
-      "heidelpayPHP\\": "src",
-      "heidelpayPHP\\examples\\": "examples"
+      "UnzerSDK\\": "src",
+      "UnzerSDK\\examples\\": "examples"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "heidelpayPHP\\test\\": "test"
+      "UnzerSDK\\test\\": "test"
     }
   },
   "support": {
-    "email": "support@heidelpay.com"
+    "email": "support@unzer.com"
   }
 }

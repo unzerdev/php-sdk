@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify interface and functionality of the payment method GiroPay.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class GiropayTest extends BaseIntegrationTest
 {
@@ -42,7 +42,7 @@ class GiropayTest extends BaseIntegrationTest
     {
         $giropay = new Giropay();
         /** @var Giropay $giropay */
-        $giropay = $this->heidelpay->createPaymentType($giropay);
+        $giropay = $this->unzer->createPaymentType($giropay);
         $this->assertInstanceOf(Giropay::class, $giropay);
         $this->assertNotNull($giropay->getId());
     }
@@ -54,11 +54,11 @@ class GiropayTest extends BaseIntegrationTest
      */
     public function giroPayShouldThrowExceptionOnAuthorize(): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $giropay = $this->heidelpay->createPaymentType(new Giropay());
-        $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+        $giropay = $this->unzer->createPaymentType(new Giropay());
+        $this->unzer->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
     }
 
     /**
@@ -69,13 +69,13 @@ class GiropayTest extends BaseIntegrationTest
     public function giroPayShouldBeChargeable(): void
     {
         /** @var Giropay $giropay */
-        $giropay = $this->heidelpay->createPaymentType(new Giropay());
+        $giropay = $this->unzer->createPaymentType(new Giropay());
         $charge = $giropay->charge(1.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
 
-        $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
+        $fetchCharge = $this->unzer->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertEquals($charge->expose(), $fetchCharge->expose());
     }
 
@@ -86,8 +86,8 @@ class GiropayTest extends BaseIntegrationTest
      */
     public function giroPayCanBeFetched(): void
     {
-        $giropay = $this->heidelpay->createPaymentType(new Giropay());
-        $fetchedGiropay = $this->heidelpay->fetchPaymentType($giropay->getId());
+        $giropay = $this->unzer->createPaymentType(new Giropay());
+        $fetchedGiropay = $this->unzer->fetchPaymentType($giropay->getId());
         $this->assertInstanceOf(Giropay::class, $fetchedGiropay);
         $this->assertEquals($giropay->getId(), $fetchedGiropay->getId());
     }

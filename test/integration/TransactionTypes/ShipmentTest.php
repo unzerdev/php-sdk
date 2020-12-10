@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify interface and functionality of shipment.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\InvoiceGuaranteed;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class ShipmentTest extends BaseIntegrationTest
 {
@@ -38,18 +38,19 @@ class ShipmentTest extends BaseIntegrationTest
      */
     public function shipmentShouldBeCreatableAndFetchable(): void
     {
-        $ivg      = new InvoiceGuaranteed();
+        $ivg      = new InvoiceSecured();
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
 
-        $charge   = $this->heidelpay->charge(100.0, 'EUR', $ivg, self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge   = $this->unzer->charge(100.0, 'EUR', $ivg, self::RETURN_URL, $customer, null, null, $basket);
         $this->assertNotNull($charge->getId());
         $this->assertNotNull($charge);
 
-        $shipment = $this->heidelpay->ship($charge->getPayment(), 'i'. self::generateRandomId(), 'i'. self::generateRandomId());
+        $shipment = $this->unzer->ship($charge->getPayment(), 'i'. self::generateRandomId(), 'i'. self::generateRandomId());
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
 
-        $fetchedShipment = $this->heidelpay->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
+        $fetchedShipment = $this->unzer->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
         $this->assertNotEmpty($fetchedShipment);
         $this->assertEquals($shipment->expose(), $fetchedShipment->expose());
     }
@@ -61,9 +62,10 @@ class ShipmentTest extends BaseIntegrationTest
      */
     public function shipmentCanBeCalledOnThePaymentObject(): void
     {
-        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $invoiceSecured = new InvoiceSecured();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge = $this->unzer->charge(100.0, 'EUR', $invoiceSecured, self::RETURN_URL, $customer, null, null, $basket);
 
         $payment  = $charge->getPayment();
         $shipment = $payment->ship('i'. self::generateRandomId(), 'o'. self::generateRandomId());
@@ -76,7 +78,7 @@ class ShipmentTest extends BaseIntegrationTest
         $this->assertNotEmpty($traceId);
         $this->assertSame($traceId, $shipment->getPayment()->getTraceId());
 
-        $fetchedShipment = $this->heidelpay->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
+        $fetchedShipment = $this->unzer->fetchShipment($shipment->getPayment()->getId(), $shipment->getId());
         $this->assertNotEmpty($fetchedShipment);
         $this->assertEquals($shipment->expose(), $fetchedShipment->expose());
     }
@@ -88,12 +90,13 @@ class ShipmentTest extends BaseIntegrationTest
      */
     public function shipmentShouldBePossibleWithPaymentObject(): void
     {
-        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $invoiceSecured = new InvoiceSecured();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge = $this->unzer->charge(100.0, 'EUR', $invoiceSecured, self::RETURN_URL, $customer, null, null, $basket);
 
         $payment  = $charge->getPayment();
-        $shipment = $this->heidelpay->ship($payment, 'i'. self::generateRandomId(), 'o'. self::generateRandomId());
+        $shipment = $this->unzer->ship($payment, 'i'. self::generateRandomId(), 'o'. self::generateRandomId());
         $this->assertNotNull($shipment->getId());
         $this->assertNotNull($shipment);
     }
@@ -105,12 +108,13 @@ class ShipmentTest extends BaseIntegrationTest
      */
     public function shipmentStatusIsSetCorrectly(): void
     {
-        $invoiceGuaranteed = new InvoiceGuaranteed();
+        $invoiceSecured = new InvoiceSecured();
         $customer          = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge            = $this->heidelpay->charge(100.0, 'EUR', $invoiceGuaranteed, self::RETURN_URL, $customer);
+        $basket = $this->createBasket();
+        $charge = $this->unzer->charge(100.0, 'EUR', $invoiceSecured, self::RETURN_URL, $customer, null, null, $basket);
 
         $payment  = $charge->getPayment();
-        $shipment = $this->heidelpay->ship($payment, 'i'. self::generateRandomId(), 'o'. self::generateRandomId());
+        $shipment = $this->unzer->ship($payment, 'i'. self::generateRandomId(), 'o'. self::generateRandomId());
         $this->assertSuccess($shipment);
     }
 }

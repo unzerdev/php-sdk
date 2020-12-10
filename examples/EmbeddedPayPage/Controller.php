@@ -3,7 +3,7 @@
  * This is the controller for the  Embedded Payment Page example.
  * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -31,13 +31,13 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Basket;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\EmbeddedResources\BasketItem;
-use heidelpayPHP\Resources\PaymentTypes\Paypage;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
 
 // start new session for this example and remove all parameters
 session_start();
@@ -53,9 +53,9 @@ $transactionType = $_POST['transaction_type'] ?? 'authorize';
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
-    // Create a heidelpay object using your private key and register a debug handler if you want to.
-    $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
-    $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    // Create an Unzer object using your private key and register a debug handler if you want to.
+    $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+    $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge/authorize transaction
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
@@ -64,16 +64,16 @@ try {
     $paypage = new Paypage(119.00, 'EUR', RETURN_CONTROLLER_URL);
 
     // ... however you can customize the Payment Page using additional parameters.
-    $paypage->setLogoImage('https://dev.heidelpay.com/devHeidelpay_400_180.jpg')
+    $paypage->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
             ->setShopName('My Test Shop')
             ->setTagline('Try and stop us from being awesome!')
             ->setOrderId('o' . microtime(true))
             ->setInvoiceId('i' . microtime(true));
 
-    // ... in order to enable FlexiPay Rate (Hire Purchase) you will need to set the effectiveInterestRate as well.
+    // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.
     $paypage->setEffectiveInterestRate(4.99);
 
-    // ... a Basket is mandatory for HirePurchase
+    // ... a Basket is mandatory for InstallmentSecured
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
@@ -81,16 +81,16 @@ try {
     $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
 
     if ($transactionType === 'charge') {
-        $heidelpay->initPayPageCharge($paypage, $customer, $basket);
+        $unzer->initPayPageCharge($paypage, $customer, $basket);
     } else {
-        $heidelpay->initPayPageAuthorize($paypage, $customer, $basket);
+        $unzer->initPayPageAuthorize($paypage, $customer, $basket);
     }
 
     $_SESSION['PaymentId'] = $paypage->getPaymentId();
     echo json_encode(['token' => $paypage->getId()]);
     die();
 
-} catch (HeidelpayApiException $e) {
+} catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {

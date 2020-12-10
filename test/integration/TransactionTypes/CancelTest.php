@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify cancellation in general.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class CancelTest extends BaseIntegrationTest
 {
@@ -35,11 +35,11 @@ class CancelTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function reversalShouldBeFetchableViaHeidelpayObject(): void
+    public function reversalShouldBeFetchableViaUnzerObject(): void
     {
         $authorization = $this->createCardAuthorization();
         $cancel = $authorization->cancel();
-        $fetchedCancel = $this->heidelpay->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
+        $fetchedCancel = $this->unzer->fetchReversal($authorization->getPayment()->getId(), $cancel->getId());
         $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
@@ -63,11 +63,11 @@ class CancelTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function refundShouldBeFetchableViaHeidelpayObject(): void
+    public function refundShouldBeFetchableViaUnzerObject(): void
     {
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
-        $fetchedCancel = $this->heidelpay->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
+        $fetchedCancel = $this->unzer->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
         $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());
     }
@@ -95,7 +95,7 @@ class CancelTest extends BaseIntegrationTest
     {
         $authorization = $this->createCardAuthorization();
         $reversal = $authorization->cancel();
-        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $fetchedPayment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
 
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
         $this->assertTransactionResourceHasBeenCreated($cancellation);
@@ -111,7 +111,7 @@ class CancelTest extends BaseIntegrationTest
     {
         $charge = $this->createCharge();
         $reversal = $charge->cancel();
-        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
+        $fetchedPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
 
         $cancellation = $fetchedPayment->getCancellation($reversal->getId());
         $this->assertTransactionResourceHasBeenCreated($cancellation);

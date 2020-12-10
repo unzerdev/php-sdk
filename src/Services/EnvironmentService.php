@@ -1,8 +1,8 @@
 <?php
 /**
- * This service provides for functionalities concerning the mgw environment.
+ * This service provides for functionalities concerning the PAPI environment.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,37 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
 use function in_array;
 use function is_bool;
 
 class EnvironmentService
 {
-    private const ENV_VAR_NAME_ENVIRONMENT = 'HEIDELPAY_MGW_ENV';
+    private const ENV_VAR_NAME_ENVIRONMENT = 'UNZER_PAPI_ENV';
     public const ENV_VAR_VALUE_STAGING_ENVIRONMENT = 'STG';
     public const ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT = 'DEV';
     public const ENV_VAR_VALUE_PROD_ENVIRONMENT = 'PROD';
 
-    /** @deprecated ENV_VAR_NAME_DISABLE_TEST_LOGGING since 1.2.7.3 replaced by ENV_VAR_NAME_VERBOSE_TEST_LOGGING */
-    public const ENV_VAR_NAME_DISABLE_TEST_LOGGING = 'HEIDELPAY_MGW_DISABLE_TEST_LOGGING';
-    public const ENV_VAR_NAME_VERBOSE_TEST_LOGGING = 'HEIDELPAY_MGW_VERBOSE_TEST_LOGGING';
+    public const ENV_VAR_NAME_VERBOSE_TEST_LOGGING = 'UNZER_PAPI_VERBOSE_TEST_LOGGING';
 
-    public const ENV_VAR_TEST_PRIVATE_KEY = 'HEIDELPAY_MGW_TEST_PRIVATE_KEY';
-    public const ENV_VAR_TEST_PUBLIC_KEY = 'HEIDELPAY_MGW_TEST_PUBLIC_KEY';
-    public const ENV_VAR_TEST_PRIVATE_KEY_NON_3DS = 'HEIDELPAY_MGW_TEST_PRIVATE_KEY_NON_3DS';
-    public const ENV_VAR_TEST_PUBLIC_KEY_NON_3DS = 'HEIDELPAY_MGW_TEST_PUBLIC_KEY_NON_3DS';
+    public const ENV_VAR_TEST_PRIVATE_KEY = 'UNZER_PAPI_TEST_PRIVATE_KEY';
+    public const ENV_VAR_TEST_PUBLIC_KEY = 'UNZER_PAPI_TEST_PUBLIC_KEY';
+    public const ENV_VAR_TEST_PRIVATE_KEY_NON_3DS = 'UNZER_PAPI_TEST_PRIVATE_KEY_NON_3DS';
+    public const ENV_VAR_TEST_PUBLIC_KEY_NON_3DS = 'UNZER_PAPI_TEST_PUBLIC_KEY_NON_3DS';
 
-    private const ENV_VAR_NAME_TIMEOUT = 'HEIDELPAY_MGW_TIMEOUT';
+    private const ENV_VAR_NAME_TIMEOUT = 'UNZER_PAPI_TIMEOUT';
     private const DEFAULT_TIMEOUT = 60;
 
-    private const ENV_VAR_NAME_CURL_VERBOSE = 'HEIDELPAY_MGW_CURL_VERBOSE';
+    private const ENV_VAR_NAME_CURL_VERBOSE = 'UNZER_PAPI_CURL_VERBOSE';
 
     /**
      * Returns the value of the given env var as bool.
@@ -66,11 +64,11 @@ class EnvironmentService
     }
 
     /**
-     * Returns the MGW environment set via environment variable or PROD es default.
+     * Returns the PAPI environment set via environment variable or PROD es default.
      *
      * @return string
      */
-    public function getMgwEnvironment(): string
+    public function getPapiEnvironment(): string
     {
         return stripslashes($_SERVER[self::ENV_VAR_NAME_ENVIRONMENT] ?? self::ENV_VAR_VALUE_PROD_ENVIRONMENT);
     }
@@ -82,10 +80,7 @@ class EnvironmentService
      */
     public static function isTestLoggingActive(): bool
     {
-        if (isset($_SERVER[self::ENV_VAR_NAME_VERBOSE_TEST_LOGGING])) {
-            return self::getBoolEnvValue(self::ENV_VAR_NAME_VERBOSE_TEST_LOGGING);
-        }
-        return !self::getBoolEnvValue(self::ENV_VAR_NAME_DISABLE_TEST_LOGGING);
+        return self::getBoolEnvValue(self::ENV_VAR_NAME_VERBOSE_TEST_LOGGING);
     }
 
     /**

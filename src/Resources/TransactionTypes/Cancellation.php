@@ -2,7 +2,7 @@
 /**
  * This represents the cancel transaction.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\TransactionTypes
+ * @package  UnzerSDK\TransactionTypes
  */
-namespace heidelpayPHP\Resources\TransactionTypes;
+namespace UnzerSDK\Resources\TransactionTypes;
 
-use heidelpayPHP\Constants\CancelReasonCodes;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\HirePurchaseDirectDebit;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use function in_array;
 
 class Cancellation extends AbstractTransactionType
 {
     /**
-     * The cancellation amount will be transferred as grossAmount in case of Hire Purchase payment type.
+     * The cancellation amount will be transferred as grossAmount in case of Installment Secured payment type.
      *
      * @var float $amount
      */
@@ -45,14 +46,14 @@ class Cancellation extends AbstractTransactionType
     protected $paymentReference;
 
     /**
-     * The net value of the cancellation amount (Hire Purchase only).
+     * The net value of the cancellation amount (Installment Secured only).
      *
      * @var float $amountNet
      */
     protected $amountNet;
 
     /**
-     * The vat value of the cancellation amount (Hire Purchase only).
+     * The vat value of the cancellation amount (Installment Secured only).
      *
      * @var float $amountVat
      */
@@ -61,7 +62,7 @@ class Cancellation extends AbstractTransactionType
     /**
      * Authorization constructor.
      *
-     * @param float $amount The amount to be cancelled, is transferred as grossAmount in case of Hire Purchase.
+     * @param float $amount The amount to be cancelled, is transferred as grossAmount in case of Installment Secured.
      */
     public function __construct($amount = null)
     {
@@ -71,7 +72,7 @@ class Cancellation extends AbstractTransactionType
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * Returns the cancellationAmount (equals grossAmount in case of Hire Purchase).
+     * Returns the cancellationAmount (equals grossAmount in case of Installment Secured).
      *
      * @return float|null
      */
@@ -81,7 +82,7 @@ class Cancellation extends AbstractTransactionType
     }
 
     /**
-     * Sets the cancellationAmount (equals grossAmount in case of Hire Purchase).
+     * Sets the cancellationAmount (equals grossAmount in case of Installment Secured).
      *
      * @param float $amount
      *
@@ -139,7 +140,7 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Returns the net value of the amount to be cancelled.
-     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     * This is needed for Installment Secured payment types only.
      *
      * @return float|null
      */
@@ -150,9 +151,9 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Sets the net value of the amount to be cancelled.
-     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     * This is needed for Installment Secured payment types only.
      *
-     * @param float|null $amountNet The net value of the amount to be cancelled (Hire Purchase only).
+     * @param float|null $amountNet The net value of the amount to be cancelled (Installment Secured only).
      *
      * @return Cancellation The resulting cancellation object.
      */
@@ -164,7 +165,7 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Returns the vat value of the cancellation amount.
-     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     * This is needed for Installment Secured payment types only.
      *
      * @return float|null
      */
@@ -175,7 +176,7 @@ class Cancellation extends AbstractTransactionType
 
     /**
      * Sets the vat value of the cancellation amount.
-     * This is needed for Hire Purchase (FlexiPay Rate) payment types only.
+     * This is needed for Installment Secured payment types only.
      *
      * @param float|null $amountVat
      *
@@ -199,7 +200,7 @@ class Cancellation extends AbstractTransactionType
         $exposeArray = parent::expose();
         $payment = $this->getPayment();
         if (isset($exposeArray['amount'])
-            && $payment instanceof Payment && $payment->getPaymentType() instanceof HirePurchaseDirectDebit) {
+            && $payment instanceof Payment && $payment->getPaymentType() instanceof InstallmentSecured) {
             $exposeArray['amountGross'] = $exposeArray['amount'];
             unset($exposeArray['amount']);
         }
@@ -209,7 +210,7 @@ class Cancellation extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'cancels';
     }

@@ -2,7 +2,7 @@
 /**
  * This service provides for all methods to manage webhooks/events.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Services
+ * @package  UnzerSDK\Services
  */
-namespace heidelpayPHP\Services;
+namespace UnzerSDK\Services;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\ResourceServiceInterface;
-use heidelpayPHP\Interfaces\WebhookServiceInterface;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\Webhook;
-use heidelpayPHP\Resources\Webhooks;
+use UnzerSDK\Unzer;
+use UnzerSDK\Interfaces\ResourceServiceInterface;
+use UnzerSDK\Interfaces\WebhookServiceInterface;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\Webhook;
+use UnzerSDK\Resources\Webhooks;
 use function is_string;
 use RuntimeException;
 
 class WebhookService implements WebhookServiceInterface
 {
-    /** @var Heidelpay $heidelpay */
-    private $heidelpay;
+    /** @var Unzer $unzer */
+    private $unzer;
 
     /** @var ResourceServiceInterface $resourceService */
     private $resourceService;
@@ -44,32 +44,32 @@ class WebhookService implements WebhookServiceInterface
     /**
      * PaymentService constructor.
      *
-     * @param Heidelpay $heidelpay
+     * @param Unzer $unzer
      */
-    public function __construct(Heidelpay $heidelpay)
+    public function __construct(Unzer $unzer)
     {
-        $this->heidelpay = $heidelpay;
-        $this->resourceService = $heidelpay->getResourceService();
+        $this->unzer = $unzer;
+        $this->resourceService = $unzer->getResourceService();
     }
 
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function getHeidelpay(): Heidelpay
+    public function getUnzer(): Unzer
     {
-        return $this->heidelpay;
+        return $this->unzer;
     }
 
     /**
-     * @param Heidelpay $heidelpay
+     * @param Unzer $unzer
      *
      * @return WebhookService
      */
-    public function setHeidelpay(Heidelpay $heidelpay): WebhookService
+    public function setUnzer(Unzer $unzer): WebhookService
     {
-        $this->heidelpay = $heidelpay;
+        $this->unzer = $unzer;
         return $this;
     }
 
@@ -102,7 +102,7 @@ class WebhookService implements WebhookServiceInterface
     public function createWebhook(string $url, string $event): Webhook
     {
         $webhook = new Webhook($url, $event);
-        $webhook->setParentResource($this->heidelpay);
+        $webhook->setParentResource($this->unzer);
         $this->resourceService->createResource($webhook);
         return $webhook;
     }
@@ -118,7 +118,7 @@ class WebhookService implements WebhookServiceInterface
             $webhookObject->setId($webhook);
         }
 
-        $webhookObject->setParentResource($this->heidelpay);
+        $webhookObject->setParentResource($this->unzer);
         $this->resourceService->fetchResource($webhookObject);
         return $webhookObject;
     }
@@ -128,7 +128,7 @@ class WebhookService implements WebhookServiceInterface
      */
     public function updateWebhook($webhook): Webhook
     {
-        $webhook->setParentResource($this->heidelpay);
+        $webhook->setParentResource($this->unzer);
         $this->resourceService->updateResource($webhook);
         return $webhook;
     }
@@ -157,7 +157,7 @@ class WebhookService implements WebhookServiceInterface
     public function fetchAllWebhooks(): array
     {
         $webhooks = new Webhooks();
-        $webhooks->setParentResource($this->heidelpay);
+        $webhooks->setParentResource($this->unzer);
         /** @var Webhooks $webhooks */
         $webhooks = $this->resourceService->fetchResource($webhooks);
 
@@ -170,7 +170,7 @@ class WebhookService implements WebhookServiceInterface
     public function deleteAllWebhooks(): void
     {
         $webhooks = new Webhooks();
-        $webhooks->setParentResource($this->heidelpay);
+        $webhooks->setParentResource($this->unzer);
         $this->resourceService->deleteResource($webhooks);
     }
 
@@ -180,7 +180,7 @@ class WebhookService implements WebhookServiceInterface
     public function registerMultipleWebhooks(string $url, array $events): array
     {
         $webhooks = new Webhooks($url, $events);
-        $webhooks->setParentResource($this->heidelpay);
+        $webhooks->setParentResource($this->unzer);
         /** @var Webhooks $webhooks */
         $webhooks = $this->resourceService->createResource($webhooks);
 
@@ -194,18 +194,18 @@ class WebhookService implements WebhookServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchResourceFromEvent($eventJson = null): AbstractHeidelpayResource
+    public function fetchResourceFromEvent($eventJson = null): AbstractUnzerResource
     {
         $resourceObject = null;
         $eventData = json_decode($eventJson ?? $this->readInputStream(), false);
         $retrieveUrl = $eventData->retrieveUrl ?? null;
 
         if (!empty($retrieveUrl)) {
-            $this->heidelpay->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
+            $this->unzer->debugLog('Received event: ' . json_encode($eventData)); // encode again to uglify json
             $resourceObject = $this->resourceService->fetchResourceByUrl($retrieveUrl);
         }
 
-        if (!$resourceObject instanceof AbstractHeidelpayResource) {
+        if (!$resourceObject instanceof AbstractUnzerResource) {
             throw new RuntimeException('Error fetching resource!');
         }
 

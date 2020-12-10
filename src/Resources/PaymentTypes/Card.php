@@ -2,7 +2,7 @@
 /**
  * This represents the card payment type which supports credit card as well as debit card payments.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
-use heidelpayPHP\Traits\CanPayout;
-use heidelpayPHP\Traits\CanRecur;
-use heidelpayPHP\Traits\HasGeoLocation;
-use heidelpayPHP\Validators\ExpiryDateValidator;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Resources\EmbeddedResources\CardDetails;
+use UnzerSDK\Traits\CanAuthorize;
+use UnzerSDK\Traits\CanDirectCharge;
+use UnzerSDK\Traits\CanPayout;
+use UnzerSDK\Traits\CanRecur;
+use UnzerSDK\Traits\HasGeoLocation;
+use UnzerSDK\Validators\ExpiryDateValidator;
 use RuntimeException;
 use stdClass;
 
@@ -166,28 +166,6 @@ class Card extends BasePaymentType
     {
         $this->cardHolder = $cardHolder;
         return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @deprecated since 1.2.7.2
-     */
-    public function getHolder(): ?string
-    {
-        return $this->getCardHolder();
-    }
-
-    /**
-     * @param string $cardHolder
-     *
-     * @return Card
-     *
-     * @deprecated since 1.2.7.2
-     */
-    public function setHolder($cardHolder): Card
-    {
-        return $this->setCardHolder($cardHolder);
     }
 
     /**

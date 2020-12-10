@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify keypair functionalities.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Unzer;
+use UnzerSDK\test\BaseIntegrationTest;
 use RuntimeException;
 
 class KeypairTest extends BaseIntegrationTest
@@ -42,8 +42,8 @@ class KeypairTest extends BaseIntegrationTest
      */
     public function validKeysShouldBeExcepted($key): void
     {
-        $heidelpay = new Heidelpay($key);
-        $this->assertEquals($key, $heidelpay->getKey());
+        $unzer = new Unzer($key);
+        $this->assertEquals($key, $unzer->getKey());
     }
 
     /**
@@ -57,7 +57,7 @@ class KeypairTest extends BaseIntegrationTest
     public function invalidKeysShouldResultInException($key): void
     {
         $this->expectException(RuntimeException::class);
-        new Heidelpay($key);
+        new Unzer($key);
     }
 
     /**
@@ -67,7 +67,7 @@ class KeypairTest extends BaseIntegrationTest
      */
     public function keypairShouldReturnExpectedValues(): void
     {
-        $keypair = $this->heidelpay->fetchKeypair();
+        $keypair = $this->unzer->fetchKeypair();
         $this->assertNotNull($keypair);
         $this->assertNotEmpty($keypair->getPublicKey());
         $this->assertNotEmpty($keypair->getPrivateKey());
@@ -82,7 +82,7 @@ class KeypairTest extends BaseIntegrationTest
      */
     public function keypairShouldBeFetchableWithDetails(): void
     {
-        $keypair = $this->heidelpay->fetchKeypair(true);
+        $keypair = $this->unzer->fetchKeypair(true);
         $this->assertNotNull($keypair);
         $this->assertNotEmpty($keypair->getPublicKey());
         $this->assertNotEmpty($keypair->getPrivateKey());

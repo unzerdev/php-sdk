@@ -3,7 +3,7 @@
 /**
  * This is a wrapper for the default http adapter (CURL).
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link http://dev.heidelpay.com/
+ * @link https://dev.unzer.com/
  *
- * @author Simon Gabriel <development@heidelpay.com>
+ * @author Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Adapter
+ * @package  UnzerSDK\Adapter
  */
-namespace heidelpayPHP\Adapter;
+namespace UnzerSDK\Adapter;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Services\EnvironmentService;
+use UnzerSDK\Unzer;
+use UnzerSDK\Services\EnvironmentService;
 use function extension_loaded;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
+use UnzerSDK\Exceptions\UnzerApiException;
 use RuntimeException;
 use function in_array;
 
@@ -94,7 +94,7 @@ class CurlAdapter implements HttpAdapterInterface
                 $errorMessage = $error . ' (curl_errno: '. $errorNo . ').';
                 break;
         }
-        throw new HeidelpayApiException($errorMessage);
+        throw new UnzerApiException($errorMessage);
     }
 
     /**
@@ -130,7 +130,7 @@ class CurlAdapter implements HttpAdapterInterface
      */
     public function setUserAgent($userAgent): void
     {
-        $this->setOption(CURLOPT_USERAGENT, Heidelpay::SDK_TYPE);
+        $this->setOption(CURLOPT_USERAGENT, Unzer::SDK_TYPE);
     }
 
     /**

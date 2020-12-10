@@ -5,7 +5,7 @@
  * This class defines a dummy implementing traits without customer dependency and with implementing the parent
  * interface.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,44 +19,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Interfaces\HeidelpayParentInterface;
-use heidelpayPHP\Traits\CanAuthorize;
-use heidelpayPHP\Traits\CanDirectCharge;
-use heidelpayPHP\Traits\CanPayout;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Unzer;
+use UnzerSDK\Interfaces\UnzerParentInterface;
+use UnzerSDK\Traits\CanAuthorize;
+use UnzerSDK\Traits\CanDirectCharge;
+use UnzerSDK\Traits\CanPayout;
 
-class TraitDummyWithoutCustomerWithParentIF implements HeidelpayParentInterface
+class TraitDummyWithoutCustomerWithParentIF implements UnzerParentInterface
 {
     use CanAuthorize;
     use CanDirectCharge;
     use CanPayout;
 
     /**
-     * Returns the heidelpay root object.
+     * Returns the Unzer root object.
      *
-     * @return Heidelpay
+     * @return Unzer
      */
-    public function getHeidelpayObject(): Heidelpay
+    public function getUnzerObject(): Unzer
     {
-        return new Heidelpay('s-priv-123');
+        return new Unzer('s-priv-123');
     }
 
     /**
      * Returns the url string for this resource.
      *
-     * @param bool $appendId
+     * @param bool   $appendId
+     * @param string $httpMethod
      *
      * @return string
      */
-    public function getUri($appendId = true): string
+    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'test/uri/';
     }

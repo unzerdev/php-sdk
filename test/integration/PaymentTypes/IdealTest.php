@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify interface and functionality of the payment method Ideal.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Ideal;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class IdealTest extends BaseIntegrationTest
 {
@@ -43,7 +43,7 @@ class IdealTest extends BaseIntegrationTest
     public function idealShouldBeCreatable(): Ideal
     {
         /** @var Ideal $ideal */
-        $ideal = $this->heidelpay->createPaymentType((new Ideal())->setBic('RABONL2U'));
+        $ideal = $this->unzer->createPaymentType((new Ideal())->setBic('RABONL2U'));
         $this->assertInstanceOf(Ideal::class, $ideal);
         $this->assertNotNull($ideal->getId());
 
@@ -60,10 +60,10 @@ class IdealTest extends BaseIntegrationTest
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(1.0, 'EUR', $ideal, self::RETURN_URL);
+        $this->unzer->authorize(1.0, 'EUR', $ideal, self::RETURN_URL);
     }
 
     /**
@@ -81,7 +81,7 @@ class IdealTest extends BaseIntegrationTest
         $this->assertNotNull($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
 
-        $fetchCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
+        $fetchCharge = $this->unzer->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertEquals($charge->expose(), $fetchCharge->expose());
     }
 
@@ -95,7 +95,7 @@ class IdealTest extends BaseIntegrationTest
      */
     public function idealTypeCanBeFetched(Ideal $ideal): void
     {
-        $fetchedIdeal = $this->heidelpay->fetchPaymentType($ideal->getId());
+        $fetchedIdeal = $this->unzer->fetchPaymentType($ideal->getId());
         $this->assertInstanceOf(Ideal::class, $fetchedIdeal);
         $this->assertEquals($ideal->getId(), $fetchedIdeal->getId());
     }

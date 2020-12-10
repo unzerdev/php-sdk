@@ -2,7 +2,7 @@
 /**
  * This file provides a list of the example implementations.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
-use heidelpayPHP\Validators\PrivateKeyValidator;
-use heidelpayPHP\Validators\PublicKeyValidator;
+use UnzerSDK\Validators\PrivateKeyValidator;
+use UnzerSDK\Validators\PublicKeyValidator;
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
@@ -46,17 +46,15 @@ function printMessage($type, $title, $text)
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>
-            Heidelpay UI Examples
-        </title>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <title>Unzer UI Examples</title>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+                integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
 
-        <link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
-        <script type="text/javascript" src="https://static.heidelpay.com/v1/heidelpay.js"></script>
+        <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
+        <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
     </head>
 
     <body style="margin: 70px 70px 0;">
@@ -72,14 +70,14 @@ function printMessage($type, $title, $text)
             <?php
                 // Show info message if the key pair is invalid
                 if (
-                    !PrivateKeyValidator::validate(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY) ||
-                    !PublicKeyValidator::validate(HEIDELPAY_PHP_PAYMENT_API_PUBLIC_KEY)
+                    !PrivateKeyValidator::validate(UNZER_PAPI_PRIVATE_KEY) ||
+                    !PublicKeyValidator::validate(UNZER_PAPI_PUBLIC_KEY)
                 ) {
                     printMessage(
                         'yellow',
                         'Attention: You need to provide a valid key pair!',
                         "The key pair provided in file _enableExamples.php does not seem to be valid.\n".
-                        'Please contact our support to get a test key pair <a href="mailto:support@heidelpay.com">support@heidelpay.com</a>'
+                        'Please contact our support to get a test key pair <a href="mailto:support@unzer.com">support@unzer.com</a>'
                     );
                 }
             ?>
@@ -206,28 +204,10 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Invoice guaranteed
-                        </div>
-                        <div class="description">
-                            This example adds the necessary customer data within the checkout form.
-                            Please refer to the example of <i>Invoice Factoring</i> if you don't want to add the customer via payment form.
+                            Unzer Invoice
                         </div>
                     </div>
-                    <div id="tryInvoiceGuaranteedExample" class="ui bottom attached green button" onclick="location.href='InvoiceGuaranteed/';">
-                        Try
-                    </div>
-                </div>
-                <div class="card olive">
-                    <div class="content">
-                        <div class="header">
-                            Invoice Factoring
-                        </div>
-                        <div class="description">
-                            This example adds the necessary customer data within the php controller.
-                            Please refer to the example of <i>Invoice guaranteed</i> if you want to add the customer data withing the payment form.
-                        </div>
-                    </div>
-                    <div id="tryInvoiceFactoringExample" class="ui bottom attached green button" onclick="location.href='InvoiceFactoring/';">
+                    <div id="tryInvoiceSecuredExample" class="ui bottom attached green button" onclick="location.href='InvoiceSecured/';">
                         Try
                     </div>
                 </div>
@@ -250,7 +230,7 @@ function printMessage($type, $title, $text)
                             PayPal Recurring
                         </div>
                         <div class="description">
-                            You can set a Pay Pal type to recurring in order to register it and charge later as well as implement recurring payments.
+                            You can set a PayPal type to recurring in order to register it and charge later as well as implement recurring payments.
                         </div>
                     </div>
                     <div id="tryPayPalRecurringExample" class="ui bottom attached green button" onclick="location.href='PayPalRecurring/';">
@@ -272,36 +252,36 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            SEPA direct debit guaranteed
+                            Unzer Direct Debit
                         </div>
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryDirectDebitGuaranteedExample" class="ui bottom attached green button" onclick="location.href='SepaDirectDebitGuaranteed/';">
+                    <div id="tryDirectDebitSecuredExample" class="ui bottom attached green button" onclick="location.href='SepaDirectDebitSecured/';">
                         Try
                     </div>
                 </div>
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            FlexiPay Rate Direct Debit (Hire Purchase)
+                            Unzer Installment (secured)
                         </div>
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryHirePurchaseDirectDebitExample" class="ui bottom attached green button" onclick="location.href='HirePurchaseDirectDebit/';">
+                    <div id="tryInstallmentSecuredExample" class="ui bottom attached green button" onclick="location.href='InstallmentSecured/';">
                         Try
                     </div>
                 </div>
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            FlexiPay Direct (PIS)
+                            Unzer Bank Transfer (PIS)
                         </div>
                         <div class="description">
                         </div>
                     </div>
-                    <div id="tryFlexiPayDirectExample" class="ui bottom attached green button" onclick="location.href='FlexiPayDirect/';">
+                    <div id="tryUnzerBankTransferExample" class="ui bottom attached green button" onclick="location.href='BankTransfer/';">
                         Try
                     </div>
                 </div>
@@ -312,11 +292,11 @@ function printMessage($type, $title, $text)
                         </div>
                         <div class="description">
                             This example shows how to use the Payment Page hosted externally.
-                            The customer will be redirected to a Payment Page on a heidelpay
+                            The customer will be redirected to a Payment Page on a Unzer
                             server and redirected to a given RedirectUrl.
                         </div>
                     </div>
-                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/docs/payment-pages/';">
                         Documentation
                     </div>
                     <div id="tryHostedPayPageExample" class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
@@ -333,7 +313,7 @@ function printMessage($type, $title, $text)
                             The Payment Page will be shown as an Overlay in your own shop.
                         </div>
                     </div>
-                    <div class="ui attached white button" onclick="location.href='https://docs.heidelpay.com/docs/payment-page/';">
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/docs/payment-pages/';">
                         Documentation
                     </div>
                     <div id="tryEmbeddedPayPageExample" class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">

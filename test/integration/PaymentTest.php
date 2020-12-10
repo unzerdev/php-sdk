@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the Payment resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PaymentTest extends BaseIntegrationTest
 {
@@ -45,7 +45,7 @@ class PaymentTest extends BaseIntegrationTest
     public function paymentShouldBeFetchableById(): void
     {
         $authorize = $this->createPaypalAuthorization();
-        $payment = $this->heidelpay->fetchPayment($authorize->getPayment()->getId());
+        $payment = $this->unzer->fetchPayment($authorize->getPayment()->getId());
         $this->assertNotEmpty($payment->getId());
         $this->assertInstanceOf(Authorization::class, $payment->getAuthorization());
         $this->assertNotEmpty($payment->getAuthorization()->getId());
@@ -94,7 +94,7 @@ class PaymentTest extends BaseIntegrationTest
         $this->assertNotNull($payment->getAuthorization()->getId());
 
         $charge = $payment->charge();
-        $fetchedPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
+        $fetchedPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
         $this->assertNotNull($fetchedPayment->getCharges());
         $this->assertCount(1, $fetchedPayment->getCharges());
 
@@ -104,9 +104,7 @@ class PaymentTest extends BaseIntegrationTest
         $this->assertEquals($charge->getId(), $fetchedCharge->getId());
         $this->assertEquals($charge->getReturnUrl(), $fetchedCharge->getReturnUrl());
 
-        $exposedCharge = $fetchedCharge->expose();
-        unset($exposedCharge['card3ds']);
-        $this->assertEquals($charge->expose(), $exposedCharge);
+        $this->assertEquals($charge->expose(), $fetchedCharge->expose());
     }
 
     /**
@@ -117,7 +115,7 @@ class PaymentTest extends BaseIntegrationTest
     public function partialChargeAfterAuthorization(): void
     {
         $authorization = $this->createCardAuthorization();
-        $fetchedPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $fetchedPayment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
         $charge = $fetchedPayment->charge(10.0);
         $this->assertNotNull($charge);
         $this->assertEquals('s-chg-1', $charge->getId());
@@ -129,53 +127,53 @@ class PaymentTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function authorizationShouldBePossibleOnHeidelpayObject(): void
+    public function authorizationShouldBePossibleOnUnzerObject(): void
     {
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
-        $authorize = $this->heidelpay->authorize(100.0, 'EUR', $paypal, self::RETURN_URL);
+        $paypal = $this->unzer->createPaymentType(new Paypal());
+        $authorize = $this->unzer->authorize(100.0, 'EUR', $paypal, self::RETURN_URL);
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
     }
 
     /**
-     * Verify heidelpay payment charge is possible using a paymentId.
+     * Verify Unzer payment charge is possible using a paymentId.
      *
      * @test
      */
     public function paymentChargeOnAuthorizeShouldBePossibleUsingPaymentId(): void
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
-        $charge = $this->heidelpay->chargePayment($authorization->getPaymentId());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
+        $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://unzer.com', null, null, null, null, false);
+        $charge = $this->unzer->chargePayment($authorization->getPaymentId());
 
         $this->assertNotEmpty($charge->getId());
     }
 
     /**
-     * Verify heidelpay payment charge is possible using a paymentId and optional ids.
+     * Verify Unzer payment charge is possible using a paymentId and optional ids.
      *
      * @test
      */
     public function paymentChargeOnAuthorizeShouldTakeResourceIds(): void
     {
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
-        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $card, 'http://heidelpay.com', null, null, null, null, false);
-        $charge = $this->heidelpay->chargePayment($authorization->getPaymentId(), null, 'EUR', 'o' . self::generateRandomId(), 'i' . self::generateRandomId());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
+        $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://unzer.com', null, null, null, null, false);
+        $charge = $this->unzer->chargePayment($authorization->getPaymentId(), null, 'EUR', 'o' . self::generateRandomId(), 'i' . self::generateRandomId());
 
         $this->assertNotEmpty($charge->getId());
     }
 
     /**
-     * Verify heidelpay payment charge throws an error if the id does not belong to a payment.
+     * Verify Unzer payment charge throws an error if the id does not belong to a payment.
      *
      * @test
      */
     public function chargePaymentShouldThrowErrorOnNonPaymentId(): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
-        $this->heidelpay->chargePayment('s-crd-xlj0qhdiw40k');
+        $this->unzer->chargePayment('s-crd-xlj0qhdiw40k');
     }
 
     /**
@@ -186,10 +184,10 @@ class PaymentTest extends BaseIntegrationTest
     public function paymentShouldBeFetchedByOrderIdIfIdIsNotSet(): void
     {
         $orderId = str_replace(' ', '', microtime());
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
-        $authorization = $this->heidelpay->authorize(100.00, 'EUR', $paypal, 'http://heidelpay.com', null, $orderId, null, null, false);
+        $paypal = $this->unzer->createPaymentType(new Paypal());
+        $authorization = $this->unzer->authorize(100.00, 'EUR', $paypal, 'https://unzer.com', null, $orderId, null, null, false);
         $payment = $authorization->getPayment();
-        $fetchedPayment = $this->heidelpay->fetchPaymentByOrderId($orderId);
+        $fetchedPayment = $this->unzer->fetchPaymentByOrderId($orderId);
 
         $this->assertNotSame($payment, $fetchedPayment);
         $this->assertEquals($payment->expose(), $fetchedPayment->expose());
@@ -205,15 +203,15 @@ class PaymentTest extends BaseIntegrationTest
         $orderId = 'o' . self::generateRandomId();
 
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $card->charge(1023, 'EUR', self::RETURN_URL, null, $orderId);
 
         try {
             /** @var Card $card2 */
-            $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
+            $card2 = $this->unzer->createPaymentType($this->createCardObject());
             $card2->charge(1023, 'EUR', self::RETURN_URL, null, $orderId);
             $this->assertTrue(true);
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
         }
     }
@@ -228,15 +226,15 @@ class PaymentTest extends BaseIntegrationTest
         $invoiceId = 'i' . self::generateRandomId();
 
         /** @var Card $card */
-        $card = $this->heidelpay->createPaymentType($this->createCardObject());
+        $card = $this->unzer->createPaymentType($this->createCardObject());
         $card->charge(1023, 'EUR', self::RETURN_URL, null, null, null, null, null, $invoiceId);
 
         try {
             /** @var Card $card2 */
-            $card2 = $this->heidelpay->createPaymentType($this->createCardObject());
+            $card2 = $this->unzer->createPaymentType($this->createCardObject());
             $card2->charge(1023, 'EUR', self::RETURN_URL, null, null, null, null, null, $invoiceId);
             $this->assertTrue(true);
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
         }
     }

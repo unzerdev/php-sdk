@@ -2,7 +2,7 @@
 /**
  * This defines a base class for all payment types e.g. Card, GiroPay, etc.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\PaymentTypes
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace heidelpayPHP\Resources\PaymentTypes;
+namespace UnzerSDK\Resources\PaymentTypes;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-abstract class BasePaymentType extends AbstractHeidelpayResource
+abstract class BasePaymentType extends AbstractUnzerResource
 {
     /**
      * Return true for invoice types.
@@ -47,9 +48,14 @@ abstract class BasePaymentType extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
-        return 'types/' . parent::getResourcePath();
+        $path = 'types';
+        if ($httpMethod !== HttpAdapterInterface::REQUEST_GET || $this->id === null) {
+            $path .= '/' . parent::getResourcePath($httpMethod);
+        }
+
+        return $path;
     }
 
     /**

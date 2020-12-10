@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the AbstractTransactionType.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
+namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
 use DateTime;
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\TransactionTypes\AbstractTransactionType;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 
@@ -184,7 +184,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
     }
 
     /**
-     * Verify payment object is fetched on fetchPayment call using the heidelpays resource service object.
+     * Verify payment object is fetched on fetchPayment call using the Unzer resource service object.
      *
      * @test
      */
@@ -197,8 +197,8 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payment);
 
-        $heidelpayObj = (new Heidelpay('s-priv-123'))->setResourceService($resourceServiceMock);
-        $payment->setParentResource($heidelpayObj);
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
 
         $transactionType = (new DummyTransactionType())->setPayment($payment);
         $transactionType->fetchPayment();

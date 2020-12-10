@@ -2,7 +2,7 @@
 /**
  * This is the controller performing the fetch all command for the Webhook tests.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\examples
+ * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -30,9 +30,9 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
-use heidelpayPHP\examples\ExampleDebugHandler;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
+use UnzerSDK\examples\ExampleDebugHandler;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Unzer;
 
 function printMessage($type, $title, $text)
 {
@@ -58,11 +58,9 @@ function printInfo($title, $text)
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>
-        Heidelpay UI Examples
-    </title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <title>Unzer UI Examples</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
@@ -79,16 +77,16 @@ function printInfo($title, $text)
 
     <?php
         try {
-            $heidelpay = new Heidelpay(HEIDELPAY_PHP_PAYMENT_API_PRIVATE_KEY);
-            $heidelpay->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+            $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+            $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-            $webhooks = $heidelpay->fetchAllWebhooks();
-        } catch (HeidelpayApiException $e) {
+            $webhooks = $unzer->fetchAllWebhooks();
+        } catch (UnzerApiException $e) {
             printError($e->getMessage());
-            $heidelpay->debugLog('Error: ' . $e->getMessage());
+            $unzer->debugLog('Error: ' . $e->getMessage());
         } catch (RuntimeException $e) {
             printError($e->getMessage());
-            $heidelpay->debugLog('Error: ' . $e->getMessage());
+            $unzer->debugLog('Error: ' . $e->getMessage());
         }
 
         printInfo('Back to the payment selection', 'Now Perform payments <a href="..">>> HERE <<</a> to trigger events!');

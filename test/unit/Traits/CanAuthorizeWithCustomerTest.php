@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the CanAuthorizeWithCustomer trait.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\Metadata;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 
 class CanAuthorizeWithCustomerTest extends BasePaymentTest
 {
     /**
-     * Verify authorize method throws exception if the class does not implement the HeidelpayParentInterface.
+     * Verify authorize method throws exception if the class does not implement the UnzerParentInterface.
      *
      * @test
      */
@@ -51,20 +51,20 @@ class CanAuthorizeWithCustomerTest extends BasePaymentTest
     }
 
     /**
-     * Verify authorize method propagates authorize method to heidelpay object.
+     * Verify authorize method propagates authorize method to Unzer object.
      *
      * @test
      */
-    public function authorizeShouldPropagateAuthorizeToHeidelpay(): void
+    public function authorizeShouldPropagateAuthorizeToUnzer(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
-        $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getHeidelpayObject'])->getMock();
+        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
+        $dummyMock     = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $authorize = new Authorization();
         $customer  = (new Customer())->setId('123');
         $metadata  = new Metadata();
-        $dummyMock->expects($this->exactly(3))->method('getHeidelpayObject')->willReturn($heidelpayMock);
-        $heidelpayMock->expects($this->exactly(3))->method('authorize')
+        $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($unzerMock);
+        $unzerMock->expects($this->exactly(3))->method('authorize')
             ->withConsecutive(
                 [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
                 [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId'],

@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the payment method Wechatpay.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Wechatpay;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Wechatpay;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class WechatpayTest extends BaseIntegrationTest
 {
@@ -41,12 +41,12 @@ class WechatpayTest extends BaseIntegrationTest
      */
     public function wechatpayShouldBeCreatableAndFetchable(): void
     {
-        $wechatpay = $this->heidelpay->createPaymentType(new Wechatpay());
+        $wechatpay = $this->unzer->createPaymentType(new Wechatpay());
         $this->assertInstanceOf(Wechatpay::class, $wechatpay);
         $this->assertNotNull($wechatpay->getId());
 
         /** @var Wechatpay $fetchedWechatpay */
-        $fetchedWechatpay = $this->heidelpay->fetchPaymentType($wechatpay->getId());
+        $fetchedWechatpay = $this->unzer->fetchPaymentType($wechatpay->getId());
         $this->assertInstanceOf(Wechatpay::class, $fetchedWechatpay);
         $this->assertEquals($wechatpay->expose(), $fetchedWechatpay->expose());
     }
@@ -59,7 +59,7 @@ class WechatpayTest extends BaseIntegrationTest
     public function wechatpayShouldBeAbleToCharge(): void
     {
         /** @var Wechatpay $wechatpay */
-        $wechatpay = $this->heidelpay->createPaymentType(new Wechatpay());
+        $wechatpay = $this->unzer->createPaymentType(new Wechatpay());
         $charge = $wechatpay->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
@@ -73,10 +73,10 @@ class WechatpayTest extends BaseIntegrationTest
      */
     public function wechatpayShouldNotBeAuthorizable(): void
     {
-        $wechatpay = $this->heidelpay->createPaymentType(new Wechatpay());
-        $this->expectException(HeidelpayApiException::class);
+        $wechatpay = $this->unzer->createPaymentType(new Wechatpay());
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'EUR', $wechatpay, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $wechatpay, self::RETURN_URL);
     }
 }

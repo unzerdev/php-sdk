@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the Authorization transaction type.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\TransactionTypes;
+namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\CustomerFactory;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\PaymentTypes\Sofort;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 use stdClass;
@@ -132,11 +132,11 @@ class ChargeTest extends BasePaymentTest
      */
     public function getLinkedResourceShouldReturnResourcesBelongingToCharge(): void
     {
-        $heidelpayObj    = new Heidelpay('s-priv-123345');
+        $unzerObj    = new Unzer('s-priv-123345');
         $paymentType     = (new Sofort())->setId('123');
         $customer        = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment         = new Payment();
-        $payment->setParentResource($heidelpayObj)->setPaymentType($paymentType)->setCustomer($customer);
+        $payment->setParentResource($unzerObj)->setPaymentType($paymentType)->setCustomer($customer);
 
         $charge          = (new Charge())->setPayment($payment);
         $linkedResources = $charge->getLinkedResources();
@@ -148,26 +148,26 @@ class ChargeTest extends BasePaymentTest
     }
 
     /**
-     * Verify cancel() calls cancelCharge() on heidelpay object with the given amount.
+     * Verify cancel() calls cancelCharge() on Unzer object with the given amount.
      *
      * @test
      */
-    public function cancelShouldCallCancelChargeOnHeidelpayObject(): void
+    public function cancelShouldCallCancelChargeOnUnzerObject(): void
     {
         $charge =  new Charge();
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)
+        $unzerMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
             ->setMethods(['cancelCharge'])
             ->getMock();
-        $heidelpayMock->expects($this->exactly(2))
+        $unzerMock->expects($this->exactly(2))
             ->method('cancelCharge')->willReturn(new Cancellation())
             ->withConsecutive(
                 [$this->identicalTo($charge), $this->isNull()],
                 [$this->identicalTo($charge), 321.9]
             );
 
-        /** @var Heidelpay $heidelpayMock */
-        $charge->setParentResource($heidelpayMock);
+        /** @var Unzer $unzerMock */
+        $charge->setParentResource($unzerMock);
         $charge->cancel();
         $charge->cancel(321.9);
     }

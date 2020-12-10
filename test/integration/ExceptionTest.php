@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the Customer resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,37 +19,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\PaymentTypes\Giropay;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class ExceptionTest extends BaseIntegrationTest
 {
     /**
-     * Verify that the HeidelpayApiException holds a special message for for the client.
+     * Verify that the UnzerApiException holds a special message for for the client.
      * Verify that there are different messages for different languages.
      *
      * @test
      */
     public function apiExceptionShouldHoldClientMessage(): void
     {
-        $giropay             = $this->heidelpay->createPaymentType(new Giropay());
+        $giropay             = $this->unzer->createPaymentType(new Giropay());
         $firstClientMessage  = '';
         $secondClientMessage = '';
 
         try {
-            $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
-        } catch (HeidelpayApiException $e) {
-            $this->assertInstanceOf(HeidelpayApiException::class, $e);
+            $this->unzer->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+        } catch (UnzerApiException $e) {
+            $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
             $this->assertNotNull($e->getErrorId());
             $firstClientMessage = $e->getClientMessage();
@@ -58,10 +58,10 @@ class ExceptionTest extends BaseIntegrationTest
         }
 
         try {
-            $this->heidelpay->setLocale('de-DE');
-            $this->heidelpay->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
-        } catch (HeidelpayApiException $e) {
-            $this->assertInstanceOf(HeidelpayApiException::class, $e);
+            $this->unzer->setLocale('de-DE');
+            $this->unzer->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+        } catch (UnzerApiException $e) {
+            $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
             $this->assertNotNull($e->getErrorId());
             $secondClientMessage = $e->getClientMessage();

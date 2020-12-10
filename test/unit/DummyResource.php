@@ -4,7 +4,7 @@
 /**
  * This class defines a dummy resource used for unit tests.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit;
+namespace UnzerSDK\test\unit;
 
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Resources\AbstractUnzerResource;
 
-class DummyResource extends AbstractHeidelpayResource
+class DummyResource extends AbstractUnzerResource
 {
     /** @var float $testFloat */
     protected $testFloat = 0.0;
@@ -62,7 +63,7 @@ class DummyResource extends AbstractHeidelpayResource
         return '{"dummyResource": "JsonSerialized"}';
     }
 
-    public function getUri($appendId = true): string
+    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return '/my/uri' . ($appendId ? '/123' : '');
     }

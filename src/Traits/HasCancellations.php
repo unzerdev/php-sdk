@@ -2,7 +2,7 @@
 /**
  * This trait adds the cancellation property to a class.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Traits
+ * @package  UnzerSDK\Traits
  */
-namespace heidelpayPHP\Traits;
+namespace UnzerSDK\Traits;
 
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Interfaces\HeidelpayParentInterface;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Interfaces\UnzerParentInterface;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use RuntimeException;
 
 trait HasCancellations
@@ -63,7 +63,7 @@ trait HasCancellations
      */
     public function addCancellation(Cancellation $cancellation): self
     {
-        if ($this instanceof HeidelpayParentInterface) {
+        if ($this instanceof UnzerParentInterface) {
             $cancellation->setParentResource($this);
         }
         $this->cancellations[] = $cancellation;
@@ -76,18 +76,18 @@ trait HasCancellations
      * @param string  $cancellationId The id of the cancellation object
      * @param boolean $lazy
      *
-     * @throws HeidelpayApiException A HeidelpayApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException      A RuntimeException is thrown when there is an error while using the SDK.
-     *
      * @return Cancellation|null The cancellation or null if none could be found.
+     *
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      */
     public function getCancellation($cancellationId, $lazy = false): ?Cancellation
     {
         /** @var Cancellation $cancellation */
         foreach ($this->cancellations as $cancellation) {
             if ($cancellation->getId() === $cancellationId) {
-                if (!$lazy && $this instanceof HeidelpayParentInterface) {
-                    /** @var AbstractHeidelpayResource $this*/
+                if (!$lazy && $this instanceof UnzerParentInterface) {
+                    /** @var AbstractUnzerResource $this*/
                     $this->getResource($cancellation);
                 }
                 return $cancellation;

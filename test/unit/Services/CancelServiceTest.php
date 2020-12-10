@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify cancel functionality of the CancelService.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,153 +18,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Services;
+namespace UnzerSDK\test\unit\Services;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\EmbeddedResources\Amount;
-use heidelpayPHP\Resources\Payment;
-use heidelpayPHP\Resources\TransactionTypes\Authorization;
-use heidelpayPHP\Resources\TransactionTypes\Cancellation;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\Services\CancelService;
-use heidelpayPHP\Services\ResourceService;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\Amount;
+use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Services\CancelService;
+use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 use PHPUnit\Framework\MockObject\MockObject;
-use RuntimeException;
 
 class CancelServiceTest extends BasePaymentTest
 {
-    //<editor-fold desc="Deprecated since 1.2.3.0">
-
-    /**
-     * Verify payment:cancel calls cancelAllCharges and cancelAuthorizationAmount and returns first charge cancellation
-     * object.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.3.0
-     */
-    public function cancelShouldCallCancelAllChargesAndCancelAuthorizationAndReturnFirstChargeCancellationObject(): void
-    {
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['cancelAmount'])->getMock();
-        $cancellation = new Cancellation(1.0);
-        $paymentMock->expects($this->once())->method('cancelAmount')->willReturn([$cancellation]);
-
-        /** @var Payment $paymentMock */
-        $this->assertSame($cancellation, $paymentMock->cancel());
-    }
-
-    /**
-     * Verify payment:cancel throws Exception if no cancellation and no auth existed to be cancelled.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.3.0
-     */
-    public function cancelShouldThrowExceptionIfNoTransactionExistsToBeCancelled(): void
-    {
-        /** @var CancelService|MockObject $cancelSrvMock */
-        $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods(['cancelAllCharges', 'cancelAuthorization'])->getMock();
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('This Payment could not be cancelled.');
-
-        $heidelpay = new Heidelpay('s-priv-1234');
-        $heidelpay->setCancelService($cancelSrvMock);
-        $payment = (new Payment())->setParentResource($heidelpay);
-
-        $payment->cancel();
-    }
-
-    /**
-     * Verify cancel all charges will call cancel on each existing charge of the payment and will return a list of
-     * cancels and exceptions.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.3.0
-     */
-    public function cancelAllChargesShouldCallCancelOnAllChargesAndReturnCancelsAndExceptions(): void
-    {
-        $cancellation1 = new Cancellation(1.0);
-        $cancellation2 = new Cancellation(2.0);
-        $cancellation3 = new Cancellation(3.0);
-        $exception1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK);
-        $exception2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK);
-
-        $chargeMock1 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock1->expects($this->once())->method('cancel')->willReturn($cancellation1);
-
-        $chargeMock2 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock2->expects($this->once())->method('cancel')->willThrowException($exception1);
-
-        $chargeMock3 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock3->expects($this->once())->method('cancel')->willReturn($cancellation2);
-
-        $chargeMock4 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock4->expects($this->once())->method('cancel')->willThrowException($exception2);
-
-        $chargeMock5 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock5->expects($this->once())->method('cancel')->willReturn($cancellation3);
-
-        /**
-         * @var Charge $chargeMock1
-         * @var Charge $chargeMock2
-         * @var Charge $chargeMock3
-         * @var Charge $chargeMock4
-         * @var Charge $chargeMock5
-         */
-        $payment = new Payment();
-        $payment->addCharge($chargeMock1)->addCharge($chargeMock2)->addCharge($chargeMock3)->addCharge($chargeMock4)->addCharge($chargeMock5);
-
-        [$cancellations, $exceptions] = $payment->cancelAllCharges();
-        $this->assertEquals([$cancellation1, $cancellation2, $cancellation3], $cancellations);
-        $this->assertEquals([$exception1, $exception2], $exceptions);
-    }
-
-    /**
-     * Verify cancelAllCharges will throw any exception with Code different to
-     * ApiResponseCodes::API_ERROR_CHARGE_ALREADY_CANCELED.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.3.0
-     */
-    public function cancelAllChargesShouldThrowChargeCancelExceptionsOtherThanAlreadyCharged(): void
-    {
-        $ex1 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_ALREADY_CHARGED_BACK);
-        $ex2 = new HeidelpayApiException('', '', ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
-
-        $chargeMock1 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock1->expects($this->once())->method('cancel')->willThrowException($ex1);
-
-        $chargeMock2 = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
-        $chargeMock2->expects($this->once())->method('cancel')->willThrowException($ex2);
-
-        /**
-         * @var Charge $chargeMock1
-         * @var Charge $chargeMock2
-         */
-        $payment = (new Payment())->addCharge($chargeMock1)->addCharge($chargeMock2);
-
-        try {
-            $payment->cancelAllCharges();
-            $this->assertFalse(true, 'The expected exception has not been thrown.');
-        } catch (HeidelpayApiException $e) {
-            $this->assertSame($ex2, $e);
-        }
-    }
-
-    //</editor-fold>
-
     /**
      * Verify cancelAmount will call cancelAuthorizationAmount with the amountToCancel.
      * When cancelAmount is <= the value of the cancellation it Will return auth cancellation only.
@@ -176,12 +51,12 @@ class CancelServiceTest extends BasePaymentTest
     {
         /** @var MockObject|CancelService $cancelSrvMock */
         $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods(['cancelPaymentAuthorization'])->getMock();
-        $this->heidelpay->setCancelService($cancelSrvMock);
+        $this->unzer->setCancelService($cancelSrvMock);
 
         /** @var MockObject|Charge $chargeMock */
         $chargeMock = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->getMock();
 
-        $payment = (new Payment($this->heidelpay))->setAuthorization(new Authorization(12.3));
+        $payment = (new Payment($this->unzer))->setAuthorization(new Authorization(12.3));
 
         $cancellation = new Cancellation(12.3);
         $cancelSrvMock->expects($this->exactly(2))->method('cancelPaymentAuthorization')->willReturn($cancellation);
@@ -200,7 +75,7 @@ class CancelServiceTest extends BasePaymentTest
     {
         /** @var MockObject|CancelService $cancelSrvMock */
         $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods(['cancelPaymentAuthorization'])->getMock();
-        $this->heidelpay->setCancelService($cancelSrvMock);
+        $this->unzer->setCancelService($cancelSrvMock);
 
         /** @var MockObject|Charge $chargeMock */
         $chargeMock = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->setConstructorArgs([10.0])->getMock();
@@ -211,7 +86,7 @@ class CancelServiceTest extends BasePaymentTest
         /** @noinspection PhpParamsInspection */
         $chargeMock->expects($this->once())->method('cancel')->with(10.0, 'CANCEL')->willReturn($cancellation);
 
-        $payment = (new Payment($this->heidelpay))->addCharge($chargeMock);
+        $payment = (new Payment($this->unzer))->addCharge($chargeMock);
 
         $this->assertEquals([$cancellation], $payment->cancelAmount(10.0));
     }
@@ -225,7 +100,7 @@ class CancelServiceTest extends BasePaymentTest
     {
         /** @var MockObject|CancelService $cancelSrvMock */
         $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods(['cancelPaymentAuthorization'])->getMock();
-        $this->heidelpay->setCancelService($cancelSrvMock);
+        $this->unzer->setCancelService($cancelSrvMock);
         /** @var MockObject|Charge $charge1Mock */
         $charge1Mock = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->setConstructorArgs([10.0])->getMock();
         /** @var MockObject|Charge $charge2Mock */
@@ -238,7 +113,7 @@ class CancelServiceTest extends BasePaymentTest
         $charge1Mock->expects($this->exactly(3))->method('cancel')->withConsecutive([10.0, 'CANCEL'], [null, 'CANCEL'], [null, 'CANCEL'])->willReturn($cancellation1);
         $charge2Mock->expects($this->exactly(2))->method('cancel')->withConsecutive([2.3, 'CANCEL'], [null, 'CANCEL'])->willReturn($cancellation2);
 
-        $payment = (new Payment($this->heidelpay))->setAuthorization(new Authorization(12.3));
+        $payment = (new Payment($this->unzer))->setAuthorization(new Authorization(12.3));
         $payment->addCharge($charge1Mock)->addCharge($charge2Mock);
 
         $this->assertEquals([$cancellation1], $payment->cancelAmount(10.0));
@@ -259,19 +134,19 @@ class CancelServiceTest extends BasePaymentTest
     {
         /** @var MockObject|CancelService $cancelSrvMock */
         $cancelSrvMock = $this->getMockBuilder(CancelService::class)->disableOriginalConstructor()->setMethods(['cancelPaymentAuthorization'])->getMock();
-        $this->heidelpay->setCancelService($cancelSrvMock);
+        $this->unzer->setCancelService($cancelSrvMock);
         /** @var MockObject|Charge $chargeMock */
         $chargeMock = $this->getMockBuilder(Charge::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
 
-        $allowedException = new HeidelpayApiException(null, null, $allowedExceptionCode);
+        $allowedException = new UnzerApiException(null, null, $allowedExceptionCode);
         $chargeMock->method('cancel')->willThrowException($allowedException);
 
-        $payment = (new Payment($this->heidelpay))->addCharge($chargeMock);
+        $payment = (new Payment($this->unzer))->addCharge($chargeMock);
 
         try {
             $this->assertEquals([], $payment->cancelAmount(12.3));
             $this->assertFalse($shouldHaveThrownException, 'Exception should have been thrown here!');
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue($shouldHaveThrownException, "Exception should not have been thrown here! ({$e->getCode()})");
         }
     }
@@ -291,7 +166,7 @@ class CancelServiceTest extends BasePaymentTest
         /** @var Payment|MockObject $paymentMock */
         $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getAuthorization'])->getMock();
         $paymentMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
-        $paymentMock->setParentResource($this->heidelpay)->setAuthorization($authorizationMock);
+        $paymentMock->setParentResource($this->unzer)->setAuthorization($authorizationMock);
 
         $this->assertEquals($cancellation, $paymentMock->cancelAuthorizationAmount());
     }
@@ -316,7 +191,7 @@ class CancelServiceTest extends BasePaymentTest
         $amountObj->handleResponse((object)['remaining' => 100.0]);
         $paymentMock->method('getAmount')->willReturn($amountObj);
         $paymentMock->expects($this->exactly(4))->method('getAuthorization')->willReturn($authorizationMock);
-        $paymentMock->setParentResource($this->heidelpay);
+        $paymentMock->setParentResource($this->unzer);
 
         $paymentMock->setAuthorization($authorizationMock);
         $this->assertEquals($cancellation, $paymentMock->cancelAuthorizationAmount());
@@ -342,16 +217,16 @@ class CancelServiceTest extends BasePaymentTest
         /** @var MockObject|Authorization $authMock */
         $authMock = $this->getMockBuilder(Authorization::class)->setMethods(['cancel'])->disableOriginalConstructor()->getMock();
 
-        $exception = new HeidelpayApiException(null, null, $exceptionCode);
+        $exception = new UnzerApiException(null, null, $exceptionCode);
         $authMock->method('cancel')->willThrowException($exception);
         $paymentMock->method('getAuthorization')->willReturn($authMock);
         $paymentMock->getAmount()->handleResponse((object)['remaining' => 100.0]);
-        $paymentMock->setParentResource($this->heidelpay);
+        $paymentMock->setParentResource($this->unzer);
 
         try {
             $this->assertEquals(null, $paymentMock->cancelAuthorizationAmount(12.3));
             $this->assertFalse($shouldHaveThrownException, 'Exception should have been thrown here!');
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertTrue($shouldHaveThrownException, "Exception should not have been thrown here! ({$e->getCode()})");
         }
     }
@@ -371,7 +246,7 @@ class CancelServiceTest extends BasePaymentTest
         $authMock->expects(self::never())->method('cancel');
         $paymentMock->getAmount()->handleResponse((object)['remaining' => 0.0]);
 
-        $paymentMock->setParentResource($this->heidelpay);
+        $paymentMock->setParentResource($this->unzer);
 
         $paymentMock->cancelAuthorizationAmount(12.3);
         $paymentMock->cancelAuthorizationAmount(0.0);
@@ -386,9 +261,9 @@ class CancelServiceTest extends BasePaymentTest
     {
         /** @var MockObject|ResourceService $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPayment'])->getMock();
-        $cancelService = $this->heidelpay->setResourceService($resourceServiceMock)->getCancelService();
+        $cancelService = $this->unzer->setResourceService($resourceServiceMock)->getCancelService();
 
-        $payment = (new Payment($this->heidelpay))->setId('paymentId');
+        $payment = (new Payment($this->unzer))->setId('paymentId');
 
         /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects(self::once())->method('fetchPayment')->with('paymentId')->willReturn($payment);

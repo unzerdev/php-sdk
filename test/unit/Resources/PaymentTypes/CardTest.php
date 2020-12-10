@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of Card payment type.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Resources\PaymentTypes;
+namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use heidelpayPHP\Resources\EmbeddedResources\CardDetails;
-use heidelpayPHP\Resources\PaymentTypes\Card;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Resources\EmbeddedResources\CardDetails;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 use stdClass;
 
@@ -179,41 +179,6 @@ class CardTest extends BasePaymentTest
         $this->assertEquals('Julia Heideich', $this->card->getCardHolder());
         $this->card->setCardHolder(self::TEST_HOLDER);
         $this->assertEquals(self::TEST_HOLDER, $this->card->getCardHolder());
-    }
-
-    /**
-     * Verify setting holder.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.7.2
-     */
-    public function verifyHolderCanBeSetAndChangedOld(): void
-    {
-        $this->assertEquals(null, $this->card->getHolder());
-        $this->card->setHolder('Julia Heideich');
-        $this->assertEquals('Julia Heideich', $this->card->getHolder());
-        $this->card->setHolder(self::TEST_HOLDER);
-        $this->assertEquals(self::TEST_HOLDER, $this->card->getHolder());
-    }
-
-    /**
-     * Verify setting holder.
-     *
-     * @test
-     *
-     * @deprecated since 1.2.7.2
-     */
-    public function verifyHolderSettersPropagate(): void
-    {
-        $cardMock = $this->getMockBuilder(Card::class)->disableOriginalConstructor()->setMethods(['setCardHolder', 'getCardHolder'])->getMock();
-        /** @noinspection PhpParamsInspection */
-        $cardMock->expects($this->once())->method('setCardHolder')->with('set my CardHolder');
-        $cardMock->expects($this->once())->method('getCardHolder')->willReturn('get my CardHolder');
-
-        /** @var Card $cardMock */
-        $cardMock->setHolder('set my CardHolder');
-        $this->assertSame('get my CardHolder', $cardMock->getHolder());
     }
 
     /**

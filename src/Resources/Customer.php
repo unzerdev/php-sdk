@@ -2,7 +2,7 @@
 /**
  * This represents the customer resource.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\Resources
+ * @package  UnzerSDK\Resources
  */
-namespace heidelpayPHP\Resources;
+namespace UnzerSDK\Resources;
 
-use heidelpayPHP\Adapter\HttpAdapterInterface;
-use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Resources\EmbeddedResources\Address;
-use heidelpayPHP\Resources\EmbeddedResources\CompanyInfo;
-use heidelpayPHP\Traits\HasGeoLocation;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
+use UnzerSDK\Traits\HasGeoLocation;
 use stdClass;
 use function in_array;
 
-class Customer extends AbstractHeidelpayResource
+class Customer extends AbstractUnzerResource
 {
     use HasGeoLocation;
 
@@ -74,19 +74,9 @@ class Customer extends AbstractHeidelpayResource
 
     /**
      * Customer constructor.
-     *
-     * @param string|null $firstname
-     * @param string|null $lastname
-     *
-     * @deprecated since Version 1.1.5.0
-     * @see CustomerFactory::createCustomer()
-     * @see CustomerFactory::createNotRegisteredB2bCustomer()
-     * @see CustomerFactory::createRegisteredB2bCustomer()
      */
-    public function __construct(string $firstname = null, string $lastname = null)
+    public function __construct()
     {
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
         $this->billingAddress = new Address();
         $this->shippingAddress = new Address();
     }
@@ -329,7 +319,7 @@ class Customer extends AbstractHeidelpayResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath(): string
+    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'customers';
     }

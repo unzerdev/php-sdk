@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify interface and functionality of the payment method prepayment.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\PaymentTypes
+ * @package  UnzerSDK\test\integration\PaymentTypes
  */
-namespace heidelpayPHP\test\integration\PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\AbstractHeidelpayResource;
-use heidelpayPHP\Resources\PaymentTypes\Prepayment;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\PaymentTypes\Prepayment;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class PrepaymentTest extends BaseIntegrationTest
 {
@@ -41,13 +41,13 @@ class PrepaymentTest extends BaseIntegrationTest
      * @return Prepayment
      * @test
      */
-    public function prepaymentShouldBeCreatableAndFetchable(): AbstractHeidelpayResource
+    public function prepaymentShouldBeCreatableAndFetchable(): AbstractUnzerResource
     {
-        $prepayment = $this->heidelpay->createPaymentType(new Prepayment());
+        $prepayment = $this->unzer->createPaymentType(new Prepayment());
         $this->assertInstanceOf(Prepayment::class, $prepayment);
         $this->assertNotEmpty($prepayment->getId());
 
-        $fetchedPrepayment = $this->heidelpay->fetchPaymentType($prepayment->getId());
+        $fetchedPrepayment = $this->unzer->fetchPaymentType($prepayment->getId());
         $this->assertInstanceOf(Prepayment::class, $fetchedPrepayment);
         $this->assertEquals($prepayment->expose(), $fetchedPrepayment->expose());
 
@@ -89,10 +89,10 @@ class PrepaymentTest extends BaseIntegrationTest
      */
     public function prepaymentTypeShouldNotBeAuthorizable(Prepayment $prepayment): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->heidelpay->authorize(100.0, 'EUR', $prepayment, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $prepayment, self::RETURN_URL);
     }
 
     /**
@@ -106,10 +106,10 @@ class PrepaymentTest extends BaseIntegrationTest
      */
     public function prepaymentTypeShouldNotBeShippable(Charge $charge): void
     {
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_SHIP_NOT_ALLOWED);
 
-        $this->heidelpay->ship($charge->getPayment());
+        $this->unzer->ship($charge->getPayment());
     }
 
     /**

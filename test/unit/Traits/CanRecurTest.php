@@ -4,7 +4,7 @@
 /**
  * This class defines unit tests to verify functionality of the CanRecur trait.
  *
- * Copyright (C) 2019 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\unit
+ * @package  UnzerSDK\test\unit
  */
-namespace heidelpayPHP\test\unit\Traits;
+namespace UnzerSDK\test\unit\Traits;
 
-use heidelpayPHP\Heidelpay;
-use heidelpayPHP\Resources\Recurring;
-use heidelpayPHP\test\BasePaymentTest;
+use UnzerSDK\Unzer;
+use UnzerSDK\Resources\Recurring;
+use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 use stdClass;
 
@@ -63,18 +63,18 @@ class CanRecurTest extends BasePaymentTest
     }
 
     /**
-     * Verify activation on object will call heidelpay.
+     * Verify activation on object will call Unzer.
      *
      * @test
      */
-    public function activateRecurringWillCallHeidelpayMethod(): void
+    public function activateRecurringWillCallUnzerMethod(): void
     {
-        $heidelpayMock = $this->getMockBuilder(Heidelpay::class)->disableOriginalConstructor()->setMethods(['activateRecurringPayment'])->getMock();
+        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['activateRecurringPayment'])->getMock();
 
-        /** @var Heidelpay $heidelpayMock */
-        $dummy = (new TraitDummyCanRecur())->setParentResource($heidelpayMock);
+        /** @var Unzer $unzerMock */
+        $dummy = (new TraitDummyCanRecur())->setParentResource($unzerMock);
         /** @noinspection PhpParamsInspection */
-        $heidelpayMock->expects(self::once())->method('activateRecurringPayment')->with($dummy, 'return url')->willReturn(new Recurring('', ''));
+        $unzerMock->expects(self::once())->method('activateRecurringPayment')->with($dummy, 'return url')->willReturn(new Recurring('', ''));
 
         $dummy->activateRecurring('return url');
     }

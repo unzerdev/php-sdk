@@ -5,7 +5,7 @@
  * This class defines integration tests to verify interface and
  * functionality of the Customer resource.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration
+ * @package  UnzerSDK\test\integration
  */
-namespace heidelpayPHP\test\integration;
+namespace UnzerSDK\test\integration;
 
-use heidelpayPHP\Constants\ApiResponseCodes;
-use heidelpayPHP\Constants\Salutations;
-use heidelpayPHP\Exceptions\HeidelpayApiException;
-use heidelpayPHP\Resources\Customer;
-use heidelpayPHP\Resources\PaymentTypes\Paypal;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\test\BaseIntegrationTest;
 use function microtime;
 
 class CustomerTest extends BaseIntegrationTest
@@ -50,14 +50,14 @@ class CustomerTest extends BaseIntegrationTest
     {
         $customer = $this->getMinimalCustomer();
         $this->assertEmpty($customer->getId());
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
         $geoLocation = $customer->getGeoLocation();
         $this->assertNull($geoLocation->getClientIp());
         $this->assertNull($geoLocation->getCountryCode());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $exposeArray     = $customer->expose();
         $exposeArray['salutation'] = Salutations::UNKNOWN;
         $this->assertEquals($exposeArray, $fetchedCustomer->expose());
@@ -80,10 +80,10 @@ class CustomerTest extends BaseIntegrationTest
     {
         $customer = $this->getMaximumCustomer();
         $this->assertEmpty($customer->getId());
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
 
         return $customer;
@@ -96,7 +96,7 @@ class CustomerTest extends BaseIntegrationTest
      */
     public function customerCanBeFetchedById(Customer $customer): void
     {
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
     }
 
@@ -108,9 +108,9 @@ class CustomerTest extends BaseIntegrationTest
     {
         $customerId = 'c' . self::generateRandomId();
         $customer = $this->getMaximumCustomer()->setCustomerId($customerId);
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomerByExtCustomerId($customer->getCustomerId());
+        $fetchedCustomer = $this->unzer->fetchCustomerByExtCustomerId($customer->getCustomerId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
     }
 
@@ -122,7 +122,7 @@ class CustomerTest extends BaseIntegrationTest
     public function customerCanBeFetchedByObject(Customer $customer): void
     {
         $customerToFetch = (new Customer())->setId($customer->getId());
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customerToFetch);
+        $fetchedCustomer = $this->unzer->fetchCustomer($customerToFetch);
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
     }
 
@@ -136,7 +136,7 @@ class CustomerTest extends BaseIntegrationTest
         $customerToFetch = $this->getMinimalCustomer()->setId($customer->getId());
         $this->assertNotEquals($customer->getFirstname(), $customerToFetch->getFirstname());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customerToFetch);
+        $fetchedCustomer = $this->unzer->fetchCustomer($customerToFetch);
         $this->assertEquals($customer->getFirstname(), $fetchedCustomer->getFirstname());
     }
 
@@ -151,10 +151,10 @@ class CustomerTest extends BaseIntegrationTest
         $customer   = $this->getMaximumCustomerInclShippingAddress()->setCustomerId($customerId);
 
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
-        $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $secPayment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
@@ -170,13 +170,13 @@ class CustomerTest extends BaseIntegrationTest
     public function transactionShouldReferenceCustomerIfItExist(): void
     {
         $customer = $this->getMaximumCustomer();
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
 
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
 
-        $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $secPayment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
@@ -192,13 +192,13 @@ class CustomerTest extends BaseIntegrationTest
     public function transactionShouldReferenceCustomerIfItExistAndItsIdHasBeenPassed(): void
     {
         $customer = $this->getMaximumCustomer();
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
 
         /** @var Paypal $paypal */
-        $paypal = $this->heidelpay->createPaymentType(new Paypal());
+        $paypal = $this->unzer->createPaymentType(new Paypal());
         $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer->getId());
 
-        $secPayment = $this->heidelpay->fetchPayment($authorization->getPayment()->getId());
+        $secPayment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
 
         /** @var Customer $secCustomer */
         $secCustomer = $secPayment->getCustomer();
@@ -218,10 +218,10 @@ class CustomerTest extends BaseIntegrationTest
     {
         $this->assertEquals('Peter', $customer->getFirstname());
         $customer->setFirstname('Not Peter');
-        $this->heidelpay->updateCustomer($customer);
+        $this->unzer->updateCustomer($customer);
         $this->assertEquals('Not Peter', $customer->getFirstname());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $this->assertEquals($customer->getId(), $fetchedCustomer->getId());
         $this->assertEquals('Not Peter', $fetchedCustomer->getFirstname());
     }
@@ -239,11 +239,11 @@ class CustomerTest extends BaseIntegrationTest
         $this->assertNotNull($customer);
         $this->assertNotNull($customer->getId());
 
-        $this->heidelpay->deleteCustomer($customer->getId());
+        $this->unzer->deleteCustomer($customer->getId());
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
-        $this->heidelpay->fetchCustomer($customer->getId());
+        $this->unzer->fetchCustomer($customer->getId());
     }
 
     /**
@@ -253,17 +253,17 @@ class CustomerTest extends BaseIntegrationTest
      */
     public function customerShouldBeDeletableByObject(): void
     {
-        $customer = $this->heidelpay->createCustomer($this->getMaximumCustomer());
+        $customer = $this->unzer->createCustomer($this->getMaximumCustomer());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $this->assertNotNull($customer);
         $this->assertNotNull($customer->getId());
 
-        $this->heidelpay->deleteCustomer($customer);
+        $this->unzer->deleteCustomer($customer);
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_DOES_NOT_EXIST);
-        $this->heidelpay->fetchCustomer($fetchedCustomer->getId());
+        $this->unzer->fetchCustomer($fetchedCustomer->getId());
     }
 
     /**
@@ -276,14 +276,14 @@ class CustomerTest extends BaseIntegrationTest
         $customerId = str_replace(' ', '', microtime());
 
         // create customer with api
-        $customer = $this->heidelpay->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+        $customer = $this->unzer->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
         $this->assertNotEmpty($customer->getCustomerId());
 
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CUSTOMER_ID_ALREADY_EXISTS);
 
         // create new customer with the same customerId
-        $this->heidelpay->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+        $this->unzer->createCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
     }
 
     /**
@@ -297,21 +297,21 @@ class CustomerTest extends BaseIntegrationTest
 
         try {
             // fetch non-existing customer by customerId
-            $this->heidelpay->fetchCustomerByExtCustomerId($customerId);
+            $this->unzer->fetchCustomerByExtCustomerId($customerId);
             $this->assertTrue(false, 'Exception should be thrown here.');
-        } catch (HeidelpayApiException $e) {
+        } catch (UnzerApiException $e) {
             $this->assertEquals(ApiResponseCodes::API_ERROR_CUSTOMER_CAN_NOT_BE_FOUND, $e->getCode());
             $this->assertNotNull($e->getErrorId());
         }
 
         // create customer with api
-        $customer = $this->heidelpay->createOrUpdateCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
+        $customer = $this->unzer->createOrUpdateCustomer($this->getMaximumCustomer()->setCustomerId($customerId));
         $this->assertNotEmpty($customer->getCustomerId());
         $this->assertEquals($customerId, $customer->getCustomerId());
         $this->assertEquals('Peter', $customer->getFirstname());
 
         $newCustomerData = $this->getMaximumCustomer()->setCustomerId($customerId)->setFirstname('Petra');
-        $this->heidelpay->createOrUpdateCustomer($newCustomerData);
+        $this->unzer->createOrUpdateCustomer($newCustomerData);
 
         $this->assertEquals('Petra', $newCustomerData->getFirstname());
         $this->assertEquals($customerId, $newCustomerData->getCustomerId());
@@ -329,14 +329,14 @@ class CustomerTest extends BaseIntegrationTest
         $customer   = $this->getMaximumCustomerInclShippingAddress()->setCustomerId($customerId);
         $longName   = 'firstfirstfirstfirstfirstfirstfirstfirst lastlastlastlastlastlastlastlastlastlast';
         $customer->getShippingAddress()->setName($longName);
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
         $this->assertEquals($longName, $customer->getShippingAddress()->getName());
 
         $veryLongName   = $longName . 'X';
         $customer->getShippingAddress()->setName($veryLongName);
-        $this->expectException(HeidelpayApiException::class);
+        $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_ADDRESS_NAME_TO_LONG);
-        $this->heidelpay->updateCustomer($customer);
+        $this->unzer->updateCustomer($customer);
     }
 
     //</editor-fold>
@@ -354,10 +354,10 @@ class CustomerTest extends BaseIntegrationTest
     {
         $customer = $this->getMinimalNotRegisteredB2bCustomer();
         $this->assertEmpty($customer->getId());
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $exposeArray     = $customer->expose();
         $exposeArray['salutation'] = Salutations::UNKNOWN;
         $this->assertEquals($exposeArray, $fetchedCustomer->expose());
@@ -374,10 +374,10 @@ class CustomerTest extends BaseIntegrationTest
     {
         $customer = $this->getMaximalNotRegisteredB2bCustomer();
         $this->assertEmpty($customer->getId());
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
     }
 
@@ -396,10 +396,10 @@ class CustomerTest extends BaseIntegrationTest
     {
         $customer = $this->getMinimalRegisteredB2bCustomer();
         $this->assertEmpty($customer->getId());
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $exposeArray     = $customer->expose();
         $exposeArray['salutation'] = Salutations::UNKNOWN;
         $this->assertEquals($exposeArray, $fetchedCustomer->expose());
@@ -416,10 +416,10 @@ class CustomerTest extends BaseIntegrationTest
     {
         $customer = $this->getMaximalRegisteredB2bCustomer();
         $this->assertEmpty($customer->getId());
-        $this->heidelpay->createCustomer($customer);
+        $this->unzer->createCustomer($customer);
         $this->assertNotEmpty($customer->getId());
 
-        $fetchedCustomer = $this->heidelpay->fetchCustomer($customer->getId());
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
     }
 

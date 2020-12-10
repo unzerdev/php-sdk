@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify cancellation of charges.
  *
- * Copyright (C) 2018 heidelpay GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.heidelpay.com/
+ * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@heidelpay.com>
+ * @author  Simon Gabriel <development@unzer.com>
  *
- * @package  heidelpayPHP\test\integration\TransactionTypes
+ * @package  UnzerSDK\test\integration\TransactionTypes
  */
-namespace heidelpayPHP\test\integration\TransactionTypes;
+namespace UnzerSDK\test\integration\TransactionTypes;
 
-use heidelpayPHP\Resources\PaymentTypes\SepaDirectDebit;
-use heidelpayPHP\Resources\TransactionTypes\Charge;
-use heidelpayPHP\test\BaseIntegrationTest;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
 
 class CancelAfterChargeTest extends BaseIntegrationTest
 {
@@ -41,9 +41,9 @@ class CancelAfterChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldBeFetchable(): Charge
     {
-        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
-        $fetchedCharge = $this->heidelpay->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
+        $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $fetchedCharge = $this->unzer->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
 
         $chargeArray = $charge->expose();
         $this->assertEquals($chargeArray, $fetchedCharge->expose());
@@ -61,7 +61,7 @@ class CancelAfterChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldBeFullyRefundable(Charge $charge): void
     {
-        $refund = $this->heidelpay->cancelCharge($charge);
+        $refund = $this->unzer->cancelCharge($charge);
         $this->assertNotNull($refund);
         $this->assertNotEmpty($refund->getId());
 
@@ -77,10 +77,10 @@ class CancelAfterChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldBeFullyRefundableWithId(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
 
-        $refund = $this->heidelpay->cancelChargeById($charge->getPayment()->getId(), $charge->getId());
+        $refund = $this->unzer->cancelChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertNotNull($refund);
         $this->assertNotEmpty($refund->getId());
     }
@@ -92,18 +92,18 @@ class CancelAfterChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldBePartlyRefundableWithId(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
 
-        $firstPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
+        $firstPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
         $this->assertAmounts($firstPayment, 0, 100, 100, 0);
         $this->assertTrue($firstPayment->isCompleted());
 
-        $refund = $this->heidelpay->cancelChargeById($charge->getPayment()->getId(), $charge->getId(), 10.0);
+        $refund = $this->unzer->cancelChargeById($charge->getPayment()->getId(), $charge->getId(), 10.0);
         $this->assertNotNull($refund);
         $this->assertNotEmpty($refund->getId());
 
-        $secondPayment = $this->heidelpay->fetchPayment($refund->getPayment()->getId());
+        $secondPayment = $this->unzer->fetchPayment($refund->getPayment()->getId());
         $this->assertNotNull($secondPayment);
         $this->assertAmounts($secondPayment, 0, 90, 100, 10);
         $this->assertTrue($secondPayment->isCompleted());
@@ -116,14 +116,14 @@ class CancelAfterChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldBePartlyRefundable(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
 
-        $firstPayment = $this->heidelpay->fetchPayment($charge->getPayment()->getId());
+        $firstPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
         $this->assertAmounts($firstPayment, 0, 100, 100, 0);
         $this->assertTrue($firstPayment->isCompleted());
 
-        $refund = $this->heidelpay->cancelCharge($charge, 10.0);
+        $refund = $this->unzer->cancelCharge($charge, 10.0);
         $this->assertNotNull($refund);
         $this->assertNotEmpty($refund->getId());
 
@@ -140,8 +140,8 @@ class CancelAfterChargeTest extends BaseIntegrationTest
      */
     public function cancelShouldAcceptPaymentReferenceParameter(): void
     {
-        $paymentType = $this->heidelpay->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->heidelpay->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
         $cancel = $charge->cancel(null, null, 'myPaymentReference');
         $this->assertEquals('myPaymentReference', $cancel->getPaymentReference());
     }
