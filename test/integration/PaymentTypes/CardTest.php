@@ -76,6 +76,36 @@ class CardTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify card can be created with email address.
+     *
+     * @dataProvider cardShouldUseEmailDataProvider
+     *
+     * @test
+     *
+     * @param mixed $email
+     * @param mixed $expected
+     */
+    public function cardShouldUseEmail($email, $expected)
+    {
+        // when.
+        /** @var Card $card */
+        $card = $this->createCardObject('4711100000000000');
+        $this->assertNull($card->getId());
+        $this->assertNull($card->getEmail());
+
+        // then.
+        $card->setEmail($email);
+        $card = $this->unzer->createPaymentType($card);
+        $this->assertNotNull($card->getId());
+        $this->assertEquals($email, $card->getEmail());
+
+        // ensure the fetched card object contains the email address.
+        $fetchedCard = $this->unzer->fetchPaymentType($card->getId());
+        $this->assertEquals($expected, $fetchedCard->getEmail());
+        $card->charge(119.00, 'EUR', 'https://unzer.com');
+    }
+
+    /**
      * Verify card creation with 3ds flag set will provide the flag in transactions.
      *
      * @test
@@ -469,4 +499,13 @@ class CardTest extends BaseIntegrationTest
     }
 
     //</editor-fold>
+    public function cardShouldUseEmailDataProvider()
+    {
+        return[
+            'email is set' => ['test@test.com', 'test@test.com'],
+            'email is empty string' => ['', null],
+            'email is empty/null' => [null, null],
+
+        ];
+    }
 }
