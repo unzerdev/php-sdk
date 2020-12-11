@@ -58,6 +58,8 @@ class Card extends BasePaymentType
     /** @var bool $card3ds */
     protected $card3ds;
 
+    protected $email;
+
     /** @var string $brand */
     private $brand = '';
 
@@ -67,15 +69,15 @@ class Card extends BasePaymentType
     /**
      * Card constructor.
      *
-     * @param string $number
-     * @param string $expiryDate
-     *
-     * @throws RuntimeException
+     * @param string      $number
+     * @param string      $expiryDate
+     * @param string|null $email
      */
-    public function __construct($number, $expiryDate)
+    public function __construct($number, $expiryDate, $email = null)
     {
         $this->setNumber($number);
         $this->setExpiryDate($expiryDate);
+        $this->setEmail($email);
     }
 
     //<editor-fold desc="Getters/Setters">
@@ -215,6 +217,25 @@ class Card extends BasePaymentType
     public function getCardDetails(): ?CardDetails
     {
         return $this->cardDetails;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $email
+     *
+     * @return Card
+     */
+    public function setEmail(?string $email): Card
+    {
+        $this->email = $email;
+        return $this;
     }
 
     //</editor-fold>
