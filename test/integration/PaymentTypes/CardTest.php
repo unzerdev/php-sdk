@@ -130,7 +130,6 @@ class CardTest extends BaseIntegrationTest
     public function CardCanBeUpdatedWithEmail()
     {
         $card = $this->createCardObject('5453010000059543');
-        $card->set3ds(true);
         $this->assertNull($card->getId());
         $this->assertNull($card->getEmail());
 

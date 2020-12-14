@@ -58,6 +58,7 @@ class Card extends BasePaymentType
     /** @var bool $card3ds */
     protected $card3ds;
 
+    /** @var string */
     protected $email;
 
     /** @var string $brand */
@@ -220,7 +221,7 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getEmail(): ?string
     {
@@ -228,7 +229,7 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @param mixed $email
+     * @param string/null $email
      *
      * @return Card
      */
