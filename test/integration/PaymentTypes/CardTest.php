@@ -91,10 +91,10 @@ class CardTest extends BaseIntegrationTest
         /** @var Card $card */
         $card = $this->createCardObject('4711100000000000');
         $this->assertNull($card->getId());
-        $this->assertNull($card->getEmail());
+        $this->assertEquals('test@test.com', $card->getEmail()); // default value is set.
 
         // then.
-        $card->setEmail($email);
+        $card->setEmail($email); // override email.
         $card = $this->unzer->createPaymentType($card);
         $this->assertNotNull($card->getId());
         $this->assertEquals($email, $card->getEmail());
@@ -114,8 +114,9 @@ class CardTest extends BaseIntegrationTest
     {
         $card = $this->createCardObject('4711100000000000');
         $this->assertNull($card->getId());
-        $this->assertNull($card->getEmail());
-        $card->setEmail('invalid-email-address');
+        $this->assertEquals('test@test.com', $card->getEmail()); // default value is set.
+
+        $card->setEmail('invalid-email-address'); // override email.
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionMessage('Email has invalid format.');
@@ -131,10 +132,9 @@ class CardTest extends BaseIntegrationTest
     {
         $card = $this->createCardObject('5453010000059543');
         $this->assertNull($card->getId());
-        $this->assertNull($card->getEmail());
+        $this->assertEquals('test@test.com', $card->getEmail());
 
         // when
-        $card->setEmail('test@test.com');
         $this->unzer->createPaymentType($card);
         /** @var Card $fetchedCard */
         $fetchedCard = $this->unzer->fetchPaymentType($card->getId());
