@@ -76,6 +76,87 @@ class CardTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify card can be created with email address.
+     *
+     * @dataProvider cardShouldUseEmailDataProvider
+     *
+     * @test
+     *
+     * @param mixed $email
+     * @param mixed $expected
+     */
+    public function cardShouldUseEmail($email, $expected)
+    {
+        // when.
+        /** @var Card $card */
+        $card = $this->createCardObject('4711100000000000');
+        $this->assertNull($card->getId());
+        $this->assertNull($card->getEmail()); // default value is set.
+
+        // then.
+        $card->setEmail($email); // override email.
+        $card = $this->unzer->createPaymentType($card);
+        $this->assertNotNull($card->getId());
+        $this->assertEquals($email, $card->getEmail());
+
+        // ensure the fetched card object contains the email address.
+        $fetchedCard = $this->unzer->fetchPaymentType($card->getId());
+        $this->assertEquals($expected, $fetchedCard->getEmail());
+        $card->charge(119.00, 'EUR', 'https://unzer.com');
+    }
+    
+    /**
+     * Verify that an invalid email cause an UnzerApiException.
+     *
+     * @test
+     */
+    public function invalidEmailCauseException()
+    {
+        $card = $this->createCardObject('4711100000000000');
+        $this->assertNull($card->getId());
+        $this->assertNull($card->getEmail());
+
+        $card->setEmail('invalid-email-address'); // override email.
+
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionMessage('Email has invalid format.');
+        $this->unzer->createPaymentType($card);
+    }
+
+    /**
+     * Verify that email field can be updated.
+     *
+     * @test
+     */
+    public function CardCanBeUpdatedWithEmail()
+    {
+        $card = $this->createCardObject('5453010000059543');
+        $this->assertNull($card->getId());
+        $this->assertNull($card->getEmail());
+
+        // when
+        $card->setEmail('test@test.com');
+        $this->unzer->createPaymentType($card);
+        /** @var Card $fetchedCard */
+        $fetchedCard = $this->unzer->fetchPaymentType($card->getId());
+        // then
+        $this->assertEquals('test@test.com', $fetchedCard->getEmail());
+
+        // when
+        $fetchedCard->setNumber('4711100000000000')
+            ->setEmail('test2@test.com')
+            ->setCvc('123');
+
+        $this->unzer->updatePaymentType($fetchedCard);
+
+        // then
+        /** @var Card $updatedCard */
+        $updatedCard = $this->unzer->fetchPaymentType($fetchedCard->getId());
+        $this->assertRegExp('/0000$/', $updatedCard->getNumber());
+        $this->assertEquals('test2@test.com', $updatedCard->getEmail());
+    }
+
+    /**
      * Verify card creation with 3ds flag set will provide the flag in transactions.
      *
      * @test
@@ -469,4 +550,12 @@ class CardTest extends BaseIntegrationTest
     }
 
     //</editor-fold>
+    public function cardShouldUseEmailDataProvider()
+    {
+        return[
+            'email is set' => ['test@test.com', 'test@test.com'],
+            'email is empty string' => ['', null],
+            'email is empty/null' => [null, null],
+        ];
+    }
 }
