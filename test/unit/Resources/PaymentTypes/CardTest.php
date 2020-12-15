@@ -39,6 +39,7 @@ class CardTest extends BasePaymentTest
     private const TEST_BRAND = 'VISA';
     private const TEST_CVC = '***';
     private const TEST_EXPIRY_DATE = '03/2020';
+    private const TEST_EMAIL = 'test@test.com';
     private const TEST_HOLDER = 'Max Mustermann';
 
     private $number     = '4111111111111111';
@@ -101,6 +102,29 @@ class CardTest extends BasePaymentTest
 
         $this->assertEquals($number, $card->getNumber());
         $this->assertEquals($expiryDate, $card->getExpiryDate());
+
+        $geoLocation = $card->getGeoLocation();
+        $this->assertNull($geoLocation->getClientIp());
+        $this->assertNull($geoLocation->getCountryCode());
+    }
+
+    /**
+     * Verify that email address can be set in card constructor.
+     *
+     * @test
+     */
+    public function constructorShouldSetEmail()
+    {
+        // when
+        $number     = '4111111111111111';
+        $expiryDate = '12/2030';
+        $email      = 'test@email.com';
+        $card       = new Card($number, $expiryDate, $email);
+
+        // then
+        $this->assertEquals($number, $card->getNumber());
+        $this->assertEquals($expiryDate, $card->getExpiryDate());
+        $this->assertEquals($email, $card->getEmail());
 
         $geoLocation = $card->getGeoLocation();
         $this->assertNull($geoLocation->getClientIp());
@@ -182,6 +206,20 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * verify that email address can be set as Expected.
+     *
+     * @test
+     */
+    public function verifyEmailCanBeSetAndChanged()
+    {
+        $this->assertEquals(null, $this->card->getEmail());
+        $this->card->setEmail('test@test.de');
+        $this->assertEquals('test@test.de', $this->card->getEmail());
+        $this->card->setEmail('test2@test.de');
+        $this->assertEquals('test2@test.de', $this->card->getEmail());
+    }
+
+    /**
      * Verify card3ds flag.
      *
      * @test
@@ -216,6 +254,7 @@ class CardTest extends BasePaymentTest
             'number' => self::TEST_NUMBER,
             'brand' => self::TEST_BRAND,
             'cvc' => self::TEST_CVC,
+            'email' => self::TEST_EMAIL,
             'expiryDate' => self::TEST_EXPIRY_DATE,
             'cardHolder' => self::TEST_HOLDER,
             'geolocation' => $newGeoLocation
@@ -227,6 +266,7 @@ class CardTest extends BasePaymentTest
         $this->assertEquals(self::TEST_NUMBER, $this->card->getNumber());
         $this->assertEquals(self::TEST_BRAND, $this->card->getBrand());
         $this->assertEquals(self::TEST_CVC, $this->card->getCvc());
+        $this->assertEquals(self::TEST_EMAIL, $this->card->getEmail());
         $this->assertEquals(self::TEST_EXPIRY_DATE, $this->card->getExpiryDate());
         $this->assertEquals(self::TEST_HOLDER, $this->card->getCardHolder());
         $cardDetails = $this->card->getCardDetails();
