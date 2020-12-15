@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.1.0.1][1.1.0.1]
 
 ### Changed
-* Add email property to payment type `card`.
+* Add email property to payment type `card` to meet 3Ds2.x regulations.
 * Several minor changes.
 
 ## [1.1.0.0][1.1.0.0]
