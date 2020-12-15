@@ -229,7 +229,7 @@ class Card extends BasePaymentType
     }
 
     /**
-     * @param string/null $email
+     * @param string|null $email
      *
      * @return Card
      */
