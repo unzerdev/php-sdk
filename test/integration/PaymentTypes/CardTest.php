@@ -91,7 +91,7 @@ class CardTest extends BaseIntegrationTest
         /** @var Card $card */
         $card = $this->createCardObject('4711100000000000');
         $this->assertNull($card->getId());
-        $this->assertEquals('test@test.com', $card->getEmail()); // default value is set.
+        $this->assertNull($card->getEmail()); // default value is set.
 
         // then.
         $card->setEmail($email); // override email.
@@ -114,7 +114,7 @@ class CardTest extends BaseIntegrationTest
     {
         $card = $this->createCardObject('4711100000000000');
         $this->assertNull($card->getId());
-        $this->assertEquals('test@test.com', $card->getEmail()); // default value is set.
+        $this->assertNull($card->getEmail());
 
         $card->setEmail('invalid-email-address'); // override email.
 
@@ -132,9 +132,10 @@ class CardTest extends BaseIntegrationTest
     {
         $card = $this->createCardObject('5453010000059543');
         $this->assertNull($card->getId());
-        $this->assertEquals('test@test.com', $card->getEmail());
+        $this->assertNull($card->getEmail());
 
         // when
+        $card->setEmail('test@test.com');
         $this->unzer->createPaymentType($card);
         /** @var Card $fetchedCard */
         $fetchedCard = $this->unzer->fetchPaymentType($card->getId());
