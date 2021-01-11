@@ -46,8 +46,7 @@ class BaseIntegrationTest extends BasePaymentTest
      */
     protected function tearDown(): void
     {
-        /** @var TestDebugHandler $debugHandler */
-        $debugHandler = $this->unzer->getDebugHandler();
+        $debugHandler = self::getDebugHandler();
 
         if ($this->getStatus() === BaseTestRunner::STATUS_PASSED) {
             $debugHandler->clearTempLog();
