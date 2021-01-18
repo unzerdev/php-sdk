@@ -65,7 +65,6 @@ class BasePaymentTest extends TestCase
         return self::$debughandler;
     }
 
-
     /**
      * Creates and returns an Unzer object if it does not exist yet.
      * Uses an invalid but well formed default key if no key is given.
