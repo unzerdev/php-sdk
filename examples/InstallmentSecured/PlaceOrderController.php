@@ -72,7 +72,7 @@ try {
     }
 
     // Check the result message of the transaction to find out what went wrong.
-    $merchantMessage = $authorize->getMessage()->getCustomer();
+    $merchantMessage = $charge->getMessage()->getCustomer();
 } catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();

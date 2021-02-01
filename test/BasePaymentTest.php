@@ -52,6 +52,19 @@ class BasePaymentTest extends TestCase
     /** @var Unzer $unzer */
     protected $unzer;
 
+    protected static $debughandler;
+
+    /**
+     * @return TestDebugHandler
+     */
+    public static function getDebugHandler(): TestDebugHandler
+    {
+        if (!self::$debughandler instanceof TestDebugHandler) {
+            self::$debughandler = new TestDebugHandler();
+        }
+        return self::$debughandler;
+    }
+
     /**
      * Creates and returns an Unzer object if it does not exist yet.
      * Uses an invalid but well formed default key if no key is given.
@@ -66,7 +79,7 @@ class BasePaymentTest extends TestCase
     {
         if (!$this->unzer instanceof Unzer) {
             $this->unzer = (new Unzer($privateKey))
-                ->setDebugHandler(new TestDebugHandler())
+                ->setDebugHandler(self::getDebugHandler())
                 ->setDebugMode(true);
         }
         return $this->unzer;
