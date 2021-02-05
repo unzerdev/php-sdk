@@ -27,6 +27,11 @@ matrix:
       env:
         - DEPS=NO
         - LEVEL=UNIT
+    - name: "php 8.0 (install) - unit"
+      php: 8.0
+      env:
+        - DEPS=NO
+        - LEVEL=UNIT
 cache:
   directories:
     - $HOME/.composer/cache
