@@ -1,9 +1,9 @@
 <?php
 /**
- * This is the controller for the PayPal example.
- * It is called when the pay button on the index page is clicked.
+ * This is the return controller for the PayPal recurring example.
+ * It is called when the client is redirected back to the shop from the external page.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,16 +27,16 @@
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
-/** Require the composer autoloader file */
 /** @noinspection PhpIncludeInspection */
+/** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
+use UnzerSDK\Resources\PaymentTypes\Card;
 
 session_start();
-session_unset();
 
 $clientMessage = 'Something went wrong. Please try again later.';
 $merchantMessage = 'Something went wrong. Please try again later.';
@@ -49,11 +49,11 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
-// You will need the id of the payment type created in the frontend (index.php)
-if (!isset($_POST['resourceId'])) {
-    redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
+// Retrieve the paymentId you remembered within the Controller
+if (!isset($_SESSION['PaymentTypeId'])) {
+    redirect(FAILURE_URL, 'The payment type id is missing.', $clientMessage);
 }
-$paymentTypeId   = $_POST['resourceId'];
+$paymentTypeId = $_SESSION['PaymentTypeId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -61,25 +61,19 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $recurring = $unzer->activateRecurringPayment($paymentTypeId, MY_RETURN_CONTROLLER_URL);
+    // Redirect to success if the payment has been successfully completed or is still in handled.
+    /** @var Card $paymentType */
+    $paymentType = $unzer->fetchPaymentType($paymentTypeId);
 
-    // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
-    $_SESSION['PaymentTypeId'] = $paymentTypeId;
-    $_SESSION['ShortId'] = $recurring->getShortId();
-
-    // Redirect to the 3ds page or to success depending on the state of the transaction
-    if (empty($recurring->getRedirectUrl()) && $recurring->isSuccess()) {
+    if ($paymentType->isRecurring()) {
         redirect(SUCCESS_URL);
-    } elseif (!empty($recurring->getRedirectUrl()) && $recurring->isPending()) {
-        redirect($recurring->getRedirectUrl());
     }
 
-    // Check the result message of the transaction to find out what went wrong.
-    $merchantMessage = $recurring->getMessage()->getCustomer();
 } catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
+
 redirect(FAILURE_URL, $merchantMessage, $clientMessage);
