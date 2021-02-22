@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 * Extended testing for Instalment payment type.
 
+### Changed
+* Remove PhpUnit 8 support.
+
 ## [1.1.1.0]
 
 ### Changed
