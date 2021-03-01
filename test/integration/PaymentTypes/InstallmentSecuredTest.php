@@ -136,6 +136,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
      * @param InstallmentSecured $hddType fetched ins type.
      *
      * @return AbstractUnzerResource|Charge
+     *
      * @throws UnzerApiException
      */
     public function hddTypeAuthorizeAndCharge(InstallmentSecured $hddType)
