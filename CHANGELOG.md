@@ -7,13 +7,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Fix
 * Change debug logging of failed tests that depend on another one to work as expected.
-* Several minor changes.
+* PayPal recurring example: Response handling changed to check the recurring status of the payment type.
 
 ### Added
 * Extended testing for Instalment payment type.
+* Cards example using email UI element.
 
 ### Changed
 * Remove PhpUnit 8 support.
+* Several minor changes.
 
 ## [1.1.1.0]
 
