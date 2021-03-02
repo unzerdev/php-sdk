@@ -80,6 +80,9 @@ require_once __DIR__ . '/../../../../autoload.php';
             </div>
         </div>
     </div>
+    <div id="card-element-id-email" class="unzerInput">
+        <!-- Card number UI Element will be inserted here. -->
+    </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
@@ -102,6 +105,10 @@ require_once __DIR__ . '/../../../../autoload.php';
         containerId: 'card-element-id-cvc',
         onlyIframe: false
     });
+    Card.create('email', {
+        containerId: 'card-element-id-email',
+        onlyIframe: false
+    });
 
     // General event handling
     let formFieldValid = {};
@@ -119,7 +126,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             formFieldValid[e.type] = false;
             $errorHolder.html(e.error)
         }
-        payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc);
+        payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc && formFieldValid.email);
     };
 
     Card.addEventListener('change', eventHandlerCardInput);
