@@ -11,10 +11,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Added
 * Extended testing for Instalment payment type.
-* Cards example using email UI element.
+* Cards (extended) example using email UI element.
 
 ### Changed
 * Remove PhpUnit 8 support.
+* Card recurring example using email UI element.
+* Card example and paypage examples use a dummy customer-email to ensure they work with 3ds2.
 * Several minor changes.
 
 ## [1.1.1.0]

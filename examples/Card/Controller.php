@@ -70,6 +70,8 @@ try {
     // The 3D secured flag can be used to switch between 3ds and non-3ds.
     // If your merchant is only configured for one of those you can omit the flag.
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
+    $customer->setEmail('test@test.com');
+
     switch ($transactionType) {
         case 'charge':
             $transaction = $unzer->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
