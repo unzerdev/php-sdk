@@ -6,18 +6,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.1.1.1]
 
 ### Fix
-* Change debug logging of failed tests that depend on another one to work as expected.
-* PayPal recurring example: Response handling changed to check the recurring status of the payment type.
+*   Change debug logging of failed tests that depend on another one to work as expected.
+*   PayPal recurring example: Response handling changed to check the recurring status of the payment type.
 
 ### Added
-* Extended testing for Instalment payment type.
-* Cards (extended) example using email UI element.
+*   Extended testing for Instalment payment type.
+*   Cards (extended) example using email UI element.
 
 ### Changed
-* Remove PhpUnit 8 support.
-* Card recurring example using email UI element.
-* Card example and paypage examples use a dummy customer-email to ensure they work with 3ds2.
-* Several minor changes.
+*   Remove PhpUnit 8 support.
+*   Card recurring example using email UI element.
+*   Card example and paypage examples use a dummy customer-email to ensure they work with 3ds2.
+*   Several minor changes.
 
 ## [1.1.1.0]
 
