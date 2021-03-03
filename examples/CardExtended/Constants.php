@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines the constants needed for the card example.
+ * This file defines the constants needed for the card extended example.
  *
  * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
