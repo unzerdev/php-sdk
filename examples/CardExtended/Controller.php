@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the controller for the Card (Complete form) example.
+ * This is the controller for the Card extended example.
  * It is called when the pay button on the index page is clicked.
  *
  * Copyright (C) 2021 - today Unzer E-Com GmbH
