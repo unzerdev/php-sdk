@@ -1,8 +1,8 @@
 <?php
 /**
- * This file provides an example implementation of the Card recurring payment type.
+ * This file provides an example implementation of the Card payment type.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,36 @@ require_once __DIR__ . '/../../../../autoload.php';
 <p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form" class="unzerUI form" novalidate>
+    <!-- This is just for the example - Start -->
+    <div class="fields inline">
+        <label for="transaction_type">Chose the transaction type you want to test:</label>
+        <div class="field">
+            <div class="unzerUI radio checkbox">
+                <input type="radio" name="transaction_type" value="authorize" checked="">
+                <label>Authorize</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="unzerUI radio checkbox">
+                <input type="radio" name="transaction_type" value="charge">
+                <label>Charge</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="unzerUI radio checkbox">
+                <input type="radio" name="transaction_type" value="payout">
+                <label>Payout</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- This is just for the example - End -->
+
+    <div class="field">
+        <div id="card-element-id-card-holder" class="unzerInput">
+            <!-- Card number UI Element will be inserted here. -->
+        </div>
+    </div>
     <div class="field">
         <div id="card-element-id-number" class="unzerInput">
             <!-- Card number UI Element will be inserted here. -->
@@ -80,8 +110,10 @@ require_once __DIR__ . '/../../../../autoload.php';
             </div>
         </div>
     </div>
-    <div id="card-element-id-email" class="unzerInput">
-        <!-- Card number UI Element will be inserted here. -->
+    <div class="field">
+        <div id="card-element-id-email" class="unzerInput">
+            <!-- Card number UI Element will be inserted here. -->
+        </div>
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
@@ -93,6 +125,10 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     // Create a Card instance and render the input fields
     let Card = unzerInstance.Card();
+    Card.create('holder', {
+        containerId: 'card-element-id-card-holder',
+        onlyIframe: false
+    });
     Card.create('number', {
         containerId: 'card-element-id-number',
         onlyIframe: false
@@ -126,7 +162,13 @@ require_once __DIR__ . '/../../../../autoload.php';
             formFieldValid[e.type] = false;
             $errorHolder.html(e.error)
         }
-        payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc && formFieldValid.email);
+        payButton.disabled = !(
+            formFieldValid.number &&
+            formFieldValid.expiry &&
+            formFieldValid.cvc &&
+            formFieldValid.email &&
+            formFieldValid.holder
+        );
     };
 
     Card.addEventListener('change', eventHandlerCardInput);

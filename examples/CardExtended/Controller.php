@@ -1,9 +1,9 @@
 <?php
 /**
- * This is the controller for the Card example.
+ * This is the controller for the Card extended example.
  * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,6 @@ $paymentTypeId   = $_POST['resourceId'];
 
 // These lines are just for this example
 $transactionType = $_POST['transaction_type'] ?? 'authorize';
-$use3Ds          = isset($_POST['3dsecure']) && ($_POST['3dsecure'] === '1');
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -67,20 +66,18 @@ try {
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // Create a charge/authorize transaction
-    // The 3D secured flag can be used to switch between 3ds and non-3ds.
+    // For 3Ds2 compliance an email need to be set either in card type or in customer resource.
     // If your merchant is only configured for one of those you can omit the flag.
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    $customer->setEmail('test@test.com');
-
     switch ($transactionType) {
         case 'charge':
-            $transaction = $unzer->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+            $transaction = $unzer->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, true);
             break;
         case 'payout':
             $transaction = $unzer->payout(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer);
             break;
         default:
-            $transaction = $unzer->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, $use3Ds);
+            $transaction = $unzer->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, true);
             break;
     }
 
