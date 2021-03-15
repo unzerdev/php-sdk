@@ -1,8 +1,8 @@
 <?php
 /**
- * This file defines the constants needed for the PayPal example.
+ * This file defines the constants needed for the card extended example.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,5 @@
 
 require_once __DIR__ . '/../Constants.php';
 
-define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'PayPalRecurring');
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'CardExtended');
 define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');
-define('MY_RETURN_CONTROLLER_URL', EXAMPLE_URL . '/ReturnController.php');

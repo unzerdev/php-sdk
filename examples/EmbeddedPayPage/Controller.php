@@ -59,6 +59,7 @@ try {
 
     // Create a charge/authorize transaction
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
+    $customer->setEmail('test@test.com');
 
     // These are the mandatory parameters for the payment page ...
     $paypage = new Paypage(119.00, 'EUR', RETURN_CONTROLLER_URL);

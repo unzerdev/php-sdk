@@ -29,6 +29,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
@@ -81,7 +82,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function hddTypeShouldBeFechable(): InstallmentSecured
+    public function hddTypeShouldBeFetchable(): InstallmentSecured
     {
         // Mock a hdd Type
         $date = $this->getTodaysDateString();
@@ -130,9 +131,11 @@ class InstallmentSecuredTest extends BaseIntegrationTest
      * Verify fetched hdd type can be authorized and charged
      *
      * @test
-     * @depends hddTypeShouldBeFechable
+     * @depends hddTypeShouldBeFetchable
      *
-     * @param InvoiceSecured $hddType fetched ins type.
+     * @param InstallmentSecured $hddType fetched ins type.
+     *
+     * @return AbstractUnzerResource|Charge
      *
      * @throws UnzerApiException
      */
@@ -140,7 +143,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
     {
         $customer = $this->getMaximumCustomer();
         $basket = $this->createBasket();
-        /** @var Authorization $auth */
+
         $auth = $hddType->authorize(119.00, 'EUR', 'https://unzer.com', $customer, null, null, $basket);
         $charge = $auth->getPayment()->charge();
         $this->assertNotNull($auth);
@@ -315,6 +318,67 @@ class InstallmentSecuredTest extends BaseIntegrationTest
         $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
         $payment = $authorize->getPayment();
         $payment->charge();
+        $cancel = $payment->cancelAmount(59.5, null, null, 50.0, 9.5);
+        $this->assertCount(1, $cancel);
+        $this->assertTrue($payment->isCompleted());
+    }
+
+    /**
+     * Verify full cancel of charged HP after shipment.
+     *
+     * @test
+     *
+     * @depends verifyChargingAnInitializedInstallmentSecured
+     */
+    public function verifyChargeAndFullCancelAnInitializedInstallmentSecuredAfterShipment(): void
+    {
+        $yesterday = $this->getYesterdaysTimestamp();
+        $plans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99, $yesterday);
+        $this->assertGreaterThan(0, count($plans->getPlans()));
+
+        /** @var InstalmentPlan $selectedPlan */
+        $selectedPlan = $plans->getPlans()[0];
+        $ins = new InstallmentSecured($selectedPlan, 'DE89370400440532013000', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $this->getTodaysDateString(), $this->getTomorrowsTimestamp());
+        $this->unzer->createPaymentType($ins);
+
+        $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $payment = $authorize->getPayment();
+
+        $hddCharge = $payment->charge();
+        $invoiceId = 'i' . self::generateRandomId();
+        $ship = $this->unzer->ship($hddCharge->getPayment(), $invoiceId);
+        $this->assertNotNull($ship);
+
+        $cancel = $payment->cancelAmount();
+        $this->assertGreaterThan(0, count($cancel));
+    }
+
+    /**
+     * Verify full cancel of charged HP after shipment.
+     *
+     * @test
+     *
+     * @depends verifyChargingAnInitializedInstallmentSecured
+     */
+    public function verifyPartlyCancelChargedInstallmentSecuredAfterShipment(): void
+    {
+        $yesterday = $this->getYesterdaysTimestamp();
+        $plans = $this->unzer->fetchInstallmentPlans(119.0, 'EUR', 4.99, $yesterday);
+        $this->assertGreaterThan(0, count($plans->getPlans()));
+
+        /** @var InstalmentPlan $selectedPlan */
+        $selectedPlan = $plans->getPlans()[0];
+        $ins = new InstallmentSecured($selectedPlan, 'DE89370400440532013000', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $this->getTodaysDateString(), $this->getTomorrowsTimestamp());
+        $this->unzer->createPaymentType($ins);
+
+        $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $this->getCustomer(), null, null, $basket = $this->createBasket());
+        $payment = $authorize->getPayment();
+
+        $hddCharge = $payment->charge();
+        $invoiceId = 'i' . self::generateRandomId();
+        $ship = $this->unzer->ship($hddCharge->getPayment(), $invoiceId);
+        $this->assertNotNull($ship);
+
         $cancel = $payment->cancelAmount(59.5, null, null, 50.0, 9.5);
         $this->assertCount(1, $cancel);
         $this->assertTrue($payment->isCompleted());

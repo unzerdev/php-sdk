@@ -88,9 +88,23 @@ function printMessage($type, $title, $text)
                         <div class="header">Card</div>
                         <div class="description">
                             You can try authorize, charge and payout transactions with or without 3Ds.
+                            This example submits email <b>via customer</b> resource.
                         </div>
                     </div>
                     <div id="tryCardExample" class="ui bottom attached green button" onclick="location.href='Card/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">Card (extended)</div>
+                        <div class="description">
+                            Including email and holder fields.
+                            Adding more information to the card can improve risk acceptance.
+                            This example submits email <b>via payment type</b>  resource.
+                        </div>
+                    </div>
+                    <div id="tryCardExample" class="ui bottom attached green button" onclick="location.href='CardExtended/';">
                         Try
                     </div>
                 </div>
