@@ -65,9 +65,22 @@ class Applepay extends BasePaymentType
 
     /**
      * ApplePay constructor.
+     *
+     * @param string         $version
+     * @param string         $data
+     * @param string         $signature
+     * @param ApplePayHeader $header
      */
-    public function __construct()
-    {
+    public function __construct(
+        string $version,
+        string $data,
+        string $signature,
+        ApplePayHeader $header
+    ) {
+        $this->version = $version;
+        $this->data = $data;
+        $this->signature = $signature;
+        $this->header = $header;
     }
 
     //<editor-fold desc="Getters/Setters"

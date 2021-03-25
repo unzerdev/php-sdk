@@ -14,15 +14,15 @@ class ApplePayTest extends BasePaymentTest
      */
     public function gettersAndSettersShouldWorkAsExpected(): void
     {
-        $applePay = new Applepay();
-        $this->assertNull($applePay->getApplicationExpirationDate());
+        $applePay = new Applepay('EC_v1', 'data1', 'signature');
         $this->assertNull($applePay->getApplicationPrimaryAccountNumber());
+        $this->assertNull($applePay->getApplicationExpirationDate());
         $this->assertNull($applePay->getCurrencyCode());
-        $this->assertNull($applePay->getData());
         $this->assertNull($applePay->getMethod());
-        $this->assertNull($applePay->getSignature());
         $this->assertEquals(0, $applePay->getTransactionAmount());
-        $this->assertNull($applePay->getVersion());
+        $this->assertEquals('data1', $applePay->getData());
+        $this->assertEquals('signature', $applePay->getSignature());
+        $this->assertEquals('EC_v1', $applePay->getVersion());
 
         // Call setters
         $applePay->setApplicationExpirationDate('07/2020');
