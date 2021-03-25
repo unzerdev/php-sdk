@@ -517,7 +517,7 @@ class ResourceService implements ResourceServiceInterface
                 $paymentType = new Alipay();
                 break;
             case IdStrings::APPLEPAY:
-                $paymentType = new Applepay('v1', 'data', 'sig');
+                $paymentType = new Applepay(null, null, null, null);
                 break;
             case IdStrings::BANCONTACT:
                 $paymentType = new Bancontact();

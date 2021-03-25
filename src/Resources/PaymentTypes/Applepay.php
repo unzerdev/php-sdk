@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the ApplePay payment type.
+ * This represents the Applepay payment type.
  *
  * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\Resources\PaymentTypes;
 
+use UnzerSDK\Resources\EmbeddedResources\ApplePayHeader;
 use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
 use UnzerSDK\Traits\CanPayout;
@@ -38,44 +39,46 @@ class Applepay extends BasePaymentType
     use CanRecur;
     use HasGeoLocation;
 
-
     /** @var string|null $applicationExpirationDate */
-    protected $applicationExpirationDate;
+    private $applicationExpirationDate;
 
     /** @var string|null $applicationPrimaryAccountNumber */
-    protected $applicationPrimaryAccountNumber;
+    private $applicationPrimaryAccountNumber;
 
     /** @var string|null $currencyCode */
-    protected $currencyCode;
+    private $currencyCode;
 
     /** @var string|null $data */
     protected $data;
 
     /** @var string|null $method */
-    protected $method;
+    private $method;
 
     /** @var string|null $signature */
     protected $signature;
 
     /** @var float $transactionAmount */
-    protected $transactionAmount = 0.0;
+    private $transactionAmount;
 
     /** @var string|null $version */
     protected $version;
 
+    /** @var ApplePayHeader|null $header */
+    protected $header;
+
     /**
      * ApplePay constructor.
      *
-     * @param string         $version
-     * @param string         $data
-     * @param string         $signature
-     * @param ApplePayHeader $header
+     * @param string|null         $version
+     * @param string|null         $data
+     * @param string|null         $signature
+     * @param ApplePayHeader|null $header
      */
     public function __construct(
-        string $version,
-        string $data,
-        string $signature,
-        ApplePayHeader $header
+        ?string $version,
+        ?string $data,
+        ?string $signature,
+        ?ApplePayHeader $header
     ) {
         $this->version = $version;
         $this->data = $data;
@@ -118,6 +121,14 @@ class Applepay extends BasePaymentType
     }
 
     /**
+     * @return ApplePayHeader|null
+     */
+    public function getHeader(): ?ApplePayHeader
+    {
+        return $this->header;
+    }
+
+    /**
      * @return string|null
      */
     public function getMethod(): ?string
@@ -136,7 +147,7 @@ class Applepay extends BasePaymentType
     /**
      * @return float
      */
-    public function getTransactionAmount(): float
+    public function getTransactionAmount(): ?float
     {
         return $this->transactionAmount;
     }
@@ -154,7 +165,7 @@ class Applepay extends BasePaymentType
      *
      * @return $this
      */
-    public function setApplicationExpirationDate(?string $applicationExpirationDate): Applepay
+    protected function setApplicationExpirationDate(?string $applicationExpirationDate): Applepay
     {
         $this->applicationExpirationDate = $applicationExpirationDate;
         return $this;
@@ -165,7 +176,7 @@ class Applepay extends BasePaymentType
      *
      * @return $this
      */
-    public function setApplicationPrimaryAccountNumber(?string $applicationPrimaryAccountNumber): Applepay
+    protected function setApplicationPrimaryAccountNumber(?string $applicationPrimaryAccountNumber): Applepay
     {
         $this->applicationPrimaryAccountNumber = $applicationPrimaryAccountNumber;
         return $this;
@@ -176,7 +187,7 @@ class Applepay extends BasePaymentType
      *
      * @return $this
      */
-    public function setCurrencyCode(?string $currencyCode): Applepay
+    protected function setCurrencyCode(?string $currencyCode): Applepay
     {
         $this->currencyCode = $currencyCode;
         return $this;
@@ -194,11 +205,22 @@ class Applepay extends BasePaymentType
     }
 
     /**
+     * @param ApplePayHeader $header
+     *
+     * @return Applepay
+     */
+    public function setHeader(ApplePayHeader $header): Applepay
+    {
+        $this->header = $header;
+        return $this;
+    }
+
+    /**
      * @param string|null $method
      *
      * @return $this
      */
-    public function setMethod(?string $method): Applepay
+    protected function setMethod(?string $method): Applepay
     {
         $this->method = $method;
         return $this;
@@ -220,7 +242,7 @@ class Applepay extends BasePaymentType
      *
      * @return $this
      */
-    public function setTransactionAmount(float $transactionAmount): Applepay
+    protected function setTransactionAmount(float $transactionAmount): Applepay
     {
         $this->transactionAmount = $transactionAmount;
         return $this;

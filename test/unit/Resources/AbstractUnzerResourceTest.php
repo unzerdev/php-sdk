@@ -444,7 +444,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal'],
             'EPS' => [new EPS(), 'parent/resource/path/types/eps'],
             'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay'],
-            'ApplePay' => [new Applepay('v1', 'data', 'sig'), 'parent/resource/path/types/applepay'],
+            'ApplePay' => [new Applepay('EC_v1', 'data', 'sig', null), 'parent/resource/path/types/applepay'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit'],
             'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types/sepa-direct-debit-secured'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice'],
@@ -470,7 +470,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
         return [
             // Payment types.
             'Alipay' => [new Alipay(), 'parent/resource/path/types'],
-            'ApplePay' => [new Applepay('v1', 'data', 'sig'), 'parent/resource/path/types'],
+            'ApplePay' => [new Applepay('EC_v1', 'data', 'sig', null), 'parent/resource/path/types'],
             'Card' => [new Card('', '03/30'), 'parent/resource/path/types'],
             'EPS' => [new EPS(), 'parent/resource/path/types'],
             'Ideal' => [new Ideal(), 'parent/resource/path/types'],

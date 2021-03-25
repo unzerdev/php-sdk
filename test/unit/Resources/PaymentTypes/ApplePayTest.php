@@ -1,64 +1,116 @@
 <?php
-
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
+/**
+ * This class defines unit tests to verify functionality of Applepay payment type.
+ *
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ * @author  David Owusu <development@unzer.com>
+ *
+ * @package  UnzerSDK\test\unit
+ */
 namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
+use UnzerSDK\Resources\EmbeddedResources\ApplePayHeader;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\test\BasePaymentTest;
 
 class ApplePayTest extends BasePaymentTest
 {
     /**
-     * Verify getters and setters work as expected.
+     * Verify the resource data is set properly.
      *
      * @test
      */
-    public function gettersAndSettersShouldWorkAsExpected(): void
+    public function constructorShouldSetParameters(): void
     {
-        $applePay = new Applepay('EC_v1', 'data1', 'signature');
-        $this->assertNull($applePay->getApplicationPrimaryAccountNumber());
-        $this->assertNull($applePay->getApplicationExpirationDate());
-        $this->assertNull($applePay->getCurrencyCode());
-        $this->assertNull($applePay->getMethod());
-        $this->assertEquals(0, $applePay->getTransactionAmount());
-        $this->assertEquals('data1', $applePay->getData());
-        $this->assertEquals('signature', $applePay->getSignature());
-        $this->assertEquals('EC_v1', $applePay->getVersion());
+        $version = 'EC_v1';
+        $data = 'some-Data';
+        $signature = 'mySignature';
+        $applepay       = new Applepay($version, $data, $signature, $this->getTestApplePayHeader());
 
-        // Call setters
-        $applePay->setApplicationExpirationDate('07/2020');
-        $applePay->setApplicationPrimaryAccountNumber('123456789');
-        $applePay->setCurrencyCode('EUR');
-        $applePay->setData('some-Data');
-        $applePay->setMethod('apple-pay');
-        $applePay->setSignature('mySignature');
-        $applePay->setTransactionAmount(100.19);
-        $applePay->setVersion('EC_v1');
+        $this->assertEquals($version, $applepay->getVersion());
+        $this->assertEquals($data, $applepay->getData());
+        $this->assertEquals($signature, $applepay->getSignature());
+        $this->assertInstanceOf(ApplePayHeader::class, $applepay->getHeader());
+    }
 
-        $this->assertEquals('07/2020', $applePay->getApplicationExpirationDate());
-        $this->assertEquals('123456789', $applePay->getApplicationPrimaryAccountNumber());
-        $this->assertEquals('EUR', $applePay->getCurrencyCode());
-        $this->assertEquals('some-Data', $applePay->getData());
-        $this->assertEquals('apple-pay', $applePay->getMethod());
-        $this->assertEquals('mySignature', $applePay->getSignature());
-        $this->assertEquals(100.19, $applePay->getTransactionAmount());
-        $this->assertEquals('EC_v1', $applePay->getVersion());
+    /**
+     * Test Apple Pay json serialization.
+     *
+     * @test
+     */
+    public function jsonSerializationExposesOnlyRequestParameter(): void
+    {
+        $applepay = $this->getTestApplepay();
 
-        $applePay->setApplicationExpirationDate(null);
-        $applePay->setApplicationPrimaryAccountNumber(null);
-        $applePay->setCurrencyCode(null);
-        $applePay->setData(null);
-        $applePay->setMethod(null);
-        $applePay->setSignature(null);
-        $applePay->setTransactionAmount(0);
-        $applePay->setVersion(null);
+        $expectedJson = '{ "data": "data", "header": { "ephemeralPublicKey": "ephemeralPublicKey", "publicKeyHash": ' .
+            '"publicKeyHash", "transactionId": "transactionId" }, "signature": "sig", "version": "EC_v1" }';
 
-        $this->assertNull($applePay->getApplicationExpirationDate());
-        $this->assertNull($applePay->getApplicationPrimaryAccountNumber());
-        $this->assertNull($applePay->getCurrencyCode());
-        $this->assertNull($applePay->getData());
-        $this->assertNull($applePay->getMethod());
-        $this->assertNull($applePay->getSignature());
-        $this->assertEquals(0, $applePay->getTransactionAmount());
-        $this->assertNull($applePay->getVersion());
+        $this->assertJsonStringEqualsJsonString($expectedJson, $applepay->jsonSerialize());
+    }
+
+    /**
+     * Test Apple Pay json response handling.
+     *
+     * @test
+     */
+    public function responseShouldBeMappedCorrectly(): void
+    {
+        $applepay = new Applepay(null, null, null, null);
+
+        $jsonResponse = '{
+            "id": "s-apl-faucbirhd6yy",
+            "method": "apple-pay",
+            "recurring": false,
+            "geoLocation": {
+                "clientIp": "115.77.189.143",
+                "countryCode": ""
+            },
+            "applicationPrimaryAccountNumber": "370295******922",
+            "applicationExpirationDate": "07/2020",
+            "currencyCode": "EUR",
+            "transactionAmount": "1.5000"
+        }';
+
+        $applepay->handleResponse(json_decode($jsonResponse));
+
+        $this->assertEquals('s-apl-faucbirhd6yy', $applepay->getId());
+        $this->assertEquals('apple-pay', $applepay->getMethod());
+        $this->assertEquals('370295******922', $applepay->getApplicationPrimaryAccountNumber());
+        $this->assertEquals('07/2020', $applepay->getApplicationExpirationDate());
+        $this->assertEquals('EUR', $applepay->getCurrencyCode());
+        $this->assertSame(1.5000, $applepay->getTransactionAmount());
+    }
+
+    /**
+     * @return ApplePayHeader
+     */
+    private function getTestApplePayHeader(): ApplePayHeader
+    {
+        return new ApplePayHeader('ephemeralPublicKey', 'publicKeyHash', 'transactionId');
+    }
+
+    /**
+     * @return Applepay
+     */
+    private function getTestApplepay(): Applepay
+    {
+        return new Applepay('EC_v1', 'data', 'sig', $this->getTestApplePayHeader());
     }
 }
