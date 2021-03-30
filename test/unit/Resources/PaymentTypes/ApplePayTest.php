@@ -96,6 +96,7 @@ class ApplePayTest extends BasePaymentTest
         $this->assertEquals('07/2020', $applepay->getApplicationExpirationDate());
         $this->assertEquals('EUR', $applepay->getCurrencyCode());
         $this->assertSame(1.5000, $applepay->getTransactionAmount());
+        $this->assertNotNull($applepay->getGeoLocation());
     }
 
     /**
