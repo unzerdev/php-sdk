@@ -24,6 +24,8 @@
  */
 namespace UnzerSDK\Resources\PaymentTypes;
 
+use stdClass;
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\EmbeddedResources\ApplePayHeader;
 use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
@@ -256,4 +258,19 @@ class Applepay extends BasePaymentType
     }
 
     //</editor-fold>
+
+    /**
+     * @inheritDoc
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    {
+        parent::handleResponse($response, $method);
+
+        if (isset($response->header)) {
+            $this->header = new ApplePayHeader(null, null, null);
+            $this->header->handleResponse($response->header);
+        }
+    }
+
+
 }

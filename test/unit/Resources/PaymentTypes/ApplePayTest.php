@@ -98,6 +98,37 @@ class ApplePayTest extends BasePaymentTest
         $this->assertSame(1.5000, $applepay->getTransactionAmount());
         $this->assertNotNull($applepay->getGeoLocation());
     }
+    /**
+     * Test Apple Pay json response handling.
+     *
+     * @test
+     */
+    public function applepayAuthorizationShouldBeMappedCorrectly(): void
+    {
+        $applepay = new Applepay(null, null, null, null);
+
+        $jsonResponse = '{
+          "version": "EC_v1",
+          "data": "data",
+          "signature": "signature",
+          "header": {
+            "ephemeralPublicKey": "ephemeralPublicKey",
+            "publicKeyHash": "publicKeyHash",
+            "transactionId": "transactionId"
+          }
+        }';
+
+        $applepay->handleResponse(json_decode($jsonResponse));
+
+        $this->assertEquals('EC_v1', $applepay->getVersion());
+        $this->assertEquals('data', $applepay->getData());
+        $this->assertEquals('signature', $applepay->getSignature());
+        $applePayHeader = $applepay->getHeader();
+        $this->assertNotNull($applePayHeader);
+        $this->assertEquals('ephemeralPublicKey', $applePayHeader->getEphemeralPublicKey());
+        $this->assertEquals('publicKeyHash', $applePayHeader->getPublicKeyHash());
+        $this->assertEquals('transactionId', $applePayHeader->getTransactionId());
+    }
 
     /**
      * @return ApplePayHeader
