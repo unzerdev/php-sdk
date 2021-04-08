@@ -98,6 +98,7 @@ class ApplePayTest extends BasePaymentTest
         $this->assertSame(1.5000, $applepay->getTransactionAmount());
         $this->assertNotNull($applepay->getGeoLocation());
     }
+
     /**
      * Test Apple Pay json response handling.
      *

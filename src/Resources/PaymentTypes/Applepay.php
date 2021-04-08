@@ -271,6 +271,4 @@ class Applepay extends BasePaymentType
             $this->header->handleResponse($response->header);
         }
     }
-
-
 }
