@@ -2,7 +2,7 @@
 /*
  *  [DESCRIPTION]
  *
- *  Copyright (C) [ACTUAL YEAR] - today Unzer E-Com GmbH
+ *  Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  *
  *  @link  https://docs.unzer.com/
  *
- *  @author  [AUTHOR] <development@unzer.com>
+ *  @author  David Owusu <development@unzer.com>
  *
  *  @package  UnzerSDK
  *
@@ -26,8 +26,8 @@
 
 namespace UnzerSDK\test\Adapter;
 
-use UnzerSDK\Adapter\ApplepaySession;
 use PHPUnit\Framework\TestCase;
+use UnzerSDK\Resources\ExternalResources\ApplepaySession;
 
 class ApplepaySessionTest extends TestCase
 {
@@ -38,6 +38,5 @@ class ApplepaySessionTest extends TestCase
 
         $jsonSerialize = $applepaySession->jsonSerialize();
         $this->assertJsonStringEqualsJsonString($expectedJson, $jsonSerialize);
-        echo $jsonSerialize;
     }
 }

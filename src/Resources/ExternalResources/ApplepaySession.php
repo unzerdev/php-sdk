@@ -1,8 +1,8 @@
 <?php
 /*
- * This is the Applepay Session is used for merchant validation call.
+ *  This class is used for applepay merchant validation request.
  *
- *  Copyright (C) [ACTUAL YEAR] - today Unzer E-Com GmbH
+ *  Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@
  *
  *  @link  https://docs.unzer.com/
  *
- *  @author  [AUTHOR] <development@unzer.com>
+ *  @author  David Owusu <development@unzer.com>
  *
  *  @package  UnzerSDK
  *
  */
 
-namespace UnzerSDK\Adapter;
+namespace UnzerSDK\Resources\ExternalResources;
 
 class ApplepaySession
 {
