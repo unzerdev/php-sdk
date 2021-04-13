@@ -1,5 +1,6 @@
 <?php
 /** @noinspection PhpComposerExtensionStubsInspection */
+
 /**
  * This is a wrapper for the applepay http adapter (CURL).
  *
@@ -25,55 +26,55 @@
  */
 namespace UnzerSDK\Adapter;
 
+use UnzerSDK\Exceptions\ApplepayMerchantValidationException;
+use UnzerSDK\Resources\ExternalResources\ApplepaySession;
 use UnzerSDK\Services\EnvironmentService;
-use UnzerSDK\Exceptions\UnzerApiException;
-use function in_array;
 
 class ApplepayAdapter
 {
     private $request;
 
     /**
-     * @param string          $merchantValidationURL
-     * @param ApplepaySession $applePaySession
-     * @param string          $merchantValidationCertificatePath
-     * @param string          $merchantValidationCertificateKeyChainPath
+     * @param string          $merchantValidationURL                     URL for merchant validation request
+     * @param ApplepaySession $applePaySession                           Containing applepay session data.
+     * @param string          $merchantValidationCertificatePath         Path to merchant identification certificate
+     * @param string|null     $merchantValidationCertificateKeyChainPath
      *
      * @return string|null
      *
-     * @throws UnzerApiException
+     * @throws ApplepayMerchantValidationException
      */
     public function validateApplePayMerchant(
         string $merchantValidationURL,
         ApplepaySession $applePaySession,
-        string $merchantValidationCertificatePath
+        string $merchantValidationCertificatePath,
+        ?string $merchantValidationCertificateKeyChainPath = null
     ): ?string {
         $payload = $applePaySession->jsonSerialize();
-        $this->init($merchantValidationURL, $payload, $merchantValidationCertificatePath);
-        try {
-            return $this->execute();
-        } catch (\Exception $exception) {
-            return $exception;
-        }
+        $this->init(
+            $merchantValidationURL,
+            $payload,
+            $merchantValidationCertificatePath,
+            $merchantValidationCertificateKeyChainPath
+        );
+        $sessionResponse = $this->execute();
+        $this->close();
+        return $sessionResponse;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function init($url, $payload, $sslCert): void
+    public function init($url, $payload, $sslCert, $caCert = null): void
     {
         $timeout = EnvironmentService::getTimeout();
         $curlVerbose = EnvironmentService::isCurlVerbose();
 
-        $this->request = curl_init();
-        $this->setOption(CURLOPT_URL, $url);
+        $this->request = curl_init($url);
         $this->setOption(CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         $this->setOption(CURLOPT_POST, 1);
         $this->setOption(CURLOPT_DNS_USE_GLOBAL_CACHE, false);
         $this->setOption(CURLOPT_POSTFIELDS, $payload);
-        $this->setOption(CURLOPT_SSLCERT, $sslCert);
-
-
         $this->setOption(CURLOPT_FAILONERROR, false);
         $this->setOption(CURLOPT_TIMEOUT, $timeout);
         $this->setOption(CURLOPT_CONNECTTIMEOUT, $timeout);
@@ -83,29 +84,11 @@ class ApplepayAdapter
         $this->setOption(CURLOPT_SSL_VERIFYHOST, 2);
         $this->setOption(CURLOPT_VERBOSE, $curlVerbose);
         $this->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute(): ?string
-    {
-        $response = curl_exec($this->request);
-        $error    = curl_error($this->request);
-        $errorNo  = curl_errno($this->request);
-
-        switch ($errorNo) {
-            case 0:
-                return $response;
-                break;
-            case CURLE_OPERATION_TIMEDOUT:
-                $errorMessage = 'Timeout: The Payment API seems to be not available at the moment!';
-                break;
-            default:
-                $errorMessage = $error . ' (curl_errno: '. $errorNo . ').';
-                break;
+        $this->setOption(CURLOPT_SSLCERT, $sslCert);
+        if (isset($caCert)) {
+            $this->setOption(CURLOPT_CAINFO, $caCert);
         }
-        throw new UnzerApiException($errorMessage);
     }
 
     /**
@@ -117,5 +100,46 @@ class ApplepayAdapter
     private function setOption($name, $value): void
     {
         curl_setopt($this->request, $name, $value);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ApplepayMerchantValidationException
+     */
+    public function execute(): ?string
+    {
+        $response = curl_exec($this->request);
+        $error = curl_error($this->request);
+        $errorNo = curl_errno($this->request);
+
+        switch ($errorNo) {
+            case 0:
+                return $response;
+                break;
+            case CURLE_OPERATION_TIMEDOUT:
+                $errorMessage = 'Timeout: The Applepay API seems to be not available at the moment!';
+                break;
+            default:
+                $errorMessage = $error . ' (curl_errno: ' . $errorNo . ').';
+                break;
+        }
+        throw new ApplepayMerchantValidationException($errorMessage);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function close(): void
+    {
+        curl_close($this->request);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getResponseCode(): string
+    {
+        return curl_getinfo($this->request, CURLINFO_HTTP_CODE);
     }
 }

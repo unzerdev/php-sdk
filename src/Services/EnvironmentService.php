@@ -143,6 +143,7 @@ class EnvironmentService
 
     /**
      * Returns the apple merchant certificate path set via environment variable.
+     *
      * @return string
      */
     public static function getAppleMerchantCertificatePath(): string
@@ -152,6 +153,7 @@ class EnvironmentService
 
     /**
      * Returns the CA certificate path set via environment variable.
+     *
      * @return string
      */
     public static function getAppleCaCertificatePath(): string
