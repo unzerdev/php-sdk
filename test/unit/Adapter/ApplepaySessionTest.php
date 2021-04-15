@@ -24,14 +24,14 @@
  *
  */
 
-namespace UnzerSDK\test\Adapter;
+namespace UnzerSDK\test\unit\Adapter;
 
 use PHPUnit\Framework\TestCase;
 use UnzerSDK\Resources\ExternalResources\ApplepaySession;
 
 class ApplepaySessionTest extends TestCase
 {
-    public function testJsonSerialize()
+    public function testJsonSerialize(): void
     {
         $applepaySession = new ApplepaySession('merchantIdentifier', 'displayName', 'domainName');
         $expectedJson = '{"merchantIdentifier": "merchantIdentifier", "displayName": "displayName", "domainName": "domainName"}';

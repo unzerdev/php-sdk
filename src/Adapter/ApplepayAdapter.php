@@ -26,6 +26,7 @@
  */
 namespace UnzerSDK\Adapter;
 
+use UnzerSDK\Constants\ApplepayValidationDomains;
 use UnzerSDK\Exceptions\ApplepayMerchantValidationException;
 use UnzerSDK\Resources\ExternalResources\ApplepaySession;
 use UnzerSDK\Services\EnvironmentService;
@@ -50,6 +51,9 @@ class ApplepayAdapter
         string $merchantValidationCertificatePath,
         ?string $merchantValidationCertificateKeyChainPath = null
     ): ?string {
+        if (!$this->validMerchantValidationDomain($merchantValidationURL)) {
+            throw new ApplepayMerchantValidationException('Invalid URL used merchantValidation request.');
+        }
         $payload = $applePaySession->jsonSerialize();
         $this->init(
             $merchantValidationURL,
@@ -60,6 +64,20 @@ class ApplepayAdapter
         $sessionResponse = $this->execute();
         $this->close();
         return $sessionResponse;
+    }
+
+    /**
+     * Check whether domain of merchantValidationURL is allowed for validation request.
+     *
+     * @param string $merchantValidationURL URL used for merchant validation request.
+     *
+     */
+    public function validMerchantValidationDomain(string $merchantValidationURL): bool
+    {
+        $domain = explode('/', $merchantValidationURL)[2] ?? '';
+
+        $UrlList = ApplepayValidationDomains::ALLOWED_VALIDATION_URLS;
+        return in_array($domain, $UrlList);
     }
 
     /**

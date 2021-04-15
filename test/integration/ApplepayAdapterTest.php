@@ -27,6 +27,7 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Adapter\ApplepayAdapter;
+use UnzerSDK\Exceptions\ApplepayMerchantValidationException;
 use UnzerSDK\Resources\ExternalResources\ApplepaySession;
 use UnzerSDK\Services\EnvironmentService;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -36,6 +37,17 @@ class ApplepayAdapterTest extends BaseIntegrationTest
     private $merchantValidationUrl;
     private $merchantValidationCertificatePath;
     private $appleCaCertificatePath;
+
+    public function domainShouldBeValidatedCorrectlyDP()
+    {
+        return [
+            'invalid: example.domain.com' => ['https://example.domain.com', false],
+            'valid: https://apple-pay-gateway.apple.com/some/path' => ['https://apple-pay-gateway.apple.com/some/path', true],
+            'valid: https://cn-apple-pay-gateway.apple.com' => ['https://cn-apple-pay-gateway.apple.com', true],
+            'invalid: apple-pay-gateway-nc-pod1.apple.com' => ['apple-pay-gateway-nc-pod1.apple.com', false],
+            'invalid: (empty)' => ['', false],
+        ];
+    }
 
     /**
      * @inheritDoc
@@ -51,6 +63,8 @@ class ApplepayAdapterTest extends BaseIntegrationTest
      * test merchant validation request.
      *
      * @test
+     *
+     * @throws \UnzerSDK\Exceptions\ApplepayMerchantValidationException
      */
     public function verifyMerchantValidationRequest(): void
     {
@@ -71,11 +85,11 @@ class ApplepayAdapterTest extends BaseIntegrationTest
      * test merchant validation request without ca certificate.
      *
      * @test
+     *
+     * @throws \UnzerSDK\Exceptions\ApplepayMerchantValidationException
      */
     public function merchantValidationWorksWithoutCaCert(): void
     {
-        $merchantValidationCertificatePath = EnvironmentService::getAppleMerchantCertificatePath();
-
         $applepaySession = $this->createApplepaySession();
         $appleAdapter = new ApplepayAdapter();
 
@@ -86,6 +100,45 @@ class ApplepayAdapterTest extends BaseIntegrationTest
         );
 
         $this->assertNotNull($validationResponse);
+    }
+
+    /**
+     * Merchant validation call should throw Exception if domain of Validation url is invalid.
+     *
+     * @test
+     *
+     */
+    public function merchantValidationThrowsErrorForInvalidDomain(): void
+    {
+        $applepaySession = $this->createApplepaySession();
+        $appleAdapter = new ApplepayAdapter();
+
+        $this->expectException(ApplepayMerchantValidationException::class);
+        $this->expectExceptionMessage('Invalid URL used merchantValidation request.');
+
+        $appleAdapter->validateApplePayMerchant(
+            'https://invalid.domain.com/some/path',
+            $applepaySession,
+            $this->merchantValidationCertificatePath
+        );
+    }
+
+    /**
+     * test merchant validation request without ca certificate.
+     *
+     * @dataProvider domainShouldBeValidatedCorrectlyDP
+     * @test
+     *
+     * @param mixed $validationUrl
+     * @param mixed $expectedResult
+     *
+     */
+    public function domainShouldBeValidatedCorrectly($validationUrl, $expectedResult): void
+    {
+        $appleAdapter = new ApplepayAdapter();
+
+        $domainValidation = $appleAdapter->validMerchantValidationDomain($validationUrl);
+        $this->assertEquals($expectedResult, $domainValidation);
     }
 
     /**
