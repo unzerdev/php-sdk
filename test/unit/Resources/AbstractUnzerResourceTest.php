@@ -33,6 +33,7 @@ use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Constants\Salutations;
 use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Resources\InstalmentPlans;
+use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
@@ -443,6 +444,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal'],
             'EPS' => [new EPS(), 'parent/resource/path/types/eps'],
             'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay'],
+            'ApplePay' => [new Applepay('EC_v1', 'data', 'sig', null), 'parent/resource/path/types/applepay'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit'],
             'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types/sepa-direct-debit-secured'],
             'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice'],
@@ -467,14 +469,15 @@ class AbstractUnzerResourceTest extends BasePaymentTest
     {
         return [
             // Payment types.
-            'Card' => [new Card('', '03/30'), 'parent/resource/path/types'],
-            'Ideal' => [new Ideal(), 'parent/resource/path/types'],
-            'EPS' => [new EPS(), 'parent/resource/path/types'],
             'Alipay' => [new Alipay(), 'parent/resource/path/types'],
+            'ApplePay' => [new Applepay('EC_v1', 'data', 'sig', null), 'parent/resource/path/types'],
+            'Card' => [new Card('', '03/30'), 'parent/resource/path/types'],
+            'EPS' => [new EPS(), 'parent/resource/path/types'],
+            'Ideal' => [new Ideal(), 'parent/resource/path/types'],
+            'InstallmentSecured' => [new InstallmentSecured(), 'parent/resource/path/types'],
+            'Invoice' => [new Invoice(), 'parent/resource/path/types'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types'],
             'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types'],
-            'Invoice' => [new Invoice(), 'parent/resource/path/types'],
-            'InstallmentSecured' => [new InstallmentSecured(), 'parent/resource/path/types'],
 
             // Other resources Uris should behave as before.
             'Customer' => [new Customer(), 'parent/resource/path/customers'],

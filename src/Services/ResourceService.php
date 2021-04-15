@@ -30,6 +30,7 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -514,6 +515,9 @@ class ResourceService implements ResourceServiceInterface
         switch ($resourceType) {
             case IdStrings::ALIPAY:
                 $paymentType = new Alipay();
+                break;
+            case IdStrings::APPLEPAY:
+                $paymentType = new Applepay(null, null, null, null);
                 break;
             case IdStrings::BANCONTACT:
                 $paymentType = new Bancontact();
