@@ -148,7 +148,7 @@ class EnvironmentService
      */
     public static function getAppleMerchantCertificatePath(): string
     {
-        return $_SERVER[self::ENV_VAR_TEST_APPLE_MERCHANT_CERTIFICATE] ?? '';
+        return stripslashes($_SERVER[self::ENV_VAR_TEST_APPLE_MERCHANT_CERTIFICATE]) ?? '';
     }
 
     /**
@@ -158,6 +158,6 @@ class EnvironmentService
      */
     public static function getAppleCaCertificatePath(): string
     {
-        return $_SERVER[self::ENV_VAR_TEST_APPLE_CA_CERTIFICATE] ?? '';
+        return stripslashes($_SERVER[self::ENV_VAR_TEST_APPLE_CA_CERTIFICATE]) ?? '';
     }
 }
