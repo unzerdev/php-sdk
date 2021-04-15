@@ -52,7 +52,7 @@ class ApplepayAdapter
         ?string $merchantValidationCertificateKeyChainPath = null
     ): ?string {
         if (!$this->validMerchantValidationDomain($merchantValidationURL)) {
-            throw new ApplepayMerchantValidationException('Invalid URL used merchantValidation request.');
+            throw new ApplepayMerchantValidationException('Invalid URL used for merchantValidation request.');
         }
         $payload = $applePaySession->jsonSerialize();
         $this->init(

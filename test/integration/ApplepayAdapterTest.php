@@ -114,7 +114,7 @@ class ApplepayAdapterTest extends BaseIntegrationTest
         $appleAdapter = new ApplepayAdapter();
 
         $this->expectException(ApplepayMerchantValidationException::class);
-        $this->expectExceptionMessage('Invalid URL used merchantValidation request.');
+        $this->expectExceptionMessage('Invalid URL used for merchantValidation request.');
 
         $appleAdapter->validateApplePayMerchant(
             'https://invalid.domain.com/some/path',
