@@ -77,7 +77,7 @@ class ApplepayTest extends BaseIntegrationTest
      *
      * @test
      *
-     * @throws \UnzerSDK\Exceptions\UnzerApiException
+     * @throws UnzerApiException
      */
     public function applepayCanBeAuthorized(): void
     {
@@ -117,10 +117,6 @@ class ApplepayTest extends BaseIntegrationTest
         $applepay = $this->unzer->createPaymentType($applepay);
 
         $charge = $applepay->charge(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
-
-        // applepay recurring is activated through charge transaction
-        /** @var Applepay $fetchedApplepay */
-        $fetchedApplepay = $this->unzer->fetchPaymentType($applepay->getId());
 
         // verify charge has been created
         $this->assertNotNull($charge->getId());
