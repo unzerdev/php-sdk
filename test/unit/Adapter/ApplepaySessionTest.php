@@ -1,6 +1,6 @@
 <?php
 /*
- *  [DESCRIPTION]
+ *  Test class for ApplepaySession.
  *
  *  Copyright (C) 2021 - today Unzer E-Com GmbH
  *

@@ -52,9 +52,9 @@ class ApplepaySession
     /**
      * ApplepaySession constructor.
      *
-     * @param string|null $merchantIdentifier
-     * @param string|null $displayName
-     * @param string|null $domainName
+     * @param string $merchantIdentifier
+     * @param string $displayName
+     * @param string $domainName
      */
     public function __construct(string $merchantIdentifier, string $displayName, string $domainName)
     {
@@ -63,6 +63,11 @@ class ApplepaySession
         $this->domainName = $domainName;
     }
 
+    /**
+     * Returns the json representation of this object's properties.
+     *
+     * @return false|string
+     */
     public function jsonSerialize()
     {
         $properties = get_object_vars($this);
