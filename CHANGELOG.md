@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.2.0]
 ### Added
-*   Payment type ApplePay.
+*   Introduce the payment type Applepay.
 
 ## [1.1.1.1]
 
