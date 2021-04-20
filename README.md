@@ -11,10 +11,10 @@ This SDK provides for an easy way to connect to the Unzer Rest API.
 
 Please refer to the following documentation for installation instructions and usage information.
 
-*   [API Documentation](https://docs.unzer.com/docs/introduction)
-*   [PHP SDK Documentation](https://docs.unzer.com/docs/php-sdk)
-*   [How to use the examples](https://docs.unzer.com/docs/example-implementations)
-*   [Debugging](https://docs.unzer.com/docs/logging-and-debugging)
+*   [API Documentation](https://docs.unzer.com/overview)
+*   [PHP SDK Documentation](https://docs.unzer.com/integrate/php-sdk)
+*   [How to use the examples](https://docs.unzer.com/integrate/php-sdk/example-implementations)
+*   [Debugging](https://docs.unzer.com/integrate/php-sdk/logging-and-debugging)
 
 ## Supported payment types
 *   Alipay
