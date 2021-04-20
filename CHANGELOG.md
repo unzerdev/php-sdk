@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Introduce the payment type Applepay.
 
+### Changed
+* Card Examples: Ensure that error messages are displayed just one time.
+
 ## [1.1.1.1](https://github.com/unzerdev/php-sdk/compare/1.1.1.0..1.1.1.1)
 
 ### Fix

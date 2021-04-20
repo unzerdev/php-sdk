@@ -151,7 +151,6 @@ require_once __DIR__ . '/../../../../autoload.php';
             $errorHolder.html('')
         } else {
             formFieldValid[e.type] = false;
-            $errorHolder.html(e.error)
         }
         payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc);
     };
