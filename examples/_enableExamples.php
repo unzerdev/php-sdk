@@ -28,11 +28,12 @@
 /* Set to true if you want to enable the examples */
 define('UNZER_PAPI_EXAMPLES', false);
 
-/* Please set this to your url. It must be reachable over the net*/
-define('UNZER_PAPI_URL', 'http://'.$_SERVER['HTTP_HOST']);
+/* Please set this to your url. It must be reachable over the net
+Webhooks will work with https only. However protocol can be changed to http if necessary. */
+define('UNZER_PAPI_URL', 'https://'.$_SERVER['HTTP_HOST']);
 
 /* Please enter the path from root directory to the example folder */
-define('UNZER_PAPI_FOLDER', '/vendor/unzer/php-sdk/examples/');
+define('UNZER_PAPI_FOLDER', '/vendor/unzerdev/php-sdk/examples/');
 
 /* Please provide your own sandbox-keypair here. */
 define('UNZER_PAPI_PRIVATE_KEY', 's-priv-***');
