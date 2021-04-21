@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
     *   Card Examples - Ensure that error messages are displayed just one time.
     *   Configuration - Change default protocol to https.
     *   Configuration - Correct vendor name of path constant `UNZER_PAPI_FOLDER`.
+*   Update documentation links.
 
 ## [1.1.1.1](https://github.com/unzerdev/php-sdk/compare/1.1.1.0..1.1.1.1)
 
