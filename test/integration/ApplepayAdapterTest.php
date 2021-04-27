@@ -64,18 +64,17 @@ class ApplepayAdapterTest extends BaseIntegrationTest
      *
      * @test
      *
-     * @throws \UnzerSDK\Exceptions\ApplepayMerchantValidationException
+     * @throws ApplepayMerchantValidationException
      */
     public function verifyMerchantValidationRequest(): void
     {
         $applepaySession = $this->createApplepaySession();
         $appleAdapter = new ApplepayAdapter();
+        $appleAdapter->init($this->merchantValidationCertificatePath, null, $this->appleCaCertificatePath);
 
         $validationResponse = $appleAdapter->validateApplePayMerchant(
             $this->merchantValidationUrl,
-            $applepaySession,
-            $this->merchantValidationCertificatePath,
-            $this->appleCaCertificatePath
+            $applepaySession
         );
 
         $this->assertNotNull($validationResponse);
@@ -86,17 +85,17 @@ class ApplepayAdapterTest extends BaseIntegrationTest
      *
      * @test
      *
-     * @throws \UnzerSDK\Exceptions\ApplepayMerchantValidationException
+     * @throws ApplepayMerchantValidationException
      */
     public function merchantValidationWorksWithoutCaCert(): void
     {
         $applepaySession = $this->createApplepaySession();
         $appleAdapter = new ApplepayAdapter();
+        $appleAdapter->init($this->merchantValidationCertificatePath);
 
         $validationResponse = $appleAdapter->validateApplePayMerchant(
             $this->merchantValidationUrl,
-            $applepaySession,
-            $this->merchantValidationCertificatePath
+            $applepaySession
         );
 
         $this->assertNotNull($validationResponse);
@@ -112,14 +111,14 @@ class ApplepayAdapterTest extends BaseIntegrationTest
     {
         $applepaySession = $this->createApplepaySession();
         $appleAdapter = new ApplepayAdapter();
+        $appleAdapter->init($this->merchantValidationCertificatePath);
 
         $this->expectException(ApplepayMerchantValidationException::class);
         $this->expectExceptionMessage('Invalid URL used for merchantValidation request.');
 
         $appleAdapter->validateApplePayMerchant(
             'https://invalid.domain.com/some/path',
-            $applepaySession,
-            $this->merchantValidationCertificatePath
+            $applepaySession
         );
     }
 
