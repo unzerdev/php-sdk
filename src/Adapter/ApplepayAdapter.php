@@ -36,10 +36,8 @@ class ApplepayAdapter
     private $request;
 
     /**
-     * @param string          $merchantValidationURL                     URL for merchant validation request
-     * @param ApplepaySession $applePaySession                           Containing applepay session data.
-     * @param string          $merchantValidationCertificatePath         Path to merchant identification certificate
-     * @param string|null     $merchantValidationCertificateKeyChainPath
+     * @param string          $merchantValidationURL URL for merchant validation request
+     * @param ApplepaySession $applePaySession       Containing applepay session data.
      *
      * @return string|null
      *
@@ -47,20 +45,18 @@ class ApplepayAdapter
      */
     public function validateApplePayMerchant(
         string $merchantValidationURL,
-        ApplepaySession $applePaySession,
-        string $merchantValidationCertificatePath,
-        ?string $merchantValidationCertificateKeyChainPath = null
+        ApplepaySession $applePaySession
     ): ?string {
         if (!$this->validMerchantValidationDomain($merchantValidationURL)) {
-            throw new ApplepayMerchantValidationException('Invalid URL used for merchantValidation request.');
+            throw new ApplepayMerchantValidationException("Invalid URL used for merchantValidation request.");
+        }
+        if ($this->request === null) {
+            throw new ApplepayMerchantValidationException('No curl adapter initiated yet. Make sure to cal init() function before.');
         }
         $payload = $applePaySession->jsonSerialize();
-        $this->init(
-            $merchantValidationURL,
-            $payload,
-            $merchantValidationCertificatePath,
-            $merchantValidationCertificateKeyChainPath
-        );
+        $this->setOption(CURLOPT_URL, $merchantValidationURL);
+        $this->setOption(CURLOPT_POSTFIELDS, $payload);
+
         $sessionResponse = $this->execute();
         $this->close();
         return $sessionResponse;
@@ -71,6 +67,7 @@ class ApplepayAdapter
      *
      * @param string $merchantValidationURL URL used for merchant validation request.
      *
+     * @return bool
      */
     public function validMerchantValidationDomain(string $merchantValidationURL): bool
     {
@@ -81,18 +78,20 @@ class ApplepayAdapter
     }
 
     /**
-     * {@inheritDoc}
+     * @param string      $sslCert Path to merchant identification certificate.
+     * @param string|null $sslKey  Path to merchant identification key file.
+     *                             This is necessary if the ssl cert file doesn't contain key already.
+     * @param string|null $caCert  Path to CA certificate.
      */
-    public function init($url, $payload, $sslCert, $caCert = null): void
+    public function init(string $sslCert, string $sslKey = null, string $caCert = null): void
     {
         $timeout = EnvironmentService::getTimeout();
         $curlVerbose = EnvironmentService::isCurlVerbose();
 
-        $this->request = curl_init($url);
+        $this->request = curl_init();
         $this->setOption(CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         $this->setOption(CURLOPT_POST, 1);
         $this->setOption(CURLOPT_DNS_USE_GLOBAL_CACHE, false);
-        $this->setOption(CURLOPT_POSTFIELDS, $payload);
         $this->setOption(CURLOPT_FAILONERROR, false);
         $this->setOption(CURLOPT_TIMEOUT, $timeout);
         $this->setOption(CURLOPT_CONNECTTIMEOUT, $timeout);
@@ -104,7 +103,10 @@ class ApplepayAdapter
         $this->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
 
         $this->setOption(CURLOPT_SSLCERT, $sslCert);
-        if (isset($caCert)) {
+        if (isset($sslKey) && !empty($sslKey)) {
+            $this->setOption(CURLOPT_SSLKEY, $sslKey);
+        }
+        if (isset($caCert) && !empty($caCert)) {
             $this->setOption(CURLOPT_CAINFO, $caCert);
         }
     }
