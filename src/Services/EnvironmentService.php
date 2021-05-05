@@ -41,6 +41,9 @@ class EnvironmentService
     public const ENV_VAR_TEST_PRIVATE_KEY_NON_3DS = 'UNZER_PAPI_TEST_PRIVATE_KEY_NON_3DS';
     public const ENV_VAR_TEST_PUBLIC_KEY_NON_3DS = 'UNZER_PAPI_TEST_PUBLIC_KEY_NON_3DS';
 
+    public const ENV_VAR_TEST_APPLE_MERCHANT_ID_FOLDER = 'UNZER_APPLE_MERCHANT_ID_PATH';
+    public const ENV_VAR_TEST_APPLE_CA_CERTIFICATE = 'UNZER_APPLE_CA_CERTIFICATE_PATH';
+
     private const ENV_VAR_NAME_TIMEOUT = 'UNZER_PAPI_TIMEOUT';
     private const DEFAULT_TIMEOUT = 60;
 
@@ -136,5 +139,25 @@ class EnvironmentService
         $variableName = $non3ds ? self::ENV_VAR_TEST_PUBLIC_KEY_NON_3DS : self::ENV_VAR_TEST_PUBLIC_KEY;
         $key = stripslashes($_SERVER[$variableName] ?? '');
         return empty($key) ? '' : $key;
+    }
+
+    /**
+     * Returns the path to apple merchant ID folder set via environment variable.
+     *
+     * @return string
+     */
+    public static function getAppleMerchantIdPath(): string
+    {
+        return stripslashes($_SERVER[self::ENV_VAR_TEST_APPLE_MERCHANT_ID_FOLDER] ?? '');
+    }
+
+    /**
+     * Returns the CA certificate path set via environment variable.
+     *
+     * @return string
+     */
+    public static function getAppleCaCertificatePath(): string
+    {
+        return stripslashes($_SERVER[self::ENV_VAR_TEST_APPLE_CA_CERTIFICATE] ?? '');
     }
 }

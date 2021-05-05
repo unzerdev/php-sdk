@@ -35,6 +35,7 @@ class IdStrings
 
     // Payment Types
     public const ALIPAY = 'ali';
+    public const APPLEPAY = 'apl';
     public const BANCONTACT = 'bct';
     public const CARD = 'crd';
     public const EPS = 'eps';
@@ -66,6 +67,7 @@ class IdStrings
     public const WEBHOOK = 'whk';
     public const PAYMENT_TYPES = [
         self::ALIPAY,
+        self::APPLEPAY,
         self::BANCONTACT,
         self::CARD,
         self::EPS,
