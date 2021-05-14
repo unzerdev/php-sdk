@@ -63,7 +63,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.1.1.0';
+    public const SDK_VERSION = '1.1.2.0';
 
     /** @var string $key */
     private $key;
@@ -98,7 +98,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * @param string $key    The private key your received from your Unzer contact person.
      * @param string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
-     * @link https://docs.unzer.com/docs/web-integration#section-localization-and-languages
+     * @link https://docs.unzer.com/integrate/web-integration/#section-localization-and-languages
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      */

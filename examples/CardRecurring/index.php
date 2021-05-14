@@ -60,7 +60,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     <li>Secret: secret3</li>
 </ul>
 
-<p><a href="https://docs.unzer.com/docs/testdata" target="_blank">Click here to open our test data in new tab.</a></p>
+<p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form" class="unzerUI form" novalidate>
     <div class="field">
@@ -79,6 +79,9 @@ require_once __DIR__ . '/../../../../autoload.php';
                 <!-- Card CVC UI Element will be inserted here. -->
             </div>
         </div>
+    </div>
+    <div id="card-element-id-email" class="unzerInput">
+        <!-- Card number UI Element will be inserted here. -->
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
@@ -102,6 +105,10 @@ require_once __DIR__ . '/../../../../autoload.php';
         containerId: 'card-element-id-cvc',
         onlyIframe: false
     });
+    Card.create('email', {
+        containerId: 'card-element-id-email',
+        onlyIframe: false
+    });
 
     // General event handling
     let formFieldValid = {};
@@ -117,9 +124,8 @@ require_once __DIR__ . '/../../../../autoload.php';
             $errorHolder.html('')
         } else {
             formFieldValid[e.type] = false;
-            $errorHolder.html(e.error)
         }
-        payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc);
+        payButton.disabled = !(formFieldValid.number && formFieldValid.expiry && formFieldValid.cvc && formFieldValid.email);
     };
 
     Card.addEventListener('change', eventHandlerCardInput);

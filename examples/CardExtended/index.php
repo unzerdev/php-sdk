@@ -1,8 +1,8 @@
 <?php
 /**
- * This file provides an example implementation of the PayPal payment type.
+ * This file provides an example implementation of the Card payment type.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,12 +44,21 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
-<h3>Example data:</h3>
+<h3>Example Data for VISA:</h3>
 <ul>
-    <li>Username: paypal-customer@heidelpay.de</li>
-    <li>Password: heidelpay</li>
+    <li>Number: 4711100000000000</li>
+    <li>Expiry date: Date in the future</li>
+    <li>Cvc: 123</li>
+    <li>Secret: secret3</li>
 </ul>
-<strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com" target="_blank">here</a>.
+
+<h3>Example Data for Mastercard:</h3>
+<ul>
+    <li>Number: 5453010000059543</li>
+    <li>Expiry date: Date in the future</li>
+    <li>Cvc: 123</li>
+    <li>Secret: secret3</li>
+</ul>
 
 <p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
@@ -69,10 +78,43 @@ require_once __DIR__ . '/../../../../autoload.php';
                 <label>Charge</label>
             </div>
         </div>
+        <div class="field">
+            <div class="unzerUI radio checkbox">
+                <input type="radio" name="transaction_type" value="payout">
+                <label>Payout</label>
+            </div>
+        </div>
     </div>
+
     <!-- This is just for the example - End -->
 
-    <div id="container-example-paypal"></div>
+    <div class="field">
+        <div id="card-element-id-card-holder" class="unzerInput">
+            <!-- Card number UI Element will be inserted here. -->
+        </div>
+    </div>
+    <div class="field">
+        <div id="card-element-id-number" class="unzerInput">
+            <!-- Card number UI Element will be inserted here. -->
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field ten wide">
+            <div id="card-element-id-expiry" class="unzerInput">
+                <!-- Card expiry date UI Element will be inserted here. -->
+            </div>
+        </div>
+        <div class="field six wide">
+            <div id="card-element-id-cvc" class="unzerInput">
+                <!-- Card CVC UI Element will be inserted here. -->
+            </div>
+        </div>
+    </div>
+    <div class="field">
+        <div id="card-element-id-email" class="unzerInput">
+            <!-- Card number UI Element will be inserted here. -->
+        </div>
+    </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
@@ -81,18 +123,61 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
-    // Create an Paypal instance
-    let Paypal = unzerInstance.Paypal();
-    Paypal.create('email', {
-        containerId: 'container-example-paypal'
-    })
+    // Create a Card instance and render the input fields
+    let Card = unzerInstance.Card();
+    Card.create('holder', {
+        containerId: 'card-element-id-card-holder',
+        onlyIframe: false
+    });
+    Card.create('number', {
+        containerId: 'card-element-id-number',
+        onlyIframe: false
+    });
+    Card.create('expiry', {
+        containerId: 'card-element-id-expiry',
+        onlyIframe: false
+    });
+    Card.create('cvc', {
+        containerId: 'card-element-id-cvc',
+        onlyIframe: false
+    });
+    Card.create('email', {
+        containerId: 'card-element-id-email',
+        onlyIframe: false
+    });
 
-    // Handle payment form submission
+    // General event handling
+    let formFieldValid = {};
+    let payButton = document.getElementById("submit-button");
+    let $errorHolder = $('#error-holder');
+
+    // Enable pay button initially
+    payButton.disabled = true;
+
+    let eventHandlerCardInput = function(e) {
+        if (e.success) {
+            formFieldValid[e.type] = true;
+            $errorHolder.html('')
+        } else {
+            formFieldValid[e.type] = false;
+        }
+        payButton.disabled = !(
+            formFieldValid.number &&
+            formFieldValid.expiry &&
+            formFieldValid.cvc &&
+            formFieldValid.email &&
+            formFieldValid.holder
+        );
+    };
+
+    Card.addEventListener('change', eventHandlerCardInput);
+
+    // Handling the form submission
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a Paypal resource
-        Paypal.createResource()
+        // Creating a Card resource
+        Card.createResource()
             .then(function(result) {
                 let hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');
@@ -106,7 +191,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 form.submit();
             })
             .catch(function(error) {
-                $('#error-holder').html(error.message)
+                $errorHolder.html(error.message);
             })
     });
 </script>

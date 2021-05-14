@@ -1143,26 +1143,27 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP(): array
     {
         return [
+            'ALIPAY'                       => ['s-ali-xen2ybcovn56', 'https://api.unzer.com/v1/types/alipay/s-ali-xen2ybcovn56/'],
+            'APPLEPAY'                     => ['s-apl-xen2ybcovn56', 'https://api.unzer.com/v1/types/appelpay/s-apl-xen2ybcovn56/'],
+            'BANCONTACT'                   => ['s-bct-xen2ybcovn56', 'https://api.unzer.com/v1/types/bancontact/s-bct-xen2ybcovn56/'],
             'CARD'                         => ['s-crd-xen2ybcovn56', 'https://api.unzer.com/v1/types/card/s-crd-xen2ybcovn56/'],
+            'EPS'                          => ['s-eps-xen2ybcovn56', 'https://api.unzer.com/v1/types/eps/s-eps-xen2ybcovn56/'],
             'GIROPAY'                      => ['s-gro-xen2ybcovn56', 'https://api.unzer.com/v1/types/giropay/s-gro-xen2ybcovn56/'],
+            'HIRE_PURCHASE_DIRECT_DEBIT'   => ['s-hdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/hire-purchase-direct-debit/s-hdd-xen2ybcovn56/'],
             'IDEAL'                        => ['s-idl-xen2ybcovn56', 'https://api.unzer.com/v1/types/ideal/s-idl-xen2ybcovn56/'],
             'INVOICE'                      => ['s-ivc-xen2ybcovn56', 'https://api.unzer.com/v1/types/invoice/s-ivc-xen2ybcovn56/'],
+            'INVOICE_FACTORING'            => ['s-ivf-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'],
             'INVOICE_GUARANTEED'           => ['s-ivg-xen2ybcovn56', 'https://api.unzer.com/v1/types/invoice-guaranteed/s-ivg-xen2ybcovn56/'],
             'INVOICE_SECURED'              => ['s-ivs-xen2ybcovn56', 'https://api.unzer.com/v1/types/invoice-secured/s-ivs-xen2ybcovn56/'],
-            'INVOICE_FACTORING'            => ['s-ivf-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-ivf-xen2ybcovn56/'],
+            'Installment_SECURED'          => ['s-ins-xen2ybcovn56', 'https://api.unzer.com/v1/types/installment-secured/s-ins-xen2ybcovn56/'],
             'PAYPAL'                       => ['s-ppl-xen2ybcovn56', 'https://api.unzer.com/v1/types/paypal/s-ppl-xen2ybcovn56/'],
+            'PIS'                          => ['s-pis-xen2ybcovn56', 'https://api.unzer.com/v1/types/pis/s-pis-xen2ybcovn56/'],
             'PREPAYMENT'                   => ['s-ppy-xen2ybcovn56', 'https://api.unzer.com/v1/types/prepayment/s-ppy-xen2ybcovn56/'],
             'PRZELEWY24'                   => ['s-p24-xen2ybcovn56', 'https://api.unzer.com/v1/types/przelewy24/s-p24-xen2ybcovn56/'],
-            'SEPA_DIRECT_DEBIT_GUARANTEED' => ['s-ddg-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'],
             'SEPA_DIRECT_DEBIT'            => ['s-sdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit/s-sdd-xen2ybcovn56/'],
+            'SEPA_DIRECT_DEBIT_GUARANTEED' => ['s-ddg-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'],
             'SOFORT'                       => ['s-sft-xen2ybcovn56', 'https://api.unzer.com/v1/types/sofort/s-sft-xen2ybcovn56/'],
-            'PIS'                          => ['s-pis-xen2ybcovn56', 'https://api.unzer.com/v1/types/pis/s-pis-xen2ybcovn56/'],
-            'EPS'                          => ['s-eps-xen2ybcovn56', 'https://api.unzer.com/v1/types/eps/s-eps-xen2ybcovn56/'],
-            'ALIPAY'                       => ['s-ali-xen2ybcovn56', 'https://api.unzer.com/v1/types/alipay/s-ali-xen2ybcovn56/'],
-            'WECHATPAY'                    => ['s-wcp-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'],
-            'HIRE_PURCHASE_DIRECT_DEBIT'   => ['s-hdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/hire-purchase-direct-debit/s-hdd-xen2ybcovn56/'],
-            'Installment_SECURED'          => ['s-ins-xen2ybcovn56', 'https://api.unzer.com/v1/types/installment-secured/s-ins-xen2ybcovn56/'],
-            'BANCONTACT'                   => ['s-bct-xen2ybcovn56', 'https://api.unzer.com/v1/types/bancontact/s-bct-xen2ybcovn56/']
+            'WECHATPAY'                    => ['s-wcp-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/']
         ];
     }
 
