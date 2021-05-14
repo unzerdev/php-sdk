@@ -1,6 +1,6 @@
 {
-  "name": "unzerdev/php-sdk",
-  "description": "This is the php sdk to connect to the Unzer rest api.",
+  "name": "brusch/unzer-php-sdk",
+  "description": "This is a fork of unzerdev/php-sdk that supports PHP8 until the official SDK provides support.",
   "minimum-stability": "stable",
   "license": "Apache-2.0",
   "require": {
