@@ -173,7 +173,7 @@ class HttpService
         }
 
         $responseObject = json_decode($response, false);
-        if ($responseCode >= 400 || isset($responseObject->errors)) {
+        if (!is_numeric($responseCode) || (int)$responseCode >= 400 || isset($responseObject->errors)) {
             $code            = null;
             $errorId         = null;
             $customerMessage = $code;
