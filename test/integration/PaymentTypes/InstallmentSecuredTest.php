@@ -35,7 +35,6 @@ use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\InstalmentPlan;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
-use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 use function count;
@@ -62,7 +61,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
 
         $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann');
         $this->unzer->createPaymentType($ins);
-        $this->assertArraySubset($selectedPlan->expose(), $ins->expose());
+        $this->assertArrayContains($selectedPlan->expose(), $ins->expose());
 
         $fetchedIns = $this->unzer->fetchPaymentType($ins->getId());
         $this->assertEquals($ins->expose(), $fetchedIns->expose());
@@ -219,7 +218,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
         $this->assertCount($selectedPlan->getNumberOfRates(), $selectedPlan->getInstallmentRates(), 'The number of rates should equal the actual rate count.');
         $ins = new InstallmentSecured($selectedPlan, 'DE46940594210000012345', 'Manuel Weißmann', $yesterday, 'COBADEFFXXX', $yesterday, $this->getTomorrowsTimestamp());
         $this->unzer->createPaymentType($ins);
-        $this->assertArraySubset($selectedPlan->expose(), $ins->expose());
+        $this->assertArrayContains($selectedPlan->expose(), $ins->expose());
     }
 
     /**
