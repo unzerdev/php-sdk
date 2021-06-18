@@ -28,13 +28,13 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 
 class Amount extends AbstractUnzerResource
 {
-    private $total = 0.0;
-    private $charged = 0.0;
-    private $canceled = 0.0;
-    private $remaining = 0.0;
+    protected $total = 0.0;
+    protected $charged = 0.0;
+    protected $canceled = 0.0;
+    protected $remaining = 0.0;
 
     /** @var string $currency */
-    private $currency;
+    protected $currency;
 
     //<editor-fold desc="Getters/Setters">
 

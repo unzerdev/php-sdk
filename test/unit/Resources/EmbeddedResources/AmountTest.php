@@ -55,4 +55,20 @@ class AmountTest extends BasePaymentTest
         $this->assertEquals(3.3, $amount->getCharged());
         $this->assertEquals(4.4, $amount->getRemaining());
     }
+
+    /**
+     * Verify exposing
+     *
+     * @test
+     *
+     */
+    public function exposeShouldNotBeEmpty(): void
+    {
+        $amount = new Amount();
+
+        $resp = ['total' => 1.1, 'canceled' => 2.2, 'charged' => 3.3, 'remaining' => 4.4, 'currency' => 'MyCurrency'];
+        $amount->handleResponse((object)$resp);
+
+        $this->assertEquals($resp, $amount->expose());
+    }
 }
