@@ -444,7 +444,7 @@ class HttpServiceTest extends BasePaymentTest
             'Prod' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, 'https://api.unzer.com/v1'],
             'Stg' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, 'https://stg-api.unzer.com/v1'],
             'else' => ['something else', 'https://api.unzer.com/v1'],
-            'undefined' => [false, 'https://api.unzer.com/v1']
+            'undefined' => ['', 'https://api.unzer.com/v1']
         ];
     }
 
