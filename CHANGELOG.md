@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.1.3.0](https://github.com/unzerdev/php-sdk/compare/1.1.2.0..1.1.3.0)
 ### Added
 *   Enable PHP 8.0 compatibility.
-*   Allow PHPUnit version 8.x and 9.x in composer dev requirements, and adjust tests accordingly.
+*   Allow PHPUnit version 8.x and 9.x in composer dev requirementsK and adjust tests accordingly.
 
 ### Changed
 *   `\UnzerSDK\Services\HttpService::handleErrors` explicitly casts response code to int, to ensure same behaviour on all PHP versions.
