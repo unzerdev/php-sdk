@@ -7,8 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Enable PHP 8.0 compatibility.
 *   Allow PHPUnit version 8.x and 9.x in composer dev requirements and adjust tests accordingly.
-*   Payment Page examples:
-    *   Add missing customer information that are required for payment with Instalment. (address, dob, salutation)
+*   Payment Page examples: Add missing customer information that are required for payment with Instalment. (address, dob, salutation)
 
 ### Changed
 *   `\UnzerSDK\Services\HttpService::handleErrors` explicitly casts response code to int, to ensure same behaviour on all PHP versions.
