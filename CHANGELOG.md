@@ -8,8 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Enable PHP 8.
 *   Allow phpUnit version 8.x. in composer dev requirements, and adjust tests accordingly.
 
-###
-Changed
+### Changed
 *   `\UnzerSDK\Services\HttpService::handleErrors` explicitly casts response code to int, to ensure same behaviour on all PHP versions.
 *   Several minor changes.
 
