@@ -77,7 +77,7 @@ class KeypairTest extends BasePaymentTest
         $keypair->handleResponse($testResponse);
 
         // then
-        $this->assertArraySubset($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertArrayContains($paymentTypes, $keypair->getPaymentTypes());
         $this->assertEquals('s-pub-1234', $keypair->getPublicKey());
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
         $this->assertTrue($keypair->isCof());
