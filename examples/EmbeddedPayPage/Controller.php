@@ -31,8 +31,10 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use UnzerSDK\Constants\Salutations;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\CustomerFactory;
@@ -57,9 +59,19 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
+    // A customer with matching addresses is mandatory for Installment payment type
+    $address  = (new Address())
+        ->setName('Max Mustermann')
+        ->setStreet('Vangerowstr. 18')
+        ->setCity('Heidelberg')
+        ->setZip('69155')
+        ->setCountry('DE');
+
     // Create a charge/authorize transaction
-    $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    $customer->setEmail('test@test.com');
+    $customer = CustomerFactory::createCustomer('Max', 'Mustermann')
+        ->setSalutation(Salutations::MR)
+        ->setBirthDate('2000-02-12')
+        ->setEmail('test@test.com');
 
     // These are the mandatory parameters for the payment page ...
     $paypage = new Paypage(119.00, 'EUR', RETURN_CONTROLLER_URL);
@@ -84,6 +96,11 @@ try {
     if ($transactionType === 'charge') {
         $unzer->initPayPageCharge($paypage, $customer, $basket);
     } else {
+        // For demo purpose we set customer address for authorize only to enable instalment payment.
+        // That way e.g. Invoice secured will display customer form on payment page.
+        $customer
+            ->setShippingAddress($address)
+            ->setBillingAddress($address);
         $unzer->initPayPageAuthorize($paypage, $customer, $basket);
     }
 
