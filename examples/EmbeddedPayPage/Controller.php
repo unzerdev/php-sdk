@@ -75,19 +75,19 @@ try {
 
     // These are the mandatory parameters for the payment page ...
     $paypage = new Paypage(119.00, 'EUR', RETURN_CONTROLLER_URL);
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // ... however you can customize the Payment Page using additional parameters.
     $paypage->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
             ->setShopName('My Test Shop')
             ->setTagline('Try and stop us from being awesome!')
-            ->setOrderId('o' . microtime(true))
+            ->setOrderId($orderId)
             ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.
     $paypage->setEffectiveInterestRate(4.99);
 
     // ... a Basket is mandatory for InstallmentSecured
-    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);

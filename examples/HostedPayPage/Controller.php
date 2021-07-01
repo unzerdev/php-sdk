@@ -79,7 +79,7 @@ try {
         ->setEmail('test@test.com');
 
     // These are the mandatory parameters for the payment page ...
-    $paypage = new Paypage(119.0, 'EUR', RETURN_CONTROLLER_URL);
+    $paypage = new Paypage(119.00, 'EUR', RETURN_CONTROLLER_URL);
 
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
