@@ -127,7 +127,7 @@ class HttpServiceTest extends BasePaymentTest
         ];
         $adapterMock->expects($this->once())->method('setHeaders')->with($headers);
         $adapterMock->expects($this->once())->method('execute')->willReturn('myResponseString');
-        $adapterMock->expects($this->once())->method('getResponseCode')->willReturn('myResponseCode');
+        $adapterMock->expects($this->once())->method('getResponseCode')->willReturn('399');
         $adapterMock->expects($this->once())->method('close');
 
         $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
@@ -254,7 +254,7 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify handleErrors will throw Exception if responseCode is greaterOrEqual to 400.
+     * Verify handleErrors will throw Exception if responseCode is greaterOrEqual to 400 or is not a number.
      *
      * @test
      * @dataProvider responseCodeProvider
@@ -385,7 +385,7 @@ class HttpServiceTest extends BasePaymentTest
         $adapterMock->expects($this->once())->method('init')->with($apiUrl, self::anything(), self::anything());
         $resource = (new DummyResource())->setParentResource(new Unzer('s-priv-MyTestKey'));
         $adapterMock->method('execute')->willReturn('myResponseString');
-        $adapterMock->method('getResponseCode')->willReturn('myResponseCode');
+        $adapterMock->method('getResponseCode')->willReturn('42');
 
         $envSrvMock = $this->getMockBuilder(EnvironmentService::class)->setMethods(['getPapiEnvironment'])->getMock();
         $envSrvMock->method('getPapiEnvironment')->willReturn($environment);
@@ -417,7 +417,8 @@ class HttpServiceTest extends BasePaymentTest
             '404' => ['404'],
             '500' => ['500'],
             '600' => ['600'],
-            '1000' => ['1000']
+            '1000' => ['1000'],
+            'Response code not a number' => ['myResponseCode']
         ];
     }
 
@@ -443,7 +444,7 @@ class HttpServiceTest extends BasePaymentTest
             'Prod' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, 'https://api.unzer.com/v1'],
             'Stg' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, 'https://stg-api.unzer.com/v1'],
             'else' => ['something else', 'https://api.unzer.com/v1'],
-            'undefined' => [false, 'https://api.unzer.com/v1']
+            'undefined' => ['', 'https://api.unzer.com/v1']
         ];
     }
 

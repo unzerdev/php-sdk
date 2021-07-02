@@ -399,7 +399,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
         // additionalAttributes
         $ppg = new Paypage(1.23456789, 'EUR', self::RETURN_URL);
         $ppg->setEffectiveInterestRate(12.3456789);
-        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 12.3457]], $ppg->expose());
+        $this->assertEquals(12.3457, $ppg->expose()['additionalAttributes']['effectiveInterestRate']);
         $this->assertEquals(12.3457, $ppg->getEffectiveInterestRate());
     }
 
@@ -417,14 +417,14 @@ class AbstractUnzerResourceTest extends BasePaymentTest
 
         // then
         $this->assertEquals(123.4567, $paypage->getEffectiveInterestRate());
-        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 123.4567]], $paypage->expose());
+        $this->assertEquals(123.4567, $paypage->expose()['additionalAttributes']['effectiveInterestRate']);
 
         // when
         $paypage->handleResponse((object)['additionalAttributes' => ['effectiveInterestRate' => 1234.567]]);
 
         // then
         $this->assertEquals(1234.567, $paypage->getEffectiveInterestRate());
-        $this->assertArraySubset(['additionalAttributes' => ['effectiveInterestRate' => 1234.567]], $paypage->expose());
+        $this->assertEquals(1234.567, $paypage->expose()['additionalAttributes']['effectiveInterestRate']);
     }
 
     //<editor-fold desc="Data Providers">

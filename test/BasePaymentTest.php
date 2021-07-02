@@ -333,4 +333,16 @@ class BasePaymentTest extends TestCase
     }
 
     //</editor-fold>
+
+    /** Assertion that all elements of an array (needle) do exist in a haystack.
+     *
+     * @param array $needle
+     * @param array $haystack
+     */
+    protected function assertArrayContains(array $needle, array $haystack): void
+    {
+        foreach ($needle as $key => $value) {
+            $this->assertEquals($value, $haystack[$key]);
+        }
+    }
 }
