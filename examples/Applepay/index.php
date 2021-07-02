@@ -130,7 +130,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                     }
                 };
 
-                let jqxhr = $.post('applepaypaymentauthorized.php', {"applePayAuthorisation": JSON.stringify(ApplePayObject)})
+                let jqxhr = $.post('Controller.php', {"applePayAuthorisation": JSON.stringify(ApplePayObject)})
                     .done(function (data) {
                         try {
                             let result;
