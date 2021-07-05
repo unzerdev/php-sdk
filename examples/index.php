@@ -85,6 +85,23 @@ function printMessage($type, $title, $text)
             <div class="ui four cards">
                 <div class="card olive">
                     <div class="content">
+                        <div class="header">Apple Pay</div>
+                        <div class="description">
+                            You can try authorize and charge transactions.
+                            Please make sure to provide the path to the certificates for this payment type.
+                            Notes:
+                            <ul>
+                                <li>This payment type is available for Apple devices only.</li>
+                                <li>Please refer to <a href="https://developer.apple.com/videos/play/tutorials/configuring-your-developer-account-for-apple-pay/" target="_blank">this page</a> to learn all about the requirements for Apple Pay.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="tryApplePayExample" class="ui bottom attached green button" onclick="location.href='Applepay/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
                         <div class="header">Card</div>
                         <div class="description">
                             You can try authorize, charge and payout transactions with or without 3Ds.
