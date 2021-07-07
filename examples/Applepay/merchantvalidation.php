@@ -32,9 +32,9 @@ require_once __DIR__ . '/Constants.php';
 require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\Adapter\ApplepayAdapter;
+use UnzerSDK\Exceptions\ApplepayMerchantValidationException;
 use UnzerSDK\Resources\ExternalResources\ApplepaySession;
 use UnzerSDK\examples\ExampleDebugHandler;
-use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
 
 session_start();
@@ -58,9 +58,12 @@ try {
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     $unzer->getDebugHandler()->log('--------------- MERCHANT VALIDATION CONTROLLER ----------------');
-    $unzer->getDebugHandler()->log(print_r($_POST, 1));
+    $unzer->getDebugHandler()->log(json_encode($_POST));
 
     $domainName = $_SERVER['HTTP_HOST'];
+
+    $jsonData = json_decode(file_get_contents('php://input'), true);
+    $merchantValidationURL = urldecode($jsonData['merchantValidationUrl']);
 
     $applepaySession = new ApplepaySession('merchant.io.unzer.merchantconnectivity', 'PHP-SDK Example', $domainName);
     $unzer->getDebugHandler()->log('session data: ' . print_r($applepaySession->jsonSerialize(), 1));
@@ -72,8 +75,7 @@ try {
 
     $appleAdapter = new ApplepayAdapter();
     $appleAdapter->init($MerchantCertPath, $MerchantCertKey);
-    $merchantValidationURL = urldecode($_POST['merchantValidationUrl']);
-//    $merchantValidationURL = urldecode($_POST['validationURL']);
+
     $merchantValidationURL = 'https://apple-pay-gateway-cert.apple.com/paymentservices/startSession';
     $validationResponse = $appleAdapter->validateApplePayMerchant(
         $merchantValidationURL,
@@ -85,11 +87,10 @@ try {
     $response = json_encode($properties, JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_FORCE_OBJECT);
     $unzer->getDebugHandler()->log('validation response: ' . $validationResponse);
     // Return the validation response to your frontend.
-    print_r($validationResponse);
+    print_r($validationResponse, 0);
 
-} catch (UnzerApiException $e) {
-    $merchantMessage = $e->getMerchantMessage();
-    $clientMessage = $e->getClientMessage();
-} catch (RuntimeException $e) {
+} catch (RuntimeException | ApplepayMerchantValidationException $e) {
     $merchantMessage = $e->getMessage();
 }
+
+echo json_encode(['result' => false, $merchantMessage, $clientMessage]);

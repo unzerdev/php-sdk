@@ -34,7 +34,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Unzer;
 
 session_start();
@@ -56,23 +55,19 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 // These lines are just for this example
 $transactionType = $_POST['transaction_type'] ?? 'authorize';
 $use3Ds          = isset($_POST['3dsecure']) && ($_POST['3dsecure'] === '1');
-$AppleAuthorization = $_POST['applePayAuthorisation'];
+
+$jsonData      = json_decode(file_get_contents('php://input'), false);
+$paymentTypeId = $jsonData->typeId;
+
+$unzer = null;
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
-    $applepay = new Applepay(null, null, null, null);
-    $unzer->getDebugHandler()->log("\n ------------------------  AUTHORIZATION JSON-----------------------");
-    $applepay->handleResponse(json_decode($AppleAuthorization));
-    $unzer->createPaymentType($applepay);
-    $unzer->getDebugHandler()->log('Authorization: ' . $AppleAuthorization);
-    $unzer->getDebugHandler()->log("\n ------------------------  AUTHORIZATION PAYMENT TYPE-----------------------");
-    $unzer->getDebugHandler()->log('Authorization: ' . $AppleAuthorization);
 
-    $transaction = $applepay->charge(100, 'EUR', RETURN_CONTROLLER_URL);
-    $unzer->getDebugHandler()->log('Merchant authorized controller');
+    $transaction = $unzer->charge(100, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
     if ($transaction->isSuccess()) {
         echo json_encode(['result' => true]);
         return;
@@ -81,7 +76,8 @@ try {
 } catch (UnzerApiException $e) {
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
-    echo json_encode(['result' => false]);
 } catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
+
+echo json_encode(['result' => false, $merchantMessage, $clientMessage]);
