@@ -147,11 +147,13 @@ require_once __DIR__ . '/../../../../autoload.php';
 
             onPaymentAuthorizedCallBack: (session, event) => {
                 var paymentData = event.payment.token.paymentData;
-                // const form = document.getElementById('payment-form');
+                const $form = $('form[id="payment-form"]');
+                let formObject = QueryStringToJSON($form.serialize());
 
                 unzerApplePayInstance.createResource(paymentData)
                     .then(function (createdResource) {
-                        makeRequest('POST', './Controller.php', JSON.stringify({"typeId": createdResource.id}))
+                        formObject.typeId = createdResource.id;
+                        makeRequest('POST', './Controller.php', JSON.stringify(formObject))
                             .then(function (e) {
                                 let paymentAuthorizedResponse = JSON.parse(e.target.response);
                                 let paymentAuthorizedResult;
@@ -179,7 +181,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 var status = ApplePaySession.STATUS_SUCCESS;
                 var newTotal = {
                     'label': 'Total amount',
-                    'amount': '0.99',
+                    'amount': '12.99',
                     'type': 'final'
                 }
                 var newLineItems =[]; // What does this mean?
@@ -190,7 +192,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 session.completePaymentMethodSelection({
                     newTotal: {
                         'label': 'Total amount',
-                        'amount': '0.99',
+                        'amount': '12.99',
                         'type': 'final'
                     }
                 });
@@ -204,6 +206,7 @@ require_once __DIR__ . '/../../../../autoload.php';
         // Initiates the Apple Pay session using the data defined in the applePayInformationObject.
         function setupApplePaySession() {
             unzerApplePayInstance.startApplePaySession(applePayInformationObject)
+            handleError('');
         }
 
         // Helps performing ajax calls, e.g. to the server-to-server integration.
@@ -226,6 +229,18 @@ require_once __DIR__ . '/../../../../autoload.php';
         function handleError (message) {
             $errorHolder.html(message);
         }
+
+        function QueryStringToJSON(queryString) {
+            var pairs = queryString.slice().split('&');
+
+            var result = {};
+            pairs.forEach(function(pair) {
+                pair = pair.split('=');
+                result[pair[0]] = decodeURIComponent(pair[1] || '');
+            });
+            return JSON.parse(JSON.stringify(result));
+        }
+
     }
 
 </script>

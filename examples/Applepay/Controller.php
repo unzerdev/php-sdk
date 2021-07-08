@@ -50,16 +50,16 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
-//$paymentTypeId   = $_POST['resourceId'];
-
 // These lines are just for this example
-$transactionType = $_POST['transaction_type'] ?? 'authorize';
-$use3Ds          = isset($_POST['3dsecure']) && ($_POST['3dsecure'] === '1');
-
 $jsonData      = json_decode(file_get_contents('php://input'), false);
 $paymentTypeId = $jsonData->typeId;
+$transactionType = $jsonData->transaction_type ?? 'authorize';
 
-$unzer = null;
+// You will need the id of the payment type created in the frontend (index.php)
+if (empty($paymentTypeId)) {
+    echo json_encode(['result' => false]);
+    return;
+}
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -67,7 +67,15 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $transaction = $unzer->charge(100, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+    switch ($transactionType) {
+        case 'charge':
+            $transaction = $unzer->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+            break;
+        default:
+            $transaction = $unzer->authorize(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+            break;
+    }
+
     if ($transaction->isSuccess()) {
         echo json_encode(['result' => true]);
         return;
@@ -80,4 +88,4 @@ try {
     $merchantMessage = $e->getMessage();
 }
 
-echo json_encode(['result' => false, $merchantMessage, $clientMessage]);
+echo json_encode(['result' => false]);
