@@ -123,7 +123,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     // Why don't we do that for the merchant, when creating the ApplePay instance?
     if (!window.ApplePaySession || !ApplePaySession.canMakePayments() || !ApplePaySession.supportsVersion(APPLE_PAY_VERSION)) {
-        console.error('This device does not support Apple Pay version 6!', APPLE_PAY_VERSION);
+        handleError('This device does not support Apple Pay version 6!', APPLE_PAY_VERSION);
     } else {
         var unzerApplePayInstance = unzerInstance.ApplePay();
 
@@ -149,7 +149,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             onPaymentAuthorizedCallBack: (session, event) => {
                 var paymentData = event.payment.token.paymentData;
                 const $form = $('form[id="payment-form"]');
-                let formObject = QueryStringToJSON($form.serialize());
+                let formObject = QueryStringToObject($form.serialize());
 
                 unzerApplePayInstance.createResource(paymentData)
                     .then(function (createdResource) {
@@ -226,12 +226,8 @@ require_once __DIR__ . '/../../../../autoload.php';
             });
         }
 
-        // Updates the error holder with the given message.
-        function handleError (message) {
-            $errorHolder.html(message);
-        }
-
-        function QueryStringToJSON(queryString) {
+        // Translates query string to object
+        function QueryStringToObject(queryString) {
             var pairs = queryString.slice().split('&');
 
             var result = {};
@@ -241,7 +237,11 @@ require_once __DIR__ . '/../../../../autoload.php';
             });
             return JSON.parse(JSON.stringify(result));
         }
+    }
 
+    // Updates the error holder with the given message.
+    function handleError (message) {
+        $errorHolder.html(message);
     }
 
 </script>
