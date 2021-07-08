@@ -97,43 +97,24 @@ require_once __DIR__ . '/../../../../autoload.php';
                 <label>Charge</label>
             </div>
         </div>
-        <div class="field">
-            <div class="unzerUI radio checkbox">
-                <input type="radio" name="transaction_type" value="payout">
-                <label>Payout</label>
-            </div>
-        </div>
-    </div>
-    <div class="fields inline">
-        <label for="3dsecure">Select this if you want to try out Card with 3Dsecure:</label>
-        <div class="field">
-            <div class="unzerUI checkbox">
-                <input type="hidden" name="3dsecure" value="0">
-                <input type="checkbox" name="3dsecure" value="1">
-                <label>Enable 3Ds</label>
-            </div>
-        </div>
     </div>
     <!-- This is just for the example - End -->
 
     <div>
+        <div class="field" id="error-holder" style="color: #9f3a38"> </div>
         <div class="button-well">
-            <div class="unsupportedBrowserMessage" hidden>
-                <p>Apple Pay not available</p>
-            </div>
             <div class="applePayButtonContainer">
                 <div class="apple-pay-button apple-pay-button-black" lang="us"
                      onclick="setupApplePaySession()"
                      title="Start Apple Pay" role="link" tabindex="0"></div>
             </div>
         </div>
-        <div id="logger">
-
-        </div>
     </div>
 </form>
 
 <script>
+    const $errorHolder = $('#error-holder');
+
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
@@ -160,11 +141,14 @@ require_once __DIR__ . '/../../../../autoload.php';
                         session.completeMerchantValidation(merchantSession)
                     }, function (e) {
                         // handle errors
+                        handle('There has been an error validating the merchant. Please try again later.' + e.message)
                     });
             },
 
             onPaymentAuthorizedCallBack: (session, event) => {
                 var paymentData = event.payment.token.paymentData;
+                // const form = document.getElementById('payment-form');
+
                 unzerApplePayInstance.createResource(paymentData)
                     .then(function (createdResource) {
                         makeRequest('POST', './Controller.php', JSON.stringify({"typeId": createdResource.id}))
@@ -176,14 +160,17 @@ require_once __DIR__ . '/../../../../autoload.php';
                                     paymentAuthorizedResult =  { status: window.ApplePaySession.STATUS_SUCCESS };
                                 } else {
                                     paymentAuthorizedResult =  { status: window.ApplePaySession.STATUS_FAILURE };
+                                    // todo error holder update
                                 }
 
-                                session.completePayment(paymentAuthorizedResult);
+                                session.completePayment(JSON.stringify(paymentAuthorizedResult));
                             }, function (e) {
-                                session.completePayment({ status: window.ApplePaySession.STATUS_FAILURE });
+                                session.completePayment(JSON.stringify({ status: window.ApplePaySession.STATUS_FAILURE }));
+                                // todo error holder update
                             });
                     })
                     .catch(function (error) {
+                        // todo error holder update
                         session.abort();
                     })
             },
@@ -210,15 +197,16 @@ require_once __DIR__ . '/../../../../autoload.php';
             },
 
             onCancelCallback: (event) => {
-
+                handleError('Canceled by user')
             }
         })
 
+        // Initiates the Apple Pay session using the data defined in the applePayInformationObject.
         function setupApplePaySession() {
-            console.log('----- call startApplePaySession with applePayInformationObject', applePayInformationObject)
             unzerApplePayInstance.startApplePaySession(applePayInformationObject)
         }
 
+        // Helps performing ajax calls, e.g. to the server-to-server integration.
         function makeRequest (method, url, body) {
             return new Promise(function (resolve, reject) {
                 var xhr = new XMLHttpRequest();
@@ -234,8 +222,9 @@ require_once __DIR__ . '/../../../../autoload.php';
             });
         }
 
-        function setErrorMessage () {
-
+        // Updates the error holder with the given message.
+        function handleError (message) {
+            $errorHolder.html(message);
         }
     }
 
