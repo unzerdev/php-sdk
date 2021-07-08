@@ -167,9 +167,11 @@ require_once __DIR__ . '/../../../../autoload.php';
                                 }
 
                                 session.completePayment(JSON.stringify(paymentAuthorizedResult));
+
+                                // todo redirect to success page
                             }, function (e) {
                                 session.completePayment(JSON.stringify({ status: window.ApplePaySession.STATUS_FAILURE }));
-                                // todo error holder update
+                                // todo redirect to failure page
                             });
                     })
                     .catch(function (error) {
