@@ -57,11 +57,10 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $unzer->getDebugHandler()->log('--------------- MERCHANT VALIDATION CONTROLLER ----------------');
-    $unzer->getDebugHandler()->log(json_encode($_POST));
-
+    // todo check error
     $domainName = $_SERVER['HTTP_HOST'];
 
+    // todo maybe outside try-block
     $jsonData = json_decode(file_get_contents('php://input'), true);
     $merchantValidationURL = urldecode($jsonData['merchantValidationUrl']);
 
