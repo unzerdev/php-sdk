@@ -107,6 +107,9 @@ require_once __DIR__ . '/../../../../autoload.php';
                         // redirect to result handler
                         window.location.href = '<?php echo RETURN_CONTROLLER_URL; ?>';
                     });
+                    checkout.error(function() {
+                        $errorHolder.html('Transaction Failure');
+                    });
 
                 }).catch(function(error) {
                     // handle error on init
