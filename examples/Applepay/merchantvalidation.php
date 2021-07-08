@@ -91,6 +91,5 @@ try {
 
 } catch (RuntimeException | ApplepayMerchantValidationException $e) {
     $merchantMessage = $e->getMessage();
+    echo json_encode(['result' => false]);
 }
-
-echo json_encode(['result' => false, $merchantMessage, $clientMessage]);
