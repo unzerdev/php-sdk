@@ -141,8 +141,8 @@ require_once __DIR__ . '/../../../../autoload.php';
                         const merchantSession = JSON.parse(e.target.response);
                         session.completeMerchantValidation(merchantSession)
                     }, function (e) {
-                        // handle errors
-                        handle('There has been an error validating the merchant. Please try again later.' + e.message)
+                        handleError('There has been an error validating the merchant. Please try again later.' + e.message)
+                        session.abort();
                     });
             },
 
@@ -160,22 +160,23 @@ require_once __DIR__ . '/../../../../autoload.php';
                                 let paymentAuthorizedResult;
 
                                 if (paymentAuthorizedResponse.result === true) {
-                                    paymentAuthorizedResult =  { status: window.ApplePaySession.STATUS_SUCCESS };
-                                } else {
-                                    paymentAuthorizedResult =  { status: window.ApplePaySession.STATUS_FAILURE };
-                                    // todo error holder update
+                                    session.completePayment({ status: window.ApplePaySession.STATUS_SUCCESS });
+                                    // todo redirect to success page
+                                    return;
                                 }
 
-                                session.completePayment(JSON.stringify(paymentAuthorizedResult));
+                                session.completePayment({ status: window.ApplePaySession.STATUS_FAILURE });
+                                handleError(e.message);
+                                // todo redirect to failure page
 
-                                // todo redirect to success page
                             }, function (e) {
-                                session.completePayment(JSON.stringify({ status: window.ApplePaySession.STATUS_FAILURE }));
+                                session.completePayment({ status: window.ApplePaySession.STATUS_FAILURE });
+                                handleError(e.message)
                                 // todo redirect to failure page
                             });
                     })
                     .catch(function (error) {
-                        // todo error holder update
+                        handleError(error.message)
                         session.abort();
                     })
             },
