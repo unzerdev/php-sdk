@@ -31,8 +31,10 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use UnzerSDK\Constants\Salutations;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\CustomerFactory;
@@ -57,25 +59,35 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
+    // A customer with matching addresses is mandatory for Installment payment type
+    $address  = (new Address())
+        ->setName('Max Mustermann')
+        ->setStreet('Vangerowstr. 18')
+        ->setCity('Heidelberg')
+        ->setZip('69155')
+        ->setCountry('DE');
+
     // Create a charge/authorize transaction
-    $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    $customer->setEmail('test@test.com');
+    $customer = CustomerFactory::createCustomer('Max', 'Mustermann')
+        ->setSalutation(Salutations::MR)
+        ->setBirthDate('2000-02-12')
+        ->setEmail('test@test.com');
 
     // These are the mandatory parameters for the payment page ...
     $paypage = new Paypage(119.00, 'EUR', RETURN_CONTROLLER_URL);
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // ... however you can customize the Payment Page using additional parameters.
     $paypage->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
             ->setShopName('My Test Shop')
             ->setTagline('Try and stop us from being awesome!')
-            ->setOrderId('o' . microtime(true))
+            ->setOrderId($orderId)
             ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.
     $paypage->setEffectiveInterestRate(4.99);
 
     // ... a Basket is mandatory for InstallmentSecured
-    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
     $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
         ->setAmountGross(119.0)
         ->setAmountVat(19.0);
@@ -84,6 +96,11 @@ try {
     if ($transactionType === 'charge') {
         $unzer->initPayPageCharge($paypage, $customer, $basket);
     } else {
+        // For demo purpose we set customer address for authorize only to enable instalment payment.
+        // That way e.g. Invoice secured will display customer form on payment page.
+        $customer
+            ->setShippingAddress($address)
+            ->setBillingAddress($address);
         $unzer->initPayPageAuthorize($paypage, $customer, $basket);
     }
 
