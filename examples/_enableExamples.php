@@ -38,3 +38,9 @@ define('UNZER_PAPI_FOLDER', '/vendor/unzerdev/php-sdk/examples/');
 /* Please provide your own sandbox-keypair here. */
 define('UNZER_PAPI_PRIVATE_KEY', 's-priv-***');
 define('UNZER_PAPI_PUBLIC_KEY', 's-pub-***');
+
+/* For Apple Pay only, set the path to your Apple Pay Merchant-ID certificate. */
+define('UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT', UNZER_PAPI_FOLDER . '');
+
+/* Set the path to the key file of your Apple Pay Merchant-ID certificate. */
+define('UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT_KEY', UNZER_PAPI_FOLDER .'');

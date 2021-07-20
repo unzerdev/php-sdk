@@ -37,8 +37,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 <head>
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
     <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
@@ -106,6 +106,9 @@ require_once __DIR__ . '/../../../../autoload.php';
                     checkout.success(function(data) {
                         // redirect to result handler
                         window.location.href = '<?php echo RETURN_CONTROLLER_URL; ?>';
+                    });
+                    checkout.error(function() {
+                        $errorHolder.html('Transaction Failure');
                     });
 
                 }).catch(function(error) {
