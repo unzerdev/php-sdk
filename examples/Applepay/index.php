@@ -121,7 +121,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     const APPLE_PAY_VERSION = 6;
 
-    // Why don't we do that for the merchant, when creating the ApplePay instance?
     if (!window.ApplePaySession || !ApplePaySession.canMakePayments() || !ApplePaySession.supportsVersion(APPLE_PAY_VERSION)) {
         handleError('This device does not support Apple Pay version 6!', APPLE_PAY_VERSION);
     } else {
