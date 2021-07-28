@@ -23,7 +23,6 @@
  *
  * @package  UnzerSDK\examples
  */
-header('Access-Control-Allow-Origin: https://dev-demo.unzer.com/');
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
 
@@ -51,44 +50,33 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
     die();
 }
 
-// Catch API errors, write the message to your log and show the ClientMessage to the client.
+// Get the merchant validation URL from the frontend.
+$jsonData = json_decode(file_get_contents('php://input'), true);
+$merchantValidationURL = urldecode($jsonData['merchantValidationUrl']);
+
+// Do the merchant validation request and return the result to the frontend.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    // todo check error
+    /*
+     * Just for demonstration purpose.
+     * It is NOT RECOMMENDED to get get the domain name this way on a production environment, because of security reasons.
+     */
     $domainName = $_SERVER['HTTP_HOST'];
 
-    // todo maybe outside try-block
-    $jsonData = json_decode(file_get_contents('php://input'), true);
-    $merchantValidationURL = urldecode($jsonData['merchantValidationUrl']);
-
     $applepaySession = new ApplepaySession('merchant.io.unzer.merchantconnectivity', 'PHP-SDK Example', $domainName);
-    $unzer->getDebugHandler()->log('session data: ' . print_r($applepaySession->jsonSerialize(), 1));
-
-    $MerchantCertPath = UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT;
-    $MerchantCertKey = UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT_KEY;
-    $merchantCertPathEscaped = realpath($MerchantCertPath);
-    $unzer->getDebugHandler()->log('Escaped Path: ' . $merchantCertPathEscaped);
-
     $appleAdapter = new ApplepayAdapter();
-    $appleAdapter->init($MerchantCertPath, $MerchantCertKey);
 
-    $merchantValidationURL = 'https://apple-pay-gateway-cert.apple.com/paymentservices/startSession';
-    $validationResponse = $appleAdapter->validateApplePayMerchant(
-        $merchantValidationURL,
-        $applepaySession
-    );
-    $responseObject = new stdClass();
-    $responseObject->response = json_decode($validationResponse);
-    $properties = get_object_vars($responseObject);
-    $response = json_encode($properties, JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_FORCE_OBJECT);
-    $unzer->getDebugHandler()->log('validation response: ' . $validationResponse);
+    $appleAdapter->init(UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT, UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT_KEY);
+
+    // Send the applepay validation request.
+    $validationResponse = $appleAdapter->validateApplePayMerchant($merchantValidationURL, $applepaySession);
+
     // Return the validation response to your frontend.
     print_r($validationResponse, 0);
-
 } catch (RuntimeException | ApplepayMerchantValidationException $e) {
-    $merchantMessage = $e->getMessage();
-    echo json_encode(['result' => false]);
+    // Dont give internal error directly to the frontend.
+    throw new Exception('There has been an error validating the merchant. Please try again later.');
 }
