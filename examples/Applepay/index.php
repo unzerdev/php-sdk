@@ -121,7 +121,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     const APPLE_PAY_VERSION = 6;
 
-    // Why don't we do that for the merchant, when creating the ApplePay instance?
     if (!window.ApplePaySession || !ApplePaySession.canMakePayments() || !ApplePaySession.supportsVersion(APPLE_PAY_VERSION)) {
         handleError('This device does not support Apple Pay version 6!', APPLE_PAY_VERSION);
     } else {
@@ -136,14 +135,16 @@ require_once __DIR__ . '/../../../../autoload.php';
             totalAmount: '0.0',
 
             onMerchantValidationCallback: (session, event) => {
-                makeRequest('POST', './merchantvalidation.php', JSON.stringify({"merchantValidationUrl": event.validationURL}))
-                    .then(function (e) {
-                        const merchantSession = JSON.parse(e.target.response);
-                        session.completeMerchantValidation(merchantSession)
-                    }, function (e) {
-                        handleError('There has been an error validating the merchant. Please try again later.' + e.message)
+                $.post('./merchantvalidation.php', JSON.stringify({"merchantValidationUrl": event.validationURL}), null, 'json')
+                    .done(function (validationResponse) {
+                        // Contains Applepay session on succsess.
+                        session.completeMerchantValidation(validationResponse);
+                    })
+                .fail(function (error) {
+                        handleError(JSON.stringify(error.statusText));
                         session.abort();
-                    });
+                    }
+                )
             },
 
             onPaymentAuthorizedCallBack: (session, event) => {
@@ -154,30 +155,28 @@ require_once __DIR__ . '/../../../../autoload.php';
                 unzerApplePayInstance.createResource(paymentData)
                     .then(function (createdResource) {
                         formObject.typeId = createdResource.id;
-                        makeRequest('POST', './Controller.php', JSON.stringify(formObject))
-                            .then(function (e) {
-                                let paymentAuthorizedResponse = JSON.parse(e.target.response);
-                                let paymentAuthorizedResult;
-
-                                if (paymentAuthorizedResponse.result === true) {
-                                    session.completePayment({ status: window.ApplePaySession.STATUS_SUCCESS });
-                                    // todo redirect to success page
-                                    return;
+                        // Hand over the type ID to your backend.
+                        $.post('./Controller.php', JSON.stringify(formObject), null, 'json')
+                            .done(function (result) {
+                                // Handle the transaction respone from backend.
+                                let status = result.transactionStatus;
+                                if (status === 'success' || status === 'pending') {
+                                    session.completePayment({status: window.ApplePaySession.STATUS_SUCCESS});
+                                    window.location.href = '<?php echo RETURN_CONTROLLER_URL; ?>';
+                                } else {
+                                    window.location.href = '<?php echo FAILURE_URL; ?>';
+                                    abortPaymentSession(session);
+                                    session.abort();
                                 }
-
-                                session.completePayment({ status: window.ApplePaySession.STATUS_FAILURE });
-                                handleError(e.message);
-                                // todo redirect to failure page
-
-                            }, function (e) {
-                                session.completePayment({ status: window.ApplePaySession.STATUS_FAILURE });
-                                handleError(e.message)
-                                // todo redirect to failure page
+                            })
+                            .fail(function (error) {
+                                handleError(error.statusText);
+                                abortPaymentSession(session);
                             });
                     })
                     .catch(function (error) {
-                        handleError(error.message)
-                        session.abort();
+                        handleError(error.message);
+                        abortPaymentSession(session);
                     })
             },
 
@@ -213,22 +212,6 @@ require_once __DIR__ . '/../../../../autoload.php';
             handleError('');
         }
 
-        // Helps performing ajax calls, e.g. to the server-to-server integration.
-        function makeRequest (method, url, body) {
-            return new Promise(function (resolve, reject) {
-                var xhr = new XMLHttpRequest();
-                xhr.withCredentials = false
-                xhr.open(method, url);
-                xhr.onload = resolve;
-                xhr.onerror = reject;
-                if (body) {
-                    xhr.send(body);
-                } else {
-                    xhr.send();
-                }
-            });
-        }
-
         // Translates query string to object
         function QueryStringToObject(queryString) {
             var pairs = queryString.slice().split('&');
@@ -245,6 +228,11 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Updates the error holder with the given message.
     function handleError (message) {
         $errorHolder.html(message);
+    }
+
+    function abortPaymentSession(session) {
+        session.completePayment({status: window.ApplePaySession.STATUS_FAILURE});
+        session.abort();
     }
 
 </script>

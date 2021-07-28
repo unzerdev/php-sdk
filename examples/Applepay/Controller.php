@@ -23,7 +23,6 @@
  *
  * @package  UnzerSDK\examples
  */
-header('Access-Control-Allow-Origin: https://dev-demo.unzer.com/');
 
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';
@@ -76,16 +75,23 @@ try {
             break;
     }
 
+    // You'll need to remember the paymentId for later in the ReturnController
+    $_SESSION['PaymentId'] = $transaction->getPaymentId();
+    $_SESSION['ShortId'] = $transaction->getShortId();
+
     if ($transaction->isSuccess()) {
-        echo json_encode(['result' => true]);
+        echo json_encode(['transactionStatus' => 'success']);
         return;
     }
-
+    if ($transaction->isPending()) {
+        echo json_encode(['transactionStatus' => 'pending']);
+        return;
+    }
 } catch (UnzerApiException $e) {
-    $merchantMessage = $e->getMerchantMessage();
-    $clientMessage = $e->getClientMessage();
+    $_SESSION['merchantMessage'] = $e->getMerchantMessage();
+    $_SESSION['clientMessage'] = $e->getClientMessage();
 } catch (RuntimeException $e) {
-    $merchantMessage = $e->getMessage();
+    $_SESSION['merchantMessage'] = $e->getMessage();
 }
 
-echo json_encode(['result' => false]);
+echo json_encode(['transactionStatus' => 'error']);
