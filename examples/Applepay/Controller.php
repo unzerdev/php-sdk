@@ -1,9 +1,9 @@
 <?php
 /**
- * This is the controller for the Card example.
+ * This is the controller for the Apple Pay example.
  * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
+ * @author  David Owusu <development@unzer.com>
  *
  * @package  UnzerSDK\examples
  */

@@ -1,8 +1,8 @@
 <?php
 /**
- * This file provides an example implementation of the Card payment type.
+ * This file provides an example implementation of the Apple Pay payment type.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
+ * @author  David Owusu <development@unzer.com>
  *
  * @package  UnzerSDK\examples
  */
