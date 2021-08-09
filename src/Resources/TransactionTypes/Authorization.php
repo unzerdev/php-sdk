@@ -29,12 +29,14 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasInvoiceId;
+use UnzerSDK\Traits\HasRecurrenceType;
 use RuntimeException;
 
 class Authorization extends AbstractTransactionType
 {
     use HasCancellations;
     use HasInvoiceId;
+    use HasRecurrenceType;
 
     /** @var float $amount */
     protected $amount = 0.0;

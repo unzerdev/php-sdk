@@ -52,6 +52,9 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     /** @var Payment $payment */
     private $payment;
 
+    /** @var $additionalTransactionData */
+    protected $additionalTransactionData;
+
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
@@ -104,6 +107,42 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
         return $this->payment->getRedirectUrl();
     }
 
+    /** Return additionalTransactionData as a Std class object.
+     *
+     * @return stdClass|null
+     */
+    public function getAdditionalTransactionData(): ?stdClass
+    {
+        return $this->additionalTransactionData;
+    }
+
+    /**
+     * @param StdClass $additionalTransactionData
+     *
+     * @return AbstractTransactionType
+     */
+    public function setAdditionalTransactionData(stdClass $additionalTransactionData): AbstractTransactionType
+    {
+        $this->additionalTransactionData = $additionalTransactionData;
+        return $this;
+    }
+
+    /** Add a single element to the additionalTransactionData object.
+     *
+     * @param mixed $value
+     * @param mixed $name
+     *
+     * @return AbstractTransactionType
+     */
+    public function addAdditionalTransactionData($name, $value): AbstractTransactionType
+    {
+        if (null === $this->additionalTransactionData) {
+            $this->additionalTransactionData = new stdClass();
+        }
+        $this->additionalTransactionData->$name = $value;
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
@@ -126,6 +165,10 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
 
         if (isset($response->redirectUrl)) {
             $payment->handleResponse((object)['redirectUrl' => $response->redirectUrl]);
+        }
+
+        if (isset($response->additionalTransactionData)) {
+            $this->setAdditionalTransactionData($response->additionalTransactionData);
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
