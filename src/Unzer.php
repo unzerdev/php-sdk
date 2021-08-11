@@ -690,7 +690,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $referenceText = null
+        $referenceText = null,
+        $recurrenceType = null
     ): Authorization {
         return $this->paymentService->authorize(
             $amount,
@@ -703,7 +704,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             $basket,
             $card3ds,
             $invoiceId,
-            $referenceText
+            $referenceText,
+            $recurrenceType
         );
     }
 
@@ -725,7 +727,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $paymentReference = null
+        $paymentReference = null,
+        $recurrenceType = null
     ): Charge {
         return $this->paymentService->charge(
             $amount,
@@ -738,7 +741,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             $basket,
             $card3ds,
             $invoiceId,
-            $paymentReference
+            $paymentReference,
+            $recurrenceType
         );
     }
 
@@ -762,10 +766,11 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         float $amount = null,
         string $currency = null,
         string $orderId = null,
-        string $invoiceId = null
+        string $invoiceId = null,
+        string $recurrenceType = null
     ): Charge {
         $paymentObject = $this->resourceService->getPaymentResource($payment);
-        return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId);
+        return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId, $recurrenceType);
     }
 
     //</editor-fold>

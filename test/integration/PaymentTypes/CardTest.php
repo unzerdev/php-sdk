@@ -28,6 +28,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\EmbeddedResources\CardDetails;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
@@ -103,6 +104,42 @@ class CardTest extends BaseIntegrationTest
         $fetchedCard = $this->unzer->fetchPaymentType($card->getId());
         $this->assertEquals($expected, $fetchedCard->getEmail());
         $card->charge(119.00, 'EUR', 'https://unzer.com');
+    }
+
+    /**
+     * Card should be chargeable with recurrence type.
+     *
+     * @test
+     */
+    public function cardShouldBeChargeableWithRecurrenceType()
+    {
+        $card = $this->createCardObject('4711100000000000');
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($card);
+        $chargeResponse = $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, RecurrenceTypes::ONE_CLICK);
+        $this->assertEquals('oneclick', $chargeResponse->getRecurrenceType());
+        $fetchedCharge = $this->unzer->fetchChargeById($chargeResponse->getPaymentId(), $chargeResponse->getId());
+
+        $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
+        $this->assertEquals('oneclick', $fetchedCharge->getRecurrenceType());
+    }
+
+    /**
+     * Card should be chargeable with recurrence type.
+     *
+     * @test
+     */
+    public function cardCanBeAuthorizedWithRecurrenceType()
+    {
+        $card = $this->createCardObject('4711100000000000');
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($card);
+        $chargeResponse = $card->authorize('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, RecurrenceTypes::ONE_CLICK);
+        $this->assertEquals('oneclick', $chargeResponse->getRecurrenceType());
+        $fetchedCharge = $this->unzer->fetchAuthorization($chargeResponse->getPayment());
+
+        $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
+        $this->assertEquals('oneclick', $fetchedCharge->getRecurrenceType());
     }
     
     /**

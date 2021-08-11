@@ -26,6 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
+use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
@@ -35,6 +36,7 @@ use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
+use function Webmozart\Assert\Tests\StaticAnalysis\object;
 
 class AuthorizationTest extends BasePaymentTest
 {

@@ -26,6 +26,7 @@
  */
 namespace UnzerSDK\test\integration\TransactionTypes;
 
+use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
@@ -93,7 +94,8 @@ class ChargeTest extends BaseIntegrationTest
         $paymentReference = 'paymentReference';
 
         // perform request
-        $charge = $paymentType->charge(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference);
+        $recurrenceType = RecurrenceTypes::ONE_CLICK;
+        $charge = $paymentType->charge(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference, $recurrenceType);
 
         // verify the data sent and received match
         $payment = $charge->getPayment();
@@ -108,6 +110,7 @@ class ChargeTest extends BaseIntegrationTest
         $this->assertTrue($charge->isCard3ds());
         $this->assertEquals($invoiceId, $charge->getInvoiceId());
         $this->assertEquals($paymentReference, $charge->getPaymentReference());
+        $this->assertEquals($recurrenceType, $charge->getRecurrenceType());
 
         // fetch the charge
         $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());

@@ -27,7 +27,6 @@
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
 use UnzerSDK\Constants\RecurrenceTypes;
-use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
@@ -78,29 +77,6 @@ class ChargeTest extends BasePaymentTest
         $this->assertEquals('https://another-return-url.test', $charge->getReturnUrl());
         $this->assertFalse($charge->isCard3ds());
         $this->assertEquals('another Payment Reference', $charge->getPaymentReference());
-    }
-
-    /**
-     * Additional transaction data should be set and get properly
-     *
-     * @test
-     */
-    public function additionalTransactionDataShouldBeSetAndGetProperly()
-    {
-        $unzerObj       = new Unzer('s-priv-123345');
-        $paymentType    = (new Card(null, null))->setId('123');
-        $payment        = new Payment();
-        $payment->setParentResource($unzerObj)->setPaymentType($paymentType);
-        $charge = (new Charge())->setPayment($payment);
-
-        $this->assertEmpty($charge->getAdditionalTransactionData());
-        $this->assertEmpty($charge->getRecurrenceType());
-
-        $charge->addAdditionalTransactionData('someTransactionData', 'Some Data');
-        $charge->setRecurrenceType(RecurrenceTypes::ONE_CLICK);
-
-        $this->assertEquals('Some Data', $charge->getAdditionalTransactionData()->someTransactionData);
-        $this->assertEquals(RecurrenceTypes::ONE_CLICK, $charge->getRecurrenceType());
     }
 
     /**
@@ -160,7 +136,6 @@ class ChargeTest extends BasePaymentTest
         $this->assertEquals('COBADEFFXXX', $charge->getBic());
         $this->assertEquals('Merchant Khang', $charge->getHolder());
         $this->assertEquals('4065.6865.6416', $charge->getDescriptor());
-        $this->assertEquals('oneClick', $charge->getRecurrenceType());
     }
 
     /**
@@ -264,31 +239,5 @@ class ChargeTest extends BasePaymentTest
         $this->assertEquals(123.4, $chargeMock->getTotalAmount());
         $this->assertEquals(23.4, $chargeMock->getTotalAmount());
         $this->assertEquals(0.0, $chargeMock->getTotalAmount());
-    }
-
-    /**
-     * Recurrence type defined in trade should be exposed properly.
-     *
-     * @test
-     */
-    public function recurrenceTypeShouldBeExposedProperly(): void
-    {
-        $unzerObj    = new Unzer('s-priv-123345');
-        $paymentType     = (new Card(null, null))->setId('123');
-        $payment         = new Payment();
-        $payment->setParentResource($unzerObj)->setPaymentType($paymentType);
-
-        $charge          = (new Charge())->setPayment($payment);
-
-        $this->assertEmpty($charge->getAdditionalTransactionData());
-        $this->assertEmpty($charge->getRecurrenceType());
-
-        $charge->setRecurrenceType(RecurrenceTypes::ONE_CLICK);
-        $exposedTransaction = $charge->expose();
-        $this->assertEquals('oneClick', $exposedTransaction['additionalTransactionData']->card->recurrenceType);
-        $this->assertStringContainsString(
-            '"additionalTransactionData":{"card":{"recurrenceType":"oneClick"}}',
-            $charge->jsonSerialize()
-        );
     }
 }

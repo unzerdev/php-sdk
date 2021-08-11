@@ -49,6 +49,8 @@ trait CanAuthorizeWithCustomer
      *                                          yet (i.e. has no id).
      * @param string|null     $invoiceId        The external id of the invoice.
      * @param string|null     $paymentReference A reference text for the payment.
+     * @param string|null     $recurrenceType   Recurrence type used for recurring payment.
+     *                                          See \UnzerSDK\Constants\RecurrenceTypes to find all supported types.
      *
      * @return Authorization
      *
@@ -64,7 +66,8 @@ trait CanAuthorizeWithCustomer
         $metadata = null,
         $basket = null,
         $invoiceId = null,
-        $paymentReference = null
+        $paymentReference = null,
+        $recurrenceType = null
     ): Authorization {
         if ($this instanceof UnzerParentInterface) {
             return $this->getUnzerObject()->authorize(
@@ -77,7 +80,8 @@ trait CanAuthorizeWithCustomer
                 $metadata,
                 $basket,
                 $invoiceId,
-                $paymentReference
+                $paymentReference,
+                $recurrenceType
             );
         }
 

@@ -37,5 +37,5 @@ class RecurrenceTypes
      * @var string Should only be used for Customer initiate transactions.
      *             Using registered payment type to buy something and the following transaction can’t be MIT.
      */
-    public const ONE_CLICK = 'oneClick';
+    public const ONE_CLICK = 'oneclick';
 }

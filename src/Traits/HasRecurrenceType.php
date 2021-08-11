@@ -24,6 +24,8 @@
  */
 namespace UnzerSDK\Traits;
 
+use function Webmozart\Assert\Tests\StaticAnalysis\null;
+
 trait HasRecurrenceType
 {
     //<editor-fold desc="Getters/Setters">
@@ -33,8 +35,13 @@ trait HasRecurrenceType
      */
     public function getRecurrenceType(): ?string
     {
+        $payment = $this->getPayment();
+        if ($payment === null || $payment->getPaymentType() === null) {
+            return null;
+        }
         $additionalTransactionData = $this->getAdditionalTransactionData();
-        return $additionalTransactionData->card->recurrenceType ?? null;
+        $method = $payment->getPaymentType()::getResourceName();
+        return $additionalTransactionData->$method->recurrenceType ?? null;
     }
 
     /**
@@ -48,7 +55,8 @@ trait HasRecurrenceType
         if ($payment === null || $payment->getPaymentType() === null) {
             throw new \RuntimeException('Payment Type has to be set before setting the recurrenceType');
         }
-        $this->addAdditionalTransactionData('card', (object)['recurrenceType' => $recurrenceType]);
+        $paymentType = $payment->getPaymentType();
+        $this->addAdditionalTransactionData($paymentType::getResourceName(), (object)['recurrenceType' => $recurrenceType]);
         return $this;
     }
 
