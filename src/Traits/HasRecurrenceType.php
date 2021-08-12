@@ -24,38 +24,48 @@
  */
 namespace UnzerSDK\Traits;
 
-use function Webmozart\Assert\Tests\StaticAnalysis\null;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 
 trait HasRecurrenceType
 {
     //<editor-fold desc="Getters/Setters">
 
     /**
+     * @param BasePaymentType|null $paymentType
+     *
      * @return string|null
      */
-    public function getRecurrenceType(): ?string
+    public function getRecurrenceType(BasePaymentType $paymentType = null): ?string
     {
-        $payment = $this->getPayment();
-        if ($payment === null || $payment->getPaymentType() === null) {
-            return null;
+        if ($paymentType === null && $this instanceof AbstractTransactionType) {
+            $payment = $this->getPayment();
+            if ($payment === null || $payment->getPaymentType() === null) {
+                return null;
+            }
+            $paymentType = $payment->getPaymentType();
         }
+
         $additionalTransactionData = $this->getAdditionalTransactionData();
-        $method = $payment->getPaymentType()::getResourceName();
+        $method = $paymentType::getResourceName();
         return $additionalTransactionData->$method->recurrenceType ?? null;
     }
 
     /**
-     * @param string $recurrenceType
+     * @param string               $recurrenceType
+     * @param BasePaymentType|null $paymentType
      *
      * @return $this
      */
-    public function setRecurrenceType(string $recurrenceType): self
+    public function setRecurrenceType(string $recurrenceType, BasePaymentType $paymentType = null): self
     {
-        $payment = $this->getPayment();
-        if ($payment === null || $payment->getPaymentType() === null) {
-            throw new \RuntimeException('Payment Type has to be set before setting the recurrenceType');
+        if ($paymentType === null) {
+            $payment = $this->getPayment();
+            if ($payment === null || $payment->getPaymentType() === null) {
+                throw new \RuntimeException('Payment Type has to be set before setting the recurrenceType');
+            }
+            $paymentType = $payment->getPaymentType();
         }
-        $paymentType = $payment->getPaymentType();
         $this->addAdditionalTransactionData($paymentType::getResourceName(), (object)['recurrenceType' => $recurrenceType]);
         return $this;
     }

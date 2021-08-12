@@ -29,6 +29,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Traits\HasAdditionalTransactionData;
 use UnzerSDK\Traits\HasCustomerMessage;
 use UnzerSDK\Traits\HasDate;
 use UnzerSDK\Traits\HasOrderId;
@@ -45,15 +46,13 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     use HasUniqueAndShortId;
     use HasTraceId;
     use HasCustomerMessage;
+    use HasAdditionalTransactionData;
     use HasDate;
 
     //<editor-fold desc="Properties">
 
     /** @var Payment $payment */
     private $payment;
-
-    /** @var $additionalTransactionData */
-    protected $additionalTransactionData;
 
     //</editor-fold>
 
@@ -105,42 +104,6 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     public function getRedirectUrl(): ?string
     {
         return $this->payment->getRedirectUrl();
-    }
-
-    /** Return additionalTransactionData as a Std class object.
-     *
-     * @return stdClass|null
-     */
-    public function getAdditionalTransactionData(): ?stdClass
-    {
-        return $this->additionalTransactionData;
-    }
-
-    /**
-     * @param StdClass $additionalTransactionData
-     *
-     * @return AbstractTransactionType
-     */
-    public function setAdditionalTransactionData(stdClass $additionalTransactionData): AbstractTransactionType
-    {
-        $this->additionalTransactionData = $additionalTransactionData;
-        return $this;
-    }
-
-    /** Add a single element to the additionalTransactionData object.
-     *
-     * @param mixed $value
-     * @param mixed $name
-     *
-     * @return AbstractTransactionType
-     */
-    public function addAdditionalTransactionData($name, $value): AbstractTransactionType
-    {
-        if (null === $this->additionalTransactionData) {
-            $this->additionalTransactionData = new stdClass();
-        }
-        $this->additionalTransactionData->$name = $value;
-        return $this;
     }
 
     //</editor-fold>

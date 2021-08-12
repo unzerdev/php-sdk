@@ -24,8 +24,10 @@
  */
 namespace UnzerSDK\Resources;
 
+use UnzerSDK\Traits\HasAdditionalTransactionData;
 use UnzerSDK\Traits\HasCustomerMessage;
 use UnzerSDK\Traits\HasDate;
+use UnzerSDK\Traits\HasRecurrenceType;
 use UnzerSDK\Traits\HasStates;
 use UnzerSDK\Traits\HasUniqueAndShortId;
 
@@ -35,6 +37,8 @@ class Recurring extends AbstractUnzerResource
     use HasUniqueAndShortId;
     use HasCustomerMessage;
     use HasDate;
+    use HasAdditionalTransactionData;
+    use HasRecurrenceType;
 
     /** @var string $returnUrl */
     protected $returnUrl;

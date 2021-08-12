@@ -343,9 +343,9 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, $returnUrl): Recurring
+    public function activateRecurringPayment($paymentType, $returnUrl, string $recurrenceType = null): Recurring
     {
-        return $this->resourceService->activateRecurringPayment($paymentType, $returnUrl);
+        return $this->resourceService->activateRecurringPayment($paymentType, $returnUrl, $recurrenceType);
     }
 
     //</editor-fold>

@@ -1012,7 +1012,7 @@ class ResourceServiceTest extends BasePaymentTest
             }));
 
         /** @var ResourceServiceInterface $resourceServiceMock */
-        $resourceServiceMock->activateRecurringPayment('typeId', 'returnUrl');
+        $resourceServiceMock->activateRecurringPayment('typeId', 'returnUrl', null);
     }
 
     /**
@@ -1032,7 +1032,7 @@ class ResourceServiceTest extends BasePaymentTest
                 return $data instanceof Recurring && $data->getReturnUrl() === 'returnUrl' && $data->getPaymentTypeId() === 'myId';
             }));
 
-        $resourceSrvMock->activateRecurringPayment($paymentType, 'returnUrl');
+        $resourceSrvMock->activateRecurringPayment($paymentType, 'returnUrl', null);
     }
 
     /**
@@ -1045,7 +1045,7 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceService = new ResourceService(new Unzer('s-priv-123'));
         $this->expectException(RuntimeException::class);
 
-        $resourceService->activateRecurringPayment(new Sofort(), 'returnUrl');
+        $resourceService->activateRecurringPayment(new Sofort(), 'returnUrl', null);
     }
 
     //</editor-fold>
