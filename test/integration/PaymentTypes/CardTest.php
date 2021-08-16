@@ -28,7 +28,6 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
-use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\EmbeddedResources\CardDetails;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
@@ -110,36 +109,68 @@ class CardTest extends BaseIntegrationTest
      * Card should be chargeable with recurrence type.
      *
      * @test
+     *
+     * @dataProvider supportedRecurrenceTypesDP
+     *
+     * @param $recurrenceType
+     *
+     * @throws UnzerApiException
      */
-    public function cardShouldBeChargeableWithRecurrenceType()
+    public function cardShouldBeChargeableWithRecurrenceType($recurrenceType): void
     {
         $card = $this->createCardObject('4711100000000000');
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
-        $chargeResponse = $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, RecurrenceTypes::ONE_CLICK);
-        $this->assertEquals('oneclick', $chargeResponse->getRecurrenceType());
+        $chargeResponse = $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+        $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchChargeById($chargeResponse->getPaymentId(), $chargeResponse->getId());
 
         $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
-        $this->assertEquals('oneclick', $fetchedCharge->getRecurrenceType());
+        $this->assertEquals($recurrenceType, $fetchedCharge->getRecurrenceType());
+    }
+
+    /**
+     * Invalid recurrence type should throw API exception.
+     *
+     * @test
+     *
+     * @throws UnzerApiException
+     *
+     * @dataProvider invalidRecurrenceTypesDP
+     *
+     * @param mixed $recurrenceType
+     */
+    public function invalidRecurrenceTypeShouldThrowApiException($recurrenceType): void
+    {
+        $card = $this->createCardObject('4711100000000000');
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($card);
+        $this->expectException(UnzerApiException::class);
+        $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
     }
 
     /**
      * Card should be chargeable with recurrence type.
      *
      * @test
+     *
+     * @dataProvider supportedRecurrenceTypesDP
+     *
+     * @param $recurrenceType
+     *
+     * @throws UnzerApiException
      */
-    public function cardCanBeAuthorizedWithRecurrenceType()
+    public function cardCanBeAuthorizedWithRecurrenceType($recurrenceType): void
     {
         $card = $this->createCardObject('4711100000000000');
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
-        $chargeResponse = $card->authorize('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, RecurrenceTypes::ONE_CLICK);
-        $this->assertEquals('oneclick', $chargeResponse->getRecurrenceType());
+        $chargeResponse = $card->authorize('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+        $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchAuthorization($chargeResponse->getPayment());
 
         $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
-        $this->assertEquals('oneclick', $fetchedCharge->getRecurrenceType());
+        $this->assertEquals($recurrenceType, $fetchedCharge->getRecurrenceType());
     }
     
     /**
@@ -593,6 +624,24 @@ class CardTest extends BaseIntegrationTest
             'email is set' => ['test@test.com', 'test@test.com'],
             'email is empty string' => ['', null],
             'email is empty/null' => [null, null],
+        ];
+    }
+
+    public function supportedRecurrenceTypesDP(): array
+    {
+        return [
+            'oneclick' => ['onecklick'],
+            'scheduled' => ['scheduled'],
+            'unscheduled' => ['unscheduled']
+        ];
+    }
+
+    public function invalidRecurrenceTypesDP(): array
+    {
+        return [
+            'empty' => [''],
+            'invalid string' => ['invalid recurrence Type'],
+            'number' => [42],
         ];
     }
 }

@@ -2,7 +2,7 @@
 /**
  * This trait adds the short id and unique id property to a class.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
+ * @author  David Owusu <development@unzer.com>
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
@@ -32,41 +33,42 @@ trait HasRecurrenceType
     //<editor-fold desc="Getters/Setters">
 
     /**
-     * @param BasePaymentType|null $paymentType
-     *
      * @return string|null
      */
-    public function getRecurrenceType(BasePaymentType $paymentType = null): ?string
+    public function getRecurrenceType(): ?string
     {
-        if ($paymentType === null && $this instanceof AbstractTransactionType) {
-            $payment = $this->getPayment();
-            if ($payment === null || $payment->getPaymentType() === null) {
-                return null;
+        $additionalTransactionData = $this->getAdditionalTransactionData();
+        if ($additionalTransactionData !== null) {
+            foreach ($additionalTransactionData as $data) {
+                if (property_exists($data, 'recurrenceType')) {
+                    return $data->recurrenceType ?? null;
+                }
             }
-            $paymentType = $payment->getPaymentType();
         }
 
-        $additionalTransactionData = $this->getAdditionalTransactionData();
-        $method = $paymentType::getResourceName();
-        return $additionalTransactionData->$method->recurrenceType ?? null;
+        return null;
     }
 
     /**
      * @param string               $recurrenceType
-     * @param BasePaymentType|null $paymentType
+     * @param BasePaymentType|null $paymentType    If provided recurrenceType is set based on this payment type.
+     *                                             This is required for recurring transaction, since the type can not be
+     *                                             determined automatically.
      *
      * @return $this
      */
     public function setRecurrenceType(string $recurrenceType, BasePaymentType $paymentType = null): self
     {
-        if ($paymentType === null) {
+        if ($paymentType === null && $this instanceof AbstractTransactionType) {
             $payment = $this->getPayment();
             if ($payment === null || $payment->getPaymentType() === null) {
                 throw new \RuntimeException('Payment Type has to be set before setting the recurrenceType');
             }
             $paymentType = $payment->getPaymentType();
         }
-        $this->addAdditionalTransactionData($paymentType::getResourceName(), (object)['recurrenceType' => $recurrenceType]);
+        $recurrenceTypeObject = (object)['recurrenceType' => $recurrenceType];
+        $this->addAdditionalTransactionData($paymentType::getResourceName(), $recurrenceTypeObject);
+
         return $this;
     }
 

@@ -33,6 +33,7 @@ use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\Unzer;
@@ -152,6 +153,20 @@ class HasRecurrenceTypeTest extends BasePaymentTest
         $this->assertNull($charge->getAdditionalTransactionData());
         $charge->setRecurrenceType(RecurrenceTypes::ONE_CLICK);
         $this->assertObjectHasAttribute($methodName, $charge->getAdditionalTransactionData());
+    }
+
+    /**
+     * recurrence type should be set properly for recurring.
+     *
+     * @test
+     */
+    public function recurrenceTypeShouldBeSetProperlyForRecurring()
+    {
+        $paymentType = $this->createCardObject();
+        $recurring = new Recurring('typeId', 'returnUrl');
+        $recurring->setRecurrenceType(RecurrenceTypes::SCHEDULED, $paymentType);
+
+        $this->assertEquals('scheduled', $recurring->getRecurrenceType());
     }
 
     /** Provides payment types and expected key name that should be used to set the recurrence type.
