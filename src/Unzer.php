@@ -766,11 +766,10 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         float $amount = null,
         string $currency = null,
         string $orderId = null,
-        string $invoiceId = null,
-        string $recurrenceType = null
+        string $invoiceId = null
     ): Charge {
         $paymentObject = $this->resourceService->getPaymentResource($payment);
-        return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId, $recurrenceType);
+        return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId);
     }
 
     //</editor-fold>
