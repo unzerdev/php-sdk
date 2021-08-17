@@ -630,7 +630,7 @@ class CardTest extends BaseIntegrationTest
     public function supportedRecurrenceTypesDP(): array
     {
         return [
-            'oneclick' => ['onecklick'],
+            'oneclick' => ['oneclick'],
             'scheduled' => ['scheduled'],
             'unscheduled' => ['unscheduled']
         ];

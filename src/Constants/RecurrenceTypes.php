@@ -34,8 +34,8 @@ class RecurrenceTypes
     public const UNSCHEDULED = 'unscheduled';
 
     /**
-     * @var string Should only be used for Customer initiate transactions.
-     *             Using registered payment type to buy something and the following transaction can’t be MIT.
+     * @var string Should only be used for customer initiated transactions.
+     *             The following transaction can’t be MIT (Merchant initiated transaction).
      */
     public const ONE_CLICK = 'oneclick';
 }
