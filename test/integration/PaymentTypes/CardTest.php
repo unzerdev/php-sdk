@@ -125,7 +125,9 @@ class CardTest extends BaseIntegrationTest
         $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchChargeById($chargeResponse->getPaymentId(), $chargeResponse->getId());
 
-        $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
+        if ($recurrenceType !== null) {
+            $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
+        }
         $this->assertEquals($recurrenceType, $fetchedCharge->getRecurrenceType());
     }
 
@@ -169,7 +171,9 @@ class CardTest extends BaseIntegrationTest
         $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchAuthorization($chargeResponse->getPayment());
 
-        $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
+        if ($recurrenceType !== null) {
+            $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
+        }
         $this->assertEquals($recurrenceType, $fetchedCharge->getRecurrenceType());
     }
     
@@ -630,6 +634,7 @@ class CardTest extends BaseIntegrationTest
     public function supportedRecurrenceTypesDP(): array
     {
         return [
+            'null' => [null],
             'oneclick' => ['oneclick'],
             'scheduled' => ['scheduled'],
             'unscheduled' => ['unscheduled']

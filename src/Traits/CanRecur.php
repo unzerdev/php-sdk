@@ -38,7 +38,7 @@ trait CanRecur
      * Activates recurring payment for the payment type.
      *
      * @param string     $returnUrl      The URL to which the customer gets redirected in case of a 3ds transaction
-     * @param null|mixed $recurrenceType
+     * @param null|mixed $recurrenceType Recurrence type used for recurring payment.
      *
      * @return Recurring
      *

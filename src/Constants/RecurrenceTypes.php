@@ -34,8 +34,7 @@ class RecurrenceTypes
     public const UNSCHEDULED = 'unscheduled';
 
     /**
-     * @var string Should only be used for customer initiated transactions.
-     *             The following transaction can’t be MIT (Merchant initiated transaction).
+     * @var string Can only be used for customer initiated transactions (CIT).
      */
     public const ONE_CLICK = 'oneclick';
 }

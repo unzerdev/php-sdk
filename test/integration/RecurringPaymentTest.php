@@ -161,11 +161,11 @@ class RecurringPaymentTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function cardWithOnecklickRecurrenceShouldThrowApiException()
+    public function activateCardRecurringWithOnecklickRecurrenceShouldThrowApiException()
     {
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($this->createCardObject()->set3ds(true));
         $this->expectException(UnzerApiException::class);
-        $recurring = $card->activateRecurring('https://dev.unzer.com', RecurrenceTypes::ONE_CLICK);
+        $card->activateRecurring('https://dev.unzer.com', RecurrenceTypes::ONE_CLICK);
     }
 }

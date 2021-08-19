@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.1.4.0](https://github.com/unzerdev/php-sdk/compare/1.1.3.0..1.1.4.0)
 ### Added
-*   Enable recurrence type to be set for `charge`, `authorize` and `activateRecurringPayment` transactions.
+*   Enable recurrence type to be set for `charge`, `authorize` and `activateRecurringPayment` methods.
 
 ### Changed
 *   Several minor improvements.

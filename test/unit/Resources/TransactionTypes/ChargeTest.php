@@ -84,7 +84,7 @@ class ChargeTest extends BasePaymentTest
      *
      * @test
      */
-    public function SetRecurrenceTypeShouldRaisExceptionWOPaymentType()
+    public function SetRecurrenceTypeShouldRaiseExceptionWOPaymentType()
     {
         $charge = new Charge();
 

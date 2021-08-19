@@ -50,7 +50,7 @@ trait HasRecurrenceType
     }
 
     /**
-     * @param string               $recurrenceType
+     * @param string               $recurrenceType Recurrence type used for recurring payment.
      * @param BasePaymentType|null $paymentType    If provided recurrenceType is set based on this payment type.
      *                                             This is required for recurring transaction, since the type can not be
      *                                             determined automatically.
