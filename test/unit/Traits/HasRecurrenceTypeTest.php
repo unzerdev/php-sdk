@@ -26,6 +26,7 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
+use RuntimeException;
 use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
@@ -167,6 +168,21 @@ class HasRecurrenceTypeTest extends BasePaymentTest
         $recurring->setRecurrenceType(RecurrenceTypes::SCHEDULED, $paymentType);
 
         $this->assertEquals('scheduled', $recurring->getRecurrenceType());
+    }
+
+    /**
+     * recurrence type should be set properly for recurring.
+     *
+     * @test
+     */
+    public function settingRecurrenceTypeShouldTrowExceptionIfTypeIsNotProvidedForRecurring(): void
+    {
+        $recurring = new Recurring('typeId', 'returnUrl');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Payment type can not be determined. Set it first or provide it via parameter $paymentType.');
+
+        $recurring->setRecurrenceType(RecurrenceTypes::SCHEDULED);
     }
 
     /** Provides payment types and expected key name that should be used to set the recurrence type.

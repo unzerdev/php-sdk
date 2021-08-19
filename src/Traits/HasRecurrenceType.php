@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This trait adds the short id and unique id property to a class.
  *
@@ -25,6 +26,7 @@
 
 namespace UnzerSDK\Traits;
 
+use RuntimeException;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 
@@ -61,10 +63,11 @@ trait HasRecurrenceType
     {
         if ($paymentType === null && $this instanceof AbstractTransactionType) {
             $payment = $this->getPayment();
-            if ($payment === null || $payment->getPaymentType() === null) {
-                throw new \RuntimeException('Payment Type has to be set before setting the recurrenceType');
-            }
-            $paymentType = $payment->getPaymentType();
+            $paymentType = $payment ? $payment->getPaymentType() : null;
+        }
+
+        if ($paymentType === null) {
+            throw new RuntimeException('Payment type can not be determined. Set it first or provide it via parameter $paymentType.');
         }
         $recurrenceTypeObject = (object)['recurrenceType' => $recurrenceType];
         $this->addAdditionalTransactionData($paymentType::getResourceName(), $recurrenceTypeObject);

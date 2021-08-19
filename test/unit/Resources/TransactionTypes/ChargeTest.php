@@ -91,7 +91,7 @@ class ChargeTest extends BasePaymentTest
         $this->assertEmpty($charge->getAdditionalTransactionData());
         $this->assertEmpty($charge->getRecurrenceType());
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Payment Type has to be set before setting the recurrenceType');
+        $this->expectExceptionMessage('Payment type can not be determined. Set it first or provide it via parameter $paymentType.');
 
         $charge->setRecurrenceType(RecurrenceTypes::ONE_CLICK);
     }
