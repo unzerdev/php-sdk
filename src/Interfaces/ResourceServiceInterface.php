@@ -63,7 +63,7 @@ interface ResourceServiceInterface
      * @param string|BasePaymentType $paymentType    The payment to activate recurring payment for.
      * @param string                 $returnUrl      The URL to which the customer gets redirected in case of a 3ds
      *                                               transaction
-     * @param string                 $recurrenceType
+     * @param string                 $recurrenceType Recurrence type used for recurring payment.
      *
      * @return Recurring The recurring object.
      *
