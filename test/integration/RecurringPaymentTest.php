@@ -157,11 +157,11 @@ class RecurringPaymentTest extends BaseIntegrationTest
     }
 
     /**
-     * Unsupported recurrencetype causes API Exception.
+     * Unsupported recurrence type causes API Exception. 'oneclick' can not be used for recurring request.
      *
      * @test
      */
-    public function activateCardRecurringWithOnecklickRecurrenceShouldThrowApiException()
+    public function activateCardRecurringWithOneclickRecurrenceShouldThrowApiException(): void
     {
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($this->createCardObject()->set3ds(true));
