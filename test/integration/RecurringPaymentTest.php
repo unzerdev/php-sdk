@@ -27,6 +27,7 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\PaymentTypes\Card;
@@ -62,9 +63,10 @@ class RecurringPaymentTest extends BaseIntegrationTest
     {
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($this->createCardObject()->set3ds(true));
-        $recurring = $card->activateRecurring('https://dev.unzer.com');
+        $recurring = $card->activateRecurring('https://dev.unzer.com', RecurrenceTypes::SCHEDULED);
         $this->assertPending($recurring);
         $this->assertEquals('https://dev.unzer.com', $recurring->getReturnUrl());
+        $this->assertEquals('scheduled', $recurring->getRecurrenceType($card));
         $this->assertNotEmpty($recurring->getDate());
 
         $message = $recurring->getMessage();
@@ -108,7 +110,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
     {
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $recurring = $paypal->activateRecurring('https://dev.unzer.com');
+        $recurring = $paypal->activateRecurring('https://dev.unzer.com', RecurrenceTypes::ONE_CLICK);
         $this->assertPending($recurring);
         $this->assertNotEmpty($recurring->getReturnUrl());
     }
@@ -129,7 +131,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
-        $this->unzer->activateRecurringPayment($dd, self::RETURN_URL);
+        $this->unzer->activateRecurringPayment($dd, self::RETURN_URL, RecurrenceTypes::SCHEDULED);
     }
 
     /**
@@ -151,6 +153,19 @@ class RecurringPaymentTest extends BaseIntegrationTest
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
-        $this->unzer->activateRecurringPayment($ddg, self::RETURN_URL);
+        $this->unzer->activateRecurringPayment($ddg, self::RETURN_URL, RecurrenceTypes::ONE_CLICK);
+    }
+
+    /**
+     * Unsupported recurrence type causes API Exception. 'oneclick' can not be used for recurring request.
+     *
+     * @test
+     */
+    public function activateCardRecurringWithOneclickRecurrenceShouldThrowApiException(): void
+    {
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($this->createCardObject()->set3ds(true));
+        $this->expectException(UnzerApiException::class);
+        $card->activateRecurring('https://dev.unzer.com', RecurrenceTypes::ONE_CLICK);
     }
 }

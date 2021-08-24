@@ -37,17 +37,18 @@ trait CanRecur
     /**
      * Activates recurring payment for the payment type.
      *
-     * @param string $returnUrl The URL to which the customer gets redirected in case of a 3ds transaction
+     * @param string     $returnUrl      The URL to which the customer gets redirected in case of a 3ds transaction
+     * @param null|mixed $recurrenceType Recurrence type used for recurring payment.
      *
      * @return Recurring
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function activateRecurring($returnUrl): Recurring
+    public function activateRecurring($returnUrl, $recurrenceType = null): Recurring
     {
         if ($this instanceof AbstractUnzerResource) {
-            return $this->getUnzerObject()->activateRecurringPayment($this, $returnUrl);
+            return $this->getUnzerObject()->activateRecurringPayment($this, $returnUrl, $recurrenceType);
         }
         throw new RuntimeException('Error: Recurring can not be enabled on this type.');
     }

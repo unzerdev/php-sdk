@@ -29,6 +29,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Traits\HasAdditionalTransactionData;
 use UnzerSDK\Traits\HasCustomerMessage;
 use UnzerSDK\Traits\HasDate;
 use UnzerSDK\Traits\HasOrderId;
@@ -45,6 +46,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     use HasUniqueAndShortId;
     use HasTraceId;
     use HasCustomerMessage;
+    use HasAdditionalTransactionData;
     use HasDate;
 
     //<editor-fold desc="Properties">
@@ -126,6 +128,10 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
 
         if (isset($response->redirectUrl)) {
             $payment->handleResponse((object)['redirectUrl' => $response->redirectUrl]);
+        }
+
+        if (isset($response->additionalTransactionData)) {
+            $this->setAdditionalTransactionData($response->additionalTransactionData);
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {

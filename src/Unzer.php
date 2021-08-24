@@ -63,7 +63,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.1.3.0';
+    public const SDK_VERSION = '1.1.4.0';
 
     /** @var string $key */
     private $key;
@@ -343,9 +343,9 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, $returnUrl): Recurring
+    public function activateRecurringPayment($paymentType, $returnUrl, string $recurrenceType = null): Recurring
     {
-        return $this->resourceService->activateRecurringPayment($paymentType, $returnUrl);
+        return $this->resourceService->activateRecurringPayment($paymentType, $returnUrl, $recurrenceType);
     }
 
     //</editor-fold>
@@ -690,7 +690,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $referenceText = null
+        $referenceText = null,
+        $recurrenceType = null
     ): Authorization {
         return $this->paymentService->authorize(
             $amount,
@@ -703,7 +704,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             $basket,
             $card3ds,
             $invoiceId,
-            $referenceText
+            $referenceText,
+            $recurrenceType
         );
     }
 
@@ -725,7 +727,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $paymentReference = null
+        $paymentReference = null,
+        $recurrenceType = null
     ): Charge {
         return $this->paymentService->charge(
             $amount,
@@ -738,7 +741,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             $basket,
             $card3ds,
             $invoiceId,
-            $paymentReference
+            $paymentReference,
+            $recurrenceType
         );
     }
 

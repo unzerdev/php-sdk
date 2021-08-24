@@ -18,23 +18,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.unzer.com/
+ * @link     https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
+ * @author   Simon Gabriel <development@unzer.com>
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
 use DateTime;
+use PHPUnit\Framework\MockObject\MockObject;
+use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
-use PHPUnit\Framework\MockObject\MockObject;
-use stdClass;
+use UnzerSDK\Unzer;
 
 class AbstractTransactionTypeTest extends BasePaymentTest
 {
@@ -54,6 +55,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $this->assertNull($transactionType->getShortId());
         $this->assertNull($transactionType->getUniqueId());
         $this->assertNull($transactionType->getTraceId());
+        $this->assertNull($transactionType->getAdditionalTransactionData());
 
         $this->assertFalse($transactionType->isError());
         $this->assertFalse($transactionType->isSuccess());
@@ -71,7 +73,14 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $date = (new DateTime('now'))->format('Y-m-d H:i:s');
         $transactionType->setDate($date);
         $ids = (object)['shortId' => 'myShortId', 'uniqueId' => 'myUniqueId', 'traceId' => 'myTraceId'];
-        $transactionType->handleResponse((object)['isError' => true, 'isPending' => true, 'isSuccess' => true, 'processing' => $ids]);
+        $responseArray = [
+            'isError' => true,
+            'isPending' => true,
+            'isSuccess' => true,
+            'processing' => $ids,
+            'additionalTransactionData' => (object)['someDataKey' => 'Some Data']
+        ];
+        $transactionType->handleResponse((object)$responseArray);
         $messageResponse = (object)['code' => '1234', 'customer' => 'Customer message!'];
         $transactionType->handleResponse((object)['message' => $messageResponse]);
 
@@ -86,6 +95,8 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $this->assertSame('myShortId', $transactionType->getShortId());
         $this->assertSame('myUniqueId', $transactionType->getUniqueId());
         $this->assertSame('myTraceId', $transactionType->getTraceId());
+        $this->assertNotNull($transactionType->getAdditionalTransactionData());
+        $this->assertObjectHasAttribute('someDataKey', $transactionType->getAdditionalTransactionData());
 
         $message = $transactionType->getMessage();
         $this->assertSame('1234', $message->getCode());

@@ -28,12 +28,14 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasInvoiceId;
+use UnzerSDK\Traits\HasRecurrenceType;
 use RuntimeException;
 
 class Charge extends AbstractTransactionType
 {
     use HasCancellations;
     use HasInvoiceId;
+    use HasRecurrenceType;
 
     /** @var float $amount */
     protected $amount;

@@ -108,7 +108,8 @@ class PaymentService implements PaymentServiceInterface
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $referenceText = null
+        $referenceText = null,
+        $recurrenceType = null
     ): Authorization {
         $payment = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
@@ -123,6 +124,10 @@ class PaymentService implements PaymentServiceInterface
             $authorization->setCard3ds($card3ds);
         }
         $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
+
+        if ($recurrenceType !== null) {
+            $authorization->setRecurrenceType($recurrenceType);
+        }
         $this->getResourceService()->createResource($authorization);
         return $authorization;
     }
@@ -145,7 +150,8 @@ class PaymentService implements PaymentServiceInterface
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $paymentReference = null
+        $paymentReference = null,
+        $recurrenceType = null
     ): Charge {
         $payment     = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
@@ -160,6 +166,10 @@ class PaymentService implements PaymentServiceInterface
             $charge->setCard3ds($card3ds);
         }
         $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
+
+        if ($recurrenceType !== null) {
+            $charge->setRecurrenceType($recurrenceType);
+        }
         $this->getResourceService()->createResource($charge);
 
         return $charge;
