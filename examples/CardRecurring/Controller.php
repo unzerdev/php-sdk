@@ -31,6 +31,7 @@ require_once __DIR__ . '/Constants.php';
 /** @noinspection PhpIncludeInspection */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
@@ -55,17 +56,21 @@ if (!isset($_POST['resourceId'])) {
 }
 $paymentTypeId   = $_POST['resourceId'];
 
+// Just for this example: Use selected recurrence type. Scheduled will be used as default.
+$recurrenceTyp = $_POST['recurrence_type'] ?? RecurrenceTypes::SCHEDULED;
+
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
-    $recurring = $unzer->activateRecurringPayment($paymentTypeId, MY_RETURN_CONTROLLER_URL);
+    $recurring = $unzer->activateRecurringPayment($paymentTypeId, MY_RETURN_CONTROLLER_URL, $recurrenceTyp);
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
     $_SESSION['PaymentTypeId'] = $paymentTypeId;
     $_SESSION['ShortId'] = $recurring->getShortId();
+    $_SESSION['recurrenceType'] = $recurring->getRecurrenceType();
 
     // Redirect to the 3ds page or to success depending on the state of the transaction
     $redirect = !empty($recurring->getRedirectUrl());

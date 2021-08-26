@@ -33,3 +33,4 @@ define('SUCCESS_URL', EXAMPLE_BASE_FOLDER . 'Success.php');
 define('PENDING_URL', EXAMPLE_BASE_FOLDER . 'Pending.php');
 define('FAILURE_URL', EXAMPLE_BASE_FOLDER . 'Failure.php');
 define('RETURN_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'ReturnController.php');
+define('RECURRING_PAYMENT_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CardRecurring/RecurringPaymentController.php');

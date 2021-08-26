@@ -8,7 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Enable recurrence type to be set for `charge`, `authorize` and `activateRecurringPayment` methods.
 
 ### Changed
-*   Several minor improvements.
+* Enable recurring examples (card paypal)to trigger subsequent transaction from success page.
+* Enable card recurring example to use recurrence type.
+* Several minor improvements.
 
 ## [1.1.3.0](https://github.com/unzerdev/php-sdk/compare/1.1.2.0..1.1.3.0)
 ### Added
