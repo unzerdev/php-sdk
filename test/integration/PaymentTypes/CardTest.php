@@ -104,6 +104,78 @@ class CardTest extends BaseIntegrationTest
         $this->assertEquals($expected, $fetchedCard->getEmail());
         $card->charge(119.00, 'EUR', 'https://unzer.com');
     }
+
+    /**
+     * Card should be chargeable with recurrence type.
+     *
+     * @test
+     *
+     * @dataProvider supportedRecurrenceTypesDP
+     *
+     * @param $recurrenceType
+     *
+     * @throws UnzerApiException
+     */
+    public function cardShouldBeChargeableWithRecurrenceType($recurrenceType): void
+    {
+        $card = $this->createCardObject('4711100000000000');
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($card);
+        $chargeResponse = $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+        $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
+        $fetchedCharge = $this->unzer->fetchChargeById($chargeResponse->getPaymentId(), $chargeResponse->getId());
+
+        if ($recurrenceType !== null) {
+            $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
+        }
+        $this->assertEquals($recurrenceType, $fetchedCharge->getRecurrenceType());
+    }
+
+    /**
+     * Invalid recurrence type should throw API exception.
+     *
+     * @test
+     *
+     * @throws UnzerApiException
+     *
+     * @dataProvider invalidRecurrenceTypesDP
+     *
+     * @param mixed $recurrenceType
+     */
+    public function invalidRecurrenceTypeShouldThrowApiException($recurrenceType): void
+    {
+        $card = $this->createCardObject('4711100000000000');
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($card);
+        $this->expectException(UnzerApiException::class);
+        $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+    }
+
+    /**
+     * Card should be chargeable with recurrence type.
+     *
+     * @test
+     *
+     * @dataProvider supportedRecurrenceTypesDP
+     *
+     * @param $recurrenceType
+     *
+     * @throws UnzerApiException
+     */
+    public function cardCanBeAuthorizedWithRecurrenceType($recurrenceType): void
+    {
+        $card = $this->createCardObject('4711100000000000');
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($card);
+        $chargeResponse = $card->authorize('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+        $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
+        $fetchedCharge = $this->unzer->fetchAuthorization($chargeResponse->getPayment());
+
+        if ($recurrenceType !== null) {
+            $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
+        }
+        $this->assertEquals($recurrenceType, $fetchedCharge->getRecurrenceType());
+    }
     
     /**
      * Verify that an invalid email cause an UnzerApiException.
@@ -128,7 +200,7 @@ class CardTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function CardCanBeUpdatedWithEmail()
+    public function cardCanBeUpdatedWithEmail()
     {
         $card = $this->createCardObject('5453010000059543');
         $this->assertNull($card->getId());
@@ -556,6 +628,25 @@ class CardTest extends BaseIntegrationTest
             'email is set' => ['test@test.com', 'test@test.com'],
             'email is empty string' => ['', null],
             'email is empty/null' => [null, null],
+        ];
+    }
+
+    public function supportedRecurrenceTypesDP(): array
+    {
+        return [
+            'null' => [null],
+            'oneclick' => ['oneclick'],
+            'scheduled' => ['scheduled'],
+            'unscheduled' => ['unscheduled']
+        ];
+    }
+
+    public function invalidRecurrenceTypesDP(): array
+    {
+        return [
+            'empty' => [''],
+            'invalid string' => ['invalid recurrence Type'],
+            'number' => [42],
         ];
     }
 }
