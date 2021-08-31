@@ -51,6 +51,8 @@ trait CanDirectChargeWithCustomer
      *                                          optional and will be ignored if not applicable.
      * @param string|null     $invoiceId        The external id of the invoice.
      * @param string|null     $paymentReference A reference text for the payment.
+     * @param string|null     $recurrenceType   Recurrence type used for recurring payment.
+     *                                          See \UnzerSDK\Constants\RecurrenceTypes to find all supported types.
      *
      * @return Charge The resulting charge object.
      *
@@ -67,7 +69,8 @@ trait CanDirectChargeWithCustomer
         $basket = null,
         $card3ds = null,
         $invoiceId = null,
-        $paymentReference = null
+        $paymentReference = null,
+        $recurrenceType = null
     ): Charge {
         if ($this instanceof UnzerParentInterface) {
             return $this->getUnzerObject()->charge(
@@ -81,7 +84,8 @@ trait CanDirectChargeWithCustomer
                 $basket,
                 $card3ds,
                 $invoiceId,
-                $paymentReference
+                $paymentReference,
+                $recurrenceType
             );
         }
 

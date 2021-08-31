@@ -343,7 +343,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, $returnUrl): Recurring
+    public function activateRecurringPayment($paymentType, $returnUrl, string $recurrenceType = null): Recurring
     {
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
@@ -354,6 +354,9 @@ class ResourceService implements ResourceServiceInterface
         if (in_array(CanRecur::class, class_uses($paymentTypeObject), true)) {
             $recurring = new Recurring($paymentTypeObject->getId(), $returnUrl);
             $recurring->setParentResource($this->unzer);
+            if ($recurrenceType !== null) {
+                $recurring->setRecurrenceType($recurrenceType, $paymentTypeObject);
+            }
             $this->createResource($recurring);
             return $recurring;
         }

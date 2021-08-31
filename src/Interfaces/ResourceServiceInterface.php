@@ -60,16 +60,17 @@ interface ResourceServiceInterface
     /**
      * Activate recurring payment for the given payment type (if possible).
      *
-     * @param string|BasePaymentType $paymentType The payment to activate recurring payment for.
-     * @param string                 $returnUrl   The URL to which the customer gets redirected in case of a 3ds
-     *                                            transaction
+     * @param string|BasePaymentType $paymentType    The payment to activate recurring payment for.
+     * @param string                 $returnUrl      The URL to which the customer gets redirected in case of a 3ds
+     *                                               transaction
+     * @param string                 $recurrenceType Recurrence type used for recurring payment.
      *
      * @return Recurring The recurring object.
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function activateRecurringPayment($paymentType, $returnUrl): Recurring;
+    public function activateRecurringPayment($paymentType, $returnUrl, string $recurrenceType = null): Recurring;
 
     /**
      * Fetch and return payment by given payment id or payment object.
