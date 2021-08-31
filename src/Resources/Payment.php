@@ -684,8 +684,8 @@ class Payment extends AbstractUnzerResource
     /**
      * Performs a Charge transaction on the payment.
      *
-     * @param null $amount   The amount to be charged.
-     * @param null $currency The currency of the charged amount.
+     * @param float|null  $amount   The amount to be charged.
+     * @param string|null $currency The currency of the charged amount.
      *
      * @return Charge|AbstractUnzerResource The resulting Charge object.
      *
