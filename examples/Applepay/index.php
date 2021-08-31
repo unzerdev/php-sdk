@@ -137,7 +137,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             onMerchantValidationCallback: (session, event) => {
                 $.post('./merchantvalidation.php', JSON.stringify({"merchantValidationUrl": event.validationURL}), null, 'json')
                     .done(function (validationResponse) {
-                        // Contains Applepay session on succsess.
+                        // Contains applepay merchant session on succsess.
                         session.completeMerchantValidation(validationResponse);
                     })
                 .fail(function (error) {
@@ -187,8 +187,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                     'amount': '12.99',
                     'type': 'final'
                 }
-                var newLineItems =[]; // What does this mean?
-                session.completeShippingMethodSelection(status, newTotal, newLineItems);
+                session.completeShippingMethodSelection(status, newTotal);
             },
 
             onPaymentMethodSelectedCallback: (session, event) => {
