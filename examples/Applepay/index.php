@@ -148,7 +148,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             },
 
             onPaymentAuthorizedCallBack: (session, event) => {
-                var paymentData = event.payment.token.paymentData;
+                let paymentData = event.payment.token.paymentData;
                 const $form = $('form[id="payment-form"]');
                 let formObject = QueryStringToObject($form.serialize());
 
@@ -181,8 +181,8 @@ require_once __DIR__ . '/../../../../autoload.php';
             },
 
             onShippingMethodSelectedCallback: (session, event) => {
-                var status = ApplePaySession.STATUS_SUCCESS;
-                var newTotal = {
+                let status = ApplePaySession.STATUS_SUCCESS;
+                let newTotal = {
                     'label': 'Total amount',
                     'amount': '12.99',
                     'type': 'final'
@@ -213,9 +213,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 
         // Translates query string to object
         function QueryStringToObject(queryString) {
-            var pairs = queryString.slice().split('&');
+            let pairs = queryString.slice().split('&');
 
-            var result = {};
+            let result = {};
             pairs.forEach(function(pair) {
                 pair = pair.split('=');
                 result[pair[0]] = decodeURIComponent(pair[1] || '');
