@@ -137,7 +137,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             onMerchantValidationCallback: (session, event) => {
                 $.post('./merchantvalidation.php', JSON.stringify({"merchantValidationUrl": event.validationURL}), null, 'json')
                     .done(function (validationResponse) {
-                        // Contains applepay merchant session on succsess.
+                        // Contains Apple Pay merchant session on success.
                         session.completeMerchantValidation(validationResponse);
                     })
                 .fail(function (error) {
