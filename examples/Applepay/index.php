@@ -120,13 +120,13 @@ require_once __DIR__ . '/../../../../autoload.php';
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
     const APPLE_PAY_VERSION = 6;
+    const unzerApplePayInstance = unzerInstance.ApplePay();
+    let applePayInformationObject;
 
     if (!window.ApplePaySession || !ApplePaySession.canMakePayments() || !ApplePaySession.supportsVersion(APPLE_PAY_VERSION)) {
         handleError('This device does not support Apple Pay version 6!', APPLE_PAY_VERSION);
     } else {
-        var unzerApplePayInstance = unzerInstance.ApplePay();
-
-        var applePayInformationObject = unzerApplePayInstance.createApplePaySessionRequest({
+        applePayInformationObject = unzerApplePayInstance.createApplePaySessionRequest({
             countryCode: 'DE',
             currencyCode: 'EUR',
             supportedNetworks: ['visa', 'masterCard'],
