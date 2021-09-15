@@ -120,7 +120,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <script>
     const $errorHolder = $('#error-holder');
 
-    let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
+    const unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
     const unzerApplePayInstance = unzerInstance.ApplePay();
 
     function startApplePaySession(applePayInformationObject) {
@@ -128,7 +128,7 @@ require_once __DIR__ . '/../../../../autoload.php';
             let request = createApplePaySessionRequest(applePayInformationObject);
             let session = new ApplePaySession(6, request);
             session.onvalidatemerchant = function (event) {
-                applePayInformationObject.onMerchantValidationCallback(session, event);
+                customMerchantValidationCallback(session, event);
             }
             session.onpaymentauthorized = function (event) {
                 let paymentData = event.payment.token.paymentData;
@@ -164,46 +164,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                         abortPaymentSession(session);
                     })
             }
-            session.onpaymentmethodselected = function (event) {
-                applePayInformationObject.onPaymentMethodSelectedCallback(event);
-                try {
-                    session.completePaymentMethodSelection({
-                        newTotal: {
-                            'label': 'Total amount',
-                            'amount': '12.99',
-                            'type': 'final'
-                        },
-                        newLineItems: [
-                            {
-                                "label": "Bag Subtotal",
-                                "type": "final",
-                                "amount": "10.00"
-                            },
-                            {
-                                "label": "Free Shipping",
-                                "amount": "0.00",
-                                "type": "final"
-                            },
-                            {
-                                "label": "Estimated Tax",
-                                "amount": "2.99",
-                                "type": "final"
-                            }
-                        ]
-                    });
-                } catch (e) {
-                    alert(e.message);
-                }
-            }
-            session.onshippingmethodselected = function (event) {
-                let status = ApplePaySession.STATUS_SUCCESS;
-                let newTotal = {
-                    'label': 'Total amount',
-                    'amount': '12.99',
-                    'type': 'final'
-                }
-                session.completeShippingMethodSelection(status, newTotal);
-            }
+
             session.oncancel = function (event) {
                 applePayInformationObject.onCancelCallback(event);
             }
@@ -221,14 +182,14 @@ require_once __DIR__ . '/../../../../autoload.php';
             requiredShippingContactFields: applePayInformationObject.requiredBillingContactFields,
             requiredBillingContactFields: applePayInformationObject.requiredBillingContactFields,
             total: {
-                label: 'Total amount',
+                label: 'Unzer gmbh',
                 amount: applePayInformationObject.totalAmount
             },
             lineItems: [
                 {
                     "label": "Bag Subtotal",
                     "type": "final",
-                    "amount": "35.00"
+                    "amount": "10.00"
                 },
                 {
                     "label": "Free Shipping",
@@ -237,7 +198,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 },
                 {
                     "label": "Estimated Tax",
-                    "amount": "3.06",
+                    "amount": "2.99",
                     "type": "final"
                 }
             ]
@@ -248,7 +209,7 @@ require_once __DIR__ . '/../../../../autoload.php';
         if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
             $('.unsupportedBrowserMessage').css('display', 'none');
             //$('.applePayButton').css('display', 'block');
-            logMessage("Startup Check: Device is capable of making Apple Pay payments");
+            handleError("Startup Check: Device is capable of making Apple Pay payments");
         }
     }
 
@@ -256,15 +217,11 @@ require_once __DIR__ . '/../../../../autoload.php';
         startApplePaySession({
             countryCode: 'DE',
             currencyCode: "EUR",
-            totalAmount: 150.00,
+            totalAmount: 12.99,
             supportedNetworks: ['amex', 'visa', 'masterCard', 'discover'],
             merchantCapabilities: ['supports3DS', 'supportsEMV', 'supportsCredit', 'supportsDebit'],
             requiredShippingContactFields: ['postalAddress', 'name', 'phone', 'email'],
             requiredBillingContactFields: ['postalAddress', 'name', 'phone', 'email'],
-            onMerchantValidationCallback: customMerchantValidationCallback,
-            onShippingMethodSelectedCallback: customShippingMethodSelectedCallback,
-            onPaymentMethodSelectedCallback: customPaymentMethodSelectedCallback,
-            onCancelCallback: customCancelCallback
         });
     }
 
@@ -279,7 +236,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 
             })
             .fail(function (error) {
-                logData("customMerchantValidationCallbackError", error);
+                handleError(JSON.stringify(error.statusText));
+                session.abort();
             });
     }
 
@@ -292,8 +250,9 @@ require_once __DIR__ . '/../../../../autoload.php';
     function customCancelCallback(event) {
     }
 
-    function logMessage(message) {
-        document.getElementById("logger").append(message + '\n');
+    // Updates the error holder with the given message.
+    function handleError (message) {
+        $errorHolder.html(message);
     }
 
     function logData(caller, event) {
