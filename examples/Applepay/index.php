@@ -107,15 +107,12 @@ require_once __DIR__ . '/../../../../autoload.php';
             <div class="applePayButtonContainer">
                 <div class="apple-pay-button apple-pay-button-black" lang="us"
                      onclick="setupApplePaySession()"
-                     title="Start Apple Pay" role="link" tabindex="0"></div>
-            </div id="logger">
-            <div
+                     title="Start Apple Pay" role="link" tabindex="0">
+                </div>
+            </div>
         </div>
     </div>
 </form>
-<div id="logger">
-
-</div>
 
 <script>
     const $errorHolder = $('#error-holder');
@@ -123,68 +120,102 @@ require_once __DIR__ . '/../../../../autoload.php';
     const unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
     const unzerApplePayInstance = unzerInstance.ApplePay();
 
-    function startApplePaySession(applePayInformationObject) {
+    checkForApplePayCompatibility();
+
+    function startApplePaySession(applePayPaymentRequest) {
         if (window.ApplePaySession) {
-            let request = createApplePaySessionRequest(applePayInformationObject);
-            let session = new ApplePaySession(6, request);
+            const session = new ApplePaySession(6, applePayPaymentRequest);
             session.onvalidatemerchant = function (event) {
-                customMerchantValidationCallback(session, event);
-            }
+                merchantValidationCallback(session, event);
+            };
+
             session.onpaymentauthorized = function (event) {
-                let paymentData = event.payment.token.paymentData;
-                const $form = $('form[id="payment-form"]');
-                let formObject = QueryStringToObject($form.serialize());
-
-                // Create an Unzer instance with your public key
-
-                unzerApplePayInstance.createResource(paymentData)
-                    .then(function (createdResource) {
-                        formObject.typeId = createdResource.id;
-                        // Hand over the type ID to your backend.
-                        $.post('./Controller.php', JSON.stringify(formObject), null, 'json')
-                            .done(function (result) {
-                                // Handle the transaction respone from backend.
-                                let status = result.transactionStatus;
-                                if (status === 'success' || status === 'pending') {
-                                    session.completePayment({status: window.ApplePaySession.STATUS_SUCCESS});
-                                    window.location.href = '<?php echo RETURN_CONTROLLER_URL; ?>';
-                                } else {
-                                    window.location.href = '<?php echo FAILURE_URL; ?>';
-                                    abortPaymentSession(session);
-                                    session.abort();
-                                }
-                            })
-                            .fail(function (error) {
-                                handleError(error.statusText);
-                                abortPaymentSession(session);
-                            });
-                    })
-                    .catch(function (error) {
-                        handleError(error.message);
-                        abortPaymentSession(session);
-                    })
-            }
+                applePayAuthorizedCallback(event, session);
+            };
 
             session.oncancel = function (event) {
-                applePayInformationObject.onCancelCallback(event);
-            }
+                onCancelCallback(event);
+            };
 
             session.begin();
         }
     }
 
-    function createApplePaySessionRequest(applePayInformationObject) {
-        return {
-            countryCode: applePayInformationObject.countryCode,
-            currencyCode: applePayInformationObject.currencyCode,
-            supportedNetworks: applePayInformationObject.supportedNetworks,
-            merchantCapabilities: applePayInformationObject.merchantCapabilities,
-            requiredShippingContactFields: applePayInformationObject.requiredBillingContactFields,
-            requiredBillingContactFields: applePayInformationObject.requiredBillingContactFields,
+    function applePayAuthorizedCallback(event, session) {
+        // Get payment data from event. "event.payment" also contains contact information, if they were set via Apple Pay.
+        const paymentData = event.payment.token.paymentData;
+        const $form = $('form[id="payment-form"]');
+        const formObject = QueryStringToObject($form.serialize());
+
+        // Create an Unzer instance with your public key
+        unzerApplePayInstance.createResource(paymentData)
+            .then(function (createdResource) {
+                formObject.typeId = createdResource.id;
+                // Hand over the type ID to your backend.
+                $.post('./Controller.php', JSON.stringify(formObject), null, 'json')
+                    .done(function (result) {
+                        // Handle the transaction respone from backend.
+                        const status = result.transactionStatus;
+                        if (status === 'success' || status === 'pending') {
+                            session.completePayment({status: window.ApplePaySession.STATUS_SUCCESS});
+                            window.location.href = '<?php echo RETURN_CONTROLLER_URL; ?>';
+                        } else {
+                            window.location.href = '<?php echo FAILURE_URL; ?>';
+                            abortPaymentSession(session);
+                            session.abort();
+                        }
+                    })
+                    .fail(function (error) {
+                        handleError(error.statusText);
+                        abortPaymentSession(session);
+                    });
+            })
+            .catch(function (error) {
+                handleError(error.message);
+                abortPaymentSession(session);
+            })
+    }
+
+    function merchantValidationCallback(session, event) {
+        $.post('./merchantvalidation.php', JSON.stringify({"merchantValidationUrl": event.validationURL}), null, 'json')
+            .done(function (validationResponse) {
+                try {
+                    session.completeMerchantValidation(validationResponse);
+                } catch (e) {
+                    alert(e.message);
+                }
+
+            })
+            .fail(function (error) {
+                handleError(JSON.stringify(error.statusText));
+                session.abort();
+            });
+    }
+
+    function onCancelCallback(event) {
+        handleError('Canceled by user');
+    }
+
+    function checkForApplePayCompatibility() {
+        if (!window.ApplePaySession || !ApplePaySession.canMakePayments()) {
+            $('.unsupportedBrowserMessage').css('display', 'none');
+            handleError("This device does not support Apple Pay!");
+        }
+    }
+
+    // Get called when pay button is clicked. Prepare ApplePayPaymentRequest and call `startApplePaySession` with it.
+    function setupApplePaySession() {
+        const applePayPaymentRequest = {
+            countryCode: 'DE',
+            currencyCode: "EUR",
             total: {
                 label: 'Unzer gmbh',
-                amount: applePayInformationObject.totalAmount
+                amount: 12.99
             },
+            supportedNetworks: ['amex', 'visa', 'masterCard', 'discover'],
+            merchantCapabilities: ['supports3DS', 'supportsEMV', 'supportsCredit', 'supportsDebit'],
+            requiredShippingContactFields: ['postalAddress', 'name', 'phone', 'email'],
+            requiredBillingContactFields: ['postalAddress', 'name', 'phone', 'email'],
             lineItems: [
                 {
                     "label": "Bag Subtotal",
@@ -203,51 +234,8 @@ require_once __DIR__ . '/../../../../autoload.php';
                 }
             ]
         };
-    }
 
-    function checkForApplePayCompatibility() {
-        if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
-            $('.unsupportedBrowserMessage').css('display', 'none');
-            //$('.applePayButton').css('display', 'block');
-            handleError("Startup Check: Device is capable of making Apple Pay payments");
-        }
-    }
-
-    function setupApplePaySession() {
-        startApplePaySession({
-            countryCode: 'DE',
-            currencyCode: "EUR",
-            totalAmount: 12.99,
-            supportedNetworks: ['amex', 'visa', 'masterCard', 'discover'],
-            merchantCapabilities: ['supports3DS', 'supportsEMV', 'supportsCredit', 'supportsDebit'],
-            requiredShippingContactFields: ['postalAddress', 'name', 'phone', 'email'],
-            requiredBillingContactFields: ['postalAddress', 'name', 'phone', 'email'],
-        });
-    }
-
-    function customMerchantValidationCallback(session, event) {
-        let jqxhr = $.post('./merchantvalidation.php', JSON.stringify({"merchantValidationUrl": event.validationURL}), null, 'json')
-            .done(function (validationResponse) {
-                try {
-                    session.completeMerchantValidation(validationResponse);
-                } catch (e) {
-                    alert(e.message);
-                }
-
-            })
-            .fail(function (error) {
-                handleError(JSON.stringify(error.statusText));
-                session.abort();
-            });
-    }
-
-    function customShippingMethodSelectedCallback(event) {
-    }
-
-    function customPaymentMethodSelectedCallback(event) {
-    }
-
-    function customCancelCallback(event) {
+        startApplePaySession(applePayPaymentRequest);
     }
 
     // Updates the error holder with the given message.
@@ -255,16 +243,11 @@ require_once __DIR__ . '/../../../../autoload.php';
         $errorHolder.html(message);
     }
 
-    function logData(caller, event) {
-        let eventMessage = JSON.stringify(getEventProps(event));
-        document.getElementById("logger").append(caller + ": " + eventMessage + '\n\n');
-    }
-
     // Translates query string to object
     function QueryStringToObject(queryString) {
-        let pairs = queryString.slice().split('&');
-
+        const pairs = queryString.slice().split('&');
         let result = {};
+
         pairs.forEach(function(pair) {
             pair = pair.split('=');
             result[pair[0]] = decodeURIComponent(pair[1] || '');
@@ -272,24 +255,11 @@ require_once __DIR__ . '/../../../../autoload.php';
         return JSON.parse(JSON.stringify(result));
     }
 
-    function getEventProps(event) {
-        let EventCloneObject = {};
-        for (const key in event) {
-            const value = event[key];
-            if (typeof value === "string") {
-                EventCloneObject[key] = value;
-            } else if (typeof value === "object") {
-                EventCloneObject[key] = value;
-            } else if (typeof value === "number") {
-                EventCloneObject[key] = value;
-            } else if (typeof value === "boolean") {
-                EventCloneObject[key] = value;
-            }
-        }
-        return EventCloneObject;
+    // abort current payment session.
+    function abortPaymentSession(session) {
+        session.completePayment({status: window.ApplePaySession.STATUS_FAILURE});
+        session.abort();
     }
-
 </script>
 </body>
 </html>
-
