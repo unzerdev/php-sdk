@@ -120,10 +120,8 @@ require_once __DIR__ . '/../../../../autoload.php';
     const unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
     const unzerApplePayInstance = unzerInstance.ApplePay();
 
-    checkForApplePayCompatibility();
-
     function startApplePaySession(applePayPaymentRequest) {
-        if (window.ApplePaySession) {
+        if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
             const session = new ApplePaySession(6, applePayPaymentRequest);
             session.onvalidatemerchant = function (event) {
                 merchantValidationCallback(session, event);
@@ -138,6 +136,8 @@ require_once __DIR__ . '/../../../../autoload.php';
             };
 
             session.begin();
+        } else {
+            handleError("This device does not support Apple Pay!");
         }
     }
 
@@ -194,13 +194,6 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     function onCancelCallback(event) {
         handleError('Canceled by user');
-    }
-
-    function checkForApplePayCompatibility() {
-        if (!window.ApplePaySession || !ApplePaySession.canMakePayments()) {
-            $('.unsupportedBrowserMessage').css('display', 'none');
-            handleError("This device does not support Apple Pay!");
-        }
     }
 
     // Get called when pay button is clicked. Prepare ApplePayPaymentRequest and call `startApplePaySession` with it.
