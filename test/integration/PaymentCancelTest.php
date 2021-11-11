@@ -383,7 +383,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function partCancelOnInitialInvoiceChargeShouldCancelMaxUnpaidAmount(): void
+    public function partCancelOnInitialInvoiceSecuredChargeShouldCancelMaxUnpaidAmount(): void
     {
         /** @var InvoiceSecured $invoiceSecured */
         $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
