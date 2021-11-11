@@ -27,7 +27,6 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\CancelReasonCodes;
-use UnzerSDK\Constants\PaymentState;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -400,7 +399,7 @@ class PaymentCancelTest extends BaseIntegrationTest
 
         $this->assertTrue($charge->isPending());
         $payment = $this->unzer->fetchPayment($charge->getPaymentId());
-        if (count($payment->getCharges()) !== 2)  {
+        if (count($payment->getCharges()) !== 2) {
             $testDescription = 'This test needs assistance:
             To perform this test properly, First set a breakpoint after charge before the payment gets fetched.
             Then perform a receipt manually over 60€ on the reservation.
