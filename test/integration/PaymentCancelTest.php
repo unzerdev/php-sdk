@@ -396,22 +396,23 @@ class PaymentCancelTest extends BaseIntegrationTest
         $invoiceId = 'i' . self::generateRandomId();
         $charge = $invoiceSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
         $charge->getPayment()->ship();
+        $paymentId = $charge->getPaymentId();
 
         $this->assertTrue($charge->isPending());
         $payment = $this->unzer->fetchPayment($charge->getPaymentId());
-        if ($payment->getState() !== PaymentState::STATE_PAYMENT_REVIEW) {
-            $testDescription = 'This test needs assistance.
+        if (count($payment->getCharges()) !== 2)  {
+            $testDescription = 'This test needs assistance:
             To perform this test properly, First set a breakpoint after charge before the payment gets fetched.
-            Then perform a receipt over 60€ on the reservation.
+            Then perform a receipt manually over 60€ on the reservation.
             After that this test can be continued';
             $this->markTestSkipped($testDescription);
         }
-        $this->assertTrue($payment->isPartlyPaid());
-        $this->assertAmounts($payment, 40.0, 60.0, 100.0, 0);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0, 100, 100.0, 0);
 
         $this->assertCount(2, $payment->cancelAmount(50.0));
         $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0, 50.0, 50.0, 0.0);
+        $this->assertAmounts($payment, 0, 50.0, 50.0, 50.0);
     }
 
     /**
