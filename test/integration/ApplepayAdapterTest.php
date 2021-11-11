@@ -53,9 +53,10 @@ class ApplepayAdapterTest extends BaseIntegrationTest
         $this->merchantValidationUrl = 'https://apple-pay-gateway-cert.apple.com/paymentservices/startSession';
 
         $appleMerchantIdPath = EnvironmentService::getAppleMerchantIdPath();
-        $this->applepayCertPath = $appleMerchantIdPath . 'merchant_id.pem';
-        $this->applepayKeyPath = $appleMerchantIdPath . 'merchant_id.key';
-        $this->applepayCombinedCertPath = $appleMerchantIdPath . 'apple-pay-cert.pem';
+
+        $this->applepayCertPath = $this->createFilePath($appleMerchantIdPath, 'merchant_id.pem');
+        $this->applepayKeyPath = $this->createFilePath($appleMerchantIdPath, 'merchant_id.key');
+        $this->applepayCombinedCertPath = $this->createFilePath($appleMerchantIdPath, 'apple-pay-cert.pem');
         $this->appleCaCertificatePath = EnvironmentService::getAppleCaCertificatePath();
     }
 
@@ -223,5 +224,17 @@ class ApplepayAdapterTest extends BaseIntegrationTest
             'invalid: apple-pay-gateway-nc-pod1.apple.com' => ['apple-pay-gateway-nc-pod1.apple.com', false],
             'invalid: (empty)' => ['', false],
         ];
+    }
+
+    /**
+     * @param string $appleMerchantIdPath
+     * @param string $merchantIdFile
+     *
+     * @return string
+     */
+    protected function createFilePath(string $appleMerchantIdPath, string $merchantIdFile): string
+    {
+        $separator = DIRECTORY_SEPARATOR;
+        return rtrim($appleMerchantIdPath, $separator) . $separator . $merchantIdFile;
     }
 }
