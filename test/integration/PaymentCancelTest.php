@@ -27,7 +27,9 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Constants\PaymentState;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class PaymentCancelTest extends BaseIntegrationTest
@@ -375,6 +377,41 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertCount(1, $payment->cancelAmount(50.0));
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
+    }
+
+    /**
+     * Verify part cancel on initial iv charge (reversal)
+     *
+     * @test
+     */
+    public function partCancelOnInitialInvoiceChargeShouldCancelMaxUnpaidAmount(): void
+    {
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
+
+        $customer = $this->getMaximumCustomer();
+        $customer->setShippingAddress($customer->getBillingAddress());
+
+        $basket = $this->createBasket();
+        $invoiceId = 'i' . self::generateRandomId();
+        $charge = $invoiceSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
+        $charge->getPayment()->ship();
+
+        $this->assertTrue($charge->isPending());
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
+        if ($payment->getState() !== PaymentState::STATE_PAYMENT_REVIEW) {
+            $testDescription = 'This test needs assistance.
+            To perform this test properly, First set a breakpoint after charge before the payment gets fetched.
+            Then perform a receipt over 60€ on the reservation.
+            After that this test can be continued';
+            $this->markTestSkipped($testDescription);
+        }
+        $this->assertTrue($payment->isPartlyPaid());
+        $this->assertAmounts($payment, 40.0, 60.0, 100.0, 0);
+
+        $this->assertCount(2, $payment->cancelAmount(50.0));
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0, 50.0, 50.0, 0.0);
     }
 
     /**

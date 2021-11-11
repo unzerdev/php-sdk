@@ -107,7 +107,9 @@ class Charge extends AbstractTransactionType
         $amount = 0.0;
         foreach ($this->getCancellations() as $cancellation) {
             /** @var Cancellation $cancellation */
-            $amount += $cancellation->getAmount();
+            if ($cancellation->isSuccess()) {
+                $amount += $cancellation->getAmount();
+            }
         }
 
         return $amount;

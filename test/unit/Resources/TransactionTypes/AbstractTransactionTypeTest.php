@@ -31,6 +31,7 @@ use DateTime;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\TransactionStatus;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Services\ResourceService;
@@ -101,6 +102,47 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $message = $transactionType->getMessage();
         $this->assertSame('1234', $message->getCode());
         $this->assertSame('Customer message!', $message->getCustomer());
+    }
+
+    /**
+     * Set status should set state flags correctly.
+     *
+     * @test
+     */
+    public function setStatusShouldSetStateFlagsCorrectly(): void
+    {
+        $transactionType = new DummyTransactionType();
+
+        // Initial checks.
+        $this->assertFalse($transactionType->isSuccess());
+        $this->assertFalse($transactionType->isPending());
+        $this->assertFalse($transactionType->isError());
+
+        $responseArray = ['status' => TransactionStatus::STATUS_ERROR];
+        $transactionType->handleResponse((object)$responseArray);
+
+        $this->assertFalse($transactionType->isSuccess());
+        $this->assertFalse($transactionType->isPending());
+        $this->assertTrue($transactionType->isError());
+
+        $responseArray['status'] = TransactionStatus::STATUS_SUCCESS;
+        $transactionType->handleResponse((object)$responseArray);
+
+        $this->assertTrue($transactionType->isSuccess());
+        $this->assertFalse($transactionType->isPending());
+        $this->assertFalse($transactionType->isError());
+
+        $responseArray['status'] = TransactionStatus::STATUS_PENDING;
+        $transactionType->handleResponse((object)$responseArray);
+
+        $this->assertFalse($transactionType->isSuccess());
+        $this->assertTrue($transactionType->isPending());
+        $this->assertFalse($transactionType->isError());
+
+        $this->expectException(\RuntimeException::class);
+
+        $responseArray['status'] = 'Invalid status.';
+        $transactionType->handleResponse((object)$responseArray);
     }
 
     /**
