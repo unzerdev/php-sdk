@@ -24,16 +24,16 @@
  */
 namespace UnzerSDK\Services;
 
+use RuntimeException;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\CancelServiceInterface;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
-use RuntimeException;
+use UnzerSDK\Unzer;
 use function in_array;
 use function is_string;
 
@@ -262,11 +262,27 @@ class CancelService implements CancelServiceInterface
         $cancellations = [];
         $cancelWholePayment = $remainingToCancel === null;
 
-        /** @var Charge $charge */
-        foreach ($payment->getCharges() as $charge) {
+        /** @var array $charge */
+        $charges = $payment->getCharges();
+        $receiptAmount = $this->calculateReceiptAmount($charges);
+        foreach ($charges as $index => $charge) {
             $cancelAmount = null;
             if (!$cancelWholePayment && $remainingToCancel <= $charge->getTotalAmount()) {
                 $cancelAmount = $remainingToCancel;
+            }
+
+            /** @var Charge $charge */
+            // Calculate the maximum cancel amount for initial transaction.
+            if ($index === 0 && $charge->isPending()) {
+                $maxReversalAmount = $charge->getAmount() - $receiptAmount - $charge->getCancelledAmount();
+                /* If canceled and charged amounts are equal or higher than the initial charge, skip it,
+                because there won't be anything left to cancel. */
+                if ($maxReversalAmount <= 0) {
+                    continue;
+                }
+                if ($maxReversalAmount < $cancelAmount) {
+                    $cancelAmount = $maxReversalAmount;
+                }
             }
 
             try {
@@ -333,5 +349,17 @@ class CancelService implements CancelServiceInterface
         return $remainingToCancel;
     }
 
-    //</editor-fold>
+    //</editor-fold>/**
+
+    protected function calculateReceiptAmount(array $charges): float
+    {
+        $receiptAmount = 0;
+        // Sum up Amounts of all successful charges from the list.
+        foreach ($charges as $charge) {
+            if ($charge->isSuccess()) {
+                $receiptAmount += $charge->getAmount();
+            }
+        }
+        return $receiptAmount;
+    }
 }

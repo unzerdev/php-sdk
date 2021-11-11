@@ -45,7 +45,7 @@ class CancelAfterChargeTest extends BaseIntegrationTest
         $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
         $fetchedCharge = $this->unzer->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
 
-        $chargeArray = $charge->expose();
+        $chargeArray = $charge->setCard3ds(false)->expose();
         $this->assertEquals($chargeArray, $fetchedCharge->expose());
 
         return $charge;

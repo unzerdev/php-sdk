@@ -125,7 +125,7 @@ class AuthorizationTest extends BaseIntegrationTest
     public function authorizationCanBeFetched(Authorization $authorization): void
     {
         $fetchedAuthorization = $this->unzer->fetchAuthorization($authorization->getPaymentId());
-        $this->assertEquals($authorization->expose(), $fetchedAuthorization->expose());
+        $this->assertEquals($authorization->setCard3ds(false)->expose(), $fetchedAuthorization->expose());
     }
 
     /**

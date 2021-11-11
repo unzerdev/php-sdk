@@ -53,7 +53,6 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
 
     /** @var Payment $payment */
     private $payment;
-
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">

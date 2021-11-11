@@ -93,7 +93,7 @@ class EPSTest extends BaseIntegrationTest
         $this->assertTrue($charge->getPayment()->isPending());
 
         $fetchCharge = $this->unzer->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
-        $this->assertEquals($charge->expose(), $fetchCharge->expose());
+        $this->assertEquals($charge->setCard3ds(false)->expose(), $fetchCharge->expose());
     }
 
     /**

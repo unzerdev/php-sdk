@@ -814,7 +814,8 @@ class Payment extends AbstractUnzerResource
             $authorization = (new Authorization())->setPayment($this)->setId($transactionId);
             $this->setAuthorization($authorization);
         }
-        $authorization->setAmount($transaction->amount);
+
+        $authorization->handleResponse($transaction);
     }
 
     /**
@@ -834,7 +835,8 @@ class Payment extends AbstractUnzerResource
             $charge = (new Charge())->setPayment($this)->setId($transactionId);
             $this->addCharge($charge);
         }
-        $charge->setAmount($transaction->amount);
+
+        $charge->handleResponse($transaction);
     }
 
     /**
@@ -859,7 +861,8 @@ class Payment extends AbstractUnzerResource
             $cancellation = (new Cancellation())->setPayment($this)->setId($transactionId);
             $authorization->addCancellation($cancellation);
         }
-        $cancellation->setAmount($transaction->amount);
+
+        $cancellation->handleResponse($transaction);
     }
 
     /**
@@ -886,7 +889,8 @@ class Payment extends AbstractUnzerResource
             $cancellation = (new Cancellation())->setPayment($this)->setId($refundId);
             $charge->addCancellation($cancellation);
         }
-        $cancellation->setAmount($transaction->amount);
+
+        $cancellation->handleResponse($transaction);
     }
 
     /**
@@ -906,7 +910,8 @@ class Payment extends AbstractUnzerResource
             $shipment = (new Shipment())->setId($shipmentId);
             $this->addShipment($shipment);
         }
-        $shipment->setAmount($transaction->amount);
+
+        $shipment->handleResponse($transaction);
     }
 
     /**
@@ -926,7 +931,8 @@ class Payment extends AbstractUnzerResource
             $payout = (new Payout())->setId($payoutId);
             $this->setPayout($payout);
         }
-        $payout->setAmount($transaction->amount);
+
+        $payout->handleResponse($transaction);
     }
 
     //</editor-fold>
