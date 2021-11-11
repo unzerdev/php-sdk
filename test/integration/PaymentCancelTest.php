@@ -379,7 +379,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify part cancel on initial iv charge (reversal)
+     * Verify part cancel on initial ivs charge (reversal)
      *
      * @test
      */
@@ -397,12 +397,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $charge->getPayment()->ship();
         $paymentId = $charge->getPaymentId();
 
-        $this->assertTrue($charge->isPending());
+        $this->assertTrue($charge->isPending()); // Set your break point here.
         $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         if (count($payment->getCharges()) !== 2) {
             $testDescription = 'This test needs assistance:
-            To perform this test properly, First set a breakpoint after charge before the payment gets fetched.
-            Then perform a receipt manually over 60€ on the reservation.
+            To perform this test properly, first set a breakpoint after charge, before the payment gets fetched.
+            Then perform a receipt manually over 60€ on the "reservation".
             After that this test can be continued';
             $this->markTestSkipped($testDescription);
         }
@@ -411,7 +411,44 @@ class PaymentCancelTest extends BaseIntegrationTest
 
         $this->assertCount(2, $payment->cancelAmount(50.0));
         $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0, 50.0, 50.0, 50.0);
+        $this->assertAmounts($payment, 0, 50.0, 100.0, 50.0);
+    }
+
+    /**
+     * Verify skip cancel on initial ivs charge
+     *
+     * @test
+     */
+    public function fullCancelOnPaidInvoiceSecuredPaymentShouldBePossible(): void
+    {
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
+
+        $customer = $this->getMaximumCustomer();
+        $customer->setShippingAddress($customer->getBillingAddress());
+
+        $basket = $this->createBasket();
+        $invoiceId = 'i' . self::generateRandomId();
+        $charge = $invoiceSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
+        $charge->getPayment()->ship();
+        $paymentId = $charge->getPaymentId();
+
+        $this->assertTrue($charge->isPending()); // Set your break point here.
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
+        if (count($payment->getCharges()) !== 2) {
+            $testDescription = 'This test needs assistance:
+            To perform this test properly, first set a breakpoint after charge, before the payment gets fetched.
+            Then perform a receipt manually over 100€ on the "reservation".
+            After that this test can be continued';
+            $this->markTestSkipped($testDescription);
+        }
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0, 100.0, 100.0, 0);
+
+        $cancellations = $payment->cancelAmount();
+        $this->assertCount(1, $cancellations);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertAmounts($payment, 0, 0, 100.0, 100.0);
     }
 
     /**
