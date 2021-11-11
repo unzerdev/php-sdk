@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 * Added Apple Pay example.
 
 ### Change
-* Adjust `canelAmount` to work properly with Invoice Secured payments.
+* Adjust `cancelAmount` logic to work properly with Invoice Secured payments.
 
 ### Updated
 *   Updated jQuery and frameworks used in examples.
