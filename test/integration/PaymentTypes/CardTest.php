@@ -635,6 +635,7 @@ class CardTest extends BaseIntegrationTest
     {
         return [
             'null' => [null],
+            'empty string' => [''],
             'oneclick' => ['oneclick'],
             'scheduled' => ['scheduled'],
             'unscheduled' => ['unscheduled']
@@ -644,7 +645,6 @@ class CardTest extends BaseIntegrationTest
     public function invalidRecurrenceTypesDP(): array
     {
         return [
-            'empty' => [''],
             'invalid string' => ['invalid recurrence Type'],
             'number' => [42],
         ];
