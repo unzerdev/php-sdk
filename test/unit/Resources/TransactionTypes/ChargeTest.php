@@ -211,11 +211,19 @@ class ChargeTest extends BasePaymentTest
         $charge = new Charge(123.4, 'myCurrency', 'https://my-return-url.test');
         $this->assertEquals(0.0, $charge->getCancelledAmount());
 
-        $cancellation1 = new Cancellation(10.0);
+        $cancellationJson = '{
+            "type": "cancel-charge",
+            "status": "success",
+            "amount": "10"
+        }';
+
+        $cancellation1 = new Cancellation();
+        $cancellation1->handleResponse(json_decode($cancellationJson));
         $charge->addCancellation($cancellation1);
         $this->assertEquals(10.0, $charge->getCancelledAmount());
 
-        $cancellation2 = new Cancellation(10.0);
+        $cancellation2 = new Cancellation();
+        $cancellation2->handleResponse(json_decode($cancellationJson));
         $charge->addCancellation($cancellation2);
         $this->assertEquals(20.0, $charge->getCancelledAmount());
     }

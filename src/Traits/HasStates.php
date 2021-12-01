@@ -24,6 +24,9 @@
  */
 namespace UnzerSDK\Traits;
 
+use RuntimeException;
+use UnzerSDK\Constants\TransactionStatus;
+
 trait HasStates
 {
     /** @var bool $isError */
@@ -95,4 +98,55 @@ trait HasStates
     }
 
     //</editor-fold>
+
+    /**
+     * Map the 'status' that is used for transactions in the transaction list of a payment resource.
+     * The actual transaction resource only has the isSuccess, isPending and isError property.
+     *
+     * @param string $status
+     *
+     * @throws RuntimeException
+     */
+    protected function setStatus(string $status): self
+    {
+        $this->validateTransactionStatus($status);
+
+        $this->setIsSuccess(false);
+        $this->setIsPending(false);
+        $this->setIsError(false);
+
+        switch ($status) {
+            case (TransactionStatus::STATUS_ERROR):
+                $this->setIsError(true);
+                break;
+            case (TransactionStatus::STATUS_PENDING):
+                $this->setIsPending(true);
+                break;
+            case (TransactionStatus::STATUS_SUCCESS):
+                $this->setIsSuccess(true);
+                break;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if transaction status is valid. If status is invalid a RuntimeException is thrown
+     *
+     * @param string $status
+     *
+     * @throws RuntimeException
+     */
+    public function validateTransactionStatus(string $status): void
+    {
+        $validStatusArray = [
+            TransactionStatus::STATUS_ERROR,
+            TransactionStatus::STATUS_PENDING,
+            TransactionStatus::STATUS_SUCCESS,
+        ];
+
+        if (!in_array($status, $validStatusArray, true)) {
+            throw new RuntimeException('Transaction status can not be set. Status is invalid for transaction.');
+        }
+    }
 }

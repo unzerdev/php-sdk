@@ -159,6 +159,6 @@ class ChargeTest extends BaseIntegrationTest
         $this->assertEquals($paymentReference, $charge->getPaymentReference());
 
         $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
-        $this->assertEquals($charge->expose(), $fetchedCharge->expose());
+        $this->assertEquals($charge->setCard3ds(false)->expose(), $fetchedCharge->expose());
     }
 }

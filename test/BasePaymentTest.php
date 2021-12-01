@@ -206,7 +206,7 @@ class BasePaymentTest extends TestCase
      *
      * @return Card
      */
-    protected function createCardObject(string $cardNumber = '5453010000059543'): Card
+    protected function createCardObject(string $cardNumber = '4711100000000000'): Card
     {
         $expiryDate = $this->getNextYearsTimestamp()->format('m/Y');
         $card = new Card($cardNumber, $expiryDate);
