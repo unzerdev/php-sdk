@@ -26,8 +26,10 @@
  */
 namespace UnzerSDK\test\unit\Resources;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use RuntimeException;
+use stdClass;
 use UnzerSDK\Constants\PaymentState;
-use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
@@ -43,9 +45,7 @@ use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
-use PHPUnit\Framework\MockObject\MockObject;
-use RuntimeException;
-use stdClass;
+use UnzerSDK\Unzer;
 
 class PaymentTest extends BasePaymentTest
 {
@@ -593,6 +593,53 @@ class PaymentTest extends BasePaymentTest
         $payment = (new Payment())->setAmount($amountMock);
         $payment->handleResponse((object) ['currency' => 'MyTestSetCurrency']);
         $this->assertEquals('MyTestGetCurrency', $payment->getCurrency());
+    }
+
+    /**
+     * Verify that a payment that contains a cancel-authorize transaction can be fetched, even though no authorize
+     * transaction exists. Can occur when canceling via Insights.
+     *
+     * @test
+     */
+    public function cancelAuthorizeOnInvoiceShouldBeHandledCorrectly(): void
+    {
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
+        /** @noinspection PhpParamsInspection */
+
+        /** @var ResourceService $resourceServiceMock */
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment = new Payment();
+        $payment->setParentResource($unzerObj);
+
+        $response = (object)[
+            "id" => "s-pay-666",
+            "state" => (object)["id" => 1, "name" => "completed"],
+            "currency" => "EUR",
+            "transactions" => [
+                (object)["date" => "2021-11-17 11:47:07",
+                    "type" => "charge",
+                    "status" => "pending",
+                    "url" => "https://api.unzer.com/v1/payments/s-pay-666/charges/s-chg-1", "amount" => "14.9900"
+                ],
+                (object)[
+                    "date" => "2021-11-17 11:48:52",
+                    "type" => "shipment", "status" => "success",
+                    "url" => "https://api.unzer.com/v1/payments/s-pay-666/shipments/s-shp-1",
+                    "amount" => "14.9900"],
+                (object)["date" => "2021-11-17 11:48:52",
+                    "type" => "cancel-authorize",
+                    "status" => "success",
+                    "url" => "https://api.unzer.com/v1/payments/s-pay-666/charges/s-chg-1/cancels/s-cnl-1",
+                    "amount" => "10.0000"]
+            ]
+        ];
+        $payment->handleResponse($response);
+        $this->assertNull($payment->getAuthorization());
+        /** @var Charge $initialCharge */
+        $initialCharge = $payment->getCharges()[0];
+
+        $this->assertCount(1, $initialCharge->getCancellations());
     }
 
     //<editor-fold desc="Handle Response Tests">
