@@ -853,7 +853,7 @@ class Payment extends AbstractUnzerResource
         $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
         $initialTransaction = $this->getInitialTransaction(true);
         if (!$initialTransaction instanceof Authorization && !$initialTransaction instanceof Charge) {
-            throw new RuntimeException('The Authorization object can not be found.');
+            throw new RuntimeException('The initial transaction object (Authorize or Charge) can not be found.');
         }
 
         $cancellation = $initialTransaction->getCancellation($transactionId, true);
