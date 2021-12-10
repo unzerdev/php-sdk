@@ -1023,7 +1023,7 @@ class PaymentTest extends BasePaymentTest
         $response->transactions = [$cancellation];
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The Authorization object can not be found.');
+        $this->expectExceptionMessage('The initial transaction object (Authorize or Charge) can not be found.');
         $payment->handleResponse($response);
     }
 
