@@ -36,6 +36,7 @@ use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Interfaces\WebhookServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Keypair;
@@ -929,7 +930,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
 
     //</editor-fold>
 
-    //<editor-fold desc="HInstallment Secured">
+    //<editor-fold desc="Installment Secured">
 
     /**
      * {@inheritDoc}
@@ -945,6 +946,18 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     }
 
     //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Config">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchConfig(BasePaymentType $paymentType): Config
+    {
+        return $this->getResourceService()->fetchConfig($paymentType);
+    }
 
     //</editor-fold>
 
