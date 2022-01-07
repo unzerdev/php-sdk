@@ -354,7 +354,6 @@ interface ResourceServiceInterface
      * @return Cancellation The fetched cancellation (refund).
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     *                           This will also occur if the given payment type has no configuration.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchRefundById($payment, $chargeId, $cancellationId): Cancellation;
@@ -393,6 +392,7 @@ interface ResourceServiceInterface
      * @return Config
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     *                           This will also occur if the given payment type has no configuration.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchConfig(BasePaymentType $paymentType): Config;
