@@ -91,6 +91,10 @@ class IdService
      */
     public static function getResourceTypeFromIdString($typeId): ?string
     {
+        if ($typeId === null) {
+            return null;
+        }
+
         $typeIdString = null;
 
         $typeIdParts = [];

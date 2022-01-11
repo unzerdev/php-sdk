@@ -38,7 +38,11 @@ class PublicKeyValidator
     public static function validate($key): bool
     {
         $match = [];
-        preg_match('/^[sp]-pub-[a-zA-Z0-9]+/', $key, $match);
-        return count($match) > 0;
+        if ($key === null) {
+            return false;
+        } else {
+            preg_match('/^[sp]-pub-[a-zA-Z0-9]+/', $key, $match);
+            return count($match) > 0;
+        }
     }
 }

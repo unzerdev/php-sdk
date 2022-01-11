@@ -76,9 +76,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Rebranding of the SDK.
 *   Removed payment type string from URL when fetching a payment type resource.
 *   Replace payment methods guaranteed/factoring by secured payment methods, i.e.:
-    *   `InvoiceGuaranteed` and `InvoiceFactoring` replaced by `InvoiceSecured`
-    *   `SepaDirectDebitGuaranteed` replaced by `SepaDirectDebitSecured`
-    *   `HirePurchaseDirectDebit` replaced by `InstallmentSecured`
+    *   `InvoiceGuaranteed` and `InvoiceFactoring` replaced by `InvoiceSecured`.
+    *   `SepaDirectDebitGuaranteed` replaced by `SepaDirectDebitSecured`.
+    *   `HirePurchaseDirectDebit` replaced by `InstallmentSecured`.
     *   Basket is now mandatory for all those payment types above.
 *   Added mapping of old payment type ids to the new payment type resources.
 *   Constant in `\UnzerSDK\Constants\ApiResponseCodes` got renamed:

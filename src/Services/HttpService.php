@@ -226,7 +226,7 @@ class HttpService
         }
         $unzerObj->debugLog(
             'Response: (' . $responseCode . ') ' .
-            json_encode(json_decode($response, false), JSON_UNESCAPED_SLASHES)
+            json_encode(json_decode($response ?? '', false), JSON_UNESCAPED_SLASHES)
         );
     }
 
