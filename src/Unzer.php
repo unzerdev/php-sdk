@@ -103,7 +103,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      */
-    public function __construct($key, $locale = null)
+    public function __construct($key, $locale = '')
     {
         $this->setKey($key);
         $this->setLocale($locale);
@@ -167,6 +167,10 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      */
     public function setLocale($locale): Unzer
     {
+        if ($locale === null) {
+            return $this;
+        }
+
         $this->locale = str_replace('_', '-', $locale);
         return $this;
     }

@@ -45,6 +45,7 @@ class ConfigTest extends BaseIntegrationTest
      */
     public function verifyInvoiceSecuredConfigIsFetchable()
     {
+        $this->markTestSkipped('Currently not enabled for test merchant.');
         $config = $this->getUnzerObject()->fetchConfig(new InvoiceSecured());
 
         $exposedConfig = $config->expose();

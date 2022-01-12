@@ -24,6 +24,8 @@
  */
 namespace UnzerSDK\Resources;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
+
 class Webhook extends AbstractUnzerResource
 {
     /** @var string $url */
