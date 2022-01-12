@@ -6,7 +6,7 @@
 [![PHP 8.0](https://img.shields.io/badge/php-8.0-blue.svg)](http://www.php.net)
 [![PHP 8.1](https://img.shields.io/badge/php-8.1-blue.svg)](http://www.php.net)
 
-![Logo](https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png)
+![Logo](/assets/images/unzer_logo.png)
 
 # Unzer php-sdk
 This SDK provides for an easy way to connect to the Unzer Rest API.
