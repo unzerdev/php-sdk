@@ -40,9 +40,8 @@ class PublicKeyValidator
         $match = [];
         if ($key === null) {
             return false;
-        } else {
-            preg_match('/^[sp]-pub-[a-zA-Z0-9]+/', $key, $match);
-            return count($match) > 0;
         }
+        preg_match('/^[sp]-pub-[a-zA-Z0-9]+/', $key, $match);
+        return count($match) > 0;
     }
 }
