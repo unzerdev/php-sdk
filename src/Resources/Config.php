@@ -40,7 +40,7 @@ class Config extends AbstractUnzerResource
     }
 
     /**
-     * @param string $optinText
+     * @param string|null $optinText
      */
     protected function setOptinText(?string $optinText): void
     {
