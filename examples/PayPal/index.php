@@ -47,8 +47,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 <body style="margin: 70px 70px 0;">
 <h3>Example data:</h3>
 <ul>
-    <li>Username: paypal-customer@heidelpay.de</li>
-    <li>Password: heidelpay</li>
+    <li>Username: paypal-buyer@unzer.com</li>
+    <li>Password: unzer1234</li>
 </ul>
 <strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com" target="_blank">here</a>.
 
