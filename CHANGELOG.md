@@ -7,8 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 *   Enable PHP 8.1 compatibility.
 ### Changed
-*   Fix an issue that can cause an exception when fetching a payment that contained a "cancel-authorize" transaction even though the payment has no authorization transaction.
-*   Several minor improvements.
+* Fix an issue that can cause an exception when fetching a payment that contained a "cancel-authorize" transaction even though the payment has no authorization transaction.
+* Update broken documentation links in readme.
+* Several minor improvements.
 
 ## [1.1.4.1](https://github.com/unzerdev/php-sdk/compare/1.1.4.0..1.1.4.1)
 ### Added
@@ -19,7 +20,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 * Updated jQuery and frameworks used in examples.
 * Fixed failing card tests.
 * Several minor improvements.
-* Update broken documentation links in readme.
 
 ## [1.1.4.0](https://github.com/unzerdev/php-sdk/compare/1.1.3.0..1.1.4.0)
 ### Added
