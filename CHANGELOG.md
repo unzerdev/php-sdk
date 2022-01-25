@@ -3,12 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.1.5.0](https://github.com/unzerdev/php-sdk/compare/1.1.4.1..1.1.5.0)
+## [1.1.4.2](https://github.com/unzerdev/php-sdk/compare/1.1.4.1..1.1.4.2)
 ### Added
 *   Enable PHP 8.1 compatibility.
 ### Changed
 *   Fix an issue that can cause an exception when fetching a payment that contained a "cancel-authorize" transaction even though the payment has no authorization transaction.
-*   Add support for fetching opt-in text of invoice secured config.
 *   Several minor improvements.
 
 ## [1.1.4.1](https://github.com/unzerdev/php-sdk/compare/1.1.4.0..1.1.4.1)

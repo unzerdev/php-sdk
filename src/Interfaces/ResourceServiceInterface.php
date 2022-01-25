@@ -27,7 +27,6 @@ namespace UnzerSDK\Interfaces;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
-use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Keypair;
 use UnzerSDK\Resources\Metadata;
@@ -383,17 +382,4 @@ interface ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchShipment($payment, $shipmentId): Shipment;
-
-    /**
-     * Get the configuration for the given payment type.
-     *
-     * @param BasePaymentType $paymentType
-     *
-     * @return Config
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     *                           This will also occur if the given payment type has no configuration.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     */
-    public function fetchConfig(BasePaymentType $paymentType): Config;
 }
