@@ -933,7 +933,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
 
     //</editor-fold>
 
-    //<editor-fold desc="HInstallment Secured">
+    //<editor-fold desc="Installment Secured">
 
     /**
      * {@inheritDoc}
