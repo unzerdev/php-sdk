@@ -63,7 +63,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.1.4.1';
+    public const SDK_VERSION = '1.1.4.2';
 
     /** @var string $key */
     private $key;
@@ -102,7 +102,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      */
-    public function __construct($key, $locale = null)
+    public function __construct($key, $locale = '')
     {
         $this->setKey($key);
         $this->setLocale($locale);
@@ -166,6 +166,10 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      */
     public function setLocale($locale): Unzer
     {
+        if ($locale === null) {
+            return $this;
+        }
+
         $this->locale = str_replace('_', '-', $locale);
         return $this;
     }
@@ -929,7 +933,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
 
     //</editor-fold>
 
-    //<editor-fold desc="HInstallment Secured">
+    //<editor-fold desc="Installment Secured">
 
     /**
      * {@inheritDoc}

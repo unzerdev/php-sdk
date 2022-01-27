@@ -4,18 +4,19 @@
 [![PHP 7.3](https://img.shields.io/badge/php-7.3-blue.svg)](http://www.php.net)
 [![PHP 7.4](https://img.shields.io/badge/php-7.4-blue.svg)](http://www.php.net)
 [![PHP 8.0](https://img.shields.io/badge/php-8.0-blue.svg)](http://www.php.net)
+[![PHP 8.1](https://img.shields.io/badge/php-8.1-blue.svg)](http://www.php.net)
 
-![Logo](https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png)
+![Logo](unzer_logo.svg)
 
 # Unzer php-sdk
 This SDK provides for an easy way to connect to the Unzer Rest API.
 
 Please refer to the following documentation for installation instructions and usage information.
 
-*   [API Documentation](https://docs.unzer.com/overview)
-*   [PHP SDK Documentation](https://docs.unzer.com/integrate/php-sdk)
-*   [How to use the examples](https://docs.unzer.com/integrate/php-sdk/example-implementations)
-*   [Debugging](https://docs.unzer.com/integrate/php-sdk/logging-and-debugging)
+*   [API Documentation](https://docs.unzer.com)
+*   [PHP SDK Documentation](https://docs.unzer.com/server-side-integration/php-sdk-integration)
+*   [How to use the examples](https://docs.unzer.com/server-side-integration/php-sdk-integration/php-example-implementation)
+*   [Debugging](https://docs.unzer.com/server-side-integration/php-sdk-integration/php-error-handling/#debug-log)
 
 ## Supported payment types
 *   Alipay
@@ -53,3 +54,6 @@ For any issues or questions please get in touch with our support team.
 ### Phone
 * DE: [+49 6221 43101-00](tel:+4962214310100)
 * AT: [+43 1 513 66 33 669](tel:+4315136633669)
+
+### Twitter
+[@UnzerTech](https://twitter.com/UnzerTech)

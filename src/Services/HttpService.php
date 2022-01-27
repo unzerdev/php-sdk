@@ -218,12 +218,16 @@ class HttpService
         $authHeader[1] = ValueService::maskValue($authHeader[1]);
         $headers['Authorization'] = implode(' ', $authHeader);
 
+        // log request
         $unzerObj->debugLog($httpMethod . ': ' . $url);
         $writingOperations = [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT];
         $unzerObj->debugLog('Headers: ' . json_encode($headers, JSON_UNESCAPED_SLASHES));
         if (in_array($httpMethod, $writingOperations, true)) {
             $unzerObj->debugLog('Request: ' . $payload);
         }
+
+        // log response
+        $response = $response ?? '';
         $unzerObj->debugLog(
             'Response: (' . $responseCode . ') ' .
             json_encode(json_decode($response, false), JSON_UNESCAPED_SLASHES)

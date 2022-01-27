@@ -89,8 +89,12 @@ class IdService
      *
      * @return string|null
      */
-    public static function getResourceTypeFromIdString($typeId): ?string
+    public static function getResourceTypeFromIdString(?string $typeId): ?string
     {
+        if ($typeId === null) {
+            return null;
+        }
+
         $typeIdString = null;
 
         $typeIdParts = [];

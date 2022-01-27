@@ -851,15 +851,15 @@ class Payment extends AbstractUnzerResource
     private function updateReversalTransaction($transaction): void
     {
         $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
-        $authorization = $this->getAuthorization(true);
-        if (!$authorization instanceof Authorization) {
-            throw new RuntimeException('The Authorization object can not be found.');
+        $initialTransaction = $this->getInitialTransaction(true);
+        if (!$initialTransaction instanceof Authorization && !$initialTransaction instanceof Charge) {
+            throw new RuntimeException('The initial transaction object (Authorize or Charge) can not be found.');
         }
 
-        $cancellation = $authorization->getCancellation($transactionId, true);
+        $cancellation = $initialTransaction->getCancellation($transactionId, true);
         if (!$cancellation instanceof Cancellation) {
             $cancellation = (new Cancellation())->setPayment($this)->setId($transactionId);
-            $authorization->addCancellation($cancellation);
+            $initialTransaction->addCancellation($cancellation);
         }
 
         $cancellation->handleResponse($transaction);

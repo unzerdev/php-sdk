@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\Resources;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Traits\HasAdditionalTransactionData;
 use UnzerSDK\Traits\HasCustomerMessage;
 use UnzerSDK\Traits\HasDate;
