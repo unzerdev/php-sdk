@@ -75,7 +75,7 @@ class BasketTest extends BaseIntegrationTest
             ->setVat(19)
             ->setUnit('ert')
             ->setAmountDiscount(1234.9)
-            ->setImageUrl('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
+            ->setImageUrl('https://docs.unzer.com/card/card.png')
             ->setSubTitle('This is some subtitle for this item')
             ->setType('this is some type');
         $basket->addBasketItem($basketItem);
@@ -249,7 +249,7 @@ class BasketTest extends BaseIntegrationTest
     public function basketItemWithInvalidUrlWillThrowAnErrorDP(): array
     {
         return [
-            'valid ' => [false, 'https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png'],
+            'valid ' => [false, 'https://docs.unzer.com/card/card.png'],
             'valid null' => [false, null],
             'valid empty' => [false, ''],
             'invalid not available' => [true, 'https://files.readme.io/does-not-exist.jpg', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL]
