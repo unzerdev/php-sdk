@@ -504,7 +504,9 @@ class PaymentServiceTest extends BasePaymentTest
                 'orderId' => 'id-4',
                 'returnUrl' => 'url',
                 'resources' => ['basketId' => 'id-2', 'customerId' => 'id-1', 'metadataId' => 'id-3', 'typeId' => 'id']
-            ], $returnedPayout->expose());
+            ],
+            $returnedPayout->expose()
+        );
     }
 
     //</editor-fold>

@@ -112,7 +112,8 @@ class HttpServiceTest extends BasePaymentTest
             $this->callback(
                 static function ($url) {
                     return str_replace(['dev-api', 'stg-api'], 'api', $url) === 'https://api.unzer.com/v1/my/uri/123';
-                }),
+                }
+            ),
             '{"dummyResource": "JsonSerialized"}',
             'GET'
         );
@@ -159,7 +160,8 @@ class HttpServiceTest extends BasePaymentTest
             $this->callback(
                 static function ($headers) use ($locale) {
                     return $locale === ($headers['Accept-Language'] ?? null);
-                })
+                }
+            )
         );
         $adapterMock->method('execute')->willReturn('myResponseString');
 
@@ -184,9 +186,10 @@ class HttpServiceTest extends BasePaymentTest
         $loggerMock = $this->getMockBuilder(DummyDebugHandler::class)->setMethods(['log'])->getMock();
         $loggerMock->expects($this->exactly(7))->method('log')->withConsecutive(
             [ $this->callback(
-                    static function ($string) {
-                        return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') GET: https://api.unzer.com/v1/my/uri/123';
-                    })
+                static function ($string) {
+                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') GET: https://api.unzer.com/v1/my/uri/123';
+                }
+            )
             ],
             [ $this->callback(
                 static function ($string) {
@@ -195,13 +198,15 @@ class HttpServiceTest extends BasePaymentTest
                     $elements = json_decode($matches[1], true);
                     return array_key_exists('Authorization', $elements) && array_key_exists('Content-Type', $elements) &&
                            array_key_exists('SDK-TYPE', $elements) && array_key_exists('SDK-VERSION', $elements);
-                })
+                }
+            )
             ],
             ['(' . (getmypid()) . ') Response: (200) {"response":"myResponseString"}'],
             [ $this->callback(
                 static function ($string) {
                     return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') POST: https://api.unzer.com/v1/my/uri/123';
-                })
+                }
+            )
             ],
             [ $this->callback(
                 static function ($string) {
@@ -210,7 +215,8 @@ class HttpServiceTest extends BasePaymentTest
                     $elements = json_decode($matches[1], true);
                     return array_key_exists('Authorization', $elements) && array_key_exists('Content-Type', $elements) &&
                         array_key_exists('SDK-TYPE', $elements) && array_key_exists('SDK-VERSION', $elements);
-                })
+                }
+            )
             ],
             ['(' . (getmypid()) . ') Request: {"dummyResource": "JsonSerialized"}'],
             ['(' . (getmypid()) . ') Response: (201) {"response":"myResponseString"}']
