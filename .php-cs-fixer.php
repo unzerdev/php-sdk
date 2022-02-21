@@ -4,7 +4,8 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__.'/src')
     ->in(__DIR__.'/test');
 
-return PhpCsFixer\Config::create()
+$config = new PhpCsFixer\Config();
+return $config
     ->setUsingCache(false)
     ->setRules(
         array(
@@ -12,12 +13,12 @@ return PhpCsFixer\Config::create()
             'no_blank_lines_after_phpdoc' => true,
             'phpdoc_add_missing_param_annotation' => true,
             'native_function_casing' => true,
-            'method_separation' => true,
+            'class_attributes_separation' => ['elements' => ['method' => 'one']],
             'method_argument_space' => true,
             'no_empty_statement' => true,
             'no_leading_import_slash' => true,
             'no_multiline_whitespace_around_double_arrow' => true,
-            'no_multiline_whitespace_before_semicolons' => true,
+            'multiline_whitespace_before_semicolons' => true,
             'no_singleline_whitespace_before_semicolons' => true,
             'no_spaces_around_offset' => true,
             'no_trailing_comma_in_singleline_array' => true,

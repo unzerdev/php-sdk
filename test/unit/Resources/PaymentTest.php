@@ -1350,7 +1350,8 @@ class PaymentTest extends BasePaymentTest
                 static function ($object) use ($basket, $unzer) {
                     /** @var Basket $object */
                     return $object === $basket && $object->getParentResource() === $unzer;
-                })
+                }
+            )
         );
 
         $payment = new Payment($unzer);
