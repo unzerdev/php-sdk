@@ -94,6 +94,16 @@ trait HasPaymentState
         return $this->getState() === PaymentState::STATE_CHARGEBACK;
     }
 
+    /**
+     * Return true if the state is create.
+     *
+     * @return bool
+     */
+    public function isCreate(): bool
+    {
+        return $this->getState() === PaymentState::STATE_CREATE;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Getters/Setters">
