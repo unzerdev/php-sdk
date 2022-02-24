@@ -69,7 +69,7 @@ class PaymentStateTest extends BasePaymentTest
     {
         $this->expectException(RuntimeException::class);
 
-        PaymentState::mapStateCodeToName(6);
+        PaymentState::mapStateCodeToName(7);
     }
 
     /**
