@@ -59,9 +59,9 @@ class EnvironmentService
     protected static function getBoolEnvValue(string $varName): bool
     {
         /** @noinspection ProperNullCoalescingOperatorUsageInspection */
-        $envVar = $_SERVER[$varName] ?? false;
+        $envVar = strtolower(stripslashes($_SERVER[$varName])) ?? false;
         if (!is_bool($envVar)) {
-            $envVar = in_array(strtolower(stripslashes($envVar)), [true, 'true', '1'], true);
+            $envVar = in_array($envVar, [true, 'true', '1'], true);
         }
         return $envVar;
     }
@@ -105,7 +105,7 @@ class EnvironmentService
      */
     public static function isCurlVerbose(): bool
     {
-        $curlVerbose = strtolower(stripslashes($_SERVER[self::ENV_VAR_NAME_CURL_VERBOSE] ?? 'false'));
+        $curlVerbose = strtolower(stripslashes($_SERVER[self::ENV_VAR_NAME_CURL_VERBOSE])) ?? 'false';
         return in_array($curlVerbose, ['true', '1'], true);
     }
 
@@ -121,7 +121,7 @@ class EnvironmentService
     public static function getTestPrivateKey($non3ds = false): string
     {
         $variableName = $non3ds ? self::ENV_VAR_TEST_PRIVATE_KEY_NON_3DS : self::ENV_VAR_TEST_PRIVATE_KEY;
-        $key = stripslashes($_SERVER[$variableName] ?? '');
+        $key = stripslashes($_SERVER[$variableName]) ?? '';
         return empty($key) ? '' : $key;
     }
 
@@ -148,7 +148,7 @@ class EnvironmentService
      */
     public static function getAppleMerchantIdPath(): string
     {
-        return stripslashes($_SERVER[self::ENV_VAR_TEST_APPLE_MERCHANT_ID_FOLDER] ?? '');
+        return stripslashes($_SERVER[self::ENV_VAR_TEST_APPLE_MERCHANT_ID_FOLDER]) ?? '';
     }
 
     /**
