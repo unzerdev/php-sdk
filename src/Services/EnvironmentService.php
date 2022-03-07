@@ -94,7 +94,7 @@ class EnvironmentService
      */
     public static function getTimeout(): int
     {
-        $timeout = stripslashes($_SERVER[self::ENV_VAR_NAME_TIMEOUT] ?? '');
+        $timeout = stripslashes($_SERVER[self::ENV_VAR_NAME_TIMEOUT]) ?? '';
         return is_numeric($timeout) ? (int)$timeout : self::DEFAULT_TIMEOUT;
     }
 
