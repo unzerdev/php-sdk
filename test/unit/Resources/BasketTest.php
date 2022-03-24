@@ -44,6 +44,7 @@ class BasketTest extends BasePaymentTest
         $this->assertEquals(0, $basket->getAmountTotalGross());
         $this->assertEquals(0, $basket->getAmountTotalDiscount());
         $this->assertEquals(0, $basket->getAmountTotalVat());
+        $this->assertEquals(0, $basket->getTotalValueGross());
         $this->assertEquals('EUR', $basket->getCurrencyCode());
         $this->assertEquals('', $basket->getNote());
         $this->assertEquals('', $basket->getOrderId());
@@ -51,12 +52,14 @@ class BasketTest extends BasePaymentTest
         $this->assertNull($basket->getBasketItemByIndex(1));
 
         $basket->setAmountTotalGross(12.34);
+        $basket->setTotalValueGross(99.99);
         $basket->setAmountTotalDiscount(34.56);
         $basket->setAmountTotalVat(45.67);
         $basket->setCurrencyCode('USD');
         $basket->setNote('This is something I have to remember!');
         $basket->setOrderId('myOrderId');
         $this->assertEquals(12.34, $basket->getAmountTotalGross());
+        $this->assertEquals(99.99, $basket->getTotalValueGross());
         $this->assertEquals(34.56, $basket->getAmountTotalDiscount());
         $this->assertEquals(45.67, $basket->getAmountTotalVat());
         $this->assertEquals('USD', $basket->getCurrencyCode());

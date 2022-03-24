@@ -40,6 +40,9 @@ class Basket extends AbstractUnzerResource
     /** @var float $amountTotalVat */
     protected $amountTotalVat = 0.0;
 
+    /** @var float $totalValueGross */
+    protected $totalValueGross = 0.0;
+
     /** @var string $currencyCode */
     protected $currencyCode;
 
@@ -90,6 +93,25 @@ class Basket extends AbstractUnzerResource
     public function setAmountTotalGross(float $amountTotalGross): Basket
     {
         $this->amountTotalGross = $amountTotalGross;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalValueGross(): float
+    {
+        return $this->totalValueGross;
+    }
+
+    /**
+     * @param float $totalValueGross
+     *
+     * @return Basket
+     */
+    public function setTotalValueGross(float $totalValueGross): Basket
+    {
+        $this->totalValueGross = $totalValueGross;
         return $this;
     }
 
