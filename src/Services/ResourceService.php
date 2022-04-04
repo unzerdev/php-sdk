@@ -112,6 +112,7 @@ class ResourceService implements ResourceServiceInterface
      *
      * @param AbstractUnzerResource $resource
      * @param string                $httpMethod
+     * @param string                $apiVersion
      *
      * @return stdClass
      *
@@ -120,11 +121,12 @@ class ResourceService implements ResourceServiceInterface
      */
     public function send(
         AbstractUnzerResource $resource,
-        $httpMethod = HttpAdapterInterface::REQUEST_GET
+        $httpMethod = HttpAdapterInterface::REQUEST_GET,
+        string $apiVersion = Unzer::API_VERSION
     ): stdClass {
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri          = $resource->getUri($appendId, $httpMethod);
-        $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod);
+        $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod, $apiVersion);
         return json_decode($responseJson, false);
     }
 
@@ -228,7 +230,7 @@ class ResourceService implements ResourceServiceInterface
     public function createResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_POST;
-        $response = $this->send($resource, $method);
+        $response = $this->send($resource, $method, $resource->getApiVersion());
 
         $isError = isset($response->isError) && $response->isError;
         if ($isError) {
@@ -257,7 +259,7 @@ class ResourceService implements ResourceServiceInterface
     public function updateResource(AbstractUnzerResource $resource): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_PUT;
-        $response = $this->send($resource, $method);
+        $response = $this->send($resource, $method, $resource->getApiVersion());
 
         $isError = isset($response->isError) && $response->isError;
         if ($isError) {
@@ -278,7 +280,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function deleteResource(AbstractUnzerResource &$resource): ?AbstractUnzerResource
     {
-        $response = $this->send($resource, HttpAdapterInterface::REQUEST_DELETE);
+        $response = $this->send($resource, HttpAdapterInterface::REQUEST_DELETE, $resource->getApiVersion());
 
         $isError = isset($response->isError) && $response->isError;
         if ($isError) {
@@ -294,7 +296,8 @@ class ResourceService implements ResourceServiceInterface
     /**
      * Updates the given local resource object (id must be set)
      *
-     * @param AbstractUnzerResource $resource The local resource object to update.
+     * @param AbstractUnzerResource $resource   The local resource object to update.
+     * @param string                $apiVersion
      *
      * @return AbstractUnzerResource The updated resource object.
      *
@@ -302,10 +305,10 @@ class ResourceService implements ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
-    public function fetchResource(AbstractUnzerResource $resource): AbstractUnzerResource
+    public function fetchResource(AbstractUnzerResource $resource, string $apiVersion = Unzer::API_VERSION): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_GET;
-        $response = $this->send($resource, $method);
+        $response = $this->send($resource, $method, $apiVersion);
         $resource->setFetchedAt(new DateTime('now'));
         $resource->handleResponse($response, $method);
         return $resource;
@@ -481,7 +484,13 @@ class ResourceService implements ResourceServiceInterface
         }
         $basketObj->setParentResource($this->unzer);
 
-        $this->fetchResource($basketObj);
+        try {
+            $this->fetchResource($basketObj, Unzer::API_VERSION_2);
+        } catch (UnzerApiException $exception) {
+            if ($exception->getCode() === ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND) {
+                $this->fetchResource($basketObj);
+            }
+        }
         return $basketObj;
     }
 

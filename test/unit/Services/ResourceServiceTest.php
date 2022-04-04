@@ -279,12 +279,12 @@ class ResourceServiceTest extends BasePaymentTest
     public function deleteShouldCallSendAndThenSetTheResourceNull(): void
     {
         /** @var Customer|MockObject $testResource */
-        $testResource = $this->getMockBuilder(Customer::class)->getMock();
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['getApVersion'])->getMock();
 
         /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
         /** @noinspection PhpParamsInspection */
-        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_DELETE)->willReturn(new stdClass());
+        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_DELETE, Unzer::API_VERSION)->willReturn(new stdClass());
 
         $this->assertNull($resourceServiceMock->deleteResource($testResource));
         $this->assertNull($testResource);
@@ -298,7 +298,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function deleteShouldNotDeleteObjectOnResponseWithError(): void
     {
         /** @var Customer|MockObject $testResource */
-        $testResource = $this->getMockBuilder(Customer::class)->getMock();
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['send'])->getMock();
 
         /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();

@@ -200,6 +200,28 @@ class BasePaymentTest extends TestCase
     }
 
     /**
+     * Creates a v2 Basket resource and returns it.
+     *
+     * @return Basket
+     */
+    public function createV2Basket(): Basket
+    {
+        $orderId = 'b' . self::generateRandomId();
+        $basket = new Basket($orderId);
+        $basket->setTotalValueGross(99.99)
+            ->setCurrencyCode('EUR');
+
+        $basketItem = (new BasketItem())
+            ->setAmountPerUnitGross(99.99)
+            ->setQuantity(1)
+            ->setBasketItemReferenceId('item1')
+            ->setTitle('title');
+        $basket->addBasketItem($basketItem);
+        $this->unzer->createBasket($basket);
+        return $basket;
+    }
+
+    /**
      * Creates a Card object for tests.
      *
      * @param string $cardNumber

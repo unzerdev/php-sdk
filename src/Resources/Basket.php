@@ -71,6 +71,8 @@ class Basket extends AbstractUnzerResource
     /**
      * Basket constructor.
      *
+     * @deprecated 1.1.5.0
+     *
      * @param float  $amountTotalGross
      * @param string $currencyCode
      * @param string $orderId
@@ -314,6 +316,14 @@ class Basket extends AbstractUnzerResource
         $returnArray['basketItems'] = $basketItemArray;
 
         return $returnArray;
+    }
+
+    public function getApiVersion() :string
+    {
+        if (!empty($this->getTotalValueGross())) {
+            return Unzer::API_VERSION_2;
+        }
+        return parent::getApiVersion();
     }
 
     /**
