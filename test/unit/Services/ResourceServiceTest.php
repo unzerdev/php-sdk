@@ -989,6 +989,35 @@ class ResourceServiceTest extends BasePaymentTest
         $this->assertEquals($unzer, $basket->getUnzerObject());
     }
 
+    /**
+     * Verify fetchBasket will use the v2 endpoint end then the v1 endpoint if basket wasn't found initially.
+     *
+     * @test
+     */
+    public function fetchBasketShouldCallV1EnpointIfBasketWasNotFound(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new Basket())->setId('s-bsk-testbasket');
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['fetchResource'])->getMock();
+
+        $unzerApiException = new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
+        $resourceServiceMock->expects(self::exactly(2))
+            ->method('fetchResource')
+            ->withConsecutive([$basket, Unzer::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->will($this->returnCallback(function ($basket, $version) {
+                if ($version === 'v2') {
+                    throw new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
+                }
+                return $basket;
+            }));
+
+        $resourceServiceMock->fetchBasket($basket);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Recurring">
@@ -1004,8 +1033,8 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType', 'createResource'])->getMock();
         /** @noinspection PhpParamsInspection */
-        $resourceServiceMock->expects(self::once())->method('fetchPaymentType')->with('typeId')->willReturn($paymentType);
         /** @noinspection PhpParamsInspection */
+        $resourceServiceMock->expects(self::once())->method('fetchPaymentType')->with('typeId')->willReturn($paymentType);
         $resourceServiceMock->expects(self::once())->method('createResource')
             ->with($this::callback(static function ($data) {
                 return $data instanceof Recurring && $data->getReturnUrl() === 'returnUrl' && $data->getPaymentTypeId() === 'myId';
@@ -1130,7 +1159,8 @@ class ResourceServiceTest extends BasePaymentTest
             'Payment'       => ['fetchPayment', ['s-pay-100801'], 'https://api.unzer.com/v1/payments/s-pay-100801'],
             'Metadata'      => ['fetchMetadata', ['s-mtd-6glqv9axjpnc'], 'https://api.unzer.com/v1/metadata/s-mtd-6glqv9axjpnc/'],
             'Customer'      => ['fetchCustomer', ['s-cst-50c14d49e2fe'], 'https://api.unzer.com/v1/customers/s-cst-50c14d49e2fe'],
-            'Basket'        => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v1/baskets/s-bsk-1254/'],
+            'v1Basket'        => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v1/baskets/s-bsk-1254/'],
+            'v2Basket'        => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v2/baskets/s-bsk-1254/'],
             'Payout'        => ['fetchPayout', ['s-pay-100746'], 'https://api.unzer.com/v1/payments/s-pay-100746/payout/s-out-1/']
         ];
     }

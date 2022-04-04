@@ -351,7 +351,7 @@ class BasketTest extends BaseIntegrationTest
             ->setBasketItemReferenceId('refIdtwo')
             ->setQuantity(1)
             ->setAmountPerUnitGross(33.33)
-            ->setVat(19)
+            ->setVat(19.5)
             ->setTitle('Item Title 1')
             ->setUnit('ert')
             ->setAmountDiscountPerUnitGross(0.0)
