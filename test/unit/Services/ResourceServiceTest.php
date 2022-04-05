@@ -1004,17 +1004,89 @@ class ResourceServiceTest extends BasePaymentTest
             ->setConstructorArgs([$unzer])
             ->setMethods(['fetchResource'])->getMock();
 
-        $unzerApiException = new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
         $resourceServiceMock->expects(self::exactly(2))
             ->method('fetchResource')
             ->withConsecutive([$basket, Unzer::API_VERSION_2], [$basket, Unzer::API_VERSION])
             ->will($this->returnCallback(function ($basket, $version) {
-                if ($version === 'v2') {
+                if ($version === Unzer::API_VERSION_2) {
                     throw new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
                 }
                 return $basket;
             }));
 
+        $resourceServiceMock->fetchBasket($basket);
+    }
+
+    /**
+     * Verify fetchBasket will call FetchResource max two time, even if the basket was not found with any version.
+     * Exception should be thrown.
+     *
+     * @test
+     */
+    public function fetchBasketShouldCallFetchResourceMaxTwoTimes(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new Basket())->setId('s-bsk-testbasket');
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['fetchResource'])->getMock();
+
+        $resourceServiceMock->expects(self::exactly(2))
+            ->method('fetchResource')
+            ->withConsecutive([$basket, Unzer::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND));
+
+        $this->expectException(UnzerApiException::class);
+        $resourceServiceMock->fetchBasket($basket);
+    }
+
+    /**
+     * Verify fetchBasket will use the v2 endpoint end then the v1 endpoint if basket wasn't found initially.
+     *
+     * @test
+     */
+    public function fetchBasketShouldCallFetchResourceOnlyOnceIfNoExceptionOccurs(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new Basket())->setId('s-bsk-testbasket');
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['fetchResource'])->getMock();
+
+        $resourceServiceMock->expects(self::once())
+            ->method('fetchResource')
+            ->with($basket, Unzer::API_VERSION_2)
+            ->willReturn($basket);
+
+        $resourceServiceMock->fetchBasket($basket);
+    }
+
+    /**
+     * Verify fetchBasket will call fetchResource only once if any other Exeption occurs but "API_ERROR_BASKET_NOT_FOUND".
+     * Exception should be thrown.
+     *
+     * @test
+     */
+    public function fetchBasketShouldNotCallFetchResourcheMethodIfAnyOtherExceptionIsThrown(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new Basket())->setId('s-bsk-testbasket');
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['fetchResource'])->getMock();
+
+        $resourceServiceMock->expects(self::once())
+            ->method('fetchResource')
+            ->with($basket, Unzer::API_VERSION_2)
+            ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL));
+
+        $this->expectException(UnzerApiException::class);
         $resourceServiceMock->fetchBasket($basket);
     }
 

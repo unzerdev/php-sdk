@@ -487,9 +487,10 @@ class ResourceService implements ResourceServiceInterface
         try {
             $this->fetchResource($basketObj, Unzer::API_VERSION_2);
         } catch (UnzerApiException $exception) {
-            if ($exception->getCode() === ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND) {
-                $this->fetchResource($basketObj);
+            if ($exception->getCode() !== ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND) {
+                throw $exception;
             }
+            $this->fetchResource($basketObj);
         }
         return $basketObj;
     }

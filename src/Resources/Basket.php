@@ -71,7 +71,7 @@ class Basket extends AbstractUnzerResource
     /**
      * Basket constructor.
      *
-     * @deprecated 1.1.5.0
+     * @deprecated 1.1.5.0 Please call constructor without parameters and use setter functions instead.
      *
      * @param float  $amountTotalGross
      * @param string $currencyCode

@@ -96,6 +96,8 @@ class BasketItem extends AbstractUnzerResource
     /**
      * BasketItem constructor.
      *
+     * @deprecated 1.1.5.0 Please call constructor without parameters and use setter functions instead.
+     *
      * @param string $title
      * @param float  $amountNet
      * @param float  $amountPerUnit
