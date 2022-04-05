@@ -34,7 +34,6 @@ use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\test\BaseIntegrationTest;
-use UnzerSDK\Unzer;
 
 class BasketTest extends BaseIntegrationTest
 {
@@ -246,21 +245,6 @@ class BasketTest extends BaseIntegrationTest
     }
 
     //</editor-fold>
-
-    /**
-     * Verify basketItem with invalid imageUrl will return an error.
-     *
-     * @test
-     *
-     * @dataProvider getApiVersionShouldReturnExpectedVersionDP
-     *
-     * @param Basket $basket
-     * @param $expectedApiVersion
-     */
-    public function getApiVersionShouldReturnExpectedVersion(Basket $basket, $expectedApiVersion): void
-    {
-        $this->assertEquals($expectedApiVersion, $basket->getApiVersion());
-    }
 
     //<editor-fold desc="Basket v2 tests">
 
@@ -557,22 +541,6 @@ class BasketTest extends BaseIntegrationTest
             'valid null' => [false, null],
             'valid empty' => [false, ''],
             'invalid not available' => [true, 'https://files.readme.io/does-not-exist.jpg', ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL]
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getApiVersionShouldReturnExpectedVersionDP(): array
-    {
-        $v1Basket = (new Basket())->setAmountTotalGross(100);
-        $v2Basket = (new Basket())->setTotalValueGross(100);
-        $mixedBasket = (new Basket())->setAmountTotalGross(100)->setTotalValueGross(100);
-        return [
-            'empty basket ' => [new Basket(), Unzer::API_VERSION],
-            'minimum v1 basket ' => [$v1Basket, Unzer::API_VERSION],
-            'minimum v2 basket ' => [$v2Basket, Unzer::API_VERSION_2],
-            'mixed v1/v2 basket ' => [$mixedBasket, Unzer::API_VERSION_2],
         ];
     }
 

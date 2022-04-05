@@ -162,7 +162,6 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
 
     /**
      * Returns the API version for this resource.
-
      *
      * @return string
      */

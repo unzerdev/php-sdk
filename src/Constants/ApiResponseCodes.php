@@ -68,11 +68,11 @@ class ApiResponseCodes
     public const API_ERROR_INVALID_KEY                                 = 'API.710.000.002';
     public const API_ERROR_INSUFFICIENT_PERMISSION                     = 'API.710.000.005';
     public const API_ERROR_WRONG_AUTHENTICATION_METHOD                 = 'API.710.000.007';
-
     public const API_ERROR_FIELD_IS_MISSING                            = 'API.710.200.100';
-    public const CORE_ERROR_INVALID_OR_MISSING_LOGIN                   = 'COR.100.300.600';
 
+    public const CORE_ERROR_INVALID_OR_MISSING_LOGIN                   = 'COR.100.300.600';
     public const CORE_ERROR_INSURANCE_ALREADY_ACTIVATED                = 'COR.700.400.800';
+
     public const SDM_ERROR_CURRENT_INSURANCE_EVENT                     = 'SDM.CURRENT_INSURANCE_EVENT';
     public const SDM_ERROR_LIMIT_EXCEEDED                              = 'SDM.LIMIT_EXCEEDED';
     public const SDM_ERROR_NEGATIVE_TRAIT_FOUND                        = 'SDM.NEGATIVE_TRAIT_FOUND';

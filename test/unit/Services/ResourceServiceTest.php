@@ -1018,7 +1018,7 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify fetchBasket will call FetchResource max two time, even if the basket was not found with any version.
+     * Verify fetchBasket will call FetchResource max two time, if the basket was not found.
      * Exception should be thrown.
      *
      * @test
@@ -1043,7 +1043,7 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify fetchBasket will use the v2 endpoint end then the v1 endpoint if basket wasn't found initially.
+     * Verify fetchBasket call fetchResource only once with v2 parameter, when basket was returned.
      *
      * @test
      */
@@ -1066,7 +1066,7 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify fetchBasket will call fetchResource only once if any other Exeption occurs but "API_ERROR_BASKET_NOT_FOUND".
+     * Verify fetchBasket will call fetchResource only once if Exception ist not "API_ERROR_BASKET_NOT_FOUND" exception.
      * Exception should be thrown.
      *
      * @test
@@ -1105,8 +1105,8 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType', 'createResource'])->getMock();
         /** @noinspection PhpParamsInspection */
-        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects(self::once())->method('fetchPaymentType')->with('typeId')->willReturn($paymentType);
+        /** @noinspection PhpParamsInspection */
         $resourceServiceMock->expects(self::once())->method('createResource')
             ->with($this::callback(static function ($data) {
                 return $data instanceof Recurring && $data->getReturnUrl() === 'returnUrl' && $data->getPaymentTypeId() === 'myId';

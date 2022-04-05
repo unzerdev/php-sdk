@@ -30,6 +30,7 @@ use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\test\BasePaymentTest;
 use stdClass;
+use UnzerSDK\Unzer;
 
 class BasketTest extends BasePaymentTest
 {
@@ -158,4 +159,39 @@ class BasketTest extends BasePaymentTest
         $this->assertEquals('0', $basketItem3->getBasketItemReferenceId());
         $this->assertEquals('1', $basketItem4->getBasketItemReferenceId());
     }
+
+    /**
+     * Verify basket provides expected API version based ond set parameters.
+     *
+     * @test
+     *
+     * @dataProvider getApiVersionShouldReturnExpectedVersionDP
+     *
+     * @param Basket $basket
+     * @param $expectedApiVersion
+     */
+    public function getApiVersionShouldReturnExpectedVersion(Basket $basket, $expectedApiVersion): void
+    {
+        $this->assertEquals($expectedApiVersion, $basket->getApiVersion());
+    }
+
+    //<editor-fold desc="Data provider">
+
+    /**
+     * @return array
+     */
+    public function getApiVersionShouldReturnExpectedVersionDP(): array
+    {
+        $v1Basket = (new Basket())->setAmountTotalGross(100);
+        $v2Basket = (new Basket())->setTotalValueGross(100);
+        $mixedBasket = (new Basket())->setAmountTotalGross(100)->setTotalValueGross(100);
+        return [
+            'empty basket ' => [new Basket(), Unzer::API_VERSION],
+            'minimum v1 basket ' => [$v1Basket, Unzer::API_VERSION],
+            'minimum v2 basket ' => [$v2Basket, Unzer::API_VERSION_2],
+            'mixed v1/v2 basket ' => [$mixedBasket, Unzer::API_VERSION_2],
+        ];
+    }
+
+    //</editor-fold>
 }
