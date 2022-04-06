@@ -26,10 +26,10 @@
  */
 namespace UnzerSDK\test\unit\Resources;
 
+use stdClass;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\test\BasePaymentTest;
-use stdClass;
 use UnzerSDK\Unzer;
 
 class BasketTest extends BasePaymentTest
@@ -188,8 +188,8 @@ class BasketTest extends BasePaymentTest
         return [
             'empty basket ' => [new Basket(), Unzer::API_VERSION],
             'minimum v1 basket ' => [$v1Basket, Unzer::API_VERSION],
-            'minimum v2 basket ' => [$v2Basket, Unzer::API_VERSION_2],
-            'mixed v1/v2 basket ' => [$mixedBasket, Unzer::API_VERSION_2],
+            'minimum v2 basket ' => [$v2Basket, BasePaymentTest::API_VERSION_2],
+            'mixed v1/v2 basket ' => [$mixedBasket, BasePaymentTest::API_VERSION_2],
         ];
     }
 

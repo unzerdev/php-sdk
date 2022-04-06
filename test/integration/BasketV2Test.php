@@ -4,7 +4,7 @@
 /**
  * This class defines integration tests to verify Basket functionalities.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2022 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
+ * @author  David Owusu <development@unzer.com>
  *
  * @package  UnzerSDK\test\integration
  */
@@ -30,36 +30,69 @@ use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\test\BaseIntegrationTest;
 
-class BasketTest extends BaseIntegrationTest
+class BasketV2Test extends BaseIntegrationTest
 {
-    //<editor-fold desc="Basket v1 tests">
+    //<editor-fold desc="Basket v2 tests">
 
     /**
      * Verify basket can be created and fetched.
      *
      * @test
      */
-    public function minBasketShouldBeCreatableAndFetchable(): void
+    public function minV2BasketShouldBeCreatableAndFetchable(): void
     {
-        $orderId = microtime(true);
-        $basket = new Basket($orderId, 123.4, 'EUR', []);
-        $basket->setNote('This basket is creatable!');
-        $basketItem = new BasketItem('myItem', 1234, 2345, 12);
-        $basket->addBasketItem($basketItem);
-        $basketItem = (new BasketItem('title'))->setAmountPerUnit(0.0);
+        $basket = new Basket();
+        $basket->setTotalValueGross(100)
+            ->setCurrencyCode('EUR');
+        $basketItem = new BasketItem();
+        $basketItem->setBasketItemReferenceId('item1')
+            ->setQuantity(1)
+            ->setAmountPerUnitGross(100)
+            ->setTitle('title');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
         $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
+        $invoice = new Invoice();
+        $invoice->setParentResource($this->unzer)->charge(100, 'EUR', 'https://unzer.com', null, 'orderId', null, $basket);
+        $fetchedBasket = $this->unzer->fetchBasket($basket->getId())->setOrderId('');
+        $this->assertEquals($basket->expose(), $fetchedBasket->expose());
+    }
+
+    /**
+     * Verify basket can be created and fetched.
+     *
+     * @test
+     */
+    public function BasketShouldBeCreatableAndFetchable(): void
+    {
+        $orderId = microtime(true);
+        $basket = new Basket();
+        $basket->setTotalValueGross(100)
+            ->setOrderId('testOrderId')
+            ->setCurrencyCode('EUR');
+        $basketItem = new BasketItem();
+        $basketItem->setBasketItemReferenceId('item1')
+            ->setQuantity(1)
+            ->setAmountPerUnitGross(100)
+            ->setTitle('title');
+        $basket->addBasketItem($basketItem);
+        $this->assertEmpty($basket->getId());
+
+        $this->unzer->createBasket($basket);
+        $this->assertNotEmpty($basket->getId());
+
+        $invoice = new Invoice();
+        $invoice->setParentResource($this->unzer)->charge(100, 'EUR', 'https://unzer.com', null, 'orderId', null, $basket);
         $fetchedBasket = $this->unzer->fetchBasket($basket->getId());
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
-        $this->assertEquals('This basket is creatable!', $basket->getNote());
     }
 
     /**
@@ -69,25 +102,48 @@ class BasketTest extends BaseIntegrationTest
      */
     public function maxBasketShouldBeCreatableAndFetchable(): void
     {
-        $basket = new Basket('b' . self::generateRandomId(), 123.4, 'EUR', []);
-        $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))
-            ->setBasketItemReferenceId('refId')
-            ->setAmountVat(1.24)
-            ->setVat(19.5)
+        $orderId = 'o'. self::generateRandomId();
+        $basket = new Basket();
+        $basket->setOrderId($orderId)
+            ->setCurrencyCode('EUR')
+            ->setNote('note this!')
+            ->setTotalValueGross(133.33);
+
+        $basketItem = (new BasketItem())
+            ->setBasketItemReferenceId('refIdOne')
+            ->setQuantity(10)
+            ->setAmountPerUnitGross(10.11)
+            ->setVat(19)
+            ->setTitle('Item Title 1')
             ->setUnit('ert')
-            ->setAmountDiscount(1234.9)
-            ->setImageUrl('https://docs.unzer.com/card/card.png')
+            ->setAmountDiscountPerUnitGross(0.11)
             ->setSubTitle('This is some subtitle for this item')
+            ->setImageUrl('https://docs.unzer.com/card/card.png')
             ->setType('this is some type');
         $basket->addBasketItem($basketItem);
+
+        $basketItem = (new BasketItem())
+            ->setBasketItemReferenceId('refIdtwo')
+            ->setQuantity(1)
+            ->setAmountPerUnitGross(33.33)
+            ->setVat(19.5)
+            ->setTitle('Item Title 1')
+            ->setUnit('ert')
+            ->setAmountDiscountPerUnitGross(0.0)
+            ->setSubTitle('This is some subtitle for this item')
+            ->setImageUrl('https://docs.unzer.com/card/card.png')
+            ->setType('this is some type');
+        $basket->addBasketItem($basketItem);
+
         $this->assertEmpty($basket->getId());
 
         $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
         $fetchedBasket = $this->unzer->fetchBasket($basket->getId());
-        $this->assertEquals($basket->expose(), $fetchedBasket->expose());
+        $exposedBasket = $basket->expose();
+        unset($exposedBasket['note']);
+        $this->assertEquals($exposedBasket, $fetchedBasket->expose());
         $this->assertEquals(
             $basket->getBasketItemByIndex(0)->expose(),
             $fetchedBasket->getBasketItemByIndex(0)->expose()
@@ -107,8 +163,16 @@ class BasketTest extends BaseIntegrationTest
      */
     public function basketItemWithInvalidUrlWillThrowAnError($expectException, $imageUrl, $exceptionCode = null): void
     {
-        $basket = new Basket('b' . self::generateRandomId(), 123.4, 'EUR', []);
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setImageUrl($imageUrl);
+        $basket = new Basket('b' . self::generateRandomId());
+        $basket->setTotalValueGross(100)
+            ->setCurrencyCode('EUR');
+
+        $basketItem = (new BasketItem())
+            ->setImageUrl($imageUrl)
+            ->setAmountPerUnitGross(100)
+            ->setQuantity(1)
+            ->setBasketItemReferenceId('item1')
+            ->setTitle('title');
         $basket->addBasketItem($basketItem);
 
         try {
@@ -131,25 +195,30 @@ class BasketTest extends BaseIntegrationTest
      */
     public function basketShouldBeUpdateable(): void
     {
-        $orderId = 'o'. self::generateRandomId();
-        $basket  = new Basket($orderId, 123.4, 'EUR', []);
-        $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
+        $orderId = 'b' . self::generateRandomId();
+        $basket = new Basket($orderId);
+        $basket->setTotalValueGross(99.99)
+            ->setCurrencyCode('EUR');
+
+        $basketItem = (new BasketItem())
+            ->setAmountPerUnitGross(99.99)
+            ->setQuantity(1)
+            ->setBasketItemReferenceId('item1')
+            ->setTitle('title');
+
         $basket->addBasketItem($basketItem);
         $this->unzer->createBasket($basket);
 
-        $fetchedBasket = $this->unzer->fetchBasket($basket->getId());
-        $fetchedBasket->setAmountTotalGross(4321);
-        $fetchedBasket->setAmountTotalDiscount(5432);
-        $fetchedBasket->setNote('This basket is updateable!');
-        $fetchedBasket->getBasketItemByIndex(0)->setTitle('This item can also be updated!');
-        $this->unzer->updateBasket($fetchedBasket);
+        $updateBasket = $this->unzer->fetchBasket($basket->getId());
+        $updateBasket->setTotalValueGross(123.45)
+            ->getBasketItemByIndex(0)
+            ->setAmountPerUnitGross(123.45)
+            ->setTitle('This item can also be updated!');
+        $this->unzer->updateBasket($updateBasket);
 
         $this->unzer->fetchBasket($basket);
         $this->assertEquals($orderId, $basket->getOrderId());
-        $this->assertEquals(4321, $basket->getAmountTotalGross());
-        $this->assertEquals(5432, $basket->getAmountTotalDiscount());
-        $this->assertEquals('This basket is updateable!', $basket->getNote());
+        $this->assertEquals(123.45, $basket->getTotalValueGross());
         $this->assertNotEquals($basket->getBasketItemByIndex(0)->expose(), $basketItem->expose());
     }
 
@@ -160,12 +229,7 @@ class BasketTest extends BaseIntegrationTest
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet(): void
     {
-        $orderId = 'o'. self::generateRandomId();
-        $basket  = new Basket($orderId, 123.4, 'EUR', []);
-        $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 123.4, 234.5, 12))->setBasketItemReferenceId('refId');
-        $basket->addBasketItem($basketItem);
-        $this->unzer->createBasket($basket);
+        $basket = $this->createV2Basket();
         $this->assertNotEmpty($basket->getId());
 
         /** @var Paypal $paypal */
@@ -183,7 +247,7 @@ class BasketTest extends BaseIntegrationTest
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet(): void
     {
-        $basket  = $this->createBasket();
+        $basket  = $this->createV2Basket();
         $this->assertNotEmpty($basket->getId());
 
         $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setBic('COBADEFFXXX');
@@ -203,10 +267,16 @@ class BasketTest extends BaseIntegrationTest
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet(): void
     {
-        $orderId = 'o'. self::generateRandomId();
-        $basket  = new Basket($orderId, 123.4, 'EUR', []);
-        $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
+        $orderId = 'b' . self::generateRandomId();
+        $basket = new Basket($orderId);
+        $basket->setTotalValueGross(99.99)
+            ->setCurrencyCode('EUR');
+
+        $basketItem = (new BasketItem())
+            ->setAmountPerUnitGross(99.99)
+            ->setQuantity(1)
+            ->setBasketItemReferenceId('item1')
+            ->setTitle('title');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 
@@ -226,11 +296,16 @@ class BasketTest extends BaseIntegrationTest
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet(): void
     {
-        $orderId = 'o'. self::generateRandomId();
-        $basket  = new Basket($orderId, 123.4, 'EUR', []);
-        $basket->setNote('This basket is creatable!');
-        $basket->setAmountTotalVat(10.9);
-        $basketItem = (new BasketItem('myItem', 1234, 2345, 12))->setBasketItemReferenceId('refId');
+        $orderId = 'b' . self::generateRandomId();
+        $basket = new Basket($orderId);
+        $basket->setTotalValueGross(99.99)
+            ->setCurrencyCode('EUR');
+
+        $basketItem = (new BasketItem())
+            ->setAmountPerUnitGross(99.99)
+            ->setQuantity(1)
+            ->setBasketItemReferenceId('item1')
+            ->setTitle('title');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
 

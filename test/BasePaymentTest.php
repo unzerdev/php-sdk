@@ -28,7 +28,8 @@ namespace UnzerSDK\test;
 
 use DateInterval;
 use DateTime;
-use UnzerSDK\Unzer;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\Payment;
@@ -40,12 +41,12 @@ use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\Fixtures\CustomerFixtureTrait;
-use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use UnzerSDK\Unzer;
 
 class BasePaymentTest extends TestCase
 {
     protected const RETURN_URL = 'https://dev.unzer.com';
+    public const API_VERSION_2 = 'v2';
 
     use CustomerFixtureTrait;
 

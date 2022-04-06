@@ -27,10 +27,12 @@
 namespace UnzerSDK\test\unit\Services;
 
 use DateTime;
+use PHPUnit\Framework\MockObject\MockObject;
+use RuntimeException;
+use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
@@ -44,8 +46,8 @@ use UnzerSDK\Resources\PaymentTypes\Bancontact;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Giropay;
-use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
@@ -68,9 +70,7 @@ use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\unit\DummyResource;
 use UnzerSDK\test\unit\Traits\TraitDummyCanRecur;
-use PHPUnit\Framework\MockObject\MockObject;
-use RuntimeException;
-use stdClass;
+use UnzerSDK\Unzer;
 
 class ResourceServiceTest extends BasePaymentTest
 {
@@ -1006,9 +1006,9 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock->expects(self::exactly(2))
             ->method('fetchResource')
-            ->withConsecutive([$basket, Unzer::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket, Unzer::API_VERSION])
             ->will($this->returnCallback(function ($basket, $version) {
-                if ($version === Unzer::API_VERSION_2) {
+                if ($version === BasePaymentTest::API_VERSION_2) {
                     throw new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
                 }
                 return $basket;
@@ -1035,7 +1035,7 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock->expects(self::exactly(2))
             ->method('fetchResource')
-            ->withConsecutive([$basket, Unzer::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket, Unzer::API_VERSION])
             ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND));
 
         $this->expectException(UnzerApiException::class);
@@ -1059,7 +1059,7 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock->expects(self::once())
             ->method('fetchResource')
-            ->with($basket, Unzer::API_VERSION_2)
+            ->with($basket, BasePaymentTest::API_VERSION_2)
             ->willReturn($basket);
 
         $resourceServiceMock->fetchBasket($basket);
@@ -1083,7 +1083,7 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock->expects(self::once())
             ->method('fetchResource')
-            ->with($basket, Unzer::API_VERSION_2)
+            ->with($basket, BasePaymentTest::API_VERSION_2)
             ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL));
 
         $this->expectException(UnzerApiException::class);

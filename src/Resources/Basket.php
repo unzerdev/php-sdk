@@ -27,7 +27,6 @@ namespace UnzerSDK\Resources;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use stdClass;
-use UnzerSDK\Unzer;
 use function count;
 
 class Basket extends AbstractUnzerResource
@@ -318,10 +317,13 @@ class Basket extends AbstractUnzerResource
         return $returnArray;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getApiVersion() :string
     {
         if (!empty($this->getTotalValueGross())) {
-            return Unzer::API_VERSION_2;
+            return 'v2';
         }
         return parent::getApiVersion();
     }
