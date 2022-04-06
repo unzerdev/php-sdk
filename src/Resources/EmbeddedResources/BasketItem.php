@@ -40,7 +40,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @var float $amountDiscount
      *
-     * @deprecated 1.1.5.0 @see $amountDiscountPerUnitGross.
+     * @deprecated since 1.1.5.0 @see $amountDiscountPerUnitGross.
      */
     protected $amountDiscount = 0.0;
 
@@ -50,21 +50,21 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @var float $amountGross
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      */
     protected $amountGross = 0.0;
 
     /**
      * @var float $amountVat
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      */
     protected $amountVat = 0.0;
 
     /**
      * @var float $amountPerUnit
      *
-     * @deprecated 1.1.5.0 @see amountPerUnitGross
+     * @deprecated since 1.1.5.0 @see amountPerUnitGross
      */
     protected $amountPerUnit = 0.0;
 
@@ -74,7 +74,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @var float $amountNet
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      */
     protected $amountNet = 0.0;
 
@@ -96,7 +96,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * BasketItem constructor.
      *
-     * @deprecated 1.1.5.0 Please call constructor without parameters and use setter functions instead.
+     * @deprecated since 1.1.5.0 Please call constructor without parameters and use setter functions instead.
      *
      * @param string $title
      * @param float  $amountNet
@@ -177,7 +177,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @return float
      *
-     * @deprecated 1.1.5.0  @see $getAmountDiscountPerUnitGross.
+     * @deprecated since 1.1.5.0  @see $getAmountDiscountPerUnitGross.
      */
     public function getAmountDiscount(): float
     {
@@ -187,7 +187,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @param float $amountDiscount
      *
-     * @deprecated 1.1.5.0  @see $setAmountDiscountPerUnitGross.
+     * @deprecated since 1.1.5.0  @see $setAmountDiscountPerUnitGross.
      *
      * @return BasketItem
      */
@@ -200,7 +200,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @return float
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      */
     public function getAmountGross(): float
     {
@@ -210,7 +210,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @param float $amountGross
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      *
      * @return BasketItem
      */
@@ -261,7 +261,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @return float
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      */
     public function getAmountVat(): float
     {
@@ -271,7 +271,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @param float $amountVat
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      *
      * @return BasketItem
      */
@@ -284,7 +284,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @return float
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      */
     public function getAmountPerUnit(): float
     {
@@ -294,7 +294,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @param float $amountPerUnit
      *
-     * @deprecated 1.1.5.0 @see setAmountPerUnitGross
+     * @deprecated since 1.1.5.0 @see setAmountPerUnitGross
      *
      * @return BasketItem
      */
@@ -307,7 +307,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @return float
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      */
     public function getAmountNet(): float
     {
@@ -317,7 +317,7 @@ class BasketItem extends AbstractUnzerResource
     /**
      * @param float $amountNet
      *
-     * @deprecated 1.1.5.0 Property is redundant and is no longer needed.
+     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
      *
      * @return BasketItem
      */
