@@ -88,10 +88,17 @@ try {
     $paypage->setEffectiveInterestRate(4.99);
 
     // ... a Basket is mandatory for InstallmentSecured
-    $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
-        ->setAmountGross(119.0)
-        ->setAmountVat(19.0);
-    $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
+    $basketItem = (new BasketItem())
+        ->setAmountPerUnitGross(119.00)
+        ->setVat(19.00)
+        ->setQuantity(1)
+        ->setBasketItemReferenceId('item1')
+        ->setTitle('Hat');
+
+    $basket = new Basket($orderId);
+    $basket->setTotalValueGross(119.00)
+        ->addBasketItem($basketItem)
+        ->setCurrencyCode('EUR');
 
     if ($transactionType === 'charge') {
         $unzer->initPayPageCharge($paypage, $customer, $basket);
