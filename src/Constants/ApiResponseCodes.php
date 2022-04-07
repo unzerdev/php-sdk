@@ -62,6 +62,7 @@ class ApiResponseCodes
     public const API_ERROR_RECURRING_PAYMENT_NOT_SUPPORTED             = 'API.500.550.004';
     public const API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED            = 'API.510.310.009';
     public const API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND                    = 'API.510.310.008';
+    public const API_ERROR_BASKET_NOT_FOUND                            = 'API.600.410.024';
     public const API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL               = 'API.600.630.004';
     public const API_ERROR_RECURRING_ALREADY_ACTIVE                    = 'API.640.550.006';
     public const API_ERROR_INVALID_KEY                                 = 'API.710.000.002';

@@ -146,7 +146,11 @@ interface ResourceServiceInterface
     public function createBasket(Basket $basket): Basket;
 
     /**
-     * Fetches and returns the given Basket (by object or id).
+     * Fetches and returns the given Basket (by object or id). Since the PAPI provides 2 basket versions, this method performs up to two request.
+     * Firstly the basket gets fetched from the "v2" endpoint.
+     * Only If PAPI returns a specific "basket not found" error the function tries to fetch from the "v1" basket endpoint.
+     *
+     * @see \UnzerSDK\Constants\ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND
      *
      * @param Basket|string $basket Basket object or id of basket to be fetched.
      *

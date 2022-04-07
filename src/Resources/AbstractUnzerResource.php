@@ -161,6 +161,16 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
     }
 
     /**
+     * Returns the API version for this resource.
+     *
+     * @return string
+     */
+    public function getApiVersion(): string
+    {
+        return Unzer::API_VERSION;
+    }
+
+    /**
      * @param array $additionalAttributes
      *
      * @return AbstractUnzerResource

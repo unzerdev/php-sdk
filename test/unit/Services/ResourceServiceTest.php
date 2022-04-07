@@ -27,10 +27,12 @@
 namespace UnzerSDK\test\unit\Services;
 
 use DateTime;
+use PHPUnit\Framework\MockObject\MockObject;
+use RuntimeException;
+use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
@@ -44,8 +46,8 @@ use UnzerSDK\Resources\PaymentTypes\Bancontact;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Giropay;
-use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
@@ -68,9 +70,7 @@ use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\unit\DummyResource;
 use UnzerSDK\test\unit\Traits\TraitDummyCanRecur;
-use PHPUnit\Framework\MockObject\MockObject;
-use RuntimeException;
-use stdClass;
+use UnzerSDK\Unzer;
 
 class ResourceServiceTest extends BasePaymentTest
 {
@@ -279,12 +279,12 @@ class ResourceServiceTest extends BasePaymentTest
     public function deleteShouldCallSendAndThenSetTheResourceNull(): void
     {
         /** @var Customer|MockObject $testResource */
-        $testResource = $this->getMockBuilder(Customer::class)->getMock();
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['getApVersion'])->getMock();
 
         /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
         /** @noinspection PhpParamsInspection */
-        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_DELETE)->willReturn(new stdClass());
+        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_DELETE, Unzer::API_VERSION)->willReturn(new stdClass());
 
         $this->assertNull($resourceServiceMock->deleteResource($testResource));
         $this->assertNull($testResource);
@@ -298,7 +298,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function deleteShouldNotDeleteObjectOnResponseWithError(): void
     {
         /** @var Customer|MockObject $testResource */
-        $testResource = $this->getMockBuilder(Customer::class)->getMock();
+        $testResource = $this->getMockBuilder(Customer::class)->setMethods(['send'])->getMock();
 
         /** @var ResourceService|MockObject $resourceServiceMock */
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
@@ -989,6 +989,107 @@ class ResourceServiceTest extends BasePaymentTest
         $this->assertEquals($unzer, $basket->getUnzerObject());
     }
 
+    /**
+     * Verify fetchBasket will use the v2 endpoint end then the v1 endpoint if basket wasn't found initially.
+     *
+     * @test
+     */
+    public function fetchBasketShouldCallV1EnpointIfBasketWasNotFound(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new Basket())->setId('s-bsk-testbasket');
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['fetchResource'])->getMock();
+
+        $resourceServiceMock->expects(self::exactly(2))
+            ->method('fetchResource')
+            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->will($this->returnCallback(function ($basket, $version) {
+                if ($version === BasePaymentTest::API_VERSION_2) {
+                    throw new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
+                }
+                return $basket;
+            }));
+
+        $resourceServiceMock->fetchBasket($basket);
+    }
+
+    /**
+     * Verify fetchBasket will call FetchResource max two time, if the basket was not found.
+     * Exception should be thrown.
+     *
+     * @test
+     */
+    public function fetchBasketShouldCallFetchResourceMaxTwoTimes(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new Basket())->setId('s-bsk-testbasket');
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['fetchResource'])->getMock();
+
+        $resourceServiceMock->expects(self::exactly(2))
+            ->method('fetchResource')
+            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND));
+
+        $this->expectException(UnzerApiException::class);
+        $resourceServiceMock->fetchBasket($basket);
+    }
+
+    /**
+     * Verify fetchBasket call fetchResource only once with v2 parameter, when basket was returned.
+     *
+     * @test
+     */
+    public function fetchBasketShouldCallFetchResourceOnlyOnceIfNoExceptionOccurs(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new Basket())->setId('s-bsk-testbasket');
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['fetchResource'])->getMock();
+
+        $resourceServiceMock->expects(self::once())
+            ->method('fetchResource')
+            ->with($basket, BasePaymentTest::API_VERSION_2)
+            ->willReturn($basket);
+
+        $resourceServiceMock->fetchBasket($basket);
+    }
+
+    /**
+     * Verify fetchBasket will call fetchResource only once if Exception ist not "API_ERROR_BASKET_NOT_FOUND" exception.
+     * Exception should be thrown.
+     *
+     * @test
+     */
+    public function fetchBasketShouldNotCallFetchResourcheMethodIfAnyOtherExceptionIsThrown(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new Basket())->setId('s-bsk-testbasket');
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['fetchResource'])->getMock();
+
+        $resourceServiceMock->expects(self::once())
+            ->method('fetchResource')
+            ->with($basket, BasePaymentTest::API_VERSION_2)
+            ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL));
+
+        $this->expectException(UnzerApiException::class);
+        $resourceServiceMock->fetchBasket($basket);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Recurring">
@@ -1130,7 +1231,8 @@ class ResourceServiceTest extends BasePaymentTest
             'Payment'       => ['fetchPayment', ['s-pay-100801'], 'https://api.unzer.com/v1/payments/s-pay-100801'],
             'Metadata'      => ['fetchMetadata', ['s-mtd-6glqv9axjpnc'], 'https://api.unzer.com/v1/metadata/s-mtd-6glqv9axjpnc/'],
             'Customer'      => ['fetchCustomer', ['s-cst-50c14d49e2fe'], 'https://api.unzer.com/v1/customers/s-cst-50c14d49e2fe'],
-            'Basket'        => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v1/baskets/s-bsk-1254/'],
+            'v1Basket'        => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v1/baskets/s-bsk-1254/'],
+            'v2Basket'        => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v2/baskets/s-bsk-1254/'],
             'Payout'        => ['fetchPayout', ['s-pay-100746'], 'https://api.unzer.com/v1/payments/s-pay-100746/payout/s-out-1/']
         ];
     }
