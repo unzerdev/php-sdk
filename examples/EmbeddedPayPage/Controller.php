@@ -78,8 +78,7 @@ try {
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // ... however you can customize the Payment Page using additional parameters.
-    $paypage->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
-            ->setShopName('My Test Shop')
+    $paypage->setShopName('My Test Shop')
             ->setTagline('Try and stop us from being awesome!')
             ->setOrderId($orderId)
             ->setInvoiceId('i' . microtime(true));
