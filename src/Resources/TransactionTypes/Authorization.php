@@ -280,7 +280,7 @@ class Authorization extends AbstractTransactionType
     /**
      * Charge authorization.
      *
-     * @param null $amount
+     * @param float $amount
      *
      * @return Charge
      *
