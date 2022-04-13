@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 *   Add support for payment state `create` which can occur when using payment pages.
 *   Examples:
-    *   Use `v2/basket`resource for secured payment methods and payment pages.
+    *   Use `v2/basket` resource for secured payment methods and payment pages.
     *   Remove broken image-URLs of payment page examples.
 *   Several minor improvements.
 
