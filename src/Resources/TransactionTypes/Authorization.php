@@ -65,9 +65,9 @@ class Authorization extends AbstractTransactionType
     /**
      * Authorization constructor.
      *
-     * @param float  $amount
-     * @param string $currency
-     * @param string $returnUrl
+     * @param float|null    $amount
+     * @param string|null $currency
+     * @param string|null $returnUrl
      */
     public function __construct($amount = null, $currency = null, $returnUrl = null)
     {
@@ -87,7 +87,7 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * @param float $amount
+     * @param float|null $amount
      *
      * @return self
      */
@@ -120,7 +120,7 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * @param string $currency
+     * @param string|null $currency
      *
      * @return self
      */
@@ -177,7 +177,7 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * @param $paymentReference
+     * @param string|null $paymentReference
      *
      * @return Authorization
      */
@@ -265,7 +265,7 @@ class Authorization extends AbstractTransactionType
     /**
      * Full cancel of this authorization.
      *
-     * @param null $amount
+     * @param float|null $amount
      *
      * @return Cancellation
      *
@@ -280,7 +280,7 @@ class Authorization extends AbstractTransactionType
     /**
      * Charge authorization.
      *
-     * @param float $amount
+     * @param float|null $amount
      *
      * @return Charge
      *
