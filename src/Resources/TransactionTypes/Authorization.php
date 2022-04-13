@@ -65,7 +65,7 @@ class Authorization extends AbstractTransactionType
     /**
      * Authorization constructor.
      *
-     * @param float|null    $amount
+     * @param float|null  $amount
      * @param string|null $currency
      * @param string|null $returnUrl
      */
