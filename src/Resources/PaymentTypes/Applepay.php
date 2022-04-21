@@ -35,7 +35,6 @@ class Applepay extends BasePaymentType
 {
     use CanDirectCharge;
     use CanAuthorize;
-    use HasGeoLocation;
 
     /** @var string|null $applicationExpirationDate */
     private $applicationExpirationDate;

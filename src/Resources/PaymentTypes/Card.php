@@ -41,7 +41,6 @@ class Card extends BasePaymentType
     use CanAuthorize;
     use CanPayout;
     use CanRecur;
-    use HasGeoLocation;
 
     /** @var string $number */
     protected $number;
