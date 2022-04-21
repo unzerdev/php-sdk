@@ -269,6 +269,7 @@ class HttpService
     public function composerHttpHeaders(Unzer $unzer): array
     {
         $locale      = $unzer->getLocale();
+        $clientIp    = $unzer->getClientIp();
         $key         = $unzer->getKey();
         $httpHeaders = [
             'Authorization' => 'Basic ' . base64_encode($key . ':'),
@@ -279,6 +280,9 @@ class HttpService
         ];
         if (!empty($locale)) {
             $httpHeaders['Accept-Language'] = $locale;
+        }
+        if (!empty($clientIp)) {
+            $httpHeaders['CLIENTIP'] = $clientIp;
         }
 
         return $httpHeaders;

@@ -52,4 +52,21 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
 
         return $invoice;
     }
+
+    /**
+     * Customer should contain clientIp set via header.
+     *
+     * @test
+     */
+    public function clientIpCanBeManuallySetForPaylaterInvoiceType()
+    {
+        $clientIp = '123.123.123.123';
+        $this->unzer->setClientIp($clientIp);
+
+        /** @var PaylaterInvoice $invoice */
+        $invoice = $this->unzer->createPaymentType(new PaylaterInvoice());
+        $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
+
+        $this->assertEquals($clientIp, $fetchedInvoice->getGeoLocation()->getClientIp());
+    }
 }

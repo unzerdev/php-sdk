@@ -71,6 +71,9 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /** @var string $locale */
     private $locale;
 
+    /** @var string $clientIp */
+    private $clientIp;
+
     /** @var ResourceServiceInterface $resourceService */
     private $resourceService;
 
@@ -171,6 +174,25 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         }
 
         $this->locale = str_replace('_', '-', $locale);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientIp(): ?string
+    {
+        return $this->clientIp;
+    }
+
+    /**
+     * @param string|null $clientIp
+     *
+     * @return Unzer
+     */
+    public function setClientIp($clientIp): Unzer
+    {
+        $this->clientIp = $clientIp;
         return $this;
     }
 

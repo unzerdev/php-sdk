@@ -170,6 +170,38 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
+     * Verify 'CLIENTIP' header only set when a clientIp is defined in the Unzer object.
+     *
+     * @test
+     * @dataProvider clientIPHeaderShouldOnlyBeSetIfPropertyIsNotEmptyDP
+     *
+     * @param $clientIp
+     */
+    public function clientIPHeaderShouldOnlyBeSetIfPropertyIsNotEmpty($clientIp): void
+    {
+        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
+        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['setHeaders', 'execute'])->getMock();
+        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
+
+        $unzer = new Unzer('s-priv-MyTestKey', $clientIp);
+        $unzer->setClientIp($clientIp);
+        $resource = (new DummyResource())->setParentResource($unzer);
+
+        /** @noinspection PhpParamsInspection */
+        $adapterMock->expects($this->once())->method('setHeaders')->with(
+            $this->callback(
+                static function ($headers) use ($clientIp) {
+                    return $clientIp === ($headers['CLIENTIP'] ?? null);
+                }
+            )
+        );
+        $adapterMock->method('execute')->willReturn('myResponseString');
+
+        /** @var HttpService $httpServiceMock*/
+        $httpServiceMock->send('/my/uri/123', $resource);
+    }
+
+    /**
      * Verify debugLog logs to debug handler if debug mode and a handler are set.
      *
      * @test
@@ -436,6 +468,19 @@ class HttpServiceTest extends BasePaymentTest
         return [
             'de-DE' => ['de-DE'],
             'en-US' => ['en-US'],
+            'null' => [null]
+        ];
+    }
+
+    /**
+     * Returns test data for method public function languageShouldOnlyBeSetIfSpecificallyDefined.
+     */
+    public function clientIPHeaderShouldOnlyBeSetIfPropertyIsNotEmptyDP(): array
+    {
+        return [
+            'valid ipv4' => ['111.222.333.444'],
+            'valid ipv6' => ['684D:1111:222:3333:4444:5555:6:7'],
+            'valid ipv6 (dual)' => ['2001:db8:3333:4444:5555:6666:1.2.3.4'],
             'null' => [null]
         ];
     }
