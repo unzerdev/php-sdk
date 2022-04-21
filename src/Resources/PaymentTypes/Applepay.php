@@ -29,7 +29,6 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\EmbeddedResources\ApplePayHeader;
 use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
-use UnzerSDK\Traits\HasGeoLocation;
 
 class Applepay extends BasePaymentType
 {

@@ -31,6 +31,7 @@ use UnzerSDK\Traits\HasGeoLocation;
 abstract class BasePaymentType extends AbstractUnzerResource
 {
     use HasGeoLocation;
+
     /**
      * Return true for invoice types.
      * This enables you to handle the invoice workflow correctly.

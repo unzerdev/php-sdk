@@ -30,7 +30,6 @@ use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
 use UnzerSDK\Traits\CanPayout;
 use UnzerSDK\Traits\CanRecur;
-use UnzerSDK\Traits\HasGeoLocation;
 use UnzerSDK\Validators\ExpiryDateValidator;
 use RuntimeException;
 use stdClass;
