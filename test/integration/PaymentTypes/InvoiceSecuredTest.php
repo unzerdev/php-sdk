@@ -55,66 +55,6 @@ class InvoiceSecuredTest extends BaseIntegrationTest
 
         return $invoice;
     }
-    
-    /**
-     * Verify, backwards compatibility regarding fetching payment type and map it to invoice secured class.
-     *
-     * @test
-     */
-    public function ivgTypeShouldBeFechable(): InvoiceSecured
-    {
-        $ivgMock = $this->getMockBuilder(InvoiceSecured::class)->setMethods(['getUri'])->getMock();
-        $ivgMock->method('getUri')->willReturn('/types/invoice-guaranteed');
-
-        /** @var InvoiceSecured $ivgType */
-        $ivgType = $this->unzer->createPaymentType($ivgMock);
-        $this->assertInstanceOf(InvoiceSecured::class, $ivgType);
-        $this->assertRegExp('/^s-ivg-[.]*/', $ivgType->getId());
-
-        $fetchedType = $this->unzer->fetchPaymentType($ivgType->getId());
-        $this->assertInstanceOf(InvoiceSecured::class, $fetchedType);
-        $this->assertRegExp('/^s-ivg-[.]*/', $fetchedType->getId());
-
-        return $fetchedType;
-    }
-
-    /**
-     * Verify fetched ivg type can be charged
-     *
-     * @test
-     * @depends ivgTypeShouldBeFechable
-     *
-     * @param InvoiceSecured $ivgType fetched ivg type.
-     *
-     * @throws UnzerApiException
-     */
-    public function ivgTypeShouldBeChargable(InvoiceSecured $ivgType)
-    {
-        $customer = $this->getMaximumCustomer();
-        $charge = $ivgType->charge(100.00, 'EUR', 'https://unzer.com', $customer);
-
-        $this->assertNotNull($charge);
-        $this->assertNotEmpty($charge->getId());
-        $this->assertTrue($charge->isPending());
-
-        return $charge;
-    }
-
-    /**
-     * Verify fetched ivg type can be shipped.
-     *
-     * @test
-     * @depends ivgTypeShouldBeChargable
-     */
-    public function ivgTypeShouldBeShippable(Charge $ivgCharge)
-    {
-        $invoiceId = 'i' . self::generateRandomId();
-
-        $ship = $this->unzer->ship($ivgCharge->getPayment(), $invoiceId);
-        // expect Payment to be pending after shipment.
-        $this->assertTrue($ship->getPayment()->isPending());
-        $this->assertNotNull($ship);
-    }
 
     /**
      * Verify Invoice Secured is not authorizable.
