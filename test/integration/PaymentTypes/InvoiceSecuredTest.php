@@ -107,6 +107,29 @@ class InvoiceSecuredTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify charge with Invoice Secured throws an error when invalid ip is set.
+     *
+     * @test
+     */
+    public function invoiceSecuredRequiresValidClientIpForCharge(): void
+    {
+        $this->unzer->setClientIp('123.456.789.123');
+
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
+        $this->unzer->setClientIp(null); // Ensure that the invalid ip is only used for type creation.
+
+        $customer = $this->getMaximumCustomer();
+        $customer->setShippingAddress($customer->getBillingAddress());
+        $basket = $this->createBasket();
+
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::CORE_INVALID_IP_NUMBER);
+
+        $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+    }
+
+    /**
      * Verify Invoice Secured is chargeable.
      *
      * @test
