@@ -134,7 +134,8 @@ class CustomerTest extends BasePaymentTest
             ->setName('shipping_name')
             ->setCity('shipping_city')
             ->setZip('shipping_zip')
-            ->setStreet('shipping_street');
+            ->setStreet('shipping_street')
+            ->setShippingType('shipping_type');
 
         $customer = new Customer();
         $shippingAddress = $customer->getBillingAddress();
@@ -144,6 +145,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertNull($shippingAddress->getCity());
         $this->assertNull($shippingAddress->getZip());
         $this->assertNull($shippingAddress->getStreet());
+        $this->assertNull($shippingAddress->getShippingType());
 
         $customer->setShippingAddress($address);
         $shippingAddress = $customer->getShippingAddress();
@@ -153,6 +155,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertEquals('shipping_city', $shippingAddress->getCity());
         $this->assertEquals('shipping_zip', $shippingAddress->getZip());
         $this->assertEquals('shipping_street', $shippingAddress->getStreet());
+        $this->assertEquals('shipping_type', $shippingAddress->getShippingType());
     }
 
     /**
