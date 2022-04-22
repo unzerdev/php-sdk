@@ -49,6 +49,7 @@ use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\PIS;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
@@ -561,6 +562,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::PAYPAL:
                 $paymentType = new Paypal();
+                break;
+            case IdStrings::PAYLATER_INVOICE:
+                $paymentType = new PaylaterInvoice();
                 break;
             case IdStrings::PIS:
                 $paymentType = new PIS();
