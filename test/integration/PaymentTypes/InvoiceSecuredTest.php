@@ -113,11 +113,14 @@ class InvoiceSecuredTest extends BaseIntegrationTest
      */
     public function invoiceSecuredRequiresValidClientIpForCharge(): void
     {
-        $this->unzer->setClientIp('123.456.789.123');
+        $clientIp = '123.456.789.123';
+        $this->unzer->setClientIp($clientIp);
 
         /** @var InvoiceSecured $invoiceSecured */
         $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
         $this->unzer->setClientIp(null); // Ensure that the invalid ip is only used for type creation.
+        $this->assertEquals($clientIp, $invoiceSecured->getGeoLocation()->getClientIp());
+
 
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
@@ -127,6 +130,21 @@ class InvoiceSecuredTest extends BaseIntegrationTest
         $this->expectExceptionCode(ApiResponseCodes::CORE_INVALID_IP_NUMBER);
 
         $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+    }
+
+    /**
+     * Verify creating a payment type with client ip header set, will overwrite the clientIp of the API resource.
+     *
+     * @test
+     */
+    public function verifySettingClientIpViaHeaderWillOverwriteClientIpOfTypeResource(): void
+    {
+        $clientIp = 'xxx.xxx.xxx.xxx';
+        $this->unzer->setClientIp($clientIp);
+
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
+        $this->assertEquals($clientIp, $invoiceSecured->getGeoLocation()->getClientIp());
     }
 
     /**
