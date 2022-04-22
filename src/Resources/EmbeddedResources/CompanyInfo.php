@@ -42,6 +42,9 @@ class CompanyInfo extends AbstractUnzerResource
     /** @var string $commercialSector */
     protected $commercialSector = CompanyCommercialSectorItems::OTHER;
 
+    /** @var string|null $companyType */
+    protected $companyType;
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -120,6 +123,26 @@ class CompanyInfo extends AbstractUnzerResource
         $this->commercialSector = $this->removeRestrictedSymbols($commercialSector);
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getCompanyType(): ?string
+    {
+        return $this->companyType;
+    }
+
+    /**
+     * @param string|null $companyType
+     *
+     * @return CompanyInfo
+     */
+    public function setCompanyType(?string $companyType): CompanyInfo
+    {
+        $this->companyType = $companyType;
+        return $this;
+    }
+
 
     //</editor-fold>
 

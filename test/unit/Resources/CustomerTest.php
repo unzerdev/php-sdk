@@ -170,6 +170,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertNull($companyInfo->getCommercialRegisterNumber());
         $this->assertNull($companyInfo->getFunction());
         $this->assertNull($companyInfo->getRegistrationType());
+        $this->assertNull($companyInfo->getCompanyType());
 
         $companyInfo->setCommercialSector(CompanyCommercialSectorItems::ACCOMMODATION);
         $this->assertSame(CompanyCommercialSectorItems::ACCOMMODATION, $companyInfo->getCommercialSector());
@@ -182,6 +183,9 @@ class CustomerTest extends BasePaymentTest
 
         $companyInfo->setRegistrationType(CompanyRegistrationTypes::REGISTRATION_TYPE_REGISTERED);
         $this->assertSame(CompanyRegistrationTypes::REGISTRATION_TYPE_REGISTERED, $companyInfo->getRegistrationType());
+
+        $companyInfo->setCompanyType('companyType');
+        $this->assertSame('companyType', $companyInfo->getCompanyType());
 
         $customer = new Customer();
         $this->assertNull($customer->getCompanyInfo());
