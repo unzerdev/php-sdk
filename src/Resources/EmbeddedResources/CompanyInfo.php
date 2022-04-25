@@ -45,6 +45,9 @@ class CompanyInfo extends AbstractUnzerResource
     /** @var string|null $companyType */
     protected $companyType;
 
+    /** @var CompanyOwner|null $owner */
+    protected $owner;
+
     //<editor-fold desc="Getters/Setters">
 
     /**
@@ -143,6 +146,24 @@ class CompanyInfo extends AbstractUnzerResource
         return $this;
     }
 
+    /**
+     * @return CompanyOwner|null
+     */
+    public function getOwner(): ?CompanyOwner
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param CompanyOwner|null $owner
+     *
+     * @return CompanyInfo
+     */
+    public function setOwner(?CompanyOwner $owner): CompanyInfo
+    {
+        $this->owner = $owner;
+        return $this;
+    }
 
     //</editor-fold>
 

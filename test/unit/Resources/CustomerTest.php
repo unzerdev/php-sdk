@@ -29,6 +29,7 @@ namespace UnzerSDK\test\unit\Resources;
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Resources\EmbeddedResources\CompanyOwner;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\Customer;
@@ -171,6 +172,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertNull($companyInfo->getFunction());
         $this->assertNull($companyInfo->getRegistrationType());
         $this->assertNull($companyInfo->getCompanyType());
+        $this->assertNull($companyInfo->getOwner());
 
         $companyInfo->setCommercialSector(CompanyCommercialSectorItems::ACCOMMODATION);
         $this->assertSame(CompanyCommercialSectorItems::ACCOMMODATION, $companyInfo->getCommercialSector());
@@ -186,6 +188,13 @@ class CustomerTest extends BasePaymentTest
 
         $companyInfo->setCompanyType('companyType');
         $this->assertSame('companyType', $companyInfo->getCompanyType());
+
+        $owner = new CompanyOwner();
+        $owner->setFirstname('firstname')
+            ->setLastname('lastname')
+            ->setBirthdate('01.01.1999');
+        $companyInfo->setOwner($owner);
+        $this->assertEquals($owner, $companyInfo->getOwner());
 
         $customer = new Customer();
         $this->assertNull($customer->getCompanyInfo());
