@@ -24,8 +24,10 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use stdClass;
 use function is_string;
 
 class CompanyInfo extends AbstractUnzerResource
@@ -163,6 +165,20 @@ class CompanyInfo extends AbstractUnzerResource
     {
         $this->owner = $owner;
         return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    {
+        if (isset($response->owner) && $this->owner === null) {
+            $this->owner = new CompanyOwner();
+        }
     }
 
     //</editor-fold>

@@ -189,8 +189,7 @@ class CustomerTest extends BasePaymentTest
         $companyInfo->setCompanyType('companyType');
         $this->assertSame('companyType', $companyInfo->getCompanyType());
 
-        $owner = new CompanyOwner();
-        $owner->setFirstname('firstname')
+        $owner = (new CompanyOwner())->setFirstname('firstname')
             ->setLastname('lastname')
             ->setBirthdate('01.01.1999');
         $companyInfo->setOwner($owner);
@@ -326,6 +325,38 @@ class CustomerTest extends BasePaymentTest
         $this->assertInstanceOf(GeoLocation::class, $geoLocation);
         $this->assertEquals('client ip', $geoLocation->getClientIp());
         $this->assertEquals('country code', $geoLocation->getCountryCode());
+    }
+
+    /**
+     * Verify that CompanyOwner data are correctly set when handling a response.
+     *
+     * @test
+     */
+    public function handleResponseShouldSetCompanyOwnerData()
+    {
+        $customer = new Customer();
+        $this->assertEmpty($customer->getCompanyInfo());
+
+        $owner = (object)[
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'birthdate' => 'birthdate',
+        ];
+
+        $customerResponse = (object)[
+            'companyInfo' => (object)[
+                'owner' => $owner
+            ]
+        ];
+
+        $customer->handleResponse($customerResponse);
+
+        $this->assertNotEmpty($customer->getCompanyInfo());
+        $companyOwner = $customer->getCompanyInfo()->getOwner();
+        $this->assertNotEmpty($companyOwner);
+        $this->assertEquals('firstname', $companyOwner->getFirstname());
+        $this->assertEquals('lastname', $companyOwner->getLastname());
+        $this->assertEquals('birthdate', $companyOwner->getBirthdate());
     }
 
     //</editor-fold>

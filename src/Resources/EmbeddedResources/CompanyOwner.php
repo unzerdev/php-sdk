@@ -29,13 +29,13 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 class CompanyOwner extends AbstractUnzerResource
 {
     /** @var string|null $firstname */
-    private $firstname;
+    protected $firstname;
 
     /** @var string|null $lastname */
-    private $lastname;
+    protected $lastname;
 
     /** @var string|null $birthdate */
-    private $birthdate;
+    protected $birthdate;
 
     //<editor-fold desc="Getters/Setters">
 
@@ -52,7 +52,7 @@ class CompanyOwner extends AbstractUnzerResource
      *
      * @return CompanyOwner
      */
-    public function setFirstname(?string $firstname): self
+    public function setFirstname(?string $firstname): CompanyOwner
     {
         $this->firstname = $firstname;
         return $this;
@@ -71,7 +71,7 @@ class CompanyOwner extends AbstractUnzerResource
      *
      * @return CompanyOwner
      */
-    public function setLastname(?string $lastname): self
+    public function setLastname(?string $lastname): CompanyOwner
     {
         $this->lastname = $lastname;
         return $this;
