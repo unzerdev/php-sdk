@@ -173,18 +173,21 @@ class HttpServiceTest extends BasePaymentTest
      * Verify 'CLIENTIP' header only set when a clientIp is defined in the Unzer object.
      *
      * @test
-     * @dataProvider clientIPHeaderShouldOnlyBeSetIfPropertyIsNotEmptyDP
+     * @dataProvider clientIpHeaderShouldBeSetProperlyDP
      *
      * @param $clientIp
      * @param mixed $isHeaderExpected
      */
-    public function clientIpHeaderShouldNotExistIfPropertyIsNotSet($clientIp, $isHeaderExpected): void
+    public function clientIpHeaderShouldBeSetProperly($clientIp, $isHeaderExpected): void
     {
         $unzer = new Unzer('s-priv-MyTestKey', $clientIp);
         $unzer->setClientIp($clientIp);
 
-        $composerHttpHeaders = $unzer->getHttpService()->composerHttpHeaders($unzer);
+        $composerHttpHeaders = $unzer->getHttpService()->composeHttpHeaders($unzer);
         $this->assertEquals($isHeaderExpected, isset($composerHttpHeaders['CLIENTIP']));
+        if ($isHeaderExpected) {
+            $this->assertEquals($clientIp, $composerHttpHeaders['CLIENTIP']);
+        }
     }
 
     /**
@@ -461,7 +464,7 @@ class HttpServiceTest extends BasePaymentTest
     /**
      * Returns test data for method public function languageShouldOnlyBeSetIfSpecificallyDefined.
      */
-    public function clientIPHeaderShouldOnlyBeSetIfPropertyIsNotEmptyDP(): array
+    public function clientIpHeaderShouldBeSetProperlyDP(): array
     {
         return [
             'valid ipv4' => ['111.222.333.444', true],

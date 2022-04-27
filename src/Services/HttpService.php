@@ -124,7 +124,7 @@ class HttpService
         // perform request
         $url     = $this->getEnvironmentUrl($uri, $apiVersion);
         $payload = $resource->jsonSerialize();
-        $headers = $this->composerHttpHeaders($unzerObj);
+        $headers = $this->composeHttpHeaders($unzerObj);
         $this->initRequest($url, $payload, $httpMethod, $headers);
         $httpAdapter  = $this->getAdapter();
         $response     = $httpAdapter->execute();
@@ -266,7 +266,7 @@ class HttpService
      *
      * @return array
      */
-    public function composerHttpHeaders(Unzer $unzer): array
+    public function composeHttpHeaders(Unzer $unzer): array
     {
         $locale      = $unzer->getLocale();
         $clientIp    = $unzer->getClientIp();

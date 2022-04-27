@@ -121,7 +121,6 @@ class InvoiceSecuredTest extends BaseIntegrationTest
         $this->unzer->setClientIp(null); // Ensure that the invalid ip is only used for type creation.
         $this->assertEquals($clientIp, $invoiceSecured->getGeoLocation()->getClientIp());
 
-
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
         $basket = $this->createBasket();
