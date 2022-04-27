@@ -68,10 +68,10 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /** @var string $key */
     private $key;
 
-    /** @var string $locale */
+    /** @var string|null $locale */
     private $locale;
 
-    /** @var string $clientIp */
+    /** @var string|null $clientIp */
     private $clientIp;
 
     /** @var ResourceServiceInterface $resourceService */
@@ -178,7 +178,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getClientIp(): ?string
     {

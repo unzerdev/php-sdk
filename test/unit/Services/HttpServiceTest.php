@@ -176,29 +176,15 @@ class HttpServiceTest extends BasePaymentTest
      * @dataProvider clientIPHeaderShouldOnlyBeSetIfPropertyIsNotEmptyDP
      *
      * @param $clientIp
+     * @param mixed $isHeaderExpected
      */
-    public function clientIPHeaderShouldOnlyBeSetIfPropertyIsNotEmpty($clientIp): void
+    public function clientIpHeaderShouldNotExistIfPropertyIsNotSet($clientIp, $isHeaderExpected): void
     {
-        $httpServiceMock = $this->getMockBuilder(HttpService::class)->setMethods(['getAdapter'])->getMock();
-        $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['setHeaders', 'execute'])->getMock();
-        $httpServiceMock->method('getAdapter')->willReturn($adapterMock);
-
         $unzer = new Unzer('s-priv-MyTestKey', $clientIp);
         $unzer->setClientIp($clientIp);
-        $resource = (new DummyResource())->setParentResource($unzer);
 
-        /** @noinspection PhpParamsInspection */
-        $adapterMock->expects($this->once())->method('setHeaders')->with(
-            $this->callback(
-                static function ($headers) use ($clientIp) {
-                    return $clientIp === ($headers['CLIENTIP'] ?? null);
-                }
-            )
-        );
-        $adapterMock->method('execute')->willReturn('myResponseString');
-
-        /** @var HttpService $httpServiceMock*/
-        $httpServiceMock->send('/my/uri/123', $resource);
+        $composerHttpHeaders = $unzer->getHttpService()->composerHttpHeaders($unzer);
+        $this->assertEquals($isHeaderExpected, isset($composerHttpHeaders['CLIENTIP']));
     }
 
     /**
@@ -478,10 +464,11 @@ class HttpServiceTest extends BasePaymentTest
     public function clientIPHeaderShouldOnlyBeSetIfPropertyIsNotEmptyDP(): array
     {
         return [
-            'valid ipv4' => ['111.222.333.444'],
-            'valid ipv6' => ['684D:1111:222:3333:4444:5555:6:7'],
-            'valid ipv6 (dual)' => ['2001:db8:3333:4444:5555:6666:1.2.3.4'],
-            'null' => [null]
+            'valid ipv4' => ['111.222.333.444', true],
+            'valid ipv6' => ['684D:1111:222:3333:4444:5555:6:7', true],
+            'valid ipv6 (dual)' => ['2001:db8:3333:4444:5555:6666:1.2.3.4', true],
+            'empty string' => ['', false],
+            'null' => [null, false]
         ];
     }
 
