@@ -82,7 +82,9 @@ class UnzerTest extends BasePaymentTest
     {
         $unzer = new Unzer('s-priv-1234');
         $unzer->setLocale('myLocale');
+        $unzer->setClientIp('myIpAddress');
         $this->assertEquals('myLocale', $unzer->getLocale());
+        $this->assertEquals('myIpAddress', $unzer->getClientIp());
 
         try {
             $unzer->setKey('this is not a valid key');

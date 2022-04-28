@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.1.6.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.1.6.0)
 ### Added
 * Add payment type Paylater Invoice.
+* Allow setting the clientIp manually.
+
+### Changed
+* Add "geoLocation" property to all payment type classes.
+* Several minor improvements.
 
 ## [1.1.5.0](https://github.com/unzerdev/php-sdk/compare/1.1.4.2..1.1.5.0)
 ### Added

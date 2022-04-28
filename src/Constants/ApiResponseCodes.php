@@ -71,6 +71,7 @@ class ApiResponseCodes
     public const API_ERROR_FIELD_IS_MISSING                            = 'API.710.200.100';
 
     public const CORE_ERROR_INVALID_OR_MISSING_LOGIN                   = 'COR.100.300.600';
+    public const CORE_INVALID_IP_NUMBER                                = 'COR.100.900.401';
     public const CORE_ERROR_INSURANCE_ALREADY_ACTIVATED                = 'COR.700.400.800';
 
     public const SDM_ERROR_CURRENT_INSURANCE_EVENT                     = 'SDM.CURRENT_INSURANCE_EVENT';

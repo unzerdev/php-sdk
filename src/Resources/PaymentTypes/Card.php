@@ -30,7 +30,6 @@ use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
 use UnzerSDK\Traits\CanPayout;
 use UnzerSDK\Traits\CanRecur;
-use UnzerSDK\Traits\HasGeoLocation;
 use UnzerSDK\Validators\ExpiryDateValidator;
 use RuntimeException;
 use stdClass;
@@ -41,7 +40,6 @@ class Card extends BasePaymentType
     use CanAuthorize;
     use CanPayout;
     use CanRecur;
-    use HasGeoLocation;
 
     /** @var string $number */
     protected $number;

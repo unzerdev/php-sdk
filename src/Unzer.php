@@ -68,8 +68,11 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /** @var string $key */
     private $key;
 
-    /** @var string $locale */
+    /** @var string|null $locale */
     private $locale;
+
+    /** @var string|null $clientIp */
+    private $clientIp;
 
     /** @var ResourceServiceInterface $resourceService */
     private $resourceService;
@@ -146,7 +149,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     }
 
     /**
-     * Returns the set customer locale.
+     * Returns the set customer locale. This will be set as a request header field.
      *
      * @return string|null The locale of the customer.
      *                     Refer to the documentation under https://docs.unzer.com for a list of supported values.
@@ -171,6 +174,27 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         }
 
         $this->locale = str_replace('_', '-', $locale);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClientIp(): ?string
+    {
+        return $this->clientIp;
+    }
+
+    /**
+     * Sets the clientIp. This will be set as a request header field.
+     *
+     * @param string|null $clientIp
+     *
+     * @return Unzer
+     */
+    public function setClientIp($clientIp): Unzer
+    {
+        $this->clientIp = $clientIp;
         return $this;
     }
 
