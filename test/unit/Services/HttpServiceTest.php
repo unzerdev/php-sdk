@@ -180,13 +180,13 @@ class HttpServiceTest extends BasePaymentTest
      */
     public function clientIpHeaderShouldBeSetProperly($clientIp, $isHeaderExpected): void
     {
-        $unzer = new Unzer('s-priv-MyTestKey', $clientIp);
+        $unzer = new Unzer('s-priv-MyTestKey');
         $unzer->setClientIp($clientIp);
 
-        $composerHttpHeaders = $unzer->getHttpService()->composeHttpHeaders($unzer);
-        $this->assertEquals($isHeaderExpected, isset($composerHttpHeaders['CLIENTIP']));
+        $composeHttpHeaders = $unzer->getHttpService()->composeHttpHeaders($unzer);
+        $this->assertEquals($isHeaderExpected, isset($composeHttpHeaders['CLIENTIP']));
         if ($isHeaderExpected) {
-            $this->assertEquals($clientIp, $composerHttpHeaders['CLIENTIP']);
+            $this->assertEquals($clientIp, $composeHttpHeaders['CLIENTIP']);
         }
     }
 
