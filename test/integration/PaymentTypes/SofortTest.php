@@ -52,6 +52,7 @@ class SofortTest extends BaseIntegrationTest
         $fetchedSofort = $this->unzer->fetchPaymentType($sofort->getId());
         $this->assertInstanceOf(Sofort::class, $fetchedSofort);
         $this->assertEquals($sofort->expose(), $fetchedSofort->expose());
+        $this->assertNotEmpty($fetchedSofort->getGeoLocation()->getClientIp());
 
         return $fetchedSofort;
     }

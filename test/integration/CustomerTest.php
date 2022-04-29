@@ -438,5 +438,21 @@ class CustomerTest extends BaseIntegrationTest
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
     }
 
+    /**
+     * Customer should contain clientIp set via header.
+     *
+     * @test
+     */
+    public function customerShouldContainClientIpSetViaHeader()
+    {
+        $customer = $this->getMinimalCustomer();
+        $clientIp = '123.123.123.123';
+        $this->unzer->setClientIp($clientIp);
+        $this->unzer->createCustomer($customer);
+
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
+        $this->assertEquals($clientIp, $fetchedCustomer->getGeoLocation()->getClientIp());
+    }
+
     //</editor-fold>
 }
