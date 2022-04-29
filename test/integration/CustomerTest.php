@@ -94,7 +94,7 @@ class CustomerTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function customerWithShippingTypeCanBeCreateedAndFetched()
+    public function customerWithShippingTypeCanBeCreatedAndFetched()
     {
         $customer   = $this->getMaximumCustomerInclShippingAddress();
         $customer->getShippingAddress()->setShippingType('shippingType');

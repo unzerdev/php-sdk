@@ -24,7 +24,6 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
-use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use stdClass;
@@ -172,9 +171,13 @@ class CompanyInfo extends AbstractUnzerResource
     //<editor-fold desc="Overridable methods">
 
     /**
-     * {@inheritDoc}
+     * Create instances of necessary properties to handle API responses.
+     *
+     * @param stdClass $response
+     *
+     * @return void
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function instantiateObjectsFromResponse(stdClass $response): void
     {
         if (isset($response->owner) && $this->owner === null) {
             $this->owner = new CompanyOwner();
