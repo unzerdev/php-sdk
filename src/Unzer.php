@@ -703,6 +703,10 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     //<editor-fold desc="Transactions">
 
     //<editor-fold desc="Authorize transactions">
+    public function performAuthorization($authorization, $paymentType, $customer = null, $metadata = null, $basket = null): Authorization
+    {
+        return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
+    }
 
     /**
      * {@inheritDoc}
@@ -740,6 +744,14 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     //</editor-fold>
 
     //<editor-fold desc="Charge transactions">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function performCharge($charge, $paymentType, $customer = null, $metadata = null, $basket = null): Charge
+    {
+        return $this->paymentService->performCharge($charge, $paymentType, $customer, $metadata, $basket);
+    }
 
     /**
      * {@inheritDoc}

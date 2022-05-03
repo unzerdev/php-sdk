@@ -94,6 +94,20 @@ class PaymentService implements PaymentServiceInterface
 
     //<editor-fold desc="Authorize transaction">
 
+    public function performAuthorization($authorization, $paymentType, $customer = null, $metadata = null, $basket = null): Authorization
+    {
+        $payment = $this->createPayment($paymentType);
+        $paymentType = $payment->getPaymentType();
+        $authorization->setSpecialParams($paymentType !== null ? $paymentType->getTransactionParams() : []);
+
+        $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
+
+        $this->getResourceService()->createResource($authorization);
+        return $authorization;
+    }/**
+     * {@inheritDoc}
+     */
+
     /**
      * {@inheritDoc}
      */
@@ -118,8 +132,7 @@ class PaymentService implements PaymentServiceInterface
         $authorization = (new Authorization($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
             ->setInvoiceId($invoiceId)
-            ->setPaymentReference($referenceText)
-            ->setSpecialParams($paymentType !== null ? $paymentType->getTransactionParams() : []);
+            ->setPaymentReference($referenceText);
         if ($card3ds !== null) {
             $authorization->setCard3ds($card3ds);
         }
@@ -128,13 +141,30 @@ class PaymentService implements PaymentServiceInterface
         if ($recurrenceType !== null) {
             $authorization->setRecurrenceType($recurrenceType);
         }
-        $this->getResourceService()->createResource($authorization);
+        $this->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
         return $authorization;
     }
 
     //</editor-fold>
 
     //<editor-fold desc="Charge transaction">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function performCharge($charge, $paymentType, $customer = null, $metadata = null, $basket = null): Charge
+    {
+        $payment     = $this->createPayment($paymentType);
+        $paymentType = $payment->getPaymentType();
+
+        /** @var Charge $charge */
+        $charge->setSpecialParams($paymentType->getTransactionParams() ?? []);
+        $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
+
+        $this->getResourceService()->createResource($charge);
+
+        return $charge;
+    }
 
     /**
      * {@inheritDoc}
@@ -160,8 +190,7 @@ class PaymentService implements PaymentServiceInterface
         $charge = (new Charge($amount, $currency, $returnUrl))
             ->setOrderId($orderId)
             ->setInvoiceId($invoiceId)
-            ->setPaymentReference($paymentReference)
-            ->setSpecialParams($paymentType->getTransactionParams() ?? []);
+            ->setPaymentReference($paymentReference);
         if ($card3ds !== null) {
             $charge->setCard3ds($card3ds);
         }
@@ -170,9 +199,8 @@ class PaymentService implements PaymentServiceInterface
         if ($recurrenceType !== null) {
             $charge->setRecurrenceType($recurrenceType);
         }
-        $this->getResourceService()->createResource($charge);
 
-        return $charge;
+        return $this->performCharge($charge, $paymentType, $customer, $metadata, $basket);
     }
 
     /**

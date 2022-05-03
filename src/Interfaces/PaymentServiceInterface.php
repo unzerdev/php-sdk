@@ -45,6 +45,33 @@ interface PaymentServiceInterface
     /**
      * Performs an Authorization transaction and returns the resulting Authorization resource.
      *
+     * @param Authorization          $authorization The amount to authorize.
+     * @param BasePaymentType|string $paymentType   The PaymentType object or the id of the PaymentType to use.
+     * @param Customer|string|null   $customer      The Customer object or the id of the customer resource to reference.
+     * @param Metadata|null          $metadata      The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket        The Basket object corresponding to the payment.
+     *                                              The Basket object will be created automatically if it does not exist
+     *                                              yet (i.e. has no id).
+     *
+     * @return Authorization The resulting object of the Authorization resource.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function performAuthorization(
+        $authorization,
+        $paymentType,
+        $customer = null,
+        $metadata = null,
+        $basket = null
+    ): Authorization;
+
+    /**
+     * Performs an Authorization transaction and returns the resulting Authorization resource.
+     *
+     * @deprecated since 1.1.6.0 please use performAuthorization() instead.
+     * @see performAuthorization
+     *
      * @param float                  $amount         The amount to authorize.
      * @param string                 $currency       The currency of the amount.
      * @param string|BasePaymentType $paymentType    The PaymentType object or the id of the PaymentType to use.
@@ -83,6 +110,33 @@ interface PaymentServiceInterface
 
     /**
      * Performs a Charge transaction and returns the resulting Charge resource.
+     *
+     * @param Charge                 $charge      The amount to charge.
+     * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
+     * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
+     * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.
+     * @param Basket|null            $basket      The Basket object corresponding to the payment.
+     *                                            The Basket object will be created automatically if it does not exist
+     *                                            yet (i.e. has no id).
+     *
+     * @return Charge The resulting object of the Charge resource.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function performCharge(
+        $charge,
+        $paymentType,
+        $customer = null,
+        $metadata = null,
+        $basket = null
+    ): Charge;
+
+    /**
+     * Performs a Charge transaction and returns the resulting Charge resource.
+     *
+     * @deprecated since 1.1.6.0 please use performCharge() instead.
+     * @see performCharge
      *
      * @param float                  $amount           The amount to charge.
      * @param string                 $currency         The currency of the amount.

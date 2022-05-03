@@ -26,7 +26,9 @@
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
 
+use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class PaylaterInvoiceTest extends BaseIntegrationTest
@@ -68,5 +70,82 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
         $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
 
         $this->assertEquals($clientIp, $fetchedInvoice->getGeoLocation()->getClientIp());
+    }
+
+    /**
+     * Verify that paylater Invoice type can be authorized.
+     *
+     * @test
+     *
+     * @depends paylaterInvoiceTestTypeShouldBeCreatableAndFetchable
+     *
+     * @param mixed $paylaterInvoice
+     */
+    public function paylaterInvoiceCanbeAuthorized($paylaterInvoice) :Authorization
+    {
+        $authorization = new Authorization(99.99, 'EUR', 'https://unzer.com');
+        $authorization->setInvoiceId('202205021237');
+
+        $customer = $this->getMaximumCustomerInclShippingAddress();
+        $basket = $this->createV2Basket();
+
+        $authorization = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
+        $this->assertNotEmpty($authorization->getId());
+        $this->assertTrue($authorization->isSuccess());
+
+        return $authorization;
+    }
+
+    /**
+     * Verify that paylater Invoice type can be authorized.
+     *
+     * @test
+     *
+     * @depends paylaterInvoiceTestTypeShouldBeCreatableAndFetchable
+     *
+     * @param mixed $paylaterInvoice
+     */
+    public function paylaterInvoiceCanbeAuthorizedWithRiskData($paylaterInvoice) :Authorization
+    {
+        $riskData = new RiskData();
+        $riskData->setThreatMetrixId('f544if49wo4f74ef1x')
+            ->setCustomerGroup('TOP')
+            ->setCustomerId('C-122345')
+            ->setConfirmedAmount('1234')
+            ->setConfirmedOrders('42')
+            ->setRegistrationLevel('1')
+            ->setRegistrationDate('20160412')
+            ->setInternalScore(95);
+
+        $authorization = new Authorization(99.99, 'EUR', 'https://unzer.com');
+        $authorization->addAdditionalTransactionData('riskData', $riskData)
+            ->setInvoiceId('202205021237');
+
+        $customer = $this->getMaximumCustomerInclShippingAddress();
+        $basket = $this->createV2Basket();
+
+        $authorization = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
+        $this->assertNotEmpty($authorization->getId());
+        $this->assertTrue($authorization->isSuccess());
+
+        return $authorization;
+    }
+
+    /**
+     * Verify that paylater Invoice type can be authorized.
+     *
+     * @test
+     *
+     * @depends paylaterInvoiceCanbeAuthorized
+     *
+     * @param mixed $paylaterInvoice
+     * @param mixed $authorization
+     */
+    public function paylaterInvoiceCanbeCharged($authorization)
+    {
+        $charge = $this->unzer->chargePayment($authorization->getPayment(), 99.99);
+
+        $this->assertNotEmpty($charge->getId());
+        $this->assertTrue($charge->isSuccess());
     }
 }
