@@ -90,6 +90,21 @@ class CustomerTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify shipping type can be set for shipping address of customer resource.
+     *
+     * @test
+     */
+    public function customerWithShippingTypeCanBeCreatedAndFetched()
+    {
+        $customer   = $this->getMaximumCustomerInclShippingAddress();
+        $customer->getShippingAddress()->setShippingType('shippingType');
+
+        $this->unzer->createCustomer($customer);
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
+        $this->assertEquals('shippingType', $fetchedCustomer->getShippingAddress()->getShippingType());
+    }
+
+    /**
      * @param Customer $customer
      * @depends maxCustomerCanBeCreatedAndFetched
      * @test

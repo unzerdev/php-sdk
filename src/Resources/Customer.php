@@ -343,10 +343,9 @@ class Customer extends AbstractUnzerResource
     {
         if (isset($response->companyInfo) && $this->companyInfo === null) {
             $this->companyInfo = new CompanyInfo();
+            $this->companyInfo->instantiateObjectsFromResponse($response->companyInfo);
         }
 
         parent::handleResponse($response, $method);
     }
-
-    //</editor-fold>
 }
