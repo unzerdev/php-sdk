@@ -114,8 +114,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
             ->setConfirmedAmount('1234')
             ->setConfirmedOrders('42')
             ->setRegistrationLevel('1')
-            ->setRegistrationDate('20160412')
-            ->setInternalScore(95);
+            ->setRegistrationDate('20160412');
 
         $authorization = new Authorization(99.99, 'EUR', 'https://unzer.com');
         $authorization->addAdditionalTransactionData('riskData', $riskData)
@@ -124,9 +123,11 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
         $customer = $this->getMaximumCustomerInclShippingAddress();
         $basket = $this->createV2Basket();
 
-        $authorization = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
-        $this->assertNotEmpty($authorization->getId());
-        $this->assertTrue($authorization->isSuccess());
+        $transaction = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
+        $this->assertNotEmpty($transaction->getId());
+        $this->assertNotEmpty($transaction->getAdditionalTransactionData()->riskData);
+        $this->assertEquals($authorization->getAdditionalTransactionData(), $transaction->getAdditionalTransactionData());
+        $this->assertTrue($transaction->isSuccess());
 
         return $authorization;
     }

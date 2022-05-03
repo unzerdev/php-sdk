@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
+use UnzerSDK\Constants\CustomerGroups;
 use UnzerSDK\Resources\AbstractUnzerResource;
 
 class RiskData extends AbstractUnzerResource
@@ -96,7 +97,7 @@ class RiskData extends AbstractUnzerResource
     }
 
     /**
-     * @param string|null $registrationDate
+     * @param string|null $registrationDate Dateformat must be "YYYYMMDD".
      *
      * @return RiskData
      */
@@ -135,6 +136,7 @@ class RiskData extends AbstractUnzerResource
 
     /**
      * @param string|null $customerGroup
+     * @see CustomerGroups
      *
      * @return RiskData
      */
