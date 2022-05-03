@@ -28,9 +28,11 @@ namespace UnzerSDK\test\Fixtures;
 
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Constants\ShippingTypes;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\CompanyOwner;
 
 trait CustomerFixtureTrait
 {
@@ -122,12 +124,20 @@ trait CustomerFixtureTrait
      */
     public function getMaximalRegisteredB2bCustomer(): Customer
     {
-        return $this->getMinimalRegisteredB2bCustomer()
+        $owner = (new CompanyOwner())
+            ->setFirstname('firstname')
+            ->setLastname('lastname')
+            ->setBirthdate('1999-01-01');
+
+        $customer = $this->getMinimalRegisteredB2bCustomer()
             ->setShippingAddress($this->getShippingAddress())
             ->setSalutation(Salutations::MR)
             ->setMobile('+49172123456')
             ->setPhone('+4962216471100')
             ->setBillingAddress($this->getBillingAddress());
+
+        $customer->getCompanyInfo()->setOwner($owner);
+        return $customer;
     }
 
     /**
@@ -159,6 +169,7 @@ trait CustomerFixtureTrait
             ->setZip('60386')
             ->setCity('Frankfurt am Main')
             ->setCountry('DE')
-            ->setState('DE-BO');
+            ->setState('DE-BO')
+            ->setShippingType(ShippingTypes::EQUALS_BILLING);
     }
 }
