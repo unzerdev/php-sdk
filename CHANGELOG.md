@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 * Add properties `companyType` and `owner` to `CompanyInfo` class.
 * Add shipping type to `Address` class.
 * Allow setting the clientIp manually.
+* Allow setting riskData for authorize request.
+* Add new methods for `authorize` and `charge` transactions that use prepared objects only.
 
 ### Changed
 * Add "geoLocation" property to all payment type classes.

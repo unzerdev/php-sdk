@@ -88,13 +88,14 @@ class CardTest extends BaseIntegrationTest
     public function cardShouldUseEmail($email, $expected)
     {
         // when.
-        /** @var Card $card */
         $card = $this->createCardObject('4711100000000000');
         $this->assertNull($card->getId());
         $this->assertNull($card->getEmail()); // default value is set.
 
         // then.
         $card->setEmail($email); // override email.
+
+        /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
         $this->assertNotNull($card->getId());
         $this->assertEquals($email, $card->getEmail());

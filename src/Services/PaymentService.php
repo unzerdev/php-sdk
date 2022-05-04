@@ -212,8 +212,7 @@ class PaymentService implements PaymentServiceInterface
         string $orderId = null,
         string $invoiceId = null
     ): Charge {
-        $paymentResource = $this->getResourceService()->getPaymentResource($payment);
-        return $this->chargePayment($paymentResource, $amount, $orderId, $invoiceId);
+        return $this->chargePayment($payment, $amount, $orderId, $invoiceId);
     }
 
     /**
@@ -222,20 +221,30 @@ class PaymentService implements PaymentServiceInterface
     public function chargePayment(
         $payment,
         float $amount = null,
-        string $currency = null,
         string $orderId = null,
         string $invoiceId = null
     ): Charge {
-        $charge = new Charge($amount, $currency);
-        $charge->setPayment($payment);
+        $charge = new Charge($amount);
+
         if ($orderId !== null) {
             $charge->setOrderId($orderId);
         }
         if ($invoiceId !== null) {
             $charge->setInvoiceId($invoiceId);
         }
-        $payment->addCharge($charge);
+
+        return $this->performChargeOnPayment($payment, $charge);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function performChargeOnPayment($payment, $charge): Charge
+    {
+        $paymentResource = $this->getResourceService()->getPaymentResource($payment);
+        $paymentResource->addCharge($charge);
         $this->getResourceService()->createResource($charge);
+
         return $charge;
     }
 

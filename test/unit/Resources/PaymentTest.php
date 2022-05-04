@@ -1240,13 +1240,13 @@ class PaymentTest extends BasePaymentTest
             ->withConsecutive(
                 [$payment, null, null],
                 [$payment, 1.1, null],
-                [$payment, 2.2, 'MyCurrency']
+                [$payment, 2.2]
             )->willReturn(new Charge());
         $payment->setParentResource($unzerMock);
 
         $payment->charge();
         $payment->charge(1.1);
-        $payment->charge(2.2, 'MyCurrency');
+        $payment->charge(2.2);
     }
 
     /**

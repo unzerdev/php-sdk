@@ -136,6 +136,7 @@ class RiskData extends AbstractUnzerResource
 
     /**
      * @param string|null $customerGroup
+     *
      * @see CustomerGroups
      *
      * @return RiskData

@@ -176,6 +176,23 @@ interface PaymentServiceInterface
     ): Charge;
 
     /**
+     * Performs a Charge transaction for a previously authorized payment.
+     * To perform a full charge of the authorized amount leave the amount null.
+     *
+     * @param string|Payment $payment The Payment object the Authorization to charge belongs to.
+     * @param string|Charge  $charge  The amount to charge.
+     *
+     * @return Charge The resulting object of the Charge resource.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function performChargeOnPayment(
+        $payment,
+        $charge
+    ): Charge;
+
+    /**
      * Performs a Charge transaction for the Authorization of the given Payment object.
      * To perform a full charge of the authorized amount leave the amount null.
      *
@@ -201,7 +218,6 @@ interface PaymentServiceInterface
      *
      * @param Payment|string $payment   The Payment object to be charged.
      * @param float|null     $amount    The amount to charge.
-     * @param string|null    $currency  The Currency of the charged amount.
      * @param string|null    $orderId   The order id from the shop.
      * @param string|null    $invoiceId The invoice id from the shop.
      *
@@ -213,7 +229,6 @@ interface PaymentServiceInterface
     public function chargePayment(
         $payment,
         float $amount = null,
-        string $currency = null,
         string $orderId = null,
         string $invoiceId = null
     ): Charge;

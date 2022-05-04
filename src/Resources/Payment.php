@@ -684,17 +684,16 @@ class Payment extends AbstractUnzerResource
     /**
      * Performs a Charge transaction on the payment.
      *
-     * @param float|null  $amount   The amount to be charged.
-     * @param string|null $currency The currency of the charged amount.
+     * @param float|null $amount The amount to be charged.
      *
      * @return Charge|AbstractUnzerResource The resulting Charge object.
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function charge($amount = null, $currency = null): Charge
+    public function charge($amount = null): Charge
     {
-        return $this->getUnzerObject()->chargePayment($this, $amount, $currency);
+        return $this->getUnzerObject()->chargePayment($this, $amount);
     }
 
     /**

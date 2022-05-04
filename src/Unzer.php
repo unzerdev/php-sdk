@@ -804,12 +804,15 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public function chargePayment(
         $payment,
         float $amount = null,
-        string $currency = null,
         string $orderId = null,
         string $invoiceId = null
     ): Charge {
-        $paymentObject = $this->resourceService->getPaymentResource($payment);
-        return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId);
+        return $this->paymentService->chargePayment($payment, $amount, $orderId, $invoiceId);
+    }
+
+    public function performChargeOnPayment($payment, $charge): Charge
+    {
+        return $this->paymentService->performChargeOnPayment($payment, $charge);
     }
 
     //</editor-fold>
