@@ -530,6 +530,9 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
                 if (!empty($value->riskData) && $value->riskData instanceof self) {
                     $value->riskData = $value->riskData->expose();
                 }
+                if (!empty($value->shipping) && $value->shipping instanceof self) {
+                    $value->shipping = $value->shipping->expose();
+                }
             }
 
             $properties[$property] = $value;

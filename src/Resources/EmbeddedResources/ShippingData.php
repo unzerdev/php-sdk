@@ -29,68 +29,68 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 class ShippingData extends AbstractUnzerResource
 {
     /** @var string|null $deliveryTrackingId */
-    protected $threatMetrixId;
+    protected $deliveryTrackingId;
 
     /** @var string|null $deliveryService */
-    protected $registrationLevel;
+    protected $deliveryService;
 
     /** @var string|null $returnTrackingId */
-    protected $registrationDate;
+    protected $returnTrackingId;
 
     /**
      * @return string|null
      */
-    public function getThreatMetrixId(): ?string
+    public function getDeliveryTrackingId(): ?string
     {
-        return $this->threatMetrixId;
+        return $this->deliveryTrackingId;
     }
 
     /**
-     * @param string|null $threatMetrixId
+     * @param string|null $deliveryTrackingId
      *
      * @return ShippingData
      */
-    public function setThreatMetrixId(?string $threatMetrixId): ShippingData
+    public function setDeliveryTrackingId(?string $deliveryTrackingId): ShippingData
     {
-        $this->threatMetrixId = $threatMetrixId;
+        $this->deliveryTrackingId = $deliveryTrackingId;
         return $this;
     }
 
     /**
      * @return string|null
      */
-    public function getRegistrationLevel(): ?string
+    public function getDeliveryService(): ?string
     {
-        return $this->registrationLevel;
+        return $this->deliveryService;
     }
 
     /**
-     * @param string|null $registrationLevel
+     * @param string|null $deliveryService
      *
      * @return ShippingData
      */
-    public function setRegistrationLevel(?string $registrationLevel): ShippingData
+    public function setDeliveryService(?string $deliveryService): ShippingData
     {
-        $this->registrationLevel = $registrationLevel;
+        $this->deliveryService = $deliveryService;
         return $this;
     }
 
     /**
      * @return string|null
      */
-    public function getRegistrationDate(): ?string
+    public function getReturnTrackingId(): ?string
     {
-        return $this->registrationDate;
+        return $this->returnTrackingId;
     }
 
     /**
-     * @param string|null $registrationDate
+     * @param string|null $returnTrackingId
      *
      * @return ShippingData
      */
-    public function setRegistrationDate(?string $registrationDate): ShippingData
+    public function setReturnTrackingId(?string $returnTrackingId): ShippingData
     {
-        $this->registrationDate = $registrationDate;
+        $this->returnTrackingId = $returnTrackingId;
         return $this;
     }
 }
