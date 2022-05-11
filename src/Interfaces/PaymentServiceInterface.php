@@ -45,7 +45,7 @@ interface PaymentServiceInterface
     /**
      * Performs an Authorization transaction and returns the resulting Authorization resource.
      *
-     * @param Authorization          $authorization The amount to authorize.
+     * @param Authorization          $authorization The Authorization object containing transaction specific information.
      * @param BasePaymentType|string $paymentType   The PaymentType object or the id of the PaymentType to use.
      * @param Customer|string|null   $customer      The Customer object or the id of the customer resource to reference.
      * @param Metadata|null          $metadata      The Metadata object containing custom information for the payment.
@@ -111,7 +111,7 @@ interface PaymentServiceInterface
     /**
      * Performs a Charge transaction and returns the resulting Charge resource.
      *
-     * @param Charge                 $charge      The amount to charge.
+     * @param Charge                 $charge      The Charge object containing transaction specific information.
      * @param string|BasePaymentType $paymentType The PaymentType object or the id of the PaymentType to use.
      * @param Customer|string|null   $customer    The Customer object or the id of the customer resource to reference.
      * @param Metadata|null          $metadata    The Metadata object containing custom information for the payment.

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 * Add shipping type to `Address` class.
 * Allow setting the clientIp manually.
 * Allow setting riskData for authorize request.
+* Allow setting shipping for charge request.
 * Add new methods for `authorize` and `charge` transactions that use prepared objects only.
 
 ### Changed
