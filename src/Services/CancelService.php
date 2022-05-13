@@ -170,6 +170,11 @@ class CancelService implements CancelServiceInterface
         if (is_string($payment)) {
             $paymentObject = $this->getResourceService()->fetchPayment($payment);
         }
+        $paymentType = $paymentObject->getPaymentType();
+        if ($paymentType !== null && $paymentType->supportsDirectPaymentCancel()) {
+            $message = 'The used payment type is not supported by this cancel method. Please use Unzer::cancelAuthorizedPayment() or Unzer::cancelChargedPayment() instead.';
+            throw new RuntimeException($message);
+        }
 
         if (!$paymentObject instanceof Payment) {
             throw new RuntimeException('Invalid payment object.');
@@ -306,6 +311,47 @@ class CancelService implements CancelServiceInterface
         return $cancellations;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelAuthorizedPayment($payment, ?Cancellation $cancellation = null): Cancellation
+    {
+        if ($cancellation === null) {
+            $cancellation = new Cancellation();
+        }
+
+        $paymentResource = $this->getResourceService()->getPaymentResource($payment);
+
+        // Authorization is required to build the proper resource path for the cancellation.
+        $authorization = (new Authorization())->setParentResource($paymentResource);
+        $cancellation->setPayment($paymentResource)
+            ->setParentResource($authorization);
+
+        /** @var Cancellation $cancellation */
+        $cancellation = $this->getResourceService()->createResource($cancellation);
+        return $cancellation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelChargedPayment($payment, ?Cancellation $cancellation = null): Cancellation
+    {
+        if ($cancellation === null) {
+            $cancellation = new Cancellation();
+        }
+        $paymentResource = $this->getResourceService()->getPaymentResource($payment);
+
+        // Charge is required to build the proper resource path for the cancellation.
+        $charge = (new Charge())->setParentResource($paymentResource);
+        $cancellation->setPayment($paymentResource)
+            ->setParentResource($charge);
+
+        /** @var Cancellation $cancellation */
+        $cancellation = $this->getResourceService()->createResource($cancellation);
+        return $cancellation;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
@@ -349,8 +395,6 @@ class CancelService implements CancelServiceInterface
         return $remainingToCancel;
     }
 
-    //</editor-fold>/**
-
     protected function calculateReceiptAmount(array $charges): float
     {
         $receiptAmount = 0;
@@ -362,4 +406,6 @@ class CancelService implements CancelServiceInterface
         }
         return $receiptAmount;
     }
+
+    //</editor-fold>/**
 }

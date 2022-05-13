@@ -63,6 +63,9 @@ class PaymentTest extends BasePaymentTest
         /** @noinspection UnnecessaryAssertionInspection */
         $this->assertInstanceOf(Amount::class, $payment->getAmount());
         $this->assertNull($payment->getTraceId());
+        $this->assertNull($payment->getAuthorization());
+        $this->assertIsEmptyArray($payment->getReversals());
+        $this->assertIsEmptyArray($payment->getRefunds());
 
         // update
         $ids = (object)['traceId' => 'myTraceId'];
@@ -77,6 +80,81 @@ class PaymentTest extends BasePaymentTest
         $this->assertSame($authorize, $payment->getAuthorization(true));
         $this->assertSame($payout, $payment->getPayout(true));
         $this->assertSame('myTraceId', $payment->getTraceId());
+    }
+
+    /**
+     * Verify that direct payment cancellations are handled correctly.
+     *
+     * @test
+     */
+    public function PaymentCancellationsShouldBeHandledAsExpected()
+    {
+        $payment = (new Payment())->setParentResource(new Unzer('s-priv-1234'));
+
+        $this->assertIsEmptyArray($payment->getReversals());
+        $this->assertIsEmptyArray($payment->getRefunds());
+
+        $transactions = [
+            (object)[
+                "date" => "2022-05-13 08:04:29",
+                "type" => "authorize",
+                "status" => "success",
+                "url" => "https://api.unzer.com/v1/payments/s-pay-777/authorize/s-aut-1",
+                "amount" => "99.9900"
+            ],
+            (object)[
+                "date" => "2022-05-13 08:04:30",
+                "type" => "charge",
+                "status" => "success",
+                "url" => "https://api.unzer.com/v1/payments/s-pay-777/charges/s-chg-1",
+                "amount" => "99.9900"
+            ],
+            (object)[
+                "date" => "2022-05-13 08:04:31",
+                "type" => "cancel-authorize",
+                "status" => "success",
+                "url" => "https://api.unzer.com/v1/payments/s-pay-777/authorize/cancels/s-cnl-1",
+                "amount" => "22.2200"
+            ],
+            (object)[
+                "date" => "2022-05-13 08:04:31",
+                "type" => "cancel-charge",
+                "status" => "success",
+                "url" => "https://api.unzer.com/v1/payments/s-pay-777/charges/cancels/s-cnl-1",
+                "amount" => "22.2200"
+            ]
+        ];
+
+        $payment->handleResponse((object)['transactions' => $transactions]);
+
+        $this->assertCount(1, $payment->getReversals());
+        $this->assertCount(1, $payment->getRefunds());
+        $this->assertCount(2, $payment->getCancellations());
+    }
+
+    /**
+     * Verify that adding refunds/reversals to the payment happens as expected
+     *
+     * @test
+     */
+    public function verifyAddingCancelationsWorksProperly()
+    {
+        $payment = (new Payment())->setParentResource(new Unzer('s-priv-1234'));
+        $this->assertIsEmptyArray($payment->getReversals());
+        $this->assertIsEmptyArray($payment->getRefunds());
+        $reversal1 = (new Cancellation())->setId('s-cnl-1')->setAmount(99.99);
+        $reversal2 = (new Cancellation())->setId('s-cnl-2')->setAmount(99.99);
+        $reversal3 = (new Cancellation())->setId('s-cnl-2')->setAmount(33.33);
+
+        $payment->addReversal($reversal1);
+        $payment->addReversal($reversal2);
+        $this->assertCount(2, $payment->getReversals());
+
+        // update existing transaction.
+        $payment->addReversal($reversal3);
+        $this->assertCount(2, $payment->getReversals());
+
+        $this->assertEquals(33.33, $payment->getReversals()['s-cnl-2']->getAmount());
     }
 
     /**

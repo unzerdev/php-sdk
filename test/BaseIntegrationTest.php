@@ -61,6 +61,7 @@ class BaseIntegrationTest extends BasePaymentTest
 
     /**
      * @return Authorization
+     *
      * @throws \UnzerSDK\Exceptions\UnzerApiException
      */
     protected function createPaylaterAuthorization(): Authorization

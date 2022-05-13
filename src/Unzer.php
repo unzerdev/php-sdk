@@ -63,7 +63,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.1.6.0';
+    public const SDK_VERSION = '1.2.0.0';
 
     /** @var string $key */
     private $key;
@@ -604,6 +604,22 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchRefund($charge, $cancellationId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaymentRefund($payment, $cancellationId): Cancellation
+    {
+        return $this->resourceService->fetchPaymentRefund($payment, $cancellationId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaymentReversal($payment, $cancellationId): Cancellation
+    {
+        return $this->resourceService->fetchPaymentReversal($payment, $cancellationId);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Shipment resource">
@@ -899,6 +915,24 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     ): Cancellation {
         return $this->cancelService
             ->cancelCharge($charge, $amount, $reasonCode, $referenceText, $amountNet, $amountVat);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelAuthorizedPayment($payment, ?Cancellation $cancellation = null): Cancellation
+    {
+        return $this->cancelService
+            ->cancelAuthorizedPayment($payment, $cancellation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelChargedPayment($payment, ?Cancellation $cancellation = null): Cancellation
+    {
+        return $this->cancelService
+            ->cancelChargedPayment($payment, $cancellation);
     }
 
     //</editor-fold>

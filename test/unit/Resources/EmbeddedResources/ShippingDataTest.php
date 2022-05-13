@@ -26,7 +26,6 @@
  */
 namespace UnzerSDK\test\unit\Resources\EmbeddedResources;
 
-use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\test\BasePaymentTest;
 

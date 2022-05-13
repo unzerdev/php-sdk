@@ -70,6 +70,20 @@ class Payment extends AbstractUnzerResource
     /** @var array $charges */
     private $charges = [];
 
+    /**
+     * Associative array using the Id of the cancellations as the key.
+     *
+     * @var array $reversals
+     */
+    private $reversals = [];
+
+    /**
+     * Associative array using the Id of the cancellations as the key.
+     *
+     * @var array $refunds
+     */
+    private $refunds = [];
+
     /** @var Customer $customer */
     private $customer;
 
@@ -466,6 +480,12 @@ class Payment extends AbstractUnzerResource
      */
     public function getCancellations(): array
     {
+        if (!empty($this->refunds) || !(empty($this->reversals))) {
+            return array_merge(
+                array_values($this->reversals),
+                array_values($this->refunds)
+            );
+        }
         $refunds = [];
 
         /** @var Charge $charge */
@@ -588,6 +608,69 @@ class Payment extends AbstractUnzerResource
     protected function setCurrency(string $currency): self
     {
         $this->amount->handleResponse((object)['currency' => $currency]);
+        return $this;
+    }
+
+    /**
+     * @return array Associative array with cancellation id as the key and the Cancellation object as value.
+     */
+    public function getRefunds(): array
+    {
+        return $this->refunds;
+    }
+
+    /**
+     * @param array $refunds
+     *
+     * @return Payment
+     */
+    public function setRefunds(array $refunds): Payment
+    {
+        $this->refunds = $refunds;
+        return $this;
+    }
+
+    /**
+     * @param Cancellation $refund
+     *
+     * @return Payment
+     */
+    public function addRefund(Cancellation $refund): Payment
+    {
+        $this->refunds[$refund->getId()] = $refund;
+        return $this;
+    }
+
+    /**
+     * @return array Associative array with cancellation id as the key and the Cancellation object as value.
+     */
+    public function getReversals(): array
+    {
+        return $this->reversals;
+    }
+
+    /**
+     * @param array $reversals
+     *
+     * @return Payment
+     */
+    public function setReversals(array $reversals): Payment
+    {
+        $this->reversals = $reversals;
+        return $this;
+    }
+
+    /**
+     * Adds a Cancellation to the associative reversal array with the cancellation id as the key. If a cancellation with
+     * that ID already exists it will be overwritten.
+     *
+     * @param Cancellation $reversal
+     *
+     * @return Payment
+     */
+    public function addReversal(Cancellation $reversal): Payment
+    {
+        $this->reversals[$reversal->getId()] = $reversal;
         return $this;
     }
 
@@ -850,15 +933,22 @@ class Payment extends AbstractUnzerResource
     private function updateReversalTransaction($transaction): void
     {
         $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
-        $initialTransaction = $this->getInitialTransaction(true);
-        if (!$initialTransaction instanceof Authorization && !$initialTransaction instanceof Charge) {
-            throw new RuntimeException('The initial transaction object (Authorize or Charge) can not be found.');
-        }
 
-        $cancellation = $initialTransaction->getCancellation($transactionId, true);
-        if (!$cancellation instanceof Cancellation) {
+        $isPaymentCancellation = IdService::isPaymentCancellation($transaction->url);
+        if ($isPaymentCancellation) {
             $cancellation = (new Cancellation())->setPayment($this)->setId($transactionId);
-            $initialTransaction->addCancellation($cancellation);
+            $this->addReversal($cancellation);
+        } else {
+            $initialTransaction = $this->getInitialTransaction(true);
+            if (!$initialTransaction instanceof Authorization && !$initialTransaction instanceof Charge) {
+                throw new RuntimeException('The initial transaction object (Authorize or Charge) can not be found.');
+            }
+
+            $cancellation = $initialTransaction->getCancellation($transactionId, true);
+            if (!$cancellation instanceof Cancellation) {
+                $cancellation = (new Cancellation())->setPayment($this)->setId($transactionId);
+                $initialTransaction->addCancellation($cancellation);
+            }
         }
 
         $cancellation->handleResponse($transaction);
@@ -876,17 +966,24 @@ class Payment extends AbstractUnzerResource
     private function updateRefundTransaction($transaction): void
     {
         $refundId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
-        $chargeId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
-
-        $charge = $this->getCharge($chargeId, true);
-        if (!$charge instanceof Charge) {
-            throw new RuntimeException('The Charge object can not be found.');
+        $isPaymentCancellation = IdService::isPaymentCancellation($transaction->url);
+        if ($isPaymentCancellation) {
+            $cancellation = (new Cancellation())->setPayment($this)->setId($refundId);
+            $this->addRefund($cancellation);
         }
 
-        $cancellation = $charge->getCancellation($refundId, true);
-        if (!$cancellation instanceof Cancellation) {
-            $cancellation = (new Cancellation())->setPayment($this)->setId($refundId);
-            $charge->addCancellation($cancellation);
+        if (!$isPaymentCancellation) {
+            $chargeId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
+            $charge = $this->getCharge($chargeId, true);
+            if (!$charge instanceof Charge) {
+                throw new RuntimeException('The Charge object can not be found.');
+            }
+            $cancellation = $charge->getCancellation($refundId, true);
+
+            if (!$cancellation instanceof Cancellation) {
+                $cancellation = (new Cancellation())->setPayment($this)->setId($refundId);
+                $charge->addCancellation($cancellation);
+            }
         }
 
         $cancellation->handleResponse($transaction);

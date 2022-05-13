@@ -32,6 +32,9 @@ abstract class BasePaymentType extends AbstractUnzerResource
 {
     use HasGeoLocation;
 
+    /** @var bool  */
+    protected const SUPPORT_DIRECT_PAYMENT_CANCEL = false;
+
     /**
      * Return true for invoice types.
      * This enables you to handle the invoice workflow correctly.
@@ -47,6 +50,10 @@ abstract class BasePaymentType extends AbstractUnzerResource
     }
 
     //<editor-fold desc="Overridable Methods">
+    public function supportsDirectPaymentCancel(): bool
+    {
+        return static::SUPPORT_DIRECT_PAYMENT_CANCEL;
+    }
 
     /**
      * {@inheritDoc}

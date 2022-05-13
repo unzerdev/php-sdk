@@ -83,7 +83,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
      *
      * @param mixed $paylaterInvoice
      */
-    public function paylaterInvoiceCanbeAuthorized($paylaterInvoice) :Authorization
+    public function paylaterInvoiceCanbeAuthorized($paylaterInvoice): Authorization
     {
         $authorization = new Authorization(99.99, 'EUR', 'https://unzer.com');
         $authorization->setInvoiceId('202205021237');
@@ -99,7 +99,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify that paylater Invoice type can be authorized.
+     * Verify that paylater Invoice type can be authorized with riskdata.
      *
      * @test
      *
@@ -107,7 +107,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
      *
      * @param mixed $paylaterInvoice
      */
-    public function paylaterInvoiceCanbeAuthorizedWithRiskData($paylaterInvoice) :Authorization
+    public function paylaterInvoiceCanbeAuthorizedWithRiskData($paylaterInvoice): Authorization
     {
         $riskData = new RiskData();
         $riskData->setThreatMetrixId('f544if49wo4f74ef1x')
@@ -135,7 +135,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify that paylater Invoice type can be authorized.
+     * Verify that paylater Invoice type can be charged.
      *
      * @test
      *
@@ -146,14 +146,14 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
      */
     public function paylaterInvoiceCanbeCharged($authorization)
     {
-        $charge = $this->unzer->chargePayment($authorization->getPayment(), 99.99);
+        $charge = $this->unzer->performChargeOnPayment($authorization->getPayment(), new Charge(99.99));
 
         $this->assertNotEmpty($charge->getId());
         $this->assertTrue($charge->isSuccess());
     }
 
     /**
-     * Verify that paylater Invoice type can be authorized.
+     * Verify that paylater Invoice type can be charged with shippingdata.
      *
      * @test
      *
@@ -164,15 +164,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
      */
     public function paylaterInvoiceCanbeChargedWithShippingData()
     {
-        $paylaterInvoice = $this->unzer->createPaymentType(new PaylaterInvoice());
-
-        $authorization = new Authorization(99.99, 'EUR', 'https://unzer.com');
-        $authorization->setInvoiceId('202205021237');
-
-        $customer = $this->getMaximumCustomerInclShippingAddress();
-        $basket = $this->createV2Basket();
-
-        $authorization = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
+        $authorization = $this->createPaylaterAuthorization();
         $shippingData = (object)[
             "deliveryTrackingId" => "00340434286851877897",
             "deliveryService" => "DHL",
