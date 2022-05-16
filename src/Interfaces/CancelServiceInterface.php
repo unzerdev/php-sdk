@@ -143,13 +143,13 @@ interface CancelServiceInterface
     ): array;
 
     /**
-     * Performs a Cancellation transaction on the Payment.
+     * Performs a Cancellation transaction on the Payment. Should only be used for "paylater-invoice" payments.
      * If no Cancellation is given a full cancel will be performed.
      *
      * @param Payment|string    $payment      The Payment object or the id of the Payment to be cancelled.
      * @param Cancellation|null $cancellation
      *
-     * @return Cancellation A Cancellation objects created with this cancel call.
+     * @return Cancellation A Cancellation object created with this cancel call.
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
@@ -157,13 +157,13 @@ interface CancelServiceInterface
     public function cancelAuthorizedPayment($payment, ?Cancellation $cancellation = null): Cancellation;
 
     /**
-     * Performs a Cancellation transaction on the Payment.
-     * If no amount is given a full cancel will be performed i. e. all Charges and Authorizations will be cancelled.
+     * Performs a Cancellation transaction on the Payment. Should only be used for "paylater-invoice" payments.
+     * If no Cancellation is given a full cancel will be performed.
      *
      * @param Payment|string    $payment      The Payment object or the id of the Payment to be cancelled.
      * @param Cancellation|null $cancellation
      *
-     * @return Cancellation An array holding all Cancellation objects created with this cancel call.
+     * @return Cancellation A Cancellation object created with this cancel call.
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.

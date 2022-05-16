@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
   * `Unzer::fetchPaymentRefund()`
 
 ### Changed
+* Remove redundant `currency` parameter from `Unzer::chargePayment()` method.
 * Add "geoLocation" property to all payment type classes.
 * Several minor improvements.
 
