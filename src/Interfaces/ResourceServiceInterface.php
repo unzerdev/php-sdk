@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.unzer.com/
+ * @link     https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
+ * @author   Simon Gabriel <development@unzer.com>
  *
  * @package  UnzerSDK\Interfaces
  */
+
 namespace UnzerSDK\Interfaces;
 
 use UnzerSDK\Exceptions\UnzerApiException;
@@ -373,6 +374,32 @@ interface ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchRefund(Charge $charge, $cancellationId): Cancellation;
+
+    /**
+     * Fetch a cancellation resource of a charged payment (aka refund).
+     *
+     * @param Payment $payment        The payment object to fetch the cancellation for.
+     * @param string  $cancellationId The id of the cancellation to fetch.
+     *
+     * @return Cancellation The fetched cancellation (refund).
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchPaymentRefund($payment, $cancellationId): Cancellation;
+
+    /**
+     * Fetch a cancellation resource of an authorized payment (aka reversal).
+     *
+     * @param Payment $payment        The payment object to fetch the cancellation for.
+     * @param string  $cancellationId The id of the cancellation to fetch.
+     *
+     * @return Cancellation The fetched cancellation (refund).
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchPaymentReversal($payment, $cancellationId): Cancellation;
 
     /**
      * Fetch a shipment resource of the given payment by id.

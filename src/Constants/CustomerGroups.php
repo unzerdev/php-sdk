@@ -1,6 +1,6 @@
 <?php
 /**
- * This represents the paylater invoice payment type.
+ * This file contains definitions of the allowed salutations.
  *
  * Copyright (C) 2022 - today Unzer E-Com GmbH
  *
@@ -20,11 +20,13 @@
  *
  * @author  David Owusu <development@unzer.com>
  *
- * @package  UnzerSDK\PaymentTypes
+ * @package  UnzerSDK\Constants
  */
-namespace UnzerSDK\Resources\PaymentTypes;
+namespace UnzerSDK\Constants;
 
-class PaylaterInvoice extends BasePaymentType
+class CustomerGroups
 {
-    protected const SUPPORT_DIRECT_PAYMENT_CANCEL = true;
+    public const TOP = 'TOP';
+    public const GOOD = 'GOOD';
+    public const NEUTRAL = 'NEUTRAL';
 }

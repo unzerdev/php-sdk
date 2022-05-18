@@ -57,6 +57,21 @@ class IdService
     }
 
     /**
+     * Determine base on the cancellation URL if the transaction refers directly to the payment or not.
+     *
+     * @param string $url
+     *
+     * @return string
+     *
+     * @throws RuntimeException
+     */
+    public static function isPaymentCancellation($url): string
+    {
+        $pattern = '/\/payments\/[s|p]{1}-pay-[a-z\d]+\/(charges|authorize)\/cancels\/[s|p]{1}-cnl-[a-z\d]+/';
+        return preg_match($pattern, $url) === 1;
+    }
+
+    /**
      * Behaves like getResourceIdFromUrl but does not throw exception but returns null if the id can not be detected.
      *
      * @param string $url
