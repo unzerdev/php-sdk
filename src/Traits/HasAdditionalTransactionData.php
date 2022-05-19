@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.unzer.com/
+ * @link     https://docs.unzer.com/
  *
- * @author  David Owusu <development@unzer.com>
+ * @author   David Owusu <development@unzer.com>
  *
  * @package  UnzerSDK\Traits
  */
@@ -26,6 +26,8 @@
 namespace UnzerSDK\Traits;
 
 use stdClass;
+use UnzerSDK\Resources\EmbeddedResources\RiskData;
+use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 
 trait HasAdditionalTransactionData
@@ -68,5 +70,29 @@ trait HasAdditionalTransactionData
         }
         $this->additionalTransactionData->$name = $value;
         return $this;
+    }
+
+    public function setShipping(?ShippingData $shipping): self
+    {
+        $this->addAdditionalTransactionData('shipping', $shipping);
+        return $this;
+    }
+
+    public function getShipping(): ?ShippingData
+    {
+        $shipping = $this->getAdditionalTransactionData()->shipping ?? null;
+        return $shipping instanceof ShippingData ? $shipping : null;
+    }
+
+    public function setRiskData(?RiskData $riskData): self
+    {
+        $this->addAdditionalTransactionData('riskData', $riskData);
+        return $this;
+    }
+
+    public function getRiskData(): ?RiskData
+    {
+        $riskData = $this->getAdditionalTransactionData()->riskData ?? null;
+        return $riskData instanceof RiskData ? $riskData : null;
     }
 }

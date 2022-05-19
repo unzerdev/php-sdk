@@ -27,6 +27,8 @@ namespace UnzerSDK\Resources\TransactionTypes;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\EmbeddedResources\RiskData;
+use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Traits\HasAdditionalTransactionData;
@@ -129,9 +131,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
             $payment->handleResponse((object)['redirectUrl' => $response->redirectUrl]);
         }
 
-        if (isset($response->additionalTransactionData)) {
-            $this->setAdditionalTransactionData($response->additionalTransactionData);
-        }
+        $this->handleAdditionalTransactionData($response);
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
             $this->fetchPayment();
@@ -174,6 +174,51 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
         $payment = $this->getPayment();
         if ($payment instanceof AbstractUnzerResource) {
             $this->fetchResource($payment);
+        }
+    }
+
+    /**
+     * @param stdClass $response
+     *
+     * @return void
+     */
+    protected function handleAdditionalTransactionData(stdClass $response): void
+    {
+        if (isset($response->additionalTransactionData)) {
+            $this->setAdditionalTransactionData($response->additionalTransactionData);
+
+            $this->handleRiskData($response);
+            $this->handleShipping($response);
+        }
+    }
+
+    /**
+     * @param stdClass $response
+     *
+     * @return void
+     */
+    protected function handleRiskData(stdClass $response): void
+    {
+        if (isset($response->additionalTransactionData->riskData)) {
+            $riskData = $response->additionalTransactionData->riskData;
+            $riskDataObject = $this->getRiskData() ?? new RiskData();
+            $riskDataObject->handleResponse($riskData);
+            $this->setRiskData($riskDataObject);
+        }
+    }
+
+    /**
+     * @param stdClass $response
+     *
+     * @return void
+     */
+    protected function handleShipping(stdClass $response): void
+    {
+        if (isset($response->additionalTransactionData->shipping)) {
+            $shipping = $response->additionalTransactionData->shipping;
+            $shippingObject = $this->getShipping() ?? new ShippingData();
+            $shippingObject->handleResponse($shipping);
+            $this->setShipping($shippingObject);
         }
     }
 }

@@ -119,7 +119,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
             ->setRegistrationDate('20160412');
 
         $authorization = new Authorization(99.99, 'EUR', 'https://unzer.com');
-        $authorization->addAdditionalTransactionData('riskData', $riskData)
+        $authorization->setRiskData($riskData)
             ->setInvoiceId('202205021237');
 
         $customer = $this->getMaximumCustomerInclShippingAddress();
@@ -127,7 +127,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
 
         $transaction = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
         $this->assertNotEmpty($transaction->getId());
-        $this->assertNotEmpty($transaction->getAdditionalTransactionData()->riskData);
+        $this->assertNotEmpty($transaction->getRiskData());
         $this->assertEquals($authorization->getAdditionalTransactionData(), $transaction->getAdditionalTransactionData());
         $this->assertTrue($transaction->isSuccess());
 
@@ -157,8 +157,6 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
      *
      * @test
      *
-     * @depends paylaterInvoiceCanbeAuthorized
-     *
      * @param mixed $paylaterInvoice
      * @param mixed $authorization
      */
@@ -177,7 +175,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
         $chargeInstance->setOrderId($this->generateRandomId())
             ->setInvoiceId($this->generateRandomId())
             ->setPaymentReference('reference')
-            ->addAdditionalTransactionData('shipping', $shipping);
+            ->setShipping($shipping);
 
         $chargeResponse = $this->unzer->performChargeOnPayment($authorization->getPayment(), $chargeInstance);
 
@@ -186,8 +184,8 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
 
         $fetchedCharge = $this->unzer->fetchChargeById($authorization->getPaymentId(), $chargeResponse->getId());
         $this->assertEquals(
-            $chargeResponse->getAdditionalTransactionData()->shipping,
-            $fetchedCharge->getAdditionalTransactionData()->shipping
+            $chargeResponse->getShipping(),
+            $fetchedCharge->getShipping()
         );
     }
 }
