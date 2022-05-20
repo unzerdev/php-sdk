@@ -153,7 +153,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
         }
 
         return [
-            'customer'=> $payment->getCustomer(),
+            'customer' => $payment->getCustomer(),
             'type' => $paymentType,
             'metadata' => $payment->getMetadata(),
             'basket' => $payment->getBasket()
@@ -178,29 +178,34 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     }
 
     /**
+     * Handle additional transaction data from API response.
+     *
      * @param stdClass $response
      *
      * @return void
      */
     protected function handleAdditionalTransactionData(stdClass $response): void
     {
-        if (isset($response->additionalTransactionData)) {
-            $this->setAdditionalTransactionData($response->additionalTransactionData);
+        $additionalTransactionData = $response->additionalTransactionData ?? null;
+        if ($additionalTransactionData !== null) {
+            $this->setAdditionalTransactionData($additionalTransactionData);
 
-            $this->handleRiskData($response);
-            $this->handleShipping($response);
+            $this->handleRiskData($additionalTransactionData);
+            $this->handleShipping($additionalTransactionData);
         }
     }
 
     /**
-     * @param stdClass $response
+     * Handle risk data object contained in additional transaction data from API response.
+     *
+     * @param stdClass $additionalTransactionData
      *
      * @return void
      */
-    protected function handleRiskData(stdClass $response): void
+    protected function handleRiskData(stdClass $additionalTransactionData): void
     {
-        if (isset($response->additionalTransactionData->riskData)) {
-            $riskData = $response->additionalTransactionData->riskData;
+        $riskData = $additionalTransactionData->riskData ?? null;
+        if ($riskData !== null) {
             $riskDataObject = $this->getRiskData() ?? new RiskData();
             $riskDataObject->handleResponse($riskData);
             $this->setRiskData($riskDataObject);
@@ -208,14 +213,16 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     }
 
     /**
-     * @param stdClass $response
+     * Handle risk data object contained in additional transaction data from API response.
+     *
+     * @param stdClass $additionalTransactionData
      *
      * @return void
      */
-    protected function handleShipping(stdClass $response): void
+    protected function handleShipping(stdClass $additionalTransactionData): void
     {
-        if (isset($response->additionalTransactionData->shipping)) {
-            $shipping = $response->additionalTransactionData->shipping;
+        $shipping = $additionalTransactionData->shipping ?? null;
+        if ($shipping !== null) {
             $shippingObject = $this->getShipping() ?? new ShippingData();
             $shippingObject->handleResponse($shipping);
             $this->setShipping($shippingObject);

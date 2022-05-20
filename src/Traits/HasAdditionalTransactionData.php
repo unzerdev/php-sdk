@@ -72,24 +72,48 @@ trait HasAdditionalTransactionData
         return $this;
     }
 
-    public function setShipping(?ShippingData $shipping): self
+    /**
+     * Sets the shipping value inside the additional transaction Data array.
+     *
+     * @param ShippingData|null $shippingData
+     *
+     * @return $this
+     */
+    public function setShipping(?ShippingData $shippingData): self
     {
-        $this->addAdditionalTransactionData('shipping', $shipping);
+        $this->addAdditionalTransactionData('shipping', $shippingData);
         return $this;
     }
 
+    /**
+     * Gets the shipping value from the additional transaction Data array.
+     *
+     * @return ShippingData|null Returns null if shipping is empty or does not contain a ShippingObject.
+     */
     public function getShipping(): ?ShippingData
     {
         $shipping = $this->getAdditionalTransactionData()->shipping ?? null;
         return $shipping instanceof ShippingData ? $shipping : null;
     }
 
+    /**
+     * Sets the riskData value inside the additional transaction Data array.
+     *
+     * @param RiskData|null $riskData
+     *
+     * @return $this
+     */
     public function setRiskData(?RiskData $riskData): self
     {
         $this->addAdditionalTransactionData('riskData', $riskData);
         return $this;
     }
 
+    /**
+     * Gets the riskData value from the additional transaction Data array.
+     *
+     * @return RiskData|null
+     */
     public function getRiskData(): ?RiskData
     {
         $riskData = $this->getAdditionalTransactionData()->riskData ?? null;

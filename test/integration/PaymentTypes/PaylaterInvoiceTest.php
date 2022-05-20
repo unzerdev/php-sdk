@@ -178,14 +178,10 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
             ->setShipping($shipping);
 
         $chargeResponse = $this->unzer->performChargeOnPayment($authorization->getPayment(), $chargeInstance);
-
         $this->assertNotEmpty($chargeResponse->getId());
         $this->assertTrue($chargeResponse->isSuccess());
 
         $fetchedCharge = $this->unzer->fetchChargeById($authorization->getPaymentId(), $chargeResponse->getId());
-        $this->assertEquals(
-            $chargeResponse->getShipping(),
-            $fetchedCharge->getShipping()
-        );
+        $this->assertEquals($shipping, $fetchedCharge->getShipping());
     }
 }
