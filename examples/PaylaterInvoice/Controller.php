@@ -91,6 +91,7 @@ try {
     // You'll need to remember the shortId to show it on the success or failure page
     $_SESSION['ShortId'] = $transaction->getShortId();
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
+    $_SESSION['isAuthorizeTransaction'] = true;
 /*    $_SESSION['additionalPaymentInformation'] =
         sprintf(
             "Please transfer the amount of %f %s to the following account:<br /><br />"
