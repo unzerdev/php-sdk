@@ -26,6 +26,7 @@ namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasInvoiceId;
 use UnzerSDK\Traits\HasRecurrenceType;
@@ -36,6 +37,7 @@ class Charge extends AbstractTransactionType
     use HasCancellations;
     use HasInvoiceId;
     use HasRecurrenceType;
+    use HasAccountInformation;
 
     /** @var float $amount */
     protected $amount;
@@ -45,18 +47,6 @@ class Charge extends AbstractTransactionType
 
     /** @var string $returnUrl */
     protected $returnUrl;
-
-    /** @var string $iban */
-    private $iban;
-
-    /** @var string bic */
-    private $bic;
-
-    /** @var string $holder */
-    private $holder;
-
-    /** @var string $descriptor */
-    private $descriptor;
 
     /** @var string $paymentReference */
     protected $paymentReference;
@@ -158,94 +148,6 @@ class Charge extends AbstractTransactionType
     public function setReturnUrl($returnUrl): self
     {
         $this->returnUrl = $returnUrl;
-        return $this;
-    }
-
-    /**
-     * Returns the IBAN of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getIban(): ?string
-    {
-        return $this->iban;
-    }
-
-    /**
-     * @param string $iban
-     *
-     * @return self
-     */
-    protected function setIban(string $iban): self
-    {
-        $this->iban = $iban;
-        return $this;
-    }
-
-    /**
-     * Returns the BIC of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getBic(): ?string
-    {
-        return $this->bic;
-    }
-
-    /**
-     * @param string $bic
-     *
-     * @return self
-     */
-    protected function setBic(string $bic): self
-    {
-        $this->bic = $bic;
-        return $this;
-    }
-
-    /**
-     * Returns the holder of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getHolder(): ?string
-    {
-        return $this->holder;
-    }
-
-    /**
-     * @param string $holder
-     *
-     * @return self
-     */
-    protected function setHolder(string $holder): self
-    {
-        $this->holder = $holder;
-        return $this;
-    }
-
-    /**
-     * Returns the Descriptor the customer needs to use when transferring the amount.
-     * E. g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getDescriptor(): ?string
-    {
-        return $this->descriptor;
-    }
-
-    /**
-     * @param string $descriptor
-     *
-     * @return self
-     */
-    protected function setDescriptor(string $descriptor): self
-    {
-        $this->descriptor = $descriptor;
         return $this;
     }
 
