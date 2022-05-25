@@ -327,7 +327,7 @@ function printMessage($type, $title, $text)
                             server and redirected to a given RedirectUrl.
                         </div>
                     </div>
-                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/accept-payments/accept-payments-payment-page';">
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/online-payments/payment-pages/integrate-hpp/';">
                         Documentation
                     </div>
                     <div id="tryHostedPayPageExample" class="ui bottom attached green button" onclick="location.href='HostedPayPage/';">
@@ -344,7 +344,7 @@ function printMessage($type, $title, $text)
                             The Payment Page will be shown as an Overlay in your own shop.
                         </div>
                     </div>
-                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/accept-payments/accept-payments-payment-page';">
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/online-payments/payment-pages/integrate-epp/';">
                         Documentation
                     </div>
                     <div id="tryEmbeddedPayPageExample" class="ui bottom attached green button" onclick="location.href='EmbeddedPayPage/';">

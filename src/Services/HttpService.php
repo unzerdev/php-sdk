@@ -103,6 +103,7 @@ class HttpService
      * @param $uri string url of the target system
      * @param AbstractUnzerResource $resource
      * @param string                $httpMethod
+     * @param string                $apiVersion
      *
      * @return string
      *
@@ -112,7 +113,8 @@ class HttpService
     public function send(
         $uri = null,
         AbstractUnzerResource $resource = null,
-        $httpMethod = HttpAdapterInterface::REQUEST_GET
+        $httpMethod = HttpAdapterInterface::REQUEST_GET,
+        string $apiVersion = Unzer::API_VERSION
     ): string {
         if (!$resource instanceof AbstractUnzerResource) {
             throw new RuntimeException('Transfer object is empty!');
@@ -120,7 +122,7 @@ class HttpService
         $unzerObj = $resource->getUnzerObject();
 
         // perform request
-        $url     = $this->getEnvironmentUrl($uri);
+        $url     = $this->getEnvironmentUrl($uri, $apiVersion);
         $payload = $resource->jsonSerialize();
         $headers = $this->composerHttpHeaders($unzerObj);
         $this->initRequest($url, $payload, $httpMethod, $headers);
@@ -238,10 +240,11 @@ class HttpService
      * Returns the environment url.
      *
      * @param $uri
+     * @param string $apiVersion
      *
      * @return string
      */
-    private function getEnvironmentUrl($uri): string
+    private function getEnvironmentUrl($uri, string $apiVersion): string
     {
         $envUrl = [];
         switch ($this->getEnvironmentService()->getPapiEnvironment()) {
@@ -255,7 +258,7 @@ class HttpService
                 break;
         }
         $envUrl[] = Unzer::BASE_URL;
-        return 'https://' . implode('-', $envUrl) . '/' . Unzer::API_VERSION . $uri;
+        return 'https://' . implode('-', $envUrl) . '/' . $apiVersion . $uri;
     }
 
     /**

@@ -28,7 +28,8 @@ namespace UnzerSDK\test;
 
 use DateInterval;
 use DateTime;
-use UnzerSDK\Unzer;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\Payment;
@@ -40,12 +41,12 @@ use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\Fixtures\CustomerFixtureTrait;
-use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use UnzerSDK\Unzer;
 
 class BasePaymentTest extends TestCase
 {
     protected const RETURN_URL = 'https://dev.unzer.com';
+    public const API_VERSION_2 = 'v2';
 
     use CustomerFixtureTrait;
 
@@ -194,6 +195,28 @@ class BasePaymentTest extends TestCase
             ->setAmountVat(19.0)
             ->setAmountGross(119.0)
             ->setImageUrl('https://hpp-images.s3.amazonaws.com/7/bsk_0_6377B5798E5C55C6BF8B5BECA59529130226E580B050B913EAC3606DA0FF4F68.jpg');
+        $basket->addBasketItem($basketItem);
+        $this->unzer->createBasket($basket);
+        return $basket;
+    }
+
+    /**
+     * Creates a v2 Basket resource and returns it.
+     *
+     * @return Basket
+     */
+    public function createV2Basket(): Basket
+    {
+        $orderId = 'b' . self::generateRandomId();
+        $basket = new Basket($orderId);
+        $basket->setTotalValueGross(99.99)
+            ->setCurrencyCode('EUR');
+
+        $basketItem = (new BasketItem())
+            ->setAmountPerUnitGross(99.99)
+            ->setQuantity(1)
+            ->setBasketItemReferenceId('item1')
+            ->setTitle('title');
         $basket->addBasketItem($basketItem);
         $this->unzer->createBasket($basket);
         return $basket;

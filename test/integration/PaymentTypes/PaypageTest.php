@@ -31,6 +31,7 @@ use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\Constants\PaymentState;
 
 class PaypageTest extends BaseIntegrationTest
 {
@@ -48,6 +49,21 @@ class PaypageTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify the Paypage resource creates payment in state "create".
+     *
+     * @test
+     */
+    public function paymentShouldBeInStateCreateOnInitialization(): void
+    {
+        $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
+        $paypage = $this->unzer->initPayPageCharge($paypage);
+        $payment = $paypage->getPayment();
+
+        $this->assertTrue($payment->isCreate());
+        $this->assertEquals($payment->getState(), PaymentState::STATE_CREATE);
+    }
+
+    /**
      * Verify the Paypage resource for charge can be created with all parameters.
      *
      * @test
@@ -59,8 +75,8 @@ class PaypageTest extends BaseIntegrationTest
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
         $invoiceId = 'i'. self::generateRandomId();
         $paypage = (new Paypage(119.0, 'EUR', self::RETURN_URL))
-            ->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
-            ->setFullPageImage('https://dev.unzer.com/wp-content/uploads/2020/09/01_Unzer_Ambitious_RGB_LoRes.jpg')
+            ->setLogoImage('https://docs.unzer.com/card/card.png')
+            ->setFullPageImage('https://docs.unzer.com/card/card.png')
             ->setShopName('My Test Shop')
             ->setShopDescription('Best shop in the whole world!')
             ->setTagline('Try and stop us from being awesome!')
@@ -114,8 +130,8 @@ class PaypageTest extends BaseIntegrationTest
         $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
         $invoiceId = 'i'. self::generateRandomId();
         $paypage = (new Paypage(119.0, 'EUR', self::RETURN_URL))
-            ->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
-            ->setFullPageImage('https://dev.unzer.com/wp-content/uploads/2020/09/01_Unzer_Ambitious_RGB_LoRes.jpg')
+            ->setLogoImage('https://docs.unzer.com/card/card.png')
+            ->setFullPageImage('https://docs.unzer.com/card/card.png')
             ->setShopName('My Test Shop')
             ->setShopDescription('Best shop in the whole world!')
             ->setTagline('Try and stop us from being awesome!')

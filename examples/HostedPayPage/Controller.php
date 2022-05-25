@@ -84,9 +84,7 @@ try {
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // ... however you can customize the Payment Page using additional parameters.
-    $paypage->setLogoImage('https://dev.unzer.com/wp-content/uploads/2020/09/Unzer__PrimaryLogo_Raspberry_RGB.png')
-            ->setFullPageImage('https://dev.unzer.com/wp-content/uploads/2020/09/01_Unzer_Ambitious_RGB_LoRes.jpg')
-            ->setShopName('My Test Shop')
+    $paypage->setShopName('My Test Shop')
             ->setShopDescription('Best shop in the whole world!')
             ->setTagline('Try and stop us from being awesome!')
             ->setOrderId('OrderNr' . $orderId)
@@ -101,10 +99,17 @@ try {
     $paypage->setEffectiveInterestRate(4.99);
 
     // ... a Basket is mandatory for InstallmentSecured
-    $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
-        ->setAmountGross(119.0)
-        ->setAmountVat(19.0);
-    $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
+    $basketItem = (new BasketItem())
+        ->setAmountPerUnitGross(119.00)
+        ->setVat(19.00)
+        ->setQuantity(1)
+        ->setBasketItemReferenceId('item1')
+        ->setTitle('Hat');
+
+    $basket = new Basket($orderId);
+    $basket->setTotalValueGross(119.00)
+        ->addBasketItem($basketItem)
+        ->setCurrencyCode('EUR');
 
     if ($transactionType === 'charge') {
         $unzer->initPayPageCharge($paypage, $customer, $basket);
