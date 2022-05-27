@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@unzer.com>
- *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
 namespace UnzerSDK\Resources\EmbeddedResources;

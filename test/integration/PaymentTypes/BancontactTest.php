@@ -22,8 +22,6 @@
  *
  * @author  David Owusu <development@unzer.com>
  * @author  Florian Evertz <development@unzer.com>
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
