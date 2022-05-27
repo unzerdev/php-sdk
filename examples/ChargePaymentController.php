@@ -1,9 +1,9 @@
 <?php
 
 /*
- *  Controller for subsequent transactions.
+ *  Controller for charge on payment (capture).
  *
- *  Copyright (C) 2021 - today Unzer E-Com GmbH
+ *  Copyright (C) 2022 - today Unzer E-Com GmbH
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,11 +30,12 @@ require_once __DIR__ . '/Constants.php';
 
 /** Require the composer autoloader file */
 /** @noinspection PhpIncludeInspection */
-require_once __DIR__ . '/../../../../autoload.php';
+require_once __DIR__ . '/../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Unzer;
 
 session_start();
@@ -52,13 +53,10 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 }
 
 // You will need the id of the payment type created in the frontend (index.php)
-if (!isset($_POST['payment_type_id'])) {
+if (!isset($_POST['payment_id'])) {
     redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
-$paymentTypeId   = $_POST['payment_type_id'];
-
-// Reuse the recurrence type of the recurring transaction, if set.
-$recurrenceTyp = $_SESSION['recurrenceType'] ?? null;
+$paymentId   = $_POST['payment_id'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -66,14 +64,11 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler($debugHandler);
 
-    $customer = CustomerFactory::createCustomer('Max', 'Mustermann');
-    $customer->setEmail('test@test.com');
-
-    $transaction = $unzer->charge(12.99, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL, $customer, null, null, null, true, null, null, $recurrenceTyp);
+    $transaction = $unzer->performChargeOnPayment($paymentId, new Charge());
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
-    $_SESSION['PaymentTypeId'] = $paymentTypeId;
     $_SESSION['ShortId'] = $transaction->getShortId();
+    unset($_SESSION['isAuthorizeTransaction']);
 
     // Redirect to the failure page or to success depending on the state of the transaction
     $redirect = !empty($transaction->getRedirectUrl());
