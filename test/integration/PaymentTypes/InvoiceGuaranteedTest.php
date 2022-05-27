@@ -29,6 +29,9 @@ use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
+/**
+ * @deprecated since 1.2.0.0 PaylaterInvoice should be used instead in the future.
+ */
 class InvoiceGuaranteedTest extends BaseIntegrationTest
 {
     /**
@@ -57,7 +60,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
      * Verify fetched ivg type can be charged
      *
      * @test
-     * @depends ivgTypeShouldBeFechable
+     * @depends ivgTypeShouldBeFetchable
      *
      * @param InvoiceSecured $ivgType fetched ivg type.
      *

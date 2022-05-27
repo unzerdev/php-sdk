@@ -31,6 +31,9 @@ use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
+/**
+ * @deprecated since 1.2.0.0 PaylaterInvoice should be used instead in the future.
+ */
 class InvoiceSecuredTest extends BaseIntegrationTest
 {
     /**
