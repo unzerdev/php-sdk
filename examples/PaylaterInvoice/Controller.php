@@ -90,7 +90,7 @@ try {
     $_SESSION['ShortId'] = $transaction->getShortId();
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
     $_SESSION['isAuthorizeTransaction'] = true;
-/*    $_SESSION['additionalPaymentInformation'] =
+    $_SESSION['additionalPaymentInformation'] =
         sprintf(
             "Please transfer the amount of %f %s to the following account:<br /><br />"
             . "Holder: %s<br/>"
@@ -104,7 +104,7 @@ try {
             $transaction->getIban(),
             $transaction->getBic(),
             $transaction->getDescriptor()
-        );*/
+        );
 
     // To avoid redundant code this example redirects to the general ReturnController which contains the code example to handle payment results.
     redirect(RETURN_CONTROLLER_URL);

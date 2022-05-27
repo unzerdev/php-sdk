@@ -25,6 +25,7 @@ namespace UnzerSDK\Resources\TransactionTypes;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
+use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasInvoiceId;
 use UnzerSDK\Traits\HasRecurrenceType;
@@ -35,6 +36,7 @@ class Authorization extends AbstractTransactionType
     use HasCancellations;
     use HasInvoiceId;
     use HasRecurrenceType;
+    use HasAccountInformation;
 
     /** @var float $amount */
     protected $amount = 0.0;

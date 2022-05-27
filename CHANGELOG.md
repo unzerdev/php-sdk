@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 * Remove redundant `currency` parameter from `Unzer::chargePayment()` method.
 * Add "geoLocation" property to all payment type classes.
 * Several minor improvements.
+* Add account information coming from PAPI to Authorize class.
 
 ## [1.1.5.0](https://github.com/unzerdev/php-sdk/compare/1.1.4.2..1.1.5.0)
 ### Added
