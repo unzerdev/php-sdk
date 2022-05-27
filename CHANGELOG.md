@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 * Add new methods to fetch cancellations of payment done via paylater-invoice type:
   * `Unzer::fetchPaymentReversal()`
   * `Unzer::fetchPaymentRefund()`
+* Add Paylater Invoice example including the function to capture an authorized payment.
 
 ### Changed
 * Remove redundant `currency` parameter from `Unzer::chargePayment()` method.
