@@ -53,7 +53,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     <div id="customer" class="field">
         <!-- The customer form UI element will be inserted here -->
     </div>
-    <div id="example-invoice-secured"></div>
+    <div id="example-paylater-invoice"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"></div>
     <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
 </form>
@@ -62,10 +62,10 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
-    // Create an Invoice Secured instance
+    // Create an Paylater Invoice instance
     let paylaterInvoice = unzerInstance.PaylaterInvoice();
     paylaterInvoice.create({
-        containerId: 'example-invoice-secured',
+        containerId: 'example-paylater-invoice',
         errorHolderId: 'error-holder'
     });
 
@@ -84,37 +84,37 @@ require_once __DIR__ . '/../../../../autoload.php';
     let payButton = document.getElementById("submit-button");
     payButton.disabled = true;
 
-    let validCustomer = false;
-    let validResource = false;
+    let isValidCustomer = false;
+    let isValidResource = false;
     paylaterInvoice.addEventListener('change', function eventHandlerResource(e) {
         if (e.optinSuccess) {
-            validResource = true;
-            if (validCustomer) {
+            isValidResource = true;
+            if (isValidCustomer) {
                 $('button[type="submit"]').removeAttr('disabled');
             }
         } else {
-            validResource = false;
+            isValidResource = false;
             $('button[type="submit"]').attr('disabled', 'disabled');
         }
     })
 
     Customer.addEventListener('validate', function eventHandlerCustomer(e) {
         if (e.success) {
-            validCustomer = true;
-            if (validResource) {
+            isValidCustomer = true;
+            if (isValidResource) {
                 $('button[type="submit"]').removeAttr('disabled');
             }
         } else {
             $('button[type="submit"]').attr('disabled', 'disabled');
-            validCustomer = false;
+            isValidCustomer = false;
         }
     })
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        let PaylaterInvoicePromise = paylaterInvoice.createResource();
+        let paylaterInvoicePromise = paylaterInvoice.createResource();
         let customerPromise = Customer.createCustomer();
-        Promise.all([PaylaterInvoicePromise, customerPromise])
+        Promise.all([paylaterInvoicePromise, customerPromise])
             .then(function(values) {
                 let paymentType = values[0];
                 let customer = values[1];

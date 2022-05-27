@@ -27,6 +27,7 @@
 namespace UnzerSDK\test\Fixtures;
 
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
+use UnzerSDK\Constants\CompanyTypes;
 use UnzerSDK\Constants\Salutations;
 use UnzerSDK\Constants\ShippingTypes;
 use UnzerSDK\Resources\Customer;
@@ -136,7 +137,7 @@ trait CustomerFixtureTrait
             ->setPhone('+4962216471100')
             ->setBillingAddress($this->getBillingAddress());
 
-        $customer->getCompanyInfo()->setOwner($owner);
+        $customer->getCompanyInfo()->setOwner($owner)->setCompanyType(CompanyTypes::COMPANY);
         return $customer;
     }
 
