@@ -18,8 +18,6 @@
  *
  * @link     https://docs.unzer.com/
  *
- * @author   David Owusu <support@unzer.com>
- *
  * @package  UnzerSDK\Constants
  */
 

@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
 namespace UnzerSDK\test\integration\PaymentTypes;

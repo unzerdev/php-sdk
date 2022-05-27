@@ -19,8 +19,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\PaymentTypes
  */
 namespace UnzerSDK\Resources\PaymentTypes;
