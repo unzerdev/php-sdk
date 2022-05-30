@@ -67,7 +67,7 @@ interface PaymentServiceInterface
     /**
      * Performs an Authorization transaction and returns the resulting Authorization resource.
      *
-     * @deprecated since 1.1.6.0 please use performAuthorization() instead.
+     * @deprecated since 1.2.0.0 please use performAuthorization() instead.
      * @see performAuthorization
      *
      * @param float                  $amount         The amount to authorize.
@@ -133,7 +133,7 @@ interface PaymentServiceInterface
     /**
      * Performs a Charge transaction and returns the resulting Charge resource.
      *
-     * @deprecated since 1.1.6.0 please use performCharge() instead.
+     * @deprecated since 1.2.0.0 please use performCharge() instead.
      * @see performCharge
      *
      * @param float                  $amount           The amount to charge.
