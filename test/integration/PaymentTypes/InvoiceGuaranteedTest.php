@@ -39,7 +39,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function ivgTypeShouldBeFechable(): InvoiceSecured
+    public function ivgTypeShouldBeFetchable(): InvoiceSecured
     {
         $ivgMock = $this->getMockBuilder(InvoiceSecured::class)->setMethods(['getUri'])->getMock();
         $ivgMock->method('getUri')->willReturn('/types/invoice-guaranteed');

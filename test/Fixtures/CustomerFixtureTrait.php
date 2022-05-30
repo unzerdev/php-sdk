@@ -98,12 +98,24 @@ trait CustomerFixtureTrait
      */
     public function getMaximalNotRegisteredB2bCustomer(): Customer
     {
-        return $this->getMinimalNotRegisteredB2bCustomer()
+
+        $customer = $this->getMinimalNotRegisteredB2bCustomer()
             ->setShippingAddress($this->getShippingAddress())
             ->setSalutation(Salutations::MR)
             ->setMobile('+49172123456')
             ->setPhone('+4962216471100')
             ->setBillingAddress($this->getBillingAddress());
+
+        $owner = (new CompanyOwner())
+            ->setFirstname('firstname')
+            ->setLastname('lastname')
+            ->setBirthdate('1999-01-01');
+
+        $customer->getCompanyInfo()
+            ->setOwner($owner)
+            ->setCompanyType(CompanyTypes::COMPANY);
+
+        return $customer;
     }
 
     /**
@@ -123,10 +135,6 @@ trait CustomerFixtureTrait
      */
     public function getMaximalRegisteredB2bCustomer(): Customer
     {
-        $owner = (new CompanyOwner())
-            ->setFirstname('firstname')
-            ->setLastname('lastname')
-            ->setBirthdate('1999-01-01');
 
         $customer = $this->getMinimalRegisteredB2bCustomer()
             ->setShippingAddress($this->getShippingAddress())
@@ -135,7 +143,15 @@ trait CustomerFixtureTrait
             ->setPhone('+4962216471100')
             ->setBillingAddress($this->getBillingAddress());
 
-        $customer->getCompanyInfo()->setOwner($owner)->setCompanyType(CompanyTypes::COMPANY);
+        $owner = (new CompanyOwner())
+            ->setFirstname('firstname')
+            ->setLastname('lastname')
+            ->setBirthdate('1999-01-01');
+
+        $customer->getCompanyInfo()
+            ->setOwner($owner)
+            ->setCompanyType(CompanyTypes::COMPANY);
+
         return $customer;
     }
 

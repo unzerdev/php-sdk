@@ -92,7 +92,7 @@ class PaymentService implements PaymentServiceInterface
 
     //<editor-fold desc="Authorize transaction">
 
-    public function performAuthorization($authorization, $paymentType, $customer = null, $metadata = null, $basket = null): Authorization
+    public function performAuthorization(Authorization $authorization, $paymentType, $customer = null, $metadata = null, $basket = null): Authorization
     {
         $payment = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
@@ -150,7 +150,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function performCharge($charge, $paymentType, $customer = null, $metadata = null, $basket = null): Charge
+    public function performCharge(Charge $charge, $paymentType, $customer = null, $metadata = null, $basket = null): Charge
     {
         $payment     = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
@@ -237,7 +237,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function performChargeOnPayment($payment, $charge): Charge
+    public function performChargeOnPayment($payment, Charge $charge): Charge
     {
         $paymentResource = $this->getResourceService()->getPaymentResource($payment);
         $paymentResource->addCharge($charge);

@@ -721,7 +721,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function performAuthorization($authorization, $paymentType, $customer = null, $metadata = null, $basket = null): Authorization
+    public function performAuthorization(Authorization $authorization, $paymentType, $customer = null, $metadata = null, $basket = null): Authorization
     {
         return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
     }
@@ -766,7 +766,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function performCharge($charge, $paymentType, $customer = null, $metadata = null, $basket = null): Charge
+    public function performCharge(Charge $charge, $paymentType, $customer = null, $metadata = null, $basket = null): Charge
     {
         return $this->paymentService->performCharge($charge, $paymentType, $customer, $metadata, $basket);
     }
@@ -828,7 +828,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->paymentService->chargePayment($payment, $amount, $orderId, $invoiceId);
     }
 
-    public function performChargeOnPayment($payment, $charge): Charge
+    public function performChargeOnPayment($payment, Charge $charge): Charge
     {
         return $this->paymentService->performChargeOnPayment($payment, $charge);
     }

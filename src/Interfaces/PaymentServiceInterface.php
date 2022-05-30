@@ -57,7 +57,7 @@ interface PaymentServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function performAuthorization(
-        $authorization,
+        Authorization $authorization,
         $paymentType,
         $customer = null,
         $metadata = null,
@@ -67,7 +67,7 @@ interface PaymentServiceInterface
     /**
      * Performs an Authorization transaction and returns the resulting Authorization resource.
      *
-     * @deprecated since 1.1.6.0 please use performAuthorization() instead.
+     * @deprecated since 1.2.0.0 please use performAuthorization() instead.
      * @see performAuthorization
      *
      * @param float                  $amount         The amount to authorize.
@@ -123,7 +123,7 @@ interface PaymentServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function performCharge(
-        $charge,
+        Charge $charge,
         $paymentType,
         $customer = null,
         $metadata = null,
@@ -133,7 +133,7 @@ interface PaymentServiceInterface
     /**
      * Performs a Charge transaction and returns the resulting Charge resource.
      *
-     * @deprecated since 1.1.6.0 please use performCharge() instead.
+     * @deprecated since 1.2.0.0 please use performCharge() instead.
      * @see performCharge
      *
      * @param float                  $amount           The amount to charge.
@@ -178,7 +178,7 @@ interface PaymentServiceInterface
      * To perform a full charge of the authorized amount leave the amount null.
      *
      * @param string|Payment $payment The Payment object the Authorization to charge belongs to.
-     * @param string|Charge  $charge  The amount to charge.
+     * @param Charge         $charge  The Charge object containing transaction specific information.
      *
      * @return Charge The resulting object of the Charge resource.
      *
@@ -187,7 +187,7 @@ interface PaymentServiceInterface
      */
     public function performChargeOnPayment(
         $payment,
-        $charge
+        Charge $charge
     ): Charge;
 
     /**
