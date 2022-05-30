@@ -133,6 +133,28 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify that paylater Invoice type can be authorized with not registered B2B Customer.
+     *
+     * @test
+     *
+     * @depends paylaterInvoiceTestTypeShouldBeCreatableAndFetchable
+     *
+     * @param mixed $paylaterInvoice
+     */
+    public function paylaterInvoiceCanbeAuthorizedWithB2BCustomer($paylaterInvoice)
+    {
+        $authorization = new Authorization(99.99, 'EUR', 'https://unzer.com');
+        $authorization->setInvoiceId('202205021237');
+
+        $customer = $this->getMaximalNotRegisteredB2bCustomer();
+        $basket = $this->createV2Basket();
+
+        $transaction = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
+        $this->assertNotEmpty($transaction->getId());
+        $this->assertTrue($transaction->isSuccess());
+    }
+
+    /**
      * Verify that paylater Invoice type can be charged.
      *
      * @test
