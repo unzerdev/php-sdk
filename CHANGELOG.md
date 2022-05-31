@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 * Add `shippingType` property to `Address` class.
 * Allow setting the clientIp manually.
 * Allow setting `riskData` for authorize request.
-* Allow setting shipping data for charge request such as `deliveryTrackingId`, `deliveryService` and `returnTrackingId`
+* Allow setting shipping data for charge request such as `deliveryTrackingId`, `deliveryService` and `returnTrackingId`.
 * Add new methods for `authorize` and `charge` transactions that use prepared objects only:
   * `Unzer::performAuthorization()`
   * `Unzer::performCharge()`
