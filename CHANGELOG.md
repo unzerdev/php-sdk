@@ -7,11 +7,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 * Add payment type Paylater Invoice.
 * Add properties `companyType` and `owner` to `CompanyInfo` class.
-* Add shipping type to `Address` class.
+* Add `shippingType` property to `Address` class.
 * Allow setting the clientIp manually.
-* Allow setting riskData for authorize request.
-* Allow setting shipping for charge request.
-* Add new methods for `authorize` and `charge` transactions that use prepared objects only.
+* Allow setting `riskData` for authorize request.
+* Allow setting shipping data for charge request such as `deliveryTrackingId`, `deliveryService` and `returnTrackingId`
+* Add new methods for `authorize` and `charge` transactions that use prepared objects only:
+  * `Unzer::performAuthorization()`
+  * `Unzer::performCharge()`
+  * `Unzer::performChargeOnPayment()`
 * Add new methods to cancel payments done via paylater-invoice type:
   * `Unzer::cancelAuthorizedPayment()`
   * `Unzer::cancelChargedPayment()`
@@ -22,7 +25,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Changed
 * Remove redundant `currency` parameter from `Unzer::chargePayment()` method.
-* Add "geoLocation" property to all payment type classes.
+* Add `geoLocation` property to all payment type classes.
 * Mark `InvoiceSecured` payment type as deprecated.
 * Several minor improvements.
 * Add account information coming from PAPI to Authorize class.
