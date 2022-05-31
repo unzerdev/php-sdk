@@ -16,11 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.unzer.com/
- *
- * @author  David Owusu <development@unzer.com>
- * @author  Florian Evertz <development@unzer.com>
- * @author  Simon Gabriel <development@unzer.com>
+ * @link     https://docs.unzer.com/
  *
  * @package  UnzerSDK\PaymentTypes
  */

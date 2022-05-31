@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\TransactionTypes
  */
 namespace UnzerSDK\Resources\TransactionTypes;
@@ -27,6 +25,8 @@ namespace UnzerSDK\Resources\TransactionTypes;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\EmbeddedResources\RiskData;
+use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Traits\HasAdditionalTransactionData;
@@ -129,9 +129,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
             $payment->handleResponse((object)['redirectUrl' => $response->redirectUrl]);
         }
 
-        if (isset($response->additionalTransactionData)) {
-            $this->setAdditionalTransactionData($response->additionalTransactionData);
-        }
+        $this->handleAdditionalTransactionData($response);
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {
             $this->fetchPayment();
@@ -153,7 +151,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
         }
 
         return [
-            'customer'=> $payment->getCustomer(),
+            'customer' => $payment->getCustomer(),
             'type' => $paymentType,
             'metadata' => $payment->getMetadata(),
             'basket' => $payment->getBasket()
@@ -174,6 +172,58 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
         $payment = $this->getPayment();
         if ($payment instanceof AbstractUnzerResource) {
             $this->fetchResource($payment);
+        }
+    }
+
+    /**
+     * Handle additional transaction data from API response.
+     *
+     * @param stdClass $response
+     *
+     * @return void
+     */
+    protected function handleAdditionalTransactionData(stdClass $response): void
+    {
+        $additionalTransactionData = $response->additionalTransactionData ?? null;
+        if ($additionalTransactionData !== null) {
+            $this->setAdditionalTransactionData($additionalTransactionData);
+
+            $this->handleRiskData($additionalTransactionData);
+            $this->handleShipping($additionalTransactionData);
+        }
+    }
+
+    /**
+     * Handle risk data object contained in additional transaction data from API response.
+     *
+     * @param stdClass $additionalTransactionData
+     *
+     * @return void
+     */
+    protected function handleRiskData(stdClass $additionalTransactionData): void
+    {
+        $riskData = $additionalTransactionData->riskData ?? null;
+        if ($riskData !== null) {
+            $riskDataObject = $this->getRiskData() ?? new RiskData();
+            $riskDataObject->handleResponse($riskData);
+            $this->setRiskData($riskDataObject);
+        }
+    }
+
+    /**
+     * Handle risk data object contained in additional transaction data from API response.
+     *
+     * @param stdClass $additionalTransactionData
+     *
+     * @return void
+     */
+    protected function handleShipping(stdClass $additionalTransactionData): void
+    {
+        $shipping = $additionalTransactionData->shipping ?? null;
+        if ($shipping !== null) {
+            $shippingObject = $this->getShipping() ?? new ShippingData();
+            $shippingObject->handleResponse($shipping);
+            $this->setShipping($shippingObject);
         }
     }
 }

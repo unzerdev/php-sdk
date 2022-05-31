@@ -21,8 +21,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration
  */
 namespace UnzerSDK\test\integration;
@@ -87,6 +85,21 @@ class CustomerTest extends BaseIntegrationTest
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
 
         return $customer;
+    }
+
+    /**
+     * Verify shipping type can be set for shipping address of customer resource.
+     *
+     * @test
+     */
+    public function customerWithShippingTypeCanBeCreatedAndFetched()
+    {
+        $customer   = $this->getMaximumCustomerInclShippingAddress();
+        $customer->getShippingAddress()->setShippingType('shippingType');
+
+        $this->unzer->createCustomer($customer);
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
+        $this->assertEquals('shippingType', $fetchedCustomer->getShippingAddress()->getShippingType());
     }
 
     /**
@@ -421,6 +434,22 @@ class CustomerTest extends BaseIntegrationTest
 
         $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
         $this->assertEquals($customer->expose(), $fetchedCustomer->expose());
+    }
+
+    /**
+     * Customer should contain clientIp set via header.
+     *
+     * @test
+     */
+    public function customerShouldContainClientIpSetViaHeader()
+    {
+        $customer = $this->getMinimalCustomer();
+        $clientIp = '123.123.123.123';
+        $this->unzer->setClientIp($clientIp);
+        $this->unzer->createCustomer($customer);
+
+        $fetchedCustomer = $this->unzer->fetchCustomer($customer->getId());
+        $this->assertEquals($clientIp, $fetchedCustomer->getGeoLocation()->getClientIp());
     }
 
     //</editor-fold>

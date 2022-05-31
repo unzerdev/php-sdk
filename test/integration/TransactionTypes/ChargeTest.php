@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration\TransactionTypes
  */
 namespace UnzerSDK\test\integration\TransactionTypes;
@@ -32,6 +30,7 @@ use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class ChargeTest extends BaseIntegrationTest
@@ -96,6 +95,60 @@ class ChargeTest extends BaseIntegrationTest
         // perform request
         $recurrenceType = RecurrenceTypes::ONE_CLICK;
         $charge = $paymentType->charge(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, true, $invoiceId, $paymentReference, $recurrenceType);
+
+        // verify the data sent and received match
+        $payment = $charge->getPayment();
+        $this->assertSame($paymentType, $payment->getPaymentType());
+        $this->assertEquals(119.0, $charge->getAmount());
+        $this->assertEquals('EUR', $charge->getCurrency());
+        $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
+        $this->assertSame($customer, $payment->getCustomer());
+        $this->assertEquals($orderId, $charge->getOrderId());
+        $this->assertSame($metadata, $payment->getMetadata());
+        $this->assertSame($basket, $payment->getBasket());
+        $this->assertTrue($charge->isCard3ds());
+        $this->assertEquals($invoiceId, $charge->getInvoiceId());
+        $this->assertEquals($paymentReference, $charge->getPaymentReference());
+        $this->assertEquals($recurrenceType, $charge->getRecurrenceType());
+
+        // fetch the charge
+        $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
+
+        // verify the fetched transaction matches the initial transaction
+        $this->assertEquals($charge->expose(), $fetchedCharge->expose());
+        $fetchedPayment = $fetchedCharge->getPayment();
+        $this->assertEquals($payment->getPaymentType()->expose(), $fetchedPayment->getPaymentType()->expose());
+        $this->assertEquals($payment->getCustomer()->expose(), $fetchedPayment->getCustomer()->expose());
+        $this->assertEquals($payment->getMetadata()->expose(), $fetchedPayment->getMetadata()->expose());
+        $this->assertEquals($payment->getBasket()->expose(), $fetchedPayment->getBasket()->expose());
+    }
+
+    /**
+     * Verify requestCharge accepts all parameters.
+     *
+     * @test
+     */
+    public function requestChargeShouldAcceptAllParameters(): void
+    {
+        // prepare test data
+        /** @var Card $paymentType */
+        $paymentType = $this->unzer->createPaymentType($this->createCardObject());
+        $customer = $this->getMinimalCustomer();
+        $orderId = 'o'. self::generateRandomId();
+        $metadata = (new Metadata())->addMetadata('key', 'value');
+        $basket = $this->createBasket();
+        $invoiceId = 'i'. self::generateRandomId();
+        $paymentReference = 'paymentReference';
+        $recurrenceType = RecurrenceTypes::ONE_CLICK;
+
+        // perform request
+        $charge = new Charge(119.0, 'EUR', self::RETURN_URL);
+        $charge->setRecurrenceType(RecurrenceTypes::ONE_CLICK, $paymentType)
+            ->setOrderId($orderId)
+            ->setInvoiceId($invoiceId)
+            ->setPaymentReference($paymentReference);
+
+        $charge = $this->unzer->performCharge($charge, $paymentType, $customer, $metadata, $basket);
 
         // verify the data sent and received match
         $payment = $charge->getPayment();

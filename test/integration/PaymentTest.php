@@ -21,8 +21,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration
  */
 namespace UnzerSDK\test\integration;
@@ -159,7 +157,7 @@ class PaymentTest extends BaseIntegrationTest
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
         $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://unzer.com', null, null, null, null, false);
-        $charge = $this->unzer->chargePayment($authorization->getPaymentId(), null, 'EUR', 'o' . self::generateRandomId(), 'i' . self::generateRandomId());
+        $charge = $this->unzer->chargePayment($authorization->getPaymentId(), null, 'o' . self::generateRandomId(), 'i' . self::generateRandomId());
 
         $this->assertNotEmpty($charge->getId());
     }

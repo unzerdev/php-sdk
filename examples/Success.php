@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -46,20 +44,36 @@ session_start();
                 echo $_SESSION['additionalPaymentInformation'];
             }
 
-            if (isset($_SESSION['ShortId']) && !empty($_SESSION['ShortId'])) {
-                echo '<p>Please look for ShortId ' . $_SESSION['ShortId'] . ' in Unzer Insights to see the transaction.</p>';
+            $shortId = $_SESSION['ShortId'] ?? null;
+            if ($shortId !== null) {
+                echo '<p>Please look for ShortId ' . $shortId . ' in Unzer Insights to see the transaction.</p>';
             }
-            if (isset($_SESSION['PaymentId']) && !empty($_SESSION['PaymentId'])) {
-                echo '<p>The PaymentId of your transaction is \'' . $_SESSION['PaymentId'] . '\'.</p>';
+            $paymentId = $_SESSION['PaymentId'] ?? null;
+            if ($paymentId !== null) {
+                echo '<p>The PaymentId of your transaction is \'' . $paymentId . '\'.</p>';
             }
-            if (isset($_SESSION['PaymentTypeId']) && !empty($_SESSION['PaymentTypeId'])) {
-                echo    '<p>The TypeId for the recurring payment is \'' . $_SESSION['PaymentTypeId'] . '\'. You can use it
+
+            $paymentTypeId = $_SESSION['PaymentTypeId'] ?? null;
+            if ($paymentTypeId !== null) {
+                echo    '<p>The TypeId for the recurring payment is \'' . $paymentTypeId . '\'. You can use it
                             now for subsequent transactions.</p>
                             <form id="payment-form" class="unzerUI form" action="' . RECURRING_PAYMENT_CONTROLLER_URL . '" method="post">
-                                <input type="hidden" name="payment_type_id" value="' . $_SESSION['PaymentTypeId'] . ' ">
+                                <input type="hidden" name="payment_type_id" value="' . $paymentTypeId . ' ">
                                 <div class="fields inline">
                                     <div class="field">
                                         <button class="unzerUI primary button fluid" id="submit-button" type="submit">Charge payment type again.</button>
+                                    </div>
+                                </div>
+                            </form>';
+            }
+            $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
+            if ($paymentId !== null && $isAuthorizeTransaction) {
+                echo    '<p>The authorization was successfully. You can use the payment ID to charge the payment.</p>
+                            <form id="payment-form" class="unzerUI form" action="' . CHARGE_PAYMENT_CONTROLLER_URL . '" method="post">
+                                <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
+                                <div class="fields inline">
+                                    <div class="field">
+                                        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Charge payment.</button>
                                     </div>
                                 </div>
                             </form>';

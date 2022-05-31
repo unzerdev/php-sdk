@@ -19,8 +19,6 @@
  *
  * @link https://dev.unzer.com/
  *
- * @author Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Adapter
  */
 namespace UnzerSDK\Adapter;

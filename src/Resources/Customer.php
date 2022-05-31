@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Resources
  */
 namespace UnzerSDK\Resources;
@@ -343,10 +341,9 @@ class Customer extends AbstractUnzerResource
     {
         if (isset($response->companyInfo) && $this->companyInfo === null) {
             $this->companyInfo = new CompanyInfo();
+            $this->companyInfo->instantiateObjectsFromResponse($response->companyInfo);
         }
 
         parent::handleResponse($response, $method);
     }
-
-    //</editor-fold>
 }

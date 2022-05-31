@@ -18,14 +18,13 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use stdClass;
 use function is_string;
 
 class CompanyInfo extends AbstractUnzerResource
@@ -41,6 +40,12 @@ class CompanyInfo extends AbstractUnzerResource
 
     /** @var string $commercialSector */
     protected $commercialSector = CompanyCommercialSectorItems::OTHER;
+
+    /** @var string|null $companyType */
+    protected $companyType;
+
+    /** @var CompanyOwner|null $owner */
+    protected $owner;
 
     //<editor-fold desc="Getters/Setters">
 
@@ -119,6 +124,62 @@ class CompanyInfo extends AbstractUnzerResource
     {
         $this->commercialSector = $this->removeRestrictedSymbols($commercialSector);
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCompanyType(): ?string
+    {
+        return $this->companyType;
+    }
+
+    /**
+     * @param string|null $companyType
+     *
+     * @return CompanyInfo
+     */
+    public function setCompanyType(?string $companyType): CompanyInfo
+    {
+        $this->companyType = $companyType;
+        return $this;
+    }
+
+    /**
+     * @return CompanyOwner|null
+     */
+    public function getOwner(): ?CompanyOwner
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param CompanyOwner|null $owner
+     *
+     * @return CompanyInfo
+     */
+    public function setOwner(?CompanyOwner $owner): CompanyInfo
+    {
+        $this->owner = $owner;
+        return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
+
+    /**
+     * Create instances of necessary properties to handle API responses.
+     *
+     * @param stdClass $response
+     *
+     * @return void
+     */
+    public function instantiateObjectsFromResponse(stdClass $response): void
+    {
+        if (isset($response->owner) && $this->owner === null) {
+            $this->owner = new CompanyOwner();
+        }
     }
 
     //</editor-fold>

@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\unit
  */
 namespace UnzerSDK\test\unit\Services;
@@ -167,6 +165,27 @@ class HttpServiceTest extends BasePaymentTest
 
         /** @var HttpService $httpServiceMock*/
         $httpServiceMock->send('/my/uri/123', $resource);
+    }
+
+    /**
+     * Verify 'CLIENTIP' header only set when a clientIp is defined in the Unzer object.
+     *
+     * @test
+     * @dataProvider clientIpHeaderShouldBeSetProperlyDP
+     *
+     * @param $clientIp
+     * @param mixed $isHeaderExpected
+     */
+    public function clientIpHeaderShouldBeSetProperly($clientIp, $isHeaderExpected): void
+    {
+        $unzer = new Unzer('s-priv-MyTestKey');
+        $unzer->setClientIp($clientIp);
+
+        $composeHttpHeaders = $unzer->getHttpService()->composeHttpHeaders($unzer);
+        $this->assertEquals($isHeaderExpected, isset($composeHttpHeaders['CLIENTIP']));
+        if ($isHeaderExpected) {
+            $this->assertEquals($clientIp, $composeHttpHeaders['CLIENTIP']);
+        }
     }
 
     /**
@@ -437,6 +456,20 @@ class HttpServiceTest extends BasePaymentTest
             'de-DE' => ['de-DE'],
             'en-US' => ['en-US'],
             'null' => [null]
+        ];
+    }
+
+    /**
+     * Returns test data for method public function languageShouldOnlyBeSetIfSpecificallyDefined.
+     */
+    public function clientIpHeaderShouldBeSetProperlyDP(): array
+    {
+        return [
+            'valid ipv4' => ['111.222.333.444', true],
+            'valid ipv6' => ['684D:1111:222:3333:4444:5555:6:7', true],
+            'valid ipv6 (dual)' => ['2001:db8:3333:4444:5555:6666:1.2.3.4', true],
+            'empty string' => ['', false],
+            'null' => [null, false]
         ];
     }
 

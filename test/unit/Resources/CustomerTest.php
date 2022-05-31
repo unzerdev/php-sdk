@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\unit
  */
 namespace UnzerSDK\test\unit\Resources;
@@ -29,6 +27,7 @@ namespace UnzerSDK\test\unit\Resources;
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Resources\EmbeddedResources\CompanyOwner;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\Customer;
@@ -134,7 +133,8 @@ class CustomerTest extends BasePaymentTest
             ->setName('shipping_name')
             ->setCity('shipping_city')
             ->setZip('shipping_zip')
-            ->setStreet('shipping_street');
+            ->setStreet('shipping_street')
+            ->setShippingType('shipping_type');
 
         $customer = new Customer();
         $shippingAddress = $customer->getBillingAddress();
@@ -144,6 +144,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertNull($shippingAddress->getCity());
         $this->assertNull($shippingAddress->getZip());
         $this->assertNull($shippingAddress->getStreet());
+        $this->assertNull($shippingAddress->getShippingType());
 
         $customer->setShippingAddress($address);
         $shippingAddress = $customer->getShippingAddress();
@@ -153,6 +154,7 @@ class CustomerTest extends BasePaymentTest
         $this->assertEquals('shipping_city', $shippingAddress->getCity());
         $this->assertEquals('shipping_zip', $shippingAddress->getZip());
         $this->assertEquals('shipping_street', $shippingAddress->getStreet());
+        $this->assertEquals('shipping_type', $shippingAddress->getShippingType());
     }
 
     /**
@@ -167,6 +169,8 @@ class CustomerTest extends BasePaymentTest
         $this->assertNull($companyInfo->getCommercialRegisterNumber());
         $this->assertNull($companyInfo->getFunction());
         $this->assertNull($companyInfo->getRegistrationType());
+        $this->assertNull($companyInfo->getCompanyType());
+        $this->assertNull($companyInfo->getOwner());
 
         $companyInfo->setCommercialSector(CompanyCommercialSectorItems::ACCOMMODATION);
         $this->assertSame(CompanyCommercialSectorItems::ACCOMMODATION, $companyInfo->getCommercialSector());
@@ -179,6 +183,15 @@ class CustomerTest extends BasePaymentTest
 
         $companyInfo->setRegistrationType(CompanyRegistrationTypes::REGISTRATION_TYPE_REGISTERED);
         $this->assertSame(CompanyRegistrationTypes::REGISTRATION_TYPE_REGISTERED, $companyInfo->getRegistrationType());
+
+        $companyInfo->setCompanyType('companyType');
+        $this->assertSame('companyType', $companyInfo->getCompanyType());
+
+        $owner = (new CompanyOwner())->setFirstname('firstname')
+            ->setLastname('lastname')
+            ->setBirthdate('01.01.1999');
+        $companyInfo->setOwner($owner);
+        $this->assertEquals($owner, $companyInfo->getOwner());
 
         $customer = new Customer();
         $this->assertNull($customer->getCompanyInfo());
@@ -310,6 +323,38 @@ class CustomerTest extends BasePaymentTest
         $this->assertInstanceOf(GeoLocation::class, $geoLocation);
         $this->assertEquals('client ip', $geoLocation->getClientIp());
         $this->assertEquals('country code', $geoLocation->getCountryCode());
+    }
+
+    /**
+     * Verify that CompanyOwner data are correctly set when handling a response.
+     *
+     * @test
+     */
+    public function handleResponseShouldSetCompanyOwnerData()
+    {
+        $customer = new Customer();
+        $this->assertEmpty($customer->getCompanyInfo());
+
+        $owner = (object)[
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'birthdate' => 'birthdate',
+        ];
+
+        $customerResponse = (object)[
+            'companyInfo' => (object)[
+                'owner' => $owner
+            ]
+        ];
+
+        $customer->handleResponse($customerResponse);
+
+        $this->assertNotEmpty($customer->getCompanyInfo());
+        $companyOwner = $customer->getCompanyInfo()->getOwner();
+        $this->assertNotEmpty($companyOwner);
+        $this->assertEquals('firstname', $companyOwner->getFirstname());
+        $this->assertEquals('lastname', $companyOwner->getLastname());
+        $this->assertEquals('birthdate', $companyOwner->getBirthdate());
     }
 
     //</editor-fold>
