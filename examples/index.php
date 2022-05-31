@@ -239,6 +239,9 @@ function printMessage($type, $title, $text)
                             With "paylater-invoice" type.
                         </div>
                     </div>
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/payment-methods/unzer-invoice-upl/';">
+                        Documentation
+                    </div>
                     <div id="tryInvoiceSecuredExample" class="ui bottom attached green button" onclick="location.href='PaylaterInvoice/';">
                         Try
                     </div>
