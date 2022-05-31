@@ -151,6 +151,21 @@ class CardTest extends BaseIntegrationTest
     }
 
     /**
+     * Invalid expiry date should throw API exception.
+     *
+     * @test
+     */
+    public function invalidExpiryDateShouldThrowApiException(): void
+    {
+        $card = $this->createCardObject('4711100000000000');
+        $card->setExpiryDate('01/2001');
+
+        /** @var Card $card */
+        $this->expectException(UnzerApiException::class);
+        $this->unzer->createPaymentType($card);
+    }
+
+    /**
      * Card should be chargeable with recurrence type.
      *
      * @test
