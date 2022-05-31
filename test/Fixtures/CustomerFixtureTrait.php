@@ -98,7 +98,6 @@ trait CustomerFixtureTrait
      */
     public function getMaximalNotRegisteredB2bCustomer(): Customer
     {
-
         $customer = $this->getMinimalNotRegisteredB2bCustomer()
             ->setShippingAddress($this->getShippingAddress())
             ->setSalutation(Salutations::MR)
@@ -135,7 +134,6 @@ trait CustomerFixtureTrait
      */
     public function getMaximalRegisteredB2bCustomer(): Customer
     {
-
         $customer = $this->getMinimalRegisteredB2bCustomer()
             ->setShippingAddress($this->getShippingAddress())
             ->setSalutation(Salutations::MR)
