@@ -26,9 +26,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 * Remove redundant `currency` parameter from `Unzer::chargePayment()` method.
 * Add `geoLocation` property to all payment type classes.
-* Mark `InvoiceSecured` payment type as deprecated.
 * Several minor improvements.
 * Add account information coming from PAPI to Authorize class.
+
+### Deprecated
+* Classes
+  * Mark `InvoiceSecured` as deprecated, will be replaced by `PaylaterInvoice`.
+* Methods
+  * Mark `Unzer::authorize()` as deprecated. Please use `Unzer::performAuthorization()` instead.
+  * Mark `Unzer::charge()` as deprecated. Please use `Unzer::performCharge()` instead.
+  * Mark `Unzer::chargePayment()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
+  * Mark `Unzer::chargeAuthorization()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
 
 ## [1.1.5.0](https://github.com/unzerdev/php-sdk/compare/1.1.4.2..1.1.5.0)
 ### Added
