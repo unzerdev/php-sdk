@@ -194,6 +194,8 @@ interface PaymentServiceInterface
      * Performs a Charge transaction for the Authorization of the given Payment object.
      * To perform a full charge of the authorized amount leave the amount null.
      *
+     * @deprecated since 1.2.0.0 please use performChargeOnPayment() instead.
+     *
      * @param string|Payment $payment   The Payment object the Authorization to charge belongs to.
      * @param float|null     $amount    The amount to charge.
      * @param string|null    $orderId   The order id from the shop.
@@ -213,6 +215,8 @@ interface PaymentServiceInterface
 
     /**
      * Performs a Charge transaction for a specific Payment and returns the resulting Charge object.
+     *
+     * @deprecated since 1.2.0.0 please use performChargeOnPayment() instead.
      *
      * @param Payment|string $payment   The Payment object to be charged.
      * @param float|null     $amount    The amount to charge.
