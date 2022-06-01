@@ -46,7 +46,9 @@ session_start();
 
             $shortId = $_SESSION['ShortId'] ?? null;
             if ($shortId !== null) {
-                echo '<p>Please look for ShortId ' . $shortId . ' in Unzer Insights to see the transaction.</p>';
+                $defaultTransactionMessage = '<p>Please look for ShortId ' . $shortId . ' in Unzer Insights to see the transaction.</p>';
+                $paylaterTransactionMessage = '<p>Please use the "descriptor" to look for the transaction in the Unzer Pay Later Merchant Portal.</p>';
+                echo preg_match('/[\d]{4}.[\d]{4}.[\d]{4}/', $shortId) ? $defaultTransactionMessage : $paylaterTransactionMessage;
             }
             $paymentId = $_SESSION['PaymentId'] ?? null;
             if ($paymentId !== null) {
@@ -73,7 +75,7 @@ session_start();
                                 <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
                                 <div class="fields inline">
                                     <div class="field">
-                                        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Charge payment.</button>
+                                        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Charge payment</button>
                                     </div>
                                 </div>
                             </form>';
