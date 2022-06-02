@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Services
  */
 namespace UnzerSDK\Services;
@@ -49,6 +47,7 @@ use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\PIS;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
@@ -182,6 +181,15 @@ class ResourceService implements ResourceServiceInterface
             case $resourceType === IdStrings::CANCEL:
                 $paymentId  = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
                 $chargeId   = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
+                if (IdService::isPaymentCancellation($url)) {
+                    $isRefund = preg_match('/charge/', $url) === 1;
+                    if ($isRefund) {
+                        $resource = $unzer->fetchPaymentRefund($paymentId, $resourceId);
+                        break;
+                    }
+                    $resource = $unzer->fetchPaymentReversal($paymentId, $resourceId);
+                    break;
+                }
                 if ($chargeId !== null) {
                     $resource = $unzer->fetchRefundById($paymentId, $chargeId, $resourceId);
                     break;
@@ -562,6 +570,9 @@ class ResourceService implements ResourceServiceInterface
             case IdStrings::PAYPAL:
                 $paymentType = new Paypal();
                 break;
+            case IdStrings::PAYLATER_INVOICE:
+                $paymentType = new PaylaterInvoice();
+                break;
             case IdStrings::PIS:
                 $paymentType = new PIS();
                 break;
@@ -777,6 +788,36 @@ class ResourceService implements ResourceServiceInterface
         $cancel = $this->fetchResource($charge->getCancellation($cancellationId, true));
         return $cancel;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaymentRefund($payment, $cancellationId): Cancellation
+    {
+        $charge = new Charge();
+        $charge->setParentResource($payment);
+        $cancel = (new Cancellation())
+            ->setId($cancellationId)
+            ->setPayment($payment)
+            ->setParentResource($charge);
+        return $this->fetchResource($cancel);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaymentReversal($payment, $cancellationId): Cancellation
+    {
+        $authorization = new Authorization();
+        $authorization->setParentResource($payment);
+        $cancel = (new Cancellation())
+            ->setId($cancellationId)
+            ->setPayment($payment)
+            ->setParentResource($authorization);
+        return $this->fetchResource($cancel);
+    }
+
+
 
     //</editor-fold>
 

@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Interfaces
  */
 namespace UnzerSDK\Interfaces;
@@ -141,6 +139,34 @@ interface CancelServiceInterface
         float $amountNet = null,
         float $amountVat = null
     ): array;
+
+    /**
+     * Performs a Cancellation transaction on the Payment. Should only be used for "paylater-invoice" payments.
+     * If no Cancellation is given a full cancel will be performed.
+     *
+     * @param Payment|string    $payment      The Payment object or the id of the Payment to be cancelled.
+     * @param Cancellation|null $cancellation
+     *
+     * @return Cancellation A Cancellation object created with this cancel call.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function cancelAuthorizedPayment($payment, ?Cancellation $cancellation = null): Cancellation;
+
+    /**
+     * Performs a Cancellation transaction on the Payment. Should only be used for "paylater-invoice" payments.
+     * If no Cancellation is given a full cancel will be performed.
+     *
+     * @param Payment|string    $payment      The Payment object or the id of the Payment to be cancelled.
+     * @param Cancellation|null $cancellation
+     *
+     * @return Cancellation A Cancellation object created with this cancel call.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is a error while using the SDK.
+     */
+    public function cancelChargedPayment($payment, ?Cancellation $cancellation = null): Cancellation;
 
     /**
      * Cancel the given amount of the payments authorization.

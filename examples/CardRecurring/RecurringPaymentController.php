@@ -19,9 +19,7 @@
  *
  *  @link  https://docs.unzer.com/
  *
- *  @author  David Owusu <development@unzer.com>
- *
- *  @package  UnzerSDK
+ *  @package  UnzerSDK\examples
  *
  */
 

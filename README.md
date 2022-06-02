@@ -33,7 +33,8 @@ Please refer to the following documentation for installation instructions and us
 *   Unzer Bank Transfer (PIS)
 *   Unzer Direct Debit (secured) + Recurring
 *   Unzer Instalment (secured)
-*   Unzer Invoice (secured)
+*   Unzer Invoice
+*   Unzer Invoice Secured (deprecated)
 *   WeChat Pay
 
 ## Supported features

@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
@@ -29,10 +27,16 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\Services\EnvironmentService;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class InvoiceTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->getUnzerObject(EnvironmentService::getTestPrivateKey(true));
+    }
+
     /**
      * Verifies invoice payment type can be created.
      *

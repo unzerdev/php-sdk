@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration
  */
 namespace UnzerSDK\test\integration;
@@ -30,7 +28,6 @@ use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
-use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -60,8 +57,6 @@ class BasketV2Test extends BaseIntegrationTest
         $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
-        $invoice = new Invoice();
-        $invoice->setParentResource($this->unzer)->charge(100, 'EUR', 'https://unzer.com', null, 'orderId', null, $basket);
         $fetchedBasket = $this->unzer->fetchBasket($basket->getId())->setOrderId('');
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
     }
@@ -89,8 +84,6 @@ class BasketV2Test extends BaseIntegrationTest
         $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
 
-        $invoice = new Invoice();
-        $invoice->setParentResource($this->unzer)->charge(100, 'EUR', 'https://unzer.com', null, 'orderId', null, $basket);
         $fetchedBasket = $this->unzer->fetchBasket($basket->getId());
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
     }

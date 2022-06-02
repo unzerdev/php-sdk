@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -236,6 +234,25 @@ function printMessage($type, $title, $text)
                     <div class="content">
                         <div class="header">
                             Unzer Invoice
+                        </div>
+                        <div class="description">
+                            With "paylater-invoice" type.
+                        </div>
+                    </div>
+                    <div class="ui attached white button" onclick="location.href='https://docs.unzer.com/payment-methods/unzer-invoice-upl/';">
+                        Documentation
+                    </div>
+                    <div id="tryInvoiceSecuredExample" class="ui bottom attached green button" onclick="location.href='PaylaterInvoice/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Unzer Invoice (deprecated)
+                        </div>
+                        <div class="description">
+                            With "invoice-secured" type.
                         </div>
                     </div>
                     <div id="tryInvoiceSecuredExample" class="ui bottom attached green button" onclick="location.href='InvoiceSecured/';">

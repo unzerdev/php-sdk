@@ -18,8 +18,6 @@
  *
  * @link  https://dev.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Constants
  */
 namespace UnzerSDK\Constants;

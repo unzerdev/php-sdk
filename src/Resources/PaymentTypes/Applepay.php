@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@unzer.com>
- *
  * @package  UnzerSDK\PaymentTypes
  */
 namespace UnzerSDK\Resources\PaymentTypes;
@@ -29,13 +27,11 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\EmbeddedResources\ApplePayHeader;
 use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
-use UnzerSDK\Traits\HasGeoLocation;
 
 class Applepay extends BasePaymentType
 {
     use CanDirectCharge;
     use CanAuthorize;
-    use HasGeoLocation;
 
     /** @var string|null $applicationExpirationDate */
     private $applicationExpirationDate;

@@ -19,8 +19,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK
  */
 namespace UnzerSDK;
@@ -63,13 +61,16 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.1.5.0';
+    public const SDK_VERSION = '1.2.0.0';
 
     /** @var string $key */
     private $key;
 
-    /** @var string $locale */
+    /** @var string|null $locale */
     private $locale;
+
+    /** @var string|null $clientIp */
+    private $clientIp;
 
     /** @var ResourceServiceInterface $resourceService */
     private $resourceService;
@@ -146,7 +147,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     }
 
     /**
-     * Returns the set customer locale.
+     * Returns the set customer locale. This will be set as a request header field.
      *
      * @return string|null The locale of the customer.
      *                     Refer to the documentation under https://docs.unzer.com for a list of supported values.
@@ -171,6 +172,27 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         }
 
         $this->locale = str_replace('_', '-', $locale);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClientIp(): ?string
+    {
+        return $this->clientIp;
+    }
+
+    /**
+     * Sets the clientIp. This will be set as a request header field.
+     *
+     * @param string|null $clientIp
+     *
+     * @return Unzer
+     */
+    public function setClientIp($clientIp): Unzer
+    {
+        $this->clientIp = $clientIp;
         return $this;
     }
 
@@ -580,6 +602,22 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchRefund($charge, $cancellationId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaymentRefund($payment, $cancellationId): Cancellation
+    {
+        return $this->resourceService->fetchPaymentRefund($payment, $cancellationId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaymentReversal($payment, $cancellationId): Cancellation
+    {
+        return $this->resourceService->fetchPaymentReversal($payment, $cancellationId);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Shipment resource">
@@ -683,6 +721,14 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
+    public function performAuthorization(Authorization $authorization, $paymentType, $customer = null, $metadata = null, $basket = null): Authorization
+    {
+        return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function authorize(
         $amount,
         $currency,
@@ -716,6 +762,14 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     //</editor-fold>
 
     //<editor-fold desc="Charge transactions">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function performCharge(Charge $charge, $paymentType, $customer = null, $metadata = null, $basket = null): Charge
+    {
+        return $this->paymentService->performCharge($charge, $paymentType, $customer, $metadata, $basket);
+    }
 
     /**
      * {@inheritDoc}
@@ -768,12 +822,15 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public function chargePayment(
         $payment,
         float $amount = null,
-        string $currency = null,
         string $orderId = null,
         string $invoiceId = null
     ): Charge {
-        $paymentObject = $this->resourceService->getPaymentResource($payment);
-        return $this->paymentService->chargePayment($paymentObject, $amount, $currency, $orderId, $invoiceId);
+        return $this->paymentService->chargePayment($payment, $amount, $orderId, $invoiceId);
+    }
+
+    public function performChargeOnPayment($payment, Charge $charge): Charge
+    {
+        return $this->paymentService->performChargeOnPayment($payment, $charge);
     }
 
     //</editor-fold>
@@ -856,6 +913,24 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     ): Cancellation {
         return $this->cancelService
             ->cancelCharge($charge, $amount, $reasonCode, $referenceText, $amountNet, $amountVat);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelAuthorizedPayment($payment, ?Cancellation $cancellation = null): Cancellation
+    {
+        return $this->cancelService
+            ->cancelAuthorizedPayment($payment, $cancellation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelChargedPayment($payment, ?Cancellation $cancellation = null): Cancellation
+    {
+        return $this->cancelService
+            ->cancelChargedPayment($payment, $cancellation);
     }
 
     //</editor-fold>

@@ -3,6 +3,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.0.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.2.0.0)
+### Added
+* Add payment type Paylater Invoice.
+* Add properties `companyType` and `owner` to `CompanyInfo` class.
+* Add `shippingType` property to `Address` class.
+* Allow setting the clientIp manually.
+* Allow setting `riskData` for authorize request.
+* Allow setting shipping data for charge request such as `deliveryTrackingId`, `deliveryService` and `returnTrackingId`.
+* Add new methods for `authorize` and `charge` transactions that use prepared objects only:
+  * `Unzer::performAuthorization()`
+  * `Unzer::performCharge()`
+  * `Unzer::performChargeOnPayment()`
+* Add new methods to cancel payments done via paylater-invoice type:
+  * `Unzer::cancelAuthorizedPayment()`
+  * `Unzer::cancelChargedPayment()`
+* Add new methods to fetch cancellations of payment done via paylater-invoice type:
+  * `Unzer::fetchPaymentReversal()`
+  * `Unzer::fetchPaymentRefund()`
+* Add Paylater Invoice example including the function to capture an authorized payment.
+
+### Changed
+* Remove redundant `currency` parameter from `Unzer::chargePayment()` method.
+* Add `geoLocation` property to all payment type classes.
+* Several minor improvements.
+* Add account information coming from PAPI to Authorize class.
+
+### Deprecated
+* Classes
+  * Mark `InvoiceSecured` as deprecated, will be replaced by `PaylaterInvoice`.
+* Methods
+  * Mark `Unzer::authorize()` as deprecated. Please use `Unzer::performAuthorization()` instead.
+  * Mark `Unzer::charge()` as deprecated. Please use `Unzer::performCharge()` instead.
+  * Mark `Unzer::chargePayment()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
+  * Mark `Unzer::chargeAuthorization()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
+
 ## [1.1.5.0](https://github.com/unzerdev/php-sdk/compare/1.1.4.2..1.1.5.0)
 ### Added
 *   Add Support for basket `v2` resource.

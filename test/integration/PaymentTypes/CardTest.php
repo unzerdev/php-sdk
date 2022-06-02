@@ -21,8 +21,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
@@ -88,13 +86,14 @@ class CardTest extends BaseIntegrationTest
     public function cardShouldUseEmail($email, $expected)
     {
         // when.
-        /** @var Card $card */
         $card = $this->createCardObject('4711100000000000');
         $this->assertNull($card->getId());
         $this->assertNull($card->getEmail()); // default value is set.
 
         // then.
         $card->setEmail($email); // override email.
+
+        /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
         $this->assertNotNull($card->getId());
         $this->assertEquals($email, $card->getEmail());
@@ -149,6 +148,21 @@ class CardTest extends BaseIntegrationTest
         $card = $this->unzer->createPaymentType($card);
         $this->expectException(UnzerApiException::class);
         $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+    }
+
+    /**
+     * Invalid expiry date should throw API exception.
+     *
+     * @test
+     */
+    public function invalidExpiryDateShouldThrowApiException(): void
+    {
+        $card = $this->createCardObject('4711100000000000');
+        $card->setExpiryDate('01/2001');
+
+        /** @var Card $card */
+        $this->expectException(UnzerApiException::class);
+        $this->unzer->createPaymentType($card);
     }
 
     /**
