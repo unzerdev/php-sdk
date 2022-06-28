@@ -61,10 +61,9 @@ class KlarnaTest extends BaseIntegrationTest
      *
      * @param Klarna $klarna
      *
-     * @return Charge
      * @depends klarnaShouldBeCreatableAndFetchable
      */
-    public function klarnaShouldBeAbleToCharge(Klarna $klarna): Charge
+    public function klarnaShouldBeAbleToCharge(Klarna $klarna)
     {
         $chargeInstance = (new Charge(99.99, 'EUR', self::RETURN_URL))
             ->addAdditionalTransactionData('termsAndConditionsUrl', 'https://merchant-terms-url.com')
@@ -75,8 +74,6 @@ class KlarnaTest extends BaseIntegrationTest
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
-
-        return $charge;
     }
 
     /**

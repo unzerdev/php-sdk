@@ -62,7 +62,7 @@ class BaseIntegrationTest extends BasePaymentTest
      *
      * @throws \UnzerSDK\Exceptions\UnzerApiException
      */
-    protected function createPaylaterAuthorization(): Authorization
+    protected function createPaylaterInvoiceAuthorization(): Authorization
     {
         $paylaterInvoice = $this->unzer->createPaymentType(new PaylaterInvoice());
 
