@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.2.1.0](https://github.com/unzerdev/php-sdk/compare/1.2.0.0..1.2.1.0)
 ### Added
 * Add payment type "Klarna".
+* Provide Example for "Klarna" payment method.
+
+### Changed
+* Several minor improvements.
 
 ## [1.2.0.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.2.0.0)
 ### Added
