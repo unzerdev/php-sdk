@@ -66,7 +66,7 @@ class KlarnaTest extends BaseIntegrationTest
     public function klarnaShouldBeAbleToCharge(Klarna $klarna)
     {
         $chargeInstance = (new Charge(99.99, 'EUR', self::RETURN_URL))
-            ->addAdditionalTransactionData('termsAndConditionsUrl', 'https://merchant-terms-url.com')
+            ->addAdditionalTransactionData('termsAndConditionUrl', 'https://merchant-terms-url.com')
             ->addAdditionalTransactionData('privacyPolicyUrl', 'https://merchant-data-privacy-url.com');
 
         $basket = $this->createV2Basket();
@@ -86,12 +86,14 @@ class KlarnaTest extends BaseIntegrationTest
      */
     public function klarnaShouldBeAuthorizable(Klarna $klarna): void
     {
-        $authorizationInstance = (new Authorization(100.0, 'EUR', self::RETURN_URL))
-            ->addAdditionalTransactionData('termsAndConditionsUrl', 'https://merchant-terms-url.com')
-            ->addAdditionalTransactionData('privacyPolicyUrl', 'https://merchant-data-privacy-url.com');
+        $authorizationInstance = (new Authorization(99.99, 'EUR', self::RETURN_URL))
+            ->addAdditionalTransactionData('termsAndConditionUrl', 'https://www.unzer.com/de')
+            ->addAdditionalTransactionData('privacyPolicyUrl', 'https://www.unzer.com/de');
+
+        $customer = $this->getMaximumCustomerInclShippingAddress();
 
         $basket = $this->createV2Basket();
-        $authorization = $this->unzer->performAuthorization($authorizationInstance, $klarna, null, null, $basket);
+        $authorization = $this->unzer->performAuthorization($authorizationInstance, $klarna, $customer, null, $basket);
         $this->assertNotNull($authorization);
         $this->assertNotEmpty($authorization->getId());
         $this->assertNotEmpty($authorization->getRedirectUrl());
