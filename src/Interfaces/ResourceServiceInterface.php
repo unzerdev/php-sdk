@@ -417,6 +417,7 @@ interface ResourceServiceInterface
      * Get the configuration for the given payment type.
      *
      * @param BasePaymentType $paymentType
+     * @param Config|null     $config      Can be used to add query params to the GET request.
      *
      * @return Config
      *
@@ -424,5 +425,5 @@ interface ResourceServiceInterface
      *                           This will also occur if the given payment type has no configuration.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchConfig(BasePaymentType $paymentType): Config;
+    public function fetchConfig(BasePaymentType $paymentType, ?Config $config = null): Config;
 }

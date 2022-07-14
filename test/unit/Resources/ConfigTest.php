@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -18,12 +19,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.unzer.com/
- *
- * @author  David Owusu <development@unzer.com>
+ * @link     https://docs.unzer.com/
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace UnzerSDK\test\unit\Resources;
 
 use UnzerSDK\Resources\Config;
@@ -36,25 +36,44 @@ class ConfigTest extends BasePaymentTest
      *
      * @test
      */
-    public function mandatoryConstructorParametersShouldDefaultToEmptyString(): void
+    public function getterAndSetterWorkAsExpected(): void
     {
         $config = new Config();
-        $this->assertEquals('', $config->getOptinText());
+        $this->assertNull($config->getDataPrivacyConsent());
+        $this->assertNull($config->getDataPrivacyDeclaration());
+        $this->assertNull($config->getTermsAndConditions());
+        $this->assertIsEmptyArray($config->getQueryParams());
+
+        $config->setDataPrivacyConsent('dataPrivacyConsent')
+            ->setDataPrivacyDeclaration('dataPrivacyDeclaration')
+            ->setTermsAndConditions('termsAndConditions');
+
+        $this->assertEquals('dataPrivacyConsent', $config->getDataPrivacyConsent());
+        $this->assertEquals('dataPrivacyDeclaration', $config->getDataPrivacyDeclaration());
+        $this->assertEquals('termsAndConditions', $config->getTermsAndConditions());
     }
 
     /**
-     * Verify the getters and setters of the webhook resource.
+     * Verify query params can be set via Config class.
      *
      * @test
      */
-    public function gettersAndSettersOfWebhookShouldBehaveAsExpected(): void
+    public function queryParameterCanBeSetViaConfigClass(): void
     {
         $config = new Config();
-        $this->assertEquals('', $config->getOptinText());
+        $queryParams = $config->getQueryParams();
+        $this->assertIsEmptyArray($queryParams);
 
-        $responseArray = ['optinText' => 'Some opt-in text.'];
-        
-        $config->handleResponse((object)$responseArray);
-        $this->assertEquals('Some opt-in text.', $config->getOptinText());
+        $queryArray = [
+            'param1' => 'param1',
+            'param2' => 'param2',
+            'param3' => 'param3',
+        ];
+
+        $config->setQueryParams($queryArray);
+        $updatedParams = $config->getQueryParams();
+        $this->assertEquals('param1', $updatedParams['param1']);
+        $this->assertEquals('param2', $updatedParams['param2']);
+        $this->assertEquals('param3', $updatedParams['param3']);
     }
 }

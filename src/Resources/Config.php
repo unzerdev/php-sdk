@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  This represents the config resource.
  *
@@ -26,24 +27,151 @@
 
 namespace UnzerSDK\Resources;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
+
 class Config extends AbstractUnzerResource
 {
-    /** @var string */
-    protected $optinText;
+    /** @var string | null */
+    private $dataPrivacyConsent;
+
+    /** @var string | null */
+    private $dataPrivacyDeclaration;
+
+    /** @var string | null */
+    private $termsAndConditions;
+
+    /** @var array $queryParams Query parameter used for GET request */
+    private $queryParams = [];
+
+    private const QUERY_KEY_CUSTOMER_TYPE = 'customerType';
+    private const PARAM_KEY_COUNTRY = 'country';
 
     /**
      * @return string
      */
-    public function getOptinText(): ?string
+    public function getDataPrivacyConsent(): ?string
     {
-        return $this->optinText;
+        return $this->dataPrivacyConsent;
     }
 
     /**
-     * @param string|null $optinText
+     * @param string $dataPrivacyConsent
+     *
+     * @return Config
      */
-    protected function setOptinText(?string $optinText): void
+    public function setDataPrivacyConsent(string $dataPrivacyConsent): Config
     {
-        $this->optinText = $optinText;
+        $this->dataPrivacyConsent = $dataPrivacyConsent;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataPrivacyDeclaration(): ?string
+    {
+        return $this->dataPrivacyDeclaration;
+    }
+
+    /**
+     * @param string $dataPrivacyDeclaration
+     *
+     * @return Config
+     */
+    public function setDataPrivacyDeclaration(string $dataPrivacyDeclaration): Config
+    {
+        $this->dataPrivacyDeclaration = $dataPrivacyDeclaration;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTermsAndConditions(): ?string
+    {
+        return $this->termsAndConditions;
+    }
+
+    /**
+     * @param string $termsAndConditions
+     *
+     * @return Config
+     */
+    public function setTermsAndConditions(string $termsAndConditions): Config
+    {
+        $this->termsAndConditions = $termsAndConditions;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getQueryParams(): array
+    {
+        return $this->queryParams;
+    }
+
+    /**
+     * @param array $queryParams
+     *
+     * @return Config
+     */
+    public function setQueryParams(array $queryParams): Config
+    {
+        $this->queryParams = $queryParams;
+        return $this;
+    }
+
+    /** Gets the 'customerType' value from query parameter array.
+     *
+     * @return string
+     */
+    public function getCustomerType(): ?string
+    {
+        return ($this->queryParams[self::QUERY_KEY_CUSTOMER_TYPE] ?? null);
+    }
+
+    /** Sets the 'customerType' as query parameter for GET requests.
+     *
+     * @param string|null $customerType
+     *
+     * @return Config
+     */
+    public function setCustomerType(?string $customerType): self
+    {
+        $this->queryParams[self::QUERY_KEY_CUSTOMER_TYPE] = $customerType;
+        return $this;
+    }
+
+    /** Gets the 'country' value from query parameter array.
+     *
+     * @return string
+     */
+    public function getCountry(): ?string
+    {
+        return ($this->queryParams[self::PARAM_KEY_COUNTRY] ?? null);
+    }
+
+    /** Sets the 'country' as query parameter for GET requests.
+     *
+     * @param string|null $country
+     *
+     * @return Config
+     */
+    public function setCountry(?string $country): self
+    {
+        $this->queryParams[self::PARAM_KEY_COUNTRY] = $country;
+        return $this;
+    }
+
+    public function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    {
+        return parent::getResourcePath($httpMethod) . $this->getQueryString();
+    }
+
+    private function getQueryString(): ?string
+    {
+        $query = http_build_query($this->queryParams);
+        return $query ? '?' . $query : null;
     }
 }

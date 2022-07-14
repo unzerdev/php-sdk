@@ -62,7 +62,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.2.0.0';
+    public const SDK_VERSION = '1.2.1.0';
 
     /** @var string $key */
     private $key;
@@ -1032,10 +1032,12 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
 
     /**
      * {@inheritDoc}
+     *
+     * @param Config|null $config
      */
-    public function fetchConfig(BasePaymentType $paymentType): Config
+    public function fetchConfig(BasePaymentType $paymentType, ?Config $config = null): Config
     {
-        return $this->getResourceService()->fetchConfig($paymentType);
+        return $this->getResourceService()->fetchConfig($paymentType, $config);
     }
 
     //</editor-fold>

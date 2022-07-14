@@ -839,13 +839,17 @@ class ResourceService implements ResourceServiceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @param Config|null $config
      */
-    public function fetchConfig(BasePaymentType $paymentType): Config
+    public function fetchConfig(BasePaymentType $paymentType, ?Config $config = null): Config
     {
         $paymentType->setParentResource($this->unzer);
-        $configObject = (new Config())->setParentResource($paymentType);
-        $this->fetchResource($configObject);
-        return $configObject;
+
+        $configObject = $config ?? new Config();
+        $configObject->setParentResource($paymentType);
+
+        return $this->fetchResource($configObject);
     }
 
     //</editor-fold>

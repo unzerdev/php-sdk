@@ -20,16 +20,15 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration
  */
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
-use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
@@ -43,15 +42,21 @@ class ConfigTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function verifyInvoiceSecuredConfigIsFetchable()
+    public function verifyPaylaterinvoiceConfigIsFetchable()
     {
-        $this->markTestSkipped('Currently not enabled for test merchant.');
-        $config = $this->getUnzerObject()->fetchConfig(new InvoiceSecured());
+        $config = (new Config())
+            ->setCustomerType('B2C')
+            ->setCountry('DE');
 
-        $exposedConfig = $config->expose();
-        $this->assertNotNull($exposedConfig);
-        $this->assertCount(1, $exposedConfig);
-        $this->assertNotEmpty($config->getOptinText());
+        $this->assertNull($config->getDataPrivacyConsent());
+        $this->assertNull($config->getDataPrivacyDeclaration());
+        $this->assertNull($config->getTermsAndConditions());
+
+        $this->getUnzerObject()->fetchConfig(new PaylaterInvoice(), $config);
+
+        $this->assertNotNull($config->getDataPrivacyConsent());
+        $this->assertNotNull($config->getDataPrivacyDeclaration());
+        $this->assertNotNull($config->getTermsAndConditions());
     }
 
     /**
