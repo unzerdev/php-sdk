@@ -1,51 +1,64 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
+to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [1.2.1.0](https://github.com/unzerdev/php-sdk/compare/1.2.0.0..1.2.1.0)
+
 ### Added
-* Allow fetching payment type config for paylater invoice.
+
+*   Allow fetching payment type config for paylater invoice.
 
 ## [1.2.0.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.2.0.0)
+
 ### Added
-* Add payment type Paylater Invoice.
-* Add properties `companyType` and `owner` to `CompanyInfo` class.
-* Add `shippingType` property to `Address` class.
-* Allow setting the clientIp manually.
-* Allow setting `riskData` for authorize request.
-* Allow setting shipping data for charge request such as `deliveryTrackingId`, `deliveryService` and `returnTrackingId`.
-* Add new methods for `authorize` and `charge` transactions that use prepared objects only:
-  * `Unzer::performAuthorization()`
-  * `Unzer::performCharge()`
-  * `Unzer::performChargeOnPayment()`
-* Add new methods to cancel payments done via paylater-invoice type:
-  * `Unzer::cancelAuthorizedPayment()`
-  * `Unzer::cancelChargedPayment()`
-* Add new methods to fetch cancellations of payment done via paylater-invoice type:
-  * `Unzer::fetchPaymentReversal()`
-  * `Unzer::fetchPaymentRefund()`
-* Add Paylater Invoice example including the function to capture an authorized payment.
+
+*   Add payment type Paylater Invoice.
+*   Add properties `companyType` and `owner` to `CompanyInfo` class.
+*   Add `shippingType` property to `Address` class.
+*   Allow setting the clientIp manually.
+*   Allow setting `riskData` for authorize request.
+*   Allow setting shipping data for charge request such as `deliveryTrackingId`, `deliveryService`
+    and `returnTrackingId`.
+*   Add new methods for `authorize` and `charge` transactions that use prepared objects only:
+    *   `Unzer::performAuthorization()`
+    *   `Unzer::performCharge()`
+    *   `Unzer::performChargeOnPayment()`
+*   Add new methods to cancel payments done via paylater-invoice type:
+    *   `Unzer::cancelAuthorizedPayment()`
+    *   `Unzer::cancelChargedPayment()`
+*   Add new methods to fetch cancellations of payment done via paylater-invoice type:
+    *   `Unzer::fetchPaymentReversal()`
+    *   `Unzer::fetchPaymentRefund()`
+*   Add Paylater Invoice example including the function to capture an authorized payment.
 
 ### Changed
-* Remove redundant `currency` parameter from `Unzer::chargePayment()` method.
-* Add `geoLocation` property to all payment type classes.
-* Several minor improvements.
-* Add account information coming from PAPI to Authorize class.
+
+*   Remove redundant `currency` parameter from `Unzer::chargePayment()` method.
+*   Add `geoLocation` property to all payment type classes.
+*   Several minor improvements.
+*   Add account information coming from PAPI to Authorize class.
 
 ### Deprecated
-* Classes
-  * Mark `InvoiceSecured` as deprecated, will be replaced by `PaylaterInvoice`.
-* Methods
-  * Mark `Unzer::authorize()` as deprecated. Please use `Unzer::performAuthorization()` instead.
-  * Mark `Unzer::charge()` as deprecated. Please use `Unzer::performCharge()` instead.
-  * Mark `Unzer::chargePayment()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
-  * Mark `Unzer::chargeAuthorization()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
+
+*   Classes
+*   Mark `InvoiceSecured` as deprecated, will be replaced by `PaylaterInvoice`.
+*   Methods:
+    *   Mark `Unzer::authorize()` as deprecated. Please use `Unzer::performAuthorization()` instead.
+    *   Mark `Unzer::charge()` as deprecated. Please use `Unzer::performCharge()` instead.
+    *   Mark `Unzer::chargePayment()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
+*   Mark `Unzer::chargeAuthorization()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
 
 ## [1.1.5.0](https://github.com/unzerdev/php-sdk/compare/1.1.4.2..1.1.5.0)
+
 ### Added
+
 *   Add Support for basket `v2` resource.
+
 ### Changed
+
 *   Add support for payment state `create` which can occur when using payment pages.
 *   Examples:
     *   Use `v2/basket` resource for secured payment methods and payment pages.
@@ -53,47 +66,66 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 *   Several minor improvements.
 
 ## [1.1.4.2](https://github.com/unzerdev/php-sdk/compare/1.1.4.1..1.1.4.2)
+
 ### Added
+
 *   Enable PHP 8.1 compatibility.
+
 ### Changed
-* Fix an issue that can cause an exception when fetching a payment that contained a "cancel-authorize" transaction even though the payment has no authorization transaction.
+
+* Fix an issue that can cause an exception when fetching a payment that contained a "cancel-authorize" transaction even
+  though the payment has no authorization transaction.
 * Update broken documentation links in readme.
 * Several minor improvements.
 
 ## [1.1.4.1](https://github.com/unzerdev/php-sdk/compare/1.1.4.0..1.1.4.1)
+
 ### Added
+
 *   Added Apple Pay example.
 
 ### Changed
+
 * Adjust `cancelAmount` logic to work properly with Invoice Secured payments.
 * Updated jQuery and frameworks used in examples.
 * Fixed failing card tests.
 * Several minor improvements.
 
 ## [1.1.4.0](https://github.com/unzerdev/php-sdk/compare/1.1.3.0..1.1.4.0)
+
 ### Added
+
 *   Enable recurrence type to be set for `charge`, `authorize` and `activateRecurringPayment` methods.
 
 ### Changed
+
 *   Enable recurring examples (card paypal)to trigger subsequent transaction from success page.
 *   Enable card recurring example to use recurrence type.
 *   Several minor improvements.
 
 ## [1.1.3.0](https://github.com/unzerdev/php-sdk/compare/1.1.2.0..1.1.3.0)
+
 ### Added
+
 *   Enable PHP 8.0 compatibility.
 *   Allow PHPUnit version 8.x and 9.x in composer dev requirements and adjust tests accordingly.
-*   Payment Page examples: Add missing customer information that are required for payment with Instalment (address, dob, salutation).
+*   Payment Page examples: Add missing customer information that are required for payment with Instalment (address, dob,
+    salutation).
 
 ### Changed
-*   `\UnzerSDK\Services\HttpService::handleErrors` explicitly casts response code to int, to ensure same behaviour on all PHP versions.
+
+*   `\UnzerSDK\Services\HttpService::handleErrors` explicitly casts response code to int, to ensure same behaviour on
+    all PHP versions.
 *   Several minor changes.
 
 ## [1.1.2.0](https://github.com/unzerdev/php-sdk/compare/1.1.1.1..1.1.2.0)
+
 ### Added
+
 *   Introduce the payment type Applepay.
 
 ### Changed
+
 *   Examples:
     *   Card Examples - Ensure that error messages are displayed just one time.
     *   Configuration - Change default protocol to https.
@@ -103,14 +135,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.1.1.1](https://github.com/unzerdev/php-sdk/compare/1.1.1.0..1.1.1.1)
 
 ### Fix
+
 *   Change debug logging of failed tests that depend on another one to work as expected.
 *   PayPal recurring example: Response handling changed to check the recurring status of the payment type.
 
 ### Added
+
 *   Extended testing for Instalment payment type.
 *   Cards (extended) example using email UI element.
 
 ### Changed
+
 *   Remove PhpUnit 8 support.
 *   Card recurring example using email UI element.
 *   Card example and paypage examples use a dummy customer-email to ensure they work with 3ds2.
@@ -119,12 +154,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## [1.1.1.0](https://github.com/unzerdev/php-sdk/compare/1.1.0.0..1.1.1.0)
 
 ### Changed
+
 *   Add email property to payment type `card` to meet 3Ds2.x regulations.
 *   Several minor changes.
 
 ## [1.1.0.0](https://github.com/unzerdev/php-sdk/compare/1260b8314af1ac461e33f0cfb382ffcd0e87c105..1.1.0.0)
 
 ### Changed
+
 *   Rebranding of the SDK.
 *   Removed payment type string from URL when fetching a payment type resource.
 *   Replace payment methods guaranteed/factoring by secured payment methods, i.e.:
@@ -137,7 +174,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
     *   `API_ERROR_IVF_REQUIRES_CUSTOMER` renamed to `API_ERROR_FACTORING_REQUIRES_CUSTOMER`.
     *   `API_ERROR_IVF_REQUIRES_BASKET` renamed to `API_ERROR_FACTORING_REQUIRES_BASKET`.
 *   Several minor changes.
+
 ### Remove
+
 *   Remove deprecated methods:
     *   getAmountTotal
     *   setAmountTotal
