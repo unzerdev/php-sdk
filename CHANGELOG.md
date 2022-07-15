@@ -42,9 +42,9 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Deprecated
 
-* Classes:
+*   Classes:
     *   Mark `InvoiceSecured` as deprecated, will be replaced by `PaylaterInvoice`.
-* Methods:
+*   Methods:
     *   Mark `Unzer::authorize()` as deprecated. Please use `Unzer::performAuthorization()` instead.
     *   Mark `Unzer::charge()` as deprecated. Please use `Unzer::performCharge()` instead.
     *   Mark `Unzer::chargePayment()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
@@ -84,10 +84,10 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-* Adjust `cancelAmount` logic to work properly with Invoice Secured payments.
-* Updated jQuery and frameworks used in examples.
-* Fixed failing card tests.
-* Several minor improvements.
+*   Adjust `cancelAmount` logic to work properly with Invoice Secured payments.
+*   Updated jQuery and frameworks used in examples.
+*   Fixed failing card tests.
+*   Several minor improvements.
 
 ## [1.1.4.0](https://github.com/unzerdev/php-sdk/compare/1.1.3.0..1.1.4.0)
 
