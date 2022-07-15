@@ -20,8 +20,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 *   Add `shippingType` property to `Address` class.
 *   Allow setting the clientIp manually.
 *   Allow setting `riskData` for authorize request.
-*   Allow setting shipping data for charge request such as `deliveryTrackingId`, `deliveryService`
-    and `returnTrackingId`.
+*   Allow setting shipping data for charge request such as `deliveryTrackingId`, `deliveryService` and `returnTrackingId`.
 *   Add new methods for `authorize` and `charge` transactions that use prepared objects only:
     *   `Unzer::performAuthorization()`
     *   `Unzer::performCharge()`
@@ -43,8 +42,8 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Deprecated
 
-*   Classes
-*   Mark `InvoiceSecured` as deprecated, will be replaced by `PaylaterInvoice`.
+*   Classes:
+    *   Mark `InvoiceSecured` as deprecated, will be replaced by `PaylaterInvoice`.
 *   Methods:
     *   Mark `Unzer::authorize()` as deprecated. Please use `Unzer::performAuthorization()` instead.
     *   Mark `Unzer::charge()` as deprecated. Please use `Unzer::performCharge()` instead.
@@ -73,8 +72,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-* Fix an issue that can cause an exception when fetching a payment that contained a "cancel-authorize" transaction even
-  though the payment has no authorization transaction.
+* Fix an issue that can cause an exception when fetching a payment that contained a "cancel-authorize" transaction even though the payment has no authorization transaction.
 * Update broken documentation links in readme.
 * Several minor improvements.
 
@@ -109,13 +107,11 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 *   Enable PHP 8.0 compatibility.
 *   Allow PHPUnit version 8.x and 9.x in composer dev requirements and adjust tests accordingly.
-*   Payment Page examples: Add missing customer information that are required for payment with Instalment (address, dob,
-    salutation).
+*   Payment Page examples: Add missing customer information that are required for payment with Instalment (address, dob, salutation).
 
 ### Changed
 
-*   `\UnzerSDK\Services\HttpService::handleErrors` explicitly casts response code to int, to ensure same behaviour on
-    all PHP versions.
+*   `\UnzerSDK\Services\HttpService::handleErrors` explicitly casts response code to int, to ensure same behaviour on all PHP versions.
 *   Several minor changes.
 
 ## [1.1.2.0](https://github.com/unzerdev/php-sdk/compare/1.1.1.1..1.1.2.0)
@@ -188,7 +184,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
     *   getResource
     *   fetchResource
 *   Remove deprecated constants:
-    * API_ERROR_AUTHORIZE_ALREADY_CANCELLED
-    * API_ERROR_CHARGE_ALREADY_CHARGED_BACK
-    * API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION
-    * ENV_VAR_NAME_DISABLE_TEST_LOGGING
+    *   API_ERROR_AUTHORIZE_ALREADY_CANCELLED
+    *   API_ERROR_CHARGE_ALREADY_CHARGED_BACK
+    *   API_ERROR_BASKET_ITEM_IMAGE_INVALID_EXTENSION
+    *   ENV_VAR_NAME_DISABLE_TEST_LOGGING
