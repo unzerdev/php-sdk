@@ -42,13 +42,13 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Deprecated
 
-*   Classes:
+* Classes:
     *   Mark `InvoiceSecured` as deprecated, will be replaced by `PaylaterInvoice`.
-*   Methods:
+* Methods:
     *   Mark `Unzer::authorize()` as deprecated. Please use `Unzer::performAuthorization()` instead.
     *   Mark `Unzer::charge()` as deprecated. Please use `Unzer::performCharge()` instead.
     *   Mark `Unzer::chargePayment()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
-*   Mark `Unzer::chargeAuthorization()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
+    *   Mark `Unzer::chargeAuthorization()` as deprecated. Please use `Unzer::performChargeOnPayment()` instead.
 
 ## [1.1.5.0](https://github.com/unzerdev/php-sdk/compare/1.1.4.2..1.1.5.0)
 
