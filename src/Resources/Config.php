@@ -101,7 +101,8 @@ class Config extends AbstractUnzerResource
         return $this;
     }
 
-    /**
+    /** Get query parameter used for GET request.
+     *
      * @return array
      */
     public function getQueryParams(): array
@@ -109,7 +110,8 @@ class Config extends AbstractUnzerResource
         return $this->queryParams;
     }
 
-    /**
+    /** Set query parameter used for GET request.
+     *
      * @param array $queryParams
      *
      * @return Config
@@ -120,7 +122,7 @@ class Config extends AbstractUnzerResource
         return $this;
     }
 
-    /** Gets the 'customerType' value from query parameter array.
+    /** Get the 'customerType' value from query parameter array.
      *
      * @return string
      */
@@ -129,7 +131,7 @@ class Config extends AbstractUnzerResource
         return ($this->queryParams[self::QUERY_KEY_CUSTOMER_TYPE] ?? null);
     }
 
-    /** Sets the 'customerType' as query parameter for GET requests.
+    /** Set the 'customerType' as query parameter for GET requests.
      *
      * @param string|null $customerType
      *
@@ -141,7 +143,7 @@ class Config extends AbstractUnzerResource
         return $this;
     }
 
-    /** Gets the 'country' value from query parameter array.
+    /** Get the 'country' value from query parameter array.
      *
      * @return string
      */
@@ -150,7 +152,7 @@ class Config extends AbstractUnzerResource
         return ($this->queryParams[self::PARAM_KEY_COUNTRY] ?? null);
     }
 
-    /** Sets the 'country' as query parameter for GET requests.
+    /** Set the 'country' as query parameter for GET requests.
      *
      * @param string|null $country
      *
@@ -162,11 +164,18 @@ class Config extends AbstractUnzerResource
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return parent::getResourcePath($httpMethod) . $this->getQueryString();
     }
 
+    /** Return the query string created from 'queryParams'.
+     *
+     * @return string|null
+     */
     private function getQueryString(): ?string
     {
         $query = http_build_query($this->queryParams);
