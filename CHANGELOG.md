@@ -11,6 +11,10 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 *   Allow fetching payment type config for paylater invoice.
 
+### Changed
+
+*   Update UPL Invoice Example to display the "my consent" link in payment form.
+
 ## [1.2.0.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.2.0.0)
 
 ### Added
