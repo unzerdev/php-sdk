@@ -64,6 +64,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     let paylaterInvoice = unzerInstance.PaylaterInvoice();
     paylaterInvoice.create({
         containerId: 'example-paylater-invoice',
+        customerType: 'B2C',
         errorHolderId: 'error-holder'
     });
 
@@ -85,7 +86,7 @@ require_once __DIR__ . '/../../../../autoload.php';
     let isValidCustomer = false;
     let isValidResource = false;
     paylaterInvoice.addEventListener('change', function eventHandlerResource(e) {
-        if (e.optinSuccess) {
+        if (e.success) {
             isValidResource = true;
             if (isValidCustomer) {
                 $('button[type="submit"]').removeAttr('disabled');
