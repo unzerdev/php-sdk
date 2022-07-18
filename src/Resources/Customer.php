@@ -70,6 +70,9 @@ class Customer extends AbstractUnzerResource
     /** @var CompanyInfo $companyInfo */
     protected $companyInfo;
 
+    /** @var string $language */
+    protected $language;
+
     /**
      * Customer constructor.
      */
@@ -307,6 +310,25 @@ class Customer extends AbstractUnzerResource
     public function setCompanyInfo(CompanyInfo $companyInfo): Customer
     {
         $this->companyInfo = $companyInfo;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     *
+     * @return Customer
+     */
+    public function setLanguage(?string $language): Customer
+    {
+        $this->language = $language;
         return $this;
     }
 

@@ -91,6 +91,7 @@ class KlarnaTest extends BaseIntegrationTest
             ->setPrivacyPolicyUrl('https://www.unzer.com/de');
 
         $customer = $this->getMaximumCustomerInclShippingAddress();
+        $customer->setLanguage('de');
 
         $basket = $this->createV2Basket();
         $authorization = $this->unzer->performAuthorization($authorizationInstance, $klarna, $customer, null, $basket);
