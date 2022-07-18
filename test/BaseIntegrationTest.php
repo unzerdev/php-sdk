@@ -57,7 +57,8 @@ class BaseIntegrationTest extends BasePaymentTest
         }
     }
 
-    /**
+    /** Creates a Paylater Invoice authorization transaction with an amount of 99.99€.
+     *
      * @return Authorization
      *
      * @throws \UnzerSDK\Exceptions\UnzerApiException

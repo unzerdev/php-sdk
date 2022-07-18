@@ -607,11 +607,11 @@ class CardTest extends BaseIntegrationTest
     {
         $cardDetailsA = new CardDetails();
         $cardDetailsAObj          = (object)[
-            'cardType'          => 'CLASSIC',
-            'account'           => 'CREDIT',
-            'countryIsoA2'      => 'RU',
-            'countryName'       => 'RUSSIAN FEDERATION',
-            'issuerName'        => '',
+            'cardType'          => 'STANDARD',
+            'account'           => 'DEBIT',
+            'countryIsoA2'      => 'BE',
+            'countryName'       => 'BELGIUM',
+            'issuerName'        => 'MASTERCARD EUROPE',
             'issuerUrl'         => '',
             'issuerPhoneNumber' => ''
         ];
@@ -630,7 +630,7 @@ class CardTest extends BaseIntegrationTest
         $cardDetailsB->handleResponse($cardDetailsBObj);
 
         return [
-            'card type set'   => ['4012001037461114', $cardDetailsA],
+            'card type set'   => ['6799851000000032', $cardDetailsA],
             'issuer data set' => ['5453010000059543', $cardDetailsB]
         ];
     }
