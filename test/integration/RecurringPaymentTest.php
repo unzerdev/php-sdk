@@ -36,6 +36,9 @@ use UnzerSDK\Services\EnvironmentService;
 use UnzerSDK\test\BaseIntegrationTest;
 use RuntimeException;
 
+/**
+ * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
+ */
 class RecurringPaymentTest extends BaseIntegrationTest
 {
     /**

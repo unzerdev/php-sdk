@@ -1097,6 +1097,8 @@ class ResourceServiceTest extends BasePaymentTest
     /**
      * Verify createRecurring calls fetch for the payment type if it is given the id.
      *
+     * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
+     *
      * @test
      */
     public function createRecurringShouldFetchThePaymentTypeById(): void
@@ -1119,6 +1121,8 @@ class ResourceServiceTest extends BasePaymentTest
     /**
      * Verify createRecurring does not call fetch for the payment type if it is given the object itself.
      *
+     * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
+     *
      * @test
      */
     public function createRecurringShouldNotFetchThePaymentTypeByObject(): void
@@ -1138,6 +1142,8 @@ class ResourceServiceTest extends BasePaymentTest
 
     /**
      * Verify createRecurring throws exception if it is called with a payment type which does not support recurring payment.
+     *
+     * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
      *
      * @test
      */

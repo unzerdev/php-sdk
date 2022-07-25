@@ -69,6 +69,13 @@ interface ResourceServiceInterface
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     *
+     * @see        Charge::setRecurrenceType() for recurring card payment activation with initial charge transaction.
+     * @see        Authorization::setRecurrenceType() for recurring card payment activation with initial authorize transaction.
+     *
+     * @deprecated since 1.3.0.0 for "card" and "sepaDirectDebit" types.
+     * After a successful charge, the Direct Debit resources are automatically set as recurring.
+     *
      */
     public function activateRecurringPayment($paymentType, $returnUrl, string $recurrenceType = null): Recurring;
 

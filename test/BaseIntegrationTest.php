@@ -76,4 +76,12 @@ class BaseIntegrationTest extends BasePaymentTest
         $authorization = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
         return $authorization;
     }
+
+    /**
+     * @return void
+     */
+    protected function useNon3dsKey(): void
+    {
+        $this->getUnzerObject()->setKey(EnvironmentService::getTestPrivateKey(true));
+    }
 }

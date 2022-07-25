@@ -30,6 +30,9 @@ use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
 use stdClass;
 
+/**
+ * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
+ */
 class CanRecurTest extends BasePaymentTest
 {
     /**
