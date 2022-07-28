@@ -5,7 +5,7 @@ on:
     branches:
       - 'develop'
       - 'feature/**'
-    push:
+  push:
 
 jobs:
   build:
