@@ -1,7 +1,10 @@
 name: SDK unit tests
 
 on:
-  push:
+  pull_request:
+    branches:
+      - 'develop'
+      - 'feature/**'
 
 jobs:
   build:
