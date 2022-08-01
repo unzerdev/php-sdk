@@ -91,6 +91,8 @@ try {
             ->setImprintUrl('https://www.unzer.com/de/impressum')
             ->setHelpUrl('https://www.unzer.com/de/support')
             ->setContactUrl('https://www.unzer.com/en/ueber-unzer')
+            ->setFullPageImage(UNZER_PP_FULL_PAGE_IMAGE_URL)
+            ->setLogoImage(UNZER_PP_LOGO_URL)
             ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.

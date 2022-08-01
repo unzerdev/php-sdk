@@ -15,6 +15,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 *   Update UPL Invoice Example to display the "my consent" link in payment form.
 *   Update examples to display shortId on success page also for payments done via payment pages.
+*   Add background and logo image URLs to examples, which can be adjusted in the `_enableExamples.php` file.
 
 ## [1.2.0.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.2.0.0)
 
