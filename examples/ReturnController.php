@@ -68,6 +68,11 @@ try {
     $payment   = $unzer->fetchPayment($paymentId);
     $transaction = $payment->getInitialTransaction();
 
+    // Ensure that shortId is also set in case of payment pages.
+    if ($transaction !== null) {
+        $_SESSION['ShortId'] = $_SESSION['ShortId'] ?? $transaction->getShortId();
+    }
+
     if ($payment->isCompleted()) {
         // The payment process has been successful.
         // You show the success page.
