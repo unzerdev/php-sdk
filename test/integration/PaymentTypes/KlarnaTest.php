@@ -26,6 +26,8 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Resources\PaymentTypes\Klarna;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class KlarnaTest extends BaseIntegrationTest
@@ -50,5 +52,51 @@ class KlarnaTest extends BaseIntegrationTest
         $this->assertNotEmpty($fetchedKlarna->getGeoLocation()->getClientIp());
 
         return $fetchedKlarna;
+    }
+
+    /**
+     * Verify klarna is chargeable.
+     *
+     * @test
+     *
+     * @param Klarna $klarna
+     *
+     * @depends klarnaShouldBeCreatableAndFetchable
+     */
+    public function klarnaShouldBeAbleToCharge(Klarna $klarna)
+    {
+        $chargeInstance = (new Charge(99.99, 'EUR', self::RETURN_URL))
+            ->setTermsAndConditionUrl('https://www.unzer.com/de')
+            ->setPrivacyPolicyUrl('https://www.unzer.com/de');
+
+        $basket = $this->createV2Basket();
+        $charge = $this->unzer->performCharge($chargeInstance, $klarna, null, null, $basket);
+        $this->assertNotNull($charge);
+        $this->assertNotEmpty($charge->getId());
+        $this->assertNotEmpty($charge->getRedirectUrl());
+    }
+
+    /**
+     * Verify klarna is not authorizable.
+     *
+     * @test
+     *
+     * @param Klarna $klarna
+     * @depends klarnaShouldBeCreatableAndFetchable
+     */
+    public function klarnaShouldBeAuthorizable(Klarna $klarna): void
+    {
+        $authorizationInstance = (new Authorization(99.99, 'EUR', self::RETURN_URL))
+            ->setTermsAndConditionUrl('https://www.unzer.com/de')
+            ->setPrivacyPolicyUrl('https://www.unzer.com/de');
+
+        $customer = $this->getMaximumCustomerInclShippingAddress();
+        $customer->setLanguage('de');
+
+        $basket = $this->createV2Basket();
+        $authorization = $this->unzer->performAuthorization($authorizationInstance, $klarna, $customer, null, $basket);
+        $this->assertNotNull($authorization);
+        $this->assertNotEmpty($authorization->getId());
+        $this->assertNotEmpty($authorization->getRedirectUrl());
     }
 }
