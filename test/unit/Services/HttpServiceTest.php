@@ -394,7 +394,7 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify environment switches when environment variable defines PAPI environment.
+     * Verify environment switches accordingly depending on environment variable and keypair defines PAPI environment.
      *
      * @test
      *
@@ -403,12 +403,12 @@ class HttpServiceTest extends BasePaymentTest
      * @param $environment
      * @param $apiUrl
      */
-    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl): void
+    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl, $key): void
     {
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close'])->getMock();
         /** @noinspection PhpParamsInspection */
         $adapterMock->expects($this->once())->method('init')->with($apiUrl, self::anything(), self::anything());
-        $resource = (new DummyResource())->setParentResource(new Unzer('s-priv-MyTestKey'));
+        $resource = (new DummyResource())->setParentResource(new Unzer($key));
         $adapterMock->method('execute')->willReturn('myResponseString');
         $adapterMock->method('getResponseCode')->willReturn('42');
 
@@ -478,12 +478,25 @@ class HttpServiceTest extends BasePaymentTest
      */
     public function environmentUrlSwitchesWithEnvironmentVariableDP(): array
     {
+        $devUrl = 'https://dev-api.unzer.com/v1';
+        $stgUrl = 'https://stg-api.unzer.com/v1';
+        $sbxUrl = 'https://sbx-api.unzer.com/v1';
+        $prodUrl = 'https://api.unzer.com/v1';
+
+        $prodKey = 'p-priv-MyTestKey';
+        $sbxKey = 's-priv-MyTestKey';
+
         return [
-            'Dev' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, 'https://dev-api.unzer.com/v1'],
-            'Prod' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, 'https://api.unzer.com/v1'],
-            'Stg' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, 'https://stg-api.unzer.com/v1'],
-            'else' => ['something else', 'https://api.unzer.com/v1'],
-            'undefined' => ['', 'https://api.unzer.com/v1']
+            'Dev with production key' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, $prodUrl, $prodKey],
+            'Prod with production key' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, $prodUrl, $prodKey],
+            'Stg with production key' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, $prodUrl, $prodKey],
+            'something else with production key' => ['something else', $prodUrl, $prodKey],
+            'undefined with production key' => ['', $prodUrl, $prodKey],
+            'Dev with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, $devUrl, $sbxKey],
+            'Prod with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, $sbxUrl, $sbxKey],
+            'Stg with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, $stgUrl, $sbxKey],
+            'something else with sandbox key' => ['something else', $sbxUrl, $sbxKey],
+            'undefined with sandbox key' => ['', $sbxUrl, $sbxKey],
         ];
     }
 

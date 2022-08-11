@@ -222,6 +222,20 @@ class UnzerTest extends BasePaymentTest
         $unzer->$unzerMethod(...$unzerParams);
     }
 
+    /**
+     * Verify unzer provides correct environment based on the set key.
+     *
+     * @test
+     */
+    public function unzerShouldProvideExpectedKeyEnvironment()
+    {
+        $unzerProduction = new Unzer('p-priv-abcdef-g');
+        $this->assertEquals(true, $unzerProduction->hasProductionKey());
+
+        $unzerSandbox = new Unzer('s-priv-abcdef-g');
+        $this->assertEquals(false, $unzerSandbox->hasProductionKey());
+    }
+
     //<editor-fold desc="DataProviders">
 
     /**

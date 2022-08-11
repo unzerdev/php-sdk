@@ -136,6 +136,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * @return Unzer This Unzer object.
      *
      * @throws RuntimeException Throws a RuntimeException when the key is invalid.
+     *
+     * @deprecated public access will be removed. Please create a new instance with a different keypair instead.
      */
     public function setKey($key): Unzer
     {
@@ -1057,6 +1059,11 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
                 $debugHandler->log('(' . getmypid() . ') ' . $message);
             }
         }
+    }
+
+    public function hasProductionKey(): bool
+    {
+        return strpos($this->getKey(), 'p') === 0;
     }
 
     //</editor-fold>
