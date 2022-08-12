@@ -1,9 +1,9 @@
 <?php
 
 /*
- *  Controller for charge on payment (capture).
+ *  [DESCRIPTION]
  *
- *  Copyright (C) 2022 - today Unzer E-Com GmbH
+ *  Copyright (C) [ACTUAL YEAR] - today Unzer E-Com GmbH
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,16 +19,18 @@
  *
  *  @link  https://docs.unzer.com/
  *
- *  @package  UnzerSDK\examples
+ *  @author  [AUTHOR] <development@unzer.com>
+ *
+ *  @package  UnzerSDK
  *
  */
 
 /** Require the constants of this example */
-require_once __DIR__ . '/Constants.php';
+require_once __DIR__ . '/../Constants.php';
 
 /** Require the composer autoloader file */
 /** @noinspection PhpIncludeInspection */
-require_once __DIR__ . '/../../../autoload.php';
+require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
@@ -71,7 +73,7 @@ try {
     // Redirect to the failure page or to success depending on the state of the transaction
     $redirect = !empty($transaction->getRedirectUrl());
     if (!$redirect && $transaction->isSuccess()) {
-        redirect(SUCCESS_URL);
+        redirect(BACKEND_URL);
     } elseif ($redirect && $transaction->isPending()) {
         redirect(FAILURE_URL, 'Transaction initiated by merchant should not redirect to 3ds Page. The customer needs to
         do the 3ds authentication first for that payment type.');

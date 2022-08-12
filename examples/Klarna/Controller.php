@@ -118,6 +118,7 @@ try {
     // You'll need to remember the paymentId for later in the ReturnController
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
     $_SESSION['ShortId']   = $transaction->getShortId();
+    $_SESSION['isAuthorizeTransaction'] = true;
 
     // Redirect to the Klarna page
     if (!$transaction->isError() && $transaction->getRedirectUrl() !== null) {
