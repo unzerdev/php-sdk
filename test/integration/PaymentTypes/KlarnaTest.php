@@ -86,14 +86,14 @@ class KlarnaTest extends BaseIntegrationTest
      */
     public function klarnaShouldBeAuthorizable(Klarna $klarna): void
     {
-        $authorizationInstance = (new Authorization(100, 'EUR', self::RETURN_URL))
+        $authorizationInstance = (new Authorization(99.99, 'EUR', self::RETURN_URL))
             ->setTermsAndConditionUrl('https://www.unzer.com/de')
             ->setPrivacyPolicyUrl('https://www.unzer.com/de');
 
         $customer = $this->getMaximumCustomerInclShippingAddress();
         $customer->setLanguage('de');
 
-        $basket = $this->createBasket();
+        $basket = $this->createV2Basket();
         $authorization = $this->unzer->performAuthorization($authorizationInstance, $klarna, $customer, null, $basket);
         $this->assertNotNull($authorization);
         $this->assertNotEmpty($authorization->getId());

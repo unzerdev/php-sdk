@@ -38,14 +38,31 @@ require_once __DIR__ . '/../../../../autoload.php';
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://dev-static.unzer.com/v1/unzer.css" />
-    <script type="text/javascript" src="https://dev-static.unzer.com/v1/unzer.js"></script>
+    <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
+    <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
 </head>
 
 <body style="margin: 70px 70px 0;">
 <p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form" class="unzerUI form" novalidate>
+    <!-- This is just for the example - Start -->
+    <div class="fields inline">
+        <label for="transaction_type">Chose the transaction type you want to test:</label>
+        <div class="field">
+            <div class="unzerUI radio checkbox">
+                <input type="radio" name="transaction_type" value="authorize" checked="">
+                <label>Authorize</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="unzerUI radio checkbox">
+                <input type="radio" name="transaction_type" value="charge">
+                <label>Charge</label>
+            </div>
+        </div>
+    </div>
+    <!-- This is just for the example - End -->
 
     <div id="container-example-klarna"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
