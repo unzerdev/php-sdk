@@ -29,9 +29,13 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use UnzerSDK\Constants\Salutations;
+use UnzerSDK\Constants\ShippingTypes;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
@@ -78,8 +82,27 @@ try {
     $basket = new Basket($orderId);
     $basket->setTotalValueGross(119.00)
         ->addBasketItem($basketItem)
-        ->setCurrencyCode('EUR')
-        ->setOrderId($orderId);
+        ->setCurrencyCode('EUR');
+
+    // A customer is mandatory for Klarna payment type
+    $address  = (new Address())
+        ->setName('Max Universum')
+        ->setStreet('Hugo-Junkers-Str. 4')
+        ->setZip('60386')
+        ->setCity('Frankfurt am Main')
+        ->setCountry('DE')
+        ->setState('DE-BO')
+        ->setShippingType(ShippingTypes::EQUALS_BILLING);
+
+    $customer = CustomerFactory::createCustomer('Peter', 'Universum')
+        ->setSalutation(Salutations::MR)
+        ->setCompany('Unzer GmbH')
+        ->setBirthDate('1989-12-24')
+        ->setEmail('peter.universum@universum-group.de')
+        ->setMobile('+49172123456')
+        ->setPhone('+4962216471100')
+        ->setBillingAddress($address)
+        ->setLanguage('de');
 
     $transactionData = [119.00, 'EUR', RETURN_CONTROLLER_URL];
     $additionalTransactionData = [
@@ -88,16 +111,9 @@ try {
     ];
 
     // Create a charge/authorize transaction to get the redirectUrl.
-    if ($transactionType === 'charge') {
-        $chargeInstance = (new Charge(...$transactionData))
-            ->setAdditionalTransactionData((object)$additionalTransactionData);
-
-        $transaction = $unzer->performCharge($chargeInstance, $paymentTypeId, null, null, $basket);
-    } else {
-        $authorizationInstance = (new Authorization(...$transactionData))
-            ->setAdditionalTransactionData((object)$additionalTransactionData);
-        $transaction = $unzer->performAuthorization($authorizationInstance, $paymentTypeId, null, null, $basket);
-    }
+    $authorizationInstance = (new Authorization(...$transactionData))
+        ->setAdditionalTransactionData((object)$additionalTransactionData);
+    $transaction = $unzer->performAuthorization($authorizationInstance, $paymentTypeId, $customer, null, $basket);
 
     // You'll need to remember the paymentId for later in the ReturnController
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
