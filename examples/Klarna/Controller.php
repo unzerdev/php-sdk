@@ -110,7 +110,7 @@ try {
         'privacyPolicyUrl' => 'https://www.unzer.com/de/'
     ];
 
-    // Create a charge/authorize transaction to get the redirectUrl.
+    // Create a authorize transaction to get the redirectUrl.
     $authorizationInstance = (new Authorization(...$transactionData))
         ->setAdditionalTransactionData((object)$additionalTransactionData);
     $transaction = $unzer->performAuthorization($authorizationInstance, $paymentTypeId, $customer, null, $basket);
