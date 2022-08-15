@@ -207,11 +207,11 @@ class BasePaymentTest extends TestCase
     {
         $orderId = 'b' . self::generateRandomId();
         $basket = new Basket($orderId);
-        $basket->setTotalValueGross(600)
+        $basket->setTotalValueGross(99.99)
             ->setCurrencyCode('EUR');
 
         $basketItem = (new BasketItem())
-            ->setAmountPerUnitGross(600)
+            ->setAmountPerUnitGross(99.99)
             ->setQuantity(1)
             ->setBasketItemReferenceId('item1')
             ->setTitle('title');
