@@ -1,7 +1,7 @@
 <?php
 
 /*
- *  [DESCRIPTION]
+ *  Controller for charge on payment (capture).
  *
  *  Copyright (C) [ACTUAL YEAR] - today Unzer E-Com GmbH
  *
@@ -19,9 +19,7 @@
  *
  *  @link  https://docs.unzer.com/
  *
- *  @author  [AUTHOR] <development@unzer.com>
- *
- *  @package  UnzerSDK
+ *  @package  UnzerSDK\examples
  *
  */
 

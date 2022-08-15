@@ -1,7 +1,7 @@
 <?php
 
 /*
- *  Controller for charge on payment (capture).
+ *  Controller to cancel a payment. Performs reversal or refund depending on payment status.
  *
  *  Copyright (C) 2022 - today Unzer E-Com GmbH
  *
