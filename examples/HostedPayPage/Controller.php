@@ -83,16 +83,17 @@ try {
 
     // ... however you can customize the Payment Page using additional parameters.
     $paypage->setShopName('My Test Shop')
-            ->setShopDescription('Best shop in the whole world!')
-            ->setTagline('Try and stop us from being awesome!')
-            ->setOrderId('OrderNr' . $orderId)
-            ->setTermsAndConditionUrl('https://www.unzer.com/en/')
-            ->setPrivacyPolicyUrl('https://www.unzer.com/de/datenschutz/')
-            ->setImprintUrl('https://www.unzer.com/de/impressum')
-            ->setHelpUrl('https://www.unzer.com/de/support')
-            ->setContactUrl('https://www.unzer.com/en/ueber-unzer')
-            ->setLogoImage(UNZER_PP_LOGO_URL)
-            ->setInvoiceId('i' . microtime(true));
+        ->setShopDescription('Best shop in the whole world!')
+        ->setTagline('Try and stop us from being awesome!')
+        ->setOrderId('OrderNr' . $orderId)
+        ->setTermsAndConditionUrl('https://www.unzer.com/en/')
+        ->setPrivacyPolicyUrl('https://www.unzer.com/de/datenschutz/')
+        ->setImprintUrl('https://www.unzer.com/de/impressum')
+        ->setHelpUrl('https://www.unzer.com/de/support')
+        ->setContactUrl('https://www.unzer.com/en/ueber-unzer')
+        ->setFullPageImage(UNZER_PP_FULL_PAGE_IMAGE_URL)
+        ->setLogoImage(UNZER_PP_LOGO_URL)
+        ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.
     $paypage->setEffectiveInterestRate(4.99);

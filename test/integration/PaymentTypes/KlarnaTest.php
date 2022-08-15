@@ -101,6 +101,5 @@ class KlarnaTest extends BaseIntegrationTest
 
         $this->expectException(UnzerApiException::class);
         $this->unzer->performCharge($chargeInstance, $klarna, $customer, null, $basket);
-
     }
 }
