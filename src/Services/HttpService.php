@@ -285,7 +285,7 @@ class HttpService
     private function getEnvironmentPrefix(Unzer $unzer): string
     {
         // Production Environment uses no prefix.
-        if ($unzer->hasProductionKey()) {
+        if ($this->isProductionKey($unzer->getKey())) {
             return '';
         }
 
@@ -300,5 +300,16 @@ class HttpService
                 $envPrefix = self::URL_PART_SANDBOX_ENVIRONMENT;
         }
         return $envPrefix . '-';
+    }
+
+    /** Determine whether key is for production environment.
+     *
+     * @param string $privateKey
+     *
+     * @return bool
+     */
+    private function isProductionKey(string $privateKey): bool
+    {
+        return strpos($privateKey, 'p') === 0;
     }
 }

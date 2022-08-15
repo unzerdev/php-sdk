@@ -1061,10 +1061,5 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         }
     }
 
-    public function hasProductionKey(): bool
-    {
-        return strpos($this->getKey(), 'p') === 0;
-    }
-
     //</editor-fold>
 }

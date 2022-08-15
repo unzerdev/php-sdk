@@ -394,7 +394,7 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify environment switches accordingly depending on environment variable and keypair defines PAPI environment.
+     * Verify API environment switches accordingly depending on environment variable and keypair.
      *
      * @test
      *
@@ -402,8 +402,9 @@ class HttpServiceTest extends BasePaymentTest
      *
      * @param $environment
      * @param $apiUrl
+     * @param string $key
      */
-    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl, $key): void
+    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl, string $key): void
     {
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close'])->getMock();
         /** @noinspection PhpParamsInspection */
