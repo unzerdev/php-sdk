@@ -35,6 +35,7 @@ class HttpService
 {
     private const URL_PART_STAGING_ENVIRONMENT = 'stg';
     private const URL_PART_DEVELOPMENT_ENVIRONMENT = 'dev';
+    private const URL_PART_SANDBOX_ENVIRONMENT = 'sbx';
 
     /** @var HttpAdapterInterface $httpAdapter */
     private $httpAdapter;
@@ -120,10 +121,10 @@ class HttpService
         $unzerObj = $resource->getUnzerObject();
 
         // perform request
-        $url     = $this->getEnvironmentUrl($uri, $apiVersion);
+        $requestUrl = $this->buildRequestUrl($uri, $apiVersion, $unzerObj);
         $payload = $resource->jsonSerialize();
         $headers = $this->composeHttpHeaders($unzerObj);
-        $this->initRequest($url, $payload, $httpMethod, $headers);
+        $this->initRequest($requestUrl, $payload, $httpMethod, $headers);
         $httpAdapter  = $this->getAdapter();
         $response     = $httpAdapter->execute();
         $responseCode = $httpAdapter->getResponseCode();
@@ -133,7 +134,7 @@ class HttpService
         try {
             $this->handleErrors($responseCode, $response);
         } finally {
-            $this->debugLog($unzerObj, $payload, $headers, $responseCode, $httpMethod, $url, $response);
+            $this->debugLog($unzerObj, $payload, $headers, $responseCode, $httpMethod, $requestUrl, $response);
         }
 
         return $response;
@@ -242,21 +243,10 @@ class HttpService
      *
      * @return string
      */
-    private function getEnvironmentUrl($uri, string $apiVersion): string
+    private function buildRequestUrl($uri, string $apiVersion, Unzer $unzer): string
     {
-        $envUrl = [];
-        switch ($this->getEnvironmentService()->getPapiEnvironment()) {
-            case EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT:
-                $envUrl[] = self::URL_PART_STAGING_ENVIRONMENT;
-                break;
-            case EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT:
-                $envUrl[] = self::URL_PART_DEVELOPMENT_ENVIRONMENT;
-                break;
-            default:
-                break;
-        }
-        $envUrl[] = Unzer::BASE_URL;
-        return 'https://' . implode('-', $envUrl) . '/' . $apiVersion . $uri;
+        $envPrefix = $this->getEnvironmentPrefix($unzer);
+        return "https://" . $envPrefix . Unzer::BASE_URL . "/" . $apiVersion . $uri;
     }
 
     /**
@@ -284,5 +274,42 @@ class HttpService
         }
 
         return $httpHeaders;
+    }
+
+    /** Determine the environment to be used for Api calls and returns the prefix for it. Production environment has no prefix.
+     *
+     * @param Unzer $unzer
+     *
+     * @return string
+     */
+    private function getEnvironmentPrefix(Unzer $unzer): string
+    {
+        // Production Environment uses no prefix.
+        if ($this->isProductionKey($unzer->getKey())) {
+            return '';
+        }
+
+        switch ($this->getEnvironmentService()->getPapiEnvironment()) {
+            case EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT:
+                $envPrefix = self::URL_PART_STAGING_ENVIRONMENT;
+                break;
+            case EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT:
+                $envPrefix = self::URL_PART_DEVELOPMENT_ENVIRONMENT;
+                break;
+            default:
+                $envPrefix = self::URL_PART_SANDBOX_ENVIRONMENT;
+        }
+        return $envPrefix . '-';
+    }
+
+    /** Determine whether key is for production environment.
+     *
+     * @param string $privateKey
+     *
+     * @return bool
+     */
+    private function isProductionKey(string $privateKey): bool
+    {
+        return strpos($privateKey, 'p') === 0;
     }
 }
