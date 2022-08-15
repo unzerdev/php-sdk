@@ -109,7 +109,7 @@ class HttpServiceTest extends BasePaymentTest
         $adapterMock->expects($this->once())->method('init')->with(
             $this->callback(
                 static function ($url) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $url) === 'https://api.unzer.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'sbx-api', $url) === 'https://sbx-api.unzer.com/v1/my/uri/123';
                 }
             ),
             '{"dummyResource": "JsonSerialized"}',
@@ -206,7 +206,7 @@ class HttpServiceTest extends BasePaymentTest
         $loggerMock->expects($this->exactly(7))->method('log')->withConsecutive(
             [ $this->callback(
                 static function ($string) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') GET: https://api.unzer.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'sbx-api', $string) === '(' . (getmypid()) . ') GET: https://sbx-api.unzer.com/v1/my/uri/123';
                 }
             )
             ],
@@ -223,7 +223,7 @@ class HttpServiceTest extends BasePaymentTest
             ['(' . (getmypid()) . ') Response: (200) {"response":"myResponseString"}'],
             [ $this->callback(
                 static function ($string) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') POST: https://api.unzer.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'sbx-api', $string) === '(' . (getmypid()) . ') POST: https://sbx-api.unzer.com/v1/my/uri/123';
                 }
             )
             ],
