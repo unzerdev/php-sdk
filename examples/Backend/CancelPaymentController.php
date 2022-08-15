@@ -81,7 +81,7 @@ try {
     if (!$redirect && $transaction->isSuccess()) {
         redirect(BACKEND_URL);
     } elseif ($redirect && $transaction->isPending()) {
-        redirect(FAILURE_URL, 'Transaction initiated by merchant should not redirect to 3ds Page. The customer needs to
+        redirect(BACKEND_FAILURE_URL, 'Transaction initiated by merchant should not redirect to 3ds Page. The customer needs to
         do the 3ds authentication first for that payment type.');
     }
 
@@ -93,4 +93,4 @@ try {
 } catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
-redirect(FAILURE_URL, $merchantMessage, $clientMessage);
+redirect(BACKEND_FAILURE_URL, $merchantMessage, $clientMessage);

@@ -74,9 +74,9 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                                 </div>
                             </form>';
             }
-        $isAuthorizable = $paymentId !== null && $isAuthorizeTransaction;
-        if ($isAuthorizable) {
-            echo '<p><a href="./Backend/PaymentView.php">Manage Payment</a></p>';
+        $isManageable = $paymentId !== null && $isAuthorizeTransaction;
+        if ($isManageable) {
+            echo '<p>As a merchant you can charge or cancel the Payment here: <a href="./Backend/ManagePayment.php">Manage Payment</a></p>';
             }
             ?>
         </p>

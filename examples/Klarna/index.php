@@ -38,8 +38,8 @@ require_once __DIR__ . '/../../../../autoload.php';
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://dev-static.unzer.com/v1/unzer.css" />
-    <script type="text/javascript" src="https://dev-static.unzer.com/v1/unzer.js"></script>
+    <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
+    <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
 </head>
 
 <body style="margin: 70px 70px 0;">
