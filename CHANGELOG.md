@@ -10,20 +10,15 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 *   Allow fetching payment type config for paylater invoice.
+*   Add payment type "Klarna".
+*   Provide Example for "Klarna" payment method.
+*   Add `language` property to Customer class which is required for klarna payments.
 
 ### Changed
 
 *   Update UPL Invoice Example to display the "my consent" link in payment form.
 *   Update examples to display shortId on success page also for payments done via payment pages.
 *   Add background and logo image URLs to examples, which can be adjusted in the `_enableExamples.php` file.
-
-## [1.2.1.0](https://github.com/unzerdev/php-sdk/compare/1.2.0.0..1.2.1.0)
-### Added
-* Add payment type "Klarna".
-* Provide Example for "Klarna" payment method.
-
-### Changed
-* Several minor improvements.
 
 ## [1.2.0.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.2.0.0)
 
