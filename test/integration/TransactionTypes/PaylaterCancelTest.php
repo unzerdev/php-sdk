@@ -37,7 +37,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function reversalIsPossibleViaUnzerFacade(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $cancel = $this->unzer->cancelAuthorizedPayment($payment, new Cancellation());
 
@@ -53,7 +53,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function reversalIsPossibleWOCancellationObject(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $cancel = $this->unzer->cancelAuthorizedPayment($payment);
 
@@ -67,23 +67,9 @@ class PaylaterCancelTest extends BaseIntegrationTest
     /**
      * @test
      */
-    public function cancelPaymentMethodThrowsExceptionWithPaylaterInvoiceType(): void
-    {
-        $authorization = $this->createPaylaterAuthorization();
-        $payment = $authorization->getPayment();
-
-        $this->expectException(\RuntimeException::class);
-        $expectedMessage = 'The used payment type is not supported by this cancel method. Please use Unzer::cancelAuthorizedPayment() or Unzer::cancelChargedPayment() instead.';
-        $this->expectExceptionMessage($expectedMessage);
-        $this->unzer->cancelPayment($payment, 33.33);
-    }
-
-    /**
-     * @test
-     */
     public function reversalIsFetchableViaUnzerFacade(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $cancel = $this->unzer->cancelAuthorizedPayment($payment, new Cancellation());
         $fetchedCancel = $this->unzer->fetchPaymentReversal($payment, $cancel->getId());
@@ -100,7 +86,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function verifyPartReversalAttemptWillRaiseApiException(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $reversalAmount = 33.33;
         $this->expectException(UnzerApiException::class);
 
@@ -112,7 +98,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function fullRefundWorksViaUnzerFacadeAsExpected(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $charge = $this->unzer->performChargeOnPayment($payment, new Charge());
         $cancel = $this->unzer->cancelChargedPayment($payment, new Cancellation());
@@ -132,7 +118,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function fullRefundIsPossibleWOCancellationObject(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $charge = $this->unzer->performChargeOnPayment($payment, new Charge());
         $cancel = $this->unzer->cancelChargedPayment($payment);
@@ -152,7 +138,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function partRefundIsPossibleViaUnzerFacade(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $this->unzer->performChargeOnPayment($payment, new Charge());
 
@@ -182,7 +168,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function reversalOnChargedPaymentThrowsException(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $charge1 = $this->unzer->performChargeOnPayment($payment, new Charge(11.11));
         $this->expectException(UnzerApiException::class);
@@ -196,7 +182,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function ChargeToHighAmountThrowsException(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $this->expectException(UnzerApiException::class);
         $this->unzer->performChargeOnPayment($payment, new Charge(100));
@@ -207,7 +193,7 @@ class PaylaterCancelTest extends BaseIntegrationTest
      */
     public function refundShouldBeFetchableViaUnzerObject(): void
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $this->unzer->performChargeOnPayment($payment, new Charge());
         $cancel = $this->unzer->cancelChargedPayment($payment, new Cancellation(33.33));

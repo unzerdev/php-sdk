@@ -10,6 +10,9 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 *   Allow fetching payment type config for paylater invoice.
+*   Add payment type "Klarna".
+*   Provide Example for "Klarna" payment method.
+*   Add `language` property to Customer class which is required for klarna payments.
 
 ### Changed
 

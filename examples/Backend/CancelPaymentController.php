@@ -1,7 +1,7 @@
 <?php
 
 /*
- *  Controller for charge on payment (capture).
+ *  Controller to cancel a payment. Performs reversal or refund depending on payment status.
  *
  *  Copyright (C) 2022 - today Unzer E-Com GmbH
  *
@@ -24,11 +24,11 @@
  */
 
 /** Require the constants of this example */
-require_once __DIR__ . '/Constants.php';
+require_once __DIR__ . '/../Constants.php';
 
 /** Require the composer autoloader file */
 /** @noinspection PhpIncludeInspection */
-require_once __DIR__ . '/../../../autoload.php';
+require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
@@ -55,6 +55,8 @@ if (!isset($_POST['payment_id'])) {
     redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
 $paymentId   = $_POST['payment_id'];
+$unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+$payment = $unzer->fetchPayment($paymentId);
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -62,7 +64,13 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler($debugHandler);
 
-    $transaction = $unzer->performChargeOnPayment($paymentId, new Charge());
+    if ($payment->isCompleted()) {
+        $transaction = $unzer->cancelChargedPayment($paymentId);
+        $_SESSION['additionalPaymentInformation'] = '<p>Refund was successful.</p>';
+    } else {
+        $transaction = $unzer->cancelAuthorizedPayment($paymentId);
+        $_SESSION['additionalPaymentInformation'] = '<p>Reversal was successful.</p>';
+    }
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
     $_SESSION['ShortId'] = $transaction->getShortId();
@@ -71,9 +79,9 @@ try {
     // Redirect to the failure page or to success depending on the state of the transaction
     $redirect = !empty($transaction->getRedirectUrl());
     if (!$redirect && $transaction->isSuccess()) {
-        redirect(SUCCESS_URL);
+        redirect(BACKEND_URL);
     } elseif ($redirect && $transaction->isPending()) {
-        redirect(FAILURE_URL, 'Transaction initiated by merchant should not redirect to 3ds Page. The customer needs to
+        redirect(BACKEND_FAILURE_URL, 'Transaction initiated by merchant should not redirect to 3ds Page. The customer needs to
         do the 3ds authentication first for that payment type.');
     }
 
@@ -85,4 +93,4 @@ try {
 } catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
-redirect(FAILURE_URL, $merchantMessage, $clientMessage);
+redirect(BACKEND_FAILURE_URL, $merchantMessage, $clientMessage);

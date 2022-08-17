@@ -262,6 +262,19 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            Klarna
+                        </div>
+                        <div class="description">
+                            You can try authorize and direct charge.
+                        </div>
+                    </div>
+                    <div id="tryKlarnaExample" class="ui bottom attached green button" onclick="location.href='Klarna/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             PayPal
                         </div>
                         <div class="description">
