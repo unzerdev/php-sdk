@@ -36,9 +36,6 @@ use UnzerSDK\Services\EnvironmentService;
 use UnzerSDK\test\BaseIntegrationTest;
 use RuntimeException;
 
-/**
- * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
- */
 class RecurringPaymentTest extends BaseIntegrationTest
 {
     /**
@@ -59,6 +56,8 @@ class RecurringPaymentTest extends BaseIntegrationTest
      * After recurring call the parameters are set.
      *
      * @test
+     *
+     * @deprecated since 1.2.1.0 Get removed with `activateRecurring` method.
      */
     public function recurringForCardWith3dsShouldReturnAttributes(): void
     {
@@ -79,6 +78,8 @@ class RecurringPaymentTest extends BaseIntegrationTest
      * Verify card without 3ds can activate recurring payments.
      *
      * @test
+     *
+     * @deprecated since 1.2.1.0 Get removed with `activateRecurring` method.
      */
     public function recurringForCardWithout3dsShouldActivateRecurringAtOnce(): void
     {

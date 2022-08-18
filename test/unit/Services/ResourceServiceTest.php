@@ -1097,7 +1097,6 @@ class ResourceServiceTest extends BasePaymentTest
     /**
      * Verify createRecurring calls fetch for the payment type if it is given the id.
      *
-     * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
      *
      * @test
      */
@@ -1121,7 +1120,6 @@ class ResourceServiceTest extends BasePaymentTest
     /**
      * Verify createRecurring does not call fetch for the payment type if it is given the object itself.
      *
-     * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
      *
      * @test
      */
@@ -1143,7 +1141,7 @@ class ResourceServiceTest extends BasePaymentTest
     /**
      * Verify createRecurring throws exception if it is called with a payment type which does not support recurring payment.
      *
-     * @deprecated since 1.3.0.0 Get removed with `activateRecurring` method.
+     * @deprecated since 1.2.1.0 Get removed with `activateRecurring` method.
      *
      * @test
      */
