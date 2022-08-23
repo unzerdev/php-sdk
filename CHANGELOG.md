@@ -20,6 +20,12 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 *   Update examples to display shortId on success page also for payments done via payment pages.
 *   Add background and logo image URLs to examples, which can be adjusted in the `_enableExamples.php` file.
 
+### Deprecated
+
+*   The `activateRecurring` method for Card and SepaDirectDebit types is deprecated.
+    *   For Card recurring please use `Charge|Authorization::setRecurrenceType` and perform a charge or authorization.
+    *   For Sepa Direct Debit a successful charge will automatically set the type resource as recurring.
+
 ## [1.2.0.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.2.0.0)
 
 ### Added

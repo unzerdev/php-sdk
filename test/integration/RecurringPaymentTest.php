@@ -56,6 +56,8 @@ class RecurringPaymentTest extends BaseIntegrationTest
      * After recurring call the parameters are set.
      *
      * @test
+     *
+     * @deprecated since 1.2.1.0 Get removed with `activateRecurring` method.
      */
     public function recurringForCardWith3dsShouldReturnAttributes(): void
     {
@@ -76,6 +78,8 @@ class RecurringPaymentTest extends BaseIntegrationTest
      * Verify card without 3ds can activate recurring payments.
      *
      * @test
+     *
+     * @deprecated since 1.2.1.0 Get removed with `activateRecurring` method.
      */
     public function recurringForCardWithout3dsShouldActivateRecurringAtOnce(): void
     {
