@@ -64,6 +64,17 @@ require_once __DIR__ . '/../../../../autoload.php';
         containerId: 'example-eps'
     });
 
+    let payButton = document.getElementById("submit-button");
+    payButton.disabled = true;
+
+    EPS.addEventListener('change', function eventHandlerResource(e) {
+        if (e.value) {
+            $("#submit-button").removeAttr('disabled');
+        } else {
+            $("#submit-button").attr('disabled', 'disabled');
+        }
+    })
+
     // Handling payment form submission
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {

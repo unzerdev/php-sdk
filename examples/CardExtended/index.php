@@ -150,9 +150,10 @@ require_once __DIR__ . '/../../../../autoload.php';
     // General event handling
     let formFieldValid = {};
     let payButton = document.getElementById("submit-button");
+
     let $errorHolder = $('#error-holder');
 
-    // Enable pay button initially
+    // Disable pay button initially
     payButton.disabled = true;
 
     let eventHandlerCardInput = function(e) {

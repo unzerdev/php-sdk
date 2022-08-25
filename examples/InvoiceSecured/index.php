@@ -71,6 +71,18 @@ require_once __DIR__ . '/../../../../autoload.php';
         containerId: 'customer'
     });
 
+    let payButton = document.getElementById("submit-button");
+
+    payButton.disabled = true;
+
+    Customer.addEventListener('validate', function eventHandlerCustomer(e) {
+        if (e.success) {
+            $('button[type="submit"]').removeAttr('disabled');
+        } else {
+            $('button[type="submit"]').attr('disabled', 'disabled');
+        }
+    })
+
     // Handle payment form submission.
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {

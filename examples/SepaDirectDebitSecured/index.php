@@ -77,6 +77,36 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     // Handle payment form submission.
     let form = document.getElementById('payment-form');
+    let payButton = document.getElementById("submit-button");
+
+    payButton.disabled = true;
+
+    let isValidCustomer = false;
+    let isValidResource = false;
+    SepaDirectDebitSecured.addEventListener('change', function eventHandlerResource(e) {
+        if (e.success) {
+            isValidResource = true;
+            if (isValidCustomer) {
+                $('button[type="submit"]').removeAttr('disabled');
+            }
+        } else {
+            isValidResource = false;
+            $('button[type="submit"]').attr('disabled', 'disabled');
+        }
+    })
+
+    Customer.addEventListener('validate', function eventHandlerCustomer(e) {
+        if (e.success) {
+            isValidCustomer = true;
+            if (isValidResource) {
+                $('button[type="submit"]').removeAttr('disabled');
+            }
+        } else {
+            $('button[type="submit"]').attr('disabled', 'disabled');
+            isValidCustomer = false;
+        }
+    })
+
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         let sepaDirectDebitSecuredPromise = SepaDirectDebitSecured.createResource();
