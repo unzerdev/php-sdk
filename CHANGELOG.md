@@ -21,8 +21,8 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 *   Add background and logo image URLs to examples, which can be adjusted in the `_enableExamples.php` file.
 *   General adjustments of examples:
     *   Ensure all payment forms use correct css class.
-    *   Place Submit button into an extra div element.
-    *   Disable pay-button by default if a payment type has mandatory input fields.
+    *   Place submit-button into an extra div element.
+    *   Disable submit-button by default if a payment type has mandatory input fields.
 
 ### Deprecated
 
