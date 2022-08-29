@@ -264,9 +264,6 @@ function printMessage($type, $title, $text)
                         <div class="header">
                             Klarna
                         </div>
-                        <div class="description">
-                            You can try authorize and direct charge.
-                        </div>
                     </div>
                     <div id="tryKlarnaExample" class="ui bottom attached green button" onclick="location.href='Klarna/';">
                         Try

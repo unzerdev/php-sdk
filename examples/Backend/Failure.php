@@ -47,6 +47,6 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
             echo '<p>Back to <a href="ManagePayment.php">Manage Payment</a> page.</p>';
             ?>
         </p>
-        <p><a href=".">start again</a></p>
+        <p><a href="..">start again</a></p>
     </body>
 </html>

@@ -74,6 +74,7 @@ try {
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann')
         ->setSalutation(Salutations::MR)
         ->setBirthDate('2000-02-12')
+        ->setLanguage('de')
         ->setEmail('test@test.com');
 
     // These are the mandatory parameters for the payment page ...
