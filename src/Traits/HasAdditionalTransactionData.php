@@ -31,7 +31,6 @@ use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 
 trait HasAdditionalTransactionData
 {
-
     /** @var stdClass $additionalTransactionData */
     protected $additionalTransactionData;
 
