@@ -79,6 +79,8 @@ try {
     // ... however you can customize the Payment Page using additional parameters.
     $paypage->setShopName('My Test Shop')
             ->setTagline('Try and stop us from being awesome!')
+            ->setTermsAndConditionUrl('https://www.unzer.com/en/')
+            ->setPrivacyPolicyUrl('https://www.unzer.com/de/datenschutz/')
             ->setOrderId($orderId)
             ->setLogoImage(UNZER_PP_LOGO_URL)
             ->setInvoiceId('i' . microtime(true));
