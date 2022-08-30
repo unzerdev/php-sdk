@@ -1,8 +1,8 @@
 <?php
 /**
- * This file provides an example implementation of the PayPal payment type.
+ * This file provides an example implementation of the Klarna payment type.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
+ * Copyright (C) 2022 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,35 +43,11 @@ require_once __DIR__ . '/../../../../autoload.php';
 </head>
 
 <body style="margin: 70px 70px 0;">
-<h3>Example data:</h3>
-<ul>
-    <li>Username: paypal-buyer@unzer.com</li>
-    <li>Password: unzer1234</li>
-</ul>
-<strong>Attention:</strong> We recommend to create your own PayPal test account <a href="https://developer.paypal.com" target="_blank">here</a>.
-
 <p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
 <form id="payment-form" class="unzerUI form" novalidate>
-    <!-- This is just for the example - Start -->
-    <div class="fields inline">
-        <label for="transaction_type">Chose the transaction type you want to test:</label>
-        <div class="field">
-            <div class="unzerUI radio checkbox">
-                <input type="radio" name="transaction_type" value="authorize" checked="">
-                <label>Authorize</label>
-            </div>
-        </div>
-        <div class="field">
-            <div class="unzerUI radio checkbox">
-                <input type="radio" name="transaction_type" value="charge">
-                <label>Charge</label>
-            </div>
-        </div>
-    </div>
-    <!-- This is just for the example - End -->
 
-    <div id="container-example-paypal"></div>
+    <div id="container-example-klarna"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <div class="field">
         <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
@@ -82,18 +58,15 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
-    // Create an Paypal instance
-    let Paypal = unzerInstance.Paypal();
-    Paypal.create('email', {
-        containerId: 'container-example-paypal'
-    })
+    // Create an Klarna instance
+    let klarna = unzerInstance.Klarna();
 
     // Handle payment form submission
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a Paypal resource
-        Paypal.createResource()
+        // Creating a Klarna resource
+        klarna.createResource()
             .then(function(result) {
                 let hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');

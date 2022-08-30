@@ -69,6 +69,7 @@ try {
     $customer = CustomerFactory::createCustomer('Max', 'Mustermann')
         ->setSalutation(Salutations::MR)
         ->setBirthDate('2000-02-12')
+        ->setLanguage('de')
         ->setEmail('test@test.com');
 
     // These are the mandatory parameters for the payment page ...
@@ -78,7 +79,10 @@ try {
     // ... however you can customize the Payment Page using additional parameters.
     $paypage->setShopName('My Test Shop')
             ->setTagline('Try and stop us from being awesome!')
+            ->setTermsAndConditionUrl('https://www.unzer.com/en/')
+            ->setPrivacyPolicyUrl('https://www.unzer.com/de/datenschutz/')
             ->setOrderId($orderId)
+            ->setLogoImage(UNZER_PP_LOGO_URL)
             ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.

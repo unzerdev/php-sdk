@@ -35,6 +35,7 @@ use UnzerSDK\Interfaces\UnzerParentInterface;
 use UnzerSDK\Interfaces\WebhookServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Keypair;
@@ -61,7 +62,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.2.0.0';
+    public const SDK_VERSION = '1.2.1.0';
 
     /** @var string $key */
     private $key;
@@ -1024,6 +1025,20 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     }
 
     //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Config">
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param Config|null $config
+     */
+    public function fetchConfig(BasePaymentType $paymentType, ?Config $config = null): Config
+    {
+        return $this->getResourceService()->fetchConfig($paymentType, $config);
+    }
 
     //</editor-fold>
 

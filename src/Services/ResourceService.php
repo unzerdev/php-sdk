@@ -28,7 +28,9 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
+use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -567,6 +569,9 @@ class ResourceService implements ResourceServiceInterface
             case IdStrings::INVOICE_SECURED:
                 $paymentType = new InvoiceSecured();
                 break;
+            case IdStrings::KLARNA:
+                $paymentType = new Klarna();
+                break;
             case IdStrings::PAYPAL:
                 $paymentType = new Paypal();
                 break;
@@ -830,6 +835,25 @@ class ResourceService implements ResourceServiceInterface
     {
         $paymentObject = $this->fetchPayment($payment);
         return $paymentObject->getShipment($shipmentId);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Config resource">
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param Config|null $config
+     */
+    public function fetchConfig(BasePaymentType $paymentType, ?Config $config = null): Config
+    {
+        $paymentType->setParentResource($this->unzer);
+
+        $configObject = $config ?? new Config();
+        $configObject->setParentResource($paymentType);
+
+        return $this->fetchResource($configObject);
     }
 
     //</editor-fold>

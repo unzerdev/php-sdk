@@ -24,13 +24,13 @@
 namespace UnzerSDK\Traits;
 
 use stdClass;
+use UnzerSDK\Constants\AdditionalTransactionDataKeys;
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 
 trait HasAdditionalTransactionData
 {
-
     /** @var stdClass $additionalTransactionData */
     protected $additionalTransactionData;
 
@@ -116,5 +116,53 @@ trait HasAdditionalTransactionData
     {
         $riskData = $this->getAdditionalTransactionData()->riskData ?? null;
         return $riskData instanceof RiskData ? $riskData : null;
+    }
+
+    /**
+     * Sets the privacyPolicyUrl value inside the additional transaction Data array.
+     *
+     * @param string|null $privacyPolicyUrl
+     *
+     * @return $this
+     */
+    public function setPrivacyPolicyUrl(?string $privacyPolicyUrl): self
+    {
+        $this->addAdditionalTransactionData(AdditionalTransactionDataKeys::PRIVACY_POLICY_URL, $privacyPolicyUrl);
+        return $this;
+    }
+
+    /**
+     * Gets the privacyPolicyUrl value from the additional transaction Data array.
+     *
+     * @return string|null
+     */
+    public function getPrivacyPolicyUrl(): ?string
+    {
+        $propertyKey = AdditionalTransactionDataKeys::PRIVACY_POLICY_URL;
+        return $this->getAdditionalTransactionData()->$propertyKey ?? null;
+    }
+
+    /**
+     * Sets the termsAndConditionUrl value inside the additional transaction Data array.
+     *
+     * @param string|null $termsAndConditionUrl
+     *
+     * @return $this
+     */
+    public function setTermsAndConditionUrl(?string $termsAndConditionUrl): self
+    {
+        $this->addAdditionalTransactionData(AdditionalTransactionDataKeys::TERMS_AND_CONDITION_URL, $termsAndConditionUrl);
+        return $this;
+    }
+
+    /**
+     * Gets the termsAndConditionUrl value from the additional transaction Data array.
+     *
+     * @return string|null
+     */
+    public function getTermsAndConditionUrl(): ?string
+    {
+        $propertyKey = AdditionalTransactionDataKeys::TERMS_AND_CONDITION_URL;
+        return $this->getAdditionalTransactionData()->$propertyKey ?? null;
     }
 }

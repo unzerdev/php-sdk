@@ -112,14 +112,18 @@ class CardTest extends BaseIntegrationTest
      * @dataProvider supportedRecurrenceTypesDP
      *
      * @param $recurrenceType
+     * @param mixed $isrecurring
      *
      * @throws UnzerApiException
      */
-    public function cardShouldBeChargeableWithRecurrenceType($recurrenceType): void
+    public function cardShouldBeChargeableWithRecurrenceType($recurrenceType, $isrecurring): void
     {
+        $this->useNon3dsKey();
         $card = $this->createCardObject('4711100000000000');
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
+        $this->assertNotTrue($card->isRecurring());
+
         $chargeResponse = $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
         $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchChargeById($chargeResponse->getPaymentId(), $chargeResponse->getId());
@@ -128,6 +132,9 @@ class CardTest extends BaseIntegrationTest
             $this->assertNotNull($fetchedCharge->getAdditionalTransactionData());
         }
         $this->assertEquals($recurrenceType, $fetchedCharge->getRecurrenceType());
+
+        $fetchedCard = $this->getUnzerObject()->fetchPaymentType($card->getId());
+        $this->assertTrue($fetchedCard->isRecurring());
     }
 
     /**
@@ -607,11 +614,11 @@ class CardTest extends BaseIntegrationTest
     {
         $cardDetailsA = new CardDetails();
         $cardDetailsAObj          = (object)[
-            'cardType'          => 'CLASSIC',
-            'account'           => 'CREDIT',
-            'countryIsoA2'      => 'RU',
-            'countryName'       => 'RUSSIAN FEDERATION',
-            'issuerName'        => '',
+            'cardType'          => 'STANDARD',
+            'account'           => 'DEBIT',
+            'countryIsoA2'      => 'BE',
+            'countryName'       => 'BELGIUM',
+            'issuerName'        => 'MASTERCARD EUROPE',
             'issuerUrl'         => '',
             'issuerPhoneNumber' => ''
         ];
@@ -630,7 +637,7 @@ class CardTest extends BaseIntegrationTest
         $cardDetailsB->handleResponse($cardDetailsBObj);
 
         return [
-            'card type set'   => ['4012001037461114', $cardDetailsA],
+            'card type set'   => ['6799851000000032', $cardDetailsA],
             'issuer data set' => ['5453010000059543', $cardDetailsB]
         ];
     }
@@ -648,11 +655,11 @@ class CardTest extends BaseIntegrationTest
     public function supportedRecurrenceTypesDP(): array
     {
         return [
-            'null' => [null],
-            'empty string' => [''],
-            'oneclick' => ['oneclick'],
-            'scheduled' => ['scheduled'],
-            'unscheduled' => ['unscheduled']
+            'null' => [null, false],
+            'empty string' => ['', false],
+            'oneclick' => ['oneclick', false],
+            'scheduled' => ['scheduled', true],
+            'unscheduled' => ['unscheduled', true]
         ];
     }
 

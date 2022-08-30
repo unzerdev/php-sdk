@@ -48,6 +48,7 @@ use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
+use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\PIS;
@@ -1096,6 +1097,7 @@ class ResourceServiceTest extends BasePaymentTest
     /**
      * Verify createRecurring calls fetch for the payment type if it is given the id.
      *
+     *
      * @test
      */
     public function createRecurringShouldFetchThePaymentTypeById(): void
@@ -1118,6 +1120,7 @@ class ResourceServiceTest extends BasePaymentTest
     /**
      * Verify createRecurring does not call fetch for the payment type if it is given the object itself.
      *
+     *
      * @test
      */
     public function createRecurringShouldNotFetchThePaymentTypeByObject(): void
@@ -1137,6 +1140,8 @@ class ResourceServiceTest extends BasePaymentTest
 
     /**
      * Verify createRecurring throws exception if it is called with a payment type which does not support recurring payment.
+     *
+     * @deprecated since 1.2.1.0 Get removed with `activateRecurring` method.
      *
      * @test
      */
@@ -1332,6 +1337,7 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType InvoiceGuaranteed sandbox' => ['fetchPaymentType', ['s-ivg-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
             'PaymentType InvoiceSecured sandbox' => ['fetchPaymentType', ['s-ivs-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
             'PaymentType Invoie factoring sandbox' => ['fetchPaymentType', ['s-ivf-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
+            'PaymentType Klarna' => ['fetchPaymentType', ['s-kla-12345678'], $getPaymentTypeCB(Klarna::class)],
             'PaymentType Paypal sandbox' => ['fetchPaymentType', ['s-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
             'PaymentType Paylater-Invoice sandbox' => ['fetchPaymentType', ['s-piv-12345678'], $getPaymentTypeCB(PaylaterInvoice::class)],
             'PaymentType Prepayment sandbox' => ['fetchPaymentType', ['s-ppy-12345678'], $getPaymentTypeCB(Prepayment::class)],

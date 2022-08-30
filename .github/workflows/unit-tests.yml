@@ -1,0 +1,27 @@
+name: SDK unit tests
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+      - 'develop'
+      - 'feature/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
+    name: PHP ${{ matrix.php }} unit tests
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+      - run: php -v
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: Run unit tests
+        run: php ./vendor/bin/phpunit test/unit

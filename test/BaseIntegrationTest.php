@@ -57,12 +57,13 @@ class BaseIntegrationTest extends BasePaymentTest
         }
     }
 
-    /**
+    /** Creates a Paylater Invoice authorization transaction with an amount of 99.99€.
+     *
      * @return Authorization
      *
      * @throws \UnzerSDK\Exceptions\UnzerApiException
      */
-    protected function createPaylaterAuthorization(): Authorization
+    protected function createPaylaterInvoiceAuthorization(): Authorization
     {
         $paylaterInvoice = $this->unzer->createPaymentType(new PaylaterInvoice());
 
@@ -74,5 +75,13 @@ class BaseIntegrationTest extends BasePaymentTest
 
         $authorization = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
         return $authorization;
+    }
+
+    /**
+     * @return void
+     */
+    protected function useNon3dsKey(): void
+    {
+        $this->getUnzerObject()->setKey(EnvironmentService::getTestPrivateKey(true));
     }
 }
