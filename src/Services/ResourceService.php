@@ -30,6 +30,7 @@ use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
+use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -567,6 +568,9 @@ class ResourceService implements ResourceServiceInterface
             case IdStrings::INVOICE_GUARANTEED:
             case IdStrings::INVOICE_SECURED:
                 $paymentType = new InvoiceSecured();
+                break;
+            case IdStrings::KLARNA:
+                $paymentType = new Klarna();
                 break;
             case IdStrings::PAYPAL:
                 $paymentType = new Paypal();

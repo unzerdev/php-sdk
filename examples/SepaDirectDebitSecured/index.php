@@ -46,7 +46,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form">
+<form id="payment-form" class="unzerUI form">
     <div id="sepa-secured-IBAN" class="field">
         <!-- The IBAN field UI Element will be inserted here -->
     </div>
@@ -54,7 +54,9 @@ require_once __DIR__ . '/../../../../autoload.php';
         <!-- The customer form UI element will be inserted here -->
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"></div>
-    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <div class="field">
+        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    </div>
 </form>
 
 <script>
@@ -75,6 +77,36 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     // Handle payment form submission.
     let form = document.getElementById('payment-form');
+    let payButton = document.getElementById("submit-button");
+
+    payButton.disabled = true;
+
+    let isValidCustomer = false;
+    let isValidResource = false;
+    SepaDirectDebitSecured.addEventListener('change', function eventHandlerResource(e) {
+        if (e.success) {
+            isValidResource = true;
+            if (isValidCustomer) {
+                $('button[type="submit"]').removeAttr('disabled');
+            }
+        } else {
+            isValidResource = false;
+            $('button[type="submit"]').attr('disabled', 'disabled');
+        }
+    })
+
+    Customer.addEventListener('validate', function eventHandlerCustomer(e) {
+        if (e.success) {
+            isValidCustomer = true;
+            if (isValidResource) {
+                $('button[type="submit"]').removeAttr('disabled');
+            }
+        } else {
+            $('button[type="submit"]').attr('disabled', 'disabled');
+            isValidCustomer = false;
+        }
+    })
+
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         let sepaDirectDebitSecuredPromise = SepaDirectDebitSecured.createResource();

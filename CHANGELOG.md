@@ -14,12 +14,25 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 *   Allow fetching payment type config for paylater invoice.
+*   Add payment type "Klarna".
+*   Provide Example for "Klarna" payment method.
+*   Add `language` property to Customer class which is required for klarna payments.
 
 ### Changed
 
 *   Update UPL Invoice Example to display the "my consent" link in payment form.
 *   Update examples to display shortId on success page also for payments done via payment pages.
 *   Add background and logo image URLs to examples, which can be adjusted in the `_enableExamples.php` file.
+*   General adjustments of examples:
+    *   Ensure all payment forms use correct css class.
+    *   Place submit button into an extra div element.
+    *   Disable submit button by default if a payment type has mandatory input fields.
+
+### Deprecated
+
+*   The `activateRecurring` method for Card and SepaDirectDebit types is deprecated.
+    *   For Card recurring please use `Charge|Authorization::setRecurrenceType` and perform a charge or authorization.
+    *   For Sepa Direct Debit a successful charge will automatically set the type resource as recurring.
 
 ## [1.2.0.0](https://github.com/unzerdev/php-sdk/compare/1.1.5.0..1.2.0.0)
 

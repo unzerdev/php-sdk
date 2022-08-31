@@ -28,6 +28,9 @@ use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\EmbeddedResources\Amount;
 use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Klarna;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
@@ -268,6 +271,24 @@ class CancelServiceTest extends BasePaymentTest
         $cancelService->cancelPayment('paymentId');
     }
 
+    /** Verify that payment types processed on P3 are not canceled via unzer::cancelPayment method.
+     * @test
+     *
+     * @dataProvider p3PaymentTypes
+     *
+     * @param BasePaymentType $paymentType
+     */
+    public function cancelPaymentMethodThrowsRuntimeExceptionWithP3PaymentType(BasePaymentType $paymentType): void
+    {
+        $dummyPayment = new Payment($this->unzer);
+        $dummyPayment->setPaymentType($paymentType);
+
+        $this->expectException(\RuntimeException::class);
+        $expectedMessage = 'The used payment type is not supported by this cancel method. Please use Unzer::cancelAuthorizedPayment() or Unzer::cancelChargedPayment() instead.';
+        $this->expectExceptionMessage($expectedMessage);
+        $this->unzer->cancelPayment($dummyPayment, 33.33);
+    }
+
     //<editor-fold desc="Data Providers">
 
     /**
@@ -292,6 +313,17 @@ class CancelServiceTest extends BasePaymentTest
             'already cancelled' => [ApiResponseCodes::API_ERROR_ALREADY_CANCELLED, false],
             'already chargedBack' => [ApiResponseCodes::API_ERROR_ALREADY_CHARGED, false],
             'other' => [ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL, true]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function p3PaymentTypes(): array
+    {
+        return [
+            'Paylater Invoice' => [(new PaylaterInvoice())->setId('s-piv-dummyId')],
+            'Klarna' => [(new Klarna())->setId('s-piv-dummyId')]
         ];
     }
 
