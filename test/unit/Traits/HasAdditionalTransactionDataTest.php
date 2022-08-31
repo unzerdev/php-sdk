@@ -49,14 +49,23 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
         $riskData = (new RiskData())
             ->setThreatMetrixId('threatMetrixId');
 
-        $dummy->setShipping($shipping);
-        $dummy->setRiskData($riskData);
+        $privacyPolicyUrl = 'privacyPolicyUrl';
+        $termsAndConditionUrl = 'termsAndConditionUrl';
+        $dummy->setShipping($shipping)
+            ->setRiskData($riskData)
+            ->setPrivacyPolicyUrl($privacyPolicyUrl)
+            ->setTermsAndConditionUrl($termsAndConditionUrl);
+
 
         $this->assertNotNull($dummy->getShipping());
         $this->assertNotNull($dummy->getRiskData());
+        $this->assertNotNull($dummy->getPrivacyPolicyUrl());
+        $this->assertNotNull($dummy->getTermsAndConditionUrl());
 
         $this->assertEquals($shipping, $dummy->getShipping());
         $this->assertEquals($riskData, $dummy->getRiskData());
+        $this->assertEquals($privacyPolicyUrl, $dummy->getPrivacyPolicyUrl());
+        $this->assertEquals($termsAndConditionUrl, $dummy->getTermsAndConditionUrl());
     }
 
     /**

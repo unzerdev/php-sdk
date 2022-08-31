@@ -47,13 +47,15 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form">
+<form id="payment-form" class="unzerUI form">
     <div id="customer" class="field">
         <!-- The customer form UI element will be inserted here -->
     </div>
     <div id="example-paylater-invoice"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"></div>
-    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <div class="field">
+        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    </div>
 </form>
 
 <script>

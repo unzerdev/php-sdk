@@ -182,7 +182,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
      */
     public function paylaterInvoiceCanbeChargedWithShippingData()
     {
-        $authorization = $this->createPaylaterAuthorization();
+        $authorization = $this->createPaylaterInvoiceAuthorization();
         $shippingData = (object)[
             "deliveryTrackingId" => "00340434286851877897",
             "deliveryService" => "DHL",
