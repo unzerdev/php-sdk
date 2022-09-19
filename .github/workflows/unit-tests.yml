@@ -20,6 +20,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          ini-values: 'serialize_precision = -1'
       - run: php -v
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
