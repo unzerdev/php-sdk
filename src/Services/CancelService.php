@@ -277,7 +277,7 @@ class CancelService implements CancelServiceInterface
             /** @var Charge $charge */
             // Calculate the maximum cancel amount for initial transaction.
             if ($index === 0 && $charge->isPending()) {
-                $maxReversalAmount = $charge->getAmount() - $receiptAmount - $charge->getCancelledAmount();
+                $maxReversalAmount = round($charge->getAmount() - $receiptAmount - $charge->getCancelledAmount(), 4);
                 /* If canceled and charged amounts are equal or higher than the initial charge, skip it,
                 because there won't be anything left to cancel. */
                 if ($maxReversalAmount <= 0) {
@@ -388,7 +388,7 @@ class CancelService implements CancelServiceInterface
     {
         $cancelWholePayment = $remainingToCancel === null;
         if (!$cancelWholePayment) {
-            $remainingToCancel -= $amount;
+            $remainingToCancel = round($remainingToCancel - $amount, 4);
         }
         return $remainingToCancel;
     }

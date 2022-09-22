@@ -108,7 +108,7 @@ class Charge extends AbstractTransactionType
      */
     public function getTotalAmount(): ?float
     {
-        return $this->getAmount() - $this->getCancelledAmount();
+        return round(($this->getAmount() - $this->getCancelledAmount()), 4);
     }
 
     /**
