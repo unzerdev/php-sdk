@@ -277,7 +277,7 @@ class CancelService implements CancelServiceInterface
             /** @var Charge $charge */
             // Calculate the maximum cancel amount for initial transaction.
             if ($index === 0 && $charge->isPending()) {
-                $maxReversalAmount = round($charge->getAmount() - $receiptAmount - $charge->getCancelledAmount(), 4);
+                $maxReversalAmount = $this->calculateMaxReversalAmount($charge, $receiptAmount);
                 /* If canceled and charged amounts are equal or higher than the initial charge, skip it,
                 because there won't be anything left to cancel. */
                 if ($maxReversalAmount <= 0) {
@@ -405,5 +405,17 @@ class CancelService implements CancelServiceInterface
         return $receiptAmount;
     }
 
-    //</editor-fold>/**
+    /** Calculate max reversal amount for a charge and round it to 4th digit.
+     *
+     * @param Charge $charge
+     * @param float  $receiptAmount
+     *
+     * @return float
+     */
+    private function calculateMaxReversalAmount(Charge $charge, float $receiptAmount): float
+    {
+        return round($charge->getAmount() - $receiptAmount - $charge->getCancelledAmount(), 4);
+    }
+
+    //</editor-fold>
 }
