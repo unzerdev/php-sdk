@@ -1,0 +1,27 @@
+name: SDK integration tests
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+      - 'develop'
+      - 'feature/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: PHP Integration Tests
+    env:
+      UNZER_PAPI_TEST_PRIVATE_KEY: ${{ secrets.PAPI_PRIVATE_KEY }}
+      UNZER_PAPI_TEST_PRIVATE_KEY_NON_3DS: ${{ secrets.PAPI_PRIVATE_KEY_NO_3DS }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.1'
+      - run: php -v
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: Run integration tests
+        run: php ./vendor/bin/phpunit test/integration/PaymentTypes # For faster testing just run PaymentType tests for now.
