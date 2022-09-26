@@ -5,7 +5,6 @@ on:
     branches:
       - 'master'
       - 'develop'
-      - 'feature/**'
 
 jobs:
   build:
@@ -21,7 +20,9 @@ jobs:
         with:
           php-version: '7.1'
       - run: php -v
+      - run: mkdir certs
+      - run: ll
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Run integration tests
-        run: php ./vendor/bin/phpunit test/integration/PaymentTypes # For faster testing just run PaymentType tests for now.
+        run: php ./vendor/bin/phpunit test/integration
