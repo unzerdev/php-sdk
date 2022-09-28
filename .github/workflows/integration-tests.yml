@@ -13,6 +13,9 @@ jobs:
     env:
       UNZER_PAPI_TEST_PRIVATE_KEY: ${{ secrets.PAPI_PRIVATE_KEY }}
       UNZER_PAPI_TEST_PRIVATE_KEY_NON_3DS: ${{ secrets.PAPI_PRIVATE_KEY_NO_3DS }}
+      APPLE_PAY_MERCHANT_ID_CERT: ${{ secrets.APPLE_PAY_MERCHANT_ID_CERT }}
+      APPLE_PAY_MERCHANT_ID_CERT_COMBINED: ${{ secrets.APPLE_PAY_MERCHANT_ID_CERT_COMBINED }}
+      APPLE_PAY_MERCHANT_ID_KEY: ${{ secrets.APPLE_PAY_MERCHANT_ID_KEY }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -21,7 +24,9 @@ jobs:
           php-version: '7.1'
       - run: php -v
       - run: mkdir certs
-      - run: ll
+      - run: $APPLE_PAY_MERCHANT_ID_CERT > certs/merchant_id.pem
+      - run: $APPLE_PAY_MERCHANT_ID_CERT_COMBINED > certs/apple-pay-cert.pem
+      - run: $APPLE_PAY_MERCHANT_ID_KEY > certs/merchant_id.key
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Run integration tests
