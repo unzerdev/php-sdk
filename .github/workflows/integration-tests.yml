@@ -1,4 +1,4 @@
-name: SDK integration tests
+name: integration
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: PHP Integration Tests
+    name: integration
     env:
       UNZER_PAPI_TEST_PRIVATE_KEY: ${{ secrets.PAPI_PRIVATE_KEY }}
       UNZER_PAPI_TEST_PRIVATE_KEY_NON_3DS: ${{ secrets.PAPI_PRIVATE_KEY_NO_3DS }}
@@ -27,7 +27,8 @@ jobs:
       - run: echo "$APPLE_PAY_MERCHANT_ID_CERT" > certs/merchant_id.pem
       - run: echo "$APPLE_PAY_MERCHANT_ID_CERT_COMBINED" > certs/apple-pay-cert.pem
       - run: echo "$APPLE_PAY_MERCHANT_ID_KEY" > certs/merchant_id.key
+      - run: ls -l /certs
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Run integration tests
-        run: php ./vendor/bin/phpunit test/integration
+        run: php ./vendor/bin/phpunit test/integration/ApplepayAdapterTest.php
