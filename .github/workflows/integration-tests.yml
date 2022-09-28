@@ -27,7 +27,7 @@ jobs:
       - run: echo "$APPLE_PAY_MERCHANT_ID_CERT" > certs/merchant_id.pem
       - run: echo "$APPLE_PAY_MERCHANT_ID_CERT_COMBINED" > certs/apple-pay-cert.pem
       - run: echo "$APPLE_PAY_MERCHANT_ID_KEY" > certs/merchant_id.key
-      - run: ls -l /certs
+      - run: ls -l certs
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Run integration tests
