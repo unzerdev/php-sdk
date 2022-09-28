@@ -1,4 +1,4 @@
-name: integration
+name: integration tests
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: integration
+    name: integration tests
     env:
       UNZER_PAPI_TEST_PRIVATE_KEY: ${{ secrets.PAPI_PRIVATE_KEY }}
       UNZER_PAPI_TEST_PRIVATE_KEY_NON_3DS: ${{ secrets.PAPI_PRIVATE_KEY_NO_3DS }}
@@ -34,4 +34,4 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Run integration tests
-        run: php ./vendor/bin/phpunit test/integration/ApplepayAdapterTest.php
+        run: php ./vendor/bin/phpunit test/integration
