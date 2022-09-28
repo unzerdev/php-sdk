@@ -24,9 +24,9 @@ jobs:
           php-version: '7.1'
       - run: php -v
       - run: mkdir certs
-      - run: $APPLE_PAY_MERCHANT_ID_CERT > certs/merchant_id.pem
-      - run: $APPLE_PAY_MERCHANT_ID_CERT_COMBINED > certs/apple-pay-cert.pem
-      - run: $APPLE_PAY_MERCHANT_ID_KEY > certs/merchant_id.key
+      - run: echo "$APPLE_PAY_MERCHANT_ID_CERT" > certs/merchant_id.pem
+      - run: echo "$APPLE_PAY_MERCHANT_ID_CERT_COMBINED" > certs/apple-pay-cert.pem
+      - run: echo "$APPLE_PAY_MERCHANT_ID_KEY" > certs/merchant_id.key
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Run integration tests
