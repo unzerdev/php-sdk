@@ -123,6 +123,33 @@ class CancelServiceTest extends BasePaymentTest
     }
 
     /**
+     * Verify that max cancel amount is calculated correctly in edge case.
+     *
+     * @test
+     */
+    public function maxCancelAmountShouldBeRoundedCorrectly(): void
+    {
+        $cancelSrvMock = new CancelService($this->unzer);
+        $reflection = new \ReflectionClass(get_class($cancelSrvMock));
+        $method = $reflection->getMethod('calculateMaxReversalAmount');
+        $method->setAccessible(true);
+
+        $chargeAmount = 12.3;
+        $receiptAmount = 10.0;
+        $canceledAmount = 2.3;
+
+        // Verify not rounded result would not equal zero.
+        $this->assertNotEquals(0, $chargeAmount - $receiptAmount - $canceledAmount);
+
+        $chargeMock = $this->getMockBuilder(Charge::class)->setMethods(['getCancelledAmount'])->setConstructorArgs([$chargeAmount])->getMock();
+        $chargeMock->method('getCancelledAmount')->willReturn($canceledAmount);
+
+        $maxReversalAmount = $method->invokeArgs($cancelSrvMock, [$chargeMock , $receiptAmount]);
+
+        $this->assertEquals(0, $maxReversalAmount);
+    }
+
+    /**
      * Verify certain errors are allowed during cancellation and will be ignored.
      *
      * @test
