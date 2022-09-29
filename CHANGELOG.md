@@ -10,6 +10,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 *   Sandbox API-URL will automatically be used for API calls depending on the private key.
+*   Adjust cancel calculation to avoid float precision issues in .
 
 ## [1.2.1.0](https://github.com/unzerdev/php-sdk/compare/1.2.0.0..1.2.1.0)
 
