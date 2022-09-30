@@ -27,7 +27,7 @@ jobs:
           php-version: '7.1'
       - run: php -v
       - name: Setup Apple Pay test certificate
-      - run: mkdir certs
+        run: mkdir certs
       - run: echo "$APPLE_PAY_MERCHANT_ID_CERT" > certs/merchant_id.pem
       - run: echo "$APPLE_PAY_MERCHANT_ID_CERT_COMBINED" > certs/apple-pay-cert.pem
       - run: echo "$APPLE_PAY_MERCHANT_ID_KEY" > certs/merchant_id.key
