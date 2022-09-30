@@ -1,7 +1,7 @@
 name: integration tests
 
 on:
-  push:
+  pull_request:
     branches:
       - 'master'
       - 'develop'
