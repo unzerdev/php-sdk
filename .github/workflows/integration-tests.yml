@@ -1,7 +1,7 @@
 name: integration tests
 
 on:
-  pull_request:
+  push:
     branches:
       - 'master'
       - 'develop'
@@ -25,7 +25,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.1'
-      - run: php -v
       - name: Setup Apple Pay test certificate
         run: mkdir certs
       - run: echo "$APPLE_PAY_MERCHANT_ID_CERT" > certs/merchant_id.pem
