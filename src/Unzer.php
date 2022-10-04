@@ -62,7 +62,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.2.1.0';
+    public const SDK_VERSION = '1.2.2.0';
 
     /** @var string $key */
     private $key;
@@ -136,6 +136,8 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
      * @return Unzer This Unzer object.
      *
      * @throws RuntimeException Throws a RuntimeException when the key is invalid.
+     *
+     * @deprecated public access will be removed. Please create a new instance with a different keypair instead.
      */
     public function setKey($key): Unzer
     {
