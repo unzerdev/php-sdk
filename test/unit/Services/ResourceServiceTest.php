@@ -253,6 +253,28 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
+     * Verify patch method will call send method and call the resources handleResponse method with the response.
+     *
+     * @test
+     */
+    public function patchShouldCallSendAndThenHandleResponseWithTheResponseData(): void
+    {
+        $response = new stdClass();
+
+        /** @var Customer|MockObject $testResource */
+        $testResource = $this->getMockBuilder(Charge::class)->setMethods(['handleResponse'])->getMock();
+        /** @noinspection PhpParamsInspection */
+        $testResource->expects($this->once())->method('handleResponse')->with($response, HttpAdapterInterface::REQUEST_PATCH);
+
+        /** @var ResourceService|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)->setMethods(['send'])->disableOriginalConstructor()->getMock();
+        /** @noinspection PhpParamsInspection */
+        $resourceServiceMock->expects($this->once())->method('send')->with($testResource, HttpAdapterInterface::REQUEST_PATCH)->willReturn($response);
+
+        $this->assertSame($testResource, $resourceServiceMock->patchResource($testResource));
+    }
+
+    /**
      * Verify update does not handle response with error.
      *
      * @test
@@ -1283,6 +1305,7 @@ class ResourceServiceTest extends BasePaymentTest
     {
         return [
             HttpAdapterInterface::REQUEST_GET    => [HttpAdapterInterface::REQUEST_GET, '/my/get/uri', true],
+            HttpAdapterInterface::REQUEST_PATCH   => [HttpAdapterInterface::REQUEST_PATCH, '/my/patch/uri', true],
             HttpAdapterInterface::REQUEST_POST   => [HttpAdapterInterface::REQUEST_POST, '/my/post/uri', false],
             HttpAdapterInterface::REQUEST_PUT    => [HttpAdapterInterface::REQUEST_PUT, '/my/put/uri', true],
             HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, '/my/delete/uri', true],

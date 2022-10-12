@@ -28,6 +28,7 @@ namespace UnzerSDK\test\unit\Traits;
 
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\EmbeddedResources\ShippingData;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\test\BasePaymentTest;
 
 class HasAdditionalTransactionDataTest extends BasePaymentTest
@@ -40,6 +41,12 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
     public function gettersAndSettersShouldWorkProperly(): void
     {
         $dummy = new TraitDummyHasAdditionalTransactionData();
+
+        $this->assertNull($dummy->getShipping());
+        $this->assertNull($dummy->getRiskData());
+        $this->assertNull($dummy->getPrivacyPolicyUrl());
+        $this->assertNull($dummy->getTermsAndConditionUrl());
+        $this->assertNull($dummy->getCheckoutType());
 
         $shipping = (new ShippingData())
             ->setDeliveryService('deliveryService')
@@ -54,13 +61,14 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
         $dummy->setShipping($shipping)
             ->setRiskData($riskData)
             ->setPrivacyPolicyUrl($privacyPolicyUrl)
+            ->setCheckoutType(new Paypal(), 'express')
             ->setTermsAndConditionUrl($termsAndConditionUrl);
-
 
         $this->assertNotNull($dummy->getShipping());
         $this->assertNotNull($dummy->getRiskData());
         $this->assertNotNull($dummy->getPrivacyPolicyUrl());
         $this->assertNotNull($dummy->getTermsAndConditionUrl());
+        $this->assertNotNull($dummy->getCheckoutType());
 
         $this->assertEquals($shipping, $dummy->getShipping());
         $this->assertEquals($riskData, $dummy->getRiskData());

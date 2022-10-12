@@ -535,7 +535,7 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
 
             $properties[$property] = $value;
         }
-    
+
         return $properties;
     }
 
@@ -552,7 +552,10 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
          * @var AbstractUnzerResource $linkedResource
          */
         foreach ($this->getLinkedResources() as $attributeName => $linkedResource) {
-            $exposedResources[$attributeName . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
+            $resourceId = $linkedResource ? $linkedResource->getId() : null;
+            if ($resourceId !== null) {
+                $exposedResources[$attributeName . 'Id'] = $resourceId;
+            }
         }
         return $exposedResources;
     }

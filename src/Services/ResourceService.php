@@ -281,6 +281,31 @@ class ResourceService implements ResourceServiceInterface
     }
 
     /**
+     * Update the resource on the api with PATCH method.
+     *
+     * @param AbstractUnzerResource $resource
+     *
+     * @return AbstractUnzerResource
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     * @throws Exception
+     */
+    public function patchResource(AbstractUnzerResource $resource): AbstractUnzerResource
+    {
+        $method = HttpAdapterInterface::REQUEST_PATCH;
+        $response = $this->send($resource, $method, $resource->getApiVersion());
+
+        $isError = isset($response->isError) && $response->isError;
+        if ($isError) {
+            return $resource;
+        }
+
+        $resource->handleResponse($response, $method);
+        return $resource;
+    }
+
+    /**
      * @param AbstractUnzerResource $resource
      *
      * @return AbstractUnzerResource|null
