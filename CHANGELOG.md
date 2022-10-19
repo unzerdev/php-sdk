@@ -18,6 +18,8 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
     *   Add transaction status `resumed`.
     *   Add `updateCharge` and `updateAuthorization` method to `Unzer` class
 
+*   Add missing "payment" webhook event.
+
 ## [1.2.2.0](https://github.com/unzerdev/php-sdk/compare/1.2.1.0..1.2.2.0)
 
 ### Changed
