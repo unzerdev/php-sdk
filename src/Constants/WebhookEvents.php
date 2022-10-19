@@ -63,6 +63,7 @@ class WebhookEvents
     public const CUSTOMER_UPDATED = 'customer.updated';
 
     // payment events
+    public const PAYMENT = 'payment';
     public const PAYMENT_PENDING = 'payment.pending';
     public const PAYMENT_COMPLETED = 'payment.completed';
     public const PAYMENT_CANCELED = 'payment.canceled';
@@ -98,6 +99,7 @@ class WebhookEvents
         self::CUSTOMER_CREATED,
         self::CUSTOMER_DELETED,
         self::CUSTOMER_UPDATED,
+        self::PAYMENT,
         self::PAYMENT_PENDING,
         self::PAYMENT_COMPLETED,
         self::PAYMENT_CANCELED,
