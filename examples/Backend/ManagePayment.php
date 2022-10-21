@@ -84,7 +84,22 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                                 </div>
                             </div>
                         </form>';
+
+    echo '<p>You can update resumed transaction.</p>
+                        <form id="payment-form" class="unzerUI form" action="' . UPDATE_TRANSACTION_CONTROLLER_URL . '" method="post">
+                            <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
+                            <label for="shiipping_amount">Shipping amoung: </label>
+                            <input type="number" name="shipping_amount" value="0">
+                            <div class="fields inline">
+                                <div class="field">
+                                    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Cancel payment</button>
+                                </div>
+                            </div>
+                        </form>';
+
     ?>
+
+
 </p>
 <p><a href="..">start again</a></p>
 </body>
