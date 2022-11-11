@@ -170,13 +170,20 @@ trait HasAdditionalTransactionData
     /**
      * Set checkout type based on the given payment Type.
      *
+     * @param string          $checkoutType
+     * @param BasePaymentType $paymentType  This is needed to set the correct key in additionalTransactionData array.
+     *
+     * @return self
      */
-    public function setCheckoutType(BasePaymentType $paymentType, string $checkoutType): self
+    public function setCheckoutType(string $checkoutType, BasePaymentType $paymentType): self
     {
-        $this->addAdditionalTransactionData(
-            $paymentType::getResourceName(),
-            (object) [AdditionalTransactionDataKeys::CHECKOUTTYPE => $checkoutType]
-        );
+        $typeName = $paymentType::getResourceName();
+        if (empty($this->getAdditionalTransactionData()->$typeName)) {
+            $this->addAdditionalTransactionData($typeName, new StdClass());
+        }
+
+        $checkoutTypekey = AdditionalTransactionDataKeys::CHECKOUTTYPE;
+        $this->getAdditionalTransactionData()->$typeName->$checkoutTypekey = $checkoutType;
         return $this;
     }
 

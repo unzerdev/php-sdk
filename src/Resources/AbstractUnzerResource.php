@@ -525,11 +525,10 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
 
             // handle additionalTransactionData values
             if ($property === 'additionalTransactionData') {
-                if (!empty($value->riskData) && $value->riskData instanceof self) {
-                    $value->riskData = $value->riskData->expose();
-                }
-                if (!empty($value->shipping) && $value->shipping instanceof self) {
-                    $value->shipping = $value->shipping->expose();
+                foreach ($value as $key => $data) {
+                    if ($data instanceof self) {
+                        $value->$key = $data->expose();
+                    }
                 }
             }
 

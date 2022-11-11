@@ -61,7 +61,7 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
         $dummy->setShipping($shipping)
             ->setRiskData($riskData)
             ->setPrivacyPolicyUrl($privacyPolicyUrl)
-            ->setCheckoutType(new Paypal(), 'express')
+            ->setCheckoutType('express', new Paypal())
             ->setTermsAndConditionUrl($termsAndConditionUrl);
 
         $this->assertNotNull($dummy->getShipping());

@@ -125,7 +125,8 @@ class PaypalTest extends BaseIntegrationTest
     public function paypalChargeWithExpressCheckout(Paypal $paypal): Charge
     {
         $charge = new Charge(100.00, 'EUR', self::RETURN_URL);
-        $charge->setCheckoutType($paypal, 'express');
+        $charge->setCheckoutType('express', $paypal);
+
         $this->getUnzerObject()->performCharge($charge, $paypal);
         $this->assertNotEmpty($charge->getId());
 
@@ -163,7 +164,7 @@ class PaypalTest extends BaseIntegrationTest
     public function paypalAuthorizeWithExpressCheckout(Paypal $paypal): Authorization
     {
         $authorize = new Authorization(100.00, 'EUR', self::RETURN_URL);
-        $authorize->setCheckoutType($paypal, 'express');
+        $authorize->setCheckoutType('express', $paypal);
         $this->getUnzerObject()->performAuthorization($authorize, $paypal);
         $this->assertNotEmpty($authorize->getId());
 
@@ -188,7 +189,7 @@ class PaypalTest extends BaseIntegrationTest
     public function invalidCheckoutTypeThrowsApiException(Paypal $paypal): Authorization
     {
         $authorize = new Authorization(100.00, 'EUR', self::RETURN_URL);
-        $authorize->setCheckoutType($paypal, 'expresso');
+        $authorize->setCheckoutType('expresso', $paypal);
 
         $this->expectException(UnzerApiException::class);
 
