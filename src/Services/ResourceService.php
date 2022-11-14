@@ -559,76 +559,7 @@ class ResourceService implements ResourceServiceInterface
      */
     public function fetchPaymentType($typeId): BasePaymentType
     {
-        $resourceType = IdService::getResourceTypeFromIdString($typeId);
-        switch ($resourceType) {
-            case IdStrings::ALIPAY:
-                $paymentType = new Alipay();
-                break;
-            case IdStrings::APPLEPAY:
-                $paymentType = new Applepay(null, null, null, null);
-                break;
-            case IdStrings::BANCONTACT:
-                $paymentType = new Bancontact();
-                break;
-            case IdStrings::CARD:
-                $paymentType = new Card(null, null);
-                break;
-            case IdStrings::EPS:
-                $paymentType = new EPS();
-                break;
-            case IdStrings::GIROPAY:
-                $paymentType = new Giropay();
-                break;
-            case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
-            case IdStrings::INSTALLMENT_SECURED:
-                $paymentType = new InstallmentSecured();
-                break;
-            case IdStrings::IDEAL:
-                $paymentType = new Ideal();
-                break;
-            case IdStrings::INVOICE:
-                $paymentType = new Invoice();
-                break;
-            case IdStrings::INVOICE_FACTORING:
-            case IdStrings::INVOICE_GUARANTEED:
-            case IdStrings::INVOICE_SECURED:
-                $paymentType = new InvoiceSecured();
-                break;
-            case IdStrings::KLARNA:
-                $paymentType = new Klarna();
-                break;
-            case IdStrings::PAYPAL:
-                $paymentType = new Paypal();
-                break;
-            case IdStrings::PAYLATER_INVOICE:
-                $paymentType = new PaylaterInvoice();
-                break;
-            case IdStrings::PIS:
-                $paymentType = new PIS();
-                break;
-            case IdStrings::PREPAYMENT:
-                $paymentType = new Prepayment();
-                break;
-            case IdStrings::PRZELEWY24:
-                $paymentType = new Przelewy24();
-                break;
-            case IdStrings::SEPA_DIRECT_DEBIT:
-                $paymentType = new SepaDirectDebit(null);
-                break;
-            case IdStrings::SEPA_DIRECT_DEBIT_GUARANTEED:
-            case IdStrings::SEPA_DIRECT_DEBIT_SECURED:
-                $paymentType = new SepaDirectDebitSecured(null);
-                break;
-            case IdStrings::SOFORT:
-                $paymentType = new Sofort();
-                break;
-            case IdStrings::WECHATPAY:
-                $paymentType = new Wechatpay();
-                break;
-            default:
-                throw new RuntimeException('Invalid payment type!');
-                break;
-        }
+        $paymentType = self::getTypeInstanceFromIdString($typeId);
 
         /** @var BasePaymentType $paymentType */
         $paymentType = $paymentType->setParentResource($this->unzer)->setId($typeId);
@@ -882,4 +813,86 @@ class ResourceService implements ResourceServiceInterface
     }
 
     //</editor-fold>
+
+    /**
+     * Creates a payment type instance from a typeId string.
+     *
+     * @param $typeId
+     *
+     * @return BasePaymentType
+     */
+    public static function getTypeInstanceFromIdString($typeId): BasePaymentType
+    {
+        $resourceType = IdService::getResourceTypeFromIdString($typeId);
+        switch ($resourceType) {
+            case IdStrings::ALIPAY:
+                $paymentType = new Alipay();
+                break;
+            case IdStrings::APPLEPAY:
+                $paymentType = new Applepay(null, null, null, null);
+                break;
+            case IdStrings::BANCONTACT:
+                $paymentType = new Bancontact();
+                break;
+            case IdStrings::CARD:
+                $paymentType = new Card(null, null);
+                break;
+            case IdStrings::EPS:
+                $paymentType = new EPS();
+                break;
+            case IdStrings::GIROPAY:
+                $paymentType = new Giropay();
+                break;
+            case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
+            case IdStrings::INSTALLMENT_SECURED:
+                $paymentType = new InstallmentSecured();
+                break;
+            case IdStrings::IDEAL:
+                $paymentType = new Ideal();
+                break;
+            case IdStrings::INVOICE:
+                $paymentType = new Invoice();
+                break;
+            case IdStrings::INVOICE_FACTORING:
+            case IdStrings::INVOICE_GUARANTEED:
+            case IdStrings::INVOICE_SECURED:
+                $paymentType = new InvoiceSecured();
+                break;
+            case IdStrings::KLARNA:
+                $paymentType = new Klarna();
+                break;
+            case IdStrings::PAYPAL:
+                $paymentType = new Paypal();
+                break;
+            case IdStrings::PAYLATER_INVOICE:
+                $paymentType = new PaylaterInvoice();
+                break;
+            case IdStrings::PIS:
+                $paymentType = new PIS();
+                break;
+            case IdStrings::PREPAYMENT:
+                $paymentType = new Prepayment();
+                break;
+            case IdStrings::PRZELEWY24:
+                $paymentType = new Przelewy24();
+                break;
+            case IdStrings::SEPA_DIRECT_DEBIT:
+                $paymentType = new SepaDirectDebit(null);
+                break;
+            case IdStrings::SEPA_DIRECT_DEBIT_GUARANTEED:
+            case IdStrings::SEPA_DIRECT_DEBIT_SECURED:
+                $paymentType = new SepaDirectDebitSecured(null);
+                break;
+            case IdStrings::SOFORT:
+                $paymentType = new Sofort();
+                break;
+            case IdStrings::WECHATPAY:
+                $paymentType = new Wechatpay();
+                break;
+            default:
+                throw new RuntimeException('Invalid payment type!');
+                break;
+        }
+        return $paymentType;
+    }
 }

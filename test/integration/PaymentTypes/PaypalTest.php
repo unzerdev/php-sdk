@@ -164,7 +164,7 @@ class PaypalTest extends BaseIntegrationTest
     public function paypalAuthorizeWithExpressCheckout(Paypal $paypal): Authorization
     {
         $authorize = new Authorization(100.00, 'EUR', self::RETURN_URL);
-        $authorize->setCheckoutType('express', $paypal);
+        $authorize->setCheckoutType('express', $paypal->getId());
         $this->getUnzerObject()->performAuthorization($authorize, $paypal);
         $this->assertNotEmpty($authorize->getId());
 

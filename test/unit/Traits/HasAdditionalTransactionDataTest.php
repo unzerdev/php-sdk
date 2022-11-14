@@ -77,6 +77,21 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
     }
 
     /**
+     * Verify checkoutType can be set via typeId correctly.
+     *
+     * @test
+     */
+    public function checkoutTypeCanBeSetViaTypeId()
+    {
+        $dummy = new TraitDummyHasAdditionalTransactionData();
+        $dummy->setCheckoutType('checkoutType', 's-ppl-xyz');
+
+        $additionalTransactionData = $dummy->getAdditionalTransactionData();
+        $this->assertObjectHasAttribute('paypal', $additionalTransactionData);
+        $this->assertEquals($additionalTransactionData->paypal->checkoutType, 'checkoutType');
+    }
+
+    /**
      * @test
      */
     public function getterShouldReturnNullIfAdittionalTransactionDataDoNOtContainProperObject()
