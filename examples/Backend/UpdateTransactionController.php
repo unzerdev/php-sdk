@@ -69,7 +69,7 @@ try {
     $transaction = $payment->getInitialTransaction();
 
     //Add Shipping cost to initial amount.
-    $updatedCost = $transaction->getAmount() + $shippingCost; //TODO: handle shipping amount 0 (zero).
+    $updatedCost = $transaction->getAmount() + $shippingCost;
 
     // Update transaction amount.
     $transaction->setAmount($updatedCost);
