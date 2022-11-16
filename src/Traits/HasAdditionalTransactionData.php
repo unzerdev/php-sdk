@@ -29,6 +29,7 @@ use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Services\ResourceService;
 
 trait HasAdditionalTransactionData
 {
@@ -170,13 +171,24 @@ trait HasAdditionalTransactionData
     /**
      * Set checkout type based on the given payment Type.
      *
+     * @param string                   $checkoutType
+     * @param BasePaymentType | string $paymentType  This is needed to set the correct key in additionalTransactionData array.
+     *
+     * @return self
      */
-    public function setCheckoutType(BasePaymentType $paymentType, string $checkoutType): self
+    public function setCheckoutType(string $checkoutType, $paymentType): self
     {
-        $this->addAdditionalTransactionData(
-            $paymentType::getResourceName(),
-            (object) [AdditionalTransactionDataKeys::CHECKOUTTYPE => $checkoutType]
-        );
+        if (is_string($paymentType)) {
+            $paymentType = ResourceService::getTypeInstanceFromIdString($paymentType);
+        }
+
+        $typeName = $paymentType::getResourceName();
+        if (empty($this->getAdditionalTransactionData()->$typeName)) {
+            $this->addAdditionalTransactionData($typeName, new StdClass());
+        }
+
+        $checkoutTypekey = AdditionalTransactionDataKeys::CHECKOUTTYPE;
+        $this->getAdditionalTransactionData()->$typeName->$checkoutTypekey = $checkoutType;
         return $this;
     }
 

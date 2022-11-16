@@ -61,7 +61,7 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
         $dummy->setShipping($shipping)
             ->setRiskData($riskData)
             ->setPrivacyPolicyUrl($privacyPolicyUrl)
-            ->setCheckoutType(new Paypal(), 'express')
+            ->setCheckoutType('express', new Paypal())
             ->setTermsAndConditionUrl($termsAndConditionUrl);
 
         $this->assertNotNull($dummy->getShipping());
@@ -74,6 +74,21 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
         $this->assertEquals($riskData, $dummy->getRiskData());
         $this->assertEquals($privacyPolicyUrl, $dummy->getPrivacyPolicyUrl());
         $this->assertEquals($termsAndConditionUrl, $dummy->getTermsAndConditionUrl());
+    }
+
+    /**
+     * Verify checkoutType can be set via typeId correctly.
+     *
+     * @test
+     */
+    public function checkoutTypeCanBeSetViaTypeId()
+    {
+        $dummy = new TraitDummyHasAdditionalTransactionData();
+        $dummy->setCheckoutType('checkoutType', 's-ppl-xyz');
+
+        $additionalTransactionData = $dummy->getAdditionalTransactionData();
+        $this->assertObjectHasAttribute('paypal', $additionalTransactionData);
+        $this->assertEquals($additionalTransactionData->paypal->checkoutType, 'checkoutType');
     }
 
     /**
