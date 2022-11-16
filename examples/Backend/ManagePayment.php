@@ -48,7 +48,7 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
     <?php
 
     if (!empty($additionalPaymentInformation)) {
-        echo $additionalPaymentInformation;
+        echo '<h3>' . $additionalPaymentInformation . '</h3>';
     }
 
     $paymentId = $_SESSION['PaymentId'] ?? null;
@@ -92,7 +92,7 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                             <input type="number" name="shipping_amount" value="0">
                             <div class="fields inline">
                                 <div class="field">
-                                    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Cancel payment</button>
+                                    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Patch Transaction</button>
                                 </div>
                             </div>
                         </form>';

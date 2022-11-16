@@ -71,6 +71,7 @@ try {
     // Redirect to the failure page or to success depending on the state of the transaction
     $redirect = !empty($transaction->getRedirectUrl());
     if (!$redirect && $transaction->isSuccess()) {
+        $_SESSION['additionalPaymentInformation'] = '<p>Charge was successful.</p>';
         redirect(BACKEND_URL);
     } elseif ($redirect && $transaction->isPending()) {
         redirect(BACKEND_FAILURE_URL, 'Transaction initiated by merchant should not redirect to 3ds Page. The customer needs to

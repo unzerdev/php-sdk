@@ -89,13 +89,13 @@ try {
     if ($transactionType === 'charge') {
         $charge = new Charge(12.32, 'EUR', RETURN_CONTROLLER_URL);
         if ($useExpressCheckout) {
-            $charge->setCheckoutType($paymentType, 'express');
+            $charge->setCheckoutType('express', $paymentType);
         }
         $transaction = $unzer->performCharge($charge, $paymentType, null, null, $basket);
     } else {
         $authorize = new Authorization(12.32, 'EUR', RETURN_CONTROLLER_URL);
         if ($useExpressCheckout) {
-            $authorize->setCheckoutType($paymentType, 'express');
+            $authorize->setCheckoutType('express', $paymentType);
         }
         $transaction = $unzer->performAuthorization($authorize, $paymentType, null, null, $basket);
     }

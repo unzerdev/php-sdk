@@ -69,7 +69,7 @@ try {
     $transaction = $payment->getInitialTransaction();
 
     //Add Shipping cost to initial amount.
-    $updatedCost = $transaction->getAmount() + $shippingCost;
+    $updatedCost = $transaction->getAmount() + $shippingCost; //TODO: handle shipping amount 0 (zero).
 
     // Update transaction amount.
     $transaction->setAmount($updatedCost);
@@ -77,7 +77,7 @@ try {
     //Update basket
     $basket = $payment->getBasket();
 
-    if ($basket !== null) {
+    if ($basket !== null && $shippingCost < 0) {
         $shippingItem = new BasketItem('shipping costs');
         $shippingItem->setAmountPerUnitGross($shippingCost);
         $basket->addBasketItem($shippingItem);
@@ -86,11 +86,10 @@ try {
     }
 
     if ($transaction instanceof Authorization) {
-        $unzer->updateAuthorization($transaction, $basket);
+        $unzer->updateAuthorization($transaction->getPaymentId(), $transaction, $basket);
     } else {
-        $unzer->updateCharge($transaction, $basket);
+        $unzer->updateCharge($transaction->getPaymentId(), $transaction, $basket);
     }
-
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
     $_SESSION['ShortId'] = $transaction->getShortId();
@@ -99,6 +98,7 @@ try {
     // Redirect to the failure page or to success depending on the state of the transaction
     $redirect = !empty($transaction->getRedirectUrl());
     if (!$redirect && $transaction->isSuccess()) {
+        $_SESSION['additionalPaymentInformation'] = '<p>Updating(PATCH) transaction was successful.</p>';
         redirect(BACKEND_URL);
     } elseif ($redirect && $transaction->isPending()) {
         redirect(BACKEND_FAILURE_URL, 'Transaction initiated by merchant should not redirect to 3ds Page. The customer needs to
