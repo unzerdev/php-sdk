@@ -69,7 +69,6 @@ interface PaymentServiceInterface
      *
      * @param Payment|string $payment       The Payment object or ID the transaction belongs to.
      * @param Authorization  $authorization The Authorization object containing transaction specific information.
-     * @param Basket|null    $basket        The Basket object corresponding to the payment.
      *                                      The Basket object will be created automatically if it does not exist
      *                                      yet (i.e. has no id).
      *
@@ -78,7 +77,7 @@ interface PaymentServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function updateAuthorization($payment, Authorization $authorization, Basket $basket = null): Authorization;
+    public function updateAuthorization($payment, Authorization $authorization): Authorization;
 
     /**
      * Performs an Authorization transaction and returns the resulting Authorization resource.
@@ -151,7 +150,6 @@ interface PaymentServiceInterface
      *
      * @param Payment|string $payment The Payment object or ID the transaction belongs to.
      * @param Charge         $charge  The Charge object containing transaction specific information.
-     * @param Basket|null    $basket  The Basket object corresponding to the payment.
      *                                The Basket object will be created automatically if it does not exist
      *                                yet (i.e. has no id).
      *
@@ -160,7 +158,7 @@ interface PaymentServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function updateCharge($payment, Charge $charge, Basket $basket = null): Charge;
+    public function updateCharge($payment, Charge $charge): Charge;
 
     /**
      * Performs a Charge transaction and returns the resulting Charge resource.
