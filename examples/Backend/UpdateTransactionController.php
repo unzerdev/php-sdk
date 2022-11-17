@@ -86,9 +86,10 @@ try {
     }
 
     if ($transaction instanceof Authorization) {
-        $unzer->updateAuthorization($transaction->getPaymentId(), $transaction, $basket);
+        $unzer->updateAuthorization($transaction->getPaymentId(), $transaction);
     } else {
-        $unzer->updateCharge($transaction->getPaymentId(), $transaction, $basket);
+        /** @var $transaction Charge */
+        $unzer->updateCharge($transaction->getPaymentId(), $transaction);
     }
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)

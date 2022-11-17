@@ -67,11 +67,8 @@ try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
-
     $paymentType = $unzer->fetchPaymentType($paymentTypeId);
-
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
-
 
     $basketItem = (new BasketItem())
         ->setAmountPerUnitGross(12.32)
