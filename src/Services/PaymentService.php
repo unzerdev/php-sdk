@@ -109,11 +109,10 @@ class PaymentService implements PaymentServiceInterface
      *
      * @param Authorization $payment
      */
-    public function updateAuthorization($payment, Authorization $authorization, Basket $basket = null): Authorization
+    public function updateAuthorization($payment, Authorization $authorization): Authorization
     {
         $authorization->setId(null);
         $paymentResource = $this->getResourceService()->getPaymentResource($payment);
-        $paymentResource->setBasket($basket);
         $authorization->setPayment($paymentResource);
         $this->getResourceService()->patchResource($authorization);
         return $authorization;
@@ -182,11 +181,10 @@ class PaymentService implements PaymentServiceInterface
      *
      * @param Charge $payment
      */
-    public function updateCharge($payment, Charge $charge, Basket $basket = null): Charge
+    public function updateCharge($payment, Charge $charge): Charge
     {
         $charge->setId(null);
         $paymentResource = $this->getResourceService()->getPaymentResource($payment);
-        $paymentResource->setBasket($basket);
         $charge->setPayment($paymentResource);
         $this->getResourceService()->patchResource($charge);
         return $charge;
