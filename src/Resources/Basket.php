@@ -92,7 +92,7 @@ class Basket extends AbstractUnzerResource
     /**
      * @return float
      *
-     * @deprecated since 1.1.5.0 @see $getTotalValueGross.
+     * @deprecated since 1.1.5.0 @see getTotalValueGross().
      */
     public function getAmountTotalGross(): float
     {
@@ -102,7 +102,7 @@ class Basket extends AbstractUnzerResource
     /**
      * @param float $amountTotalGross
      *
-     * @deprecated since 1.1.5.0 @see $getTotalValueGross.
+     * @deprecated since 1.1.5.0 @see setTotalValueGross().
      *
      * @return Basket
      */

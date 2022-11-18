@@ -115,6 +115,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $this->assertFalse($transactionType->isSuccess());
         $this->assertFalse($transactionType->isPending());
         $this->assertFalse($transactionType->isError());
+        $this->assertFalse($transactionType->isResumed());
 
         $responseArray = ['status' => TransactionStatus::STATUS_ERROR];
         $transactionType->handleResponse((object)$responseArray);
@@ -122,6 +123,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $this->assertFalse($transactionType->isSuccess());
         $this->assertFalse($transactionType->isPending());
         $this->assertTrue($transactionType->isError());
+        $this->assertFalse($transactionType->isResumed());
 
         $responseArray['status'] = TransactionStatus::STATUS_SUCCESS;
         $transactionType->handleResponse((object)$responseArray);
@@ -129,6 +131,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $this->assertTrue($transactionType->isSuccess());
         $this->assertFalse($transactionType->isPending());
         $this->assertFalse($transactionType->isError());
+        $this->assertFalse($transactionType->isResumed());
 
         $responseArray['status'] = TransactionStatus::STATUS_PENDING;
         $transactionType->handleResponse((object)$responseArray);
@@ -136,6 +139,15 @@ class AbstractTransactionTypeTest extends BasePaymentTest
         $this->assertFalse($transactionType->isSuccess());
         $this->assertTrue($transactionType->isPending());
         $this->assertFalse($transactionType->isError());
+        $this->assertFalse($transactionType->isResumed());
+
+        $responseArray['status'] = TransactionStatus::STATUS_RESUMED;
+        $transactionType->handleResponse((object)$responseArray);
+
+        $this->assertFalse($transactionType->isSuccess());
+        $this->assertFalse($transactionType->isPending());
+        $this->assertFalse($transactionType->isError());
+        $this->assertTrue($transactionType->isResumed());
 
         $this->expectException(\RuntimeException::class);
 

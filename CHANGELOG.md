@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.3.0](https://github.com/unzerdev/php-sdk/compare/1.2.1.0..1.2.3.0)
+
+### Changed
+
+*   Resource ID fields won't be sent in payment request if they are empty anymore.
+
+### Added
+
+*   Add support for express checkout via PayPal.
+    *   Add support to set `checkoutType` for charge/authorize request.
+    *   Add transaction status `resumed`.
+    *   Add `updateCharge` and `updateAuthorization` method to `Unzer` class
+
+*   Add missing "payment" webhook event.
+
 ## [1.2.2.0](https://github.com/unzerdev/php-sdk/compare/1.2.1.0..1.2.2.0)
 
 ### Changed

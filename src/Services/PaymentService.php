@@ -102,9 +102,21 @@ class PaymentService implements PaymentServiceInterface
 
         $this->getResourceService()->createResource($authorization);
         return $authorization;
-    }/**
+    }
+
+    /**
      * {@inheritDoc}
+     *
+     * @param Authorization $payment
      */
+    public function updateAuthorization($payment, Authorization $authorization): Authorization
+    {
+        $authorization->setId(null);
+        $paymentResource = $this->getResourceService()->getPaymentResource($payment);
+        $authorization->setPayment($paymentResource);
+        $this->getResourceService()->patchResource($authorization);
+        return $authorization;
+    }
 
     /**
      * {@inheritDoc}
@@ -161,6 +173,20 @@ class PaymentService implements PaymentServiceInterface
 
         $this->getResourceService()->createResource($charge);
 
+        return $charge;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param Charge $payment
+     */
+    public function updateCharge($payment, Charge $charge): Charge
+    {
+        $charge->setId(null);
+        $paymentResource = $this->getResourceService()->getPaymentResource($payment);
+        $charge->setPayment($paymentResource);
+        $this->getResourceService()->patchResource($charge);
         return $charge;
     }
 
