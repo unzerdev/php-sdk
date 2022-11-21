@@ -224,7 +224,7 @@ class ChargeTest extends BaseIntegrationTest
     {
         $paymentType = $this->unzer->createPaymentType($this->createCardObject());
         $charge = new Charge(99.99, 'EUR', self::RETURN_URL);
-        $charge->setCheckoutType($paymentType, 'express');
+        $charge->setCheckoutType('express', $paymentType);
         $this->getUnzerObject()->performCharge($charge, $paymentType);
 
         $fetchedCharge = $this->getUnzerObject()->fetchChargeById(
