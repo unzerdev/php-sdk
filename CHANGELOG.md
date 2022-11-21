@@ -10,7 +10,6 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 *   Resource ID fields won't be sent in payment request if they are empty anymore.
-*   Marked unsecured `Invoice` class as deprecated.
 
 ### Added
 
@@ -21,6 +20,10 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 *   Add missing "payment" webhook event.
 *   Add `invoiceId` to Cancellation class.
+
+### Deprecated
+
+*   Marked unsecured `Invoice` class as deprecated.
 
 ## [1.2.2.0](https://github.com/unzerdev/php-sdk/compare/1.2.1.0..1.2.2.0)
 
