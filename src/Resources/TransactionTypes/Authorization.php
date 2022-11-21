@@ -27,14 +27,12 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
-use UnzerSDK\Traits\HasInvoiceId;
 use UnzerSDK\Traits\HasRecurrenceType;
 use RuntimeException;
 
 class Authorization extends AbstractTransactionType
 {
     use HasCancellations;
-    use HasInvoiceId;
     use HasRecurrenceType;
     use HasAccountInformation;
 

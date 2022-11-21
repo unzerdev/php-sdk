@@ -32,6 +32,7 @@ use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Traits\HasAdditionalTransactionData;
 use UnzerSDK\Traits\HasCustomerMessage;
 use UnzerSDK\Traits\HasDate;
+use UnzerSDK\Traits\HasInvoiceId;
 use UnzerSDK\Traits\HasOrderId;
 use UnzerSDK\Traits\HasStates;
 use UnzerSDK\Traits\HasTraceId;
@@ -42,6 +43,7 @@ use stdClass;
 abstract class AbstractTransactionType extends AbstractUnzerResource
 {
     use HasOrderId;
+    use HasInvoiceId;
     use HasStates;
     use HasUniqueAndShortId;
     use HasTraceId;
