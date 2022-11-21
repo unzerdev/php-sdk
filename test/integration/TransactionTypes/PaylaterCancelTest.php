@@ -39,7 +39,8 @@ class PaylaterCancelTest extends BaseIntegrationTest
     {
         $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
-        $cancel = $this->unzer->cancelAuthorizedPayment($payment, new Cancellation());
+        $cancellation = (new Cancellation())->setInvoiceId('i' . self::generateRandomId());
+        $cancel = $this->unzer->cancelAuthorizedPayment($payment, $cancellation);
 
         $this->assertTrue($cancel->isSuccess());
         $this->assertNull($cancel->getParentResource()->getId());
@@ -101,7 +102,8 @@ class PaylaterCancelTest extends BaseIntegrationTest
         $authorization = $this->createPaylaterInvoiceAuthorization();
         $payment = $authorization->getPayment();
         $charge = $this->unzer->performChargeOnPayment($payment, new Charge());
-        $cancel = $this->unzer->cancelChargedPayment($payment, new Cancellation());
+        $cancellation = (new Cancellation())->setInvoiceId('i' . self::generateRandomId());
+        $cancel = $this->unzer->cancelChargedPayment($payment, $cancellation);
 
         $this->assertInstanceOf(Charge::class, $cancel->getParentResource());
         $this->assertNull($cancel->getParentResource()->getId());
