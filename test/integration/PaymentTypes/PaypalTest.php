@@ -35,6 +35,11 @@ use UnzerSDK\test\BaseIntegrationTest;
 
 class PaypalTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->useNon3dsKey();
+    }
+
     /**
      * Verify PayPal payment type can be created and fetched.
      *

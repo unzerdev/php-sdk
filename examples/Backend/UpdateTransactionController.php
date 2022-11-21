@@ -33,6 +33,8 @@ require_once __DIR__ . '/../../../../autoload.php';
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Unzer;
 
@@ -55,6 +57,7 @@ if (!isset($_POST['payment_id'])) {
     redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
 $paymentId   = $_POST['payment_id'];
+$shippingCost   = $_POST['shipping_amount'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -62,7 +65,32 @@ try {
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler($debugHandler);
 
-    $transaction = $unzer->performChargeOnPayment($paymentId, new Charge());
+    $payment = $unzer->fetchPayment($paymentId);
+    $transaction = $payment->getInitialTransaction();
+
+    //Add Shipping cost to initial amount.
+    $updatedCost = $transaction->getAmount() + $shippingCost;
+
+    // Update transaction amount.
+    $transaction->setAmount($updatedCost);
+
+    //Update basket
+    $basket = $payment->getBasket();
+
+    if ($basket !== null && $shippingCost < 0) {
+        $shippingItem = new BasketItem('shipping costs');
+        $shippingItem->setAmountPerUnitGross($shippingCost);
+        $basket->addBasketItem($shippingItem);
+        $basket->setTotalValueGross($updatedCost);
+        $unzer->updateBasket($basket);
+    }
+
+    if ($transaction instanceof Authorization) {
+        $unzer->updateAuthorization($transaction->getPaymentId(), $transaction);
+    } else {
+        /** @var $transaction Charge */
+        $unzer->updateCharge($transaction->getPaymentId(), $transaction);
+    }
 
     // You'll need to remember the paymentId for later in the ReturnController (in case of 3ds)
     $_SESSION['ShortId'] = $transaction->getShortId();
@@ -71,7 +99,7 @@ try {
     // Redirect to the failure page or to success depending on the state of the transaction
     $redirect = !empty($transaction->getRedirectUrl());
     if (!$redirect && $transaction->isSuccess()) {
-        $_SESSION['additionalPaymentInformation'] = '<p>Charge was successful.</p>';
+        $_SESSION['additionalPaymentInformation'] = '<p>Updating(PATCH) transaction was successful.</p>';
         redirect(BACKEND_URL);
     } elseif ($redirect && $transaction->isPending()) {
         redirect(BACKEND_FAILURE_URL, 'Transaction initiated by merchant should not redirect to 3ds Page. The customer needs to
