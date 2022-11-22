@@ -221,7 +221,7 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Invoice
+                            Invoice (deprecated)
                         </div>
                         <div class="description">
                         </div>
