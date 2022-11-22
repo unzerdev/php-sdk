@@ -79,7 +79,7 @@ class CancelTest extends BaseIntegrationTest
     public function refundShouldBeFetchableViaPaymentObject(): void
     {
         $charge = $this->createCharge();
-        $cancel = (new Cancellation())->setInvoiceId('i' . self::generateRandomId());
+        $cancel = new Cancellation();
         $this->getUnzerObject()->cancelChargedPayment($charge->getPayment(), $cancel);
         $fetchedCancel = $cancel->getPayment()->getCharge($charge->getId())->getCancellation($cancel->getId());
         $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
