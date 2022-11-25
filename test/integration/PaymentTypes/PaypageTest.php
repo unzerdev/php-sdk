@@ -117,11 +117,11 @@ class PaypageTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify the Paypage resource for authorize can be created with the mandatory parameters only.
+     * Verify fetched payment contains paypage when fetched.
      *
      * @test
      */
-    public function PaymentShouldContainPayPageObject(): void
+    public function fetchedPaymentShouldContainPayPageObject(): void
     {
         $payPage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($payPage->getId());

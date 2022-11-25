@@ -884,12 +884,11 @@ class Payment extends AbstractUnzerResource
     /**
      * Handles the resources from a response and updates the payment object accordingly.
      *
-     * @param $resources
+     * @param stdClass $resources
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function updateResponseResources($resources): void
+    private function updateResponseResources(stdClass $resources): void
     {
         if (isset($resources->paymentId)) {
             $this->setId($resources->paymentId);
@@ -943,7 +942,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function updateAuthorizationTransaction($transaction): void
+    private function updateAuthorizationTransaction(stdClass $transaction): void
     {
         $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::AUTHORIZE);
         $authorization = $this->getAuthorization(true);
@@ -964,7 +963,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function updateChargeTransaction($transaction): void
+    private function updateChargeTransaction(stdClass $transaction): void
     {
         $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
         $charge        = $this->getCharge($transactionId, true);
@@ -985,7 +984,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function updateReversalTransaction($transaction): void
+    private function updateReversalTransaction(stdClass $transaction): void
     {
         $transactionId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
 
@@ -1018,7 +1017,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function updateRefundTransaction($transaction): void
+    private function updateRefundTransaction(stdClass $transaction): void
     {
         $refundId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CANCEL);
         $isPaymentCancellation = IdService::isPaymentCancellation($transaction->url);
@@ -1053,7 +1052,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function updateShipmentTransaction($transaction): void
+    private function updateShipmentTransaction(stdClass $transaction): void
     {
         $shipmentId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::SHIPMENT);
         $shipment   = $this->getShipment($shipmentId, true);
@@ -1074,7 +1073,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function updatePayoutTransaction($transaction): void
+    private function updatePayoutTransaction(stdClass $transaction): void
     {
         $payoutId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::PAYOUT);
         $payout   = $this->getPayout(true);
