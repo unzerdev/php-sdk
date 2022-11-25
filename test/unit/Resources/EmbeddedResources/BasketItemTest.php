@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\unit
  */
 namespace UnzerSDK\test\unit\Resources\EmbeddedResources;
@@ -42,6 +40,8 @@ class BasketItemTest extends BasePaymentTest
         $this->assertEquals(1, $basketItem->getQuantity());
         $this->assertEquals(0, $basketItem->getAmountDiscount());
         $this->assertEquals(0, $basketItem->getAmountGross());
+        $this->assertEquals(0, $basketItem->getAmountPerUnitGross());
+        $this->assertEquals(0, $basketItem->getAmountDiscountPerUnitGross());
         $this->assertEquals(0, $basketItem->getAmountPerUnit());
         $this->assertEquals(0, $basketItem->getAmountNet());
         $this->assertEquals(0, $basketItem->getAmountVat());
@@ -59,6 +59,8 @@ class BasketItemTest extends BasePaymentTest
         $basketItem->setAmountNet(6543);
         $basketItem->setAmountVat(5432);
         $basketItem->setVat(6543);
+        $basketItem->setAmountPerUnitGross(5432);
+        $basketItem->setAmountDiscountPerUnitGross(4321);
         $basketItem->setBasketItemReferenceId('myRefId');
         $basketItem->setUnit('myUnit');
         $basketItem->setTitle('myTitle');
@@ -73,6 +75,8 @@ class BasketItemTest extends BasePaymentTest
         $this->assertEquals(6543, $basketItem->getAmountNet());
         $this->assertEquals(5432, $basketItem->getAmountVat());
         $this->assertEquals(6543, $basketItem->getVat());
+        $this->assertEquals(5432, $basketItem->getAmountPerUnitGross());
+        $this->assertEquals(4321, $basketItem->getAmountDiscountPerUnitGross());
         $this->assertEquals('myRefId', $basketItem->getBasketItemReferenceId());
         $this->assertEquals('myUnit', $basketItem->getUnit());
         $this->assertEquals('myTitle', $basketItem->getTitle());

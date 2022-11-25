@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Resources
  */
 namespace UnzerSDK\Resources;
@@ -158,6 +156,16 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
     {
         $this->specialParams = $specialParams;
         return $this;
+    }
+
+    /**
+     * Returns the API version for this resource.
+     *
+     * @return string
+     */
+    public function getApiVersion(): string
+    {
+        return Unzer::API_VERSION;
     }
 
     /**
@@ -336,53 +344,13 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      */
     public function expose()
     {
-        // Add resources properties
-        $properties = get_object_vars($this);
-        foreach ($properties as $property => $value) {
-            if (self::propertyShouldBeSkipped($property, $value)) {
-                unset($properties[$property]);
-                continue;
-            }
-
-            // expose child objects if possible
-            if ($value instanceof self) {
-                $value = $value->expose();
-            }
-
-            // reduce floats to 4 decimal places and update the property in object
-            if (is_float($value)) {
-                $value = ValueService::limitFloats($value);
-                self::setItemProperty($this, $property, $value);
-            }
-
-            // handle additional values
-            if ($property === 'additionalAttributes') {
-                if (!is_array($value) || empty($value)) {
-                    unset($properties[$property]);
-                    continue;
-                }
-                $value = $this->exposeAdditionalAttributes($value);
-            }
-
-            $properties[$property] = $value;
-        }
-        //---------------------
-
-        // Add linked resources if any
-        $resources = [];
-        /**
-         * @var string                $attributeName
-         * @var AbstractUnzerResource $linkedResource
-         */
-        foreach ($this->getLinkedResources() as $attributeName => $linkedResource) {
-            $resources[$attributeName . 'Id'] = $linkedResource ? $linkedResource->getId() : '';
-        }
+        $properties = $this->exposeProperties();
+        $resources  = $this->exposeLinkedResources();
 
         if (count($resources) > 0) {
             ksort($resources);
             $properties['resources'] = $resources;
         }
-        //---------------------
 
         // Add special params if any
         foreach ($this->getSpecialParams() as $attributeName => $specialParam) {
@@ -517,5 +485,77 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
         return null;
     }
 
-    //</editor-fold>
+    //</editor-fold>/**
+
+    /**
+     * Exposes properties
+     *
+     * @param array $properties
+     *
+     * @return array
+     */
+    private function exposeProperties(): array
+    {
+        $properties = get_object_vars($this);
+        foreach ($properties as $property => $value) {
+            if (self::propertyShouldBeSkipped($property, $value)) {
+                unset($properties[$property]);
+                continue;
+            }
+
+            // expose child objects if possible
+            if ($value instanceof self) {
+                $value = $value->expose();
+            }
+
+            // reduce floats to 4 decimal places and update the property in object
+            if (is_float($value)) {
+                $value = ValueService::limitFloats($value);
+                self::setItemProperty($this, $property, $value);
+            }
+
+            // handle additional values
+            if ($property === 'additionalAttributes') {
+                if (!is_array($value) || empty($value)) {
+                    unset($properties[$property]);
+                    continue;
+                }
+                $value = $this->exposeAdditionalAttributes($value);
+            }
+
+            // handle additionalTransactionData values
+            if ($property === 'additionalTransactionData') {
+                foreach ($value as $key => $data) {
+                    if ($data instanceof self) {
+                        $value->$key = $data->expose();
+                    }
+                }
+            }
+
+            $properties[$property] = $value;
+        }
+
+        return $properties;
+    }
+
+    /**
+     * Expose linked resources if any.
+     *
+     * @return array
+     */
+    private function exposeLinkedResources(): array
+    {
+        $exposedResources = [];
+        /**
+         * @var string                $attributeName
+         * @var AbstractUnzerResource $linkedResource
+         */
+        foreach ($this->getLinkedResources() as $attributeName => $linkedResource) {
+            $resourceId = $linkedResource ? $linkedResource->getId() : null;
+            if ($resourceId !== null) {
+                $exposedResources[$attributeName . 'Id'] = $resourceId;
+            }
+        }
+        return $exposedResources;
+    }
 }

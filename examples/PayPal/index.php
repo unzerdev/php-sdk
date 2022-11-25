@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -54,7 +52,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form" class="unzerUI form" novalidate>
+<form id="payment-form" class="unzerUI" novalidate>
     <!-- This is just for the example - Start -->
     <div class="fields inline">
         <label for="transaction_type">Chose the transaction type you want to test:</label>
@@ -71,11 +69,19 @@ require_once __DIR__ . '/../../../../autoload.php';
             </div>
         </div>
     </div>
+
+            <label for="express_checkout">Use express Checkout</label>
+            <input type="checkbox" name="express-checkout" value="1">
+
+
+
     <!-- This is just for the example - End -->
 
     <div id="container-example-paypal"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <div class="field">
+        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    </div>
 </form>
 
 <script>

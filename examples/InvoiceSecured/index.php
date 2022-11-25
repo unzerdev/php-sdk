@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -49,13 +47,15 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form">
+<form id="payment-form" class="unzerUI form">
     <div id="example-invoice-secured"></div>
     <div id="customer" class="field">
         <!-- The customer form UI element will be inserted here -->
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"></div>
-    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <div class="field">
+        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    </div>
 </form>
 
 <script>
@@ -70,6 +70,18 @@ require_once __DIR__ . '/../../../../autoload.php';
     Customer.create({
         containerId: 'customer'
     });
+
+    let payButton = document.getElementById("submit-button");
+
+    payButton.disabled = true;
+
+    Customer.addEventListener('validate', function eventHandlerCustomer(e) {
+        if (e.success) {
+            $('button[type="submit"]').removeAttr('disabled');
+        } else {
+            $('button[type="submit"]').attr('disabled', 'disabled');
+        }
+    })
 
     // Handle payment form submission.
     let form = document.getElementById('payment-form');

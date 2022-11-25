@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Traits
  */
 namespace UnzerSDK\Traits;
@@ -92,6 +90,16 @@ trait HasPaymentState
     public function isChargeBack(): bool
     {
         return $this->getState() === PaymentState::STATE_CHARGEBACK;
+    }
+
+    /**
+     * Return true if the state is create.
+     *
+     * @return bool
+     */
+    public function isCreate(): bool
+    {
+        return $this->getState() === PaymentState::STATE_CREATE;
     }
 
     //</editor-fold>

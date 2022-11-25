@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
@@ -31,6 +29,7 @@ use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\Constants\PaymentState;
 
 class PaypageTest extends BaseIntegrationTest
 {
@@ -45,6 +44,21 @@ class PaypageTest extends BaseIntegrationTest
         $this->assertEmpty($paypage->getId());
         $paypage = $this->unzer->initPayPageCharge($paypage);
         $this->assertNotEmpty($paypage->getId());
+    }
+
+    /**
+     * Verify the Paypage resource creates payment in state "create".
+     *
+     * @test
+     */
+    public function paymentShouldBeInStateCreateOnInitialization(): void
+    {
+        $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
+        $paypage = $this->unzer->initPayPageCharge($paypage);
+        $payment = $paypage->getPayment();
+
+        $this->assertTrue($payment->isCreate());
+        $this->assertEquals($payment->getState(), PaymentState::STATE_CREATE);
     }
 
     /**

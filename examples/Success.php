@@ -18,14 +18,19 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
 require_once __DIR__ . '/Constants.php';
 
 session_start();
+
+$additionalPaymentInformation = $_SESSION['additionalPaymentInformation'] ?? null;
+$shortId = $_SESSION['ShortId'] ?? null;
+$paymentId = $_SESSION['PaymentId'] ?? null;
+$paymentTypeId = $_SESSION['PaymentTypeId'] ?? null;
+$isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
+
 ?>
 
 <!DOCTYPE html>
@@ -41,22 +46,27 @@ session_start();
         <p>
             The order has been successfully placed.
 
-            <?php
-            if (isset($_SESSION['additionalPaymentInformation'])) {
-                echo $_SESSION['additionalPaymentInformation'];
-            }
+        <?php
 
-            if (isset($_SESSION['ShortId']) && !empty($_SESSION['ShortId'])) {
-                echo '<p>Please look for ShortId ' . $_SESSION['ShortId'] . ' in Unzer Insights to see the transaction.</p>';
-            }
-            if (isset($_SESSION['PaymentId']) && !empty($_SESSION['PaymentId'])) {
-                echo '<p>The PaymentId of your transaction is \'' . $_SESSION['PaymentId'] . '\'.</p>';
-            }
-            if (isset($_SESSION['PaymentTypeId']) && !empty($_SESSION['PaymentTypeId'])) {
-                echo    '<p>The TypeId for the recurring payment is \'' . $_SESSION['PaymentTypeId'] . '\'. You can use it
+        if (!empty($additionalPaymentInformation)) {
+            echo $additionalPaymentInformation;
+        }
+
+        if ($shortId !== null) {
+            $defaultTransactionMessage = '<p>Please look for ShortId ' . $shortId . ' in Unzer Insights to see the transaction.</p>';
+            $paylaterTransactionMessage = '<p>Please use the "descriptor" to look for the transaction in the Unzer Pay Later Merchant Portal.</p>';
+            echo preg_match('/[\d]{4}.[\d]{4}.[\d]{4}/', $shortId) ? $defaultTransactionMessage : $paylaterTransactionMessage;
+        }
+        $paymentId = $_SESSION['PaymentId'] ?? null;
+        if ($paymentId !== null) {
+            echo '<p>The PaymentId of your transaction is \'' . $paymentId . '\'.</p>';
+        }
+
+        if ($paymentTypeId !== null) {
+                echo    '<p>The TypeId for the recurring payment is \'' . $paymentTypeId . '\'. You can use it
                             now for subsequent transactions.</p>
                             <form id="payment-form" class="unzerUI form" action="' . RECURRING_PAYMENT_CONTROLLER_URL . '" method="post">
-                                <input type="hidden" name="payment_type_id" value="' . $_SESSION['PaymentTypeId'] . ' ">
+                                <input type="hidden" name="payment_type_id" value="' . $paymentTypeId . ' ">
                                 <div class="fields inline">
                                     <div class="field">
                                         <button class="unzerUI primary button fluid" id="submit-button" type="submit">Charge payment type again.</button>
@@ -64,7 +74,9 @@ session_start();
                                 </div>
                             </form>';
             }
-            ?>
+        $isManageable = $paymentId !== null && $isAuthorizeTransaction;
+        echo '<p>As a merchant you can charge or cancel the Payment here: <a href="./Backend/ManagePayment.php">Manage Payment</a></p>';
+        ?>
         </p>
         <p><a href=".">start again</a></p>
     </body>

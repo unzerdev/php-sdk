@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/docs/php-sdk/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Adapter
  */
 namespace UnzerSDK\Adapter;
@@ -28,10 +26,11 @@ use UnzerSDK\Exceptions\UnzerApiException;
 
 interface HttpAdapterInterface
 {
-    public const REQUEST_POST = 'POST';
     public const REQUEST_DELETE = 'DELETE';
-    public const REQUEST_PUT = 'PUT';
     public const REQUEST_GET = 'GET';
+    public const REQUEST_PATCH = 'PATCH';
+    public const REQUEST_POST = 'POST';
+    public const REQUEST_PUT = 'PUT';
 
     /**
      * Initializes the request.

@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\unit
  */
 namespace UnzerSDK\test\unit\Services;
@@ -111,7 +109,7 @@ class HttpServiceTest extends BasePaymentTest
         $adapterMock->expects($this->once())->method('init')->with(
             $this->callback(
                 static function ($url) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $url) === 'https://api.unzer.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'sbx-api', $url) === 'https://sbx-api.unzer.com/v1/my/uri/123';
                 }
             ),
             '{"dummyResource": "JsonSerialized"}',
@@ -170,6 +168,27 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
+     * Verify 'CLIENTIP' header only set when a clientIp is defined in the Unzer object.
+     *
+     * @test
+     * @dataProvider clientIpHeaderShouldBeSetProperlyDP
+     *
+     * @param $clientIp
+     * @param mixed $isHeaderExpected
+     */
+    public function clientIpHeaderShouldBeSetProperly($clientIp, $isHeaderExpected): void
+    {
+        $unzer = new Unzer('s-priv-MyTestKey');
+        $unzer->setClientIp($clientIp);
+
+        $composeHttpHeaders = $unzer->getHttpService()->composeHttpHeaders($unzer);
+        $this->assertEquals($isHeaderExpected, isset($composeHttpHeaders['CLIENTIP']));
+        if ($isHeaderExpected) {
+            $this->assertEquals($clientIp, $composeHttpHeaders['CLIENTIP']);
+        }
+    }
+
+    /**
      * Verify debugLog logs to debug handler if debug mode and a handler are set.
      *
      * @test
@@ -187,7 +206,7 @@ class HttpServiceTest extends BasePaymentTest
         $loggerMock->expects($this->exactly(7))->method('log')->withConsecutive(
             [ $this->callback(
                 static function ($string) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') GET: https://api.unzer.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'sbx-api', $string) === '(' . (getmypid()) . ') GET: https://sbx-api.unzer.com/v1/my/uri/123';
                 }
             )
             ],
@@ -204,7 +223,7 @@ class HttpServiceTest extends BasePaymentTest
             ['(' . (getmypid()) . ') Response: (200) {"response":"myResponseString"}'],
             [ $this->callback(
                 static function ($string) {
-                    return str_replace(['dev-api', 'stg-api'], 'api', $string) === '(' . (getmypid()) . ') POST: https://api.unzer.com/v1/my/uri/123';
+                    return str_replace(['dev-api', 'stg-api'], 'sbx-api', $string) === '(' . (getmypid()) . ') POST: https://sbx-api.unzer.com/v1/my/uri/123';
                 }
             )
             ],
@@ -375,7 +394,7 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify environment switches when environment variable defines PAPI environment.
+     * Verify API environment switches accordingly depending on environment variable and keypair.
      *
      * @test
      *
@@ -383,13 +402,14 @@ class HttpServiceTest extends BasePaymentTest
      *
      * @param $environment
      * @param $apiUrl
+     * @param string $key
      */
-    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl): void
+    public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl, string $key): void
     {
         $adapterMock = $this->getMockBuilder(CurlAdapter::class)->setMethods(['init', 'setUserAgent', 'setHeaders', 'execute', 'getResponseCode', 'close'])->getMock();
         /** @noinspection PhpParamsInspection */
         $adapterMock->expects($this->once())->method('init')->with($apiUrl, self::anything(), self::anything());
-        $resource = (new DummyResource())->setParentResource(new Unzer('s-priv-MyTestKey'));
+        $resource = (new DummyResource())->setParentResource(new Unzer($key));
         $adapterMock->method('execute')->willReturn('myResponseString');
         $adapterMock->method('getResponseCode')->willReturn('42');
 
@@ -441,16 +461,43 @@ class HttpServiceTest extends BasePaymentTest
     }
 
     /**
+     * Returns test data for method public function languageShouldOnlyBeSetIfSpecificallyDefined.
+     */
+    public function clientIpHeaderShouldBeSetProperlyDP(): array
+    {
+        return [
+            'valid ipv4' => ['111.222.333.444', true],
+            'valid ipv6' => ['684D:1111:222:3333:4444:5555:6:7', true],
+            'valid ipv6 (dual)' => ['2001:db8:3333:4444:5555:6666:1.2.3.4', true],
+            'empty string' => ['', false],
+            'null' => [null, false]
+        ];
+    }
+
+    /**
      * @return array
      */
     public function environmentUrlSwitchesWithEnvironmentVariableDP(): array
     {
+        $devUrl = 'https://dev-api.unzer.com/v1';
+        $stgUrl = 'https://stg-api.unzer.com/v1';
+        $sbxUrl = 'https://sbx-api.unzer.com/v1';
+        $prodUrl = 'https://api.unzer.com/v1';
+
+        $prodKey = 'p-priv-MyTestKey';
+        $sbxKey = 's-priv-MyTestKey';
+
         return [
-            'Dev' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, 'https://dev-api.unzer.com/v1'],
-            'Prod' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, 'https://api.unzer.com/v1'],
-            'Stg' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, 'https://stg-api.unzer.com/v1'],
-            'else' => ['something else', 'https://api.unzer.com/v1'],
-            'undefined' => ['', 'https://api.unzer.com/v1']
+            'Dev with production key' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, $prodUrl, $prodKey],
+            'Prod with production key' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, $prodUrl, $prodKey],
+            'Stg with production key' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, $prodUrl, $prodKey],
+            'something else with production key' => ['something else', $prodUrl, $prodKey],
+            'undefined with production key' => ['', $prodUrl, $prodKey],
+            'Dev with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, $devUrl, $sbxKey],
+            'Prod with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, $sbxUrl, $sbxKey],
+            'Stg with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, $stgUrl, $sbxKey],
+            'something else with sandbox key' => ['something else', $sbxUrl, $sbxKey],
+            'undefined with sandbox key' => ['', $sbxUrl, $sbxKey],
         ];
     }
 

@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration
  */
 namespace UnzerSDK\test\integration;
@@ -346,6 +344,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      */
     public function fullCancelOnInitialInvoiceCharge($amount): void
     {
+        $this->useNon3dsKey();
         /** @var Invoice $invoice */
         $invoice = $this->unzer->createPaymentType(new Invoice());
         $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
@@ -366,6 +365,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      */
     public function partCancelOnInitialInvoiceChargeShouldBePossible(): void
     {
+        $this->useNon3dsKey();
         /** @var Invoice $invoice */
         $invoice = $this->unzer->createPaymentType(new Invoice());
         $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);

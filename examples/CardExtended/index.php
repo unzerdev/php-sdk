@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -117,7 +115,9 @@ require_once __DIR__ . '/../../../../autoload.php';
         </div>
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <div class="field">
+        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    </div>
 </form>
 
 <script>
@@ -150,9 +150,10 @@ require_once __DIR__ . '/../../../../autoload.php';
     // General event handling
     let formFieldValid = {};
     let payButton = document.getElementById("submit-button");
+
     let $errorHolder = $('#error-holder');
 
-    // Enable pay button initially
+    // Disable pay button initially
     payButton.disabled = true;
 
     let eventHandlerCardInput = function(e) {

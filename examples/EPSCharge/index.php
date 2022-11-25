@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -51,7 +49,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 <form id="payment-form" class="unzerUI form" novalidate>
     <div id="example-eps" class="field"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <div class="field">
+        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    </div>
 </form>
 
 <script>
@@ -63,6 +63,17 @@ require_once __DIR__ . '/../../../../autoload.php';
     EPS.create('eps', {
         containerId: 'example-eps'
     });
+
+    let payButton = document.getElementById("submit-button");
+    payButton.disabled = true;
+
+    EPS.addEventListener('change', function eventHandlerResource(e) {
+        if (e.value) {
+            $("#submit-button").removeAttr('disabled');
+        } else {
+            $("#submit-button").attr('disabled', 'disabled');
+        }
+    })
 
     // Handling payment form submission
     let form = document.getElementById('payment-form');

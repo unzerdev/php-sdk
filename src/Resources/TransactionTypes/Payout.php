@@ -18,19 +18,14 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\TransactionTypes
  */
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Traits\HasInvoiceId;
 
 class Payout extends AbstractTransactionType
 {
-    use HasInvoiceId;
-
     /** @var float|null $amount */
     protected $amount;
 

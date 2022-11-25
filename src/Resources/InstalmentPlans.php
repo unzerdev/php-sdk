@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Resources
  */
 namespace UnzerSDK\Resources;
@@ -192,12 +190,7 @@ class InstalmentPlans extends AbstractUnzerResource
      */
     protected function getQueryString(): string
     {
-        $getParameterArray = $this->getQueryArray();
-        foreach ($getParameterArray as $key=> $parameter) {
-            $getParameterArray[$key] = $key . '=' . $parameter;
-        }
-
-        return '?' . implode('&', $getParameterArray);
+        return '?' . http_build_query($this->getQueryArray());
     }
 
     /**

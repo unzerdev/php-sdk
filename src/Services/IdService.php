@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Services
  */
 namespace UnzerSDK\Services;
@@ -54,6 +52,21 @@ class IdService
         }
 
         return $matches[1];
+    }
+
+    /**
+     * Determine base on the cancellation URL if the transaction refers directly to the payment or not.
+     *
+     * @param string $url
+     *
+     * @return string
+     *
+     * @throws RuntimeException
+     */
+    public static function isPaymentCancellation($url): string
+    {
+        $pattern = '/\/payments\/[s|p]{1}-pay-[a-z\d]+\/(charges|authorize)\/cancels\/[s|p]{1}-cnl-[a-z\d]+/';
+        return preg_match($pattern, $url) === 1;
     }
 
     /**

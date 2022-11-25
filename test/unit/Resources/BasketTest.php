@@ -20,16 +20,15 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\unit
  */
 namespace UnzerSDK\test\unit\Resources;
 
+use stdClass;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\test\BasePaymentTest;
-use stdClass;
+use UnzerSDK\Unzer;
 
 class BasketTest extends BasePaymentTest
 {
@@ -44,6 +43,7 @@ class BasketTest extends BasePaymentTest
         $this->assertEquals(0, $basket->getAmountTotalGross());
         $this->assertEquals(0, $basket->getAmountTotalDiscount());
         $this->assertEquals(0, $basket->getAmountTotalVat());
+        $this->assertEquals(0, $basket->getTotalValueGross());
         $this->assertEquals('EUR', $basket->getCurrencyCode());
         $this->assertEquals('', $basket->getNote());
         $this->assertEquals('', $basket->getOrderId());
@@ -51,12 +51,14 @@ class BasketTest extends BasePaymentTest
         $this->assertNull($basket->getBasketItemByIndex(1));
 
         $basket->setAmountTotalGross(12.34);
+        $basket->setTotalValueGross(99.99);
         $basket->setAmountTotalDiscount(34.56);
         $basket->setAmountTotalVat(45.67);
         $basket->setCurrencyCode('USD');
         $basket->setNote('This is something I have to remember!');
         $basket->setOrderId('myOrderId');
         $this->assertEquals(12.34, $basket->getAmountTotalGross());
+        $this->assertEquals(99.99, $basket->getTotalValueGross());
         $this->assertEquals(34.56, $basket->getAmountTotalDiscount());
         $this->assertEquals(45.67, $basket->getAmountTotalVat());
         $this->assertEquals('USD', $basket->getCurrencyCode());
@@ -155,4 +157,39 @@ class BasketTest extends BasePaymentTest
         $this->assertEquals('0', $basketItem3->getBasketItemReferenceId());
         $this->assertEquals('1', $basketItem4->getBasketItemReferenceId());
     }
+
+    /**
+     * Verify basket provides expected API version based ond set parameters.
+     *
+     * @test
+     *
+     * @dataProvider getApiVersionShouldReturnExpectedVersionDP
+     *
+     * @param Basket $basket
+     * @param $expectedApiVersion
+     */
+    public function getApiVersionShouldReturnExpectedVersion(Basket $basket, $expectedApiVersion): void
+    {
+        $this->assertEquals($expectedApiVersion, $basket->getApiVersion());
+    }
+
+    //<editor-fold desc="Data provider">
+
+    /**
+     * @return array
+     */
+    public function getApiVersionShouldReturnExpectedVersionDP(): array
+    {
+        $v1Basket = (new Basket())->setAmountTotalGross(100);
+        $v2Basket = (new Basket())->setTotalValueGross(100);
+        $mixedBasket = (new Basket())->setAmountTotalGross(100)->setTotalValueGross(100);
+        return [
+            'empty basket ' => [new Basket(), Unzer::API_VERSION],
+            'minimum v1 basket ' => [$v1Basket, Unzer::API_VERSION],
+            'minimum v2 basket ' => [$v2Basket, BasePaymentTest::API_VERSION_2],
+            'mixed v1/v2 basket ' => [$mixedBasket, BasePaymentTest::API_VERSION_2],
+        ];
+    }
+
+    //</editor-fold>
 }

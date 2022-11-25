@@ -20,12 +20,11 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration\TransactionTypes
  */
 namespace UnzerSDK\test\integration\TransactionTypes;
 
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class CancelTest extends BaseIntegrationTest
@@ -80,7 +79,8 @@ class CancelTest extends BaseIntegrationTest
     public function refundShouldBeFetchableViaPaymentObject(): void
     {
         $charge = $this->createCharge();
-        $cancel = $charge->cancel();
+        $cancel = new Cancellation();
+        $this->getUnzerObject()->cancelChargedPayment($charge->getPayment(), $cancel);
         $fetchedCancel = $cancel->getPayment()->getCharge($charge->getId())->getCancellation($cancel->getId());
         $this->assertTransactionResourceHasBeenCreated($fetchedCancel);
         $this->assertEquals($cancel->expose(), $fetchedCancel->expose());

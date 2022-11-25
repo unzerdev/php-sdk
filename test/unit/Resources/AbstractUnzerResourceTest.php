@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\unit
  */
 namespace UnzerSDK\test\unit\Resources;
@@ -83,6 +81,8 @@ class AbstractUnzerResourceTest extends BasePaymentTest
 
         $customer->setFetchedAt(new DateTime('2018-12-03'));
         $this->assertEquals(new DateTime('2018-12-03'), $customer->getFetchedAt());
+
+        $this->assertEquals(Unzer::API_VERSION, $customer->getApiVersion());
     }
 
     /**

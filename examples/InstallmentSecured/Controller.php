@@ -19,8 +19,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -87,10 +85,17 @@ try {
         ->setEmail('linda.heideich@test.de');
 
     // A Basket is mandatory for Installment Secured payment type
-    $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
-        ->setAmountGross(119.0)
-        ->setAmountVat(19.0);
-    $basket = (new Basket($orderId, 119.0, 'EUR', [$basketItem]))->setAmountTotalVat(19.0);
+    $basketItem = (new BasketItem())
+        ->setAmountPerUnitGross(119.00)
+        ->setVat(19)
+        ->setQuantity(1)
+        ->setBasketItemReferenceId('item1')
+        ->setTitle('Hat');
+
+    $basket = new Basket($orderId);
+    $basket->setTotalValueGross(119.00)
+        ->addBasketItem($basketItem)
+        ->setCurrencyCode('EUR');
 
     // initialize the payment
     $authorize = $unzer->authorize(

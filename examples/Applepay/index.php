@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  David Owusu <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -206,7 +204,7 @@ require_once __DIR__ . '/../../../../autoload.php';
                 amount: 12.99
             },
             supportedNetworks: ['amex', 'visa', 'masterCard', 'discover'],
-            merchantCapabilities: ['supports3DS', 'supportsEMV', 'supportsCredit', 'supportsDebit'],
+            merchantCapabilities: ['supports3DS', 'supportsCredit', 'supportsDebit'],
             requiredShippingContactFields: ['postalAddress', 'name', 'phone', 'email'],
             requiredBillingContactFields: ['postalAddress', 'name', 'phone', 'email'],
             lineItems: [

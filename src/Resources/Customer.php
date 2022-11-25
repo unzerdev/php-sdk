@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Resources
  */
 namespace UnzerSDK\Resources;
@@ -71,6 +69,9 @@ class Customer extends AbstractUnzerResource
 
     /** @var CompanyInfo $companyInfo */
     protected $companyInfo;
+
+    /** @var string $language */
+    protected $language;
 
     /**
      * Customer constructor.
@@ -312,6 +313,25 @@ class Customer extends AbstractUnzerResource
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     *
+     * @return Customer
+     */
+    public function setLanguage(?string $language): Customer
+    {
+        $this->language = $language;
+        return $this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Resource IF">
@@ -343,10 +363,9 @@ class Customer extends AbstractUnzerResource
     {
         if (isset($response->companyInfo) && $this->companyInfo === null) {
             $this->companyInfo = new CompanyInfo();
+            $this->companyInfo->instantiateObjectsFromResponse($response->companyInfo);
         }
 
         parent::handleResponse($response, $method);
     }
-
-    //</editor-fold>
 }

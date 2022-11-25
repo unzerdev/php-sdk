@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
@@ -33,6 +31,9 @@ use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
+/**
+ * @deprecated since 1.2.0.0 PaylaterInvoice should be used instead in the future.
+ */
 class InvoiceSecuredTest extends BaseIntegrationTest
 {
     /**
@@ -54,66 +55,6 @@ class InvoiceSecuredTest extends BaseIntegrationTest
         $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
 
         return $invoice;
-    }
-    
-    /**
-     * Verify, backwards compatibility regarding fetching payment type and map it to invoice secured class.
-     *
-     * @test
-     */
-    public function ivgTypeShouldBeFechable(): InvoiceSecured
-    {
-        $ivgMock = $this->getMockBuilder(InvoiceSecured::class)->setMethods(['getUri'])->getMock();
-        $ivgMock->method('getUri')->willReturn('/types/invoice-guaranteed');
-
-        /** @var InvoiceSecured $ivgType */
-        $ivgType = $this->unzer->createPaymentType($ivgMock);
-        $this->assertInstanceOf(InvoiceSecured::class, $ivgType);
-        $this->assertRegExp('/^s-ivg-[.]*/', $ivgType->getId());
-
-        $fetchedType = $this->unzer->fetchPaymentType($ivgType->getId());
-        $this->assertInstanceOf(InvoiceSecured::class, $fetchedType);
-        $this->assertRegExp('/^s-ivg-[.]*/', $fetchedType->getId());
-
-        return $fetchedType;
-    }
-
-    /**
-     * Verify fetched ivg type can be charged
-     *
-     * @test
-     * @depends ivgTypeShouldBeFechable
-     *
-     * @param InvoiceSecured $ivgType fetched ivg type.
-     *
-     * @throws UnzerApiException
-     */
-    public function ivgTypeShouldBeChargable(InvoiceSecured $ivgType)
-    {
-        $customer = $this->getMaximumCustomer();
-        $charge = $ivgType->charge(100.00, 'EUR', 'https://unzer.com', $customer);
-
-        $this->assertNotNull($charge);
-        $this->assertNotEmpty($charge->getId());
-        $this->assertTrue($charge->isPending());
-
-        return $charge;
-    }
-
-    /**
-     * Verify fetched ivg type can be shipped.
-     *
-     * @test
-     * @depends ivgTypeShouldBeChargable
-     */
-    public function ivgTypeShouldBeShippable(Charge $ivgCharge)
-    {
-        $invoiceId = 'i' . self::generateRandomId();
-
-        $ship = $this->unzer->ship($ivgCharge->getPayment(), $invoiceId);
-        // expect Payment to be pending after shipment.
-        $this->assertTrue($ship->getPayment()->isPending());
-        $this->assertNotNull($ship);
     }
 
     /**
@@ -164,6 +105,46 @@ class InvoiceSecuredTest extends BaseIntegrationTest
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_FACTORING_REQUIRES_BASKET);
 
         $invoiceSecured->charge(1.0, 'EUR', self::RETURN_URL, $customer);
+    }
+
+    /**
+     * Verify charge with Invoice Secured throws an error when invalid ip is set.
+     *
+     * @test
+     */
+    public function invoiceSecuredRequiresValidClientIpForCharge(): void
+    {
+        $clientIp = '123.456.789.123';
+        $this->unzer->setClientIp($clientIp);
+
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
+        $this->unzer->setClientIp(null); // Ensure that the invalid ip is only used for type creation.
+        $this->assertEquals($clientIp, $invoiceSecured->getGeoLocation()->getClientIp());
+
+        $customer = $this->getMaximumCustomer();
+        $customer->setShippingAddress($customer->getBillingAddress());
+        $basket = $this->createBasket();
+
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::CORE_INVALID_IP_NUMBER);
+
+        $invoiceSecured->charge(119.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket);
+    }
+
+    /**
+     * Verify creating a payment type with client ip header set, will overwrite the clientIp of the API resource.
+     *
+     * @test
+     */
+    public function verifySettingClientIpViaHeaderWillOverwriteClientIpOfTypeResource(): void
+    {
+        $clientIp = 'xxx.xxx.xxx.xxx';
+        $this->unzer->setClientIp($clientIp);
+
+        /** @var InvoiceSecured $invoiceSecured */
+        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
+        $this->assertEquals($clientIp, $invoiceSecured->getGeoLocation()->getClientIp());
     }
 
     /**

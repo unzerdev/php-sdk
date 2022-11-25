@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -38,6 +36,10 @@ define('UNZER_PAPI_FOLDER', '/vendor/unzerdev/php-sdk/examples/');
 /* Please provide your own sandbox-keypair here. */
 define('UNZER_PAPI_PRIVATE_KEY', 's-priv-***');
 define('UNZER_PAPI_PUBLIC_KEY', 's-pub-***');
+
+/* Image URLs used for Paymentpages can be adjusted here */
+define('UNZER_PP_LOGO_URL', 'https://sbx-insights.unzer.com/static/unzerLogo.svg');
+define('UNZER_PP_FULL_PAGE_IMAGE_URL', 'https://raw.githubusercontent.com/unzerdev/php-sdk/da9c3fce11264f412e03009606621cc6d9ec0ab1/unzer_logo.svg');
 
 /* For Apple Pay only, set the path to your Apple Pay Merchant-ID certificate. */
 define('UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT', UNZER_PAPI_FOLDER . '');

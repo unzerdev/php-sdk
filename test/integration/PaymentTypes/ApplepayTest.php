@@ -19,8 +19,6 @@
  *
  *  @link  https://docs.unzer.com/
  *
- *  @author  David Owusu <development@unzer.com>
- *
  *  @package  UnzerSDK
  *
  */
@@ -34,6 +32,11 @@ use UnzerSDK\test\BaseIntegrationTest;
 
 class ApplepayTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->markTestSkipped('Testdata need to be updated.');
+    }
+
     /**
      * Verify applepay can be created and fetched.
      *

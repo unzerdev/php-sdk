@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
 namespace UnzerSDK\Resources\EmbeddedResources;
@@ -45,6 +43,9 @@ class Address extends AbstractUnzerResource
 
     /** @var string country */
     protected $country;
+
+    /** @var string|null shippingType */
+    protected $shippingType;
 
     //<editor-fold desc="Getters/Setters">
 
@@ -159,6 +160,25 @@ class Address extends AbstractUnzerResource
     public function setCountry($country): Address
     {
         $this->country = $country;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getShippingType(): ?string
+    {
+        return $this->shippingType;
+    }
+
+    /**
+     * @param string|null $shippingType
+     *
+     * @return Address
+     */
+    public function setShippingType(?string $shippingType): Address
+    {
+        $this->shippingType = $shippingType;
         return $this;
     }
 

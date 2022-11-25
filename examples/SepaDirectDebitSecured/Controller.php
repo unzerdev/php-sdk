@@ -19,8 +19,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -67,10 +65,17 @@ try {
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
     // A Basket is mandatory for SEPA direct debit secured payment type
-    $basketItem = (new BasketItem('Hat', 100.00, 119.00, 1))
-        ->setAmountGross(119.0)
-        ->setAmountVat(19.0);
-    $basket = new Basket($orderId, 119.0, 'EUR', [$basketItem]);
+    $basketItem = (new BasketItem())
+        ->setAmountPerUnitGross(119.00)
+        ->setVat(19.00)
+        ->setQuantity(1)
+        ->setBasketItemReferenceId('item1')
+        ->setTitle('Hat');
+
+    $basket = new Basket($orderId);
+    $basket->setTotalValueGross(119.00)
+        ->addBasketItem($basketItem)
+        ->setCurrencyCode('EUR');
 
     $transaction = $unzer->charge(119.0, 'EUR', $paymentTypeId, CONTROLLER_URL, $customerId, $orderId, null, $basket);
 

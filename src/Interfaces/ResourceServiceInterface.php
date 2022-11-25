@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.unzer.com/
- *
- * @author  Simon Gabriel <development@unzer.com>
+ * @link     https://docs.unzer.com/
  *
  * @package  UnzerSDK\Interfaces
  */
+
 namespace UnzerSDK\Interfaces;
 
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Keypair;
 use UnzerSDK\Resources\Metadata;
@@ -160,7 +160,11 @@ interface ResourceServiceInterface
     public function createBasket(Basket $basket): Basket;
 
     /**
-     * Fetches and returns the given Basket (by object or id).
+     * Fetches and returns the given Basket (by object or id). Since the PAPI provides 2 basket versions, this method performs up to two request.
+     * Firstly the basket gets fetched from the "v2" endpoint.
+     * Only If PAPI returns a specific "basket not found" error the function tries to fetch from the "v1" basket endpoint.
+     *
+     * @see \UnzerSDK\Constants\ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND
      *
      * @param Basket|string $basket Basket object or id of basket to be fetched.
      *
@@ -385,6 +389,32 @@ interface ResourceServiceInterface
     public function fetchRefund(Charge $charge, $cancellationId): Cancellation;
 
     /**
+     * Fetch a cancellation resource of a charged payment (aka refund).
+     *
+     * @param Payment $payment        The payment object to fetch the cancellation for.
+     * @param string  $cancellationId The id of the cancellation to fetch.
+     *
+     * @return Cancellation The fetched cancellation (refund).
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchPaymentRefund($payment, $cancellationId): Cancellation;
+
+    /**
+     * Fetch a cancellation resource of an authorized payment (aka reversal).
+     *
+     * @param Payment $payment        The payment object to fetch the cancellation for.
+     * @param string  $cancellationId The id of the cancellation to fetch.
+     *
+     * @return Cancellation The fetched cancellation (refund).
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchPaymentReversal($payment, $cancellationId): Cancellation;
+
+    /**
      * Fetch a shipment resource of the given payment by id.
      *
      * @param Payment|string $payment    The payment object or id of the payment to fetch the cancellation for.
@@ -396,4 +426,18 @@ interface ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchShipment($payment, $shipmentId): Shipment;
+
+    /**
+     * Get the configuration for the given payment type.
+     *
+     * @param BasePaymentType $paymentType
+     * @param Config|null     $config      Can be used to add query params to the GET request.
+     *
+     * @return Config
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     *                           This will also occur if the given payment type has no configuration.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchConfig(BasePaymentType $paymentType, ?Config $config = null): Config;
 }

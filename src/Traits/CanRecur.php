@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Traits
  */
 namespace UnzerSDK\Traits;
@@ -44,6 +42,10 @@ trait CanRecur
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     *
+     * @deprecated since 1.3.0.0 Please set the recurrence type in your Charge/Authorize object using `setRecurrenceType`
+     *             before performing the transaction request.
+     *
      */
     public function activateRecurring($returnUrl, $recurrenceType = null): Recurring
     {

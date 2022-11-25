@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\PaymentTypes
  */
 namespace UnzerSDK\Resources\PaymentTypes;
@@ -27,6 +25,9 @@ namespace UnzerSDK\Resources\PaymentTypes;
 use UnzerSDK\Traits\CanDirectCharge;
 use UnzerSDK\Traits\IsInvoiceType;
 
+/**
+ * @deprecated since 1.2.3.0 Please switch to PaylaterInvoice.
+ */
 class Invoice extends BasePaymentType
 {
     use CanDirectCharge;

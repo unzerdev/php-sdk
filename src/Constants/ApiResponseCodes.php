@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Constants
  */
 namespace UnzerSDK\Constants;
@@ -62,6 +60,7 @@ class ApiResponseCodes
     public const API_ERROR_RECURRING_PAYMENT_NOT_SUPPORTED             = 'API.500.550.004';
     public const API_ERROR_WEBHOOK_EVENT_ALREADY_REGISTERED            = 'API.510.310.009';
     public const API_ERROR_WEBHOOK_CAN_NOT_BE_FOUND                    = 'API.510.310.008';
+    public const API_ERROR_BASKET_NOT_FOUND                            = 'API.600.410.024';
     public const API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL               = 'API.600.630.004';
     public const API_ERROR_RECURRING_ALREADY_ACTIVE                    = 'API.640.550.006';
     public const API_ERROR_INVALID_KEY                                 = 'API.710.000.002';
@@ -70,6 +69,7 @@ class ApiResponseCodes
     public const API_ERROR_FIELD_IS_MISSING                            = 'API.710.200.100';
 
     public const CORE_ERROR_INVALID_OR_MISSING_LOGIN                   = 'COR.100.300.600';
+    public const CORE_INVALID_IP_NUMBER                                = 'COR.100.900.401';
     public const CORE_ERROR_INSURANCE_ALREADY_ACTIVATED                = 'COR.700.400.800';
 
     public const SDM_ERROR_CURRENT_INSURANCE_EVENT                     = 'SDM.CURRENT_INSURANCE_EVENT';

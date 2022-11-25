@@ -20,8 +20,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\test\unit
  */
 namespace UnzerSDK\test\unit\Constants;
@@ -69,7 +67,7 @@ class PaymentStateTest extends BasePaymentTest
     {
         $this->expectException(RuntimeException::class);
 
-        PaymentState::mapStateCodeToName(6);
+        PaymentState::mapStateCodeToName(7);
     }
 
     /**

@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -69,7 +67,9 @@ require_once __DIR__ . '/../../../../autoload.php';
 
     <!-- The Payment Page needs to be initialized using the private key, that means it can only be done with a Server-To-Server call.
     Therefore we redirect to the controller without doing anything here. -->
-    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    <div class="field">
+        <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
+    </div>
 </form>
 
 <script>

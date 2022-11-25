@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Constants
  */
 namespace UnzerSDK\Constants;
@@ -34,6 +32,7 @@ class PaymentState
     public const STATE_PARTLY = 3;
     public const STATE_PAYMENT_REVIEW = 4;
     public const STATE_CHARGEBACK = 5;
+    public const STATE_CREATE = 6;
 
     public const STATE_NAME_PENDING = 'pending';
     public const STATE_NAME_COMPLETED = 'completed';
@@ -41,6 +40,7 @@ class PaymentState
     public const STATE_NAME_PARTLY = 'partly';
     public const STATE_NAME_PAYMENT_REVIEW = 'payment review';
     public const STATE_NAME_CHARGEBACK = 'chargeback';
+    public const STATE_NAME_CREATE = 'create';
 
     /**
      * Returns the name of the state with the given code.
@@ -71,6 +71,9 @@ class PaymentState
                 break;
             case self::STATE_CHARGEBACK:
                 $stateName =  self::STATE_NAME_CHARGEBACK;
+                break;
+            case self::STATE_CREATE:
+                $stateName =  self::STATE_NAME_CREATE;
                 break;
             default:
                 throw new RuntimeException('Unknown payment state #' . $stateCode);

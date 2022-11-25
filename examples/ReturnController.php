@@ -22,8 +22,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -70,13 +68,18 @@ try {
     $payment   = $unzer->fetchPayment($paymentId);
     $transaction = $payment->getInitialTransaction();
 
+    // Ensure that shortId is also set in case of payment pages.
+    if ($transaction !== null) {
+        $_SESSION['ShortId'] = $_SESSION['ShortId'] ?? $transaction->getShortId();
+    }
+
     if ($payment->isCompleted()) {
         // The payment process has been successful.
         // You show the success page.
         // Goods can be shipped.
         redirect(SUCCESS_URL);
     } elseif ($payment->isPending()) {
-        if ($transaction->isSuccess()) {
+        if ($transaction->isSuccess() || $transaction->isResumed()) {
             if ($transaction instanceof Authorization) {
                 // Payment is ready to be captured.
                 // Goods can be shipped later AFTER charge.

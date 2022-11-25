@@ -19,8 +19,6 @@
  *
  * @link https://dev.unzer.com/
  *
- * @author Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\Adapter
  */
 namespace UnzerSDK\Adapter;
@@ -69,7 +67,12 @@ class CurlAdapter implements HttpAdapterInterface
         $this->setOption(CURLOPT_VERBOSE, $curlVerbose);
         $this->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
 
-        if (in_array($httpMethod, [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT], true)) {
+        $postFieldMethods = [
+            HttpAdapterInterface::REQUEST_POST,
+            HttpAdapterInterface::REQUEST_PUT,
+            HttpAdapterInterface::REQUEST_PATCH
+        ];
+        if (in_array($httpMethod, $postFieldMethods, true)) {
             $this->setOption(CURLOPT_POSTFIELDS, $payload);
         }
     }

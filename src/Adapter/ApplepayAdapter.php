@@ -20,8 +20,6 @@
  *
  * @link https://dev.unzer.com/
  *
- * @author David Owusu <development@unzer.com>
- *
  * @package  UnzerSDK\Adapter
  */
 namespace UnzerSDK\Adapter;

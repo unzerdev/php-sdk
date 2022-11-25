@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -53,9 +51,11 @@ require_once __DIR__ . '/../../../../autoload.php';
         <!-- The Installment Secured field UI Element will be inserted here -->
     </div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
-    <button id="continue-button" class="unzerUI primary button fluid" type="submit" style="display: none" disabled>
-        Continue
-    </button>
+    <div class="field">
+        <button id="continue-button" class="unzerUI primary button fluid" type="submit" style="display: none" disabled>
+            Continue
+        </button>
+    </div>
 </form>
 
 <script>

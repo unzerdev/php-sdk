@@ -18,8 +18,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @author  Simon Gabriel <development@unzer.com>
- *
  * @package  UnzerSDK\examples
  */
 
@@ -33,4 +31,9 @@ define('SUCCESS_URL', EXAMPLE_BASE_FOLDER . 'Success.php');
 define('PENDING_URL', EXAMPLE_BASE_FOLDER . 'Pending.php');
 define('FAILURE_URL', EXAMPLE_BASE_FOLDER . 'Failure.php');
 define('RETURN_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'ReturnController.php');
+define('BACKEND_URL', EXAMPLE_BASE_FOLDER . 'Backend/ManagePayment.php');
+define('BACKEND_FAILURE_URL', EXAMPLE_BASE_FOLDER . 'Backend/Failure.php');
 define('RECURRING_PAYMENT_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CardRecurring/RecurringPaymentController.php');
+define('CHARGE_PAYMENT_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'Backend/ChargePaymentController.php');
+define('CANCEL_PAYMENT_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'Backend/CancelPaymentController.php');
+define('UPDATE_TRANSACTION_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'Backend/UpdateTransactionController.php');
