@@ -322,7 +322,7 @@ class Customer extends AbstractUnzerResource
     }
 
     /**
-     * @param string $language
+     * @param string|null $language
      *
      * @return Customer
      */

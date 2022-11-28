@@ -357,7 +357,7 @@ class CancelService implements CancelServiceInterface
     /**
      * Throws exception if the passed exception is not to be ignored while cancelling charges or authorization.
      *
-     * @param $exception
+     * @param UnzerApiException $exception
      *
      * @throws UnzerApiException
      */

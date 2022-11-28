@@ -329,7 +329,7 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      *
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      *
-     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * @return false|string data which can be serialized by <b>json_encode</b>,
      *               which is a value of any type other than a resource.
      */
     public function jsonSerialize()
@@ -490,8 +490,6 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
 
     /**
      * Exposes properties
-     *
-     * @param array $properties
      *
      * @return array
      */
