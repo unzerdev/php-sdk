@@ -126,6 +126,7 @@ trait HasStates
      * @param string $status
      *
      * @throws RuntimeException
+     * @return self
      */
     protected function setStatus(string $status): self
     {

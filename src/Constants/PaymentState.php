@@ -51,7 +51,7 @@ class PaymentState
      *
      * @throws RuntimeException A RuntimeException is thrown when the $stateCode is unknown.
      */
-    public static function mapStateCodeToName($stateCode): string
+    public static function mapStateCodeToName(int $stateCode): string
     {
         switch ($stateCode) {
             case self::STATE_PENDING:
@@ -91,7 +91,7 @@ class PaymentState
      *
      * @throws RuntimeException A RuntimeException is thrown when the $stateName is unknown.
      */
-    public static function mapStateNameToCode($stateName): int
+    public static function mapStateNameToCode(string $stateName): int
     {
         switch ($stateName) {
             case self::STATE_NAME_PENDING:

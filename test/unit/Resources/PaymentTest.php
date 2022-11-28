@@ -1394,7 +1394,7 @@ class PaymentTest extends BasePaymentTest
 
         // when
         /** @noinspection PhpParamsInspection */
-        $payment->setMetadata('test');
+        $payment->setMetadata(null);
 
         // then
         $this->assertNull($payment->getMetadata());

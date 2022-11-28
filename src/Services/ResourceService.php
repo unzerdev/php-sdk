@@ -122,8 +122,8 @@ class ResourceService implements ResourceServiceInterface
      */
     public function send(
         AbstractUnzerResource $resource,
-        $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        string $apiVersion = Unzer::API_VERSION
+        string                $httpMethod = HttpAdapterInterface::REQUEST_GET,
+        string                $apiVersion = Unzer::API_VERSION
     ): stdClass {
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri          = $resource->getUri($appendId, $httpMethod);
@@ -163,6 +163,10 @@ class ResourceService implements ResourceServiceInterface
         $unzer    = $this->unzer;
 
         $resourceId   = IdService::getLastResourceIdFromUrlString($url);
+        if (empty($resourceId)) {
+            return null;
+        }
+
         $resourceType = IdService::getResourceTypeFromIdString($resourceId);
         switch (true) {
             case $resourceType === IdStrings::AUTHORIZE:
@@ -381,7 +385,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, $returnUrl, string $recurrenceType = null): Recurring
+    public function activateRecurringPayment($paymentType, string $returnUrl, string $recurrenceType = null): Recurring
     {
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
@@ -445,7 +449,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchPaymentByOrderId($orderId): Payment
+    public function fetchPaymentByOrderId(string $orderId): Payment
     {
         $paymentObject = (new Payment($this->unzer))->setOrderId($orderId);
         $this->fetchResource($paymentObject);
@@ -459,7 +463,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchKeypair($detailed = false): Keypair
+    public function fetchKeypair(bool $detailed = false): Keypair
     {
         $keyPair = (new Keypair())->setParentResource($this->unzer)->setDetailed($detailed);
         $this->fetchResource($keyPair);
@@ -557,7 +561,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchPaymentType($typeId): BasePaymentType
+    public function fetchPaymentType(string $typeId): BasePaymentType
     {
         $paymentType = self::getTypeInstanceFromIdString($typeId);
 
@@ -631,7 +635,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchCustomerByExtCustomerId($customerId): Customer
+    public function fetchCustomerByExtCustomerId(string $customerId): Customer
     {
         $customerObject = (new Customer())->setCustomerId($customerId);
         $this->fetchResource($customerObject->setParentResource($this->unzer));
@@ -694,7 +698,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchChargeById($payment, $chargeId): Charge
+    public function fetchChargeById($payment, string $chargeId): Charge
     {
         $paymentObject = $this->fetchPayment($payment);
         $charge = $paymentObject->getCharge($chargeId, true);
@@ -714,7 +718,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchReversalByAuthorization($authorization, $cancellationId): Cancellation
+    public function fetchReversalByAuthorization(Authorization $authorization, string $cancellationId): Cancellation
     {
         $this->fetchResource($authorization);
         return $authorization->getCancellation($cancellationId);
@@ -723,7 +727,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchReversal($payment, $cancellationId): Cancellation
+    public function fetchReversal($payment, string $cancellationId): Cancellation
     {
         /** @var Authorization $authorization */
         $authorization = $this->fetchPayment($payment)->getAuthorization();
@@ -733,7 +737,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchRefundById($payment, $chargeId, $cancellationId): Cancellation
+    public function fetchRefundById($payment, string $chargeId, string $cancellationId): Cancellation
     {
         /** @var Charge $charge */
         $charge = $this->fetchChargeById($payment, $chargeId);
@@ -743,7 +747,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchRefund(Charge $charge, $cancellationId): Cancellation
+    public function fetchRefund(Charge $charge, string $cancellationId): Cancellation
     {
         /** @var Cancellation $cancel */
         $cancel = $this->fetchResource($charge->getCancellation($cancellationId, true));
@@ -753,13 +757,15 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchPaymentRefund($payment, $cancellationId): Cancellation
+    public function fetchPaymentRefund($payment, string $cancellationId): Cancellation
     {
         $charge = new Charge();
-        $charge->setParentResource($payment);
+        $paymentResource = $this->getPaymentResource($payment);
+
+        $charge->setParentResource($paymentResource);
         $cancel = (new Cancellation())
             ->setId($cancellationId)
-            ->setPayment($payment)
+            ->setPayment($paymentResource)
             ->setParentResource($charge);
         return $this->fetchResource($cancel);
     }
@@ -767,13 +773,15 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchPaymentReversal($payment, $cancellationId): Cancellation
+    public function fetchPaymentReversal($payment, string $cancellationId): Cancellation
     {
         $authorization = new Authorization();
-        $authorization->setParentResource($payment);
+        $paymentResource = $this->getPaymentResource($payment);
+
+        $authorization->setParentResource($paymentResource);
         $cancel = (new Cancellation())
             ->setId($cancellationId)
-            ->setPayment($payment)
+            ->setPayment($paymentResource)
             ->setParentResource($authorization);
         return $this->fetchResource($cancel);
     }
@@ -787,7 +795,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchShipment($payment, $shipmentId): Shipment
+    public function fetchShipment($payment, string $shipmentId): Shipment
     {
         $paymentObject = $this->fetchPayment($payment);
         return $paymentObject->getShipment($shipmentId);

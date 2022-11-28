@@ -60,9 +60,9 @@ class Cancellation extends AbstractTransactionType
     /**
      * Authorization constructor.
      *
-     * @param float $amount The amount to be cancelled, is transferred as grossAmount in case of Installment Secured.
+     * @param float|null $amount The amount to be cancelled, is transferred as grossAmount in case of Installment Secured.
      */
-    public function __construct($amount = null)
+    public function __construct(float $amount = null)
     {
         $this->setAmount($amount);
     }
@@ -82,11 +82,11 @@ class Cancellation extends AbstractTransactionType
     /**
      * Sets the cancellationAmount (equals grossAmount in case of Installment Secured).
      *
-     * @param float $amount
+     * @param float|null $amount
      *
      * @return Cancellation
      */
-    public function setAmount($amount): Cancellation
+    public function setAmount(?float $amount): Cancellation
     {
         $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
@@ -109,7 +109,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return Cancellation
      */
-    public function setReasonCode($reasonCode): Cancellation
+    public function setReasonCode(?string $reasonCode): Cancellation
     {
         if (in_array($reasonCode, array_merge(CancelReasonCodes::REASON_CODE_ARRAY, [null]), true)) {
             $this->reasonCode = $reasonCode;
@@ -130,7 +130,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return Cancellation
      */
-    public function setPaymentReference($paymentReference): Cancellation
+    public function setPaymentReference(?string $paymentReference): Cancellation
     {
         $this->paymentReference = $paymentReference;
         return $this;
@@ -155,7 +155,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return Cancellation The resulting cancellation object.
      */
-    public function setAmountNet($amountNet): Cancellation
+    public function setAmountNet(?float $amountNet): Cancellation
     {
         $this->amountNet = $amountNet;
         return $this;
@@ -180,7 +180,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return Cancellation
      */
-    public function setAmountVat($amountVat): Cancellation
+    public function setAmountVat(?float $amountVat): Cancellation
     {
         $this->amountVat = $amountVat;
         return $this;
@@ -208,7 +208,7 @@ class Cancellation extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'cancels';
     }

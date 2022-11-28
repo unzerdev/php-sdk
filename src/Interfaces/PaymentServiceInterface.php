@@ -60,8 +60,8 @@ interface PaymentServiceInterface
         Authorization $authorization,
         $paymentType,
         $customer = null,
-        $metadata = null,
-        $basket = null
+        ?Metadata $metadata = null,
+        Basket $basket = null
     ): Authorization;
 
     /**
@@ -138,11 +138,11 @@ interface PaymentServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function performCharge(
-        Charge $charge,
+        Charge   $charge,
         $paymentType,
         $customer = null,
-        $metadata = null,
-        $basket = null
+        Metadata $metadata = null,
+        Basket $basket = null
     ): Charge;
 
     /**
@@ -287,16 +287,16 @@ interface PaymentServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function payout(
-        $amount,
-        $currency,
+        float    $amount,
+        string   $currency,
         $paymentType,
-        $returnUrl,
+        string   $returnUrl,
         $customer = null,
-        $orderId = null,
-        $metadata = null,
-        $basket = null,
-        $invoiceId = null,
-        $referenceText = null
+        string   $orderId = null,
+        Metadata $metadata = null,
+        Basket   $basket = null,
+        string   $invoiceId = null,
+        string $referenceText = null
     ): Payout;
 
     /**
@@ -383,9 +383,9 @@ interface PaymentServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchInstallmentPlans(
-        $amount,
-        $currency,
-        $effectiveInterest,
+        float    $amount,
+        string   $currency,
+        float    $effectiveInterest,
         DateTime $orderDate = null
     ): InstalmentPlans;
 }

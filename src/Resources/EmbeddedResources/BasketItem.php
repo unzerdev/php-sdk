@@ -128,7 +128,7 @@ class BasketItem extends AbstractUnzerResource
      *
      * @return BasketItem
      */
-    public function setBasketItemReferenceId($basketItemReferenceId): BasketItem
+    public function setBasketItemReferenceId(?string $basketItemReferenceId): BasketItem
     {
         $this->basketItemReferenceId = $basketItemReferenceId;
         return $this;
@@ -338,7 +338,7 @@ class BasketItem extends AbstractUnzerResource
      *
      * @return BasketItem
      */
-    public function setUnit($unit): BasketItem
+    public function setUnit(?string $unit): BasketItem
     {
         $this->unit = $unit;
         return $this;
@@ -376,7 +376,7 @@ class BasketItem extends AbstractUnzerResource
      *
      * @return BasketItem
      */
-    public function setImageUrl($imageUrl): BasketItem
+    public function setImageUrl(?string $imageUrl): BasketItem
     {
         $this->imageUrl = $imageUrl;
         return $this;
@@ -395,7 +395,7 @@ class BasketItem extends AbstractUnzerResource
      *
      * @return BasketItem
      */
-    public function setSubTitle($subTitle): BasketItem
+    public function setSubTitle(?string $subTitle): BasketItem
     {
         $this->subTitle = $subTitle;
         return $this;
@@ -417,7 +417,7 @@ class BasketItem extends AbstractUnzerResource
      *
      * @return BasketItem
      */
-    public function setType($type): BasketItem
+    public function setType(?string $type): BasketItem
     {
         $this->type = $type;
         return $this;

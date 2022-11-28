@@ -111,7 +111,7 @@ class Recurring extends AbstractUnzerResource
      *
      * @return Recurring
      */
-    protected function setRedirectUrl($redirectUrl): Recurring
+    protected function setRedirectUrl(?string $redirectUrl): Recurring
     {
         $this->redirectUrl = $redirectUrl;
         return $this;
@@ -124,7 +124,7 @@ class Recurring extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         $parts = [
             'types',

@@ -1236,7 +1236,6 @@ class ResourceServiceTest extends BasePaymentTest
             ['p-crd12345678abc'],
             ['pcrd12345678abc'],
             ['myId'],
-            [null],
             ['']
         ];
     }

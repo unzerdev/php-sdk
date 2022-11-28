@@ -159,7 +159,7 @@ class CancelService implements CancelServiceInterface
     public function cancelPayment(
         $payment,
         float $amount = null,
-        $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
+        ?string $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
         string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
@@ -243,11 +243,11 @@ class CancelService implements CancelServiceInterface
 
     /**
      * @param Payment $payment
-     * @param string  $reasonCode
-     * @param string  $referenceText
-     * @param float   $amountNet
-     * @param float   $amountVat
-     * @param float   $remainingToCancel
+     * @param ?string  $reasonCode
+     * @param ?string  $referenceText
+     * @param ?float   $amountNet
+     * @param ?float   $amountVat
+     * @param ?float   $remainingToCancel
      *
      * @return array
      *
@@ -256,11 +256,11 @@ class CancelService implements CancelServiceInterface
      */
     public function cancelPaymentCharges(
         Payment $payment,
-        $reasonCode,
-        $referenceText,
-        $amountNet,
-        $amountVat,
-        float $remainingToCancel = null
+        ?string  $reasonCode,
+        ?string  $referenceText,
+        ?float   $amountNet,
+        ?float   $amountVat,
+        ?float   $remainingToCancel = null
     ): array {
         $cancellations = [];
         $cancelWholePayment = $remainingToCancel === null;
@@ -384,7 +384,7 @@ class CancelService implements CancelServiceInterface
      *
      * @return float|null
      */
-    private function updateCancelAmount($remainingToCancel, float $amount): ?float
+    private function updateCancelAmount(?float $remainingToCancel, float $amount): ?float
     {
         $cancelWholePayment = $remainingToCancel === null;
         if (!$cancelWholePayment) {

@@ -62,7 +62,7 @@ class CardDetails extends AbstractUnzerResource
      *
      * @return CardDetails
      */
-    protected function setCardType($cardType): CardDetails
+    protected function setCardType(?string $cardType): CardDetails
     {
         $this->cardType = $cardType;
         return $this;
@@ -81,7 +81,7 @@ class CardDetails extends AbstractUnzerResource
      *
      * @return CardDetails
      */
-    protected function setAccount($account): CardDetails
+    protected function setAccount(?string $account): CardDetails
     {
         $this->account = $account;
         return $this;
@@ -100,7 +100,7 @@ class CardDetails extends AbstractUnzerResource
      *
      * @return CardDetails
      */
-    protected function setCountryIsoA2($countryIsoA2): CardDetails
+    protected function setCountryIsoA2(?string $countryIsoA2): CardDetails
     {
         $this->countryIsoA2 = $countryIsoA2;
         return $this;
@@ -119,7 +119,7 @@ class CardDetails extends AbstractUnzerResource
      *
      * @return CardDetails
      */
-    protected function setCountryName($countryName): CardDetails
+    protected function setCountryName(?string $countryName): CardDetails
     {
         $this->countryName = $countryName;
         return $this;
@@ -138,7 +138,7 @@ class CardDetails extends AbstractUnzerResource
      *
      * @return CardDetails
      */
-    protected function setIssuerName($issuerName): CardDetails
+    protected function setIssuerName(?string $issuerName): CardDetails
     {
         $this->issuerName = $issuerName;
         return $this;
@@ -157,7 +157,7 @@ class CardDetails extends AbstractUnzerResource
      *
      * @return CardDetails
      */
-    protected function setIssuerUrl($issuerUrl): CardDetails
+    protected function setIssuerUrl(?string $issuerUrl): CardDetails
     {
         $this->issuerUrl = $issuerUrl;
         return $this;
@@ -176,7 +176,7 @@ class CardDetails extends AbstractUnzerResource
      *
      * @return CardDetails
      */
-    protected function setIssuerPhoneNumber($issuerPhoneNumber): CardDetails
+    protected function setIssuerPhoneNumber(?string $issuerPhoneNumber): CardDetails
     {
         $this->issuerPhoneNumber = $issuerPhoneNumber;
         return $this;
