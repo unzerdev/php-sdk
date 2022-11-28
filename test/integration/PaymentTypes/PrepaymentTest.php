@@ -37,6 +37,7 @@ class PrepaymentTest extends BaseIntegrationTest
      * Verify Prepayment can be created and fetched.
      *
      * @return Prepayment
+     *
      * @test
      */
     public function prepaymentShouldBeCreatableAndFetchable(): AbstractUnzerResource

@@ -153,6 +153,7 @@ class CancelServiceTest extends BasePaymentTest
      * Verify certain errors are allowed during cancellation and will be ignored.
      *
      * @test
+     *
      * @dataProvider allowedErrorCodesDuringChargeCancel
      *
      * @param string $allowedExceptionCode
@@ -232,6 +233,7 @@ class CancelServiceTest extends BasePaymentTest
      * Verify certain errors are allowed during cancellation and will be ignored.
      *
      * @test
+     *
      * @dataProvider allowedErrorCodesDuringAuthCancel
      *
      * @param string $exceptionCode

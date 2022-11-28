@@ -33,6 +33,7 @@ class PublicKeyValidatorTest extends BasePaymentTest
      * Verify validate method behaves as expected.
      *
      * @test
+     *
      * @dataProvider validateShouldReturnTrueIfPublicKeyHasCorrectFormatDP
      *
      * @param string $key

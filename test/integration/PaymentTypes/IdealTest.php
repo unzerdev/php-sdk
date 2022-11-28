@@ -54,6 +54,7 @@ class IdealTest extends BaseIntegrationTest
      * @test
      *
      * @param Ideal $ideal
+     *
      * @depends idealShouldBeCreatable
      */
     public function idealShouldThrowExceptionOnAuthorize(Ideal $ideal): void
@@ -68,6 +69,7 @@ class IdealTest extends BaseIntegrationTest
      * Verify that ideal payment type is chargeable.
      *
      * @test
+     *
      * @depends idealShouldBeCreatable
      *
      * @param Ideal $ideal
@@ -87,6 +89,7 @@ class IdealTest extends BaseIntegrationTest
      * Verify ideal payment type can be fetched.
      *
      * @test
+     *
      * @depends idealShouldBeCreatable
      *
      * @param Ideal $ideal
