@@ -126,6 +126,7 @@ class UnzerTest extends BasePaymentTest
      * Verify Unzer propagates resource actions to the resource service.
      *
      * @test
+     *
      * @dataProvider resourceServiceDP
      *
      * @param string $unzerMethod
@@ -151,6 +152,7 @@ class UnzerTest extends BasePaymentTest
      * Verify Unzer propagates payment actions to the payment service.
      *
      * @test
+     *
      * @dataProvider paymentServiceDP
      *
      * @param string $unzerMethod
@@ -176,6 +178,7 @@ class UnzerTest extends BasePaymentTest
      * Verify Unzer propagates webhook actions to the webhook service.
      *
      * @test
+     *
      * @dataProvider UnzerShouldForwardWebhookActionCallsToTheWebhookServiceDP
      *
      * @param string $unzerMethod
@@ -201,6 +204,7 @@ class UnzerTest extends BasePaymentTest
      * Verify Unzer propagates cancel actions to the cancel service.
      *
      * @test
+     *
      * @dataProvider cancelServiceDP
      *
      * @param string $unzerMethod

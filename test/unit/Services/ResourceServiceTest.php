@@ -96,6 +96,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Verify send will call send on httpService.
      *
      * @test
+     *
      * @dataProvider sendShouldCallSendOnHttpServiceDP
      *
      * @param string $method
@@ -131,6 +132,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Verify getResourceIdFromUrl works correctly.
      *
      * @test
+     *
      * @dataProvider urlIdStringProvider
      *
      * @param string $expected
@@ -149,6 +151,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Verify getResourceIdFromUrl throws exception if the id cannot be found.
      *
      * @test
+     *
      * @dataProvider failingUrlIdStringProvider
      *
      * @param mixed $uri
@@ -168,6 +171,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Verify fetchResource calls fetch if its id is set and it has never been fetched before.
      *
      * @test
+     *
      * @dataProvider fetchResourceFetchCallDP
      *
      * @param $resource
@@ -365,6 +369,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Verify fetchResourceByUrl calls fetch for the desired resource.
      *
      * @test
+     *
      * @dataProvider fetchResourceByUrlShouldFetchTheDesiredResourceDP
      *
      * @param string $fetchMethod
@@ -385,6 +390,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Verify fetchResourceByUrl calls fetch for the desired resource.
      *
      * @test
+     *
      * @dataProvider fetchResourceByUrlForAPaymentTypeShouldCallFetchPaymentTypeDP
      *
      * @param string $paymentTypeId
@@ -418,6 +424,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Verify fetchPayment method will fetch the passed payment object.
      *
      * @test
+     *
      * @dataProvider fetchShouldCallFetchResourceDP
      *
      * @param string $fetchMethod
@@ -475,6 +482,7 @@ class ResourceServiceTest extends BasePaymentTest
      * Verify fetchPaymentType will throw exception if the id does not fit any type or is invalid.
      *
      * @test
+     *
      * @dataProvider paymentTypeIdProviderInvalid
      *
      * @param string $typeId

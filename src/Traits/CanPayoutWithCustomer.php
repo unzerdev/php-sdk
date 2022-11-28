@@ -55,9 +55,9 @@ trait CanPayoutWithCustomer
         float  $amount,
         string $currency,
         string $returnUrl,
-               $customer,
+        $customer,
         string $orderId = null,
-               $metadata = null,
+        $metadata = null,
         Basket $basket = null
     ): Payout {
         if ($this instanceof UnzerParentInterface) {

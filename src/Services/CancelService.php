@@ -243,11 +243,11 @@ class CancelService implements CancelServiceInterface
 
     /**
      * @param Payment $payment
-     * @param ?string  $reasonCode
-     * @param ?string  $referenceText
-     * @param ?float   $amountNet
-     * @param ?float   $amountVat
-     * @param ?float   $remainingToCancel
+     * @param ?string $reasonCode
+     * @param ?string $referenceText
+     * @param ?float  $amountNet
+     * @param ?float  $amountVat
+     * @param ?float  $remainingToCancel
      *
      * @return array
      *

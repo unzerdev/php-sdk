@@ -102,8 +102,8 @@ class HttpService
      *
      * @param $uri string|null uri of the target system
      * @param ?AbstractUnzerResource $resource
-     * @param string $httpMethod
-     * @param string $apiVersion
+     * @param string                 $httpMethod
+     * @param string                 $apiVersion
      *
      * @return string
      *

@@ -378,7 +378,7 @@ interface ResourceServiceInterface
      * Fetch a cancellation resource of a charged payment (aka refund).
      *
      * @param Payment|string $payment        The payment object to fetch the cancellation for.
-     * @param string  $cancellationId The id of the cancellation to fetch.
+     * @param string         $cancellationId The id of the cancellation to fetch.
      *
      * @return Cancellation The fetched cancellation (refund).
      *
@@ -391,7 +391,7 @@ interface ResourceServiceInterface
      * Fetch a cancellation resource of an authorized payment (aka reversal).
      *
      * @param Payment|string $payment        The payment object to fetch the cancellation for.
-     * @param string  $cancellationId The id of the cancellation to fetch.
+     * @param string         $cancellationId The id of the cancellation to fetch.
      *
      * @return Cancellation The fetched cancellation (refund).
      *

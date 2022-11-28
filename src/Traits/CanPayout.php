@@ -57,9 +57,9 @@ trait CanPayout
         float  $amount,
         string $currency,
         string $returnUrl,
-               $customer = null,
+        $customer = null,
         string $orderId = null,
-               $metadata = null,
+        $metadata = null,
         Basket $basket = null,
         string $invoiceId = null,
         string $paymentReference = null

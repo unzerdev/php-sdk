@@ -97,10 +97,11 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * Construct a new Unzer object.
      *
-     * @param string $key    The private key your received from your Unzer contact person.
+     * @param string  $key    The private key your received from your Unzer contact person.
      * @param ?string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
+     *
      *@link https://docs.unzer.com/integrate/web-integration/#section-localization-and-languages
      *
      */

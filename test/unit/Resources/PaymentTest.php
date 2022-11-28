@@ -724,6 +724,7 @@ class PaymentTest extends BasePaymentTest
      * Verify handleResponse will update stateId.
      *
      * @test
+     *
      * @dataProvider stateDataProvider
      *
      * @param integer $state
@@ -1500,6 +1501,7 @@ class PaymentTest extends BasePaymentTest
      * Autofetch is disabled due to missing transactionIds.
      *
      * @test
+     *
      * @dataProvider initialTransactionDP
      *
      * @param AbstractTransactionType $expected
