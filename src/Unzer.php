@@ -725,7 +725,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function performAuthorization(Authorization $authorization, $paymentType, $customer = null, $metadata = null, Basket $basket = null): Authorization
+    public function performAuthorization(Authorization $authorization, $paymentType, $customer = null, Metadata $metadata = null, Basket $basket = null): Authorization
     {
         return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
     }

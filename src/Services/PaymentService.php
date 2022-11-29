@@ -92,7 +92,13 @@ class PaymentService implements PaymentServiceInterface
 
     //<editor-fold desc="Authorize transaction">
 
-    public function performAuthorization(Authorization $authorization, $paymentType, $customer = null, $metadata = null, Basket $basket = null): Authorization
+    public function performAuthorization(
+        Authorization $authorization,
+        $paymentType,
+        $customer = null,
+        Metadata $metadata = null,
+        Basket $basket = null
+    ): Authorization
     {
         $payment = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();

@@ -60,7 +60,7 @@ interface PaymentServiceInterface
         Authorization $authorization,
         $paymentType,
         $customer = null,
-        ?Metadata $metadata = null,
+        Metadata $metadata = null,
         Basket $basket = null
     ): Authorization;
 
