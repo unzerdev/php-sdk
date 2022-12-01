@@ -89,7 +89,7 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                         <form id="payment-form" class="unzerUI form" action="' . UPDATE_TRANSACTION_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
                             <label for="shiipping_amount">Shipping amount: </label>
-                            <input type="number" name="shipping_amount" value="0">
+                            <input type="number" name="shipping_amount" value="0" step="any">
                             <div class="fields inline">
                                 <div class="field">
                                     <button class="unzerUI primary button fluid" id="submit-button" type="submit">Patch Transaction</button>
