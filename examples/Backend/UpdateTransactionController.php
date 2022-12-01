@@ -68,6 +68,10 @@ try {
     $payment = $unzer->fetchPayment($paymentId);
     $transaction = $payment->getInitialTransaction();
 
+    if (!$transaction->isResumed()) {
+        redirect(BACKEND_FAILURE_URL, 'Transaction can only be updated in resumed state.');
+    }
+
     //Add Shipping cost to initial amount.
     $updatedCost = $transaction->getAmount() + $shippingCost;
 
