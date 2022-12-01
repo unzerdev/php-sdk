@@ -77,7 +77,7 @@ try {
     //Update basket
     $basket = $payment->getBasket();
 
-    if ($basket !== null && $shippingCost < 0) {
+    if ($basket !== null && $shippingCost > 0) {
         $shippingItem = new BasketItem('shipping costs');
         $shippingItem->setAmountPerUnitGross($shippingCost);
         $basket->addBasketItem($shippingItem);
