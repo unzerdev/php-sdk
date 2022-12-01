@@ -53,8 +53,9 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 session_start();
 
 // Retrieve the paymentId you remembered within the Controller
+$redirectUrl = FAILURE_URL;
 if (!isset($_SESSION['PaymentId'])) {
-    redirect(FAILURE_URL, 'The payment id is missing.', $clientMessage);
+    $merchantMessage = 'The payment id is missing.';
 }
 $paymentId = $_SESSION['PaymentId'];
 
@@ -77,8 +78,10 @@ try {
         // The payment process has been successful.
         // You show the success page.
         // Goods can be shipped.
-        redirect(SUCCESS_URL);
-    } elseif ($payment->isPending()) {
+        $redirectUrl = SUCCESS_URL;
+    }
+
+    if ($payment->isPending()) {
         if ($transaction->isSuccess() || $transaction->isResumed()) {
             if ($transaction instanceof Authorization) {
                 // Payment is ready to be captured.
@@ -91,26 +94,30 @@ try {
             // In any case:
             // * You can show the success page.
             // * You can set order status to pending payment
-            redirect(SUCCESS_URL);
+            $redirectUrl = SUCCESS_URL;
         } elseif ($transaction->isPending()) {
-
-            // The initial transaction of invoice types will not change to success but stay pending.
-            $paymentType = $payment->getPaymentType();
-            if ($paymentType instanceof Prepayment || $paymentType->isInvoiceType()) {
-                // Awaiting payment by the customer.
-                // Goods can be shipped immediately except for Prepayment type.
-                redirect(SUCCESS_URL);
-            }
-
             // In cases of a redirect to an external service (e.g. 3D secure, PayPal, etc) it sometimes takes time for
             // the payment to update it's status after redirect into shop.
             // In this case the payment and the transaction are pending at first and change to cancel or success later.
 
             // Use the webhooks feature to stay informed about changes of payment and transaction (e.g. cancel, success)
             // then you can handle the states as shown above in transaction->isSuccess() branch.
-            redirect(PENDING_URL);
+            $redirectUrl = PENDING_URL;
+
+            // The initial transaction of invoice types will not change to success but stay pending.
+            $paymentType = $payment->getPaymentType();
+            if ($paymentType instanceof Prepayment || $paymentType->isInvoiceType()) {
+                // Awaiting payment by the customer.
+                // Goods can be shipped immediately except for Prepayment type.
+                $redirectUrl = SUCCESS_URL;
+            }
         }
     }
+
+    if ($payment->isCreate()) {
+        $redirectUrl = CREATE_URL;
+    }
+
     // If the payment is neither success nor pending something went wrong.
     // In this case do not create the order or cancel it if you already did.
     // Redirect to an error page in your shop and show a message if you want.
@@ -122,11 +129,11 @@ try {
         $clientMessage = $transaction->getMessage()->getCustomer();
     }
 } catch (UnzerApiException $e) {
+    // Write the merchant message to your log.
+    // Show the client message to the customer (it is localized).
     $merchantMessage = $e->getMerchantMessage();
     $clientMessage = $e->getClientMessage();
 } catch (RuntimeException $e) {
     $merchantMessage = $e->getMessage();
 }
-// Write the merchant message to your log.
-// Show the client message to the customer (it is localized).
-redirect(FAILURE_URL, $merchantMessage, $clientMessage);
+redirect($redirectUrl, $merchantMessage, $clientMessage);
