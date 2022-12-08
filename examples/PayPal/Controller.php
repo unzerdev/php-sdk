@@ -31,6 +31,10 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Unzer;
 
 session_start();
@@ -51,6 +55,9 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 if (!isset($_POST['resourceId'])) {
     redirect(FAILURE_URL, 'Resource id is missing!', $clientMessage);
 }
+
+$useExpressCheckout = isset($_POST['express-checkout']) && ($_POST['express-checkout'] === '1');
+
 $paymentTypeId   = $_POST['resourceId'];
 
 $transactionType = $_POST['transaction_type'] ?? 'authorize';
@@ -60,12 +67,34 @@ try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
     $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
+    $paymentType = $unzer->fetchPaymentType($paymentTypeId);
+    $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
+
+    $basketItem = (new BasketItem())
+        ->setAmountPerUnitGross(12.32)
+        ->setVat(19.00)
+        ->setQuantity(1)
+        ->setBasketItemReferenceId('item1')
+        ->setTitle('Hat');
+
+    $basket = new Basket($orderId);
+    $basket->setTotalValueGross(12.32)
+        ->addBasketItem($basketItem)
+        ->setCurrencyCode('EUR');
 
     // Create a charge/authorize transaction to get the redirectUrl.
     if ($transactionType === 'charge') {
-        $transaction = $unzer->charge(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+        $charge = new Charge(12.32, 'EUR', RETURN_CONTROLLER_URL);
+        if ($useExpressCheckout) {
+            $charge->setCheckoutType('express', $paymentType);
+        }
+        $transaction = $unzer->performCharge($charge, $paymentType, null, null, $basket);
     } else {
-        $transaction = $unzer->authorize(12.32, 'EUR', $paymentTypeId, RETURN_CONTROLLER_URL);
+        $authorize = new Authorization(12.32, 'EUR', RETURN_CONTROLLER_URL);
+        if ($useExpressCheckout) {
+            $authorize->setCheckoutType('express', $paymentType);
+        }
+        $transaction = $unzer->performAuthorization($authorize, $paymentType, null, null, $basket);
     }
 
     // You'll need to remember the paymentId for later in the ReturnController

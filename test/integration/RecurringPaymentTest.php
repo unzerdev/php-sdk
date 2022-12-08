@@ -112,7 +112,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
     {
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $recurring = $paypal->activateRecurring('https://dev.unzer.com', RecurrenceTypes::ONE_CLICK);
+        $recurring = $paypal->activateRecurring('https://dev.unzer.com');
         $this->assertPending($recurring);
         $this->assertNotEmpty($recurring->getReturnUrl());
     }

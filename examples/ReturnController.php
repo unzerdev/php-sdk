@@ -79,7 +79,7 @@ try {
         // Goods can be shipped.
         redirect(SUCCESS_URL);
     } elseif ($payment->isPending()) {
-        if ($transaction->isSuccess()) {
+        if ($transaction->isSuccess() || $transaction->isResumed()) {
             if ($transaction instanceof Authorization) {
                 // Payment is ready to be captured.
                 // Goods can be shipped later AFTER charge.

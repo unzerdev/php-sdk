@@ -29,19 +29,21 @@ class WebhookEvents
 
     // authorize events
     public const AUTHORIZE = 'authorize';
-    public const AUTHORIZE_SUCCEEDED = 'authorize.succeeded';
+    public const AUTHORIZE_CANCELED = 'authorize.canceled';
+    public const AUTHORIZE_EXPIRED = 'authorize.expired';
     public const AUTHORIZE_FAILED = 'authorize.failed';
     public const AUTHORIZE_PENDING = 'authorize.pending';
-    public const AUTHORIZE_EXPIRED = 'authorize.expired';
-    public const AUTHORIZE_CANCELED = 'authorize.canceled';
+    public const AUTHORIZE_RESUMED = 'authorize.resumed';
+    public const AUTHORIZE_SUCCEEDED = 'authorize.succeeded';
 
     // charge events
     public const CHARGE = 'charge';
-    public const CHARGE_SUCCEEDED = 'charge.succeeded';
+    public const CHARGE_CANCELED = 'charge.canceled';
+    public const CHARGE_EXPIRED = 'charge.expired';
     public const CHARGE_FAILED = 'charge.failed';
     public const CHARGE_PENDING = 'charge.pending';
-    public const CHARGE_EXPIRED = 'charge.expired';
-    public const CHARGE_CANCELED = 'charge.canceled';
+    public const CHARGE_RESUMED = 'charge.resumed';
+    public const CHARGE_SUCCEEDED = 'charge.succeeded';
 
     // chargeback events
     public const CHARGEBACK = 'chargeback';
@@ -61,6 +63,7 @@ class WebhookEvents
     public const CUSTOMER_UPDATED = 'customer.updated';
 
     // payment events
+    public const PAYMENT = 'payment';
     public const PAYMENT_PENDING = 'payment.pending';
     public const PAYMENT_COMPLETED = 'payment.completed';
     public const PAYMENT_CANCELED = 'payment.canceled';
@@ -74,17 +77,19 @@ class WebhookEvents
     public const ALLOWED_WEBHOOKS = [
         self::ALL,
         self::AUTHORIZE,
-        self::AUTHORIZE_SUCCEEDED,
+        self::AUTHORIZE_CANCELED,
+        self::AUTHORIZE_EXPIRED,
         self::AUTHORIZE_FAILED,
         self::AUTHORIZE_PENDING,
-        self::AUTHORIZE_EXPIRED,
-        self::AUTHORIZE_CANCELED,
+        self::AUTHORIZE_RESUMED,
+        self::AUTHORIZE_SUCCEEDED,
         self::CHARGE,
-        self::CHARGE_SUCCEEDED,
+        self::CHARGE_CANCELED,
+        self::CHARGE_EXPIRED,
         self::CHARGE_FAILED,
         self::CHARGE_PENDING,
-        self::CHARGE_EXPIRED,
-        self::CHARGE_CANCELED,
+        self::CHARGE_RESUMED,
+        self::CHARGE_SUCCEEDED,
         self::CHARGEBACK,
         self::PAYOUT,
         self::PAYOUT_SUCCEEDED,
@@ -94,6 +99,7 @@ class WebhookEvents
         self::CUSTOMER_CREATED,
         self::CUSTOMER_DELETED,
         self::CUSTOMER_UPDATED,
+        self::PAYMENT,
         self::PAYMENT_PENDING,
         self::PAYMENT_COMPLETED,
         self::PAYMENT_CANCELED,

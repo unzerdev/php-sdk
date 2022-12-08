@@ -23,12 +23,9 @@
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Traits\HasInvoiceId;
 
 class Shipment extends AbstractTransactionType
 {
-    use HasInvoiceId;
-
     /** @var float|null $amount */
     protected $amount;
 

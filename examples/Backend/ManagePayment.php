@@ -48,7 +48,7 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
     <?php
 
     if (!empty($additionalPaymentInformation)) {
-        echo $additionalPaymentInformation;
+        echo '<h3>' . $additionalPaymentInformation . '</h3>';
     }
 
     $paymentId = $_SESSION['PaymentId'] ?? null;
@@ -63,19 +63,17 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
         echo preg_match('/[\d]{4}.[\d]{4}.[\d]{4}/', $shortId) ? $defaultTransactionMessage : $paylaterTransactionMessage;
     }
 
-    $isAuthorizable = $paymentId !== null && $isAuthorizeTransaction;
-
-    echo    '<p>You can use the payment ID to charge the payment.</p>
+    echo    '<h3>You can use the payment ID to charge the payment.</h3>
                         <form id="payment-form" class="unzerUI form" action="' . CHARGE_PAYMENT_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
                             <div class="fields inline">
                                 <div class="field">
-                                    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Charge payment</button>
+                                    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Capture payment</button>
                                 </div>
                             </div>
-                        </form>';
-    
-    echo    '<p>You can use the payment ID to cancel the payment.</p>
+                        </form><br>';
+
+    echo    '<h3>You can use the payment ID to cancel the payment.</h3>
                         <form id="payment-form" class="unzerUI form" action="' . CANCEL_PAYMENT_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
                             <div class="fields inline">
@@ -83,8 +81,22 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                                     <button class="unzerUI primary button fluid" id="submit-button" type="submit">Cancel payment</button>
                                 </div>
                             </div>
-                        </form>';
+                        </form><br>';
+
+    echo '<h3>PayPal Express only: You can finalize a transaction in resumed state.</h3>
+                        <form id="payment-form" class="unzerUI form" action="' . UPDATE_TRANSACTION_CONTROLLER_URL . '" method="post">
+                            <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
+                            <label for="shiipping_amount">Shipping amount: </label>
+                            <input type="number" name="shipping_amount" value="0" step="any">
+                            <div class="fields inline">
+                                <div class="field">
+                                    <button class="unzerUI primary button fluid" id="submit-button" type="submit">Finalize Transaction</button>
+                                </div>
+                            </div>
+                        </form><br>';
+
     ?>
+
 </p>
 <p><a href="..">start again</a></p>
 </body>

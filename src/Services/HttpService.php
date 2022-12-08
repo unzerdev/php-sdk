@@ -221,7 +221,11 @@ class HttpService
 
         // log request
         $unzerObj->debugLog($httpMethod . ': ' . $url);
-        $writingOperations = [HttpAdapterInterface::REQUEST_POST, HttpAdapterInterface::REQUEST_PUT];
+        $writingOperations = [
+            HttpAdapterInterface::REQUEST_POST,
+            HttpAdapterInterface::REQUEST_PUT,
+            HttpAdapterInterface::REQUEST_PATCH
+        ];
         $unzerObj->debugLog('Headers: ' . json_encode($headers, JSON_UNESCAPED_SLASHES));
         if (in_array($httpMethod, $writingOperations, true)) {
             $unzerObj->debugLog('Request: ' . $payload);

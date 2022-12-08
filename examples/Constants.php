@@ -36,3 +36,4 @@ define('BACKEND_FAILURE_URL', EXAMPLE_BASE_FOLDER . 'Backend/Failure.php');
 define('RECURRING_PAYMENT_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'CardRecurring/RecurringPaymentController.php');
 define('CHARGE_PAYMENT_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'Backend/ChargePaymentController.php');
 define('CANCEL_PAYMENT_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'Backend/CancelPaymentController.php');
+define('UPDATE_TRANSACTION_CONTROLLER_URL', EXAMPLE_BASE_FOLDER . 'Backend/UpdateTransactionController.php');

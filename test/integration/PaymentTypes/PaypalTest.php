@@ -24,12 +24,22 @@
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
 
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Basket;
+use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class PaypalTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->useNon3dsKey();
+    }
+
     /**
      * Verify PayPal payment type can be created and fetched.
      *
@@ -105,5 +115,120 @@ class PaypalTest extends BaseIntegrationTest
         $charge = $paypal->charge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
+    }
+
+    /**
+     * Test PayPal Express checkout.
+     *
+     * @test
+     * @depends paypalShouldBeCreatableAndFetchable
+     *
+     * @param Paypal $paypal
+     *
+     * @return Charge
+     *
+     * @throws UnzerApiException
+     */
+    public function paypalChargeWithExpressCheckout(Paypal $paypal): Charge
+    {
+        $initialAmount = 100.00;
+        $charge = new Charge($initialAmount, 'EUR', self::RETURN_URL);
+        $charge->setCheckoutType('express', $paypal);
+
+        $basketItem = (new BasketItem())
+            ->setTitle('ItemTitle')
+            ->setAmountPerUnitGross($initialAmount);
+        $basket = (new Basket())->setTotalValueGross($initialAmount);
+        $basket->addBasketItem($basketItem);
+        $this->getUnzerObject()->performCharge($charge, $paypal, null, null, $basket);
+        $this->assertNotEmpty($charge->getId());
+
+        $this->assertTrue($charge->isPending());
+
+        return $charge;
+    }
+
+    /**
+     * Verify Charge can be updated
+     *
+     * @test
+     * @depends paypalChargeWithExpressCheckout
+     */
+    public function updateChargeThrowsExceptionWhenStatusIsPending(Charge $charge): void
+    {
+        $charge->setAmount(120);
+        $this->expectException(UnzerApiException::class);
+
+        $this->getUnzerObject()->updateCharge($charge->getPaymentId(), $charge);
+    }
+
+    /**
+     * Test PayPal Express checkout.
+     *
+     * @test
+     * @depends paypalShouldBeCreatableAndFetchable
+     *
+     * @param Paypal $paypal
+     *
+     * @return Authorization
+     *
+     * @throws UnzerApiException
+     */
+    public function paypalAuthorizeWithExpressCheckout(Paypal $paypal): Authorization
+    {
+        $initialAmount = 100.00;
+        $authorize = new Authorization($initialAmount, 'EUR', self::RETURN_URL);
+        $authorize->setCheckoutType('express', $paypal->getId());
+
+        $basketItem = (new BasketItem())
+            ->setTitle('ItemTitle')
+            ->setAmountPerUnitGross($initialAmount);
+        $basket = (new Basket())->setTotalValueGross($initialAmount);
+        $basket->addBasketItem($basketItem);
+
+        $this->getUnzerObject()->performAuthorization($authorize, $paypal, null, null, $basket);
+        $this->assertNotEmpty($authorize->getId());
+
+        $this->assertTrue($authorize->isPending());
+        $this->assertNotNull($authorize->getCheckoutType());
+
+        return $authorize;
+    }
+
+    /**
+     * Test PayPal Express checkout.
+     *
+     * @test
+     * @depends paypalShouldBeCreatableAndFetchable
+     *
+     * @param Paypal $paypal
+     *
+     * @return Authorization
+     *
+     * @throws UnzerApiException
+     */
+    public function invalidCheckoutTypeThrowsApiException(Paypal $paypal): Authorization
+    {
+        $authorize = new Authorization(100.00, 'EUR', self::RETURN_URL);
+        $authorize->setCheckoutType('expresso', $paypal);
+
+        $this->expectException(UnzerApiException::class);
+
+        $this->getUnzerObject()->performAuthorization($authorize, $paypal);
+
+        return $authorize;
+    }
+
+    /**
+     * Verify Authorize can be updated
+     *
+     * @test
+     * @depends paypalAuthorizeWithExpressCheckout
+     */
+    public function updateAuthorizeThrowsApiExceptionWhenStatusIsPending(Authorization $authorize): void
+    {
+        $authorize->setAmount(120);
+        $this->expectException(UnzerApiException::class);
+        $this->getUnzerObject()->updateAuthorization($authorize->getPaymentId(), $authorize);
     }
 }

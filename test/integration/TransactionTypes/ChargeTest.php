@@ -214,4 +214,24 @@ class ChargeTest extends BaseIntegrationTest
         $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
         $this->assertEquals($charge->setCard3ds(false)->expose(), $fetchedCharge->expose());
     }
+
+    /**
+     * Verify checkoutType for not supported type gets ignored by Api.
+     *
+     * @test
+     */
+    public function checkoutTypeGetsIgnordedByApiWithNotSupportedType()
+    {
+        $paymentType = $this->unzer->createPaymentType($this->createCardObject());
+        $charge = new Charge(99.99, 'EUR', self::RETURN_URL);
+        $charge->setCheckoutType('express', $paymentType);
+        $this->getUnzerObject()->performCharge($charge, $paymentType);
+
+        $fetchedCharge = $this->getUnzerObject()->fetchChargeById(
+            $charge->getPayment()->getId(),
+            $charge->getId()
+        );
+        $this->assertTrue($fetchedCharge->isPending());
+        $this->assertNull($fetchedCharge->getCheckoutType());
+    }
 }

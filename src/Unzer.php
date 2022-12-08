@@ -62,7 +62,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '1.2.2.0';
+    public const SDK_VERSION = '1.2.3.0';
 
     /** @var string $key */
     private $key;
@@ -729,6 +729,11 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
     }
 
+    public function updateAuthorization($payment, Authorization $authorization): Authorization
+    {
+        return $this->paymentService->updateAuthorization($payment, $authorization);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -772,6 +777,11 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public function performCharge(Charge $charge, $paymentType, $customer = null, $metadata = null, $basket = null): Charge
     {
         return $this->paymentService->performCharge($charge, $paymentType, $customer, $metadata, $basket);
+    }
+
+    public function updateCharge($payment, Charge $charge): Charge
+    {
+        return $this->paymentService->updateCharge($payment, $charge);
     }
 
     /**

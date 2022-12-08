@@ -52,7 +52,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 
 <p><a href="https://docs.unzer.com/reference/test-data" target="_blank">Click here to open our test data in new tab.</a></p>
 
-<form id="payment-form" class="unzerUI form" novalidate>
+<form id="payment-form" class="unzerUI" novalidate>
     <!-- This is just for the example - Start -->
     <div class="fields inline">
         <label for="transaction_type">Chose the transaction type you want to test:</label>
@@ -69,31 +69,55 @@ require_once __DIR__ . '/../../../../autoload.php';
             </div>
         </div>
     </div>
-    <!-- This is just for the example - End -->
 
+    <!-- This is just for the example - End -->
+    <h3>PayPal</h3>
     <div id="container-example-paypal"></div>
     <div class="field" id="error-holder" style="color: #9f3a38"> </div>
     <div class="field">
         <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
     </div>
+
+    <h3>PayPal Express</h3>
+    <div id="container-example-paypal-express"></div>
 </form>
 
 <script>
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
-    // Create an Paypal instance
-    let Paypal = unzerInstance.Paypal();
-    Paypal.create('email', {
+    // Create a normal Paypal instance
+    let paypalInstance = unzerInstance.Paypal();
+    paypalInstance.create('email', {
         containerId: 'container-example-paypal'
+    })
+
+    // Create a Paypal Express instance
+    let paypalExpress = unzerInstance.PaypalExpress();
+    paypalExpress.create({
+        containerId: 'container-example-paypal-express',
+        color: 'gold'
     })
 
     // Handle payment form submission
     let form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        // Creating a Paypal resource
-        Paypal.createResource()
+
+        // If the express button submitted the form use the PaypalExpress instance.
+        if (event.submitter.id === 'pay-button') {
+            paypalInstance = paypalExpress;
+
+            // Create an additional input so that backend can set the checkout type for the transaction.
+            let expressCheckout = document.createElement('input');
+            expressCheckout.setAttribute('type', 'hidden');
+            expressCheckout.setAttribute('name', 'express-checkout');
+            expressCheckout.setAttribute('value', "1");
+            form.appendChild(expressCheckout);
+        }
+
+        // Creating a PayPal or PayPal express resource
+        paypalInstance.createResource()
             .then(function(result) {
                 let hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');
