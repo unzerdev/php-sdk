@@ -83,7 +83,7 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                             </div>
                         </form><br>';
 
-    echo '<h3>PayPal express only: You can finalize a transaction in resumed state.</h3>
+    echo '<h3>PayPal Express only: You can finalize a transaction in resumed state.</h3>
                         <form id="payment-form" class="unzerUI form" action="' . UPDATE_TRANSACTION_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
                             <label for="shiipping_amount">Shipping amount: </label>

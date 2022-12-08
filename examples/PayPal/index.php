@@ -78,7 +78,7 @@ require_once __DIR__ . '/../../../../autoload.php';
         <button class="unzerUI primary button fluid" id="submit-button" type="submit">Pay</button>
     </div>
 
-    <h3>PayPal express</h3>
+    <h3>PayPal Express</h3>
     <div id="container-example-paypal-express"></div>
 </form>
 
