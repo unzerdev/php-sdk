@@ -33,6 +33,7 @@ class HasPaymentStateTest extends BasePaymentTest
      * Verify that getters and setters work properly.
      *
      * @test
+     *
      * @dataProvider gettersAndSettersShouldWorkProperlyDP
      *
      * @param mixed $state

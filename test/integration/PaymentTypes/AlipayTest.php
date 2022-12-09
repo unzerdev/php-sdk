@@ -62,6 +62,7 @@ class AlipayTest extends BaseIntegrationTest
      * @param Alipay $alipay
      *
      * @return Charge
+     *
      * @depends alipayShouldBeCreatableAndFetchable
      */
     public function alipayShouldBeAbleToCharge(Alipay $alipay): Charge
@@ -80,6 +81,7 @@ class AlipayTest extends BaseIntegrationTest
      * @test
      *
      * @param Alipay $alipay
+     *
      * @depends alipayShouldBeCreatableAndFetchable
      */
     public function alipayShouldNotBeAuthorizable(Alipay $alipay): void

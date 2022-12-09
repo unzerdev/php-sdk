@@ -167,7 +167,7 @@ class Config extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    public function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return parent::getResourcePath($httpMethod) . $this->getQueryString();
     }

@@ -65,7 +65,7 @@ class InstallmentSecured extends InstalmentPlan
      *
      * @return $this
      */
-    public function selectInstalmentPlan($plan): self
+    public function selectInstalmentPlan(?InstalmentPlan $plan): self
     {
         if ($plan instanceof InstalmentPlan) {
             $this->handleResponse((object)$plan->expose());
@@ -88,7 +88,7 @@ class InstallmentSecured extends InstalmentPlan
      *
      * @return $this
      */
-    public function setIban($iban): self
+    public function setIban(?string $iban): self
     {
         $this->iban = $iban;
         return $this;
@@ -107,7 +107,7 @@ class InstallmentSecured extends InstalmentPlan
      *
      * @return $this
      */
-    public function setBic($bic): self
+    public function setBic(?string $bic): self
     {
         $this->bic = $bic;
         return $this;
@@ -126,7 +126,7 @@ class InstallmentSecured extends InstalmentPlan
      *
      * @return $this
      */
-    public function setAccountHolder($accountHolder): self
+    public function setAccountHolder(?string $accountHolder): self
     {
         $this->accountHolder = $accountHolder;
         return $this;

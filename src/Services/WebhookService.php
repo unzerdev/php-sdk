@@ -124,7 +124,7 @@ class WebhookService implements WebhookServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function updateWebhook($webhook): Webhook
+    public function updateWebhook(Webhook $webhook): Webhook
     {
         $webhook->setParentResource($this->unzer);
         $this->resourceService->updateResource($webhook);
@@ -192,7 +192,7 @@ class WebhookService implements WebhookServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchResourceFromEvent($eventJson = null): AbstractUnzerResource
+    public function fetchResourceFromEvent(string $eventJson = null): AbstractUnzerResource
     {
         $resourceObject = null;
         $eventData = json_decode($eventJson ?? $this->readInputStream(), false);

@@ -76,7 +76,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
      *
      * @return $this
      */
-    public function setPayment($payment): self
+    public function setPayment(Payment $payment): self
     {
         $this->payment = $payment;
         $this->setParentResource($payment);
@@ -84,9 +84,9 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     }
 
     /**
-     * Return the Id of the referenced payment object.
+     * Return the ID of the referenced payment object.
      *
-     * @return null|string The Id of the payment object or null if nothing is found.
+     * @return null|string The ID of the payment object or null if nothing is found.
      */
     public function getPaymentId(): ?string
     {
@@ -117,7 +117,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

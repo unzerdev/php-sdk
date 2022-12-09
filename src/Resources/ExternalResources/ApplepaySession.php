@@ -1,6 +1,6 @@
 <?php
 /*
- *  This class is used for applepay merchant validation request.
+ *  This class is used for Apple Pay merchant validation request.
  *
  *  Copyright (C) 2021 - today Unzer E-Com GmbH
  *

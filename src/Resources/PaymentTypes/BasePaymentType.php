@@ -56,7 +56,7 @@ abstract class BasePaymentType extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         $path = 'types';
         if ($httpMethod !== HttpAdapterInterface::REQUEST_GET || $this->id === null) {

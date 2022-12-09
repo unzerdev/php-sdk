@@ -34,6 +34,7 @@ class KeypairTest extends BaseIntegrationTest
      * Validate valid keys are accepted.
      *
      * @test
+     *
      * @dataProvider validKeysDataProvider
      *
      * @param string $key
@@ -48,6 +49,7 @@ class KeypairTest extends BaseIntegrationTest
      * Validate invalid keys are revoked.
      *
      * @test
+     *
      * @dataProvider invalidKeysDataProvider
      *
      * @param string $key

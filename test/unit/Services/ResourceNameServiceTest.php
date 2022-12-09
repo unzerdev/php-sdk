@@ -33,6 +33,7 @@ class ResourceNameServiceTest extends BasePaymentTest
      * Verify getting the short name of a class.
      *
      * @test
+     *
      * @dataProvider classShortNameTestDP
      *
      * @param string $className

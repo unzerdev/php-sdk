@@ -35,6 +35,7 @@ class InstalmentPlanTest extends BasePaymentTest
      * Verify the functionalities of the instalment plan resources.
      *
      * @test
+     *
      * @dataProvider verifyQueryStringDP
      *
      * @param float  $amount

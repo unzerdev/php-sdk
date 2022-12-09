@@ -217,7 +217,7 @@ class Basket extends AbstractUnzerResource
      *
      * @return Basket
      */
-    public function setNote($note): Basket
+    public function setNote(?string $note): Basket
     {
         $this->note = $note;
         return $this;
@@ -287,7 +287,7 @@ class Basket extends AbstractUnzerResource
      *
      * @return BasketItem|null
      */
-    public function getBasketItemByIndex($index): ?BasketItem
+    public function getBasketItemByIndex(int $index): ?BasketItem
     {
         return $this->basketItems[$index] ?? null;
     }
@@ -340,7 +340,7 @@ class Basket extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'baskets';
     }
@@ -348,7 +348,7 @@ class Basket extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

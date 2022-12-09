@@ -111,7 +111,7 @@ class Webhooks extends AbstractUnzerResource
      *
      * @throws RuntimeException
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

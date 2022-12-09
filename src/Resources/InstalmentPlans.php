@@ -196,7 +196,7 @@ class InstalmentPlans extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    public function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    public function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'plans' . $this->getQueryString();
     }
@@ -204,7 +204,7 @@ class InstalmentPlans extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

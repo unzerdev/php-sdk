@@ -231,6 +231,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      * Verify fetchPayment is never called after a Get-Request.
      *
      * @test
+     *
      * @dataProvider updatePaymentDataProvider
      *
      * @param string  $method

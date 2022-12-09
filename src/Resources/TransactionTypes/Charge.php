@@ -53,11 +53,11 @@ class Charge extends AbstractTransactionType
     /**
      * Authorization constructor.
      *
-     * @param float  $amount
-     * @param string $currency
-     * @param string $returnUrl
+     * @param float|null  $amount
+     * @param string|null $currency
+     * @param string|null $returnUrl
      */
-    public function __construct($amount = null, $currency = null, $returnUrl = null)
+    public function __construct(float $amount = null, string $currency = null, string $returnUrl = null)
     {
         $this->setAmount($amount);
         $this->setCurrency($currency);
@@ -75,11 +75,11 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @param float $amount
+     * @param float|null $amount
      *
      * @return self
      */
-    public function setAmount($amount): self
+    public function setAmount(?float $amount): self
     {
         $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
@@ -118,11 +118,11 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @param string $currency
+     * @param string|null $currency
      *
      * @return self
      */
-    public function setCurrency($currency): self
+    public function setCurrency(?string $currency): self
     {
         $this->currency = $currency;
         return $this;
@@ -137,11 +137,11 @@ class Charge extends AbstractTransactionType
     }
 
     /**
-     * @param string $returnUrl
+     * @param string|null $returnUrl
      *
      * @return self
      */
-    public function setReturnUrl($returnUrl): self
+    public function setReturnUrl(?string $returnUrl): self
     {
         $this->returnUrl = $returnUrl;
         return $this;
@@ -160,7 +160,7 @@ class Charge extends AbstractTransactionType
      *
      * @return Charge
      */
-    public function setPaymentReference($referenceText): Charge
+    public function setPaymentReference(?string $referenceText): Charge
     {
         $this->paymentReference = $referenceText;
         return $this;
@@ -179,7 +179,7 @@ class Charge extends AbstractTransactionType
      *
      * @return Charge
      */
-    public function setCard3ds($card3ds): Charge
+    public function setCard3ds(?bool $card3ds): Charge
     {
         $this->card3ds = $card3ds;
         return $this;
@@ -192,7 +192,7 @@ class Charge extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'charges';
     }
@@ -217,11 +217,11 @@ class Charge extends AbstractTransactionType
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancel(
-        $amount = null,
+        float  $amount = null,
         string $reasonCode = null,
         string $paymentReference = null,
-        float $amountNet = null,
-        float $amountVat = null
+        float  $amountNet = null,
+        float  $amountVat = null
     ): Cancellation {
         return $this->getUnzerObject()->cancelCharge(
             $this,
