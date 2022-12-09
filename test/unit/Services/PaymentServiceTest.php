@@ -84,6 +84,7 @@ class PaymentServiceTest extends BasePaymentTest
      * @test
      *
      * @param $card3ds
+     *
      * @dataProvider card3dsDataProvider
      */
     public function authorizeShouldCreateNewAuthorizationAndPayment($card3ds): void
@@ -127,6 +128,7 @@ class PaymentServiceTest extends BasePaymentTest
      * @test
      *
      * @param $card3ds
+     *
      * @dataProvider card3dsDataProvider
      */
     public function chargeShouldCreateNewPaymentAndCharge($card3ds): void

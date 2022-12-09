@@ -62,6 +62,7 @@ class PISTest extends BaseIntegrationTest
      * @param PIS $pis
      *
      * @return Charge
+     *
      * @depends pisShouldBeCreatableAndFetchable
      */
     public function pisShouldBeAbleToCharge(PIS $pis): Charge
@@ -80,6 +81,7 @@ class PISTest extends BaseIntegrationTest
      * @test
      *
      * @param PIS $pis
+     *
      * @depends pisShouldBeCreatableAndFetchable
      */
     public function pisShouldNotBeAuthorizable(PIS $pis): void

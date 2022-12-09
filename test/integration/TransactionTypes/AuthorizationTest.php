@@ -117,6 +117,7 @@ class AuthorizationTest extends BaseIntegrationTest
      * Verify authorization can be fetched.
      *
      * @depends authorizationWithCustomerId
+     *
      * @test
      *
      * @param Authorization $authorization
@@ -131,6 +132,7 @@ class AuthorizationTest extends BaseIntegrationTest
      * Verify authorization has the expected states.
      *
      * @test
+     *
      * @dataProvider authorizeHasExpectedStatesDP
      *
      * @param BasePaymentType|AbstractUnzerResource $paymentType

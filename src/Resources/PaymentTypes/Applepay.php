@@ -61,7 +61,7 @@ class Applepay extends BasePaymentType
     protected $header;
 
     /**
-     * ApplePay constructor.
+     * Apple Pay constructor.
      *
      * @param string|null         $version
      * @param string|null         $data
@@ -258,7 +258,7 @@ class Applepay extends BasePaymentType
     /**
      * @inheritDoc
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

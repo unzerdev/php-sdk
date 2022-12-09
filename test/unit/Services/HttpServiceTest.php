@@ -141,6 +141,7 @@ class HttpServiceTest extends BasePaymentTest
      * Verify 'Accept-Language' header only set when a locale is defined in the Unzer object.
      *
      * @test
+     *
      * @dataProvider languageShouldOnlyBeSetIfSpecificallyDefinedDP
      *
      * @param $locale
@@ -171,6 +172,7 @@ class HttpServiceTest extends BasePaymentTest
      * Verify 'CLIENTIP' header only set when a clientIp is defined in the Unzer object.
      *
      * @test
+     *
      * @dataProvider clientIpHeaderShouldBeSetProperlyDP
      *
      * @param $clientIp
@@ -282,6 +284,7 @@ class HttpServiceTest extends BasePaymentTest
      * Verify handleErrors will throw Exception if responseCode is greaterOrEqual to 400 or is not a number.
      *
      * @test
+     *
      * @dataProvider responseCodeProvider
      *
      * @param string $responseCode

@@ -61,6 +61,7 @@ class KlarnaTest extends BaseIntegrationTest
      * @test
      *
      * @param Klarna $klarna
+     *
      * @depends klarnaShouldBeCreatableAndFetchable
      */
     public function klarnaShouldBeAuthorizable(Klarna $klarna): void
