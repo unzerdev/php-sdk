@@ -173,6 +173,7 @@ class AuthorizationTest extends BasePaymentTest
      * Verify charge throws exception if payment is not set.
      *
      * @test
+     *
      * @dataProvider chargeValueProvider
      *
      * @param float|null $value

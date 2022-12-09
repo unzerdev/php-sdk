@@ -79,7 +79,7 @@ trait HasCancellations
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      */
-    public function getCancellation($cancellationId, $lazy = false): ?Cancellation
+    public function getCancellation(string $cancellationId, bool $lazy = false): ?Cancellation
     {
         /** @var Cancellation $cancellation */
         foreach ($this->cancellations as $cancellation) {

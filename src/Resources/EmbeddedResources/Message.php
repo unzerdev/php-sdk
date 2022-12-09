@@ -1,6 +1,6 @@
 <?php
 /**
- * Represents the message resource holding information like a transactions error code and message.
+ * Represents the message resource holding information like a transaction error code and message.
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -88,7 +88,7 @@ class Message extends AbstractUnzerResource
      *
      * @return Message
      */
-    protected function setMerchant($merchant): Message
+    protected function setMerchant(?string $merchant): Message
     {
         $this->merchant = $merchant;
         return $this;

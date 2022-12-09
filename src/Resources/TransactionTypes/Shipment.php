@@ -40,11 +40,11 @@ class Shipment extends AbstractTransactionType
     }
 
     /**
-     * @param float $amount
+     * @param float|null $amount
      *
      * @return Shipment
      */
-    public function setAmount($amount): Shipment
+    public function setAmount(?float $amount): Shipment
     {
         $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
@@ -57,7 +57,7 @@ class Shipment extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'shipments';
     }

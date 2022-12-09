@@ -47,6 +47,7 @@ class UnzerApiExceptionTest extends BasePaymentTest
      * Verify the exception stores the given data.
      *
      * @test
+     *
      * @dataProvider exceptionDataProvider
      *
      * @param array $expected
