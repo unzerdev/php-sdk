@@ -380,6 +380,16 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
 
     //</editor-fold>
 
+    //<editor-fold desc="PayPage resource">
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPayPage($payPage): Paypage
+    {
+        return $this->resourceService->fetchPayPage($payPage);
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Payment resource">
 
     /**

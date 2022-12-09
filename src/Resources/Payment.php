@@ -97,6 +97,9 @@ class Payment extends AbstractUnzerResource
     /** @var Basket $basket */
     private $basket;
 
+    /** @var Paypage $payPage */
+    private $payPage;
+
     /**
      * @param null $parent
      */
@@ -326,6 +329,48 @@ class Payment extends AbstractUnzerResource
     public function getCustomer(): ?Customer
     {
         return $this->customer;
+    }
+
+    /**
+     * Reference this payment object to the passed PayPage resource.
+     * The PayPage resource can be passed as PayPage object or the Id of a PayPage resource.
+     * If the PayPage object has not been created yet via API this is done automatically.
+     *
+     * @param PayPage|string|null $payPage The PayPage object or the id of the PayPage to be referenced by the Payment.
+     *
+     * @return Payment This Payment object.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function setPayPage($payPage): Payment
+    {
+        if (empty($payPage)) {
+            return $this;
+        }
+
+        $unzer = $this->getUnzerObject();
+
+        /** @var PayPage $payPageObject */
+        $payPageObject = $payPage;
+
+        if (is_string($payPage)) {
+            $payPageObject = $unzer->fetchPayPage($payPage);
+        }
+
+        $payPageObject->setParentResource($unzer);
+        $this->payPage = $payPageObject;
+        return $this;
+    }
+
+    /**
+     * Returns the PayPage object referenced by this Payment.
+     *
+     * @return PayPage|null The PayPage object referenced by this Payment or null if no PayPage could be found.
+     */
+    public function getPayPage(): ?PayPage
+    {
+        return $this->payPage;
     }
 
     /**
@@ -839,12 +884,11 @@ class Payment extends AbstractUnzerResource
     /**
      * Handles the resources from a response and updates the payment object accordingly.
      *
-     * @param $resources
+     * @param stdClass $resources
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    private function updateResponseResources($resources): void
+    private function updateResponseResources(stdClass $resources): void
     {
         if (isset($resources->paymentId)) {
             $this->setId($resources->paymentId);
@@ -856,6 +900,18 @@ class Payment extends AbstractUnzerResource
                 $this->getResource($this->customer);
             } else {
                 $this->customer = $this->getUnzerObject()->fetchCustomer($customerId);
+            }
+        }
+
+        $payPageId = $resources->payPageId ?? null;
+        if (!empty($payPageId)) {
+            if ($this->payPage instanceof Paypage && $this->payPage->getId() === $payPageId) {
+                $this->getResource($this->payPage);
+            } else {
+                $payPage = (new Paypage(0, '', ''))
+                    ->setId($payPageId)
+                    ->setPayment($this);
+                $this->payPage = $this->getUnzerObject()->fetchPayPage($payPage);
             }
         }
 

@@ -7,6 +7,10 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+*   Add paypage property to `Payment` class.
+
 ### Changed
 
 *   Add Type declaration to methods where applicable.

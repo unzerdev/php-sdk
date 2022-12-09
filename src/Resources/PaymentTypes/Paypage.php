@@ -568,6 +568,32 @@ class Paypage extends BasePaymentType
     }
 
     /**
+     * {@inheritDoc}
+     * Change resource path.
+     */
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    {
+        $basePath = 'paypage';
+
+        if ($httpMethod === HttpAdapterInterface::REQUEST_GET) {
+            return $basePath;
+        }
+
+        switch ($this->action) {
+            case TransactionTypes::AUTHORIZATION:
+                $transactionType = TransactionTypes::AUTHORIZATION;
+                break;
+            case TransactionTypes::CHARGE:
+                // intended Fall-Through
+            default:
+                $transactionType = TransactionTypes::CHARGE;
+                break;
+        }
+
+        return $basePath . '/' . $transactionType;
+    }
+
+    /**
      * @return float|null
      */
     public function getEffectiveInterestRate(): ?float
@@ -578,24 +604,6 @@ class Paypage extends BasePaymentType
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
-
-    /**
-     * {@inheritDoc}
-     * Change resource path.
-     */
-    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
-    {
-        switch ($this->action) {
-            case TransactionTypes::AUTHORIZATION:
-                return 'paypage/authorize';
-                break;
-            case TransactionTypes::CHARGE:
-                // intended Fall-Through
-            default:
-                return 'paypage/charge';
-                break;
-        }
-    }
 
     /**
      * {@inheritDoc}
@@ -616,7 +624,17 @@ class Paypage extends BasePaymentType
         /** @var Payment $payment */
         $payment = $this->getPayment();
         if (isset($response->resources->paymentId)) {
-            $payment->setId($response->resources->paymentId);
+            $paymentId = $response->resources->paymentId;
+
+            if (null === $payment) {
+                $payment = new Payment($this->getUnzerObject());
+                $payment->setId($paymentId)
+                    ->setPayPage($this);
+                $this->setPayment($payment);
+                $this->getUnzerObject()->fetchPayment($payment);
+            }
+
+            $payment->setId($paymentId);
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {

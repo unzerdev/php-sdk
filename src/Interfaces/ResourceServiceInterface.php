@@ -32,6 +32,7 @@ use UnzerSDK\Resources\Keypair;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -96,6 +97,19 @@ interface ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchPaymentByOrderId(string $orderId): Payment;
+
+    /**
+     * Fetch and return payPage by given payPageId or payPage object.
+     * If a payPage object is given it will be updated as well, thus you do not rely on the returned object.
+     *
+     * @param Paypage|string $payPage The payment object or paymentId to fetch.
+     *
+     * @return Paypage The fetched payPage object.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchPayPage($payPage): Paypage;
 
     /**
      * Fetch public key and configured payment types from API.

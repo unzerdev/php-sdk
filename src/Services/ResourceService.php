@@ -31,6 +31,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -430,6 +431,22 @@ class ResourceService implements ResourceServiceInterface
         }
         return $paymentObject;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchPayPage($payPage): Paypage
+    {
+        $payPageObject = $payPage;
+        if (is_string($payPage)) {
+            $payPageObject = new payPage(0, '', '');
+            $payPageObject->setId($payPage);
+        }
+
+        $this->fetchResource($payPageObject->setParentResource($this->unzer));
+        return $payPageObject;
+    }
+
 
     /**
      * {@inheritDoc}

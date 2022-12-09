@@ -404,7 +404,7 @@ class PaymentService implements PaymentServiceInterface
         Metadata $metadata = null
     ): Paypage {
         $paypage->setAction($action)->setParentResource($this->unzer);
-        $payment = $this->createPayment($paypage)->setBasket($basket)->setCustomer($customer)->setMetadata($metadata);
+        $payment = $this->createPayment($paypage)->setBasket($basket)->setCustomer($customer)->setMetadata($metadata)->setPayPage($paypage);
         $this->getResourceService()->createResource($paypage->setPayment($payment));
         return $paypage;
     }
