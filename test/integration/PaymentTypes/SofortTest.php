@@ -63,6 +63,7 @@ class SofortTest extends BaseIntegrationTest
      * @param Sofort $sofort
      *
      * @return Charge
+     *
      * @depends sofortShouldBeCreatableAndFetchable
      */
     public function sofortShouldBeAbleToCharge(Sofort $sofort): Charge
@@ -81,6 +82,7 @@ class SofortTest extends BaseIntegrationTest
      * @test
      *
      * @param Sofort $sofort
+     *
      * @depends sofortShouldBeCreatableAndFetchable
      */
     public function sofortShouldNotBeAuthorizable(Sofort $sofort): void

@@ -78,30 +78,30 @@ class InstalmentPlan extends BasePaymentType
     private $installmentRates;
 
     /**
-     * @param int    $numberOfRates
-     * @param string $dayOfPurchase
-     * @param float  $totalPurchaseAmount
-     * @param float  $totalInterestAmount
-     * @param float  $totalAmount
-     * @param float  $effectiveInterestRate
-     * @param float  $nominalInterestRate
-     * @param float  $feeFirstRate
-     * @param float  $feePerRate
-     * @param float  $monthlyRate
-     * @param float  $lastRate
+     * @param int|null    $numberOfRates
+     * @param string|null $dayOfPurchase
+     * @param float|null  $totalPurchaseAmount
+     * @param float|null  $totalInterestAmount
+     * @param float|null  $totalAmount
+     * @param float|null  $effectiveInterestRate
+     * @param float|null  $nominalInterestRate
+     * @param float|null  $feeFirstRate
+     * @param float|null  $feePerRate
+     * @param float|null  $monthlyRate
+     * @param float|null  $lastRate
      */
     public function __construct(
-        $numberOfRates = null,
-        $dayOfPurchase = null,
-        $totalPurchaseAmount = null,
-        $totalInterestAmount = null,
-        $totalAmount = null,
-        $effectiveInterestRate = null,
-        $nominalInterestRate = null,
-        $feeFirstRate = null,
-        $feePerRate = null,
-        $monthlyRate = null,
-        $lastRate = null
+        int    $numberOfRates = null,
+        string $dayOfPurchase = null,
+        float  $totalPurchaseAmount = null,
+        float  $totalInterestAmount = null,
+        float  $totalAmount = null,
+        float  $effectiveInterestRate = null,
+        float  $nominalInterestRate = null,
+        float  $feeFirstRate = null,
+        float  $feePerRate = null,
+        float  $monthlyRate = null,
+        float  $lastRate = null
     ) {
         $this->numberOfRates         = $numberOfRates;
         $this->dayOfPurchase         = $dayOfPurchase;
@@ -150,7 +150,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setNumberOfRates($numberOfRates): self
+    public function setNumberOfRates(?int $numberOfRates): self
     {
         $this->numberOfRates = $numberOfRates;
         return $this;
@@ -188,7 +188,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setTotalPurchaseAmount($totalPurchaseAmount): self
+    public function setTotalPurchaseAmount(?float $totalPurchaseAmount): self
     {
         $this->totalPurchaseAmount = $totalPurchaseAmount;
         return $this;
@@ -207,7 +207,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setTotalInterestAmount($totalInterestAmount): self
+    public function setTotalInterestAmount(?float $totalInterestAmount): self
     {
         $this->totalInterestAmount = $totalInterestAmount;
         return $this;
@@ -226,7 +226,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setTotalAmount($totalAmount): self
+    public function setTotalAmount(?float $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
         return $this;
@@ -245,7 +245,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setEffectiveInterestRate($effectiveInterestRate): self
+    public function setEffectiveInterestRate(?float $effectiveInterestRate): self
     {
         $this->effectiveInterestRate = $effectiveInterestRate;
         return $this;
@@ -264,7 +264,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setNominalInterestRate($nominalInterestRate): self
+    public function setNominalInterestRate(?float $nominalInterestRate): self
     {
         $this->nominalInterestRate = $nominalInterestRate;
         return $this;
@@ -283,7 +283,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setFeeFirstRate($feeFirstRate): self
+    public function setFeeFirstRate(?float $feeFirstRate): self
     {
         $this->feeFirstRate = $feeFirstRate;
         return $this;
@@ -302,7 +302,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setFeePerRate($feePerRate): self
+    public function setFeePerRate(?float $feePerRate): self
     {
         $this->feePerRate = $feePerRate;
         return $this;
@@ -321,7 +321,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setMonthlyRate($monthlyRate): self
+    public function setMonthlyRate(?float $monthlyRate): self
     {
         $this->monthlyRate = $monthlyRate;
         return $this;
@@ -340,7 +340,7 @@ class InstalmentPlan extends BasePaymentType
      *
      * @return $this
      */
-    public function setLastRate($lastRate): self
+    public function setLastRate(?float $lastRate): self
     {
         $this->lastRate = $lastRate;
         return $this;
@@ -424,7 +424,7 @@ class InstalmentPlan extends BasePaymentType
     /**
      * {@inheritDoc}
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 

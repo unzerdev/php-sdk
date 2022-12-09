@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
 use UnzerSDK\Adapter\CurlAdapter;
@@ -99,10 +100,10 @@ class HttpService
     /**
      * send post request to payment server
      *
-     * @param $uri string url of the target system
-     * @param AbstractUnzerResource $resource
-     * @param string                $httpMethod
-     * @param string                $apiVersion
+     * @param $uri string|null uri of the target system
+     * @param ?AbstractUnzerResource $resource
+     * @param string                 $httpMethod
+     * @param string                 $apiVersion
      *
      * @return string
      *
@@ -110,10 +111,10 @@ class HttpService
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function send(
-        $uri = null,
-        AbstractUnzerResource $resource = null,
-        $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        string $apiVersion = Unzer::API_VERSION
+        ?string                $uri = null,
+        ?AbstractUnzerResource $resource = null,
+        string                 $httpMethod = HttpAdapterInterface::REQUEST_GET,
+        string                 $apiVersion = Unzer::API_VERSION
     ): string {
         if (!$resource instanceof AbstractUnzerResource) {
             throw new RuntimeException('Transfer object is empty!');
@@ -146,11 +147,11 @@ class HttpService
      * @param string $uri
      * @param string $payload
      * @param string $httpMethod
-     * @param $httpHeaders
+     * @param array  $httpHeaders
      *
      * @throws RuntimeException
      */
-    private function initRequest($uri, $payload, $httpMethod, $httpHeaders): void
+    private function initRequest(string $uri, string $payload, string $httpMethod, array $httpHeaders): void
     {
         $httpAdapter = $this->getAdapter();
         $httpAdapter->init($uri, $payload, $httpMethod);
@@ -167,7 +168,7 @@ class HttpService
      *
      * @throws UnzerApiException
      */
-    private function handleErrors($responseCode, $response): void
+    private function handleErrors(string $responseCode, ?string $response): void
     {
         if ($response === null) {
             throw new UnzerApiException('The Request returned a null response!');
@@ -200,19 +201,19 @@ class HttpService
      * @param Unzer       $unzerObj
      * @param string      $payload
      * @param mixed       $headers
-     * @param int         $responseCode
+     * @param string      $responseCode
      * @param string      $httpMethod
      * @param string      $url
      * @param string|null $response
      */
     public function debugLog(
-        Unzer $unzerObj,
-        $payload,
+        Unzer  $unzerObj,
+        string $payload,
         $headers,
-        $responseCode,
-        $httpMethod,
+        string    $responseCode,
+        string $httpMethod,
         string $url,
-        $response
+        ?string $response
     ): void {
         // mask auth string
         $authHeader = explode(' ', $headers['Authorization']);
@@ -242,12 +243,13 @@ class HttpService
     /**
      * Returns the environment url.
      *
-     * @param $uri
+     * @param string $uri
      * @param string $apiVersion
+     * @param Unzer  $unzer
      *
      * @return string
      */
-    private function buildRequestUrl($uri, string $apiVersion, Unzer $unzer): string
+    private function buildRequestUrl(string $uri, string $apiVersion, Unzer $unzer): string
     {
         $envPrefix = $this->getEnvironmentPrefix($unzer);
         return "https://" . $envPrefix . Unzer::BASE_URL . "/" . $apiVersion . $uri;
@@ -280,7 +282,8 @@ class HttpService
         return $httpHeaders;
     }
 
-    /** Determine the environment to be used for Api calls and returns the prefix for it. Production environment has no prefix.
+    /** Determine the environment to be used for Api calls and returns the prefix for it.
+     * Production environment has no prefix.
      *
      * @param Unzer $unzer
      *

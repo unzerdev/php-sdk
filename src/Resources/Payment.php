@@ -69,14 +69,14 @@ class Payment extends AbstractUnzerResource
     private $charges = [];
 
     /**
-     * Associative array using the Id of the cancellations as the key.
+     * Associative array using the ID of the cancellations as the key.
      *
      * @var array $reversals
      */
     private $reversals = [];
 
     /**
-     * Associative array using the Id of the cancellations as the key.
+     * Associative array using the ID of the cancellations as the key.
      *
      * @var array $refunds
      */
@@ -129,7 +129,7 @@ class Payment extends AbstractUnzerResource
      *
      * @return Payment
      */
-    protected function setRedirectUrl($redirectUrl): Payment
+    protected function setRedirectUrl(?string $redirectUrl): Payment
     {
         $this->redirectUrl = $redirectUrl;
         return $this;
@@ -148,7 +148,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getAuthorization($lazy = false)
+    public function getAuthorization(bool $lazy = false)
     {
         $authorization = $this->authorization;
         if (!$lazy && $authorization !== null) {
@@ -184,7 +184,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getPayout($lazy = false)
+    public function getPayout(bool $lazy = false)
     {
         $payout = $this->payout;
         if (!$lazy && $payout !== null) {
@@ -245,7 +245,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getCharge($chargeId, $lazy = false): ?Charge
+    public function getCharge(string $chargeId, bool $lazy = false): ?Charge
     {
         /** @var Charge $charge */
         foreach ($this->charges as $charge) {
@@ -273,7 +273,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getChargeByIndex($index, $lazy = false)
+    public function getChargeByIndex(int $index, bool $lazy = false)
     {
         $resource = null;
         if (isset($this->getCharges()[$index])) {
@@ -387,7 +387,7 @@ class Payment extends AbstractUnzerResource
      * Sets the Payments reference to the given PaymentType resource.
      * The PaymentType can be either a PaymentType object or the id of a PaymentType resource.
      *
-     * @param mixed $paymentType The PaymentType object or the id of the PaymentType to be referenced.
+     * @param BasePaymentType|string|null $paymentType The PaymentType object or the id of the PaymentType to be referenced.
      *
      * @return Payment This Payment object.
      *
@@ -432,7 +432,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function setMetadata($metadata): Payment
+    public function setMetadata(?Metadata $metadata): Payment
     {
         if (!$metadata instanceof Metadata) {
             return $this;
@@ -465,7 +465,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function setBasket($basket): Payment
+    public function setBasket(?Basket $basket): Payment
     {
         $this->basket = $basket;
 
@@ -497,7 +497,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getCancellation($cancellationId, $lazy = false): ?Cancellation
+    public function getCancellation(string $cancellationId, bool $lazy = false): ?Cancellation
     {
         /** @var Cancellation $cancellation */
         foreach ($this->getCancellations() as $cancellation) {
@@ -576,7 +576,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function getShipment($shipmentId, $lazy = false): ?Shipment
+    public function getShipment(string $shipmentId, bool $lazy = false): ?Shipment
     {
         /** @var Shipment $shipment */
         foreach ($this->getShipments() as $shipment) {
@@ -636,7 +636,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException
      * @throws RuntimeException
      */
-    public function getInitialTransaction($lazy = false): ?AbstractTransactionType
+    public function getInitialTransaction(bool $lazy = false): ?AbstractTransactionType
     {
         return $this->getAuthorization($lazy) ?? $this->getChargeByIndex(0, $lazy);
     }
@@ -724,7 +724,7 @@ class Payment extends AbstractUnzerResource
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'payments';
     }
@@ -735,7 +735,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
 
@@ -781,11 +781,11 @@ class Payment extends AbstractUnzerResource
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancelAmount(
-        float $amount = null,
-        $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        string $paymentReference = null,
-        float $amountNet = null,
-        float $amountVat = null
+        float   $amount = null,
+        ?string $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
+        string  $paymentReference = null,
+        float   $amountNet = null,
+        float   $amountVat = null
     ): array {
         return $this->getUnzerObject()->cancelPayment($this, $amount, $reasonCode, $paymentReference, $amountNet, $amountVat);
     }
@@ -817,7 +817,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function charge($amount = null): Charge
+    public function charge(float $amount = null): Charge
     {
         return $this->getUnzerObject()->chargePayment($this, $amount);
     }
@@ -833,7 +833,7 @@ class Payment extends AbstractUnzerResource
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function ship($invoiceId = null, $orderId = null)
+    public function ship(string $invoiceId = null, string $orderId = null)
     {
         return $this->getUnzerObject()->ship($this, $invoiceId, $orderId);
     }

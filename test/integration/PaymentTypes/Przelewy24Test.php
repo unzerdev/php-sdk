@@ -58,6 +58,7 @@ class Przelewy24Test extends BaseIntegrationTest
      * Verify przelewy24 can authorize.
      *
      * @test
+     *
      * @depends przelewy24ShouldBeCreatableAndFetchable
      *
      * @param Przelewy24 $przelewy24
@@ -78,6 +79,7 @@ class Przelewy24Test extends BaseIntegrationTest
      * Verify przelewy24 can not be authorized.
      *
      * @test
+     *
      * @depends przelewy24ShouldBeCreatableAndFetchable
      *
      * @param Przelewy24 $przelewy24

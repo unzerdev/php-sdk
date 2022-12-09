@@ -56,7 +56,7 @@ class TraitDummyWithoutCustomerWithParentIF implements UnzerParentInterface
      *
      * @return string
      */
-    public function getUri($appendId = true, $httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    public function getUri(bool $appendId = true, string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'test/uri/';
     }

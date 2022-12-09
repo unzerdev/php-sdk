@@ -35,6 +35,7 @@ class EnvironmentServiceTest extends TestCase
      * Verify test logging environment vars are correctly interpreted.
      *
      * @test
+     *
      * @dataProvider envVarsShouldBeInterpretedAsExpectedDP
      *
      * @param mixed $verboseLog

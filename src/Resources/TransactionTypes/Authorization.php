@@ -67,7 +67,7 @@ class Authorization extends AbstractTransactionType
      * @param string|null $currency
      * @param string|null $returnUrl
      */
-    public function __construct($amount = null, $currency = null, $returnUrl = null)
+    public function __construct(float $amount = null, string $currency = null, string $returnUrl = null)
     {
         $this->setAmount($amount);
         $this->setCurrency($currency);
@@ -89,7 +89,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return self
      */
-    public function setAmount($amount): self
+    public function setAmount(?float $amount): self
     {
         $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
@@ -122,7 +122,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return self
      */
-    public function setCurrency($currency): self
+    public function setCurrency(?string $currency): self
     {
         $this->currency = $currency;
         return $this;
@@ -137,11 +137,11 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * @param string $returnUrl
+     * @param string|null $returnUrl
      *
      * @return self
      */
-    public function setReturnUrl($returnUrl): self
+    public function setReturnUrl(?string $returnUrl): self
     {
         $this->returnUrl = $returnUrl;
         return $this;
@@ -160,7 +160,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return Authorization
      */
-    public function setCard3ds($card3ds): Authorization
+    public function setCard3ds(?bool $card3ds): Authorization
     {
         $this->card3ds = $card3ds;
         return $this;
@@ -179,7 +179,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return Authorization
      */
-    public function setPaymentReference($paymentReference): Authorization
+    public function setPaymentReference(?string $paymentReference): Authorization
     {
         $this->paymentReference = $paymentReference;
         return $this;
@@ -198,14 +198,14 @@ class Authorization extends AbstractTransactionType
      *
      * @return Authorization
      */
-    protected function setExternalOrderId($externalOrderId): Authorization
+    protected function setExternalOrderId(?string $externalOrderId): Authorization
     {
         $this->externalOrderId = $externalOrderId;
         return $this;
     }
 
     /**
-     * Returns the reference Id of the insurance provider if applicable.
+     * Returns the reference ID of the insurance provider if applicable.
      *
      * @return string|null
      */
@@ -215,13 +215,13 @@ class Authorization extends AbstractTransactionType
     }
 
     /**
-     * Sets the reference Id of the insurance provider.
+     * Sets the reference ID of the insurance provider.
      *
      * @param string|null $zgReferenceId
      *
      * @return Authorization
      */
-    protected function setZgReferenceId($zgReferenceId): Authorization
+    protected function setZgReferenceId(?string $zgReferenceId): Authorization
     {
         $this->zgReferenceId = $zgReferenceId;
         return $this;
@@ -240,7 +240,7 @@ class Authorization extends AbstractTransactionType
      *
      * @return Authorization
      */
-    protected function setPDFLink($PDFLink): Authorization
+    protected function setPDFLink(?string $PDFLink): Authorization
     {
         $this->PDFLink = $PDFLink;
         return $this;
@@ -253,7 +253,7 @@ class Authorization extends AbstractTransactionType
     /**
      * {@inheritDoc}
      */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'authorize';
     }
@@ -270,7 +270,7 @@ class Authorization extends AbstractTransactionType
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function cancel($amount = null): Cancellation
+    public function cancel(float $amount = null): Cancellation
     {
         return $this->getUnzerObject()->cancelAuthorization($this, $amount);
     }
@@ -285,7 +285,7 @@ class Authorization extends AbstractTransactionType
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function charge($amount = null): Charge
+    public function charge(float $amount = null): Charge
     {
         $payment = $this->getPayment();
         if (!$payment instanceof Payment) {

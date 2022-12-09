@@ -22,6 +22,7 @@
  */
 namespace UnzerSDK\Resources\PaymentTypes;
 
+use RuntimeException;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Traits\CanRecur;

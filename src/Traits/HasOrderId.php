@@ -42,7 +42,7 @@ trait HasOrderId
      *
      * @return $this
      */
-    public function setOrderId($orderId): self
+    public function setOrderId(?string $orderId): self
     {
         $this->orderId = $orderId;
         return $this;

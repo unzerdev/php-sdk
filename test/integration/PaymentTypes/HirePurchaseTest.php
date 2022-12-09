@@ -88,6 +88,7 @@ class HirePurchaseTest extends BaseIntegrationTest
      * Verify fetched hdd type can be authorized and charged
      *
      * @test
+     *
      * @depends hddTypeShouldBeFetchable
      *
      * @param InstallmentSecured $hddType fetched hdd type.
@@ -114,6 +115,7 @@ class HirePurchaseTest extends BaseIntegrationTest
      * Verify fetched hdd payment can be shipped.
      *
      * @test
+     *
      * @depends hddTypeAuthorizeAndCharge
      */
     public function hddTypeShouldBeShippable(Charge $hddCharge)
@@ -129,6 +131,7 @@ class HirePurchaseTest extends BaseIntegrationTest
      * Verify full cancel of charged HP after shipment.
      *
      * @test
+     *
      * @depends hddTypeAuthorizeAndCharge
      */
     public function hddChargeCanBePartiallyCancledBeforeShipment(Charge $hddCharge): void
