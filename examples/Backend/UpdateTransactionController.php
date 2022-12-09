@@ -68,6 +68,10 @@ try {
     $payment = $unzer->fetchPayment($paymentId);
     $transaction = $payment->getInitialTransaction();
 
+    if (!$transaction->isResumed()) {
+        redirect(BACKEND_FAILURE_URL, 'Transaction can only be updated in resumed state.');
+    }
+
     //Add Shipping cost to initial amount.
     $updatedCost = $transaction->getAmount() + $shippingCost;
 
@@ -77,7 +81,7 @@ try {
     //Update basket
     $basket = $payment->getBasket();
 
-    if ($basket !== null && $shippingCost < 0) {
+    if ($basket !== null && $shippingCost > 0) {
         $shippingItem = new BasketItem('shipping costs');
         $shippingItem->setAmountPerUnitGross($shippingCost);
         $basket->addBasketItem($shippingItem);
