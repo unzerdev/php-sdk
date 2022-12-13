@@ -53,12 +53,12 @@ function redirect($url, $merchantMessage = '', $clientMessage = '')
 session_start();
 
 // Retrieve the paymentId you remembered within the Controller
-$redirectUrl = FAILURE_URL;
 if (!isset($_SESSION['PaymentId'])) {
     $merchantMessage = 'The payment id is missing.';
 }
 $paymentId = $_SESSION['PaymentId'];
 
+$redirectUrl = FAILURE_URL;
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
     // Create an Unzer object using your private key and register a debug handler if you want to.
@@ -79,6 +79,14 @@ try {
         // You show the success page.
         // Goods can be shipped.
         $redirectUrl = SUCCESS_URL;
+    }
+
+    if ($payment->isCreate()) {
+        // The payment is in create state, meaning the customer clicked the "Back to Merchant" button.
+        // The Payment page was not used for a payment yet.
+        // It is still active and could be used by the customer.
+        $_SESSION['paypageId'] = $payment->getPayPage()->getRedirectUrl();
+        $redirectUrl = CREATE_URL;
     }
 
     if ($payment->isPending()) {
@@ -112,10 +120,6 @@ try {
                 $redirectUrl = SUCCESS_URL;
             }
         }
-    }
-
-    if ($payment->isCreate()) {
-        $redirectUrl = CREATE_URL;
     }
 
     // If the payment is neither success nor pending something went wrong.

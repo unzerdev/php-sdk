@@ -147,7 +147,7 @@ class PaypageTest extends BaseIntegrationTest
     {
         $payPage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($payPage->getId());
-        // Todo: Check fetching of additional resources. e.g fetchedAt for created resources.
+
         $payPage = $this->unzer->initPayPageAuthorize($payPage);
         $payment = $payPage->getPayment();
         $this->assertNotEmpty($payPage->getId());
@@ -156,6 +156,7 @@ class PaypageTest extends BaseIntegrationTest
         $this->assertNotNull($fetchedPayPage->getPayment());
 
         $this->assertEquals($payment->getId(), $fetchedPayPage->getPayment()->getId());
+        $this->assertNotNull($payment->getFetchedAt());
     }
 
     /**

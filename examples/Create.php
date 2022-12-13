@@ -42,11 +42,12 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
         <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
     </head>
     <body>
-        <h1 id="result">Success</h1>
+        <h1 id="result">Create</h1>
         <p>
-            The order has been successfully placed.
-
+            The payment is in create state.<br>
+            Payment page was not used for a payment yet. It is still active and could be used by the customer.<br>
         <?php
+        echo  'Paypage-URL: <a href="' . $_SESSION['paypageId'] . '">Payment page</a>';
 
         if (!empty($additionalPaymentInformation)) {
             echo $additionalPaymentInformation;
@@ -59,7 +60,7 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
         }
         $paymentId = $_SESSION['PaymentId'] ?? null;
         if ($paymentId !== null) {
-            echo '<p>The PaymentId of your transaction is \'' . $paymentId . '\'.</p>';
+            echo '<p>The PaymentId is \'' . $paymentId . '\'.</p>';
         }
 
         if ($paymentTypeId !== null) {
