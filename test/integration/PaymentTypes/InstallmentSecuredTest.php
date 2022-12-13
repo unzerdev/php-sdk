@@ -78,6 +78,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
      * Verify Installment Secured authorization (positive and negative).
      *
      * @test
+     *
      * @dataProvider CustomerRankingDataProvider
      *
      * @param $firstname

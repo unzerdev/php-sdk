@@ -186,7 +186,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setLogoImage($logoImage): Paypage
+    public function setLogoImage(?string $logoImage): Paypage
     {
         $this->logoImage = $logoImage;
         return $this;
@@ -205,7 +205,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setFullPageImage($fullPageImage): Paypage
+    public function setFullPageImage(?string $fullPageImage): Paypage
     {
         $this->fullPageImage = $fullPageImage;
         return $this;
@@ -224,7 +224,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setShopName($shopName): Paypage
+    public function setShopName(?string $shopName): Paypage
     {
         $this->shopName = $shopName;
         return $this;
@@ -243,7 +243,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setShopDescription($shopDescription): Paypage
+    public function setShopDescription(?string $shopDescription): Paypage
     {
         $this->shopDescription = $shopDescription;
         return $this;
@@ -262,7 +262,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setTagline($tagline): Paypage
+    public function setTagline(?string $tagline): Paypage
     {
         $this->tagline = $tagline;
         return $this;
@@ -281,7 +281,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setTermsAndConditionUrl($termsAndConditionUrl): Paypage
+    public function setTermsAndConditionUrl(?string $termsAndConditionUrl): Paypage
     {
         $this->termsAndConditionUrl = $termsAndConditionUrl;
         return $this;
@@ -300,7 +300,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setPrivacyPolicyUrl($privacyPolicyUrl): Paypage
+    public function setPrivacyPolicyUrl(?string $privacyPolicyUrl): Paypage
     {
         $this->privacyPolicyUrl = $privacyPolicyUrl;
         return $this;
@@ -319,7 +319,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setImprintUrl($imprintUrl): Paypage
+    public function setImprintUrl(?string $imprintUrl): Paypage
     {
         $this->imprintUrl = $imprintUrl;
         return $this;
@@ -338,7 +338,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setHelpUrl($helpUrl): Paypage
+    public function setHelpUrl(?string $helpUrl): Paypage
     {
         $this->helpUrl = $helpUrl;
         return $this;
@@ -357,7 +357,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setContactUrl($contactUrl): Paypage
+    public function setContactUrl(?string $contactUrl): Paypage
     {
         $this->contactUrl = $contactUrl;
         return $this;
@@ -531,7 +531,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setCard3ds($card3ds): Paypage
+    public function setCard3ds(?bool $card3ds): Paypage
     {
         $this->card3ds = $card3ds;
         return $this;
@@ -550,7 +550,7 @@ class Paypage extends BasePaymentType
      *
      * @return Paypage
      */
-    public function setCss($styles): Paypage
+    public function setCss(?array $styles): Paypage
     {
         $this->css = empty($styles) ? null : $styles;
         return $this;
@@ -568,6 +568,32 @@ class Paypage extends BasePaymentType
     }
 
     /**
+     * {@inheritDoc}
+     * Change resource path.
+     */
+    protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
+    {
+        $basePath = 'paypage';
+
+        if ($httpMethod === HttpAdapterInterface::REQUEST_GET) {
+            return $basePath;
+        }
+
+        switch ($this->action) {
+            case TransactionTypes::AUTHORIZATION:
+                $transactionType = TransactionTypes::AUTHORIZATION;
+                break;
+            case TransactionTypes::CHARGE:
+                // intended Fall-Through
+            default:
+                $transactionType = TransactionTypes::CHARGE;
+                break;
+        }
+
+        return $basePath . '/' . $transactionType;
+    }
+
+    /**
      * @return float|null
      */
     public function getEffectiveInterestRate(): ?float
@@ -581,30 +607,12 @@ class Paypage extends BasePaymentType
 
     /**
      * {@inheritDoc}
-     * Change resource path.
-     */
-    protected function getResourcePath($httpMethod = HttpAdapterInterface::REQUEST_GET): string
-    {
-        switch ($this->action) {
-            case TransactionTypes::AUTHORIZATION:
-                return 'paypage/authorize';
-                break;
-            case TransactionTypes::CHARGE:
-                // intended Fall-Through
-            default:
-                return 'paypage/charge';
-                break;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
      * Map external name of property to internal name of property.
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function handleResponse(stdClass $response, $method = HttpAdapterInterface::REQUEST_GET): void
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         if (isset($response->impressumUrl)) {
             $response->imprintUrl = $response->impressumUrl;
@@ -616,7 +624,17 @@ class Paypage extends BasePaymentType
         /** @var Payment $payment */
         $payment = $this->getPayment();
         if (isset($response->resources->paymentId)) {
-            $payment->setId($response->resources->paymentId);
+            $paymentId = $response->resources->paymentId;
+
+            if (null === $payment) {
+                $payment = new Payment($this->getUnzerObject());
+                $payment->setId($paymentId)
+                    ->setPayPage($this);
+                $this->setPayment($payment);
+                $this->getUnzerObject()->fetchPayment($payment);
+            }
+
+            $payment->setId($paymentId);
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {

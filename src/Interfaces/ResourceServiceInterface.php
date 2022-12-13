@@ -32,6 +32,7 @@ use UnzerSDK\Resources\Keypair;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -63,14 +64,14 @@ interface ResourceServiceInterface
      * @param string|BasePaymentType $paymentType    The payment to activate recurring payment for.
      * @param string                 $returnUrl      The URL to which the customer gets redirected in case of a 3ds
      *                                               transaction
-     * @param string                 $recurrenceType Recurrence type used for recurring payment.
+     * @param string|null            $recurrenceType Recurrence type used for recurring payment.
      *
      * @return Recurring The recurring object.
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function activateRecurringPayment($paymentType, $returnUrl, string $recurrenceType = null): Recurring;
+    public function activateRecurringPayment($paymentType, string $returnUrl, string $recurrenceType = null): Recurring;
 
     /**
      * Fetch and return payment by given payment id or payment object.
@@ -95,7 +96,20 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchPaymentByOrderId($orderId): Payment;
+    public function fetchPaymentByOrderId(string $orderId): Payment;
+
+    /**
+     * Fetch and return payPage by given payPageId or payPage object.
+     * If a payPage object is given it will be updated as well, thus you do not rely on the returned object.
+     *
+     * @param Paypage|string $payPage The payment object or paymentId to fetch.
+     *
+     * @return Paypage The fetched payPage object.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchPayPage($payPage): Paypage;
 
     /**
      * Fetch public key and configured payment types from API.
@@ -107,12 +121,12 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchKeypair($detailed = false): Keypair;
+    public function fetchKeypair(bool $detailed = false): Keypair;
 
     /**
      * Create Metadata resource.
      *
-     * @param Metadata $metadata The Metadata object to be created.
+     * @param Metadata|string $metadata The Metadata object to be created.
      *
      * @return Metadata The fetched Metadata resource.
      *
@@ -209,7 +223,7 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchPaymentType($typeId): BasePaymentType;
+    public function fetchPaymentType(string $typeId): BasePaymentType;
 
     /**
      * Create an API resource for the given customer object.
@@ -257,7 +271,7 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchCustomerByExtCustomerId($customerId): Customer;
+    public function fetchCustomerByExtCustomerId(string $customerId): Customer;
 
     /**
      * Update and return a Customer object via API.
@@ -307,7 +321,7 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchChargeById($payment, $chargeId): Charge;
+    public function fetchChargeById($payment, string $chargeId): Charge;
 
     /**
      * Update local charge object.
@@ -332,7 +346,7 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchReversalByAuthorization($authorization, $cancellationId): Cancellation;
+    public function fetchReversalByAuthorization(Authorization $authorization, string $cancellationId): Cancellation;
 
     /**
      * Fetches a cancellation resource on an authorization (aka reversal) via payment and cancellation id.
@@ -345,7 +359,7 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchReversal($payment, $cancellationId): Cancellation;
+    public function fetchReversal($payment, string $cancellationId): Cancellation;
 
     /**
      * Fetch a cancellation resource on a charge (aka refund) via id.
@@ -359,7 +373,7 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchRefundById($payment, $chargeId, $cancellationId): Cancellation;
+    public function fetchRefundById($payment, string $chargeId, string $cancellationId): Cancellation;
 
     /**
      * Fetch a cancellation resource on a Charge (aka refund).
@@ -372,33 +386,33 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchRefund(Charge $charge, $cancellationId): Cancellation;
+    public function fetchRefund(Charge $charge, string $cancellationId): Cancellation;
 
     /**
      * Fetch a cancellation resource of a charged payment (aka refund).
      *
-     * @param Payment $payment        The payment object to fetch the cancellation for.
-     * @param string  $cancellationId The id of the cancellation to fetch.
+     * @param Payment|string $payment        The payment object to fetch the cancellation for.
+     * @param string         $cancellationId The id of the cancellation to fetch.
      *
      * @return Cancellation The fetched cancellation (refund).
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchPaymentRefund($payment, $cancellationId): Cancellation;
+    public function fetchPaymentRefund($payment, string $cancellationId): Cancellation;
 
     /**
      * Fetch a cancellation resource of an authorized payment (aka reversal).
      *
-     * @param Payment $payment        The payment object to fetch the cancellation for.
-     * @param string  $cancellationId The id of the cancellation to fetch.
+     * @param Payment|string $payment        The payment object to fetch the cancellation for.
+     * @param string         $cancellationId The id of the cancellation to fetch.
      *
      * @return Cancellation The fetched cancellation (refund).
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchPaymentReversal($payment, $cancellationId): Cancellation;
+    public function fetchPaymentReversal($payment, string $cancellationId): Cancellation;
 
     /**
      * Fetch a shipment resource of the given payment by id.
@@ -411,7 +425,7 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function fetchShipment($payment, $shipmentId): Shipment;
+    public function fetchShipment($payment, string $shipmentId): Shipment;
 
     /**
      * Get the configuration for the given payment type.

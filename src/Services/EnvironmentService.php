@@ -116,7 +116,7 @@ class EnvironmentService
      *
      * @return string
      */
-    public static function getTestPrivateKey($non3ds = false): string
+    public static function getTestPrivateKey(bool $non3ds = false): string
     {
         $variableName = $non3ds ? self::ENV_VAR_TEST_PRIVATE_KEY_NON_3DS : self::ENV_VAR_TEST_PRIVATE_KEY;
         $key = stripslashes($_SERVER[$variableName] ?? '');
@@ -132,7 +132,7 @@ class EnvironmentService
      *
      * @return string
      */
-    public static function getTestPublicKey($non3ds = false): string
+    public static function getTestPublicKey(bool $non3ds = false): string
     {
         $variableName = $non3ds ? self::ENV_VAR_TEST_PUBLIC_KEY_NON_3DS : self::ENV_VAR_TEST_PUBLIC_KEY;
         $key = stripslashes($_SERVER[$variableName] ?? '');

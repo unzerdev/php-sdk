@@ -35,11 +35,11 @@ interface HttpAdapterInterface
     /**
      * Initializes the request.
      *
-     * @param string $url        The full url to connect to.
-     * @param string $payload    Json encoded payload string.
-     * @param string $httpMethod The Http method to perform.
+     * @param string      $url        The full url to connect to.
+     * @param string|null $payload    Json encoded payload string.
+     * @param string      $httpMethod The Http method to perform.
      */
-    public function init($url, $payload = null, $httpMethod = HttpAdapterInterface::REQUEST_GET): void;
+    public function init(string $url, string $payload = null, string $httpMethod = HttpAdapterInterface::REQUEST_GET): void;
 
     /**
      * Executes the request and returns the response.

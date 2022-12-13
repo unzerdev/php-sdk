@@ -142,6 +142,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      * PHPLIB-228 - Case 4 + 5
      *
      * @test
+     *
      * @dataProvider partCancelDataProvider
      *
      * @param float $amount
@@ -173,6 +174,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      * PHPLIB-228 - Case 6
      *
      * @test
+     *
      * @dataProvider fullCancelDataProvider
      *
      * @param float $amount
@@ -222,6 +224,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      * PHPLIB-228 - Case 8
      *
      * @test
+     *
      * @dataProvider fullCancelDataProvider
      *
      * @param float $amount The amount to be cancelled.
@@ -248,6 +251,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      * PHPLIB-228 - Case 9
      *
      * @test
+     *
      * @dataProvider fullCancelDataProvider
      *
      * @param $amount
@@ -338,6 +342,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      * PHPLIB-228 - Case 13
      *
      * @test
+     *
      * @dataProvider fullCancelDataProvider
      *
      * @param float $amount

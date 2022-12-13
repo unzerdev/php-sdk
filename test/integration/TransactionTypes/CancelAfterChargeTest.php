@@ -53,6 +53,7 @@ class CancelAfterChargeTest extends BaseIntegrationTest
      * Verify full refund of a charge.
      *
      * @test
+     *
      * @depends chargeShouldBeFetchable
      *
      * @param Charge $charge

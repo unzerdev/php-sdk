@@ -195,6 +195,7 @@ class ApplepayAdapterTest extends BaseIntegrationTest
      * test merchant validation request without ca certificate.
      *
      * @dataProvider domainShouldBeValidatedCorrectlyDP
+     *
      * @test
      *
      * @param mixed $validationUrl

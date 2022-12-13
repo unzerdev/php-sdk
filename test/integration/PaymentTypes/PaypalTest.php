@@ -86,6 +86,7 @@ class PaypalTest extends BaseIntegrationTest
      * Verify paypal can authorize.
      *
      * @test
+     *
      * @depends paypalShouldBeCreatableAndFetchable
      *
      * @param Paypal $paypal
@@ -106,6 +107,7 @@ class PaypalTest extends BaseIntegrationTest
      * Verify paypal can charge.
      *
      * @test
+     *
      * @depends paypalShouldBeCreatableAndFetchable
      *
      * @param Paypal $paypal
@@ -121,6 +123,7 @@ class PaypalTest extends BaseIntegrationTest
      * Test PayPal Express checkout.
      *
      * @test
+     *
      * @depends paypalShouldBeCreatableAndFetchable
      *
      * @param Paypal $paypal
@@ -152,6 +155,7 @@ class PaypalTest extends BaseIntegrationTest
      * Verify Charge can be updated
      *
      * @test
+     *
      * @depends paypalChargeWithExpressCheckout
      */
     public function updateChargeThrowsExceptionWhenStatusIsPending(Charge $charge): void
@@ -166,6 +170,7 @@ class PaypalTest extends BaseIntegrationTest
      * Test PayPal Express checkout.
      *
      * @test
+     *
      * @depends paypalShouldBeCreatableAndFetchable
      *
      * @param Paypal $paypal
@@ -199,6 +204,7 @@ class PaypalTest extends BaseIntegrationTest
      * Test PayPal Express checkout.
      *
      * @test
+     *
      * @depends paypalShouldBeCreatableAndFetchable
      *
      * @param Paypal $paypal
@@ -223,6 +229,7 @@ class PaypalTest extends BaseIntegrationTest
      * Verify Authorize can be updated
      *
      * @test
+     *
      * @depends paypalAuthorizeWithExpressCheckout
      */
     public function updateAuthorizeThrowsApiExceptionWhenStatusIsPending(Authorization $authorize): void

@@ -42,7 +42,7 @@ trait HasInvoiceId
      *
      * @return self
      */
-    public function setInvoiceId($invoiceId): self
+    public function setInvoiceId(?string $invoiceId): self
     {
         $this->invoiceId = $invoiceId;
         return $this;
