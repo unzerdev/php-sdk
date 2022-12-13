@@ -84,7 +84,7 @@ try {
     if ($payment->isCreate()) {
         // The payment is in create state, meaning the customer clicked the "Back to Merchant" button.
         // The Payment page was not used for a payment yet.
-        // It is still active and could be used by the customer.
+        // It is still active and could be used by the customer for the current payment.
         $_SESSION['paypageId'] = $payment->getPayPage()->getRedirectUrl();
         $redirectUrl = CREATE_URL;
     }

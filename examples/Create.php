@@ -44,8 +44,9 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
     <body>
         <h1 id="result">Create</h1>
         <p>
-            The payment is in create state.<br>
-            Payment page was not used for a payment yet. It is still active and could be used by the customer.<br>
+            The payment is in create state, meaning the customer clicked the "Back to merchant" button.<br>
+            The Payment page was not used for a payment yet.<br>
+            It is still active and could be used by the customer for the current payment.<br>
         <?php
         echo  'Paypage-URL: <a href="' . $_SESSION['paypageId'] . '">Payment page</a>';
 
