@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 3.0.0
 
 ### Added
 
@@ -14,6 +14,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+*   Switch SDK to 3-digit versioning. First digit, formerly representing API version gets omitted (1.3.0.0 -> 3.0.0).
 *   Add Type declaration to methods where applicable.
 *   Enable `Unzer::fetchPaymentRefund` and `Unzer::fetchPaymentReversal` to use resource ID as parameter.
 *   Raise minimum PHP version to 7.4 in composer.json
