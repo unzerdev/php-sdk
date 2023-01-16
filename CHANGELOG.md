@@ -9,13 +9,14 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+*   Enable PHP version 8.2 in composer.json.
 *   Add paypage property to `Payment` class.
 
 ### Changed
 
 *   Add Type declaration to methods where applicable.
 *   Enable `Unzer::fetchPaymentRefund` and `Unzer::fetchPaymentReversal` to use resource ID as parameter.
-*   Raise minimum php version to 7.4 in composer.json
+*   Raise minimum PHP version to 7.4 in composer.json
 
 ## [1.2.3.0](https://github.com/unzerdev/php-sdk/compare/1.2.2.0..1.2.3.0)
 
