@@ -447,7 +447,6 @@ class ResourceService implements ResourceServiceInterface
         return $payPageObject;
     }
 
-
     /**
      * {@inheritDoc}
      */

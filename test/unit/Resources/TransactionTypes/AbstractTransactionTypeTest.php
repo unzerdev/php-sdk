@@ -32,6 +32,7 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\TransactionStatus;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\Unzer;
@@ -266,6 +267,24 @@ class AbstractTransactionTypeTest extends BasePaymentTest
 
         $transactionType = (new DummyTransactionType())->setPayment($payment);
         $transactionType->fetchPayment();
+    }
+
+    /**
+     * Liability indicator response should stored in transaction
+     *
+     * @test
+     */
+    public function liabilityResponseShouldBeStroedInTransaction()
+    {
+        $jsonRespone = '{"additionalTransactionData":{"card":{"liability":"MERCHANT"}}}';
+
+        $transaction = new DummyTransactionType();
+        $transaction->handleResponse(json_decode($jsonRespone, false));
+        $this->assertEquals($transaction->getAdditionalTransactionData()->card->liability, 'MERCHANT');
+
+        $jsonRespone = '{"additionalTransactionData":{"card":{"liability":"ISSUER"}}}';
+        $transaction->handleResponse(json_decode($jsonRespone, false));
+        $this->assertEquals($transaction->getAdditionalTransactionData()->card->liability, 'ISSUER');
     }
 
     //<editor-fold desc="Data Providers">
