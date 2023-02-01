@@ -29,10 +29,10 @@ use DateTime;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\LiabilityShiftIndicator;
 use UnzerSDK\Constants\TransactionStatus;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
-use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\Unzer;
@@ -280,11 +280,11 @@ class AbstractTransactionTypeTest extends BasePaymentTest
 
         $transaction = new DummyTransactionType();
         $transaction->handleResponse(json_decode($jsonRespone, false));
-        $this->assertEquals($transaction->getAdditionalTransactionData()->card->liability, 'MERCHANT');
+        $this->assertEquals($transaction->getAdditionalTransactionData()->card->liability, LiabilityShiftIndicator::MERCHANT);
 
         $jsonRespone = '{"additionalTransactionData":{"card":{"liability":"ISSUER"}}}';
         $transaction->handleResponse(json_decode($jsonRespone, false));
-        $this->assertEquals($transaction->getAdditionalTransactionData()->card->liability, 'ISSUER');
+        $this->assertEquals($transaction->getAdditionalTransactionData()->card->liability, LiabilityShiftIndicator::ISSUER);
     }
 
     //<editor-fold desc="Data Providers">

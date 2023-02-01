@@ -11,6 +11,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 *   Enable PHP version 8.2 in composer.json.
 *   Add paypage property to `Payment` class.
+*   Add constants `\UnzerSDK\Constants\LiabilityShiftIndicator` for valid liability shift indicator values, relevant for card payment.
 
 ### Changed
 
