@@ -269,9 +269,9 @@ class CardTest extends BaseIntegrationTest
      * Verify card transaction returns Liability Shift Indicator.
      *
      * @test
-     * @dataProvider CardTransactionReturnsLiabilityIndicatorDP()
+     * @dataProvider cardTransactionReturnsLiabilityIndicatorDP()
      */
-    public function CardTransactionReturnsLiabilityIndicator($pan): void
+    public function cardTransactionReturnsLiabilityIndicator($pan): void
     {
         $this->markTestSkipped('Requires a special config for card.');
         $card = $this->createCardObject()->setNumber($pan)->set3ds(false);
@@ -697,7 +697,7 @@ class CardTest extends BaseIntegrationTest
         ];
     }
 
-    public function CardTransactionReturnsLiabilityIndicatorDP()
+    public function cardTransactionReturnsLiabilityIndicatorDP()
     {
         return [
             '6799851000000032' => ['6799851000000032'],
