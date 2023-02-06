@@ -266,6 +266,32 @@ class CardTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify card transaction returns Liability Shift Indicator.
+     *
+     * @test
+     * @dataProvider cardTransactionReturnsLiabilityIndicatorDP()
+     */
+    public function cardTransactionReturnsLiabilityIndicator($pan): void
+    {
+        $this->markTestSkipped('Requires a special config for card.');
+        $card = $this->createCardObject()->setNumber($pan)->set3ds(false);
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($card);
+        $charge = $card->charge(12.34, 'EUR', 'https://docs.unzer.com');
+
+        // Verify Liability Indicator in response.
+        $this->assertNotNull($charge->getAdditionalTransactionData());
+        $this->assertNotNull($charge->getAdditionalTransactionData()->card->liability);
+
+        // Verify Liability Indicator In payment response.
+        $fetchedPayment = $this->unzer->fetchPayment($charge->getPaymentId());
+        $paymentCharge = $fetchedPayment->getCharge('s-chg-1', true);
+        $this->assertNotNull($paymentCharge->getAdditionalTransactionData()->card->liability);
+
+        $this->getUnzerObject()->fetchCharge($charge);
+    }
+
+    /**
      * Verify that the card can perform an authorization with a card.
      *
      * @test
@@ -668,6 +694,16 @@ class CardTest extends BaseIntegrationTest
         return [
             'invalid string' => ['invalid recurrence Type'],
             'number' => [42],
+        ];
+    }
+
+    public function cardTransactionReturnsLiabilityIndicatorDP()
+    {
+        return [
+            '6799851000000032' => ['6799851000000032'],
+            '5453010000059543' => ['5453010000059543'],
+            '4711100000000000' => ['4711100000000000'],
+            '4012001037461114' => ['4012001037461114']
         ];
     }
 }

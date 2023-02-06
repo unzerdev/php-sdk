@@ -819,7 +819,7 @@ class PaymentTest extends BasePaymentTest
     public function handleResponseShouldFetchAndUpdatePayPageIfItIsAlreadySet(): void
     {
         $payment = (new Payment())->setId('myPaymentId');
-        $payPage = (new Paypage(0,'',''))->setId('payPageId');
+        $payPage = (new Paypage(0, '', ''))->setId('payPageId');
 
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
             ->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
