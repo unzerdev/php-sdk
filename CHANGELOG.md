@@ -22,7 +22,9 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 *   Add Type declaration to methods where applicable.
 *   Enable `Unzer::fetchPaymentRefund` and `Unzer::fetchPaymentReversal` to use resource ID as parameter.
 *   Raise minimum PHP version to 7.4 in composer.json
-*   `additionalTransactionData.card` from API responses will be mapped on `\UnzerSDK\Resources\EmbeddedResources\CardTransactionData` now.
+*   Handling of additionalTransactionData:
+    *   `additionalTransactionData.card` from API responses will be mapped on `\UnzerSDK\Resources\EmbeddedResources\CardTransactionData` now.
+    *   Remove `paymentType` parameter of `\UnzerSDK\Traits\HasRecurrenceType::setRecurrenceType`, it will always be set for `card` field of `additionalTransactionData`.
 
 ## [1.2.3.0](https://github.com/unzerdev/php-sdk/compare/1.2.2.0..1.2.3.0)
 

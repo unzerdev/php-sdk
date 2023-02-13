@@ -25,7 +25,6 @@
 namespace UnzerSDK\Traits;
 
 use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
-use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 
 trait HasRecurrenceType
 {
@@ -46,12 +45,10 @@ trait HasRecurrenceType
 
     /**
      * @param string               $recurrenceType Recurrence type used for recurring payment.
-     * @param BasePaymentType|null $paymentType    Deprecated Parameter:
-     *                                             Is not used anymore since it is only possible for card payments.
      *
      * @return $this
      */
-    public function setRecurrenceType(string $recurrenceType, BasePaymentType $paymentType = null): self
+    public function setRecurrenceType(string $recurrenceType): self
     {
         $card = $this->getCardTransactionData() ?? new CardTransactionData();
         $card->setRecurrenceType($recurrenceType);
