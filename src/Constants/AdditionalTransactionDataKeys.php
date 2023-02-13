@@ -30,4 +30,6 @@ class AdditionalTransactionDataKeys
 
     // Checkout types
     public const CHECKOUTTYPE = 'checkoutType';
+
+    public const CARD = 'card';
 }

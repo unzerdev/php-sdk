@@ -25,6 +25,7 @@ namespace UnzerSDK\Resources\TransactionTypes;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\Resources\Payment;
@@ -192,6 +193,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
 
             $this->handleRiskData($additionalTransactionData);
             $this->handleShipping($additionalTransactionData);
+            $this->handleCardTransactionData($additionalTransactionData);
         }
     }
 
@@ -226,6 +228,23 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
             $shippingObject = $this->getShipping() ?? new ShippingData();
             $shippingObject->handleResponse($shipping);
             $this->setShipping($shippingObject);
+        }
+    }
+
+    /**
+     * Handle CardTransactionData object contained in additional transaction data from API response.
+     *
+     * @param stdClass $additionalTransactionData
+     *
+     * @return void
+     */
+    protected function handleCardTransactionData(stdClass $additionalTransactionData): void
+    {
+        $card = $additionalTransactionData->card ?? null;
+        if ($card !== null) {
+            $cardTransactionData = $this->getCardTransactionData() ?? new CardTransactionData();
+            $cardTransactionData->handleResponse($card);
+            $this->setCardTransactionData($cardTransactionData);
         }
     }
 }

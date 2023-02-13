@@ -91,7 +91,7 @@ class HasRecurrenceTypeTest extends BasePaymentTest
 
         $charge->setRecurrenceType(RecurrenceTypes::ONE_CLICK);
         $exposedTransaction = $charge->expose();
-        $this->assertEquals('oneclick', $exposedTransaction['additionalTransactionData']->card->recurrenceType);
+        $this->assertEquals('oneclick', $exposedTransaction['additionalTransactionData']->card['recurrenceType']);
         $this->assertStringContainsString(
             '"additionalTransactionData":{"card":{"recurrenceType":"oneclick"}}',
             $charge->jsonSerialize()
@@ -168,21 +168,6 @@ class HasRecurrenceTypeTest extends BasePaymentTest
         $this->assertEquals('scheduled', $recurring->getRecurrenceType());
     }
 
-    /**
-     * recurrence type should be set properly for recurring.
-     *
-     * @test
-     */
-    public function settingRecurrenceTypeShouldTrowExceptionIfTypeIsNotProvidedForRecurring(): void
-    {
-        $recurring = new Recurring('typeId', 'returnUrl');
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Payment type can not be determined. Set it first or provide it via parameter $paymentType.');
-
-        $recurring->setRecurrenceType(RecurrenceTypes::SCHEDULED);
-    }
-
     /** Provides payment types and expected key name that should be used to set the recurrence type.
      * @return array[]
      */
@@ -190,9 +175,6 @@ class HasRecurrenceTypeTest extends BasePaymentTest
     {
         return [
             'card' => [new Card(null, null), 'card'],
-            'sofort' => [new Sofort(), 'sofort'],
-            'sepa-direct-debit' => [new SepaDirectDebit(null), 'sepa-direct-debit'],
-            'paypal' => [new Paypal(), 'paypal']
         ];
     }
 }

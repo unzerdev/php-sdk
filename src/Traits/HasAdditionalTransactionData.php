@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This trait allows a transaction type to have additional transaction Data.
  *
@@ -25,6 +26,7 @@ namespace UnzerSDK\Traits;
 
 use stdClass;
 use UnzerSDK\Constants\AdditionalTransactionDataKeys;
+use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
@@ -208,5 +210,30 @@ trait HasAdditionalTransactionData
         }
 
         return null;
+    }
+
+    /**
+     * Get the card field from additional transaction Data.
+     *
+     * @return CardTransactionData|null "card" object of additionalTransaction data.
+     */
+    public function getCardTransactionData(): ?CardTransactionData
+    {
+        $key = AdditionalTransactionDataKeys::CARD;
+        $card = $this->getAdditionalTransactionData()->$key ?? null;
+        return $card instanceof CardTransactionData ? $card : null;
+    }
+
+    /**
+     * Sets CardTransactionData object as "card" field of additionalTransactionData.
+     *
+     * @param CardTransactionData|null $cardTransactionData
+     *
+     * @return self
+     */
+    public function setCardTransactionData(?CardTransactionData $cardTransactionData): self
+    {
+        $this->addAdditionalTransactionData(AdditionalTransactionDataKeys::CARD, $cardTransactionData);
+        return $this;
     }
 }
