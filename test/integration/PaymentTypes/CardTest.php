@@ -294,7 +294,10 @@ class CardTest extends BaseIntegrationTest
      * Verify card transaction returns Liability Shift Indicator.
      *
      * @test
+     *
      * @dataProvider cardTransactionReturnsLiabilityIndicatorDP()
+     *
+     * @param mixed $pan
      */
     public function cardTransactionReturnsLiabilityIndicator($pan): void
     {

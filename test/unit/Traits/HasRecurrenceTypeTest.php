@@ -24,14 +24,9 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
-use RuntimeException;
 use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Resources\Payment;
-use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
-use UnzerSDK\Resources\PaymentTypes\Paypal;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BasePaymentTest;

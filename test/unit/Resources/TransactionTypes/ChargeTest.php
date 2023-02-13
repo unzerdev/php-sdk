@@ -78,7 +78,7 @@ class ChargeTest extends BasePaymentTest
     }
 
     /**
-     * Setting recurrence type without a payment type does not raise exception anymore.
+     * Setting recurrence type without a payment type does not raise exception.
      *
      * @test
      */

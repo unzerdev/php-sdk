@@ -44,7 +44,7 @@ trait HasRecurrenceType
     }
 
     /**
-     * @param string               $recurrenceType Recurrence type used for recurring payment.
+     * @param string $recurrenceType Recurrence type used for recurring payment.
      *
      * @return $this
      */
