@@ -26,6 +26,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\EmbeddedResources\CardDetails;
@@ -279,14 +280,14 @@ class CardTest extends BaseIntegrationTest
         $card = $this->unzer->createPaymentType($card);
         $charge = new Charge(12.34, 'EUR', 'https://docs.unzer.com');
         $cardTransactionData = (new CardTransactionData())
-            ->setExemptionType('lvp');
+            ->setExemptionType(ExemptionType::LOW_VALUE_PAYMENT);
 
         $charge->setCardTransactionData($cardTransactionData);
         $this->getUnzerObject()->performCharge($charge, $card);
 
         // Verify lvp value gets mapped from response
         $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
-        $this->assertEquals('lvp', $fetchedCharge->getCardTransactionData()->getExemptionType());
+        $this->assertEquals(ExemptionType::LOW_VALUE_PAYMENT, $fetchedCharge->getCardTransactionData()->getExemptionType());
     }
 
     /**
