@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains the different id strings to be handled within this SDK.
+ * This file contains valid exemption type values
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -16,20 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.unzer.com/
+ * @link  https://dev.unzer.com/
  *
  * @package  UnzerSDK\Constants
  */
 namespace UnzerSDK\Constants;
 
-class AdditionalTransactionDataKeys
+class ExemptionType
 {
-    // Transactions
-    public const TERMS_AND_CONDITION_URL = 'termsAndConditionUrl';
-    public const PRIVACY_POLICY_URL = 'privacyPolicyUrl';
-
-    // Checkout types
-    public const CHECKOUTTYPE = 'checkoutType';
-
-    public const CARD = 'card';
+    public const LOW_VALUE_PAYMENT    = 'lvp';
 }

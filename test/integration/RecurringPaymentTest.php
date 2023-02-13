@@ -155,7 +155,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_RECURRING_ALREADY_ACTIVE);
-        $this->unzer->activateRecurringPayment($ddg, self::RETURN_URL, RecurrenceTypes::ONE_CLICK);
+        $this->unzer->activateRecurringPayment($ddg, self::RETURN_URL);
     }
 
     /**

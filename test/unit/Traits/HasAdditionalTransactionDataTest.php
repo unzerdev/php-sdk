@@ -26,6 +26,7 @@
 /** @noinspection PhpDocMissingThrowsInspection */
 namespace UnzerSDK\test\unit\Traits;
 
+use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\EmbeddedResources\ShippingData;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
@@ -77,11 +78,59 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
     }
 
     /**
+     * Setting and getting card data should work as expected.
+     *
+     * @test
+     */
+    public function setAndGetCardData(): void
+    {
+        $dummy = new TraitDummyHasAdditionalTransactionData();
+        $this->assertNull($dummy->getCardTransactionData());
+
+        $cardTransactionData = (new CardTransactionData())
+            ->setRecurrenceType('recurrenceType')
+            ->setExemptionType('exemptionType');
+
+        $dummy->setCardTransactionData($cardTransactionData);
+
+        $cardData = $dummy->getCardTransactionData();
+        $this->assertNotNull($cardData);
+        $this->assertEquals('exemptionType', $cardData->getExemptionType());
+        $this->assertNull($cardData->getLiability());
+        $this->assertEquals('recurrenceType', $cardData->getRecurrenceType());
+    }
+    
+    /**
+     * CardData should be exposed correctly.
+     *
+     * @test
+     */
+    public function exposeCardDataAsExpected(): void
+    {
+        $dummy = new TraitDummyHasAdditionalTransactionData();
+        $this->assertNull($dummy->getCardTransactionData());
+
+        $cardTransactionData = (new CardTransactionData())
+            ->setRecurrenceType('recurrenceType')
+            ->setExemptionType('exemptionType');
+
+        $dummy->setCardTransactionData($cardTransactionData);
+
+        $exposedResource = $dummy->expose();
+        $this->assertNotNull($exposedResource['additionalTransactionData']);
+        $additionalTransactionData = $exposedResource['additionalTransactionData'];
+
+        $this->assertFalse(isset($additionalTransactionData->card['liability']));
+        $this->assertEquals('recurrenceType', $additionalTransactionData->card['recurrenceType']);
+        $this->assertEquals('exemptionType', $additionalTransactionData->card['exemptionType']);
+    }
+
+    /**
      * Verify checkoutType can be set via typeId correctly.
      *
      * @test
      */
-    public function checkoutTypeCanBeSetViaTypeId()
+    public function checkoutTypeCanBeSetViaTypeId(): void
     {
         $dummy = new TraitDummyHasAdditionalTransactionData();
         $dummy->setCheckoutType('checkoutType', 's-ppl-xyz');

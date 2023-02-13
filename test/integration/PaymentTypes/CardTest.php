@@ -26,10 +26,13 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\EmbeddedResources\CardDetails;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Services\ValueService;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -266,10 +269,35 @@ class CardTest extends BaseIntegrationTest
     }
 
     /**
+     * Verfify card transaction can be used with exemptionType
+     *
+     * @test
+     */
+    public function cardTransactionAcceptsExemptionType(): void
+    {
+        $card = $this->createCardObject();
+        /** @var Card $card */
+        $card = $this->unzer->createPaymentType($card);
+        $charge = new Charge(12.34, 'EUR', 'https://docs.unzer.com');
+        $cardTransactionData = (new CardTransactionData())
+            ->setExemptionType(ExemptionType::LOW_VALUE_PAYMENT);
+
+        $charge->setCardTransactionData($cardTransactionData);
+        $this->getUnzerObject()->performCharge($charge, $card);
+
+        // Verify lvp value gets mapped from response
+        $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
+        $this->assertEquals(ExemptionType::LOW_VALUE_PAYMENT, $fetchedCharge->getCardTransactionData()->getExemptionType());
+    }
+
+    /**
      * Verify card transaction returns Liability Shift Indicator.
      *
      * @test
+     *
      * @dataProvider cardTransactionReturnsLiabilityIndicatorDP()
+     *
+     * @param mixed $pan
      */
     public function cardTransactionReturnsLiabilityIndicator($pan): void
     {

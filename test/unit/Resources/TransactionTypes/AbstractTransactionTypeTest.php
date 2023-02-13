@@ -280,11 +280,11 @@ class AbstractTransactionTypeTest extends BasePaymentTest
 
         $transaction = new DummyTransactionType();
         $transaction->handleResponse(json_decode($jsonRespone, false));
-        $this->assertEquals($transaction->getAdditionalTransactionData()->card->liability, LiabilityShiftIndicator::MERCHANT);
+        $this->assertEquals($transaction->getCardTransactionData()->getLiability(), LiabilityShiftIndicator::MERCHANT);
 
         $jsonRespone = '{"additionalTransactionData":{"card":{"liability":"ISSUER"}}}';
         $transaction->handleResponse(json_decode($jsonRespone, false));
-        $this->assertEquals($transaction->getAdditionalTransactionData()->card->liability, LiabilityShiftIndicator::ISSUER);
+        $this->assertEquals($transaction->getCardTransactionData()->getLiability(), LiabilityShiftIndicator::ISSUER);
     }
 
     //<editor-fold desc="Data Providers">
