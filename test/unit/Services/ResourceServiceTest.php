@@ -52,6 +52,8 @@ use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\PIS;
+use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
+use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
 use UnzerSDK\Resources\PaymentTypes\Przelewy24;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
@@ -1296,6 +1298,8 @@ class ResourceServiceTest extends BasePaymentTest
             'PAYLATER_INVOICE'             => ['s-piv-xen2ybcovn56', 'https://api.unzer.com/v1/types/paylater-invoice/s-piv-xen2ybcovn56/'],
             'PAYPAL'                       => ['s-ppl-xen2ybcovn56', 'https://api.unzer.com/v1/types/paypal/s-ppl-xen2ybcovn56/'],
             'PIS'                          => ['s-pis-xen2ybcovn56', 'https://api.unzer.com/v1/types/pis/s-pis-xen2ybcovn56/'],
+            'POST_FINANCE_EFINANCE'        => ['s-pfe-xen2ybcovn56', 'https://api.unzer.com/v1/types/pfe/s-pfe-xen2ybcovn56/'],
+            'POST_FINANCE_CARD'            => ['s-pfc-xen2ybcovn56', 'https://api.unzer.com/v1/types/pfc/s-pfc-xen2ybcovn56/'],
             'PREPAYMENT'                   => ['s-ppy-xen2ybcovn56', 'https://api.unzer.com/v1/types/prepayment/s-ppy-xen2ybcovn56/'],
             'PRZELEWY24'                   => ['s-p24-xen2ybcovn56', 'https://api.unzer.com/v1/types/przelewy24/s-p24-xen2ybcovn56/'],
             'SEPA_DIRECT_DEBIT'            => ['s-sdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit/s-sdd-xen2ybcovn56/'],
@@ -1377,32 +1381,36 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType SepaDirectDebitSecured sandbox' => ['fetchPaymentType', ['s-dds-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
             'PaymentType Sofort sandbox' => ['fetchPaymentType', ['s-sft-12345678'], $getPaymentTypeCB(Sofort::class)],
             'PaymentType PIS sandbox' => ['fetchPaymentType', ['s-pis-12345678'], $getPaymentTypeCB(PIS::class)],
+            'PaymentType PFC sandbox' => ['fetchPaymentType', ['s-pfc-12345678'], $getPaymentTypeCB(PostFinanceCard::class)],
+            'PaymentType PFE sandbox' => ['fetchPaymentType', ['s-pfe-12345678'], $getPaymentTypeCB(PostFinanceEfinance::class)],
             'PaymentType EPS sandbox' => ['fetchPaymentType', ['s-eps-12345678'], $getPaymentTypeCB(EPS::class)],
             'PaymentType Alipay sandbox' => ['fetchPaymentType', ['s-ali-12345678'], $getPaymentTypeCB(Alipay::class)],
             'PaymentType Wechatpay sandbox' => ['fetchPaymentType', ['s-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
             'PaymentType HirePurchaseDirectDebit sandbox' => ['fetchPaymentType', ['s-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
             'PaymentType InstallmentSecured sandbox' => ['fetchPaymentType', ['s-ins-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
             'PaymentType Bancontact sandbox' => ['fetchPaymentType', ['s-bct-12345678'], $getPaymentTypeCB(Bancontact::class)],
+            'PaymentType Alipay production' => ['fetchPaymentType', ['p-ali-12345678'], $getPaymentTypeCB(Alipay::class)],
+            'PaymentType Bancontact production' => ['fetchPaymentType', ['p-bct-12345678'], $getPaymentTypeCB(Bancontact::class)],
             'PaymentType Card production' => ['fetchPaymentType', ['p-crd-12345678'], $getPaymentTypeCB(Card::class)],
+            'PaymentType EPS production' => ['fetchPaymentType', ['p-eps-12345678'], $getPaymentTypeCB(EPS::class)],
             'PaymentType Giropay production' => ['fetchPaymentType', ['p-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
+            'PaymentType HirePurchaseDirectDebit production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
             'PaymentType Ideal production' => ['fetchPaymentType', ['p-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
+            'PaymentType InstallmentSecured production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
+            'PaymentType Invoice factoring production' => ['fetchPaymentType', ['p-ivf-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
             'PaymentType Invoice production' => ['fetchPaymentType', ['p-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
             'PaymentType InvoiceGuaranteed production' => ['fetchPaymentType', ['p-ivg-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
-            'PaymentType Invoice factoring production' => ['fetchPaymentType', ['p-ivf-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],
-            'PaymentType Paypal production' => ['fetchPaymentType', ['p-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
             'PaymentType Paylater-Invoice production' => ['fetchPaymentType', ['p-piv-12345678'], $getPaymentTypeCB(PaylaterInvoice::class)],
+            'PaymentType Paypal production' => ['fetchPaymentType', ['p-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
+            'PaymentType PFC production' => ['fetchPaymentType', ['p-pfc-12345678'], $getPaymentTypeCB(PostFinanceCard::class)],
+            'PaymentType PFE production' => ['fetchPaymentType', ['p-pfe-12345678'], $getPaymentTypeCB(PostFinanceEfinance::class)],
             'PaymentType Prepayment production' => ['fetchPaymentType', ['p-ppy-12345678'], $getPaymentTypeCB(Prepayment::class)],
             'PaymentType Przelewy24 production' => ['fetchPaymentType', ['p-p24-12345678'], $getPaymentTypeCB(Przelewy24::class)],
             'PaymentType SepaDirectDebit production' => ['fetchPaymentType', ['p-sdd-12345678'], $getPaymentTypeCB(SepaDirectDebit::class)],
             'PaymentType SepaDirectDebitGuaranteed production' => ['fetchPaymentType', ['p-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
             'PaymentType SepaDirectDebitSecured production' => ['fetchPaymentType', ['p-dds-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
             'PaymentType Sofort production' => ['fetchPaymentType', ['p-sft-12345678'], $getPaymentTypeCB(Sofort::class)],
-            'PaymentType EPS production' => ['fetchPaymentType', ['p-eps-12345678'], $getPaymentTypeCB(EPS::class)],
-            'PaymentType Alipay production' => ['fetchPaymentType', ['p-ali-12345678'], $getPaymentTypeCB(Alipay::class)],
             'PaymentType Wechatpay production' => ['fetchPaymentType', ['p-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
-            'PaymentType HirePurchaseDirectDebit production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
-            'PaymentType InstallmentSecured production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
-            'PaymentType Bancontact production' => ['fetchPaymentType', ['p-bct-12345678'], $getPaymentTypeCB(Bancontact::class)],
         ];
     }
 

@@ -32,6 +32,8 @@ use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
+use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -893,6 +895,12 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::PIS:
                 $paymentType = new PIS();
+                break;
+            case IdStrings::POST_FINANCE_CARD:
+                $paymentType = new PostFinanceCard();
+                break;
+            case IdStrings::POST_FINANCE_EFINANCE:
+                $paymentType = new PostFinanceEfinance();
                 break;
             case IdStrings::PREPAYMENT:
                 $paymentType = new Prepayment();
