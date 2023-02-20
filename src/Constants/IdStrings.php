@@ -49,6 +49,8 @@ class IdStrings
     public const PAYLATER_INVOICE = 'piv';
     public const PAYMENT_PAGE = 'ppg';
     public const PAYPAL = 'ppl';
+    public const POST_FINANCE_CARD = 'pfc';
+    public const POST_FINANCE_EFINANCE = 'pfe';
     public const PIS = 'pis';
     public const PREPAYMENT = 'ppy';
     public const PRZELEWY24 = 'p24';
@@ -83,6 +85,8 @@ class IdStrings
         self::PAYLATER_INVOICE,
         self::PAYMENT_PAGE,
         self::PAYPAL,
+        self::POST_FINANCE_CARD,
+        self::POST_FINANCE_EFINANCE,
         self::PIS,
         self::PREPAYMENT,
         self::PRZELEWY24,
