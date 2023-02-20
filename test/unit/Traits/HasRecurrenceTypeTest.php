@@ -24,14 +24,9 @@
  */
 namespace UnzerSDK\test\unit\Traits;
 
-use RuntimeException;
 use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Resources\Payment;
-use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
-use UnzerSDK\Resources\PaymentTypes\Paypal;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BasePaymentTest;
@@ -91,7 +86,7 @@ class HasRecurrenceTypeTest extends BasePaymentTest
 
         $charge->setRecurrenceType(RecurrenceTypes::ONE_CLICK);
         $exposedTransaction = $charge->expose();
-        $this->assertEquals('oneclick', $exposedTransaction['additionalTransactionData']->card->recurrenceType);
+        $this->assertEquals('oneclick', $exposedTransaction['additionalTransactionData']->card['recurrenceType']);
         $this->assertStringContainsString(
             '"additionalTransactionData":{"card":{"recurrenceType":"oneclick"}}',
             $charge->jsonSerialize()
@@ -131,30 +126,6 @@ class HasRecurrenceTypeTest extends BasePaymentTest
     }
 
     /**
-     * The object containing recurrenceType should named according to the current payment Type.
-     *
-     * @test
-     *
-     * @dataProvider recurrenceTypeShouldConsiderPaymentTypeDP
-     *
-     * @param $paymentType
-     * @param mixed $methodName
-     *
-     * @throws \UnzerSDK\Exceptions\UnzerApiException
-     */
-    public function recurrenceTypeShouldConsiderPaymentType(BasePaymentType $paymentType, $methodName): void
-    {
-        $unzerObj    = new Unzer('s-priv-123345');
-        $paymentType->setId('123');
-        $payment         = new Payment();
-        $payment->setParentResource($unzerObj)->setPaymentType($paymentType);
-        $charge          = (new Charge())->setPayment($payment);
-        $this->assertNull($charge->getAdditionalTransactionData());
-        $charge->setRecurrenceType(RecurrenceTypes::ONE_CLICK);
-        $this->assertObjectHasAttribute($methodName, $charge->getAdditionalTransactionData());
-    }
-
-    /**
      * recurrence type should be set properly for recurring.
      *
      * @test
@@ -166,33 +137,5 @@ class HasRecurrenceTypeTest extends BasePaymentTest
         $recurring->setRecurrenceType(RecurrenceTypes::SCHEDULED, $paymentType);
 
         $this->assertEquals('scheduled', $recurring->getRecurrenceType());
-    }
-
-    /**
-     * recurrence type should be set properly for recurring.
-     *
-     * @test
-     */
-    public function settingRecurrenceTypeShouldTrowExceptionIfTypeIsNotProvidedForRecurring(): void
-    {
-        $recurring = new Recurring('typeId', 'returnUrl');
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Payment type can not be determined. Set it first or provide it via parameter $paymentType.');
-
-        $recurring->setRecurrenceType(RecurrenceTypes::SCHEDULED);
-    }
-
-    /** Provides payment types and expected key name that should be used to set the recurrence type.
-     * @return array[]
-     */
-    public function recurrenceTypeShouldConsiderPaymentTypeDP(): array
-    {
-        return [
-            'card' => [new Card(null, null), 'card'],
-            'sofort' => [new Sofort(), 'sofort'],
-            'sepa-direct-debit' => [new SepaDirectDebit(null), 'sepa-direct-debit'],
-            'paypal' => [new Paypal(), 'paypal']
-        ];
     }
 }

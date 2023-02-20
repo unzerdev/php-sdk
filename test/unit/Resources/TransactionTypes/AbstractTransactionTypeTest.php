@@ -29,6 +29,7 @@ use DateTime;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\LiabilityShiftIndicator;
 use UnzerSDK\Constants\TransactionStatus;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
@@ -231,6 +232,7 @@ class AbstractTransactionTypeTest extends BasePaymentTest
      * Verify fetchPayment is never called after a Get-Request.
      *
      * @test
+     *
      * @dataProvider updatePaymentDataProvider
      *
      * @param string  $method
@@ -265,6 +267,24 @@ class AbstractTransactionTypeTest extends BasePaymentTest
 
         $transactionType = (new DummyTransactionType())->setPayment($payment);
         $transactionType->fetchPayment();
+    }
+
+    /**
+     * Liability indicator response should stored in transaction
+     *
+     * @test
+     */
+    public function liabilityResponseShouldBeStroedInTransaction()
+    {
+        $jsonRespone = '{"additionalTransactionData":{"card":{"liability":"MERCHANT"}}}';
+
+        $transaction = new DummyTransactionType();
+        $transaction->handleResponse(json_decode($jsonRespone, false));
+        $this->assertEquals($transaction->getCardTransactionData()->getLiability(), LiabilityShiftIndicator::MERCHANT);
+
+        $jsonRespone = '{"additionalTransactionData":{"card":{"liability":"ISSUER"}}}';
+        $transaction->handleResponse(json_decode($jsonRespone, false));
+        $this->assertEquals($transaction->getCardTransactionData()->getLiability(), LiabilityShiftIndicator::ISSUER);
     }
 
     //<editor-fold desc="Data Providers">

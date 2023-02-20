@@ -60,6 +60,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
      * Verify fetched ivg type can be charged
      *
      * @test
+     *
      * @depends ivgTypeShouldBeFetchable
      *
      * @param InvoiceSecured $ivgType fetched ivg type.
@@ -82,6 +83,7 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
      * Verify fetched ivg type can be shipped.
      *
      * @test
+     *
      * @depends ivgTypeShouldBeChargable
      */
     public function ivgTypeShouldBeShippable(Charge $ivgCharge)

@@ -77,6 +77,7 @@ class SepaDirectDebitSecuredTest extends BaseIntegrationTest
      * Verify Sepa Direct Debit Secured needs a basket object
      *
      * @test
+     *
      * @depends sepaDirectDebitSecuredShouldBeCreatable
      *
      * @param sepaDirectDebitSecured $sepaDirectDebitSecured
@@ -92,6 +93,7 @@ class SepaDirectDebitSecuredTest extends BaseIntegrationTest
      * Verify Sepa Direct Debit Secured needs a customer object
      *
      * @test
+     *
      * @depends sepaDirectDebitSecuredShouldBeCreatable
      *
      * @param sepaDirectDebitSecured $sepaDirectDebitSecured
@@ -110,6 +112,7 @@ class SepaDirectDebitSecuredTest extends BaseIntegrationTest
      * @test
      *
      * @param SepaDirectDebitSecured $directDebitSecured
+     *
      * @depends sepaDirectDebitSecuredShouldBeCreatable
      */
     public function directDebitSecuredShouldProhibitAuthorization(SepaDirectDebitSecured $directDebitSecured): void
@@ -185,6 +188,7 @@ class SepaDirectDebitSecuredTest extends BaseIntegrationTest
      * Verify fetched ddg type can be charged
      *
      * @test
+     *
      * @depends ddgTypeShouldBeFechable
      *
      * @param SepaDirectDebitSecured $ddgType fetched ins type.
@@ -209,6 +213,7 @@ class SepaDirectDebitSecuredTest extends BaseIntegrationTest
      * Verify fetched ddg payment throws an exception when being shipped.
      *
      * @test
+     *
      * @depends ddgTypeCharge
      *
      * @param Charge $ddgCharge

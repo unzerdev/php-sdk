@@ -24,9 +24,7 @@
 
 namespace UnzerSDK\Traits;
 
-use RuntimeException;
-use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
-use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
+use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 
 trait HasRecurrenceType
 {
@@ -37,38 +35,24 @@ trait HasRecurrenceType
      */
     public function getRecurrenceType(): ?string
     {
-        $additionalTransactionData = $this->getAdditionalTransactionData();
-        if ($additionalTransactionData !== null) {
-            foreach ($additionalTransactionData as $data) {
-                if (property_exists($data, 'recurrenceType')) {
-                    return $data->recurrenceType ?? null;
-                }
-            }
+        $cardTransactionData = $this->getCardTransactionData();
+        if ($cardTransactionData instanceof CardTransactionData) {
+            return $cardTransactionData->getRecurrenceType();
         }
 
-        return null;
+        return $this->getAdditionalTransactionData()->card['recurrenceType'] ?? null;
     }
 
     /**
-     * @param string               $recurrenceType Recurrence type used for recurring payment.
-     * @param BasePaymentType|null $paymentType    If provided recurrenceType is set based on this payment type.
-     *                                             This is required for recurring transaction, since the type can not be
-     *                                             determined automatically.
+     * @param string $recurrenceType Recurrence type used for recurring payment.
      *
      * @return $this
      */
-    public function setRecurrenceType(string $recurrenceType, BasePaymentType $paymentType = null): self
+    public function setRecurrenceType(string $recurrenceType): self
     {
-        if ($paymentType === null && $this instanceof AbstractTransactionType) {
-            $payment = $this->getPayment();
-            $paymentType = $payment ? $payment->getPaymentType() : null;
-        }
-
-        if ($paymentType === null) {
-            throw new RuntimeException('Payment type can not be determined. Set it first or provide it via parameter $paymentType.');
-        }
-        $recurrenceTypeObject = (object)['recurrenceType' => $recurrenceType];
-        $this->addAdditionalTransactionData($paymentType::getResourceName(), $recurrenceTypeObject);
+        $card = $this->getCardTransactionData() ?? new CardTransactionData();
+        $card->setRecurrenceType($recurrenceType);
+        $this->addAdditionalTransactionData('card', $card);
 
         return $this;
     }

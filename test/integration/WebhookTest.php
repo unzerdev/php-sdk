@@ -184,6 +184,7 @@ class WebhookTest extends BaseIntegrationTest
      * Verify setting multiple events at once.
      *
      * @test
+     *
      * @depends allWebhooksShouldBeRemovableAtOnce
      */
     public function bulkSettingWebhookEventsShouldBePossible(): void

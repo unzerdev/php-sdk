@@ -1,6 +1,6 @@
 <?php
 /**
- * This provides validation functions concerning public key.
+ * This file contains the valid Liability shift indicator values
  *
  * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
@@ -16,30 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @link  https://docs.unzer.com/
+ * @link  https://dev.unzer.com/
  *
- * @package  UnzerSDK\Validators
+ * @package  UnzerSDK\Constants
  */
-namespace UnzerSDK\Validators;
+namespace UnzerSDK\Constants;
 
-use function count;
-
-class PublicKeyValidator
+class LiabilityShiftIndicator
 {
-    /**
-     * Returns true if the given public key has a valid format.
-     *
-     * @param string|null $key
-     *
-     * @return bool
-     */
-    public static function validate(?string $key): bool
-    {
-        $match = [];
-        if ($key === null) {
-            return false;
-        }
-        preg_match('/^[sp]-pub-[a-zA-Z0-9]+/', $key, $match);
-        return count($match) > 0;
-    }
+    public const ISSUER    = 'ISSUER';
+    public const MERCHANT = 'MERCHANT';
 }

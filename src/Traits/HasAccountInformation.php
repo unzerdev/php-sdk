@@ -42,7 +42,7 @@ trait HasAccountInformation
 
     /**
      * Returns the IBAN of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
+     * E.g. invoice, prepayment, etc.
      *
      * @return string|null
      */
@@ -64,7 +64,7 @@ trait HasAccountInformation
 
     /**
      * Returns the BIC of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
+     * E.g. invoice, prepayment, etc.
      *
      * @return string|null
      */
@@ -86,7 +86,7 @@ trait HasAccountInformation
 
     /**
      * Returns the holder of the account the customer needs to transfer the amount to.
-     * E. g. invoice, prepayment, etc.
+     * E.g. invoice, prepayment, etc.
      *
      * @return string|null
      */
@@ -108,7 +108,7 @@ trait HasAccountInformation
 
     /**
      * Returns the Descriptor the customer needs to use when transferring the amount.
-     * E. g. invoice, prepayment, etc.
+     * E.g. invoice, prepayment, etc.
      *
      * @return string|null
      */

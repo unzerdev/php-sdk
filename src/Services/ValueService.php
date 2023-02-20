@@ -48,7 +48,7 @@ class ValueService
      *
      * @return string
      */
-    public static function maskValue($value, $maskSymbol = '*'): string
+    public static function maskValue($value, string $maskSymbol = '*'): string
     {
         return substr($value, 0, 6) . str_repeat($maskSymbol, strlen($value) - 10) . substr($value, -4);
     }

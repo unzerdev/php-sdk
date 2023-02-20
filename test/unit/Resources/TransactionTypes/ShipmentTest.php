@@ -55,6 +55,7 @@ class ShipmentTest extends BasePaymentTest
      * @test
      *
      * @param Shipment $shipment
+     *
      * @depends gettersAndSettersShouldWorkProperly
      */
     public function aShipmentShouldBeUpdatedThroughResponseHandling(Shipment $shipment): void

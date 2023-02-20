@@ -117,6 +117,49 @@ class PaypageTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify fetched payment contains paypage when fetched.
+     *
+     * @test
+     */
+    public function fetchedPaymentShouldContainPayPageObject(): void
+    {
+        $payPage = new Paypage(100.0, 'EUR', self::RETURN_URL);
+        $this->assertEmpty($payPage->getId());
+        $payPage = $this->unzer->initPayPageAuthorize($payPage);
+        $payment = $payPage->getPayment();
+        $this->assertNotEmpty($payPage->getId());
+
+        $fetchedPayment = $this->unzer->fetchPayment($payPage->getPaymentId());
+        $fetchedPayPage = $fetchedPayment->getPayPage();
+
+        $this->assertNotEmpty($fetchedPayPage);
+        $this->assertEquals($payPage->expose(), $fetchedPayPage->expose());
+        $this->assertEquals($payment->expose(), $fetchedPayment->expose());
+        $this->assertEquals($payment->getRedirectUrl(), $fetchedPayment->getRedirectUrl());
+    }
+
+    /**
+     * Verify the Paypage resource for authorize can be created with the mandatory parameters only.
+     *
+     * @test
+     */
+    public function fetchingPayPageShouldHaveReferenceToPayment(): void
+    {
+        $payPage = new Paypage(100.0, 'EUR', self::RETURN_URL);
+        $this->assertEmpty($payPage->getId());
+
+        $payPage = $this->unzer->initPayPageAuthorize($payPage);
+        $payment = $payPage->getPayment();
+        $this->assertNotEmpty($payPage->getId());
+
+        $fetchedPayPage = $this->unzer->fetchPayPage($payPage->getId());
+        $this->assertNotNull($fetchedPayPage->getPayment());
+
+        $this->assertEquals($payment->getId(), $fetchedPayPage->getPayment()->getId());
+        $this->assertNotNull($payment->getFetchedAt());
+    }
+
+    /**
      * Verify the Paypage resource for authorize can be created with all parameters.
      *
      * @test

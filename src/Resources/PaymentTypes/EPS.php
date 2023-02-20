@@ -46,7 +46,7 @@ class EPS extends BasePaymentType
      *
      * @return self
      */
-    public function setBic($bic): self
+    public function setBic(?string $bic): self
     {
         $this->bic = $bic;
         return $this;

@@ -34,6 +34,7 @@ use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Amount;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -724,6 +725,7 @@ class PaymentTest extends BasePaymentTest
      * Verify handleResponse will update stateId.
      *
      * @test
+     *
      * @dataProvider stateDataProvider
      *
      * @param integer $state
@@ -806,6 +808,32 @@ class PaymentTest extends BasePaymentTest
         $response = new stdClass();
         $response->resources = new stdClass();
         $response->resources->customerId = 'customerId';
+        $payment->handleResponse($response);
+    }
+
+    /**
+     * Verify handleResponse updates payPage if it set.
+     *
+     * @test
+     */
+    public function handleResponseShouldFetchAndUpdatePayPageIfItIsAlreadySet(): void
+    {
+        $payment = (new Payment())->setId('myPaymentId');
+        $payPage = (new Paypage(0, '', ''))->setId('payPageId');
+
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
+        /** @noinspection PhpParamsInspection */
+        $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payPage);
+
+        /** @var ResourceService $resourceServiceMock */
+        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment->setParentResource($unzerObj);
+        $payment->setpayPage($payPage);
+
+        $response = new stdClass();
+        $response->resources = new stdClass();
+        $response->resources->payPageId = 'payPageId';
         $payment->handleResponse($response);
     }
 
@@ -1394,7 +1422,7 @@ class PaymentTest extends BasePaymentTest
 
         // when
         /** @noinspection PhpParamsInspection */
-        $payment->setMetadata('test');
+        $payment->setMetadata(null);
 
         // then
         $this->assertNull($payment->getMetadata());
@@ -1500,6 +1528,7 @@ class PaymentTest extends BasePaymentTest
      * Autofetch is disabled due to missing transactionIds.
      *
      * @test
+     *
      * @dataProvider initialTransactionDP
      *
      * @param AbstractTransactionType $expected
