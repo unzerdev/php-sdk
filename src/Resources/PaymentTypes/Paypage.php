@@ -378,6 +378,7 @@ class Paypage extends BasePaymentType
      */
     public function setAction(String $action): Paypage
     {
+        $action = strtolower($action);
         if (in_array($action, [TransactionTypes::CHARGE, TransactionTypes::AUTHORIZATION], true)) {
             $this->action = $action;
         }
@@ -619,8 +620,6 @@ class Paypage extends BasePaymentType
             unset($response->impressumUrl);
         }
 
-        parent::handleResponse($response, $method);
-
         /** @var Payment $payment */
         $payment = $this->getPayment();
         if (isset($response->resources->paymentId)) {
@@ -631,10 +630,16 @@ class Paypage extends BasePaymentType
                 $payment->setId($paymentId)
                     ->setPayPage($this);
                 $this->setPayment($payment);
-                $this->getUnzerObject()->fetchPayment($payment);
+                $this->fetchPayment();
             }
 
             $payment->setId($paymentId);
+        }
+
+        parent::handleResponse($response, $method);
+
+        if (isset($response->additionalAttributes)) {
+            $this->additionalAttributes = (array)$response->additionalAttributes;
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {

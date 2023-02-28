@@ -188,7 +188,7 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      *
      * @return AbstractUnzerResource
      */
-    protected function setAdditionalAttribute(string $attribute, $value): AbstractUnzerResource
+    public function setAdditionalAttribute(string $attribute, $value): AbstractUnzerResource
     {
         $this->additionalAttributes[$attribute] = $value;
         return $this;
@@ -201,9 +201,17 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      *
      * @return mixed
      */
-    protected function getAdditionalAttribute(string $attribute)
+    public function getAdditionalAttribute(string $attribute)
     {
         return $this->additionalAttributes[$attribute] ?? null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalAttributes()
+    {
+        return $this->additionalAttributes;
     }
 
     //</editor-fold>

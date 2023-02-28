@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
 
+use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
@@ -114,6 +115,31 @@ class PaypageTest extends BaseIntegrationTest
         $this->assertEmpty($paypage->getId());
         $paypage = $this->unzer->initPayPageAuthorize($paypage);
         $this->assertNotEmpty($paypage->getId());
+
+        $fetchedPaypage = $this->unzer->fetchPayPage($paypage->getId());
+        $this->assertEquals($paypage->getRedirectUrl(), $fetchedPaypage->getRedirectUrl());
+        $this->assertEquals($paypage->getAction(), TransactionTypes::AUTHORIZATION);
+    }
+
+    /**
+     * Custom additional transaction data can be set.
+     *
+     * @test
+     */
+    public function customAdditionalAttributesCanBeSet(): void
+    {
+        $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
+        $paypage->setAdditionalAttribute('customField', 'customValue');
+
+        $paypage = $this->unzer->initPayPageAuthorize($paypage);
+        $this->assertNotEmpty($paypage->getId());
+
+        $fetchedPaypage = $this->unzer->fetchPayPage($paypage->getId());
+
+        $this->assertEquals(
+            $paypage->getAdditionalAttributes(),
+            $fetchedPaypage->getAdditionalAttributes()
+        );
     }
 
     /**
