@@ -23,7 +23,7 @@
  */
 namespace UnzerSDK\Constants;
 
-class AdditionalAttributeKeys
+class AdditionalAttributesKeys
 {
     public const EFFECTIVE_INTEREST_RATE = 'effectiveInterestRate';
     public const RECURRENCE_TYPE = 'recurrenceType';
