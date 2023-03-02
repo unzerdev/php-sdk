@@ -24,6 +24,9 @@
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\AdditionalAttributes;
+use UnzerSDK\Constants\ExemptionType;
+use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -378,6 +381,7 @@ class Paypage extends BasePaymentType
      */
     public function setAction(String $action): Paypage
     {
+        $action = strtolower($action);
         if (in_array($action, [TransactionTypes::CHARGE, TransactionTypes::AUTHORIZATION], true)) {
             $this->action = $action;
         }
@@ -557,15 +561,69 @@ class Paypage extends BasePaymentType
     }
 
     /**
-     * @param float|null $effectiveInterestRate
+     * @return float|null
+     */
+    public function getEffectiveInterestRate(): ?float
+    {
+        return $this->getAdditionalAttribute(AdditionalAttributes::EFFECTIVE_INTEREST_RATE);
+    }
+
+    /**
+     * @param float $effectiveInterestRate
      *
      * @return Paypage
      */
     public function setEffectiveInterestRate(float $effectiveInterestRate): Paypage
     {
-        $this->setAdditionalAttribute('effectiveInterestRate', $effectiveInterestRate);
+        $this->setAdditionalAttribute(AdditionalAttributes::EFFECTIVE_INTEREST_RATE, $effectiveInterestRate);
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getRecurrenceType(): ?string
+    {
+        return $this->getAdditionalAttribute(AdditionalAttributes::RECURRENCE_TYPE);
+    }
+
+    /**
+     * @param string $recurrenceType
+     *
+     * @see RecurrenceTypes
+     *
+     * @return Paypage
+     */
+    public function setRecurrenceType(string $recurrenceType): Paypage
+    {
+        $this->setAdditionalAttribute(AdditionalAttributes::RECURRENCE_TYPE, $recurrenceType);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getExemptionType(): ?string
+    {
+        return $this->getAdditionalAttribute(AdditionalAttributes::EXEMPTION_TYPE);
+    }
+
+    /**
+     * @param string $exemptionType
+     *
+     * @see ExemptionType
+     *
+     * @return Paypage
+     */
+    public function setExemptionType(string $exemptionType): Paypage
+    {
+        $this->setAdditionalAttribute(AdditionalAttributes::EXEMPTION_TYPE, $exemptionType);
+        return $this;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Overridable methods">
 
     /**
      * {@inheritDoc}
@@ -594,18 +652,6 @@ class Paypage extends BasePaymentType
     }
 
     /**
-     * @return float|null
-     */
-    public function getEffectiveInterestRate(): ?float
-    {
-        return $this->getAdditionalAttribute('effectiveInterestRate');
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable methods">
-
-    /**
      * {@inheritDoc}
      * Map external name of property to internal name of property.
      *
@@ -619,8 +665,6 @@ class Paypage extends BasePaymentType
             unset($response->impressumUrl);
         }
 
-        parent::handleResponse($response, $method);
-
         /** @var Payment $payment */
         $payment = $this->getPayment();
         if (isset($response->resources->paymentId)) {
@@ -631,10 +675,16 @@ class Paypage extends BasePaymentType
                 $payment->setId($paymentId)
                     ->setPayPage($this);
                 $this->setPayment($payment);
-                $this->getUnzerObject()->fetchPayment($payment);
+                $this->fetchPayment();
             }
 
             $payment->setId($paymentId);
+        }
+
+        parent::handleResponse($response, $method);
+
+        if (isset($response->additionalAttributes)) {
+            $this->additionalAttributes = (array)$response->additionalAttributes;
         }
 
         if ($method !== HttpAdapterInterface::REQUEST_GET) {

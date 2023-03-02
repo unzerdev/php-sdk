@@ -24,6 +24,9 @@
  */
 namespace UnzerSDK\test\integration\PaymentTypes;
 
+use UnzerSDK\Constants\ExemptionType;
+use UnzerSDK\Constants\RecurrenceTypes;
+use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
@@ -114,6 +117,34 @@ class PaypageTest extends BaseIntegrationTest
         $this->assertEmpty($paypage->getId());
         $paypage = $this->unzer->initPayPageAuthorize($paypage);
         $this->assertNotEmpty($paypage->getId());
+
+        $fetchedPaypage = $this->unzer->fetchPayPage($paypage->getId());
+        $this->assertEquals($paypage->getRedirectUrl(), $fetchedPaypage->getRedirectUrl());
+        $this->assertEquals($paypage->getAction(), TransactionTypes::AUTHORIZATION);
+    }
+
+    /**
+     * Custom additional transaction data can be set.
+     *
+     * @test
+     */
+    public function additionalAttributesCanBeSet(): void
+    {
+        $paypage = new Paypage(100.0, 'EUR', self::RETURN_URL);
+        $paypage->setAdditionalAttribute('customField', 'customValue')
+            ->setEffectiveInterestRate(4.99)
+            ->setExemptionType(ExemptionType::LOW_VALUE_PAYMENT)
+            ->setRecurrenceType(RecurrenceTypes::UNSCHEDULED);
+
+        $paypage = $this->unzer->initPayPageAuthorize($paypage);
+        $this->assertNotEmpty($paypage->getId());
+
+        $fetchedPaypage = $this->unzer->fetchPayPage($paypage->getId());
+
+        $this->assertEquals('customValue', $fetchedPaypage->getAdditionalAttribute('customField'));
+        $this->assertEquals(4.99, $fetchedPaypage->getEffectiveInterestRate());
+        $this->assertEquals(ExemptionType::LOW_VALUE_PAYMENT, $fetchedPaypage->getExemptionType());
+        $this->assertEquals(RecurrenceTypes::UNSCHEDULED, $fetchedPaypage->getRecurrenceType());
     }
 
     /**

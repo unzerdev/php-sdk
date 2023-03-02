@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains the different recurrence types.
+ * This file contains the AdditionalAttribute keys.
  *
  * Copyright (C) 2021 - today Unzer E-Com GmbH
  *
@@ -23,14 +23,9 @@
  */
 namespace UnzerSDK\Constants;
 
-class RecurrenceTypes
+class AdditionalAttributes
 {
-    /** @var string  Recurring with a defined interval and a defined amount.*/
-    public const SCHEDULED = 'scheduled';
-
-    /** @var string  Recurring with an undefined interval and/or an undefined amount.*/
-    public const UNSCHEDULED = 'unscheduled';
-
-    /** @var string If the payment type should be used again for future transactions.*/
-    public const ONE_CLICK = 'oneclick';
+    public const EFFECTIVE_INTEREST_RATE = 'effectiveInterestRate';
+    public const RECURRENCE_TYPE = 'recurrenceType';
+    public const EXEMPTION_TYPE = 'exemptionType';
 }
