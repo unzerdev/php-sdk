@@ -10,7 +10,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 *   Add payment types "Post Finance Card" and "Post Finance eFinance".
-*   Add setter/getter to PayPage to set `recurrenceType` and 'exemptionType'.
+*   Add setter/getter to PayPage for `recurrenceType` and `exemptionType`.
 
 ### Changed
 
