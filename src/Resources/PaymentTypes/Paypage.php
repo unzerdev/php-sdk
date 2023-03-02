@@ -24,7 +24,7 @@
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Constants\AdditionalAttributesKeys;
+use UnzerSDK\Constants\AdditionalAttributes;
 use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Constants\TransactionTypes;
@@ -565,7 +565,7 @@ class Paypage extends BasePaymentType
      */
     public function getEffectiveInterestRate(): ?float
     {
-        return $this->getAdditionalAttribute(AdditionalAttributesKeys::EFFECTIVE_INTEREST_RATE);
+        return $this->getAdditionalAttribute(AdditionalAttributes::EFFECTIVE_INTEREST_RATE);
     }
 
     /**
@@ -575,7 +575,7 @@ class Paypage extends BasePaymentType
      */
     public function setEffectiveInterestRate(float $effectiveInterestRate): Paypage
     {
-        $this->setAdditionalAttribute(AdditionalAttributesKeys::EFFECTIVE_INTEREST_RATE, $effectiveInterestRate);
+        $this->setAdditionalAttribute(AdditionalAttributes::EFFECTIVE_INTEREST_RATE, $effectiveInterestRate);
         return $this;
     }
 
@@ -584,18 +584,19 @@ class Paypage extends BasePaymentType
      */
     public function getRecurrenceType(): ?string
     {
-        return $this->getAdditionalAttribute(AdditionalAttributesKeys::RECURRENCE_TYPE);
+        return $this->getAdditionalAttribute(AdditionalAttributes::RECURRENCE_TYPE);
     }
 
     /**
      * @param string $recurrenceType
+     *
      * @see RecurrenceTypes
      *
      * @return Paypage
      */
     public function setRecurrenceType(string $recurrenceType): Paypage
     {
-        $this->setAdditionalAttribute(AdditionalAttributesKeys::RECURRENCE_TYPE, $recurrenceType);
+        $this->setAdditionalAttribute(AdditionalAttributes::RECURRENCE_TYPE, $recurrenceType);
         return $this;
     }
 
@@ -604,18 +605,19 @@ class Paypage extends BasePaymentType
      */
     public function getExemptionType(): ?string
     {
-        return $this->getAdditionalAttribute(AdditionalAttributesKeys::EXEMPTION_TYPE);
+        return $this->getAdditionalAttribute(AdditionalAttributes::EXEMPTION_TYPE);
     }
 
     /**
      * @param string $exemptionType
+     *
      * @see ExemptionType
      *
      * @return Paypage
      */
     public function setExemptionType(string $exemptionType): Paypage
     {
-        $this->setAdditionalAttribute(AdditionalAttributesKeys::EXEMPTION_TYPE, $exemptionType);
+        $this->setAdditionalAttribute(AdditionalAttributes::EXEMPTION_TYPE, $exemptionType);
         return $this;
     }
 
