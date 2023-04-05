@@ -24,6 +24,7 @@ namespace UnzerSDK\Resources;
 
 use DateTime;
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Constants\AdditionalAttributes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\UnzerParentInterface;
@@ -187,8 +188,11 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      * @param mixed  $value
      *
      * @return AbstractUnzerResource
+     *
+     * @see AdditionalAttributes
+     *
      */
-    protected function setAdditionalAttribute(string $attribute, $value): AbstractUnzerResource
+    public function setAdditionalAttribute(string $attribute, $value): AbstractUnzerResource
     {
         $this->additionalAttributes[$attribute] = $value;
         return $this;
@@ -199,11 +203,21 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      *
      * @param string $attribute
      *
+     * @see AdditionalAttributes
+     *
      * @return mixed
      */
-    protected function getAdditionalAttribute(string $attribute)
+    public function getAdditionalAttribute(string $attribute)
     {
         return $this->additionalAttributes[$attribute] ?? null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalAttributes()
+    {
+        return $this->additionalAttributes;
     }
 
     //</editor-fold>

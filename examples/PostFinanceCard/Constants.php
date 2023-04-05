@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This file contains the different recurrence types.
+ * This file defines the constants needed for the PostFinanceCard example.
  *
- * Copyright (C) 2021 - today Unzer E-Com GmbH
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,10 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\Constants
+ * @package  UnzerSDK\examples
  */
-namespace UnzerSDK\Constants;
 
-class RecurrenceTypes
-{
-    /** @var string  Recurring with a defined interval and a defined amount.*/
-    public const SCHEDULED = 'scheduled';
+require_once __DIR__ . '/../Constants.php';
 
-    /** @var string  Recurring with an undefined interval and/or an undefined amount.*/
-    public const UNSCHEDULED = 'unscheduled';
-
-    /** @var string If the payment type should be used again for future transactions.*/
-    public const ONE_CLICK = 'oneclick';
-}
+define('EXAMPLE_URL', EXAMPLE_BASE_FOLDER . 'PostFinanceCard');
+define('CONTROLLER_URL', EXAMPLE_URL . '/Controller.php');

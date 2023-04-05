@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This file contains the different recurrence types.
+ * This represents the Post Finance Card payment type.
  *
- * Copyright (C) 2021 - today Unzer E-Com GmbH
+ * Copyright (C) 2023 - today Unzer E-Com GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,14 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\Constants
+ * @package  UnzerSDK\PaymentTypes
  */
-namespace UnzerSDK\Constants;
 
-class RecurrenceTypes
+namespace UnzerSDK\Resources\PaymentTypes;
+
+use UnzerSDK\Traits\CanDirectCharge;
+
+class PostFinanceCard extends BasePaymentType
 {
-    /** @var string  Recurring with a defined interval and a defined amount.*/
-    public const SCHEDULED = 'scheduled';
-
-    /** @var string  Recurring with an undefined interval and/or an undefined amount.*/
-    public const UNSCHEDULED = 'unscheduled';
-
-    /** @var string If the payment type should be used again for future transactions.*/
-    public const ONE_CLICK = 'oneclick';
+    use CanDirectCharge;
 }

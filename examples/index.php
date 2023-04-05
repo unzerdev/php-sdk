@@ -346,6 +346,30 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            Post Finance Card
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div id="tryPostFinanceCardExample" class="ui bottom attached green button" onclick="location.href='PostFinanceCard/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Post Finance eFinance
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div id="tryPostFinanceEfinanceExample" class="ui bottom attached green button" onclick="location.href='PostFinanceEfinance/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             Hosted Payment Page
                         </div>
                         <div class="description">
