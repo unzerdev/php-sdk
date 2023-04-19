@@ -97,7 +97,7 @@ class CancelTest extends BaseIntegrationTest
         $reversal = $authorization->cancel();
         $fetchedPayment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
 
-        $cancellation = $fetchedPayment->getCancellation($reversal->getId());
+        $cancellation = $fetchedPayment->getAuthorization()->getCancellation($reversal->getId());
         $this->assertTransactionResourceHasBeenCreated($cancellation);
         $this->assertEquals($cancellation->expose(), $reversal->expose());
     }
@@ -110,12 +110,12 @@ class CancelTest extends BaseIntegrationTest
     public function chargeCancellationsShouldBeFetchableViaPaymentObject(): void
     {
         $charge = $this->createCharge();
-        $reversal = $charge->cancel();
+        $refund = $charge->cancel();
         $fetchedPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
 
-        $cancellation = $fetchedPayment->getCancellation($reversal->getId());
+        $cancellation = $fetchedPayment->getCharge($charge->getId())->getCancellation($refund->getId());
         $this->assertTransactionResourceHasBeenCreated($cancellation);
-        $this->assertEquals($cancellation->expose(), $reversal->expose());
+        $this->assertEquals($cancellation->expose(), $refund->expose());
     }
 
     /**
