@@ -31,6 +31,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
@@ -889,6 +890,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::PAYPAL:
                 $paymentType = new Paypal();
+                break;
+            case IdStrings::PAYLATER_INSTALLMENT:
+                $paymentType = new PaylaterInstallment();
                 break;
             case IdStrings::PAYLATER_INVOICE:
                 $paymentType = new PaylaterInvoice();
