@@ -37,9 +37,11 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
 use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Keypair;
 use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
@@ -1053,6 +1055,11 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     }
 
     //</editor-fold>
+
+    public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest):PaylaterInstallmentPlans
+    {
+        return $this->getPaymentService()->fetchPaylaterInstallmentPlans($plansRequest);
+    }
 
     //</editor-fold>
 

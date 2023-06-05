@@ -1,0 +1,225 @@
+<?php
+
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection */
+/**
+ * This class defines integration tests to verify interface and
+ * functionality of the payment method Installment Secured.
+ *
+ * Copyright (C) 2020 - today Unzer E-Com GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ * @package  UnzerSDK\test\integration\PaymentTypes
+ */
+
+namespace UnzerSDK\test\integration\PaymentTypes;
+
+use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
+use UnzerSDK\Resources\PaylaterInstallmentPlan;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Cancellation;
+use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\test\BaseIntegrationTest;
+use function count;
+
+class PaylaterInstallmentTest extends BaseIntegrationTest
+{
+    /**
+     * Verify that paylater installment plans can be fetched.
+     * @test
+     */
+    public function installmentPlanShouldBeFetchable(): void
+    {
+        $paylaterInstallmentPlans = new InstallmentPlansQuery(99.99, 'EUR', 'DE', 'B2C');
+        $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
+        $this->assertGreaterThan(0, count($plans->getPlans()));
+
+        /** @var PaylaterInstallmentPlan $selectedPlan */
+        $selectedPlan = $plans->getPlans()[1];
+
+        $ins = new PaylaterInstallment($plans->getId(), $selectedPlan->getNumberOfRates(), 'DE89370400440532013000', 'DE', 'Peter Mustermann');
+        $this->unzer->createPaymentType($ins);
+
+        $fetchedIns = $this->unzer->fetchPaymentType($ins->getId());
+        $this->assertNotEmpty($fetchedIns->getId());
+    }
+
+    /**
+     * Verify Installment Secured authorization (positive and negative).
+     *
+     * @test
+     *
+     * @param $firstname
+     * @param $lastname
+     * @param $errorCode
+     */
+    public function paylaterInstallmentAuthorize(): Authorization
+    {
+        $authorize = $this->createAuthorizeTransaction();
+        $this->assertNotEmpty($authorize->getId());
+        $this->assertTrue($authorize->isSuccess());
+
+        return $authorize;
+    }
+
+    /** Performs a basic authorize transaction for Paylater invoice with amount 99.99 to set up test for follow-up transactions.
+     *
+     * @return Authorization
+     *
+     * @throws UnzerApiException
+     */
+    protected function createAuthorizeTransaction(): Authorization
+    {
+        $paylaterInstallmentPlans = new InstallmentPlansQuery(99.99, 'EUR', 'DE', 'B2C');
+        $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
+        $this->assertGreaterThan(0, count($plans->getPlans()));
+
+        /** @var PaylaterInstallmentPlan $selectedPlan */
+        $selectedPlan = $plans->getPlans()[1];
+
+        $ins = new PaylaterInstallment($plans->getId(), $selectedPlan->getNumberOfRates(), 'DE89370400440532013000', 'DE', 'Peter Mustermann');
+        $this->unzer->createPaymentType($ins);
+
+        $customer = $this->getCustomer()->setFirstname('Peter')->setLastname('Mustermann');
+        $basket = $this->createBasket();
+
+        $authorization = new Authorization(99.99, 'EUR', self::RETURN_URL);
+        $authorize = $this->getUnzerObject()->performAuthorization($authorization, $ins, $customer, null, $basket);
+        return $authorize;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer(): Customer
+    {
+        $customer = CustomerFactory::createCustomer('Manuel', 'Weißmann');
+        $address = (new Address())
+            ->setStreet('Hugo-Junckers-Straße 3')
+            ->setState('DE-BO')
+            ->setZip('60386')
+            ->setCity('Frankfurt am Main')
+            ->setCountry('DE');
+        $customer
+            ->setBillingAddress($address)
+            ->setBirthDate('2000-12-12')
+            ->setEmail('manuel-weissmann@unzer.com');
+
+        return $customer;
+    }
+
+    //<editor-fold desc="Cancel">
+
+    /**
+     * Verify charge.
+     *
+     * @test
+     *
+     * @depends paylaterInstallmentAuthorize
+     *
+     * @param mixed $authorize
+     */
+    public function verifyChargingAnInitializedPaylaterInstallment($authorize): Charge
+    {
+        $payment = $authorize->getPayment();
+        $charge = $this->getUnzerObject()->performChargeOnPayment($payment, new Charge());
+        $this->assertNotNull($charge->getId());
+        $this->assertTrue($charge->isSuccess());
+
+        return $charge;
+    }
+
+    /**
+     * Verify partial charge.
+     *
+     * @test
+     */
+    public function verifyPartiallyChargingAnInitializedPaylaterInstallment(): Charge
+    {
+        $authorize = $this->createAuthorizeTransaction();
+        $payment = $authorize->getPayment();
+
+        $charge = $this->getUnzerObject()->performChargeOnPayment($payment, new Charge(33.33));
+        $this->assertNotNull($charge->getId());
+        $this->assertTrue($charge->isSuccess());
+
+        return $charge;
+    }
+
+    /**
+     * Verify full cancel of charged HP.
+     *
+     * @test
+     *
+     * @depends verifyChargingAnInitializedPaylaterInstallment
+     */
+    public function verifyChargeAndFullCancelAnInitializedPaylaterInstallment(Charge $charge): void
+    {
+        $payment = $charge->getPayment();
+        $cancel = $this->getUnzerObject()->cancelChargedPayment($payment);
+
+        // then
+        $this->assertTrue($cancel->isSuccess());
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Helper">
+
+    /**
+     * Verify full cancel of charged HP.
+     *
+     * @test
+     */
+    public function verifyPartlyCancelChargedPaylaterInstallment(): void
+    {
+        $authorize = $this->createAuthorizeTransaction();
+        $payment = $authorize->getPayment();
+        $this->getUnzerObject()->performChargeOnPayment($payment, new Charge());
+
+        // when
+        $cancel = $this->getUnzerObject()->cancelChargedPayment($payment, new Cancellation(66.66));
+
+        // then
+        $this->assertTrue($cancel->isSuccess());
+        $this->assertTrue($payment->isCompleted());
+    }
+
+    /**
+     * Verify full cancel of charged HP.
+     *
+     * @test
+     */
+    public function verifyFullCancelAuthorizedPaylaterInstallment(): void
+    {
+        $authorize = $this->createAuthorizeTransaction();
+        $payment = $authorize->getPayment();
+
+        // when
+        $cancel = $this->getUnzerObject()->cancelAuthorizedPayment($payment);
+
+        // then
+        $this->assertTrue($cancel->isSuccess());
+        $this->assertTrue($payment->isCanceled());
+    }
+
+    //</editor-fold>
+}

@@ -68,6 +68,7 @@ class PaylaterInstallment extends BasePaymentType
 
     /**
      * @param string|null $inquiryId
+     *
      * @return PaylaterInstallment
      */
     public function setInquiryId(?string $inquiryId): PaylaterInstallment
@@ -86,6 +87,7 @@ class PaylaterInstallment extends BasePaymentType
 
     /**
      * @param int|null $numberOfRates
+     *
      * @return PaylaterInstallment
      */
     public function setNumberOfRates(?int $numberOfRates): PaylaterInstallment
