@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Resource representing the installment plan for Paylater Installment.
  *
@@ -24,7 +25,7 @@
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Resources\EmbeddedResources\PaylaterInstallmentRate;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlanRate;
 use stdClass;
 
 class PaylaterInstallmentPlan extends AbstractUnzerResource
@@ -139,7 +140,7 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
     }
 
     /**
-     * @return PaylaterInstallmentRate[]|null
+     * @return PaylaterInstallmentPlan[]|null
      */
     public function getInstallmentRates(): ?array
     {
@@ -147,7 +148,7 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
     }
 
     /**
-     * @param PaylaterInstallmentRate[] $installmentRates
+     * @param PaylaterInstallmentPlan[] $installmentRates
      *
      * @return InstalmentPlan
      */
@@ -169,7 +170,7 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
         if (isset($response->installmentRates)) {
             $rates = [];
             foreach ($response->installmentRates as $rate) {
-                $rates[] = new PaylaterInstallmentRate($rate->date, $rate->rate);
+                $rates[] = new InstallmentPlanRate($rate->date, $rate->rate);
             }
             $this->setInstallmentRates($rates);
         }

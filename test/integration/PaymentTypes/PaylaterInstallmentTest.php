@@ -80,52 +80,6 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
         return $authorize;
     }
 
-    /** Performs a basic authorize transaction for Paylater invoice with amount 99.99 to set up test for follow-up transactions.
-     *
-     * @return Authorization
-     *
-     * @throws UnzerApiException
-     */
-    protected function createAuthorizeTransaction(): Authorization
-    {
-        $paylaterInstallmentPlans = new InstallmentPlansQuery(99.99, 'EUR', 'DE', 'B2C');
-        $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
-        $this->assertGreaterThan(0, count($plans->getPlans()));
-
-        /** @var PaylaterInstallmentPlan $selectedPlan */
-        $selectedPlan = $plans->getPlans()[1];
-
-        $ins = new PaylaterInstallment($plans->getId(), $selectedPlan->getNumberOfRates(), 'DE89370400440532013000', 'DE', 'Peter Mustermann');
-        $this->unzer->createPaymentType($ins);
-
-        $customer = $this->getCustomer()->setFirstname('Peter')->setLastname('Mustermann');
-        $basket = $this->createBasket();
-
-        $authorization = new Authorization(99.99, 'EUR', self::RETURN_URL);
-        $authorize = $this->getUnzerObject()->performAuthorization($authorization, $ins, $customer, null, $basket);
-        return $authorize;
-    }
-
-    /**
-     * @return Customer
-     */
-    public function getCustomer(): Customer
-    {
-        $customer = CustomerFactory::createCustomer('Manuel', 'Weißmann');
-        $address = (new Address())
-            ->setStreet('Hugo-Junckers-Straße 3')
-            ->setState('DE-BO')
-            ->setZip('60386')
-            ->setCity('Frankfurt am Main')
-            ->setCountry('DE');
-        $customer
-            ->setBillingAddress($address)
-            ->setBirthDate('2000-12-12')
-            ->setEmail('manuel-weissmann@unzer.com');
-
-        return $customer;
-    }
-
     //<editor-fold desc="Cancel">
 
     /**
@@ -182,8 +136,6 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
 
     //</editor-fold>
 
-    //<editor-fold desc="Helper">
-
     /**
      * Verify full cancel of charged HP.
      *
@@ -220,6 +172,48 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
         $this->assertTrue($cancel->isSuccess());
         $this->assertTrue($payment->isCanceled());
     }
+    //<editor-fold desc="Helper">
 
+    /** Performs a basic authorize transaction for Paylater invoice with amount 99.99 to set up test for follow-up transactions.
+     *
+     * @return Authorization
+     *
+     * @throws UnzerApiException
+     */
+    protected function createAuthorizeTransaction(): Authorization
+    {
+        $paylaterInstallmentPlans = new InstallmentPlansQuery(99.99, 'EUR', 'DE', 'B2C');
+        $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
+
+        $selectedPlan = $plans->getPlans()[0];
+        $ins = new PaylaterInstallment($plans->getId(), $selectedPlan->getNumberOfRates(), 'DE89370400440532013000', 'DE', 'Peter Mustermann');
+        $this->unzer->createPaymentType($ins);
+
+        $customer = $this->getCustomer()->setFirstname('Peter')->setLastname('Mustermann');
+        $basket = $this->createBasket();
+
+        $authorization = new Authorization(99.99, 'EUR', self::RETURN_URL);
+        return $this->getUnzerObject()->performAuthorization($authorization, $ins, $customer, null, $basket);
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer(): Customer
+    {
+        $customer = CustomerFactory::createCustomer('Manuel', 'Weißmann');
+        $address = (new Address())
+            ->setStreet('Hugo-Junckers-Straße 3')
+            ->setState('DE-BO')
+            ->setZip('60386')
+            ->setCity('Frankfurt am Main')
+            ->setCountry('DE');
+        $customer
+            ->setBillingAddress($address)
+            ->setBirthDate('2000-12-12')
+            ->setEmail('manuel-weissmann@unzer.com');
+
+        return $customer;
+    }
     //</editor-fold>
 }

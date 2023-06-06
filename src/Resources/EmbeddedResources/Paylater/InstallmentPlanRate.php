@@ -20,9 +20,9 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
-namespace UnzerSDK\Resources\EmbeddedResources;
+namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
 
-class PaylaterInstallmentRate
+class InstallmentPlanRate
 {
     /** @var string|null $date */
     protected $date;
@@ -51,9 +51,9 @@ class PaylaterInstallmentRate
     /**
      * @param string|null $date
      *
-     * @return PaylaterInstallmentRate
+     * @return InstallmentPlanRate
      */
-    public function setDate(?string $date): PaylaterInstallmentRate
+    public function setDate(?string $date): InstallmentPlanRate
     {
         $this->date = $date;
         return $this;
@@ -70,9 +70,9 @@ class PaylaterInstallmentRate
     /**
      * @param string|null $rate
      *
-     * @return PaylaterInstallmentRate
+     * @return InstallmentPlanRate
      */
-    public function setRate(?string $rate): PaylaterInstallmentRate
+    public function setRate(?string $rate): InstallmentPlanRate
     {
         $this->rate = $rate;
         return $this;
