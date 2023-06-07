@@ -10,7 +10,6 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 *   Add "Paylater Installment" payment type.
 
-
 ### Deprecated
 * `\UnzerSDK\Resources\Payment::getCancellation`, please use `getCancellation` method of `\UnzerSDK\Resources\TransactionTypes\Charge` or `\UnzerSDK\Resources\TransactionTypes\Authorization` instead, depending on your use-case.
 
