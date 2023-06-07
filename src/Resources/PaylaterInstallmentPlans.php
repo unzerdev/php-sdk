@@ -27,6 +27,7 @@ namespace UnzerSDK\Resources;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use stdClass;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
 use UnzerSDK\Traits\HasStates;
 
 class PaylaterInstallmentPlans extends AbstractUnzerResource
@@ -45,7 +46,7 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
     /** @var string */
     private $customerType;
 
-    /** @var PaylaterInstallmentPlan[] $plans */
+    /** @var InstallmentPlan[] $plans */
     private $plans = [];
 
     /** @var InstallmentPlansQuery Query parameter used to fetch available installment plans. */
@@ -130,7 +131,7 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
     }
 
     /**
-     * @return PaylaterInstallmentPlan[]
+     * @return InstallmentPlan[]
      */
     public function getPlans(): array
     {
@@ -214,7 +215,7 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
         if (isset($response->plans)) {
             $plans = [];
             foreach ($response->plans as $plan) {
-                $instalment = new PaylaterInstallmentPlan();
+                $instalment = new InstallmentPlan();
                 $instalment->handleResponse($plan);
                 $plans[] = $instalment;
             }

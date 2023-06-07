@@ -5,30 +5,31 @@
  *
  * Copyright (C) 2023 - today Unzer E-Com GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  *
- * @link  https://docs.unzer.com/
+ *  @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\Resources
+ *  @package  UnzerSDK
+ *
  */
 
-namespace UnzerSDK\Resources;
+namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlanRate;
+use UnzerSDK\Resources\AbstractUnzerResource;
 use stdClass;
 
-class PaylaterInstallmentPlan extends AbstractUnzerResource
+class InstallmentPlan extends AbstractUnzerResource
 {
     /** @var int $numberOfRates */
     private $numberOfRates;
@@ -42,7 +43,8 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
 
     /** @var string $secciUrl */
     private $secciUrl;
-    /** @var array */
+
+    /** @var InstallmentRate */
     private $installmentRates;
 
     /**
@@ -55,9 +57,9 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
 
     /**
      * @param string $secciUrl
-     * @return PaylaterInstallmentPlan
+     * @return InstallmentPlan
      */
-    public function setSecciUrl(string $secciUrl): PaylaterInstallmentPlan
+    public function setSecciUrl(string $secciUrl): InstallmentPlan
     {
         $this->secciUrl = $secciUrl;
         return $this;
@@ -74,9 +76,9 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
     /**
      * @param int $numberOfRates
      *
-     * @return PaylaterInstallmentPlan
+     * @return InstallmentPlan
      */
-    public function setNumberOfRates(int $numberOfRates): PaylaterInstallmentPlan
+    public function setNumberOfRates(int $numberOfRates): InstallmentPlan
     {
         $this->numberOfRates = $numberOfRates;
         return $this;
@@ -93,7 +95,7 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
     /**
      * @param mixed $totalAmount
      *
-     * @return PaylaterInstallmentPlan
+     * @return InstallmentPlan
      */
     public function setTotalAmount($totalAmount)
     {
@@ -112,7 +114,7 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
     /**
      * @param mixed $nominalInterestRate
      *
-     * @return PaylaterInstallmentPlan
+     * @return InstallmentPlan
      */
     public function setNominalInterestRate($nominalInterestRate)
     {
@@ -131,16 +133,16 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
     /**
      * @param float $effectiveInterestRate
      *
-     * @return PaylaterInstallmentPlan
+     * @return InstallmentPlan
      */
-    public function setEffectiveInterestRate(float $effectiveInterestRate): PaylaterInstallmentPlan
+    public function setEffectiveInterestRate(float $effectiveInterestRate): InstallmentPlan
     {
         $this->effectiveInterestRate = $effectiveInterestRate;
         return $this;
     }
 
     /**
-     * @return PaylaterInstallmentPlan[]|null
+     * @return InstallmentRate[]|null
      */
     public function getInstallmentRates(): ?array
     {
@@ -148,11 +150,11 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
     }
 
     /**
-     * @param PaylaterInstallmentPlan[] $installmentRates
+     * @param InstallmentRate[] $installmentRates
      *
-     * @return InstalmentPlan
+     * @return InstallmentPlan
      */
-    protected function setInstallmentRates(array $installmentRates): PaylaterInstallmentPlan
+    protected function setInstallmentRates(array $installmentRates): InstallmentPlan
     {
         $this->installmentRates = $installmentRates;
         return $this;
@@ -170,7 +172,7 @@ class PaylaterInstallmentPlan extends AbstractUnzerResource
         if (isset($response->installmentRates)) {
             $rates = [];
             foreach ($response->installmentRates as $rate) {
-                $rates[] = new InstallmentPlanRate($rate->date, $rate->rate);
+                $rates[] = new InstallmentRate($rate->date, $rate->rate);
             }
             $this->setInstallmentRates($rates);
         }

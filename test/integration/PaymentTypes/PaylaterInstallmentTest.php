@@ -32,7 +32,7 @@ use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
-use UnzerSDK\Resources\PaylaterInstallmentPlan;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -50,9 +50,11 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
     {
         $paylaterInstallmentPlans = new InstallmentPlansQuery(99.99, 'EUR', 'DE', 'B2C');
         $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
-        $this->assertGreaterThan(0, count($plans->getPlans()));
 
-        /** @var PaylaterInstallmentPlan $selectedPlan */
+        $this->assertGreaterThan(0, count($plans->getPlans()));
+        $this->assertTrue($plans->isSuccess());
+
+        /** @var InstallmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[1];
 
         $ins = new PaylaterInstallment($plans->getId(), $selectedPlan->getNumberOfRates(), 'DE89370400440532013000', 'DE', 'Peter Mustermann');

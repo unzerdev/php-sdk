@@ -26,7 +26,7 @@ namespace UnzerSDK\test\unit\Resources;
 
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
 use UnzerSDK\Resources\EmbeddedResources\PaylaterInstallmentRate;
-use UnzerSDK\Resources\PaylaterInstallmentPlan;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
@@ -110,7 +110,7 @@ class PaylaterInstallmentPlanTest extends BasePaymentTest
 
     /**
      * @param object[] $expected
-     * @param PaylaterInstallmentPlan[] $actual
+     * @param InstallmentPlan[] $actual
      * @return void
      */
     protected function comparePlans(array $expected, array $actual): void
