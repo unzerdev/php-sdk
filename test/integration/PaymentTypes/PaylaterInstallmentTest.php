@@ -27,6 +27,7 @@
 
 namespace UnzerSDK\test\integration\PaymentTypes;
 
+use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
@@ -53,15 +54,42 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
 
         $this->assertGreaterThan(0, count($plans->getPlans()));
         $this->assertTrue($plans->isSuccess());
+    }
+
+    /**
+     * Verify that paylater installment type can be created and fetched.
+     * @test
+     */
+    public function typeCanBeCreatedAndFetched(): void
+    {
+        // when
+        $paylaterInstallmentPlans = new InstallmentPlansQuery(99.99, 'EUR', 'DE', 'B2C');
+        $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
 
         /** @var InstallmentPlan $selectedPlan */
         $selectedPlan = $plans->getPlans()[1];
-
         $ins = new PaylaterInstallment($plans->getId(), $selectedPlan->getNumberOfRates(), 'DE89370400440532013000', 'DE', 'Peter Mustermann');
-        $this->unzer->createPaymentType($ins);
 
+        // then
+        $this->unzer->createPaymentType($ins);
+        $this->assertNotEmpty($ins->getId());
         $fetchedIns = $this->unzer->fetchPaymentType($ins->getId());
         $this->assertNotEmpty($fetchedIns->getId());
+    }
+
+    /**
+     * Verify that paylater installment plans can be fetched.
+     * @test
+     */
+    public function fetchingPlansUsesB2CCustomerAsDefaultIfEmpty(): void
+    {
+        // when
+        $paylaterInstallmentPlans = new InstallmentPlansQuery(99.99, 'EUR', 'DE');
+
+        // then
+        $this->assertEquals(CustomerTypes::B2C, $paylaterInstallmentPlans->getCustomerType());
+        $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
+        $this->assertTrue($plans->isSuccess());
     }
 
     /**

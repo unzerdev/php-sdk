@@ -23,6 +23,7 @@
 
 namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
 
+use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\AbstractUnzerResource;
 
 /** Stores query parameter used to fetch installment plans. */
@@ -39,7 +40,7 @@ class InstallmentPlansQuery extends AbstractUnzerResource
      * @param string $country
      * @param string $customerType
      */
-    public function __construct(float $amount, string $currency, string $country, string $customerType)
+    public function __construct(float $amount, string $currency, string $country, string $customerType = CustomerTypes::B2C)
     {
         $this->amount = $amount;
         $this->currency = $currency;

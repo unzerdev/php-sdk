@@ -24,6 +24,7 @@
  */
 namespace UnzerSDK\test\unit\Resources;
 
+use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
 use UnzerSDK\Resources\EmbeddedResources\PaylaterInstallmentRate;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
@@ -31,7 +32,7 @@ use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
 
-class PaylaterInstallmentPlanTest extends BasePaymentTest
+class PaylaterInstallmentPlansTest extends BasePaymentTest
 {
     /**
      * Verify getters and setters.
@@ -53,13 +54,13 @@ class PaylaterInstallmentPlanTest extends BasePaymentTest
         $PaylaterInstallmentPlans->setAmount(2.345)
             ->setCurrency('USD')
             ->setCountry('DE')
-            ->setCustomerType('B2C');
+            ->setCustomerType(CustomerTypes::B2C);
 
         // then
         $this->assertEquals(2.345, $PaylaterInstallmentPlans->getAmount());
         $this->assertEquals('USD', $PaylaterInstallmentPlans->getCurrency());
         $this->assertEquals('DE', $PaylaterInstallmentPlans->getCountry());
-        $this->assertEquals('B2C', $PaylaterInstallmentPlans->getCustomerType());
+        $this->assertEquals(CustomerTypes::B2C, $PaylaterInstallmentPlans->getCustomerType());
     }
 
     /**
