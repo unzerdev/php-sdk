@@ -26,7 +26,7 @@ namespace UnzerSDK\test\unit\Resources;
 
 use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
-use UnzerSDK\Resources\EmbeddedResources\PaylaterInstallmentRate;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentRate;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\test\BasePaymentTest;
@@ -70,7 +70,7 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
      *
      * @dataProvider verifyQueryStringDP
      *
-     * @param float $amount
+     * @param float  $amount
      * @param string $currency
      * @param string $country
      * @param string $customerType
@@ -110,8 +110,9 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
     //<editor-fold desc="Data Providers">
 
     /**
-     * @param object[] $expected
+     * @param object[]          $expected
      * @param InstallmentPlan[] $actual
+     *
      * @return void
      */
     protected function comparePlans(array $expected, array $actual): void
@@ -132,8 +133,9 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
     //<editor-fold desc="Helper">
 
     /**
-     * @param object[] $expected
-     * @param PaylaterInstallmentRate[] $planOption
+     * @param object[]                  $expected
+     * @param InstallmentRate[] $actual
+     *
      * @return void
      */
     protected function compareRates(array $expected, array $actual): void

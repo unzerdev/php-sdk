@@ -35,7 +35,7 @@ class InstallmentPlansQuery extends AbstractUnzerResource
     protected string $customerType;
 
     /**
-     * @param float $amount
+     * @param float  $amount
      * @param string $currency
      * @param string $country
      * @param string $customerType

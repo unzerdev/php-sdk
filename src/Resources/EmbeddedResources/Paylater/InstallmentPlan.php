@@ -57,6 +57,7 @@ class InstallmentPlan extends AbstractUnzerResource
 
     /**
      * @param string $secciUrl
+     *
      * @return InstallmentPlan
      */
     public function setSecciUrl(string $secciUrl): InstallmentPlan

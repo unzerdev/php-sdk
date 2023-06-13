@@ -43,13 +43,13 @@ class PaylaterInstallmentTest extends BasePaymentTest
         $this->assertNull($pit->getCountry());
         $this->assertNull($pit->getHolder());
 
-        $pit->setInquiryId('inquiryIy');
+        $pit->setInquiryId('inquiryId');
         $pit->setNumberOfRates(7);
         $pit->setIban('DE89370400440532013000');
         $pit->setCountry('DE');
         $pit->setHolder('Max Mustermann');
 
-        $this->assertEquals('inquiryIy', $pit->getInquiryId());
+        $this->assertEquals('inquiryId', $pit->getInquiryId());
         $this->assertEquals(7, $pit->getNumberOfRates());
         $this->assertEquals('DE89370400440532013000', $pit->getIban());
         $this->assertEquals('DE', $pit->getCountry());

@@ -45,6 +45,7 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
 {
     /**
      * Verify that paylater installment plans can be fetched.
+     *
      * @test
      */
     public function installmentPlanShouldBeFetchable(): void
@@ -58,6 +59,7 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
 
     /**
      * Verify that paylater installment type can be created and fetched.
+     *
      * @test
      */
     public function typeCanBeCreatedAndFetched(): void
@@ -79,6 +81,7 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
 
     /**
      * Verify that paylater installment plans can be fetched.
+     *
      * @test
      */
     public function fetchingPlansUsesB2CCustomerAsDefaultIfEmpty(): void
@@ -90,6 +93,20 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
         $this->assertEquals(CustomerTypes::B2C, $paylaterInstallmentPlans->getCustomerType());
         $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
         $this->assertTrue($plans->isSuccess());
+    }
+    
+    /**
+     * Verify Api error is handled as Exception.
+     *
+     * @test
+     */
+    public function invalidInputThrowsUnzerApiException(): void
+    {
+        $this->expectException(UnzerApiException::class);
+        $paylaterInstallmentPlans = new InstallmentPlansQuery(-99.99, 'EUR', 'DE');
+
+        $this->assertEquals(CustomerTypes::B2C, $paylaterInstallmentPlans->getCustomerType());
+        $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
     }
 
     /**
