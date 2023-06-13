@@ -47,6 +47,7 @@ class IdStrings
     public const INVOICE_SECURED = 'ivs';
     public const KLARNA = 'kla';
     public const PAYLATER_INVOICE = 'piv';
+    public const PAYLATER_INSTALLMENT = 'pit';
     public const PAYMENT_PAGE = 'ppg';
     public const PAYPAL = 'ppl';
     public const POST_FINANCE_CARD = 'pfc';
