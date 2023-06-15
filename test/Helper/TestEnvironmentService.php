@@ -26,17 +26,18 @@ use UnzerSDK\Services\EnvironmentService;
 
 class TestEnvironmentService extends EnvironmentService
 {
-    /** @const Primary testing Keypair used as default for most payment types. */
+    /** Primary testing Keypair used as default for most payment types. */
     public const ENV_VAR_TEST_PRIVATE_KEY_1 = 'UNZER_PAPI_TEST_PRIVATE_KEY_1';
     public const ENV_VAR_TEST_PUBLIC_KEY_1 = 'UNZER_PAPI_TEST_PUBLIC_KEY_1';
 
-    /** @const  Secondary keypair with mainly used for payment methods that need a second configuration to be tested. */
+    /** Secondary keypair mainly used for payment methods that need a second configuration to be tested. */
     public const ENV_VAR_TEST_PRIVATE_KEY_2 = 'UNZER_PAPI_TEST_PRIVATE_KEY_2';
     public const ENV_VAR_TEST_PUBLIC_KEY_2 = 'UNZER_PAPI_TEST_PUBLIC_KEY_2';
 
-    /** @const  Third keypair mainly used for deprecated payment methods. */
+    /** Third keypair mainly used for deprecated payment methods. */
     public const ENV_VAR_TEST_PRIVATE_KEY_3 = 'UNZER_PAPI_TEST_PRIVATE_KEY_3';
     public const ENV_VAR_TEST_PUBLIC_KEY_3 = 'UNZER_PAPI_TEST_PUBLIC_KEY_3';
+
     public const ENV_VAR_TEST_APPLE_MERCHANT_ID_FOLDER = 'UNZER_APPLE_MERCHANT_ID_PATH';
     public const ENV_VAR_TEST_APPLE_CA_CERTIFICATE = 'UNZER_APPLE_CA_CERTIFICATE_PATH';
     public const ENV_VAR_NAME_VERBOSE_TEST_LOGGING = 'UNZER_PAPI_VERBOSE_TEST_LOGGING';
