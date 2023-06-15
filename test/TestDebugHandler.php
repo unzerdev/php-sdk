@@ -39,7 +39,7 @@ class TestDebugHandler implements DebugHandlerInterface
     {
         $logMessage = 'Unzer debug message: ' . $message . "\n";
 
-        if (EnvironmentService::isTestLoggingActive()) {
+        if (Helper\TestEnvironmentService::isTestLoggingActive()) {
             // Echo log messages directly.
             echo $logMessage;
         } else {

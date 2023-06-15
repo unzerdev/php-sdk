@@ -27,6 +27,7 @@ namespace UnzerSDK\test\integration;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
@@ -83,7 +84,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
      */
     public function recurringForCardWithout3dsShouldActivateRecurringAtOnce(): void
     {
-        $privateKey = EnvironmentService::getTestPrivateKey(true);
+        $privateKey = TestEnvironmentService::getTestPrivateKey(true);
         if (empty($privateKey)) {
             $this->markTestIncomplete('No non 3ds private key set');
         }
@@ -143,6 +144,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
      */
     public function sepaDirectDebitSecuredShouldBeAbleToActivateRecurringPayments(): void
     {
+        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
         /** @var SepaDirectDebitSecured $ddg */
         $ddg = $this->unzer->createPaymentType(new SepaDirectDebitSecured('DE89370400440532013000'));
         $this->assertFalse($ddg->isRecurring());
