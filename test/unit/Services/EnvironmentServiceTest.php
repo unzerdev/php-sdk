@@ -69,16 +69,16 @@ class EnvironmentServiceTest extends TestCase
     public function privateKeyStringIsReturnedCorrectly($keyEnvVar, $non3dsKeyEnvVar, $non3ds, $expected): void
     {
         unset(
-            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_1],
-            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_2]
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_DEFAULT],
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_ALTERNATIVE]
         );
 
         if ($keyEnvVar !== null) {
-            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_1] = $keyEnvVar;
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_DEFAULT] = $keyEnvVar;
         }
 
         if ($non3dsKeyEnvVar !== null) {
-            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_2] = $non3dsKeyEnvVar;
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_ALTERNATIVE] = $non3dsKeyEnvVar;
         }
 
         $this->assertEquals($expected, TestEnvironmentService::getTestPrivateKey($non3ds));
@@ -99,16 +99,16 @@ class EnvironmentServiceTest extends TestCase
     public function publicKeyStringIsReturnedCorrectly($keyEnvVar, $non3dsKeyEnvVar, $non3ds, $expected): void
     {
         unset(
-            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_1],
-            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_2]
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_DEFAULT],
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_ALTERNATIVE]
         );
 
         if ($keyEnvVar !== null) {
-            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_1] = $keyEnvVar;
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_DEFAULT] = $keyEnvVar;
         }
 
         if ($non3dsKeyEnvVar !== null) {
-            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_2] = $non3dsKeyEnvVar;
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_ALTERNATIVE] = $non3dsKeyEnvVar;
         }
 
         $this->assertEquals($expected, TestEnvironmentService::getTestPublicKey($non3ds));
