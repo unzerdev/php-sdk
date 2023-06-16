@@ -32,6 +32,7 @@ use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class PayoutTest extends BaseIntegrationTest
 {
@@ -85,6 +86,7 @@ class PayoutTest extends BaseIntegrationTest
      */
     public function payoutCanBeCalledForSepaDirectDebitSecuredType(): void
     {
+        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
         $sepa = new SepaDirectDebitSecured('DE89370400440532013000');
         $this->unzer->createPaymentType($sepa);
         $customer = $this->getMaximumCustomer()->setShippingAddress($this->getBillingAddress());

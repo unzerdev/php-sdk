@@ -13,6 +13,9 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Deprecated
 * `\UnzerSDK\Resources\Payment::getCancellation`, please use `getCancellation` method of `\UnzerSDK\Resources\TransactionTypes\Charge` or `\UnzerSDK\Resources\TransactionTypes\Authorization` instead, depending on your use-case.
 
+### Changed
+*   Remove test-only constants and functions from `\UnzerSDK\Services\EnvironmentService` and move them to `\UnzerSDK\test\Helper\TestEnvironmentService`.
+
 ## [3.1.0](https://github.com/unzerdev/php-sdk/compare/3.0.0..3.1.0)
 
 ### Added

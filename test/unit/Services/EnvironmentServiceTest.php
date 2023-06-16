@@ -24,8 +24,8 @@
  */
 namespace UnzerSDK\test\unit\Services;
 
-use UnzerSDK\Services\EnvironmentService;
 use PHPUnit\Framework\TestCase;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class EnvironmentServiceTest extends TestCase
 {
@@ -44,14 +44,14 @@ class EnvironmentServiceTest extends TestCase
     public function envVarsShouldBeInterpretedAsExpected($verboseLog, $expectedLogEnabled): void
     {
         unset(
-            $_SERVER[EnvironmentService::ENV_VAR_NAME_VERBOSE_TEST_LOGGING]
+            $_SERVER[TestEnvironmentService::ENV_VAR_NAME_VERBOSE_TEST_LOGGING]
         );
 
         if ($verboseLog !== null) {
-            $_SERVER[EnvironmentService::ENV_VAR_NAME_VERBOSE_TEST_LOGGING] = $verboseLog;
+            $_SERVER[TestEnvironmentService::ENV_VAR_NAME_VERBOSE_TEST_LOGGING] = $verboseLog;
         }
 
-        $this->assertEquals($expectedLogEnabled, EnvironmentService::isTestLoggingActive());
+        $this->assertEquals($expectedLogEnabled, TestEnvironmentService::isTestLoggingActive());
     }
 
     /**
@@ -69,19 +69,19 @@ class EnvironmentServiceTest extends TestCase
     public function privateKeyStringIsReturnedCorrectly($keyEnvVar, $non3dsKeyEnvVar, $non3ds, $expected): void
     {
         unset(
-            $_SERVER[EnvironmentService::ENV_VAR_TEST_PRIVATE_KEY],
-            $_SERVER[EnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_NON_3DS]
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_DEFAULT],
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_ALTERNATIVE]
         );
 
         if ($keyEnvVar !== null) {
-            $_SERVER[EnvironmentService::ENV_VAR_TEST_PRIVATE_KEY] = $keyEnvVar;
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_DEFAULT] = $keyEnvVar;
         }
 
         if ($non3dsKeyEnvVar !== null) {
-            $_SERVER[EnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_NON_3DS] = $non3dsKeyEnvVar;
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PRIVATE_KEY_ALTERNATIVE] = $non3dsKeyEnvVar;
         }
 
-        $this->assertEquals($expected, EnvironmentService::getTestPrivateKey($non3ds));
+        $this->assertEquals($expected, TestEnvironmentService::getTestPrivateKey($non3ds));
     }
 
     /**
@@ -99,19 +99,19 @@ class EnvironmentServiceTest extends TestCase
     public function publicKeyStringIsReturnedCorrectly($keyEnvVar, $non3dsKeyEnvVar, $non3ds, $expected): void
     {
         unset(
-            $_SERVER[EnvironmentService::ENV_VAR_TEST_PUBLIC_KEY],
-            $_SERVER[EnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_NON_3DS]
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_DEFAULT],
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_ALTERNATIVE]
         );
 
         if ($keyEnvVar !== null) {
-            $_SERVER[EnvironmentService::ENV_VAR_TEST_PUBLIC_KEY] = $keyEnvVar;
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_DEFAULT] = $keyEnvVar;
         }
 
         if ($non3dsKeyEnvVar !== null) {
-            $_SERVER[EnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_NON_3DS] = $non3dsKeyEnvVar;
+            $_SERVER[TestEnvironmentService::ENV_VAR_TEST_PUBLIC_KEY_ALTERNATIVE] = $non3dsKeyEnvVar;
         }
 
-        $this->assertEquals($expected, EnvironmentService::getTestPublicKey($non3ds));
+        $this->assertEquals($expected, TestEnvironmentService::getTestPublicKey($non3ds));
     }
 
     //</editor-fold>
