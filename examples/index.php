@@ -55,7 +55,7 @@ function printMessage($type, $title, $text)
         <script type="text/javascript" src="https://static.unzer.com/v1/unzer.js"></script>
     </head>
 
-    <body style="margin: 70px 70px 0;">
+    <body style="margin: 30px 70px 0;">
         <div class="ui container segment">
             <h2 class="ui header">
                 <i class="shopping cart icon"></i>
@@ -322,7 +322,19 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Installment (secured)
+                            Paylater Installment
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div id="tryPaylaterInstallment" class="ui bottom attached green button" onclick="location.href='PaylaterInstallment/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Installment Secured (deprecated)
                         </div>
                         <div class="description">
                         </div>

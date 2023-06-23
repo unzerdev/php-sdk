@@ -200,6 +200,11 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
         // then
         $this->assertTrue($cancel->isSuccess());
         $this->assertTrue($payment->isCompleted());
+
+        $fetchedPayment = $this->getUnzerObject()->fetchPayment($authorize->getPaymentId());
+        $fetchedPayment->getRefunds();
+
+        $this->getUnzerObject()->fetchPaymentRefund($fetchedPayment->getId(), $cancel->getId());
     }
 
     /**

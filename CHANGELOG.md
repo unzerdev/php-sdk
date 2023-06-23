@@ -8,10 +8,14 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## [3.2.0](https://github.com/unzerdev/php-sdk/compare/3.1.0..3.2.0)
 
 ### Added
-*   Add "Paylater Installment" payment type.
+*   Support for "Paylater Installment" payment type.
+    *   Add payment type "PaylaterInstallment"
+    *   Add `\UnzerSDK\Unzer::fetchPaylaterInstallmentPlans` method to get available installment plans. 
+*   Add "Paylater Installment" example.
 
 ### Deprecated
-* `\UnzerSDK\Resources\Payment::getCancellation`, please use `getCancellation` method of `\UnzerSDK\Resources\TransactionTypes\Charge` or `\UnzerSDK\Resources\TransactionTypes\Authorization` instead, depending on your use-case.
+*   `\UnzerSDK\Resources\Payment::getCancellation`, please use `getCancellation` method of `\UnzerSDK\Resources\TransactionTypes\Charge` or `\UnzerSDK\Resources\TransactionTypes\Authorization` instead, depending on your use-case.
+*   `\UnzerSDK\Resources\PaymentTypes\InstallmentSecured`, will be replaced by `\UnzerSDK\Resources\PaymentTypes\PaylaterInstallment` in the future.
 
 ### Changed
 *   Remove test-only constants and functions from `\UnzerSDK\Services\EnvironmentService` and move them to `\UnzerSDK\test\Helper\TestEnvironmentService`.
