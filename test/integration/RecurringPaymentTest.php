@@ -33,7 +33,6 @@ use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
-use UnzerSDK\Services\EnvironmentService;
 use UnzerSDK\test\BaseIntegrationTest;
 use RuntimeException;
 

@@ -41,11 +41,11 @@ class InstallmentSecured extends InstalmentPlan
     protected $accountHolder;
 
     /**
-     * @param InstalmentPlan|null $selectedPlan
-     * @param null|string $iban
-     * @param null|string $accountHolder
+     * @param InstalmentPlan|null  $selectedPlan
+     * @param null|string          $iban
+     * @param null|string          $accountHolder
      * @param null|DateTime|string $orderDate
-     * @param null|string $bic
+     * @param null|string          $bic
      * @param null|DateTime|string $invoiceDate
      * @param null|DateTime|string $invoiceDueDate
      */

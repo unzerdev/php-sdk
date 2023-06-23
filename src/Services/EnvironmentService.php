@@ -85,5 +85,4 @@ class EnvironmentService
         $curlVerbose = strtolower(stripslashes($_SERVER[self::ENV_VAR_NAME_CURL_VERBOSE] ?? 'false'));
         return in_array($curlVerbose, ['true', '1'], true);
     }
-
 }
