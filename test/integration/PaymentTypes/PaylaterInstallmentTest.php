@@ -196,10 +196,15 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
 
         // when
         $cancel = $this->getUnzerObject()->cancelChargedPayment($payment, new Cancellation(66.66));
+        $this->assertEmpty($cancel->getFetchedAt());
 
         // then
         $this->assertTrue($cancel->isSuccess());
         $this->assertTrue($payment->isCompleted());
+
+        $fetchedPayment = $this->getUnzerObject()->fetchPayment($authorize->getPaymentId());
+        $fetchedCancel = $this->getUnzerObject()->fetchPaymentRefund($fetchedPayment->getId(), $cancel->getId());
+        $this->assertNotEmpty($fetchedCancel->getFetchedAt());
     }
 
     /**
@@ -214,10 +219,15 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
 
         // when
         $cancel = $this->getUnzerObject()->cancelAuthorizedPayment($payment);
+        $this->assertEmpty($cancel->getFetchedAt());
 
         // then
         $this->assertTrue($cancel->isSuccess());
         $this->assertTrue($payment->isCanceled());
+
+        $fetchedPayment = $this->getUnzerObject()->fetchPayment($authorize->getPaymentId());
+        $fetchedCancel = $this->getUnzerObject()->fetchPaymentReversal($fetchedPayment->getId(), $cancel->getId());
+        $this->assertNotEmpty($fetchedCancel->getFetchedAt());
     }
     //<editor-fold desc="Helper">
 

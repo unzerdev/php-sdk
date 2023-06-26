@@ -40,30 +40,35 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
 
-    <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
+
+    <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css"/>
 </head>
-<body>
-<h1 id="result">Manage Payment (Merchant only)</h1>
-<p>
-    <?php
+<body style="margin: 70px 70px 0;">
+<div class="ui container segment">
+    <h1 id="result" class="ui header">Manage Payment (Merchant only)</h1>
+    <div class="ui content">
+        <?php
+        if (!empty($additionalPaymentInformation)) {
+            echo '<h3>' . $additionalPaymentInformation . '</h3>';
+        }
 
-    if (!empty($additionalPaymentInformation)) {
-        echo '<h3>' . $additionalPaymentInformation . '</h3>';
-    }
+        $paymentId = $_SESSION['PaymentId'] ?? null;
+        if ($paymentId !== null) {
+            echo '<p>The PaymentId of your transaction is \'' . $paymentId . '\'.</p>';
+        }
 
-    $paymentId = $_SESSION['PaymentId'] ?? null;
-    if ($paymentId !== null) {
-        echo '<p>The PaymentId of your transaction is \'' . $paymentId . '\'.</p>';
-    }
-    $unzer = new \UnzerSDK\Unzer(UNZER_PAPI_PRIVATE_KEY);
-    $payment = $unzer->fetchPayment($paymentId);
-    if ($shortId !== null) {
-        $defaultTransactionMessage = '<p>Please look for ShortId ' . $shortId . ' in Unzer Insights to see the transaction.</p>';
-        $paylaterTransactionMessage = '<p>Please use the "descriptor" to look for the transaction in the Unzer Pay Later Merchant Portal.</p>';
-        echo preg_match('/[\d]{4}.[\d]{4}.[\d]{4}/', $shortId) ? $defaultTransactionMessage : $paylaterTransactionMessage;
-    }
+        $unzer = new \UnzerSDK\Unzer(UNZER_PAPI_PRIVATE_KEY);
+        $payment = $unzer->fetchPayment($paymentId);
+        if ($shortId !== null) {
+            $defaultTransactionMessage = '<p>Please look for ShortId ' . $shortId . ' in Unzer Insights to see the transaction.</p>';
+            $paylaterTransactionMessage = '<p>Please use the "descriptor" to look for the transaction in the Unzer Pay Later Merchant Portal.</p>';
+            echo preg_match('/[\d]{4}.[\d]{4}.[\d]{4}/', $shortId) ? $defaultTransactionMessage : $paylaterTransactionMessage;
+        }
 
-    echo    '<h3>You can use the payment ID to charge the payment.</h3>
+        echo '<h2>Charge payment</h2>
+                <p>You can use the payment ID to charge the payment.</p>
                         <form id="payment-form" class="unzerUI form" action="' . CHARGE_PAYMENT_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
                             <div class="fields inline">
@@ -73,7 +78,8 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                             </div>
                         </form><br>';
 
-    echo    '<h3>You can use the payment ID to cancel the payment.</h3>
+        echo '<h2>Cancel payment.</h2>
+                        <p>You can use the payment ID to cancel the payment.</p>
                         <form id="payment-form" class="unzerUI form" action="' . CANCEL_PAYMENT_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
                             <div class="fields inline">
@@ -83,7 +89,8 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                             </div>
                         </form><br>';
 
-    echo '<h3>PayPal Express only: You can finalize a transaction in resumed state.</h3>
+        echo '<h2>PayPal Express only: Finalize a transaction</h2>
+                        <p>You can finalize a transaction in resumed state.</p>
                         <form id="payment-form" class="unzerUI form" action="' . UPDATE_TRANSACTION_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
                             <label for="shiipping_amount">Shipping amount: </label>
@@ -95,9 +102,8 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                             </div>
                         </form><br>';
 
-    ?>
-
-</p>
-<p><a href="..">start again</a></p>
+        ?>
+        <a href=".." class="ui green button">start again</a>
+</div>
 </body>
 </html>

@@ -20,11 +20,15 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use DateTime;
 use UnzerSDK\Resources\InstalmentPlan;
 
+/** @deprecated will be replaced by PaylaterInstallment.
+ * @see PaylaterInstallment
+ */
 class InstallmentSecured extends InstalmentPlan
 {
     /** @var string $iban */
@@ -49,8 +53,8 @@ class InstallmentSecured extends InstalmentPlan
     {
         parent::__construct();
 
-        $this->iban          = $iban;
-        $this->bic           = $bic;
+        $this->iban = $iban;
+        $this->bic = $bic;
         $this->accountHolder = $accountHolder;
         $this->setOrderDate($orderDate);
         $this->setInvoiceDate($invoiceDate);

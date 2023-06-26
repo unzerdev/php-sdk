@@ -133,7 +133,7 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
     //<editor-fold desc="Helper">
 
     /**
-     * @param object[]                  $expected
+     * @param object[]          $expected
      * @param InstallmentRate[] $actual
      *
      * @return void

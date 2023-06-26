@@ -25,7 +25,6 @@
 namespace UnzerSDK\test;
 
 use UnzerSDK\Interfaces\DebugHandlerInterface;
-use UnzerSDK\Services\EnvironmentService;
 
 class TestDebugHandler implements DebugHandlerInterface
 {
