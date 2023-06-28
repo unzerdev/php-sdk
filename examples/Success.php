@@ -35,16 +35,21 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Unzer UI Examples</title>
+<head>
+    <meta charset="UTF-8">
+    <title>Unzer UI Examples</title>
 
-        <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css" />
-    </head>
-    <body>
-        <h1 id="result">Success</h1>
-        <p>
-            The order has been successfully placed.
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
+
+    <link rel="stylesheet" href="https://static.unzer.com/v1/unzer.css"/>
+</head>
+<body style="margin: 30px 70px 0;">
+<div class="ui container segment">
+
+    <h1 id="result" class="ui header">Success</h1>
+    <p>
+        The order has been successfully placed.
 
         <?php
 
@@ -63,7 +68,7 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
         }
 
         if ($paymentTypeId !== null) {
-                echo    '<p>The TypeId for the recurring payment is \'' . $paymentTypeId . '\'. You can use it
+            echo '<p>The TypeId for the recurring payment is \'' . $paymentTypeId . '\'. You can use it
                             now for subsequent transactions.</p>
                             <form id="payment-form" class="unzerUI form" action="' . RECURRING_PAYMENT_CONTROLLER_URL . '" method="post">
                                 <input type="hidden" name="payment_type_id" value="' . $paymentTypeId . ' ">
@@ -73,11 +78,12 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                                     </div>
                                 </div>
                             </form>';
-            }
+        }
         $isManageable = $paymentId !== null && $isAuthorizeTransaction;
         echo '<p>As a merchant you can charge or cancel the Payment here: <a href="./Backend/ManagePayment.php">Manage Payment</a></p>';
         ?>
-        </p>
-        <p><a href=".">start again</a></p>
-    </body>
+    </p>
+    <a href="." class="ui green button">start again</a>
+</div>
+</body>
 </html>

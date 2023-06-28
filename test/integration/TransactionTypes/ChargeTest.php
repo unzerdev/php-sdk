@@ -32,6 +32,7 @@ use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class ChargeTest extends BaseIntegrationTest
 {
@@ -184,6 +185,7 @@ class ChargeTest extends BaseIntegrationTest
      */
     public function chargeWithCustomerShouldAcceptAllParameters(): void
     {
+        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
         // prepare test data
         /** @var InvoiceSecured $ivg */
         $ivg = $this->unzer->createPaymentType(new InvoiceSecured());

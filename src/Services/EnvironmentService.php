@@ -31,17 +31,6 @@ class EnvironmentService
     public const ENV_VAR_VALUE_STAGING_ENVIRONMENT = 'STG';
     public const ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT = 'DEV';
     public const ENV_VAR_VALUE_PROD_ENVIRONMENT = 'PROD';
-
-    public const ENV_VAR_NAME_VERBOSE_TEST_LOGGING = 'UNZER_PAPI_VERBOSE_TEST_LOGGING';
-
-    public const ENV_VAR_TEST_PRIVATE_KEY = 'UNZER_PAPI_TEST_PRIVATE_KEY';
-    public const ENV_VAR_TEST_PUBLIC_KEY = 'UNZER_PAPI_TEST_PUBLIC_KEY';
-    public const ENV_VAR_TEST_PRIVATE_KEY_NON_3DS = 'UNZER_PAPI_TEST_PRIVATE_KEY_NON_3DS';
-    public const ENV_VAR_TEST_PUBLIC_KEY_NON_3DS = 'UNZER_PAPI_TEST_PUBLIC_KEY_NON_3DS';
-
-    public const ENV_VAR_TEST_APPLE_MERCHANT_ID_FOLDER = 'UNZER_APPLE_MERCHANT_ID_PATH';
-    public const ENV_VAR_TEST_APPLE_CA_CERTIFICATE = 'UNZER_APPLE_CA_CERTIFICATE_PATH';
-
     private const ENV_VAR_NAME_TIMEOUT = 'UNZER_PAPI_TIMEOUT';
     private const DEFAULT_TIMEOUT = 60;
 
@@ -75,16 +64,6 @@ class EnvironmentService
     }
 
     /**
-     * Returns false if the logging in tests is deactivated by environment variable.
-     *
-     * @return bool
-     */
-    public static function isTestLoggingActive(): bool
-    {
-        return self::getBoolEnvValue(self::ENV_VAR_NAME_VERBOSE_TEST_LOGGING);
-    }
-
-    /**
      * Returns the timeout set via environment variable or the default timeout.
      * ATTENTION: Setting this value to 0 will disable the limit.
      *
@@ -105,57 +84,5 @@ class EnvironmentService
     {
         $curlVerbose = strtolower(stripslashes($_SERVER[self::ENV_VAR_NAME_CURL_VERBOSE] ?? 'false'));
         return in_array($curlVerbose, ['true', '1'], true);
-    }
-
-    /**
-     * Returns the private key string set via environment variable.
-     * Returns the non 3ds version of the key if the non3ds flag is set.
-     * Returns an empty string if the environment variable is not set.
-     *
-     * @param bool $non3ds
-     *
-     * @return string
-     */
-    public static function getTestPrivateKey(bool $non3ds = false): string
-    {
-        $variableName = $non3ds ? self::ENV_VAR_TEST_PRIVATE_KEY_NON_3DS : self::ENV_VAR_TEST_PRIVATE_KEY;
-        $key = stripslashes($_SERVER[$variableName] ?? '');
-        return empty($key) ? '' : $key;
-    }
-
-    /**
-     * Returns the public key string set via environment variable.
-     * Returns the non 3ds version of the key if the non3ds flag is set.
-     * Returns an empty string if the environment variable is not set.
-     *
-     * @param bool $non3ds
-     *
-     * @return string
-     */
-    public static function getTestPublicKey(bool $non3ds = false): string
-    {
-        $variableName = $non3ds ? self::ENV_VAR_TEST_PUBLIC_KEY_NON_3DS : self::ENV_VAR_TEST_PUBLIC_KEY;
-        $key = stripslashes($_SERVER[$variableName] ?? '');
-        return empty($key) ? '' : $key;
-    }
-
-    /**
-     * Returns the path to apple merchant ID folder set via environment variable.
-     *
-     * @return string
-     */
-    public static function getAppleMerchantIdPath(): string
-    {
-        return stripslashes($_SERVER[self::ENV_VAR_TEST_APPLE_MERCHANT_ID_FOLDER] ?? '');
-    }
-
-    /**
-     * Returns the CA certificate path set via environment variable.
-     *
-     * @return string
-     */
-    public static function getAppleCaCertificatePath(): string
-    {
-        return stripslashes($_SERVER[self::ENV_VAR_TEST_APPLE_CA_CERTIFICATE] ?? '');
     }
 }

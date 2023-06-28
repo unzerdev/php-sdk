@@ -29,7 +29,9 @@ use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Przelewy24;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class Przelewy24Test extends BaseIntegrationTest
 {
@@ -65,7 +67,13 @@ class Przelewy24Test extends BaseIntegrationTest
      */
     public function przelewy24ShouldBeChargeable(Przelewy24 $przelewy24): void
     {
-        $charge = $przelewy24->charge(100.0, 'PLN', self::RETURN_URL);
+        $charge = new Charge(100.0, 'PLN', self::RETURN_URL);
+        $customer = $this->getMaximumCustomer();
+        $customer->getShippingAddress()
+            ->setCountry('PL');
+        $customer->getBillingAddress()
+            ->setCountry('PL');
+        $this->getUnzerObject()->performCharge($charge, $przelewy24, $customer);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
@@ -107,6 +115,31 @@ class Przelewy24Test extends BaseIntegrationTest
         $przelewy24 = $this->unzer->createPaymentType(new Przelewy24());
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CURRENCY_IS_NOT_SUPPORTED);
+        $charge = new Charge(100.0, $currencyCode, self::RETURN_URL);
+        $customer = $this->getMaximumCustomer();
+        $customer->getShippingAddress()
+            ->setCountry('PL');
+        $customer->getBillingAddress()
+            ->setCountry('PL');
+        $this->getUnzerObject()->performCharge($charge, $przelewy24, $customer);
+    }
+
+    /**
+     * Verify przelewy24 can only handle Currency::POLISH_ZLOTY.
+     *
+     * @test
+     *
+     * @dataProvider legazyPrzelewy24CurrencyCodeProvider
+     *
+     * @param string $currencyCode
+     */
+    public function legazyConfigPrzelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode): void
+    {
+        $this->getUnzerObject()->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
+        /** @var Przelewy24 $przelewy24 */
+        $przelewy24 = $this->unzer->createPaymentType(new Przelewy24());
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CURRENCY_IS_NOT_SUPPORTED);
         $przelewy24->charge(100.0, $currencyCode, self::RETURN_URL);
     }
 
@@ -116,6 +149,17 @@ class Przelewy24Test extends BaseIntegrationTest
      * Provides a subset of currencies not allowed by this payment method.
      */
     public function przelewy24CurrencyCodeProvider(): array
+    {
+        return [
+            'US Dollar'=> ['USD'],
+            'Swiss Franc' => ['CHF']
+        ];
+    }
+
+    /**
+     * Provides a subset of currencies not allowed by this payment method.
+     */
+    public function legazyPrzelewy24CurrencyCodeProvider(): array
     {
         return [
             'EUR' => ['EUR'],

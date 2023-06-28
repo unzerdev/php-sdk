@@ -27,6 +27,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class IdealTest extends BaseIntegrationTest
@@ -76,7 +77,13 @@ class IdealTest extends BaseIntegrationTest
      */
     public function idealShouldBeChargeable(Ideal $ideal): void
     {
-        $charge = $ideal->charge(1.0, 'EUR', self::RETURN_URL);
+        $charge = new Charge(1.0, 'EUR', self::RETURN_URL);
+        $maximumCustomer = $this->getMaximumCustomer();
+        $maximumCustomer->getBillingAddress()
+            ->setCountry('NL');
+        $maximumCustomer->getShippingAddress()
+            ->setCountry('NL');
+        $this->getUnzerObject()->performCharge($charge, $ideal, $maximumCustomer);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());

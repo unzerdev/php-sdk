@@ -28,12 +28,18 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 /**
  * @deprecated since 1.2.0.0 PaylaterInvoice should be used instead in the future.
  */
 class InvoiceGuaranteedTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->getUnzerObject(TestEnvironmentService::getLegacyTestPrivateKey());
+    }
+
     /**
      * Verify, backwards compatibility regarding fetching payment type and map it to invoice secured class.
      *

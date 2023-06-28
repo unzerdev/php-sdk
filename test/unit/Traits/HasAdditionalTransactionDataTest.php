@@ -136,7 +136,7 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
         $dummy->setCheckoutType('checkoutType', 's-ppl-xyz');
 
         $additionalTransactionData = $dummy->getAdditionalTransactionData();
-        $this->assertObjectHasAttribute('paypal', $additionalTransactionData);
+        $this->assertTrue(property_exists($additionalTransactionData, 'paypal'));
         $this->assertEquals($additionalTransactionData->paypal->checkoutType, 'checkoutType');
     }
 
