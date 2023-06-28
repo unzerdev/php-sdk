@@ -48,11 +48,9 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
 <div class="ui container segment">
 
     <h1 id="result" class="ui header">Success</h1>
-    <p>
-        The order has been successfully placed.
+    <p>The order has been successfully placed.</p>
 
         <?php
-
         if (!empty($additionalPaymentInformation)) {
             echo $additionalPaymentInformation;
         }
@@ -82,7 +80,6 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
         $isManageable = $paymentId !== null && $isAuthorizeTransaction;
         echo '<p>As a merchant you can charge or cancel the Payment here: <a href="./Backend/ManagePayment.php">Manage Payment</a></p>';
         ?>
-    </p>
     <a href="." class="ui green button">start again</a>
 </div>
 </body>
