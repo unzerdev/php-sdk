@@ -19,6 +19,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 *   Remove test-only constants and functions from `\UnzerSDK\Services\EnvironmentService` and move them to `\UnzerSDK\test\Helper\TestEnvironmentService`.
+*   `\UnzerSDK\Unzer::fetchPayPage()` method no longer automatically fetches linked Paypage to avoid issues with expired payment pages. 
 
 ## [3.1.0](https://github.com/unzerdev/php-sdk/compare/3.0.0..3.1.0)
 
