@@ -27,6 +27,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Constants\TransactionTypes;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
@@ -36,6 +37,10 @@ use UnzerSDK\Constants\PaymentState;
 
 class PaypageTest extends BaseIntegrationTest
 {
+    // IDs for Expired payment page. IDs are testkeypair specific.
+    private const EXPIRED_PAYPAGE_ID = "s-ppg-57cf4528728391347941b610ae22efccc92fa331d22e425a16b4e85b97c73362";
+    private const PAYMENT_WITH_EXPIRED_PAYMENT_PAGE = 's-pay-328749';
+
     /**
      * Verify the Paypage resource for charge can be created with the mandatory parameters only.
      *
@@ -47,6 +52,29 @@ class PaypageTest extends BaseIntegrationTest
         $this->assertEmpty($paypage->getId());
         $paypage = $this->unzer->initPayPageCharge($paypage);
         $this->assertNotEmpty($paypage->getId());
+    }
+
+    /**
+     * Verify fetching expired paypageId.
+     *
+     * @test
+     */
+    public function verifyFetchingExpiredPaypageThrowsException()
+    {
+        $this->expectException(UnzerApiException::class);
+        $this->getUnzerObject()->fetchPayPage(self::EXPIRED_PAYPAGE_ID);
+    }
+
+    /**
+     * Verify fetching payment that contains expired payment page is possible.
+     *
+     * @test
+     */
+    public function verifyFetchingPaymentwithExpiredPaymentPageIspossible()
+    {
+        $payment = $this->getUnzerObject()->fetchPayment(self::PAYMENT_WITH_EXPIRED_PAYMENT_PAGE);
+        $this->assertEquals(self::EXPIRED_PAYPAGE_ID, $payment->getPayPage()->getId());
+        $this->assertNotEmpty($payment->getFetchedAt());
     }
 
     /**
@@ -152,7 +180,7 @@ class PaypageTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function fetchedPaymentShouldContainPayPageObject(): void
+    public function fetchedPaymentShouldContainPayPageID(): void
     {
         $payPage = new Paypage(100.0, 'EUR', self::RETURN_URL);
         $this->assertEmpty($payPage->getId());
@@ -164,9 +192,9 @@ class PaypageTest extends BaseIntegrationTest
         $fetchedPayPage = $fetchedPayment->getPayPage();
 
         $this->assertNotEmpty($fetchedPayPage);
-        $this->assertEquals($payPage->expose(), $fetchedPayPage->expose());
+        $this->assertEquals($payPage->getId(), $fetchedPayPage->getId());
         $this->assertEquals($payment->expose(), $fetchedPayment->expose());
-        $this->assertEquals($payment->getRedirectUrl(), $fetchedPayment->getRedirectUrl());
+        $this->assertEmpty($fetchedPayment->getRedirectUrl());
     }
 
     /**
@@ -185,6 +213,7 @@ class PaypageTest extends BaseIntegrationTest
 
         $fetchedPayPage = $this->unzer->fetchPayPage($payPage->getId());
         $this->assertNotNull($fetchedPayPage->getPayment());
+        $this->assertNotNull($fetchedPayPage->getRedirectUrl());
 
         $this->assertEquals($payment->getId(), $fetchedPayPage->getPayment()->getId());
         $this->assertNotNull($payment->getFetchedAt());

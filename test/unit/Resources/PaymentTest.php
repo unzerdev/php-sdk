@@ -830,7 +830,7 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
             ->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
         /** @noinspection PhpParamsInspection */
-        $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payPage);
+        $resourceServiceMock->expects($this->never())->method('fetchResource')->with($payPage);
 
         /** @var ResourceService $resourceServiceMock */
         $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
