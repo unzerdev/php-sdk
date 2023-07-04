@@ -21,6 +21,8 @@
  * @package  UnzerSDK\examples
  */
 
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+
 require_once __DIR__ . '/../../../../autoload.php';
 require_once __DIR__ . '/../Constants.php';
 
@@ -39,6 +41,10 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
 <head>
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
@@ -67,7 +73,8 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
             echo preg_match('/[\d]{4}.[\d]{4}.[\d]{4}/', $shortId) ? $defaultTransactionMessage : $paylaterTransactionMessage;
         }
 
-        echo '<h2>Charge payment</h2>
+        if ($payment->getAmount()->getRemaining() > 0 && $payment->getAuthorization() !== null) {
+            echo '<h2>Charge payment</h2>
                 <p>You can use the payment ID to charge the payment.</p>
                         <form id="payment-form" class="unzerUI form" action="' . CHARGE_PAYMENT_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
@@ -77,8 +84,10 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                                 </div>
                             </div>
                         </form><br>';
+        }
 
-        echo '<h2>Cancel payment.</h2>
+        if ($payment->getPaymentType()->supportsDirectPaymentCancel() && !$payment->isCanceled()) {
+            echo '<h2>Cancel payment.</h2>
                         <p>You can use the payment ID to cancel the payment.</p>
                         <form id="payment-form" class="unzerUI form" action="' . CANCEL_PAYMENT_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
@@ -88,8 +97,10 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                                 </div>
                             </div>
                         </form><br>';
+        }
 
-        echo '<h2>PayPal Express only: Finalize a transaction</h2>
+        if ($payment->getPaymentType() instanceof Paypal) {
+            echo '<h2>PayPal Express only: Finalize a transaction</h2>
                         <p>You can finalize a transaction in resumed state.</p>
                         <form id="payment-form" class="unzerUI form" action="' . UPDATE_TRANSACTION_CONTROLLER_URL . '" method="post">
                             <input type="hidden" name="payment_id" value="' . $paymentId . ' ">
@@ -101,6 +112,7 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                                 </div>
                             </div>
                         </form><br>';
+        }
 
         ?>
         <a href=".." class="ui green button">start again</a>
