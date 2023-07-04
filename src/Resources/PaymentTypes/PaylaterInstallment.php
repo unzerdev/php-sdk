@@ -25,6 +25,8 @@ namespace UnzerSDK\Resources\PaymentTypes;
 
 class PaylaterInstallment extends BasePaymentType
 {
+    protected const SUPPORT_DIRECT_PAYMENT_CANCEL = true;
+
     /** @var string $inquiryId */
     protected $inquiryId;
 
