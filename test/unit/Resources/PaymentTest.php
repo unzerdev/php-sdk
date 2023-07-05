@@ -545,6 +545,8 @@ class PaymentTest extends BasePaymentTest
     /**
      * Verify getCancellation calls getCancellations and returns null if cancellation does not exist.
      *
+     * @deprecated To be removed with Payment::getCancellation()
+     *
      * @test
      */
     public function getCancellationShouldCallGetCancellationsAndReturnNullIfNoCancellationExists(): void
@@ -558,6 +560,8 @@ class PaymentTest extends BasePaymentTest
 
     /**
      * Verify getCancellation returns cancellation if it exists.
+     *
+     * @deprecated To be removed with Payment::getCancellation()
      *
      * @test
      */
@@ -577,6 +581,8 @@ class PaymentTest extends BasePaymentTest
 
     /**
      * Verify getCancellation fetches cancellation if it exists and lazy loading is false.
+     *
+     * @deprecated To be removed with Payment::getCancellation()
      *
      * @test
      */
@@ -824,7 +830,7 @@ class PaymentTest extends BasePaymentTest
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
             ->disableOriginalConstructor()->setMethods(['fetchResource'])->getMock();
         /** @noinspection PhpParamsInspection */
-        $resourceServiceMock->expects($this->once())->method('fetchResource')->with($payPage);
+        $resourceServiceMock->expects($this->never())->method('fetchResource')->with($payPage);
 
         /** @var ResourceService $resourceServiceMock */
         $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);

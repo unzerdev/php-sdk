@@ -26,7 +26,7 @@ namespace UnzerSDK\test;
 
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
-use UnzerSDK\Services\EnvironmentService;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 use PHPUnit\Runner\BaseTestRunner;
 
 class BaseIntegrationTest extends BasePaymentTest
@@ -36,7 +36,7 @@ class BaseIntegrationTest extends BasePaymentTest
      */
     protected function setUp(): void
     {
-        $this->getUnzerObject(EnvironmentService::getTestPrivateKey());
+        $this->getUnzerObject(TestEnvironmentService::getTestPrivateKey());
     }
 
     /**
@@ -82,6 +82,6 @@ class BaseIntegrationTest extends BasePaymentTest
      */
     protected function useNon3dsKey(): void
     {
-        $this->getUnzerObject()->setKey(EnvironmentService::getTestPrivateKey(true));
+        $this->getUnzerObject()->setKey(TestEnvironmentService::getTestPrivateKey(true));
     }
 }

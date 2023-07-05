@@ -355,7 +355,9 @@ class Payment extends AbstractUnzerResource
         $payPageObject = $payPage;
 
         if (is_string($payPage)) {
-            $payPageObject = $unzer->fetchPayPage($payPage);
+            $payPageObject = (new Paypage(0, '', ''))
+                ->setId($payPage)
+                ->setPayment($this);
         }
 
         $payPageObject->setParentResource($unzer);
@@ -496,6 +498,8 @@ class Payment extends AbstractUnzerResource
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     *
+     * @deprecated since 3.2.0 Please use getCancellation() method of a Charge or Authorization object instead.
      */
     public function getCancellation(string $cancellationId, bool $lazy = false): ?Cancellation
     {
@@ -905,14 +909,7 @@ class Payment extends AbstractUnzerResource
 
         $payPageId = $resources->payPageId ?? null;
         if (!empty($payPageId)) {
-            if ($this->payPage instanceof Paypage && $this->payPage->getId() === $payPageId) {
-                $this->getResource($this->payPage);
-            } else {
-                $payPage = (new Paypage(0, '', ''))
-                    ->setId($payPageId)
-                    ->setPayment($this);
-                $this->payPage = $this->getUnzerObject()->fetchPayPage($payPage);
-            }
+            $this->setPayPage($payPageId);
         }
 
         if (isset($resources->typeId) && !empty($resources->typeId) && !$this->paymentType instanceof BasePaymentType) {

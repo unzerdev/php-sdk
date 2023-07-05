@@ -25,6 +25,9 @@ namespace UnzerSDK\Services;
 use DateTime;
 use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
+use UnzerSDK\Resources\PaylaterInstallmentPlans;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\PaymentServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -371,6 +374,17 @@ class PaymentService implements PaymentServiceInterface
         /** @var InstalmentPlans $plans */
         $plans = $this->unzer->getResourceService()->fetchResource($plans);
         return $plans;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaylaterInstallmentPlans(
+        InstallmentPlansQuery $paylaterInstallmentPlansQuery
+    ): PaylaterInstallmentPlans {
+        $paylaterInstallment = (new PaylaterInstallment(null, null, null, null))->setParentResource($this->unzer);
+        $plans = (new PaylaterInstallmentPlans())->setQueryParameter($paylaterInstallmentPlansQuery)->setParentResource($paylaterInstallment);
+        return $this->unzer->getResourceService()->fetchResource($plans);
     }
 
     //</editor-fold>

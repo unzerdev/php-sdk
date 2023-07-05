@@ -27,8 +27,8 @@ namespace UnzerSDK\test\integration;
 use UnzerSDK\Adapter\ApplepayAdapter;
 use UnzerSDK\Exceptions\ApplepayMerchantValidationException;
 use UnzerSDK\Resources\ExternalResources\ApplepaySession;
-use UnzerSDK\Services\EnvironmentService;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class ApplepayAdapterTest extends BaseIntegrationTest
 {
@@ -50,12 +50,12 @@ class ApplepayAdapterTest extends BaseIntegrationTest
     {
         $this->merchantValidationUrl = 'https://apple-pay-gateway-cert.apple.com/paymentservices/startSession';
 
-        $appleMerchantIdPath = EnvironmentService::getAppleMerchantIdPath();
+        $appleMerchantIdPath = TestEnvironmentService::getAppleMerchantIdPath();
 
         $this->applepayCertPath = $this->createFilePath($appleMerchantIdPath, 'merchant_id.pem');
         $this->applepayKeyPath = $this->createFilePath($appleMerchantIdPath, 'merchant_id.key');
         $this->applepayCombinedCertPath = $this->createFilePath($appleMerchantIdPath, 'apple-pay-cert.pem');
-        $this->appleCaCertificatePath = EnvironmentService::getAppleCaCertificatePath();
+        $this->appleCaCertificatePath = TestEnvironmentService::getAppleCaCertificatePath();
     }
 
     /**
