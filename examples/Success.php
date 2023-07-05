@@ -21,7 +21,10 @@
  * @package  UnzerSDK\examples
  */
 
+use UnzerSDK\Unzer;
+
 require_once __DIR__ . '/Constants.php';
+require_once __DIR__ . '/../../../autoload.php';
 
 session_start();
 
@@ -38,7 +41,8 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
 <head>
     <meta charset="UTF-8">
     <title>Unzer UI Examples</title>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
 
@@ -60,9 +64,13 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
             $paylaterTransactionMessage = '<p>Please use the "descriptor" to look for the transaction in the Unzer Pay Later Merchant Portal.</p>';
             echo preg_match('/[\d]{4}.[\d]{4}.[\d]{4}/', $shortId) ? $defaultTransactionMessage : $paylaterTransactionMessage;
         }
-        $paymentId = $_SESSION['PaymentId'] ?? null;
+
+        $isManageable = false;
         if ($paymentId !== null) {
             echo '<p>The PaymentId of your transaction is \'' . $paymentId . '\'.</p>';
+            $unzer = new Unzer(UNZER_PAPI_PRIVATE_KEY);
+            $payment = $unzer->fetchPayment($paymentId);
+            $isManageable = $payment->getPaymentType()->supportsDirectPaymentCancel() || $payment->getAuthorization() !== null;
         }
 
         if ($paymentTypeId !== null) {
@@ -77,8 +85,10 @@ $isAuthorizeTransaction = $_SESSION['isAuthorizeTransaction'] ?? false;
                                 </div>
                             </form>';
         }
-        $isManageable = $paymentId !== null && $isAuthorizeTransaction;
-        echo '<p>As a merchant you can charge or cancel the Payment here: <a href="./Backend/ManagePayment.php">Manage Payment</a></p>';
+
+        if ($isManageable) {
+            echo '<p>As a merchant you can charge or cancel the Payment here: <a href="./Backend/ManagePayment.php">Manage Payment</a></p>';
+        }
         ?>
     <a href="." class="ui green button">start again</a>
 </div>
