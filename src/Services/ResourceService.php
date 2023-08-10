@@ -35,6 +35,7 @@ use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
+use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -728,6 +729,35 @@ class ResourceService implements ResourceServiceInterface
 
         $this->fetchResource($charge);
         return $charge;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Chargeback resource">
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchChargeback(Chargeback $chargeback): Chargeback
+    {
+        $this->fetchResource($chargeback);
+        return $chargeback;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchChargebackById(string $paymentId, string $chargebackId, ?string $chargeId): Chargeback
+    {
+        $paymentObject = $this->fetchPayment($paymentId);
+        $chargeback = $paymentObject->getChargeback($chargebackId, $chargeId, true);
+
+        if (!$chargeback instanceof Chargeback) {
+            throw new RuntimeException('The chargeback object could not be found.');
+        }
+
+        $this->fetchResource($chargeback);
+        return $chargeback;
     }
 
     //</editor-fold>

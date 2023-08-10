@@ -30,6 +30,7 @@ class IdStrings
     public const CHARGE = 'chg';
     public const PAYOUT = 'out';
     public const SHIPMENT = 'shp';
+    public const CHARGEBACK = 'cbk';
 
     // Payment Types
     public const ALIPAY = 'ali';

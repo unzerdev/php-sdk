@@ -49,6 +49,7 @@ use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Resources\Webhook;
@@ -583,6 +584,19 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     }
 
     //</editor-fold>
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchChargebackById(string $paymentId, string $charebackId, ?string $chargeId): Chargeback
+    {
+        return $this->resourceService->fetchChargebackById($paymentId, $charebackId, $chargeId);
+    }
+
+    public function fetchChargeback(Chargeback $chargeback): Chargeback
+    {
+        return $this->resourceService->fetchResource($chargeback);
+    }
 
     //<editor-fold desc="Cancellation resource">
 

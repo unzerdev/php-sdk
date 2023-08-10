@@ -44,7 +44,7 @@ class Shipment extends AbstractTransactionType
      *
      * @return Shipment
      */
-    public function setAmount(?float $amount): Shipment
+    public function setAmount(?float $amount): self
     {
         $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
