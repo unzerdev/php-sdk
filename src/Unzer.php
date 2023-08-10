@@ -65,7 +65,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '3.2.0';
+    public const SDK_VERSION = '3.3.0';
 
     /** @var string $key */
     private $key;
