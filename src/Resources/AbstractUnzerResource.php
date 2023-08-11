@@ -258,7 +258,7 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
     /**
      * This method updates the properties of the resource.
      *
-     * @param $object
+     * @param          $object
      * @param stdClass $response
      */
     private static function updateValues($object, stdClass $response): void

@@ -166,7 +166,7 @@ class BasketTest extends BasePaymentTest
      * @dataProvider getApiVersionShouldReturnExpectedVersionDP
      *
      * @param Basket $basket
-     * @param $expectedApiVersion
+     * @param        $expectedApiVersion
      */
     public function getApiVersionShouldReturnExpectedVersion(Basket $basket, $expectedApiVersion): void
     {

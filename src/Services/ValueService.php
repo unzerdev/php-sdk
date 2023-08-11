@@ -43,7 +43,7 @@ class ValueService
     /**
      * Mask a value.
      *
-     * @param $value
+     * @param        $value
      * @param string $maskSymbol
      *
      * @return string
