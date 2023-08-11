@@ -260,7 +260,7 @@ class Payment extends AbstractUnzerResource
      *
      * @return $this
      */
-    public function addChargeback(Chargeback $chargeback): self
+    private function addChargeback(Chargeback $chargeback): self
     {
         $chargeback->setPayment($this);
         $this->chargebacks[] = $chargeback;
@@ -1179,7 +1179,6 @@ class Payment extends AbstractUnzerResource
             if (!$chargeback instanceof Chargeback) {
                 $chargeback = (new Chargeback())->setId($chargebackId);
                 $this->addChargeback($chargeback);
-
 
                 if ($charge instanceof Charge) {
                     $charge->addChargeback($chargeback);
