@@ -37,6 +37,7 @@ use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use RuntimeException;
@@ -334,6 +335,32 @@ interface ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function fetchCharge(Charge $charge): Charge;
+
+    /**
+     * Fetch a chargeback object by combination of payment id, chargeback id and charge id.
+     * Chargeback ids are not unique to a merchant but to the payment.
+     *
+     * @param Payment|string $payment      The payment object or payment id to fetch the authorization from.
+     * @param string         $chargebackId The id of the chargeback to fetch.
+     *
+     * @return Chargeback|AbstractUnzerResource The fetched chargeback.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchChargebackById(string $paymentId, string $chargebackId, ?string $chargeId): Chargeback;
+
+    /**
+     * Update local chargeback object.
+     *
+     * @param Chargeback $chargeback The chargeback object to be fetched.
+     *
+     * @return Chargeback|AbstractUnzerResource The fetched chargeback.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchChargeback(Chargeback $chargeback): Chargeback;
 
     /**
      * Fetch a cancellation on an authorization (aka reversal).
