@@ -100,7 +100,7 @@ class HttpService
     /**
      * send post request to payment server
      *
-     * @param $uri string|null uri of the target system
+     * @param                        $uri        string|null uri of the target system
      * @param ?AbstractUnzerResource $resource
      * @param string                 $httpMethod
      * @param string                 $apiVersion

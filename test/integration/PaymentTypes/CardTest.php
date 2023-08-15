@@ -114,7 +114,7 @@ class CardTest extends BaseIntegrationTest
      *
      * @dataProvider supportedRecurrenceTypesDP
      *
-     * @param $recurrenceType
+     * @param       $recurrenceType
      * @param mixed $isrecurring
      *
      * @throws UnzerApiException

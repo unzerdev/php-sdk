@@ -33,6 +33,7 @@ use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\PaymentTypes\PayU;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
 use UnzerSDK\Resources\TransactionTypes\Chargeback;
@@ -926,6 +927,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::PAYLATER_INVOICE:
                 $paymentType = new PaylaterInvoice();
+                break;
+            case IdStrings::PAYU:
+                $paymentType = new PayU();
                 break;
             case IdStrings::PIS:
                 $paymentType = new PIS();
