@@ -99,8 +99,8 @@ class BasketTest extends BaseIntegrationTest
      *
      * @dataProvider basketItemWithInvalidUrlWillThrowAnErrorDP
      *
-     * @param $expectException
-     * @param $imageUrl
+     * @param      $expectException
+     * @param      $imageUrl
      * @param null $exceptionCode
      */
     public function basketItemWithInvalidUrlWillThrowAnError($expectException, $imageUrl, $exceptionCode = null): void

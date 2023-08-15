@@ -175,7 +175,7 @@ class HttpServiceTest extends BasePaymentTest
      *
      * @dataProvider clientIpHeaderShouldBeSetProperlyDP
      *
-     * @param $clientIp
+     * @param       $clientIp
      * @param mixed $isHeaderExpected
      */
     public function clientIpHeaderShouldBeSetProperly($clientIp, $isHeaderExpected): void
@@ -403,8 +403,8 @@ class HttpServiceTest extends BasePaymentTest
      *
      * @dataProvider environmentUrlSwitchesWithEnvironmentVariableDP
      *
-     * @param $environment
-     * @param $apiUrl
+     * @param        $environment
+     * @param        $apiUrl
      * @param string $key
      */
     public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl, string $key): void

@@ -248,7 +248,7 @@ class WebhookTest extends BaseIntegrationTest
     /**
      * Returns true if the given Webhook exists in the given array.
      *
-     * @param $webhooksArray
+     * @param         $webhooksArray
      * @param Webhook $webhook
      *
      * @return bool
