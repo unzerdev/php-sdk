@@ -298,6 +298,18 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            PayU
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div id="tryPayUExample" class="ui bottom attached green button" onclick="location.href='PayU/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             Sofort
                         </div>
                         <div class="description">

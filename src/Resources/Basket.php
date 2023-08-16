@@ -62,7 +62,7 @@ class Basket extends AbstractUnzerResource
     /** @var string $note */
     protected $note;
 
-    /** @var array $basketItems */
+    /** @var BasketItem[] $basketItems */
     private $basketItems;
 
     /**
