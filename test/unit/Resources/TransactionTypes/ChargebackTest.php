@@ -22,17 +22,18 @@
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace Resources\TransactionTypes;
 
+use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Services\HttpService;
 use UnzerSDK\Services\ResourceService;
+use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
 use UnzerSDK\Unzer;
-use UnzerSDK\Resources\Payment;
-use UnzerSDK\test\BasePaymentTest;
 
 class ChargebackTest extends BasePaymentTest
 {
@@ -65,7 +66,7 @@ class ChargebackTest extends BasePaymentTest
     public function jsonResponseShouldBeHandledProperly()
     {
         $responseObject = json_decode(JsonProvider::getJsonFromFile('chargeback.json'));
-        
+
         $chargeback = (new Chargeback())->setPayment(new Payment());
         $this->assertFalse($chargeback->isSuccess());
         $this->assertNull($chargeback->getId());
@@ -78,7 +79,7 @@ class ChargebackTest extends BasePaymentTest
         $this->assertEmpty($chargeback->getMessage()->getMerchant());
 
         $chargeback->handleResponse($responseObject);
-        
+
         $this->assertEquals('s-cbk-1', $chargeback->getId());
         $this->assertEquals('31HA0xyz', $chargeback->getUniqueId());
         $this->assertEquals('1234.1234.1234', $chargeback->getShortId());
@@ -117,7 +118,7 @@ class ChargebackTest extends BasePaymentTest
 
         // Mock Resource service
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->disableOriginalConstructor()->onlyMethods(['getResource','fetchPayment', 'fetchPaymentType'])->getMock();
+            ->disableOriginalConstructor()->onlyMethods(['getResource', 'fetchPayment', 'fetchPaymentType'])->getMock();
         $resourceServiceMock->method('fetchPaymentType')->willReturn(new PaylaterInvoice());
         $resourceServiceMock->expects($this->once())->method('fetchPayment')->willReturn($payment);
 
@@ -138,16 +139,16 @@ class ChargebackTest extends BasePaymentTest
      * verify fetching Chargeback by id without charge ID uses expected endpoint.
      *
      * @test
+     * @dataProvider fetchChargebackByIdDP
      */
-    public function fetchChargebackById(): void
+    public function fetchChargebackById($chargeId, $expectedUri): void
     {
         $responseObject = json_decode(JsonProvider::getJsonFromFile('paymentWithMultipleChargebacks.json'));
         $chargebackJson = JsonProvider::getJsonFromFile('chargeback.json');
 
         $unzer = (new Unzer('s-priv-123'));
         $payment = (new Payment())
-            ->setParentResource($unzer)
-            ->setId('MyPaymentId');
+            ->setParentResource($unzer);
 
         // Mock http service
         $httpServiceMock = $this->getMockBuilder(HttpService::class)
@@ -155,12 +156,12 @@ class ChargebackTest extends BasePaymentTest
 
         $httpServiceMock->expects($this->once())
             ->method('send')
-            ->with('/payments/s-pay-123/charges/s-chg-1/chargebacks/s-cbk-1')
+            ->with($expectedUri)
             ->willReturn($chargebackJson);
 
         // Mock Resource service
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->disableOriginalConstructor()->onlyMethods(['getResource','fetchPayment', 'fetchPaymentType'])->getMock();
+            ->disableOriginalConstructor()->onlyMethods(['getResource', 'fetchPayment', 'fetchPaymentType'])->getMock();
         $resourceServiceMock->method('fetchPaymentType')->willReturn(new PaylaterInvoice());
         $resourceServiceMock->expects($this->once())->method('fetchPayment')->willReturn($payment);
 
@@ -169,11 +170,25 @@ class ChargebackTest extends BasePaymentTest
 
         $payment->handleResponse($responseObject);
 
-        $fetchedChargeback = $unzer->fetchChargebackById('MyPaymentId', 's-cbk-1', 's-chg-1');
+        $fetchedChargeback = $unzer->fetchChargebackById('s-pay-123', 's-cbk-1', $chargeId);
         $this->assertEquals('s-cbk-1', $fetchedChargeback->getId());
         $this->assertEquals('31HA0xyz', $fetchedChargeback->getUniqueId());
         $this->assertEquals('1234.1234.1234', $fetchedChargeback->getShortId());
         $this->assertEquals('trace-123', $fetchedChargeback->getTraceId());
         $this->assertInstanceOf(Charge::class, $fetchedChargeback->getParentResource());
+    }
+
+    public function fetchChargebackByIdDP(): array
+    {
+        return [
+            'first chargeback' => [
+                's-chg-1',
+                '/payments/s-pay-123/charges/s-chg-1/chargebacks/s-cbk-1'
+            ],
+            'second chargeback' => [
+                's-chg-2',
+                '/payments/s-pay-123/charges/s-chg-2/chargebacks/s-cbk-1'
+            ]
+        ];
     }
 }
