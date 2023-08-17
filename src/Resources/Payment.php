@@ -316,7 +316,7 @@ class Payment extends AbstractUnzerResource
             $parentResource = $chargeback->getParentResource();
             if ($chargeback->getId() === $chargebackId) {
                 if ($parentResource instanceof Charge && $parentResource->getId() !== $chargeId) {
-                    return null;
+                    continue;
                 }
                 if (!$lazy) {
                     $this->getResource($chargeback);

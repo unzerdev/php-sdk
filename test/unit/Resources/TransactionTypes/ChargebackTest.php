@@ -146,34 +146,43 @@ class ChargebackTest extends BasePaymentTest
 
         $unzer = (new Unzer('s-priv-123'));
         $payment = (new Payment())
-            ->setParentResource($unzer)
-            ->setId('MyPaymentId');
+            ->setParentResource($unzer);
 
         // Mock http service
         $httpServiceMock = $this->getMockBuilder(HttpService::class)
             ->disableOriginalConstructor()->onlyMethods(['send'])->getMock();
 
-        $httpServiceMock->expects($this->once())
+        $httpServiceMock->expects($this->exactly(2))
             ->method('send')
-            ->with('/payments/s-pay-123/charges/s-chg-1/chargebacks/s-cbk-1')
+            ->withConsecutive(
+                ['/payments/s-pay-123/charges/s-chg-1/chargebacks/s-cbk-1'],
+                ['/payments/s-pay-123/charges/s-chg-2/chargebacks/s-cbk-1']
+            )
             ->willReturn($chargebackJson);
 
         // Mock Resource service
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
             ->disableOriginalConstructor()->onlyMethods(['getResource','fetchPayment', 'fetchPaymentType'])->getMock();
         $resourceServiceMock->method('fetchPaymentType')->willReturn(new PaylaterInvoice());
-        $resourceServiceMock->expects($this->once())->method('fetchPayment')->willReturn($payment);
+        $resourceServiceMock->expects($this->exactly(2))->method('fetchPayment')->willReturn($payment);
 
         $unzer->setResourceService($resourceServiceMock)
             ->setHttpService($httpServiceMock);
 
         $payment->handleResponse($responseObject);
 
-        $fetchedChargeback = $unzer->fetchChargebackById('MyPaymentId', 's-cbk-1', 's-chg-1');
-        $this->assertEquals('s-cbk-1', $fetchedChargeback->getId());
-        $this->assertEquals('31HA0xyz', $fetchedChargeback->getUniqueId());
-        $this->assertEquals('1234.1234.1234', $fetchedChargeback->getShortId());
-        $this->assertEquals('trace-123', $fetchedChargeback->getTraceId());
-        $this->assertInstanceOf(Charge::class, $fetchedChargeback->getParentResource());
+        $fetchedChargeback1 = $unzer->fetchChargebackById('s-pay-123', 's-cbk-1', 's-chg-1');
+        $this->assertEquals('s-cbk-1', $fetchedChargeback1->getId());
+        $this->assertEquals('31HA0xyz', $fetchedChargeback1->getUniqueId());
+        $this->assertEquals('1234.1234.1234', $fetchedChargeback1->getShortId());
+        $this->assertEquals('trace-123', $fetchedChargeback1->getTraceId());
+        $this->assertInstanceOf(Charge::class, $fetchedChargeback1->getParentResource());
+
+        $fetchedChargeback2 = $unzer->fetchChargebackById('s-pay-123', 's-cbk-1', 's-chg-2');
+        $this->assertEquals('s-cbk-1', $fetchedChargeback2->getId());
+        $this->assertEquals('31HA0xyz', $fetchedChargeback2->getUniqueId());
+        $this->assertEquals('1234.1234.1234', $fetchedChargeback2->getShortId());
+        $this->assertEquals('trace-123', $fetchedChargeback2->getTraceId());
+        $this->assertInstanceOf(Charge::class, $fetchedChargeback2->getParentResource());
     }
 }
