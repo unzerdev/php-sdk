@@ -33,7 +33,6 @@ trait HasCancellations
     /** @var array $cancellations */
     private $cancellations = [];
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return array
@@ -94,5 +93,4 @@ trait HasCancellations
         return null;
     }
 
-    //</editor-fold>
-}
+    }

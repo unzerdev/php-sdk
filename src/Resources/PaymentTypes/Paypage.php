@@ -117,7 +117,6 @@ class Paypage extends BasePaymentType
         $this->setReturnUrl($returnUrl);
     }
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return float
@@ -621,9 +620,7 @@ class Paypage extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable methods">
 
     /**
      * {@inheritDoc}
@@ -720,7 +717,6 @@ class Paypage extends BasePaymentType
         ];
     }
 
-    //</editor-fold>
 
     /**
      * Updates the referenced payment object if it exists and if this is not the payment object itself.

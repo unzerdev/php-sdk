@@ -66,7 +66,6 @@ class Charge extends AbstractTransactionType
         $this->setReturnUrl($returnUrl);
     }
 
-    //<editor-fold desc="Setters/Getters">
 
     /**
      * @return float|null
@@ -187,9 +186,7 @@ class Charge extends AbstractTransactionType
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * {@inheritDoc}
@@ -199,7 +196,6 @@ class Charge extends AbstractTransactionType
         return 'charges';
     }
 
-    //</editor-fold>
 
     /**
      * Full cancel of this authorization.

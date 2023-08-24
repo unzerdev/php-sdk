@@ -29,7 +29,6 @@ trait HasGeoLocation
     /** @var GeoLocation $geoLocation */
     private $geoLocation;
 
-    //<editor-fold desc="Setters/Getters">
 
     /**
      * @return GeoLocation
@@ -53,5 +52,4 @@ trait HasGeoLocation
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

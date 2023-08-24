@@ -33,7 +33,6 @@ trait HasChargebacks
     /** @var Chargeback[] $chargebacks */
     private $chargebacks = [];
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return array
@@ -94,5 +93,4 @@ trait HasChargebacks
         return null;
     }
 
-    //</editor-fold>
-}
+    }

@@ -34,7 +34,6 @@ class Amount extends AbstractUnzerResource
     /** @var string $currency */
     private $currency;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return float
@@ -131,5 +130,4 @@ class Amount extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

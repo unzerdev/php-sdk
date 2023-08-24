@@ -60,7 +60,6 @@ class PaymentService implements PaymentServiceInterface
         $this->unzer       = $unzer;
     }
 
-    //<editor-fold desc="Getters/Setters"
 
     /**
      * @return Unzer
@@ -89,11 +88,8 @@ class PaymentService implements PaymentServiceInterface
         return $this->getUnzer()->getResourceService();
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Transactions">
 
-    //<editor-fold desc="Authorize transaction">
 
     public function performAuthorization(
         Authorization $authorization,
@@ -163,9 +159,7 @@ class PaymentService implements PaymentServiceInterface
         return $authorization;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Charge transaction">
 
     /**
      * {@inheritDoc}
@@ -280,9 +274,7 @@ class PaymentService implements PaymentServiceInterface
         return $charge;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Payout transactions">
 
     /**
      * {@inheritDoc}
@@ -310,9 +302,7 @@ class PaymentService implements PaymentServiceInterface
         return $payout;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Shipment transaction">
 
     /**
      * {@inheritDoc}
@@ -326,11 +316,8 @@ class PaymentService implements PaymentServiceInterface
         return $shipment;
     }
 
-    //</editor-fold>
 
-    //</editor-fold>
 
-    //<editor-fold desc="Paypage">
 
     /**
      * {@inheritDoc}
@@ -356,9 +343,7 @@ class PaymentService implements PaymentServiceInterface
         return $this->initPayPage($paypage, TransactionTypes::AUTHORIZATION, $customer, $basket, $metadata);
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Installment Secured">
 
     /**
      * {@inheritDoc}
@@ -387,9 +372,7 @@ class PaymentService implements PaymentServiceInterface
         return $this->unzer->getResourceService()->fetchResource($plans);
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Helpers">
 
     /**
      * Creates the PayPage for the requested transaction method.
@@ -438,5 +421,4 @@ class PaymentService implements PaymentServiceInterface
         return (new Payment($this->unzer))->setPaymentType($paymentType);
     }
 
-    //</editor-fold>
-}
+    }

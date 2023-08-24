@@ -65,7 +65,6 @@ class InstalmentPlans extends AbstractUnzerResource
         $this->setOrderDate($orderDate);
     }
 
-    //<editor-fold desc="Getters / Setters">
 
     /**
      * @return float
@@ -162,9 +161,7 @@ class InstalmentPlans extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable methods">
 
     /**
      * Returns the parameter array containing the values for the query string.
@@ -219,5 +216,4 @@ class InstalmentPlans extends AbstractUnzerResource
         }
     }
 
-    //</editor-fold>
-}
+    }

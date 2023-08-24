@@ -44,7 +44,6 @@ class HttpService
     /** @var EnvironmentService $environmentService */
     private $environmentService;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * Returns the currently set HttpAdapter.
@@ -95,7 +94,6 @@ class HttpService
         return $this;
     }
 
-    //</editor-fold>
 
     /**
      * send post request to payment server

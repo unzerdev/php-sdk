@@ -47,7 +47,6 @@ class Address extends AbstractUnzerResource
     /** @var string|null shippingType */
     protected $shippingType;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -182,5 +181,4 @@ class Address extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

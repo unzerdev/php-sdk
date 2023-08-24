@@ -62,7 +62,6 @@ class Keypair extends AbstractUnzerResource
     /** @var bool $validateBasket */
     private $validateBasket;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -263,9 +262,7 @@ class Keypair extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * @inheritDoc
@@ -294,5 +291,4 @@ class Keypair extends AbstractUnzerResource
         return parent::getResourcePath($httpMethod) . ($this->isDetailed() ? '/types' : '');
     }
 
-    //</editor-fold>
-}
+    }

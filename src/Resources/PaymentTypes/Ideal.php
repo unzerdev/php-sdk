@@ -31,7 +31,6 @@ class Ideal extends BasePaymentType
     /** @var string $bic */
     protected $bic;
 
-    //<editor-fold desc="Getter/Setter">
 
     /**
      * @return string|null
@@ -52,5 +51,4 @@ class Ideal extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

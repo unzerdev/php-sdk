@@ -28,7 +28,6 @@ trait HasTraceId
     /** @var string $traceId */
     private $traceId;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -49,5 +48,4 @@ trait HasTraceId
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

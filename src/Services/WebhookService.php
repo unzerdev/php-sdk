@@ -50,7 +50,6 @@ class WebhookService implements WebhookServiceInterface
         $this->resourceService = $unzer->getResourceService();
     }
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return Unzer
@@ -90,9 +89,7 @@ class WebhookService implements WebhookServiceInterface
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Webhook resource">
 
     /**
      * {@inheritDoc}
@@ -145,9 +142,7 @@ class WebhookService implements WebhookServiceInterface
         return $this->resourceService->deleteResource($webhookObject);
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Webhooks pseudo resource">
 
     /**
      * {@inheritDoc}
@@ -185,9 +180,7 @@ class WebhookService implements WebhookServiceInterface
         return $webhooks->getWebhookList();
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Event handling">
 
     /**
      * {@inheritDoc}
@@ -220,5 +213,4 @@ class WebhookService implements WebhookServiceInterface
         return file_get_contents('php://input');
     }
 
-    //</editor-fold>
-}
+    }

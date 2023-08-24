@@ -67,7 +67,6 @@ class Cancellation extends AbstractTransactionType
         $this->setAmount($amount);
     }
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * Returns the cancellationAmount (equals grossAmount in case of Installment Secured).
@@ -186,9 +185,7 @@ class Cancellation extends AbstractTransactionType
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * {@inheritDoc}
@@ -213,5 +210,4 @@ class Cancellation extends AbstractTransactionType
         return 'cancels';
     }
 
-    //</editor-fold>
-}
+    }

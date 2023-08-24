@@ -35,7 +35,6 @@ class Message extends AbstractUnzerResource
     /** @var string $merchant */
     private $merchant = '';
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string
@@ -94,5 +93,4 @@ class Message extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

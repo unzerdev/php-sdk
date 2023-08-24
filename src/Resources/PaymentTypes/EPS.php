@@ -31,7 +31,6 @@ class EPS extends BasePaymentType
     /** @var string $bic */
     protected $bic;
 
-    //<editor-fold desc="Getter/Setter">
 
     /**
      * @return string|null
@@ -52,5 +51,4 @@ class EPS extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

@@ -35,7 +35,6 @@ class CompanyOwner extends AbstractUnzerResource
     /** @var string|null $birthdate */
     protected $birthdate;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -94,5 +93,4 @@ class CompanyOwner extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

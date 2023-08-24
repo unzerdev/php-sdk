@@ -55,7 +55,6 @@ trait CanRecur
         throw new RuntimeException('Error: Recurring can not be enabled on this type.');
     }
 
-    //<editor-fold desc="Getter/Setter">
 
     /**
      * @return bool
@@ -76,5 +75,4 @@ trait CanRecur
         return $this;
     }
 
-    //</editor-fold>
-}
+    }
