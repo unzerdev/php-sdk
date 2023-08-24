@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -61,7 +62,6 @@ class Keypair extends AbstractUnzerResource
 
     /** @var bool $validateBasket */
     private $validateBasket;
-
 
     /**
      * @return string|null
@@ -262,8 +262,6 @@ class Keypair extends AbstractUnzerResource
         return $this;
     }
 
-
-
     /**
      * @inheritDoc
      */
@@ -290,5 +288,4 @@ class Keypair extends AbstractUnzerResource
     {
         return parent::getResourcePath($httpMethod) . ($this->isDetailed() ? '/types' : '');
     }
-
-    }
+}

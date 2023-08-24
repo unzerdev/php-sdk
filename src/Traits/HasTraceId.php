@@ -21,13 +21,13 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 trait HasTraceId
 {
     /** @var string $traceId */
     private $traceId;
-
 
     /**
      * @return string|null
@@ -47,5 +47,4 @@ trait HasTraceId
         $this->traceId = $traceId;
         return $this;
     }
-
-    }
+}

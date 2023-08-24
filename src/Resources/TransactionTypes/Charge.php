@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\TransactionTypes
  */
+
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -65,7 +66,6 @@ class Charge extends AbstractTransactionType
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
     }
-
 
     /**
      * @return float|null
@@ -186,8 +186,6 @@ class Charge extends AbstractTransactionType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -195,7 +193,6 @@ class Charge extends AbstractTransactionType
     {
         return 'charges';
     }
-
 
     /**
      * Full cancel of this authorization.

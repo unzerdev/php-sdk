@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\Fixtures
  */
+
 namespace UnzerSDK\test\Fixtures;
 
 use UnzerSDK\Constants\CompanyCommercialSectorItems;

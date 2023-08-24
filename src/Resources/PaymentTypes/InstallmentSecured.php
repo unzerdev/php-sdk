@@ -77,7 +77,6 @@ class InstallmentSecured extends InstalmentPlan
         return $this;
     }
 
-
     /**
      * @return string|null
      */
@@ -134,5 +133,4 @@ class InstallmentSecured extends InstalmentPlan
         $this->accountHolder = $accountHolder;
         return $this;
     }
-
-    }
+}

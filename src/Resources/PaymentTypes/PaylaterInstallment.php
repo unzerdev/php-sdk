@@ -58,7 +58,6 @@ class PaylaterInstallment extends BasePaymentType
         $this->holder = $accountHolder;
     }
 
-
     /**
      * @return string|null
      */
@@ -153,5 +152,4 @@ class PaylaterInstallment extends BasePaymentType
         $this->holder = $holder;
         return $this;
     }
-
-    }
+}

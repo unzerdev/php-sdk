@@ -20,11 +20,13 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use stdClass;
+
 use function count;
 
 class Basket extends AbstractUnzerResource
@@ -86,7 +88,6 @@ class Basket extends AbstractUnzerResource
         $this->setAmountTotalGross($amountTotalGross);
         $this->setBasketItems($basketItems);
     }
-
 
     /**
      * @return float
@@ -291,8 +292,6 @@ class Basket extends AbstractUnzerResource
         return $this->basketItems[$index] ?? null;
     }
 
-
-
     /**
      * Add the dynamically set meta data.
      * {@inheritDoc}
@@ -359,5 +358,4 @@ class Basket extends AbstractUnzerResource
             $this->setBasketItems($items);
         }
     }
-
-    }
+}

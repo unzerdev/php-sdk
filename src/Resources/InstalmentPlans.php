@@ -22,6 +22,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use DateTime;
@@ -64,7 +65,6 @@ class InstalmentPlans extends AbstractUnzerResource
         $this->effectiveInterest = $effectiveInterest;
         $this->setOrderDate($orderDate);
     }
-
 
     /**
      * @return float
@@ -161,8 +161,6 @@ class InstalmentPlans extends AbstractUnzerResource
         return $this;
     }
 
-
-
     /**
      * Returns the parameter array containing the values for the query string.
      *
@@ -215,5 +213,4 @@ class InstalmentPlans extends AbstractUnzerResource
             $this->setPlans($plans);
         }
     }
-
-    }
+}

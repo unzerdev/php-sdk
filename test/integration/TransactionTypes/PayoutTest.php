@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\integration\TransactionTypes
  */
+
 namespace UnzerSDK\test\integration\TransactionTypes;
 
 use UnzerSDK\Resources\Metadata;
@@ -100,7 +102,7 @@ class PayoutTest extends BaseIntegrationTest
         $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
         $this->assertAmounts($payment, 0, 0, -100, 0);
     }
-    
+
     /**
      * Verify Payout transaction is fetched with Payment resource.
      *

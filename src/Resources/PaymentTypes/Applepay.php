@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use stdClass;
@@ -79,7 +80,6 @@ class Applepay extends BasePaymentType
         $this->signature = $signature;
         $this->header = $header;
     }
-
 
     /**
      * @return string|null
@@ -251,7 +251,6 @@ class Applepay extends BasePaymentType
         $this->version = $version;
         return $this;
     }
-
 
     /**
      * @inheritDoc

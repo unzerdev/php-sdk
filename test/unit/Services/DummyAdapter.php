@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace UnzerSDK\test\unit\Services;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;

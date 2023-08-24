@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 use UnzerSDK\Exceptions\UnzerApiException;
@@ -32,7 +33,6 @@ trait HasCancellations
 {
     /** @var array $cancellations */
     private $cancellations = [];
-
 
     /**
      * @return array
@@ -92,5 +92,4 @@ trait HasCancellations
         }
         return null;
     }
-
-    }
+}

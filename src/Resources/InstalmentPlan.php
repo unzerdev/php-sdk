@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use DateTime;
@@ -115,7 +116,6 @@ class InstalmentPlan extends BasePaymentType
         $this->monthlyRate           = $monthlyRate;
         $this->lastRate              = $lastRate;
     }
-
 
     /**
      * @return string|null
@@ -403,8 +403,6 @@ class InstalmentPlan extends BasePaymentType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -433,5 +431,4 @@ class InstalmentPlan extends BasePaymentType
             $this->setInstallmentRates($rates);
         }
     }
-
-    }
+}

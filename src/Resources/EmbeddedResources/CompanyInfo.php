@@ -20,11 +20,13 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use stdClass;
+
 use function is_string;
 
 class CompanyInfo extends AbstractUnzerResource
@@ -46,7 +48,6 @@ class CompanyInfo extends AbstractUnzerResource
 
     /** @var CompanyOwner|null $owner */
     protected $owner;
-
 
     /**
      * @return string|null
@@ -163,8 +164,6 @@ class CompanyInfo extends AbstractUnzerResource
         return $this;
     }
 
-
-
     /**
      * Create instances of necessary properties to handle API responses.
      *
@@ -178,8 +177,6 @@ class CompanyInfo extends AbstractUnzerResource
             $this->owner = new CompanyOwner();
         }
     }
-
-
 
     /**
      * Removes some restricted symbols from the given value.
@@ -196,5 +193,4 @@ class CompanyInfo extends AbstractUnzerResource
 
         return str_replace(['<', '>'], '', $value);
     }
-
-    }
+}

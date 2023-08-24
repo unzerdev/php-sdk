@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 use UnzerSDK\Resources\EmbeddedResources\GeoLocation;
@@ -28,7 +29,6 @@ trait HasGeoLocation
 {
     /** @var GeoLocation $geoLocation */
     private $geoLocation;
-
 
     /**
      * @return GeoLocation
@@ -51,5 +51,4 @@ trait HasGeoLocation
         $this->geoLocation = $geoLocation;
         return $this;
     }
-
-    }
+}

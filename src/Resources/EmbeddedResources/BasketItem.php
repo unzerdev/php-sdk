@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -112,7 +113,6 @@ class BasketItem extends AbstractUnzerResource
         $this->setAmountNet($amountNet);
         $this->setAmountPerUnit($amountPerUnit);
     }
-
 
     /**
      * @return string|null
@@ -421,5 +421,4 @@ class BasketItem extends AbstractUnzerResource
         $this->type = $type;
         return $this;
     }
-
-    }
+}

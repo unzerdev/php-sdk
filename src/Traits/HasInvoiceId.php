@@ -20,13 +20,13 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 trait HasInvoiceId
 {
     /** @var string $invoiceId */
     protected $invoiceId;
-
 
     /**
      * @return string|null
@@ -46,5 +46,4 @@ trait HasInvoiceId
         $this->invoiceId = $invoiceId;
         return $this;
     }
-
-    }
+}

@@ -24,6 +24,7 @@
 
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
+
 namespace UnzerSDK\test\unit\Traits;
 
 use UnzerSDK\Resources\AbstractUnzerResource;

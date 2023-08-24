@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\integration
  */
+
 namespace UnzerSDK\test;
 
 use DateInterval;
@@ -43,10 +45,9 @@ use UnzerSDK\Unzer;
 
 class BasePaymentTest extends TestCase
 {
+    use CustomerFixtureTrait;
     protected const RETURN_URL = 'https://dev.unzer.com';
     public const API_VERSION_2 = 'v2';
-
-    use CustomerFixtureTrait;
 
     /** @var Unzer $unzer */
     protected $unzer;

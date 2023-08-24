@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Traits\CanDirectCharge;
@@ -30,7 +31,6 @@ class Ideal extends BasePaymentType
 
     /** @var string $bic */
     protected $bic;
-
 
     /**
      * @return string|null
@@ -50,5 +50,4 @@ class Ideal extends BasePaymentType
         $this->bic = $bic;
         return $this;
     }
-
-    }
+}

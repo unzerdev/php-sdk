@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 use UnzerSDK\Resources\EmbeddedResources\Message;
@@ -28,7 +29,6 @@ trait HasCustomerMessage
 {
     /** @var Message $message */
     private $message;
-
 
     /**
      * @return Message
@@ -41,5 +41,4 @@ trait HasCustomerMessage
 
         return $this->message;
     }
-
-    }
+}

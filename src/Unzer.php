@@ -21,6 +21,7 @@
  *
  * @package  UnzerSDK
  */
+
 namespace UnzerSDK;
 
 use DateTime;
@@ -119,7 +120,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         $this->cancelService   = new CancelService($this);
         $this->httpService     = new HttpService();
     }
-
 
     /**
      * Returns the set private key used to connect to the API.
@@ -344,8 +344,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this;
     }
 
-
-
     /**
      * Returns this Unzer instance.
      *
@@ -364,9 +362,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return '';
     }
 
-
-
-
     /**
      * {@inheritDoc}
      */
@@ -375,15 +370,13 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->activateRecurringPayment($paymentType, $returnUrl, $recurrenceType);
     }
 
-
-        /**
+    /**
      * {@inheritDoc}
      */
     public function fetchPayPage($payPage): Paypage
     {
         return $this->resourceService->fetchPayPage($payPage);
     }
-
 
     /**
      * {@inheritDoc}
@@ -401,8 +394,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchPaymentByOrderId($orderId);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -410,8 +401,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchKeypair($detailed);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -428,8 +417,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchMetadata($metadata);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -455,8 +442,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->updateBasket($basket);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -480,8 +465,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchPaymentType($typeId);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -531,8 +514,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         $this->resourceService->deleteCustomer($customer);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -540,8 +521,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchAuthorization($payment);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -559,7 +538,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchCharge($charge);
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -572,7 +550,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchResource($chargeback);
     }
-
 
     /**
      * {@inheritDoc}
@@ -622,8 +599,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchPaymentReversal($payment, $cancellationId);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -632,8 +607,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchShipment($payment, $shipmentId);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -641,8 +614,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchPayout($payment);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -708,10 +679,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->webhookService->fetchResourceFromEvent($eventJson);
     }
 
-
-
-
-
     /**
      * {@inheritDoc}
      */
@@ -762,8 +729,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             $recurrenceType
         );
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -840,8 +805,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->paymentService->performChargeOnPayment($payment, $charge);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -857,8 +820,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->cancelService->cancelAuthorizationByPayment($payment, $amount);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -882,8 +843,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->cancelService->cancelPaymentAuthorization($payment, $amount);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -934,8 +893,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             ->cancelChargedPayment($payment, $cancellation);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -943,8 +900,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->paymentService->ship($payment, $invoiceId, $orderId);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -975,8 +930,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         );
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -1001,8 +954,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->paymentService->initPayPageAuthorize($paypage, $customer, $basket, $metadata);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -1016,13 +967,10 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             ->fetchInstallmentPlans($amount, $currency, $effectiveInterest, $orderDate);
     }
 
-
-    public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest):PaylaterInstallmentPlans
+    public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest): PaylaterInstallmentPlans
     {
         return $this->getPaymentService()->fetchPaylaterInstallmentPlans($plansRequest);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -1033,8 +981,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->getResourceService()->fetchConfig($paymentType, $config);
     }
-
-
 
     /**
      * Writes the given string to the registered debug handler if debug mode is enabled.
@@ -1050,5 +996,4 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             }
         }
     }
-
-    }
+}

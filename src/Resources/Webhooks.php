@@ -22,12 +22,14 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\WebhookEvents;
 use RuntimeException;
 use stdClass;
+
 use function in_array;
 
 class Webhooks extends AbstractUnzerResource
@@ -52,7 +54,6 @@ class Webhooks extends AbstractUnzerResource
         $this->url = $url;
         $this->eventList = $eventList;
     }
-
 
     /**
      * @return string
@@ -101,7 +102,6 @@ class Webhooks extends AbstractUnzerResource
     {
         return $this->webhooks;
     }
-
 
     /**
      * @param stdClass $response

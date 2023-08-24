@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -34,7 +35,6 @@ class CompanyOwner extends AbstractUnzerResource
 
     /** @var string|null $birthdate */
     protected $birthdate;
-
 
     /**
      * @return string|null
@@ -92,5 +92,4 @@ class CompanyOwner extends AbstractUnzerResource
         $this->birthdate = $birthdate;
         return $this;
     }
-
-    }
+}

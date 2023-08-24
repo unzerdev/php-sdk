@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Exceptions
  */
+
 namespace UnzerSDK\Exceptions;
 
 use Exception;

@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
 use DateTime;
@@ -60,7 +61,6 @@ class PaymentService implements PaymentServiceInterface
         $this->unzer       = $unzer;
     }
 
-
     /**
      * @return Unzer
      */
@@ -87,9 +87,6 @@ class PaymentService implements PaymentServiceInterface
     {
         return $this->getUnzer()->getResourceService();
     }
-
-
-
 
     public function performAuthorization(
         Authorization $authorization,
@@ -158,8 +155,6 @@ class PaymentService implements PaymentServiceInterface
         $this->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
         return $authorization;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -274,8 +269,6 @@ class PaymentService implements PaymentServiceInterface
         return $charge;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -302,8 +295,6 @@ class PaymentService implements PaymentServiceInterface
         return $payout;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -315,9 +306,6 @@ class PaymentService implements PaymentServiceInterface
         $this->getResourceService()->createResource($shipment);
         return $shipment;
     }
-
-
-
 
     /**
      * {@inheritDoc}
@@ -342,8 +330,6 @@ class PaymentService implements PaymentServiceInterface
     ): Paypage {
         return $this->initPayPage($paypage, TransactionTypes::AUTHORIZATION, $customer, $basket, $metadata);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -371,8 +357,6 @@ class PaymentService implements PaymentServiceInterface
         $plans = (new PaylaterInstallmentPlans())->setQueryParameter($paylaterInstallmentPlansQuery)->setParentResource($paylaterInstallment);
         return $this->unzer->getResourceService()->fetchResource($plans);
     }
-
-
 
     /**
      * Creates the PayPage for the requested transaction method.
@@ -420,5 +404,4 @@ class PaymentService implements PaymentServiceInterface
     {
         return (new Payment($this->unzer))->setPaymentType($paymentType);
     }
-
-    }
+}

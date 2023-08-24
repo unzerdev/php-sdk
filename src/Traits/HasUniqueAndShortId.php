@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 trait HasUniqueAndShortId
@@ -29,7 +30,6 @@ trait HasUniqueAndShortId
 
     /** @var string $shortId */
     private $shortId;
-
 
     /**
      * @return string|null
@@ -68,5 +68,4 @@ trait HasUniqueAndShortId
         $this->shortId = $shortId;
         return $this;
     }
-
-    }
+}

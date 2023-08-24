@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpComposerExtensionStubsInspection */
 /**
  * This is a wrapper for the default http adapter (CURL).
@@ -21,13 +22,15 @@
  *
  * @package  UnzerSDK\Adapter
  */
+
 namespace UnzerSDK\Adapter;
 
 use UnzerSDK\Unzer;
 use UnzerSDK\Services\EnvironmentService;
-use function extension_loaded;
 use UnzerSDK\Exceptions\UnzerApiException;
 use RuntimeException;
+
+use function extension_loaded;
 use function in_array;
 
 class CurlAdapter implements HttpAdapterInterface

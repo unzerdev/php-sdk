@@ -22,6 +22,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -70,7 +71,6 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
         $this->amount = $amount;
         return $this;
     }
-
 
     /**
      * @return string
@@ -166,8 +166,6 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
         return '?' . http_build_query($this->getQueryArray());
     }
 
-
-
     /**
      * Returns the parameter array containing the values for the query string.
      *
@@ -219,5 +217,4 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
             $this->setPlans($plans);
         }
     }
-
-    }
+}
