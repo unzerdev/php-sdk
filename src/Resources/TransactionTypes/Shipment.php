@@ -29,7 +29,6 @@ class Shipment extends AbstractTransactionType
     /** @var float|null $amount */
     protected $amount;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return float|null
@@ -50,9 +49,7 @@ class Shipment extends AbstractTransactionType
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable methods">
 
     /**
      * {@inheritDoc}
@@ -62,5 +59,4 @@ class Shipment extends AbstractTransactionType
         return 'shipments';
     }
 
-    //</editor-fold>
-}
+    }

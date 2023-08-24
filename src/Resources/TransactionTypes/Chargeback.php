@@ -43,7 +43,6 @@ class Chargeback extends AbstractTransactionType
         $this->setAmount($amount);
     }
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return float|null
@@ -101,9 +100,7 @@ class Chargeback extends AbstractTransactionType
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * {@inheritDoc}
@@ -113,5 +110,4 @@ class Chargeback extends AbstractTransactionType
         return 'chargebacks';
     }
 
-    //</editor-fold>
-}
+    }

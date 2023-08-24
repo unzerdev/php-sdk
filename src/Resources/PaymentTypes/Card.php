@@ -77,7 +77,6 @@ class Card extends BasePaymentType
         $this->setEmail($email);
     }
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string
@@ -234,9 +233,7 @@ class Card extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * Rename internal property names to external property names.
@@ -266,5 +263,4 @@ class Card extends BasePaymentType
         }
     }
 
-    //</editor-fold>
-}
+    }

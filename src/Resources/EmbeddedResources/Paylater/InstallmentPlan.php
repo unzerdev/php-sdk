@@ -161,7 +161,6 @@ class InstallmentPlan extends AbstractUnzerResource
         return $this;
     }
 
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * {@inheritDoc}
@@ -179,5 +178,4 @@ class InstallmentPlan extends AbstractUnzerResource
         }
     }
 
-    //</editor-fold>
-}
+    }

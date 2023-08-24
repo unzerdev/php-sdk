@@ -27,7 +27,6 @@ trait HasInvoiceId
     /** @var string $invoiceId */
     protected $invoiceId;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -48,5 +47,4 @@ trait HasInvoiceId
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

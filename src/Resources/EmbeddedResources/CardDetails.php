@@ -47,7 +47,6 @@ class CardDetails extends AbstractUnzerResource
     /** @var string|null $issuerPhoneNumber */
     protected $issuerPhoneNumber;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -182,5 +181,4 @@ class CardDetails extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

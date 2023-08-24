@@ -91,7 +91,6 @@ class ResourceService implements ResourceServiceInterface
         $this->unzer = $unzer;
     }
 
-    //<editor-fold desc="Getters/Setters"
 
     /** @return Unzer */
     public function getUnzer(): Unzer
@@ -110,9 +109,7 @@ class ResourceService implements ResourceServiceInterface
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="General">
 
     /**
      * Send request to API.
@@ -233,9 +230,7 @@ class ResourceService implements ResourceServiceInterface
         return $resource;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="CRUD operations">
 
     /**
      * Create the resource on the api.
@@ -359,9 +354,7 @@ class ResourceService implements ResourceServiceInterface
         return $resource;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Payout resource">
 
     /**
      * Fetch an Payout object by its paymentId.
@@ -384,9 +377,7 @@ class ResourceService implements ResourceServiceInterface
         return $payout;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Recurring">
 
     /**
      * {@inheritDoc}
@@ -412,9 +403,7 @@ class ResourceService implements ResourceServiceInterface
         throw new RuntimeException('Recurring is not available for the given payment type.');
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Payment resource">
 
     /**
      * Fetches the payment object if the id is given.
@@ -477,9 +466,7 @@ class ResourceService implements ResourceServiceInterface
         return $paymentObject;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Keypair resource">
 
     /**
      * {@inheritDoc}
@@ -491,9 +478,7 @@ class ResourceService implements ResourceServiceInterface
         return $keyPair;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Metadata resource">
 
     /**
      * {@inheritDoc}
@@ -519,9 +504,7 @@ class ResourceService implements ResourceServiceInterface
         return $metadataObject;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Basket resource">
 
     /**
      * {@inheritDoc}
@@ -565,9 +548,7 @@ class ResourceService implements ResourceServiceInterface
         return $basket;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="PaymentType resource">
 
     /**
      * {@inheritDoc}
@@ -602,9 +583,7 @@ class ResourceService implements ResourceServiceInterface
         return $returnPaymentType;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Customer resource">
 
     /**
      * {@inheritDoc}
@@ -686,9 +665,7 @@ class ResourceService implements ResourceServiceInterface
         $this->deleteResource($customerObject);
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Authorization resource">
 
     /**
      * {@inheritDoc}
@@ -707,10 +684,8 @@ class ResourceService implements ResourceServiceInterface
         return $authorize;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Charge resource">
-    public function fetchCharge(Charge $charge): Charge
+        public function fetchCharge(Charge $charge): Charge
     {
         $this->fetchResource($charge);
         return $charge;
@@ -732,9 +707,7 @@ class ResourceService implements ResourceServiceInterface
         return $charge;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Chargeback resource">
 
     /**
      * {@inheritDoc}
@@ -761,9 +734,7 @@ class ResourceService implements ResourceServiceInterface
         return $chargeback;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Cancellation resource">
 
     /**
      * {@inheritDoc}
@@ -838,9 +809,7 @@ class ResourceService implements ResourceServiceInterface
 
 
 
-    //</editor-fold>
 
-    //<editor-fold desc="Shipment resource">
 
     /**
      * {@inheritDoc}
@@ -851,9 +820,7 @@ class ResourceService implements ResourceServiceInterface
         return $paymentObject->getShipment($shipmentId);
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Config resource">
 
     /**
      * {@inheritDoc}
@@ -870,7 +837,6 @@ class ResourceService implements ResourceServiceInterface
         return $this->fetchResource($configObject);
     }
 
-    //</editor-fold>
 
     /**
      * Creates a payment type instance from a typeId string.

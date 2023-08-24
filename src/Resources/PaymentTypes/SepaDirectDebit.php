@@ -49,7 +49,6 @@ class SepaDirectDebit extends BasePaymentType
         $this->iban = $iban;
     }
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -108,5 +107,4 @@ class SepaDirectDebit extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

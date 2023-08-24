@@ -74,7 +74,6 @@ class Authorization extends AbstractTransactionType
         $this->setReturnUrl($returnUrl);
     }
 
-    //<editor-fold desc="Setters/Getters">
 
     /**
      * @return float|null
@@ -246,9 +245,7 @@ class Authorization extends AbstractTransactionType
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * {@inheritDoc}
@@ -258,7 +255,6 @@ class Authorization extends AbstractTransactionType
         return 'authorize';
     }
 
-    //</editor-fold>
 
     /**
      * Full cancel of this authorization.

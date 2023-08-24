@@ -30,7 +30,6 @@ trait HasUniqueAndShortId
     /** @var string $shortId */
     private $shortId;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -70,5 +69,4 @@ trait HasUniqueAndShortId
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

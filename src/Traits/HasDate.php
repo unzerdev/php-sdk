@@ -30,7 +30,6 @@ trait HasDate
     /** @var DateTime $date */
     private $date;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * This returns the date of the Transaction as string.
@@ -56,5 +55,4 @@ trait HasDate
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

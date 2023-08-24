@@ -35,7 +35,6 @@ class Metadata extends AbstractUnzerResource
     protected $shopType;
     protected $shopVersion;
 
-    //<editor-fold desc="Setters/Getters">
 
     /**
      * @return string|null
@@ -104,9 +103,6 @@ class Metadata extends AbstractUnzerResource
         return $this->metadata[$name] ?? null;
     }
 
-    //</editor-fold>>
-
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * Add the dynamically set meta data.
@@ -134,5 +130,4 @@ class Metadata extends AbstractUnzerResource
         }
     }
 
-    //</editor-fold>
-}
+    }

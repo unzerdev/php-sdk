@@ -27,7 +27,6 @@ trait HasOrderId
     /** @var string $orderId */
     protected $orderId;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -48,5 +47,4 @@ trait HasOrderId
         return $this;
     }
 
-    //</editor-fold>
-}
+    }

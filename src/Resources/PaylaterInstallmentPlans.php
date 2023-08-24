@@ -71,7 +71,6 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
         return $this;
     }
 
-    //<editor-fold desc="Getters / Setters">
 
     /**
      * @return string
@@ -167,9 +166,7 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
         return '?' . http_build_query($this->getQueryArray());
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable methods">
 
     /**
      * Returns the parameter array containing the values for the query string.
@@ -223,5 +220,4 @@ class PaylaterInstallmentPlans extends AbstractUnzerResource
         }
     }
 
-    //</editor-fold>
-}
+    }

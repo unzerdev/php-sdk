@@ -39,7 +39,6 @@ trait HasStates
     /** @var bool $isResumed */
     private $isResumed = false;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return bool
@@ -117,7 +116,6 @@ trait HasStates
         return $this;
     }
 
-    //</editor-fold>
 
     /**
      * Map the 'status' that is used for transactions in the transaction list of a payment resource.

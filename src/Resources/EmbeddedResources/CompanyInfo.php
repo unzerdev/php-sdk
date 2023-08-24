@@ -47,7 +47,6 @@ class CompanyInfo extends AbstractUnzerResource
     /** @var CompanyOwner|null $owner */
     protected $owner;
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -164,9 +163,7 @@ class CompanyInfo extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable methods">
 
     /**
      * Create instances of necessary properties to handle API responses.
@@ -182,9 +179,7 @@ class CompanyInfo extends AbstractUnzerResource
         }
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Helpers">
 
     /**
      * Removes some restricted symbols from the given value.
@@ -202,5 +197,4 @@ class CompanyInfo extends AbstractUnzerResource
         return str_replace(['<', '>'], '', $value);
     }
 
-    //</editor-fold>
-}
+    }

@@ -58,7 +58,6 @@ class Recurring extends AbstractUnzerResource
         $this->paymentTypeId = $paymentType;
     }
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string
@@ -117,9 +116,7 @@ class Recurring extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Overridable Methods">
 
     /**
      * {@inheritDoc}
@@ -135,5 +132,4 @@ class Recurring extends AbstractUnzerResource
         return implode('/', $parts);
     }
 
-    //</editor-fold>
-}
+    }

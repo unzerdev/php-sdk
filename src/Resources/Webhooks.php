@@ -53,7 +53,6 @@ class Webhooks extends AbstractUnzerResource
         $this->eventList = $eventList;
     }
 
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string
@@ -103,7 +102,6 @@ class Webhooks extends AbstractUnzerResource
         return $this->webhooks;
     }
 
-    //</editor-fold>
 
     /**
      * @param stdClass $response

@@ -50,7 +50,6 @@ class CancelService implements CancelServiceInterface
         $this->unzer = $unzer;
     }
 
-    //<editor-fold desc="Getters/Setters"
 
     /**
      * @return Unzer
@@ -79,9 +78,7 @@ class CancelService implements CancelServiceInterface
         return $this->getUnzer()->getResourceService();
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Authorization Cancel/Reversal transaction">
 
     /**
      * {@inheritDoc}
@@ -105,9 +102,7 @@ class CancelService implements CancelServiceInterface
         return $this->cancelAuthorization($authorization, $amount);
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Charge Cancel/Refund transaction">
 
     /**
      * {@inheritDoc}
@@ -149,9 +144,7 @@ class CancelService implements CancelServiceInterface
         return $cancellation;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Payment">
 
     /**
      * {@inheritDoc}
@@ -350,9 +343,7 @@ class CancelService implements CancelServiceInterface
         return $cancellation;
     }
 
-    //</editor-fold>
 
-    //<editor-fold desc="Helpers">
 
     /**
      * Throws exception if the passed exception is not to be ignored while cancelling charges or authorization.
@@ -417,5 +408,4 @@ class CancelService implements CancelServiceInterface
         return round($charge->getAmount() - $receiptAmount - $charge->getCancelledAmount(), 4);
     }
 
-    //</editor-fold>
-}
+    }
