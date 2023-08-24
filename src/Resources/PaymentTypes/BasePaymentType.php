@@ -47,7 +47,7 @@ abstract class BasePaymentType extends AbstractUnzerResource
         return false;
     }
 
-        public function supportsDirectPaymentCancel(): bool
+    public function supportsDirectPaymentCancel(): bool
     {
         return static::SUPPORT_DIRECT_PAYMENT_CANCEL;
     }
@@ -75,5 +75,4 @@ abstract class BasePaymentType extends AbstractUnzerResource
     {
         return [];
     }
-
-    }
+}

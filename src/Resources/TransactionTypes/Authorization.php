@@ -74,7 +74,6 @@ class Authorization extends AbstractTransactionType
         $this->setReturnUrl($returnUrl);
     }
 
-
     /**
      * @return float|null
      */
@@ -245,8 +244,6 @@ class Authorization extends AbstractTransactionType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -254,7 +251,6 @@ class Authorization extends AbstractTransactionType
     {
         return 'authorize';
     }
-
 
     /**
      * Full cancel of this authorization.

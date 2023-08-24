@@ -29,7 +29,6 @@ trait HasCustomerMessage
     /** @var Message $message */
     private $message;
 
-
     /**
      * @return Message
      */
@@ -41,5 +40,4 @@ trait HasCustomerMessage
 
         return $this->message;
     }
-
-    }
+}

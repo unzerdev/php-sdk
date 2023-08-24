@@ -35,7 +35,6 @@ class Metadata extends AbstractUnzerResource
     protected $shopType;
     protected $shopVersion;
 
-
     /**
      * @return string|null
      */
@@ -103,7 +102,6 @@ class Metadata extends AbstractUnzerResource
         return $this->metadata[$name] ?? null;
     }
 
-
     /**
      * Add the dynamically set meta data.
      * {@inheritDoc}
@@ -129,5 +127,4 @@ class Metadata extends AbstractUnzerResource
             }
         }
     }
-
-    }
+}

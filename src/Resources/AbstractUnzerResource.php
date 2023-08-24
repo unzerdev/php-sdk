@@ -58,7 +58,6 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
     /** @var array $additionalAttributes */
     protected $additionalAttributes = [];
 
-
     /**
      * Returns the API name of the resource.
      *
@@ -219,8 +218,6 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
         return $this->additionalAttributes;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -289,8 +286,6 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
         }
     }
 
-
-
     /**
      * @return ResourceService
      *
@@ -328,8 +323,6 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
     {
         $this->getResourceService()->fetchResource($resource);
     }
-
-
 
     /**
      * Specify data which should be serialized to JSON
@@ -428,8 +421,6 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
             $item->$setter($value);
         }
     }
-
-
 
     /**
      * Return the resources which should be referenced by ID within the resource section of the resource data.

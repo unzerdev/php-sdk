@@ -55,7 +55,6 @@ trait CanRecur
         throw new RuntimeException('Error: Recurring can not be enabled on this type.');
     }
 
-
     /**
      * @return bool
      */
@@ -74,5 +73,4 @@ trait CanRecur
         $this->recurring = $active;
         return $this;
     }
-
-    }
+}

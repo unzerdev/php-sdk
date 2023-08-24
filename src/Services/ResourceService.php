@@ -91,7 +91,6 @@ class ResourceService implements ResourceServiceInterface
         $this->unzer = $unzer;
     }
 
-
     /** @return Unzer */
     public function getUnzer(): Unzer
     {
@@ -108,8 +107,6 @@ class ResourceService implements ResourceServiceInterface
         $this->unzer = $unzer;
         return $this;
     }
-
-
 
     /**
      * Send request to API.
@@ -229,8 +226,6 @@ class ResourceService implements ResourceServiceInterface
 
         return $resource;
     }
-
-
 
     /**
      * Create the resource on the api.
@@ -354,8 +349,6 @@ class ResourceService implements ResourceServiceInterface
         return $resource;
     }
 
-
-
     /**
      * Fetch an Payout object by its paymentId.
      * Payout Ids are not global but specific to the payment.
@@ -376,8 +369,6 @@ class ResourceService implements ResourceServiceInterface
         $payout = $this->fetchResource($paymentObject->getPayout(true));
         return $payout;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -402,8 +393,6 @@ class ResourceService implements ResourceServiceInterface
 
         throw new RuntimeException('Recurring is not available for the given payment type.');
     }
-
-
 
     /**
      * Fetches the payment object if the id is given.
@@ -466,8 +455,6 @@ class ResourceService implements ResourceServiceInterface
         return $paymentObject;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -477,8 +464,6 @@ class ResourceService implements ResourceServiceInterface
         $this->fetchResource($keyPair);
         return $keyPair;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -503,8 +488,6 @@ class ResourceService implements ResourceServiceInterface
         $this->fetchResource($metadataObject->setParentResource($this->unzer));
         return $metadataObject;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -548,8 +531,6 @@ class ResourceService implements ResourceServiceInterface
         return $basket;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -582,8 +563,6 @@ class ResourceService implements ResourceServiceInterface
         $returnPaymentType = $this->updateResource($paymentType);
         return $returnPaymentType;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -665,8 +644,6 @@ class ResourceService implements ResourceServiceInterface
         $this->deleteResource($customerObject);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -684,8 +661,7 @@ class ResourceService implements ResourceServiceInterface
         return $authorize;
     }
 
-
-        public function fetchCharge(Charge $charge): Charge
+    public function fetchCharge(Charge $charge): Charge
     {
         $this->fetchResource($charge);
         return $charge;
@@ -706,8 +682,6 @@ class ResourceService implements ResourceServiceInterface
         $this->fetchResource($charge);
         return $charge;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -733,8 +707,6 @@ class ResourceService implements ResourceServiceInterface
         $this->fetchResource($chargeback);
         return $chargeback;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -807,10 +779,6 @@ class ResourceService implements ResourceServiceInterface
         return $this->fetchResource($cancel);
     }
 
-
-
-
-
     /**
      * {@inheritDoc}
      */
@@ -819,8 +787,6 @@ class ResourceService implements ResourceServiceInterface
         $paymentObject = $this->fetchPayment($payment);
         return $paymentObject->getShipment($shipmentId);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -836,7 +802,6 @@ class ResourceService implements ResourceServiceInterface
 
         return $this->fetchResource($configObject);
     }
-
 
     /**
      * Creates a payment type instance from a typeId string.

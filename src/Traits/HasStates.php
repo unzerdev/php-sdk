@@ -39,7 +39,6 @@ trait HasStates
     /** @var bool $isResumed */
     private $isResumed = false;
 
-
     /**
      * @return bool
      */
@@ -115,7 +114,6 @@ trait HasStates
         $this->isResumed = $isResumed;
         return $this;
     }
-
 
     /**
      * Map the 'status' that is used for transactions in the transaction list of a payment resource.

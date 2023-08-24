@@ -30,7 +30,6 @@ trait HasDate
     /** @var DateTime $date */
     private $date;
 
-
     /**
      * This returns the date of the Transaction as string.
      *
@@ -54,5 +53,4 @@ trait HasDate
         $this->date = new DateTime($date);
         return $this;
     }
-
-    }
+}

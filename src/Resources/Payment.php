@@ -116,7 +116,6 @@ class Payment extends AbstractUnzerResource
         $this->setParentResource($parent);
     }
 
-
     /**
      * Returns the redirectUrl set by the API.
      *
@@ -788,8 +787,6 @@ class Payment extends AbstractUnzerResource
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -828,8 +825,6 @@ class Payment extends AbstractUnzerResource
     {
         return $this->getOrderId();
     }
-
-
 
     /**
      * Performs a Cancellation transaction on the Payment.
@@ -904,8 +899,6 @@ class Payment extends AbstractUnzerResource
     {
         return $this->getUnzerObject()->ship($this, $invoiceId, $orderId);
     }
-
-
 
     /**
      * @param array $transactions
@@ -1188,5 +1181,4 @@ class Payment extends AbstractUnzerResource
 
         $chargeback->handleResponse($transaction);
     }
-
-    }
+}

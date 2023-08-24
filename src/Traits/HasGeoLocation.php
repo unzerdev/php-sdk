@@ -29,7 +29,6 @@ trait HasGeoLocation
     /** @var GeoLocation $geoLocation */
     private $geoLocation;
 
-
     /**
      * @return GeoLocation
      */
@@ -51,5 +50,4 @@ trait HasGeoLocation
         $this->geoLocation = $geoLocation;
         return $this;
     }
-
-    }
+}

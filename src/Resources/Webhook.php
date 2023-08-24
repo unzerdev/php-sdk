@@ -44,7 +44,6 @@ class Webhook extends AbstractUnzerResource
         $this->event = $event;
     }
 
-
     /**
      * @return string|null
      */
@@ -83,8 +82,6 @@ class Webhook extends AbstractUnzerResource
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -92,5 +89,4 @@ class Webhook extends AbstractUnzerResource
     {
         return 'webhooks';
     }
-
-    }
+}

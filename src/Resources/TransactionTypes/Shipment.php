@@ -29,7 +29,6 @@ class Shipment extends AbstractTransactionType
     /** @var float|null $amount */
     protected $amount;
 
-
     /**
      * @return float|null
      */
@@ -49,8 +48,6 @@ class Shipment extends AbstractTransactionType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -58,5 +55,4 @@ class Shipment extends AbstractTransactionType
     {
         return 'shipments';
     }
-
-    }
+}

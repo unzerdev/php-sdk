@@ -161,7 +161,6 @@ class InstallmentPlan extends AbstractUnzerResource
         return $this;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -177,5 +176,4 @@ class InstallmentPlan extends AbstractUnzerResource
             $this->setInstallmentRates($rates);
         }
     }
-
-    }
+}

@@ -34,7 +34,6 @@ class Amount extends AbstractUnzerResource
     /** @var string $currency */
     private $currency;
 
-
     /**
      * @return float
      */
@@ -129,5 +128,4 @@ class Amount extends AbstractUnzerResource
         $this->currency = $currency;
         return $this;
     }
-
-    }
+}

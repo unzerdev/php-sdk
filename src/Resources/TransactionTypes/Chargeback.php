@@ -43,7 +43,6 @@ class Chargeback extends AbstractTransactionType
         $this->setAmount($amount);
     }
 
-
     /**
      * @return float|null
      */
@@ -100,8 +99,6 @@ class Chargeback extends AbstractTransactionType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -109,5 +106,4 @@ class Chargeback extends AbstractTransactionType
     {
         return 'chargebacks';
     }
-
-    }
+}

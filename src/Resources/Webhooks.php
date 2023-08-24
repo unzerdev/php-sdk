@@ -53,7 +53,6 @@ class Webhooks extends AbstractUnzerResource
         $this->eventList = $eventList;
     }
 
-
     /**
      * @return string
      */
@@ -101,7 +100,6 @@ class Webhooks extends AbstractUnzerResource
     {
         return $this->webhooks;
     }
-
 
     /**
      * @param stdClass $response

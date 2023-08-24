@@ -113,7 +113,6 @@ class BasketItem extends AbstractUnzerResource
         $this->setAmountPerUnit($amountPerUnit);
     }
 
-
     /**
      * @return string|null
      */
@@ -421,5 +420,4 @@ class BasketItem extends AbstractUnzerResource
         $this->type = $type;
         return $this;
     }
-
-    }
+}

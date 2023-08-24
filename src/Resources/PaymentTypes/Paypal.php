@@ -40,7 +40,6 @@ class Paypal extends BasePaymentType
     /** @var string|null $email */
     protected $email;
 
-
     /**
      * @return string|null
      */
@@ -59,7 +58,6 @@ class Paypal extends BasePaymentType
         $this->email = $email;
         return $this;
     }
-
 
     /**
      * Activates recurring payment for Paypal.

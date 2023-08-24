@@ -35,7 +35,6 @@ class Message extends AbstractUnzerResource
     /** @var string $merchant */
     private $merchant = '';
 
-
     /**
      * @return string
      */
@@ -92,5 +91,4 @@ class Message extends AbstractUnzerResource
         $this->merchant = $merchant;
         return $this;
     }
-
-    }
+}

@@ -30,7 +30,6 @@ trait HasPaymentState
     /** @var int */
     private $state = 0;
 
-
     /**
      * Return true if the state is pending.
      *
@@ -101,8 +100,6 @@ trait HasPaymentState
         return $this->getState() === PaymentState::STATE_CREATE;
     }
 
-
-
     /**
      * Returns the current state code (ref. Constants/PaymentState).
      *
@@ -137,5 +134,4 @@ trait HasPaymentState
         $this->state = $state;
         return $this;
     }
-
-    }
+}

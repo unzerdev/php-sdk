@@ -50,7 +50,6 @@ class CancelService implements CancelServiceInterface
         $this->unzer = $unzer;
     }
 
-
     /**
      * @return Unzer
      */
@@ -78,8 +77,6 @@ class CancelService implements CancelServiceInterface
         return $this->getUnzer()->getResourceService();
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -101,8 +98,6 @@ class CancelService implements CancelServiceInterface
         $authorization = $this->getResourceService()->fetchAuthorization($payment);
         return $this->cancelAuthorization($authorization, $amount);
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -143,8 +138,6 @@ class CancelService implements CancelServiceInterface
 
         return $cancellation;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -343,8 +336,6 @@ class CancelService implements CancelServiceInterface
         return $cancellation;
     }
 
-
-
     /**
      * Throws exception if the passed exception is not to be ignored while cancelling charges or authorization.
      *
@@ -407,5 +398,4 @@ class CancelService implements CancelServiceInterface
     {
         return round($charge->getAmount() - $receiptAmount - $charge->getCancelledAmount(), 4);
     }
-
-    }
+}

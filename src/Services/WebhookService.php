@@ -50,7 +50,6 @@ class WebhookService implements WebhookServiceInterface
         $this->resourceService = $unzer->getResourceService();
     }
 
-
     /**
      * @return Unzer
      */
@@ -88,8 +87,6 @@ class WebhookService implements WebhookServiceInterface
         $this->resourceService = $resourceService;
         return $this;
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -142,8 +139,6 @@ class WebhookService implements WebhookServiceInterface
         return $this->resourceService->deleteResource($webhookObject);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -180,8 +175,6 @@ class WebhookService implements WebhookServiceInterface
         return $webhooks->getWebhookList();
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -212,5 +205,4 @@ class WebhookService implements WebhookServiceInterface
     {
         return file_get_contents('php://input');
     }
-
-    }
+}

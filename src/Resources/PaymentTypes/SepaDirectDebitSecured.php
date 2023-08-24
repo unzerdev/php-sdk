@@ -49,7 +49,6 @@ class SepaDirectDebitSecured extends BasePaymentType
         $this->iban = $iban;
     }
 
-
     /**
      * @return string|null
      */
@@ -106,5 +105,4 @@ class SepaDirectDebitSecured extends BasePaymentType
         $this->holder = $holder;
         return $this;
     }
-
-    }
+}

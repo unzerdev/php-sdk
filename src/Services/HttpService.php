@@ -44,7 +44,6 @@ class HttpService
     /** @var EnvironmentService $environmentService */
     private $environmentService;
 
-
     /**
      * Returns the currently set HttpAdapter.
      * If it is not set it will create a CurlRequest by default and return it.
@@ -93,7 +92,6 @@ class HttpService
         $this->environmentService = $environmentService;
         return $this;
     }
-
 
     /**
      * send post request to payment server

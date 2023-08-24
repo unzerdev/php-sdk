@@ -77,7 +77,6 @@ class Card extends BasePaymentType
         $this->setEmail($email);
     }
 
-
     /**
      * @return string
      */
@@ -233,8 +232,6 @@ class Card extends BasePaymentType
         return $this;
     }
 
-
-
     /**
      * Rename internal property names to external property names.
      *
@@ -262,5 +259,4 @@ class Card extends BasePaymentType
             $this->cardDetails->handleResponse($response->cardDetails);
         }
     }
-
-    }
+}

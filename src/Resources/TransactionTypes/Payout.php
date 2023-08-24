@@ -52,7 +52,6 @@ class Payout extends AbstractTransactionType
         $this->setReturnUrl($returnUrl);
     }
 
-
     /**
      * @return float|null
      */
@@ -129,8 +128,6 @@ class Payout extends AbstractTransactionType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -138,5 +135,4 @@ class Payout extends AbstractTransactionType
     {
         return 'payouts';
     }
-
-    }
+}

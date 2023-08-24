@@ -82,7 +82,6 @@ class Customer extends AbstractUnzerResource
         $this->shippingAddress = new Address();
     }
 
-
     /**
      * @return string|null
      */
@@ -331,8 +330,6 @@ class Customer extends AbstractUnzerResource
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -340,8 +337,6 @@ class Customer extends AbstractUnzerResource
     {
         return 'customers';
     }
-
-
 
     /**
      * {@inheritDoc}

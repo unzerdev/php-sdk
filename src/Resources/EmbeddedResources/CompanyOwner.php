@@ -35,7 +35,6 @@ class CompanyOwner extends AbstractUnzerResource
     /** @var string|null $birthdate */
     protected $birthdate;
 
-
     /**
      * @return string|null
      */
@@ -92,5 +91,4 @@ class CompanyOwner extends AbstractUnzerResource
         $this->birthdate = $birthdate;
         return $this;
     }
-
-    }
+}

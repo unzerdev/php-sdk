@@ -27,7 +27,6 @@ trait HasInvoiceId
     /** @var string $invoiceId */
     protected $invoiceId;
 
-
     /**
      * @return string|null
      */
@@ -46,5 +45,4 @@ trait HasInvoiceId
         $this->invoiceId = $invoiceId;
         return $this;
     }
-
-    }
+}

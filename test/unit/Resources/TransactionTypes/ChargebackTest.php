@@ -139,7 +139,11 @@ class ChargebackTest extends BasePaymentTest
      * verify fetching Chargeback by id without charge ID uses expected endpoint.
      *
      * @test
+     *
      * @dataProvider fetchChargebackByIdDP
+     *
+     * @param mixed $chargeId
+     * @param mixed $expectedUri
      */
     public function fetchChargebackById($chargeId, $expectedUri): void
     {

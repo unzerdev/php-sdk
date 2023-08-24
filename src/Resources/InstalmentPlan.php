@@ -116,7 +116,6 @@ class InstalmentPlan extends BasePaymentType
         $this->lastRate              = $lastRate;
     }
 
-
     /**
      * @return string|null
      */
@@ -403,8 +402,6 @@ class InstalmentPlan extends BasePaymentType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -433,5 +430,4 @@ class InstalmentPlan extends BasePaymentType
             $this->setInstallmentRates($rates);
         }
     }
-
-    }
+}

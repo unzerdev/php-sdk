@@ -66,7 +66,6 @@ class Charge extends AbstractTransactionType
         $this->setReturnUrl($returnUrl);
     }
 
-
     /**
      * @return float|null
      */
@@ -186,8 +185,6 @@ class Charge extends AbstractTransactionType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -195,7 +192,6 @@ class Charge extends AbstractTransactionType
     {
         return 'charges';
     }
-
 
     /**
      * Full cancel of this authorization.

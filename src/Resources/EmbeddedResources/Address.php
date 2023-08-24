@@ -47,7 +47,6 @@ class Address extends AbstractUnzerResource
     /** @var string|null shippingType */
     protected $shippingType;
 
-
     /**
      * @return string|null
      */
@@ -180,5 +179,4 @@ class Address extends AbstractUnzerResource
         $this->shippingType = $shippingType;
         return $this;
     }
-
-    }
+}

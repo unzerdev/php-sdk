@@ -80,7 +80,6 @@ class Applepay extends BasePaymentType
         $this->header = $header;
     }
 
-
     /**
      * @return string|null
      */
@@ -251,7 +250,6 @@ class Applepay extends BasePaymentType
         $this->version = $version;
         return $this;
     }
-
 
     /**
      * @inheritDoc

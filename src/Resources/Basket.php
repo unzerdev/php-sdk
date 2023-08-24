@@ -87,7 +87,6 @@ class Basket extends AbstractUnzerResource
         $this->setBasketItems($basketItems);
     }
 
-
     /**
      * @return float
      *
@@ -291,8 +290,6 @@ class Basket extends AbstractUnzerResource
         return $this->basketItems[$index] ?? null;
     }
 
-
-
     /**
      * Add the dynamically set meta data.
      * {@inheritDoc}
@@ -359,5 +356,4 @@ class Basket extends AbstractUnzerResource
             $this->setBasketItems($items);
         }
     }
-
-    }
+}

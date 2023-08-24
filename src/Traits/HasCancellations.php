@@ -33,7 +33,6 @@ trait HasCancellations
     /** @var array $cancellations */
     private $cancellations = [];
 
-
     /**
      * @return array
      */
@@ -92,5 +91,4 @@ trait HasCancellations
         }
         return null;
     }
-
-    }
+}

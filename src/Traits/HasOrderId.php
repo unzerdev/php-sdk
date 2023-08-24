@@ -27,7 +27,6 @@ trait HasOrderId
     /** @var string $orderId */
     protected $orderId;
 
-
     /**
      * @return string|null
      */
@@ -46,5 +45,4 @@ trait HasOrderId
         $this->orderId = $orderId;
         return $this;
     }
-
-    }
+}

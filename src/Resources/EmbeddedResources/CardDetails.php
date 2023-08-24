@@ -47,7 +47,6 @@ class CardDetails extends AbstractUnzerResource
     /** @var string|null $issuerPhoneNumber */
     protected $issuerPhoneNumber;
 
-
     /**
      * @return string|null
      */
@@ -180,5 +179,4 @@ class CardDetails extends AbstractUnzerResource
         $this->issuerPhoneNumber = $issuerPhoneNumber;
         return $this;
     }
-
-    }
+}

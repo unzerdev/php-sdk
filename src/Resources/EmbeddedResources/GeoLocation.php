@@ -32,7 +32,6 @@ class GeoLocation extends AbstractUnzerResource
     /** @var string|null $countryCode */
     private $countryCode;
 
-
     /**
      * @return string|null
      */
@@ -80,5 +79,4 @@ class GeoLocation extends AbstractUnzerResource
     {
         return $this->setCountryCode($countryCode);
     }
-
-    }
+}

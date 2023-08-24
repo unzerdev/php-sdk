@@ -33,7 +33,6 @@ trait HasChargebacks
     /** @var Chargeback[] $chargebacks */
     private $chargebacks = [];
 
-
     /**
      * @return array
      */
@@ -92,5 +91,4 @@ trait HasChargebacks
         }
         return null;
     }
-
-    }
+}

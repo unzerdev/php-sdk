@@ -117,7 +117,6 @@ class Paypage extends BasePaymentType
         $this->setReturnUrl($returnUrl);
     }
 
-
     /**
      * @return float
      */
@@ -620,8 +619,6 @@ class Paypage extends BasePaymentType
         return $this;
     }
 
-
-
     /**
      * {@inheritDoc}
      * Change resource path.
@@ -716,7 +713,6 @@ class Paypage extends BasePaymentType
             'payment' => $this->getPayment()
         ];
     }
-
 
     /**
      * Updates the referenced payment object if it exists and if this is not the payment object itself.
