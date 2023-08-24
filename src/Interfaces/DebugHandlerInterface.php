@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Interfaces
  */
+
 namespace UnzerSDK\Interfaces;
 
 interface DebugHandlerInterface

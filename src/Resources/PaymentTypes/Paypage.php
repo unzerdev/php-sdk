@@ -21,6 +21,7 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -40,6 +41,7 @@ use UnzerSDK\Traits\HasInvoiceId;
 use UnzerSDK\Traits\HasOrderId;
 use RuntimeException;
 use stdClass;
+
 use function in_array;
 
 class Paypage extends BasePaymentType

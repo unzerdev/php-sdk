@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Adapter
  */
+
 namespace UnzerSDK\Adapter;
 
 use UnzerSDK\Exceptions\UnzerApiException;

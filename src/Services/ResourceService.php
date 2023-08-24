@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
 use DateTime;
@@ -73,6 +74,7 @@ use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Traits\CanRecur;
 use RuntimeException;
 use stdClass;
+
 use function in_array;
 use function is_string;
 

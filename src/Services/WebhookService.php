@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
 use UnzerSDK\Unzer;
@@ -28,8 +29,9 @@ use UnzerSDK\Interfaces\WebhookServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Webhook;
 use UnzerSDK\Resources\Webhooks;
-use function is_string;
 use RuntimeException;
+
+use function is_string;
 
 class WebhookService implements WebhookServiceInterface
 {

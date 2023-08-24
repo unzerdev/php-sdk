@@ -20,13 +20,15 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use stdClass;
+
 use function count;
 use function in_array;
 use function is_callable;
-use stdClass;
 
 class Metadata extends AbstractUnzerResource
 {

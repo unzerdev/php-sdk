@@ -20,11 +20,13 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use stdClass;
+
 use function is_string;
 
 class CompanyInfo extends AbstractUnzerResource

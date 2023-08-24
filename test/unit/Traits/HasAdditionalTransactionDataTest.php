@@ -24,6 +24,7 @@
 
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
+
 namespace UnzerSDK\test\unit\Traits;
 
 use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
@@ -99,7 +100,7 @@ class HasAdditionalTransactionDataTest extends BasePaymentTest
         $this->assertNull($cardData->getLiability());
         $this->assertEquals('recurrenceType', $cardData->getRecurrenceType());
     }
-    
+
     /**
      * CardData should be exposed correctly.
      *

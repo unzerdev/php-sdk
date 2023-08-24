@@ -31,7 +31,7 @@ class JsonProvider
     /**
      * @throws \Exception
      */
-    public static function getJsonFromFile(string $path):string
+    public static function getJsonFromFile(string $path): string
     {
         $filepath = self::$baseDir . $path;
         $filepath = str_replace(['/'], DIRECTORY_SEPARATOR, $filepath);

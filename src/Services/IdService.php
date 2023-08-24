@@ -20,10 +20,12 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
-use function count;
 use RuntimeException;
+
+use function count;
 
 class IdService
 {
@@ -44,7 +46,7 @@ class IdService
     public static function getResourceIdFromUrl(string $url, string $idString, bool $onlyLast = false): string
     {
         $matches = [];
-        $pattern = '/\/([s|p]{1}-' . $idString . '-[a-z\d]+)\/?' . ($onlyLast ? '$':'') . '/';
+        $pattern = '/\/([s|p]{1}-' . $idString . '-[a-z\d]+)\/?' . ($onlyLast ? '$' : '') . '/';
         preg_match($pattern, $url, $matches);
 
         if (count($matches) < 2) {

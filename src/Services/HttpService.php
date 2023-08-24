@@ -29,7 +29,9 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use RuntimeException;
+
 use function in_array;
+
 use const PHP_VERSION;
 
 class HttpService

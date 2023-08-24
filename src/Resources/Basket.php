@@ -20,11 +20,13 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use stdClass;
+
 use function count;
 
 class Basket extends AbstractUnzerResource

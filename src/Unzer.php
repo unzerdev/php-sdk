@@ -21,6 +21,7 @@
  *
  * @package  UnzerSDK
  */
+
 namespace UnzerSDK;
 
 use DateTime;
@@ -966,7 +967,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             ->fetchInstallmentPlans($amount, $currency, $effectiveInterest, $orderDate);
     }
 
-    public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest):PaylaterInstallmentPlans
+    public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest): PaylaterInstallmentPlans
     {
         return $this->getPaymentService()->fetchPaylaterInstallmentPlans($plansRequest);
     }

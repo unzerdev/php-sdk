@@ -22,12 +22,14 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\WebhookEvents;
 use RuntimeException;
 use stdClass;
+
 use function in_array;
 
 class Webhooks extends AbstractUnzerResource

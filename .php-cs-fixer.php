@@ -9,7 +9,7 @@ return $config
     ->setUsingCache(false)
     ->setRules(
         array(
-            '@PSR2' => true,
+            '@PSR12' => true,
             'no_blank_lines_after_phpdoc' => true,
             'phpdoc_add_missing_param_annotation' => true,
             'native_function_casing' => true,

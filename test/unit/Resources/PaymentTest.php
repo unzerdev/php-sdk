@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace UnzerSDK\test\unit\Resources;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -974,7 +976,7 @@ class PaymentTest extends BasePaymentTest
     {
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
             ->disableOriginalConstructor()->onlyMethods(['getResource'])->getMock();
-        
+
         $unzer = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
         $payment = (new Payment())
             ->setParentResource($unzer)

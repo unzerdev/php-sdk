@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use DateTime;
@@ -35,6 +36,7 @@ use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
 use stdClass;
+
 use function count;
 use function is_array;
 use function is_callable;
