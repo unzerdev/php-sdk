@@ -69,6 +69,7 @@ class PayoutTest extends BaseIntegrationTest
      */
     public function payoutCanBeCalledForSepaDirectDebitType(): void
     {
+        $this->useLegacyKey();
         $sepa = new SepaDirectDebit('DE89370400440532013000');
         $this->unzer->createPaymentType($sepa);
         $payout = $sepa->payout(100.0, 'EUR', self::RETURN_URL);

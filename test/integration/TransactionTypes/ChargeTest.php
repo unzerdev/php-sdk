@@ -45,6 +45,7 @@ class ChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldWorkWithTypeId(): void
     {
+        $this->useLegacyKey();
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
         $charge = $this->unzer->charge(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
         $this->assertTransactionResourceHasBeenCreated($charge);
@@ -60,6 +61,7 @@ class ChargeTest extends BaseIntegrationTest
      */
     public function chargeShouldWorkWithTypeObject(): void
     {
+        $this->useLegacyKey();
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
         $charge = $this->unzer->charge(100.0, 'EUR', $paymentType, self::RETURN_URL);
         $this->assertTransactionResourceHasBeenCreated($charge);
@@ -75,6 +77,7 @@ class ChargeTest extends BaseIntegrationTest
      */
     public function chargeStatusIsSetCorrectly(): void
     {
+        $this->useLegacyKey();
         $this->assertSuccess($this->createCharge());
     }
 

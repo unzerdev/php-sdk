@@ -242,6 +242,7 @@ class BasketV2Test extends BaseIntegrationTest
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet(): void
     {
+        $this->useLegacyKey();
         $basket  = $this->createV2Basket();
         $this->assertNotEmpty($basket->getId());
 

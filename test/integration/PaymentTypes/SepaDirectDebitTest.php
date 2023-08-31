@@ -34,6 +34,11 @@ use UnzerSDK\test\BaseIntegrationTest;
 
 class SepaDirectDebitTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->useLegacyKey();
+    }
+
     /**
      * Verify sepa direct debit can be created.
      *

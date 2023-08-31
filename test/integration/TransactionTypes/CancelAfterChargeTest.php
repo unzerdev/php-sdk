@@ -32,6 +32,11 @@ use UnzerSDK\test\BaseIntegrationTest;
 
 class CancelAfterChargeTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->useLegacyKey();
+    }
+
     /**
      * Verify charge can be fetched by id.
      *

@@ -250,7 +250,7 @@ class CardTest extends BaseIntegrationTest
         // then
         /** @var Card $updatedCard */
         $updatedCard = $this->unzer->fetchPaymentType($fetchedCard->getId());
-        $this->assertRegExp('/0000$/', $updatedCard->getNumber());
+        $this->assertMatchesRegularExpression('/0000$/', $updatedCard->getNumber());
         $this->assertEquals('test2@test.com', $updatedCard->getEmail());
     }
 
