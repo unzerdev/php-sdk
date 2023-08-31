@@ -82,12 +82,12 @@ class HirePurchaseTest extends BaseIntegrationTest
         // When
         /** @var InstallmentSecured $hddMock */
         $this->unzer->createPaymentType($hddMock);
-        $this->assertRegExp('/^s-hdd-[.]*/', $hddMock->getId());
+        $this->assertMatchesRegularExpression('/^s-hdd-[.]*/', $hddMock->getId());
 
         // Then
         $fetchedType = $this->unzer->fetchPaymentType($hddMock->getId());
         $this->assertInstanceOf(InstallmentSecured::class, $fetchedType);
-        $this->assertRegExp('/^s-hdd-[.]*/', $fetchedType->getId());
+        $this->assertMatchesRegularExpression('/^s-hdd-[.]*/', $fetchedType->getId());
 
         return $fetchedType;
     }

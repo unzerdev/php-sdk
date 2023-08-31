@@ -55,11 +55,11 @@ class InvoiceGuaranteedTest extends BaseIntegrationTest
         /** @var InvoiceSecured $ivgType */
         $ivgType = $this->unzer->createPaymentType($ivgMock);
         $this->assertInstanceOf(InvoiceSecured::class, $ivgType);
-        $this->assertRegExp('/^s-ivg-[.]*/', $ivgType->getId());
+        $this->assertMatchesRegularExpression('/^s-ivg-[.]*/', $ivgType->getId());
 
         $fetchedType = $this->unzer->fetchPaymentType($ivgType->getId());
         $this->assertInstanceOf(InvoiceSecured::class, $fetchedType);
-        $this->assertRegExp('/^s-ivg-[.]*/', $fetchedType->getId());
+        $this->assertMatchesRegularExpression('/^s-ivg-[.]*/', $fetchedType->getId());
 
         return $fetchedType;
     }

@@ -52,7 +52,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
         $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
         $this->assertInstanceOf(PaylaterInvoice::class, $fetchedInvoice);
         $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
-        $this->assertRegExp('/^s-piv-[.]*/', $fetchedInvoice->getId());
+        $this->assertMatchesRegularExpression('/^s-piv-[.]*/', $fetchedInvoice->getId());
 
         return $invoice;
     }
