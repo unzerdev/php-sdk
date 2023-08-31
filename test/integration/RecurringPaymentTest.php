@@ -126,6 +126,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
      */
     public function sepaDirectDebitShouldBeAbleToActivateRecurringPayments(): void
     {
+        $this->useLegacyKey();
         /** @var SepaDirectDebit $dd */
         $dd = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
         $this->assertFalse($dd->isRecurring());

@@ -86,4 +86,12 @@ class BaseIntegrationTest extends BasePaymentTest
     {
         $this->getUnzerObject()->setKey(TestEnvironmentService::getTestPrivateKey(true));
     }
+
+    /**
+     * @return void
+     */
+    protected function useLegacyKey(): void
+    {
+        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
+    }
 }
