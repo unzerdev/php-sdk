@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace UnzerSDK\test\unit\Resources;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,10 +42,12 @@ use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\test\Fixtures\JsonProvider;
 use UnzerSDK\Unzer;
 
 class PaymentTest extends BasePaymentTest
@@ -915,6 +919,7 @@ class PaymentTest extends BasePaymentTest
      */
     public function handleResponseShouldUpdateChargeTransactions(): void
     {
+        /** @var Payment $payment */
         $payment = (new Payment())->setId('MyPaymentId');
         $this->assertIsEmptyArray($payment->getCharges());
         $this->assertIsEmptyArray($payment->getShipments());
@@ -928,6 +933,8 @@ class PaymentTest extends BasePaymentTest
         $this->assertIsEmptyArray($payment->getCharges());
         $this->assertIsEmptyArray($payment->getShipments());
         $this->assertIsEmptyArray($payment->getCancellations());
+        $this->assertIsEmptyArray($payment->getChargebacks());
+        $this->assertNull($payment->getPayout());
         $this->assertNull($payment->getAuthorization());
     }
 
@@ -958,6 +965,90 @@ class PaymentTest extends BasePaymentTest
         $authorization = $payment->getAuthorization(true);
         $this->assertInstanceOf(Authorization::class, $authorization);
         $this->assertEquals(10.321, $authorization->getAmount());
+    }
+
+    /**
+     * Verify handleResponse updates existing chargebacks from response.
+     *
+     * @test
+     */
+    public function handleResponseShouldUpdateChargebackFromResponse(): void
+    {
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->onlyMethods(['getResource'])->getMock();
+
+        $unzer = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment = (new Payment())
+            ->setParentResource($unzer)
+            ->setId('MyPaymentId');
+
+        $paymentJson = JsonProvider::getJsonFromFile('paymentWithMultipleChargebacks.json');
+        $response = new stdClass();
+
+        $payment->handleResponse(json_decode($paymentJson));
+
+        $chargebacks = $payment->getChargebacks(true);
+        $charges = $payment->getCharges();
+        $this->assertCount(2, $charges);
+        $this->assertCount(2, $chargebacks);
+
+        $chargeback1 = $chargebacks[0];
+        $this->assertInstanceOf(Chargeback::class, $chargeback1);
+        $this->assertInstanceOf(Charge::class, $chargeback1->getParentResource());
+        $this->assertEquals(0.5, $chargeback1->getAmount());
+
+        $chargeback2 = $chargebacks[1];
+        $this->assertInstanceOf(Chargeback::class, $chargeback2);
+        $this->assertInstanceOf(Charge::class, $chargeback2->getParentResource());
+        $this->assertEquals(0.5, $chargeback2->getAmount());
+
+        // Charges contain chargeback reference.
+        $charge1 = $charges[0];
+        $this->assertCount(1, $charge1->getChargebacks());
+
+        $charge2 = $charges[1];
+        $this->assertCount(1, $charge1->getChargebacks());
+    }
+
+    /**
+     * Verify handleResponse updates existing chargebacks from response.
+     *
+     * @test
+     */
+    public function chargebackOnPaymentShouldBeHandledProperly(): void
+    {
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->disableOriginalConstructor()->onlyMethods(['getResource', 'fetchResource'])->getMock();
+
+        $unzer = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
+        $payment = (new Payment())
+            ->setParentResource($unzer)
+            ->setId('MyPaymentId');
+
+        $paymentResponse = JsonProvider::getJsonFromFile('paymentWithDirectChargeback.json');
+        $payment->handleResponse(json_decode($paymentResponse, false));
+
+        $chargebacks = $payment->getChargebacks(true);
+        $charges = $payment->getCharges();
+        $this->assertCount(2, $charges);
+        $this->assertCount(2, $chargebacks);
+
+        $chargeback1 = $chargebacks[0];
+        $this->assertInstanceOf(Chargeback::class, $chargeback1);
+        $this->assertInstanceOf(Payment::class, $chargeback1->getParentResource());
+        $this->assertEquals(0.5, $chargeback1->getAmount());
+
+        $chargeback2 = $chargebacks[1];
+        $this->assertInstanceOf(Chargeback::class, $chargeback2);
+        $this->assertInstanceOf(Payment::class, $chargeback2->getParentResource());
+        $this->assertEquals(0.5, $chargeback2->getAmount());
+
+        // Charges contain chargeback reference.
+        $charge1 = $charges[0];
+        $this->assertCount(0, $charge1->getChargebacks());
+
+        $charge2 = $charges[1];
+        $this->assertCount(0, $charge2->getChargebacks());
     }
 
     /**

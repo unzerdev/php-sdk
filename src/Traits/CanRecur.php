@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 use UnzerSDK\Exceptions\UnzerApiException;
@@ -55,8 +56,6 @@ trait CanRecur
         throw new RuntimeException('Error: Recurring can not be enabled on this type.');
     }
 
-    //<editor-fold desc="Getter/Setter">
-
     /**
      * @return bool
      */
@@ -75,6 +74,4 @@ trait CanRecur
         $this->recurring = $active;
         return $this;
     }
-
-    //</editor-fold>
 }

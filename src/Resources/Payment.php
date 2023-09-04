@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -34,6 +35,7 @@ use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Services\IdService;
@@ -65,8 +67,12 @@ class Payment extends AbstractUnzerResource
     /** @var array $shipments */
     private $shipments = [];
 
-    /** @var array $charges */
+    /** @var Charge[] $charges */
     private $charges = [];
+
+    /** @var Chargeback[] $chargebacks */
+    private $chargebacks = [];
+
 
     /**
      * Associative array using the ID of the cancellations as the key.
@@ -81,6 +87,7 @@ class Payment extends AbstractUnzerResource
      * @var array $refunds
      */
     private $refunds = [];
+
 
     /** @var Customer $customer */
     private $customer;
@@ -110,8 +117,6 @@ class Payment extends AbstractUnzerResource
         $this->setParentResource($parent);
     }
 
-    //<editor-fold desc="Setters/Getters">
-
     /**
      * Returns the redirectUrl set by the API.
      *
@@ -133,6 +138,22 @@ class Payment extends AbstractUnzerResource
     {
         $this->redirectUrl = $redirectUrl;
         return $this;
+    }
+
+    /**
+     * @return Chargeback[]
+     */
+    public function getChargebacks(): array
+    {
+        return $this->chargebacks;
+    }
+
+    /**
+     * @param array $chargebacks
+     */
+    public function setChargebacks(array $chargebacks): void
+    {
+        $this->chargebacks = $chargebacks;
     }
 
     /**
@@ -232,6 +253,20 @@ class Payment extends AbstractUnzerResource
     }
 
     /**
+     * Adds a Charge object to this Payment and stores it in the charges array.
+     *
+     * @param Charge $chargeback
+     *
+     * @return $this
+     */
+    private function addChargeback(Chargeback $chargeback): self
+    {
+        $chargeback->setPayment($this);
+        $this->chargebacks[] = $chargeback;
+        return $this;
+    }
+
+    /**
      * Retrieves a Charge object from the charges array of this Payment object by its Id.
      * Fetches the Charge if it has not been fetched before and the lazy flag is not set.
      * Returns null if the Charge does not exist.
@@ -254,6 +289,38 @@ class Payment extends AbstractUnzerResource
                     $this->getResource($charge);
                 }
                 return $charge;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves a Chargeback object from the chargebacks array of this Payment object by its ID.
+     * Fetches the Charge if it has not been fetched before and the lazy flag is not set.
+     * Returns null if the Charge does not exist.
+     *
+     * @param string $chargeId The ID of the Charge to be retrieved.
+     * @param bool   $lazy     Enables lazy loading if set to true which results in the object not being updated via
+     *                         API and possibly containing just the meta data known from the Payment object response.
+     *
+     * @return Charge|null The retrieved Charge object or null if it does not exist.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function getChargeback(string $chargebackId, ?string $chargeId, bool $lazy = false): ?Chargeback
+    {
+        /** @var Chargeback $chargeback */
+        foreach ($this->chargebacks as $chargeback) {
+            $parentResource = $chargeback->getParentResource();
+            if ($chargeback->getId() === $chargebackId) {
+                if ($parentResource instanceof Charge && $parentResource->getId() !== $chargeId) {
+                    continue;
+                }
+                if (!$lazy) {
+                    $this->getResource($chargeback);
+                }
+                return $chargeback;
             }
         }
         return null;
@@ -721,10 +788,6 @@ class Payment extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
     /**
      * {@inheritDoc}
      */
@@ -763,10 +826,6 @@ class Payment extends AbstractUnzerResource
     {
         return $this->getOrderId();
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Transactions">
 
     /**
      * Performs a Cancellation transaction on the Payment.
@@ -842,10 +901,6 @@ class Payment extends AbstractUnzerResource
         return $this->getUnzerObject()->ship($this, $invoiceId, $orderId);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Payment Update">
-
     /**
      * @param array $transactions
      *
@@ -877,6 +932,9 @@ class Payment extends AbstractUnzerResource
                     break;
                 case TransactionTypes::PAYOUT:
                     $this->updatePayoutTransaction($transaction);
+                    break;
+                case TransactionTypes::CHARGEBACK:
+                    $this->updateChargebackTransaction($transaction);
                     break;
                 default:
                     // skip
@@ -1082,5 +1140,46 @@ class Payment extends AbstractUnzerResource
         $payout->handleResponse($transaction);
     }
 
-    //</editor-fold>
+    /**
+     * This updates the local chargeback object referenced by this Payment with the given chargeback transaction from the
+     * Payment response.
+     *
+     * @param stdClass $transaction The transaction from the Payment response containing the chargeback data.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    private function updateChargebackTransaction(stdClass $transaction): void
+    {
+        // does chargeback refer to a specific charge transaction
+        // Get/create charge instance, if yes.
+        // does chargeback already exist?
+        // Add chargeback to charge transaction
+        $isPaymentChargeback = IdService::isPaymentChargeback($transaction->url);
+        $chargebackId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGEBACK);
+
+
+        if (!$isPaymentChargeback) {
+            $chargeId = IdService::getResourceIdFromUrl($transaction->url, IdStrings::CHARGE);
+            $chargeback = $this->getChargeback($chargebackId, $chargeId, true);
+            $charge = $this->getCharge($chargeId, true);
+            if (!$chargeback instanceof Chargeback) {
+                $chargeback = (new Chargeback())->setId($chargebackId);
+                $this->addChargeback($chargeback);
+
+                if ($charge instanceof Charge) {
+                    $charge->addChargeback($chargeback);
+                    $chargeback->setParentResource($charge);
+                }
+            }
+        } else {
+            $chargeback = $this->getChargeback($chargebackId, null, true);
+            if (!$chargeback instanceof Chargeback) {
+                $chargeback = (new Chargeback())->setId($chargebackId);
+                $this->addChargeback($chargeback);
+            }
+        }
+
+        $chargeback->handleResponse($transaction);
+    }
 }

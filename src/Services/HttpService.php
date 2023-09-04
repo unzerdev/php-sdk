@@ -29,7 +29,9 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use RuntimeException;
+
 use function in_array;
+
 use const PHP_VERSION;
 
 class HttpService
@@ -43,8 +45,6 @@ class HttpService
 
     /** @var EnvironmentService $environmentService */
     private $environmentService;
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * Returns the currently set HttpAdapter.
@@ -95,12 +95,10 @@ class HttpService
         return $this;
     }
 
-    //</editor-fold>
-
     /**
      * send post request to payment server
      *
-     * @param $uri string|null uri of the target system
+     * @param                        $uri        string|null uri of the target system
      * @param ?AbstractUnzerResource $resource
      * @param string                 $httpMethod
      * @param string                 $apiVersion

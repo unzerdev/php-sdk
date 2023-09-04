@@ -21,6 +21,7 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -40,6 +41,7 @@ use UnzerSDK\Traits\HasInvoiceId;
 use UnzerSDK\Traits\HasOrderId;
 use RuntimeException;
 use stdClass;
+
 use function in_array;
 
 class Paypage extends BasePaymentType
@@ -116,8 +118,6 @@ class Paypage extends BasePaymentType
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
     }
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return float
@@ -621,10 +621,6 @@ class Paypage extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable methods">
-
     /**
      * {@inheritDoc}
      * Change resource path.
@@ -719,8 +715,6 @@ class Paypage extends BasePaymentType
             'payment' => $this->getPayment()
         ];
     }
-
-    //</editor-fold>
 
     /**
      * Updates the referenced payment object if it exists and if this is not the payment object itself.

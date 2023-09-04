@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -46,8 +47,6 @@ class CardDetails extends AbstractUnzerResource
 
     /** @var string|null $issuerPhoneNumber */
     protected $issuerPhoneNumber;
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -181,6 +180,4 @@ class CardDetails extends AbstractUnzerResource
         $this->issuerPhoneNumber = $issuerPhoneNumber;
         return $this;
     }
-
-    //</editor-fold>
 }

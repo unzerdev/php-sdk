@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -23,6 +24,7 @@
  *
  * @package  UnzerSDK\test\integration
  */
+
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
@@ -31,6 +33,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\test\BaseIntegrationTest;
+
 use function microtime;
 
 class CustomerTest extends BaseIntegrationTest

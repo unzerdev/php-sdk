@@ -21,6 +21,7 @@
  *
  * @package  UnzerSDK\Constants
  */
+
 namespace UnzerSDK\Constants;
 
 class RecurrenceTypes

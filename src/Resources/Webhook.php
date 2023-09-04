@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -43,8 +44,6 @@ class Webhook extends AbstractUnzerResource
         $this->url = $url;
         $this->event = $event;
     }
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -84,10 +83,6 @@ class Webhook extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Resource IF">
-
     /**
      * {@inheritDoc}
      */
@@ -95,6 +90,4 @@ class Webhook extends AbstractUnzerResource
     {
         return 'webhooks';
     }
-
-    //</editor-fold>
 }

@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
 use function in_array;

@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Traits\CanDirectCharge;
@@ -30,8 +31,6 @@ class EPS extends BasePaymentType
 
     /** @var string $bic */
     protected $bic;
-
-    //<editor-fold desc="Getter/Setter">
 
     /**
      * @return string|null
@@ -51,6 +50,4 @@ class EPS extends BasePaymentType
         $this->bic = $bic;
         return $this;
     }
-
-    //</editor-fold>
 }

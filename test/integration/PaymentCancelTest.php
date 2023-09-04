@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\integration
  */
+
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\CancelReasonCodes;
@@ -65,6 +67,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      */
     public function cancelOnChargeAndDoubleCancel(): void
     {
+        $this->useLegacyKey();
         $charge = $this->createCharge(123.44);
         $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isCompleted());
@@ -123,6 +126,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      */
     public function partialCancelAndFullCancelOnSingleCharge(): void
     {
+        $this->useLegacyKey();
         $charge = $this->createCharge(222.33);
         $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isCompleted());
@@ -467,6 +471,7 @@ class PaymentCancelTest extends BaseIntegrationTest
      */
     public function cancelMoreThanWasCharged(): void
     {
+        $this->useLegacyKey();
         $charge = $this->createCharge(50.0);
         $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isCompleted());

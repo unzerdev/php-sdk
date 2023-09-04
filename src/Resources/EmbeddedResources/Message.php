@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -34,8 +35,6 @@ class Message extends AbstractUnzerResource
 
     /** @var string $merchant */
     private $merchant = '';
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string
@@ -93,6 +92,4 @@ class Message extends AbstractUnzerResource
         $this->merchant = $merchant;
         return $this;
     }
-
-    //</editor-fold>
 }

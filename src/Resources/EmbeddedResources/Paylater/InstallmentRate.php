@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
 
 class InstallmentRate

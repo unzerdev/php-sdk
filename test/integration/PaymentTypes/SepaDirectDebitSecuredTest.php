@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -23,6 +24,7 @@
  *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
+
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
@@ -180,12 +182,12 @@ class SepaDirectDebitSecuredTest extends BaseIntegrationTest
         // When
         /** @var SepaDirectDebitSecured $insType */
         $this->unzer->createPaymentType($ddgMock);
-        $this->assertRegExp('/^s-ddg-[.]*/', $ddgMock->getId());
+        $this->assertMatchesRegularExpression('/^s-ddg-[.]*/', $ddgMock->getId());
 
         // Then
         $fetchedType = $this->unzer->fetchPaymentType($ddgMock->getId());
         $this->assertInstanceOf(SepaDirectDebitSecured::class, $fetchedType);
-        $this->assertRegExp('/^s-ddg-[.]*/', $fetchedType->getId());
+        $this->assertMatchesRegularExpression('/^s-ddg-[.]*/', $fetchedType->getId());
 
         return $fetchedType;
     }

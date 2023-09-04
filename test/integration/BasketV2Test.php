@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\integration
  */
+
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
@@ -150,8 +152,8 @@ class BasketV2Test extends BaseIntegrationTest
      *
      * @dataProvider basketItemWithInvalidUrlWillThrowAnErrorDP
      *
-     * @param $expectException
-     * @param $imageUrl
+     * @param      $expectException
+     * @param      $imageUrl
      * @param null $exceptionCode
      */
     public function basketItemWithInvalidUrlWillThrowAnError($expectException, $imageUrl, $exceptionCode = null): void
@@ -240,6 +242,7 @@ class BasketV2Test extends BaseIntegrationTest
      */
     public function chargeTransactionsShouldPassAlongTheBasketIdIfSet(): void
     {
+        $this->useLegacyKey();
         $basket  = $this->createV2Basket();
         $this->assertNotEmpty($basket->getId());
 

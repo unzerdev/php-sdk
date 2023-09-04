@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -31,8 +32,6 @@ class GeoLocation extends AbstractUnzerResource
 
     /** @var string|null $countryCode */
     private $countryCode;
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -81,6 +80,4 @@ class GeoLocation extends AbstractUnzerResource
     {
         return $this->setCountryCode($countryCode);
     }
-
-    //</editor-fold>
 }

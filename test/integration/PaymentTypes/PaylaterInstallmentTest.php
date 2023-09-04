@@ -39,6 +39,7 @@ use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
+
 use function count;
 
 class PaylaterInstallmentTest extends BaseIntegrationTest
@@ -94,7 +95,7 @@ class PaylaterInstallmentTest extends BaseIntegrationTest
         $plans = $this->unzer->fetchPaylaterInstallmentPlans($paylaterInstallmentPlans);
         $this->assertTrue($plans->isSuccess());
     }
-    
+
     /**
      * Verify Api error is handled as Exception.
      *

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\integration\TransactionTypes
  */
+
 namespace UnzerSDK\test\integration\TransactionTypes;
 
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
@@ -30,6 +32,11 @@ use UnzerSDK\test\BaseIntegrationTest;
 
 class CancelAfterChargeTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->useLegacyKey();
+    }
+
     /**
      * Verify charge can be fetched by id.
      *

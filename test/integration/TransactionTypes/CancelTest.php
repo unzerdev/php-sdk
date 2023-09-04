@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\integration\TransactionTypes
  */
+
 namespace UnzerSDK\test\integration\TransactionTypes;
 
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -64,6 +66,7 @@ class CancelTest extends BaseIntegrationTest
      */
     public function refundShouldBeFetchableViaUnzerObject(): void
     {
+        $this->useLegacyKey();
         $charge = $this->createCharge();
         $cancel = $charge->cancel();
         $fetchedCancel = $this->unzer->fetchRefundById($charge->getPayment()->getId(), $charge->getId(), $cancel->getId());
@@ -78,6 +81,7 @@ class CancelTest extends BaseIntegrationTest
      */
     public function refundShouldBeFetchableViaPaymentObject(): void
     {
+        $this->useLegacyKey();
         $charge = $this->createCharge();
         $cancel = new Cancellation();
         $this->getUnzerObject()->cancelChargedPayment($charge->getPayment(), $cancel);
@@ -109,6 +113,7 @@ class CancelTest extends BaseIntegrationTest
      */
     public function chargeCancellationsShouldBeFetchableViaPaymentObject(): void
     {
+        $this->useLegacyKey();
         $charge = $this->createCharge();
         $refund = $charge->cancel();
         $fetchedPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
@@ -125,6 +130,7 @@ class CancelTest extends BaseIntegrationTest
      */
     public function cancelStatusIsSetCorrectly(): void
     {
+        $this->useLegacyKey();
         $charge = $this->createCharge();
         $reversal = $charge->cancel();
         $this->assertSuccess($reversal);

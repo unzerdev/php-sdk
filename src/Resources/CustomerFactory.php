@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Constants\CompanyCommercialSectorItems;

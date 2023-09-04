@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\TransactionTypes
  */
+
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -51,8 +52,6 @@ class Payout extends AbstractTransactionType
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
     }
-
-    //<editor-fold desc="Setters/Getters">
 
     /**
      * @return float|null
@@ -130,10 +129,6 @@ class Payout extends AbstractTransactionType
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
     /**
      * {@inheritDoc}
      */
@@ -141,6 +136,4 @@ class Payout extends AbstractTransactionType
     {
         return 'payouts';
     }
-
-    //</editor-fold>
 }

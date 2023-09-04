@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -28,6 +29,7 @@ use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
 use UnzerSDK\Traits\HasGeoLocation;
 use stdClass;
+
 use function in_array;
 
 class Customer extends AbstractUnzerResource
@@ -81,8 +83,6 @@ class Customer extends AbstractUnzerResource
         $this->billingAddress = new Address();
         $this->shippingAddress = new Address();
     }
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -332,10 +332,6 @@ class Customer extends AbstractUnzerResource
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Resource IF">
-
     /**
      * {@inheritDoc}
      */
@@ -343,10 +339,6 @@ class Customer extends AbstractUnzerResource
     {
         return 'customers';
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable methods">
 
     /**
      * {@inheritDoc}

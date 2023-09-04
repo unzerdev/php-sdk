@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\TransactionTypes
  */
+
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -28,8 +29,6 @@ class Shipment extends AbstractTransactionType
 {
     /** @var float|null $amount */
     protected $amount;
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return float|null
@@ -44,15 +43,11 @@ class Shipment extends AbstractTransactionType
      *
      * @return Shipment
      */
-    public function setAmount(?float $amount): Shipment
+    public function setAmount(?float $amount): self
     {
         $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable methods">
 
     /**
      * {@inheritDoc}
@@ -61,6 +56,4 @@ class Shipment extends AbstractTransactionType
     {
         return 'shipments';
     }
-
-    //</editor-fold>
 }

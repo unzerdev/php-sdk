@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
 use function is_float;
@@ -43,7 +44,7 @@ class ValueService
     /**
      * Mask a value.
      *
-     * @param $value
+     * @param        $value
      * @param string $maskSymbol
      *
      * @return string

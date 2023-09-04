@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 use UnzerSDK\Constants\PaymentState;
@@ -29,8 +30,6 @@ trait HasPaymentState
 {
     /** @var int */
     private $state = 0;
-
-    //<editor-fold desc="Check for States">
 
     /**
      * Return true if the state is pending.
@@ -102,10 +101,6 @@ trait HasPaymentState
         return $this->getState() === PaymentState::STATE_CREATE;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Getters/Setters">
-
     /**
      * Returns the current state code (ref. Constants/PaymentState).
      *
@@ -140,6 +135,4 @@ trait HasPaymentState
         $this->state = $state;
         return $this;
     }
-
-    //</editor-fold>
 }

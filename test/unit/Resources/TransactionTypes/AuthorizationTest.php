@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 
 use UnzerSDK\Unzer;
@@ -33,6 +35,7 @@ use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BasePaymentTest;
 use RuntimeException;
+
 use function Webmozart\Assert\Tests\StaticAnalysis\object;
 
 class AuthorizationTest extends BasePaymentTest

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -23,6 +24,7 @@
  *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
+
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
@@ -114,7 +116,7 @@ class CardTest extends BaseIntegrationTest
      *
      * @dataProvider supportedRecurrenceTypesDP
      *
-     * @param $recurrenceType
+     * @param       $recurrenceType
      * @param mixed $isrecurring
      *
      * @throws UnzerApiException
@@ -200,7 +202,7 @@ class CardTest extends BaseIntegrationTest
         }
         $this->assertEquals($recurrenceType, $fetchedCharge->getRecurrenceType());
     }
-    
+
     /**
      * Verify that an invalid email cause an UnzerApiException.
      *
@@ -248,7 +250,7 @@ class CardTest extends BaseIntegrationTest
         // then
         /** @var Card $updatedCard */
         $updatedCard = $this->unzer->fetchPaymentType($fetchedCard->getId());
-        $this->assertRegExp('/0000$/', $updatedCard->getNumber());
+        $this->assertMatchesRegularExpression('/0000$/', $updatedCard->getNumber());
         $this->assertEquals('test2@test.com', $updatedCard->getEmail());
     }
 

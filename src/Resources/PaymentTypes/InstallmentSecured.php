@@ -77,8 +77,6 @@ class InstallmentSecured extends InstalmentPlan
         return $this;
     }
 
-    //<editor-fold desc="Getters/Setters">
-
     /**
      * @return string|null
      */
@@ -135,6 +133,4 @@ class InstallmentSecured extends InstalmentPlan
         $this->accountHolder = $accountHolder;
         return $this;
     }
-
-    //</editor-fold>
 }

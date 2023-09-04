@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -33,8 +34,6 @@ class Amount extends AbstractUnzerResource
 
     /** @var string $currency */
     private $currency;
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return float
@@ -130,6 +129,4 @@ class Amount extends AbstractUnzerResource
         $this->currency = $currency;
         return $this;
     }
-
-    //</editor-fold>
 }

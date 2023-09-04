@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\TransactionTypes
  */
+
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -52,13 +53,9 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     use HasAdditionalTransactionData;
     use HasDate;
 
-    //<editor-fold desc="Properties">
 
     /** @var Payment $payment */
     private $payment;
-    //</editor-fold>
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * Return the payment property.
@@ -108,10 +105,6 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
         return $this->payment->getRedirectUrl();
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable methods">
-
     /**
      * {@inheritDoc}
      *
@@ -160,8 +153,6 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
             'basket' => $payment->getBasket()
         ];
     }
-
-    //</editor-fold>
 
     /**
      * Updates the referenced payment object if it exists and if this is not the payment object itself.

@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
 class ResourceNameService

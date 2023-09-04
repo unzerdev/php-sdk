@@ -20,12 +20,14 @@
  *
  * @package  UnzerSDK\TransactionTypes
  */
+
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
+use UnzerSDK\Traits\HasChargebacks;
 use UnzerSDK\Traits\HasRecurrenceType;
 use RuntimeException;
 
@@ -34,6 +36,7 @@ class Charge extends AbstractTransactionType
     use HasCancellations;
     use HasRecurrenceType;
     use HasAccountInformation;
+    use HasChargebacks;
 
     /** @var float $amount */
     protected $amount;
@@ -63,8 +66,6 @@ class Charge extends AbstractTransactionType
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
     }
-
-    //<editor-fold desc="Setters/Getters">
 
     /**
      * @return float|null
@@ -185,10 +186,6 @@ class Charge extends AbstractTransactionType
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
     /**
      * {@inheritDoc}
      */
@@ -196,8 +193,6 @@ class Charge extends AbstractTransactionType
     {
         return 'charges';
     }
-
-    //</editor-fold>
 
     /**
      * Full cancel of this authorization.

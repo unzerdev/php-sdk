@@ -22,6 +22,7 @@
  *  @package  UnzerSDK
  *
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;

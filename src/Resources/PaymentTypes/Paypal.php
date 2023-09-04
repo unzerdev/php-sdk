@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use RuntimeException;
@@ -40,8 +41,6 @@ class Paypal extends BasePaymentType
     /** @var string|null $email */
     protected $email;
 
-    //<editor-fold desc="Getters/Setters">
-
     /**
      * @return string|null
      */
@@ -60,8 +59,6 @@ class Paypal extends BasePaymentType
         $this->email = $email;
         return $this;
     }
-
-    //</editor-fold>
 
     /**
      * Activates recurring payment for Paypal.

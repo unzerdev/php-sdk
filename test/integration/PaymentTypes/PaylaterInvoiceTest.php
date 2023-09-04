@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
+
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
@@ -50,7 +52,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
         $fetchedInvoice = $this->unzer->fetchPaymentType($invoice->getId());
         $this->assertInstanceOf(PaylaterInvoice::class, $fetchedInvoice);
         $this->assertEquals($invoice->getId(), $fetchedInvoice->getId());
-        $this->assertRegExp('/^s-piv-[.]*/', $fetchedInvoice->getId());
+        $this->assertMatchesRegularExpression('/^s-piv-[.]*/', $fetchedInvoice->getId());
 
         return $invoice;
     }

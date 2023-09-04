@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpComposerExtensionStubsInspection */
 
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\Adapter
  */
+
 namespace UnzerSDK\Adapter;
 
 use UnzerSDK\Constants\ApplepayValidationDomains;

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace UnzerSDK\test\unit\Services;
 
 use UnzerSDK\Adapter\CurlAdapter;
@@ -175,7 +177,7 @@ class HttpServiceTest extends BasePaymentTest
      *
      * @dataProvider clientIpHeaderShouldBeSetProperlyDP
      *
-     * @param $clientIp
+     * @param       $clientIp
      * @param mixed $isHeaderExpected
      */
     public function clientIpHeaderShouldBeSetProperly($clientIp, $isHeaderExpected): void
@@ -403,8 +405,8 @@ class HttpServiceTest extends BasePaymentTest
      *
      * @dataProvider environmentUrlSwitchesWithEnvironmentVariableDP
      *
-     * @param $environment
-     * @param $apiUrl
+     * @param        $environment
+     * @param        $apiUrl
      * @param string $key
      */
     public function environmentUrlSwitchesWithEnvironmentVariable($environment, $apiUrl, string $key): void

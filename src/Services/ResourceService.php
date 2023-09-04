@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Services
  */
+
 namespace UnzerSDK\Services;
 
 use DateTime;
@@ -33,8 +34,10 @@ use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Resources\PaymentTypes\PayU;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
+use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -71,6 +74,7 @@ use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Traits\CanRecur;
 use RuntimeException;
 use stdClass;
+
 use function in_array;
 use function is_string;
 
@@ -89,8 +93,6 @@ class ResourceService implements ResourceServiceInterface
         $this->unzer = $unzer;
     }
 
-    //<editor-fold desc="Getters/Setters"
-
     /** @return Unzer */
     public function getUnzer(): Unzer
     {
@@ -107,10 +109,6 @@ class ResourceService implements ResourceServiceInterface
         $this->unzer = $unzer;
         return $this;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="General">
 
     /**
      * Send request to API.
@@ -230,10 +228,6 @@ class ResourceService implements ResourceServiceInterface
 
         return $resource;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="CRUD operations">
 
     /**
      * Create the resource on the api.
@@ -357,10 +351,6 @@ class ResourceService implements ResourceServiceInterface
         return $resource;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Payout resource">
-
     /**
      * Fetch an Payout object by its paymentId.
      * Payout Ids are not global but specific to the payment.
@@ -381,10 +371,6 @@ class ResourceService implements ResourceServiceInterface
         $payout = $this->fetchResource($paymentObject->getPayout(true));
         return $payout;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Recurring">
 
     /**
      * {@inheritDoc}
@@ -409,10 +395,6 @@ class ResourceService implements ResourceServiceInterface
 
         throw new RuntimeException('Recurring is not available for the given payment type.');
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Payment resource">
 
     /**
      * Fetches the payment object if the id is given.
@@ -475,10 +457,6 @@ class ResourceService implements ResourceServiceInterface
         return $paymentObject;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Keypair resource">
-
     /**
      * {@inheritDoc}
      */
@@ -488,10 +466,6 @@ class ResourceService implements ResourceServiceInterface
         $this->fetchResource($keyPair);
         return $keyPair;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Metadata resource">
 
     /**
      * {@inheritDoc}
@@ -516,10 +490,6 @@ class ResourceService implements ResourceServiceInterface
         $this->fetchResource($metadataObject->setParentResource($this->unzer));
         return $metadataObject;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Basket resource">
 
     /**
      * {@inheritDoc}
@@ -563,10 +533,6 @@ class ResourceService implements ResourceServiceInterface
         return $basket;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="PaymentType resource">
-
     /**
      * {@inheritDoc}
      */
@@ -599,10 +565,6 @@ class ResourceService implements ResourceServiceInterface
         $returnPaymentType = $this->updateResource($paymentType);
         return $returnPaymentType;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Customer resource">
 
     /**
      * {@inheritDoc}
@@ -684,10 +646,6 @@ class ResourceService implements ResourceServiceInterface
         $this->deleteResource($customerObject);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Authorization resource">
-
     /**
      * {@inheritDoc}
      */
@@ -705,9 +663,6 @@ class ResourceService implements ResourceServiceInterface
         return $authorize;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Charge resource">
     public function fetchCharge(Charge $charge): Charge
     {
         $this->fetchResource($charge);
@@ -730,9 +685,30 @@ class ResourceService implements ResourceServiceInterface
         return $charge;
     }
 
-    //</editor-fold>
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchChargeback(Chargeback $chargeback): Chargeback
+    {
+        $this->fetchResource($chargeback);
+        return $chargeback;
+    }
 
-    //<editor-fold desc="Cancellation resource">
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchChargebackById(string $paymentId, string $chargebackId, ?string $chargeId): Chargeback
+    {
+        $paymentObject = $this->fetchPayment($paymentId);
+        $chargeback = $paymentObject->getChargeback($chargebackId, $chargeId, true);
+
+        if (!$chargeback instanceof Chargeback) {
+            throw new RuntimeException('The chargeback object could not be found.');
+        }
+
+        $this->fetchResource($chargeback);
+        return $chargeback;
+    }
 
     /**
      * {@inheritDoc}
@@ -805,12 +781,6 @@ class ResourceService implements ResourceServiceInterface
         return $this->fetchResource($cancel);
     }
 
-
-
-    //</editor-fold>
-
-    //<editor-fold desc="Shipment resource">
-
     /**
      * {@inheritDoc}
      */
@@ -819,10 +789,6 @@ class ResourceService implements ResourceServiceInterface
         $paymentObject = $this->fetchPayment($payment);
         return $paymentObject->getShipment($shipmentId);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Config resource">
 
     /**
      * {@inheritDoc}
@@ -838,8 +804,6 @@ class ResourceService implements ResourceServiceInterface
 
         return $this->fetchResource($configObject);
     }
-
-    //</editor-fold>
 
     /**
      * Creates a payment type instance from a typeId string.
@@ -896,6 +860,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::PAYLATER_INVOICE:
                 $paymentType = new PaylaterInvoice();
+                break;
+            case IdStrings::PAYU:
+                $paymentType = new PayU();
                 break;
             case IdStrings::PIS:
                 $paymentType = new PIS();

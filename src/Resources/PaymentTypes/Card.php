@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
@@ -76,8 +77,6 @@ class Card extends BasePaymentType
         $this->setExpiryDate($expiryDate);
         $this->setEmail($email);
     }
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string
@@ -234,10 +233,6 @@ class Card extends BasePaymentType
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
     /**
      * Rename internal property names to external property names.
      *
@@ -265,6 +260,4 @@ class Card extends BasePaymentType
             $this->cardDetails->handleResponse($response->cardDetails);
         }
     }
-
-    //</editor-fold>
 }

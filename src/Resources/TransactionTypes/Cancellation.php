@@ -20,12 +20,14 @@
  *
  * @package  UnzerSDK\TransactionTypes
  */
+
 namespace UnzerSDK\Resources\TransactionTypes;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
+
 use function in_array;
 
 class Cancellation extends AbstractTransactionType
@@ -67,8 +69,6 @@ class Cancellation extends AbstractTransactionType
         $this->setAmount($amount);
     }
 
-    //<editor-fold desc="Getters/Setters">
-
     /**
      * Returns the cancellationAmount (equals grossAmount in case of Installment Secured).
      *
@@ -86,7 +86,7 @@ class Cancellation extends AbstractTransactionType
      *
      * @return Cancellation
      */
-    public function setAmount(?float $amount): Cancellation
+    public function setAmount(?float $amount): self
     {
         $this->amount = $amount !== null ? round($amount, 4) : null;
         return $this;
@@ -186,10 +186,6 @@ class Cancellation extends AbstractTransactionType
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Overridable Methods">
-
     /**
      * {@inheritDoc}
      */
@@ -212,6 +208,4 @@ class Cancellation extends AbstractTransactionType
     {
         return 'cancels';
     }
-
-    //</editor-fold>
 }

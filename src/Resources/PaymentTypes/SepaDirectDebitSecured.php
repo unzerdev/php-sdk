@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\PaymentTypes
  */
+
 namespace UnzerSDK\Resources\PaymentTypes;
 
 use UnzerSDK\Traits\CanDirectChargeWithCustomer;
@@ -48,8 +49,6 @@ class SepaDirectDebitSecured extends BasePaymentType
     {
         $this->iban = $iban;
     }
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -107,6 +106,4 @@ class SepaDirectDebitSecured extends BasePaymentType
         $this->holder = $holder;
         return $this;
     }
-
-    //</editor-fold>
 }

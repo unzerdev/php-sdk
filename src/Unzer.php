@@ -21,6 +21,7 @@
  *
  * @package  UnzerSDK
  */
+
 namespace UnzerSDK;
 
 use DateTime;
@@ -49,6 +50,7 @@ use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Resources\Webhook;
@@ -64,7 +66,7 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '3.2.0';
+    public const SDK_VERSION = '3.3.0';
 
     /** @var string $key */
     private $key;
@@ -118,8 +120,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         $this->cancelService   = new CancelService($this);
         $this->httpService     = new HttpService();
     }
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * Returns the set private key used to connect to the API.
@@ -344,10 +344,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this;
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="ParentIF">
-
     /**
      * Returns this Unzer instance.
      *
@@ -366,12 +362,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return '';
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Resources">
-
-    //<editor-fold desc="Recurring">
-
     /**
      * {@inheritDoc}
      */
@@ -380,9 +370,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->activateRecurringPayment($paymentType, $returnUrl, $recurrenceType);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="PayPage resource">
     /**
      * {@inheritDoc}
      */
@@ -390,9 +377,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchPayPage($payPage);
     }
-    //</editor-fold>
-
-    //<editor-fold desc="Payment resource">
 
     /**
      * {@inheritDoc}
@@ -410,10 +394,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchPaymentByOrderId($orderId);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Keypair resource">
-
     /**
      * {@inheritDoc}
      */
@@ -421,10 +401,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchKeypair($detailed);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Metadata resource">
 
     /**
      * {@inheritDoc}
@@ -441,10 +417,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchMetadata($metadata);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Basket resource">
 
     /**
      * {@inheritDoc}
@@ -470,10 +442,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->updateBasket($basket);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="PaymentType resource">
-
     /**
      * {@inheritDoc}
      */
@@ -497,10 +465,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchPaymentType($typeId);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Customer resource">
 
     /**
      * {@inheritDoc}
@@ -550,10 +514,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         $this->resourceService->deleteCustomer($customer);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Authorization resource">
-
     /**
      * {@inheritDoc}
      */
@@ -561,10 +521,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchAuthorization($payment);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Charge resource">
 
     /**
      * {@inheritDoc}
@@ -582,9 +538,18 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchCharge($charge);
     }
 
-    //</editor-fold>
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchChargebackById(string $paymentId, string $charebackId, ?string $chargeId): Chargeback
+    {
+        return $this->resourceService->fetchChargebackById($paymentId, $charebackId, $chargeId);
+    }
 
-    //<editor-fold desc="Cancellation resource">
+    public function fetchChargeback(Chargeback $chargeback): Chargeback
+    {
+        return $this->resourceService->fetchResource($chargeback);
+    }
 
     /**
      * {@inheritDoc}
@@ -634,10 +599,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchPaymentReversal($payment, $cancellationId);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Shipment resource">
-
     /**
      * {@inheritDoc}
      */
@@ -646,10 +607,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->resourceService->fetchShipment($payment, $shipmentId);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Payout resource">
-
     /**
      * {@inheritDoc}
      */
@@ -657,10 +614,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->resourceService->fetchPayout($payment);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Webhook resource">
 
     /**
      * {@inheritDoc}
@@ -726,14 +679,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->webhookService->fetchResourceFromEvent($eventJson);
     }
 
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Transactions">
-
-    //<editor-fold desc="Authorize transactions">
-
     /**
      * {@inheritDoc}
      */
@@ -784,10 +729,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             $recurrenceType
         );
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Charge transactions">
 
     /**
      * {@inheritDoc}
@@ -864,10 +805,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->paymentService->performChargeOnPayment($payment, $charge);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Authorization Cancel/Reversal">
-
     /**
      * {@inheritDoc}
      */
@@ -883,10 +820,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->cancelService->cancelAuthorizationByPayment($payment, $amount);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Payment Cancel">
 
     /**
      * {@inheritDoc}
@@ -910,10 +843,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->cancelService->cancelPaymentAuthorization($payment, $amount);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Charge Cancel/Refund">
 
     /**
      * {@inheritDoc}
@@ -964,10 +893,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             ->cancelChargedPayment($payment, $cancellation);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Shipment transactions">
-
     /**
      * {@inheritDoc}
      */
@@ -975,10 +900,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->paymentService->ship($payment, $invoiceId, $orderId);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Payout transactions">
 
     /**
      * {@inheritDoc}
@@ -1009,10 +930,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         );
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="PayPage">
-
     /**
      * {@inheritDoc}
      */
@@ -1037,10 +954,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
         return $this->paymentService->initPayPageAuthorize($paypage, $customer, $basket, $metadata);
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="Installment Secured">
-
     /**
      * {@inheritDoc}
      */
@@ -1054,16 +967,10 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             ->fetchInstallmentPlans($amount, $currency, $effectiveInterest, $orderDate);
     }
 
-    //</editor-fold>
-
-    public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest):PaylaterInstallmentPlans
+    public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest): PaylaterInstallmentPlans
     {
         return $this->getPaymentService()->fetchPaylaterInstallmentPlans($plansRequest);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Config">
 
     /**
      * {@inheritDoc}
@@ -1074,10 +981,6 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     {
         return $this->getResourceService()->fetchConfig($paymentType, $config);
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Helpers">
 
     /**
      * Writes the given string to the registered debug handler if debug mode is enabled.
@@ -1093,6 +996,4 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
             }
         }
     }
-
-    //</editor-fold>
 }

@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Validators
  */
+
 namespace UnzerSDK\Validators;
 
 use function count;

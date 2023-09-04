@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 use UnzerSDK\Exceptions\UnzerApiException;
@@ -36,9 +37,9 @@ trait CanDirectCharge
      * Charge an amount with the given currency.
      * Throws UnzerApiException if the transaction could not be performed (e.g. increased risk etc.).
      *
-     * @param $amount
-     * @param $currency
-     * @param $returnUrl
+     * @param                      $amount
+     * @param                      $currency
+     * @param                      $returnUrl
      * @param Customer|string|null $customer
      * @param string|null          $orderId
      * @param Metadata|string|null $metadata

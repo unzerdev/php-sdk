@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Validators
  */
+
 namespace UnzerSDK\Validators;
 
 class ExpiryDateValidator

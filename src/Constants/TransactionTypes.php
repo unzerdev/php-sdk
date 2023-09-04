@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Constants
  */
+
 namespace UnzerSDK\Constants;
 
 class TransactionTypes
@@ -30,4 +31,5 @@ class TransactionTypes
     public const REFUND = 'cancel-charge';
     public const SHIPMENT = 'shipment';
     public const PAYOUT = 'payout';
+    public const CHARGEBACK = 'chargeback';
 }

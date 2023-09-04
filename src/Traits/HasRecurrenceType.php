@@ -28,8 +28,6 @@ use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 
 trait HasRecurrenceType
 {
-    //<editor-fold desc="Getters/Setters">
-
     /**
      * @return string|null
      */
@@ -56,6 +54,4 @@ trait HasRecurrenceType
 
         return $this;
     }
-
-    //</editor-fold>
 }

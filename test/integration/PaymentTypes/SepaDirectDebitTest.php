@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -23,6 +24,7 @@
  *
  * @package  UnzerSDK\test\integration\PaymentTypes
  */
+
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
@@ -32,6 +34,11 @@ use UnzerSDK\test\BaseIntegrationTest;
 
 class SepaDirectDebitTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->useLegacyKey();
+    }
+
     /**
      * Verify sepa direct debit can be created.
      *

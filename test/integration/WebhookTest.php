@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\integration
  */
+
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
@@ -29,6 +31,7 @@ use UnzerSDK\Constants\WebhookEvents;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Webhook;
 use UnzerSDK\test\BaseIntegrationTest;
+
 use function count;
 use function in_array;
 
@@ -248,7 +251,7 @@ class WebhookTest extends BaseIntegrationTest
     /**
      * Returns true if the given Webhook exists in the given array.
      *
-     * @param $webhooksArray
+     * @param         $webhooksArray
      * @param Webhook $webhook
      *
      * @return bool

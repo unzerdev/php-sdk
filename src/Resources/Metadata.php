@@ -20,13 +20,15 @@
  *
  * @package  UnzerSDK\Resources
  */
+
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use stdClass;
+
 use function count;
 use function in_array;
 use function is_callable;
-use stdClass;
 
 class Metadata extends AbstractUnzerResource
 {
@@ -34,8 +36,6 @@ class Metadata extends AbstractUnzerResource
 
     protected $shopType;
     protected $shopVersion;
-
-    //<editor-fold desc="Setters/Getters">
 
     /**
      * @return string|null
@@ -104,10 +104,6 @@ class Metadata extends AbstractUnzerResource
         return $this->metadata[$name] ?? null;
     }
 
-    //</editor-fold>>
-
-    //<editor-fold desc="Overridable Methods">
-
     /**
      * Add the dynamically set meta data.
      * {@inheritDoc}
@@ -133,6 +129,4 @@ class Metadata extends AbstractUnzerResource
             }
         }
     }
-
-    //</editor-fold>
 }

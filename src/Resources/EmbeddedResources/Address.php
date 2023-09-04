@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Resources\EmbeddedResources
  */
+
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -46,8 +47,6 @@ class Address extends AbstractUnzerResource
 
     /** @var string|null shippingType */
     protected $shippingType;
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * @return string|null
@@ -181,6 +180,4 @@ class Address extends AbstractUnzerResource
         $this->shippingType = $shippingType;
         return $this;
     }
-
-    //</editor-fold>
 }

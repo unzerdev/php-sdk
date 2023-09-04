@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
@@ -22,6 +23,7 @@
  *
  * @package  UnzerSDK\test\unit
  */
+
 namespace UnzerSDK\test\unit\Resources;
 
 use stdClass;
@@ -166,7 +168,7 @@ class BasketTest extends BasePaymentTest
      * @dataProvider getApiVersionShouldReturnExpectedVersionDP
      *
      * @param Basket $basket
-     * @param $expectedApiVersion
+     * @param        $expectedApiVersion
      */
     public function getApiVersionShouldReturnExpectedVersion(Basket $basket, $expectedApiVersion): void
     {

@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Interfaces
  */
+
 namespace UnzerSDK\Interfaces;
 
 use UnzerSDK\Constants\CancelReasonCodes;

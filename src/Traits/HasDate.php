@@ -20,6 +20,7 @@
  *
  * @package  UnzerSDK\Traits
  */
+
 namespace UnzerSDK\Traits;
 
 use DateTime;
@@ -29,8 +30,6 @@ trait HasDate
 {
     /** @var DateTime $date */
     private $date;
-
-    //<editor-fold desc="Getters/Setters">
 
     /**
      * This returns the date of the Transaction as string.
@@ -55,6 +54,4 @@ trait HasDate
         $this->date = new DateTime($date);
         return $this;
     }
-
-    //</editor-fold>
 }
