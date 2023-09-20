@@ -52,11 +52,11 @@ trait HasAccountInformation
     }
 
     /**
-     * @param string $iban
+     * @param string|null $iban
      *
      * @return self
      */
-    protected function setIban(string $iban): self
+    protected function setIban(?string $iban): self
     {
         $this->iban = $iban;
         return $this;
@@ -74,11 +74,11 @@ trait HasAccountInformation
     }
 
     /**
-     * @param string $bic
+     * @param string|null $bic
      *
      * @return self
      */
-    protected function setBic(string $bic): self
+    protected function setBic(?string $bic): self
     {
         $this->bic = $bic;
         return $this;
@@ -96,11 +96,11 @@ trait HasAccountInformation
     }
 
     /**
-     * @param string $holder
+     * @param string|null $holder
      *
      * @return self
      */
-    protected function setHolder(string $holder): self
+    protected function setHolder(?string $holder): self
     {
         $this->holder = $holder;
         return $this;
@@ -118,11 +118,11 @@ trait HasAccountInformation
     }
 
     /**
-     * @param string $descriptor
+     * @param string|null $descriptor
      *
      * @return self
      */
-    protected function setDescriptor(string $descriptor): self
+    protected function setDescriptor(?string $descriptor): self
     {
         $this->descriptor = $descriptor;
         return $this;
