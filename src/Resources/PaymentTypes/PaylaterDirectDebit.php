@@ -18,7 +18,7 @@ class PaylaterDirectDebit extends BasePaymentType
         $this->holder = $holder;
     }
 
-    public function getIban(): string
+    public function getIban(): ?string
     {
         return $this->iban;
     }
@@ -29,7 +29,7 @@ class PaylaterDirectDebit extends BasePaymentType
         return $this;
     }
 
-    public function getHolder(): string
+    public function getHolder(): ?string
     {
         return $this->holder;
     }
