@@ -10,7 +10,11 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 *   Add `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit` payment type.
 
 ### Changed
-* Allow 'null' for setters in '\UnzerSDK\Traits\HasAccountInformation' trait to avoid error when e.g. API response contains empty bic.
+*   Allow 'null' for setters in '\UnzerSDK\Traits\HasAccountInformation' trait to avoid error when e.g. API response contains empty bic.
+
+### Deprecated
+*   `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit`, please use `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit'`.
+*   `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured`, please use `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit'`.
 
 ## [3.3.0](https://github.com/unzerdev/php-sdk/compare/3.2.0..3.3.0)
 ### Added
