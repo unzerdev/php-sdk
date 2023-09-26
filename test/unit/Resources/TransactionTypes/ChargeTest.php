@@ -137,6 +137,28 @@ class ChargeTest extends BasePaymentTest
     }
 
     /**
+     * Verify response with empty account data can be handled.
+     *
+     * @test
+     */
+    public function verifyResponseWithEmptyAccountDataCanBeHandled()
+    {
+        $charge = new Charge();
+
+        $testResponse = new stdClass();
+        $testResponse->Iban = '';
+        $testResponse->Bic = '';
+        $testResponse->Holder = '';
+        $testResponse->Descriptor = '';
+
+        $charge->handleResponse($testResponse);
+        $this->assertNull($charge->getIban());
+        $this->assertNull($charge->getBic());
+        $this->assertNull($charge->getHolder());
+        $this->assertNull($charge->getDescriptor());
+    }
+
+    /**
      * Verify getLinkedResources throws exception if the paymentType is not set.
      *
      * @test
