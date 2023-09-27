@@ -62,12 +62,16 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
+    // Just for example purpose. Make sure to generate a unique ID.
+    let threatMetrixId = 'php-sdk-example_' + Date.now();
+
     // Create an Paylater Invoice instance
     let paylaterInvoice = unzerInstance.PaylaterInvoice();
     paylaterInvoice.create({
         containerId: 'example-paylater-invoice',
         customerType: 'B2C',
-        errorHolderId: 'error-holder'
+        errorHolderId: 'error-holder',
+        threatMetrixId: threatMetrixId
     });
 
     // Create a customer instance and render the customer form
@@ -130,6 +134,12 @@ require_once __DIR__ . '/../../../../autoload.php';
                 hiddenInputCustomerId.setAttribute('name', 'customerId');
                 hiddenInputCustomerId.setAttribute('value', customer.id);
                 form.appendChild(hiddenInputCustomerId);
+
+                let threatMetrixIdInput = document.createElement('input');
+                threatMetrixIdInput.setAttribute('type', 'hidden');
+                threatMetrixIdInput.setAttribute('name', 'threatMetrixId');
+                threatMetrixIdInput.setAttribute('value', threatMetrixId);
+                form.appendChild(threatMetrixIdInput);
 
                 form.setAttribute('method', 'POST');
                 form.setAttribute('action', '<?php echo CONTROLLER_URL; ?>');

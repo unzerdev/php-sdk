@@ -29,8 +29,10 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use UnzerSDK\Constants\CustomerGroups;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
@@ -57,6 +59,7 @@ if (!isset($_POST['paymentTypeId'], $_POST['customerId'])) {
 
 $paymentTypeId = $_POST['paymentTypeId'];
 $customerId = $_POST['customerId'];
+$threatMetrixId = $_POST['threatMetrixId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -80,8 +83,17 @@ try {
         ->setCurrencyCode('EUR')
         ->setOrderId($orderId);
 
-    $authorization = (new Authorization(119.00, 'EUR'))
-        ->setReturnUrl(CONTROLLER_URL);
+    $riskData = (new RiskData())
+        ->setThreatMetrixId($threatMetrixId)
+        ->setCustomerGroup(CustomerGroups::GOOD)
+        ->setConfirmedAmount(99.99)
+        ->setConfirmedOrders(2)
+        ->setRegistrationLevel(CustomerRegistrationLevel::REGISTERED)
+        ->setRegistrationDate('20160412');
+
+    $authorization = (new Authorization(119.00, 'EUR', CONTROLLER_URL))
+        ->setRiskData($riskData);
+
     $paymentType = $unzer->fetchPaymentType($paymentTypeId);
 
     $transaction = $unzer->performAuthorization($authorization, $paymentType, $customerId, null, $basket);
