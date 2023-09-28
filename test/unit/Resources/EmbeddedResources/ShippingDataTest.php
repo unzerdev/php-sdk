@@ -45,9 +45,9 @@ class ShippingDataTest extends BasePaymentTest
         $this->assertNull($shipping->getReturnTrackingId());
 
         $resp = [
-            "deliveryTrackingId"=> "deliveryTrackingId",
-            "deliveryService"=>"deliveryService",
-            "returnTrackingId"=>"returnTrackingId",
+            "deliveryTrackingId" => "deliveryTrackingId",
+            "deliveryService" => "deliveryService",
+            "returnTrackingId" => "returnTrackingId",
         ];
         $shipping->handleResponse((object)$resp);
 

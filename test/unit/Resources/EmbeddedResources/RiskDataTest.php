@@ -49,13 +49,13 @@ class RiskDataTest extends BasePaymentTest
         $this->assertNull($riskData->getCustomerId());
 
         $resp = [
-            "threatMetrixId"=> "f544if49wo4f74ef1x",
-            "customerGroup"=>"TOP",
-            "customerId"=>"C-122345",
-            "confirmedAmount"=>"2569",
-            "confirmedOrders"=>"14",
-            "registrationLevel"=>"1",
-            "registrationDate"=>"20160412"
+            "threatMetrixId" => "f544if49wo4f74ef1x",
+            "customerGroup" => "TOP",
+            "customerId" => "C-122345",
+            "confirmedAmount" => "2569",
+            "confirmedOrders" => "14",
+            "registrationLevel" => "1",
+            "registrationDate" => "20160412"
         ];
         $riskData->handleResponse((object)$resp);
 

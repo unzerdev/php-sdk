@@ -27,6 +27,8 @@ use UnzerSDK\Traits\CanDirectChargeWithCustomer;
 use UnzerSDK\Traits\CanPayoutWithCustomer;
 use UnzerSDK\Traits\CanRecur;
 
+/** @deprecated please use PaylaterDirectDebit instead.
+ */
 class SepaDirectDebitSecured extends BasePaymentType
 {
     use CanDirectChargeWithCustomer;

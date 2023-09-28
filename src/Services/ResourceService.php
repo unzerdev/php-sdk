@@ -32,6 +32,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
+use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\PayU;
@@ -854,6 +855,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::PAYPAL:
                 $paymentType = new Paypal();
+                break;
+            case IdStrings::PAYLATER_DIRECT_DEBIT:
+                $paymentType = new PaylaterDirectDebit();
                 break;
             case IdStrings::PAYLATER_INSTALLMENT:
                 $paymentType = new PaylaterInstallment();

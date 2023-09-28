@@ -106,7 +106,7 @@ class InstallmentSecuredTest extends BaseIntegrationTest
 
         try {
             $authorize = $ins->authorize(119.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
-            if ($errorCode!== null) {
+            if ($errorCode !== null) {
                 $this->assertTrue(false, 'Expected error for negative ranking test.');
             }
             $this->assertNotEmpty($authorize->getId());

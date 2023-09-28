@@ -347,16 +347,16 @@ class UnzerTest extends BasePaymentTest
         $event     = ['event1', 'event2'];
 
         return [
-            'createWebhook'=> [ 'createWebhook', [$url, 'event'], 'createWebhook', [$url, 'event'] ],
-            'fetchWebhook'=> [ 'fetchWebhook', [$webhookId], 'fetchWebhook', [$webhookId] ],
-            'fetchWebhook by object'=> [ 'fetchWebhook', [$webhook], 'fetchWebhook', [$webhook] ],
-            'updateWebhook'=> [ 'updateWebhook', [$webhook], 'updateWebhook', [$webhook] ],
-            'deleteWebhook'=> [ 'deleteWebhook', [$webhookId], 'deleteWebhook', [$webhookId] ],
-            'deleteWebhook by object'=> [ 'deleteWebhook', [$webhook], 'deleteWebhook', [$webhook] ],
-            'fetchAllWebhooks'=> [ 'fetchAllWebhooks', [], 'fetchAllWebhooks', [] ],
-            'deleteAllWebhooks'=> [ 'deleteAllWebhooks', [], 'deleteAllWebhooks', [] ],
-            'registerMultipleWebhooks'=> ['registerMultipleWebhooks', [$url, $event], 'registerMultipleWebhooks', [$url, $event] ],
-            'fetchResourceFromEvent'=> ['fetchResourceFromEvent', [], 'fetchResourceFromEvent', [] ]
+            'createWebhook' => [ 'createWebhook', [$url, 'event'], 'createWebhook', [$url, 'event'] ],
+            'fetchWebhook' => [ 'fetchWebhook', [$webhookId], 'fetchWebhook', [$webhookId] ],
+            'fetchWebhook by object' => [ 'fetchWebhook', [$webhook], 'fetchWebhook', [$webhook] ],
+            'updateWebhook' => [ 'updateWebhook', [$webhook], 'updateWebhook', [$webhook] ],
+            'deleteWebhook' => [ 'deleteWebhook', [$webhookId], 'deleteWebhook', [$webhookId] ],
+            'deleteWebhook by object' => [ 'deleteWebhook', [$webhook], 'deleteWebhook', [$webhook] ],
+            'fetchAllWebhooks' => [ 'fetchAllWebhooks', [], 'fetchAllWebhooks', [] ],
+            'deleteAllWebhooks' => [ 'deleteAllWebhooks', [], 'deleteAllWebhooks', [] ],
+            'registerMultipleWebhooks' => ['registerMultipleWebhooks', [$url, $event], 'registerMultipleWebhooks', [$url, $event] ],
+            'fetchResourceFromEvent' => ['fetchResourceFromEvent', [], 'fetchResourceFromEvent', [] ]
         ];
     }
 

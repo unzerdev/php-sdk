@@ -15,25 +15,7 @@ Please refer to the following documentation for installation instructions and us
 *   [PHP SDK Documentation](https://docs.unzer.com/server-side-integration/php-sdk-integration)
 *   [How to use the examples](https://docs.unzer.com/server-side-integration/php-sdk-integration/php-example-implementation)
 *   [Debugging](https://docs.unzer.com/server-side-integration/php-sdk-integration/php-error-handling/#debug-log)
-
-## Supported payment types
-*   Alipay
-*   Card (credit card and debit card) + Recurring
-*   EPS
-*   Giropay
-*   iDEAL
-*   Invoice
-*   PayPal + Recurring
-*   Prepayment
-*   Przelewy24
-*   SEPA direct debit + Recurring
-*   SOFORT
-*   Unzer Bank Transfer (PIS)
-*   Unzer Direct Debit (secured) + Recurring
-*   Unzer Instalment (secured)
-*   Unzer Invoice
-*   Unzer Invoice Secured (deprecated)
-*   WeChat Pay
+*   [Supported payment types](https://docs.unzer.com/online-payments/supported-payment-methods)
 
 ## Supported features
 *   Webhooks and event handling

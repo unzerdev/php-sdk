@@ -53,7 +53,7 @@ class HirePurchaseTest extends BaseIntegrationTest
         $date = $this->getTodaysDateString();
         $requestData =
             [
-                "iban" =>"DE89370400440532013000",
+                "iban" => "DE89370400440532013000",
                 "bic" => "COBADEFFXXX",
                 "accountHolder" => "Max Mustermann",
                 "invoiceDueDate" => $date,

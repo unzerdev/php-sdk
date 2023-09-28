@@ -153,7 +153,7 @@ class Przelewy24Test extends BaseIntegrationTest
     public function przelewy24CurrencyCodeProvider(): array
     {
         return [
-            'US Dollar'=> ['USD'],
+            'US Dollar' => ['USD'],
             'Swiss Franc' => ['CHF']
         ];
     }
@@ -165,7 +165,7 @@ class Przelewy24Test extends BaseIntegrationTest
     {
         return [
             'EUR' => ['EUR'],
-            'US Dollar'=> ['USD'],
+            'US Dollar' => ['USD'],
             'Swiss Franc' => ['CHF']
         ];
     }
