@@ -709,7 +709,7 @@ class Paypage extends BasePaymentType
     public function getLinkedResources(): array
     {
         return [
-            'customer'=> $this->getCustomer(),
+            'customer' => $this->getCustomer(),
             'metadata' => $this->getMetadata(),
             'basket' => $this->getBasket(),
             'payment' => $this->getPayment()

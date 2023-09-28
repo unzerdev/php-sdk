@@ -205,7 +205,7 @@ class PayPageTest extends BasePaymentTest
         $response->imprintUrl = 'imprint url';
         $response->privacyPolicyUrl = 'privacy policy url';
         $response->termsAndConditionUrl = 'tac url';
-        $response->css = ['my'=> 'styles'];
+        $response->css = ['my' => 'styles'];
         $paypage->handleResponse($response);
 
         // then
