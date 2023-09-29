@@ -61,12 +61,17 @@ use UnzerSDK\Services\ResourceService;
 use UnzerSDK\Services\WebhookService;
 use UnzerSDK\Validators\PrivateKeyValidator;
 
-class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface, CancelServiceInterface
+class Unzer implements
+    UnzerParentInterface,
+    PaymentServiceInterface,
+    ResourceServiceInterface,
+    WebhookServiceInterface,
+    CancelServiceInterface
 {
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '3.3.0';
+    public const SDK_VERSION = '3.4.0';
 
     /** @var string $key */
     private $key;
@@ -733,8 +738,13 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function performCharge(Charge $charge, $paymentType, $customer = null, Metadata $metadata = null, Basket $basket = null): Charge
-    {
+    public function performCharge(
+        Charge $charge,
+        $paymentType,
+        $customer = null,
+        Metadata $metadata = null,
+        Basket $basket = null
+    ): Charge {
         return $this->paymentService->performCharge($charge, $paymentType, $customer, $metadata, $basket);
     }
 
