@@ -334,6 +334,18 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            Paylater Direct Debit
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div id="tryPaylaterDirectDebit" class="ui bottom attached green button" onclick="location.href='PaylaterDirectDebit/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             Paylater Installment
                         </div>
                         <div class="description">

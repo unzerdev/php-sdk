@@ -8,6 +8,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## [3.4.0](https://github.com/unzerdev/php-sdk/compare/3.3.0..3.4.0)
 ### Added
 *   Add `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit` payment type.
+*   Add Example for Direct Debit payment type.
 *   Add constants `\UnzerSDK\Constants\CustomerRegistrationLevel` for valid "registrationLevel" values. Relevant for setting riskData.
 *   Add riskData to PaylaterInstallment example.
 *   Add riskData to PaylaterInvoice example.
