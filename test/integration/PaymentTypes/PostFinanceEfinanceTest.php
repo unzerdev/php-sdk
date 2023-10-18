@@ -8,7 +8,6 @@
  *
  * @link     https://docs.unzer.com/
  *
- * @package  UnzerSDK\test\integration\PaymentTypes
  */
 
 namespace UnzerSDK\test\integration\PaymentTypes;

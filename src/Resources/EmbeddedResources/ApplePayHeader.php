@@ -4,7 +4,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\Resources\EmbeddedResources
  */
 
 namespace UnzerSDK\Resources\EmbeddedResources;

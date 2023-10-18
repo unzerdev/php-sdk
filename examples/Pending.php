@@ -4,7 +4,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\examples
  */
 
 session_start();

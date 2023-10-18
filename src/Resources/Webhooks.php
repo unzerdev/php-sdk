@@ -6,7 +6,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\Resources
  */
 
 namespace UnzerSDK\Resources;

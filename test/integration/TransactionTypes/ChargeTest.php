@@ -7,7 +7,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\test\integration\TransactionTypes
  */
 
 namespace UnzerSDK\test\integration\TransactionTypes;

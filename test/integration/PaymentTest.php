@@ -8,7 +8,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\test\integration
  */
 
 namespace UnzerSDK\test\integration;

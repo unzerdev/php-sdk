@@ -4,7 +4,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\Exceptions
  */
 
 namespace UnzerSDK\Exceptions;

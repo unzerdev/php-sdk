@@ -4,7 +4,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\PaymentTypes
  */
 
 namespace UnzerSDK\Resources\PaymentTypes;

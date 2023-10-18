@@ -5,7 +5,6 @@
  *
  * @link     https://docs.unzer.com/
  *
- * @package  UnzerSDK\Traits
  */
 
 namespace UnzerSDK\Traits;

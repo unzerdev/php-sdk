@@ -5,8 +5,6 @@
  *
  *  @link  https://docs.unzer.com/
  *
- *  @package  UnzerSDK
- *
  */
 
 namespace UnzerSDK\test\integration\PaymentTypes;

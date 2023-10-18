@@ -7,7 +7,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\test\unit\Services
  */
 
 namespace UnzerSDK\test\unit\Services;

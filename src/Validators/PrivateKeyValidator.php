@@ -4,7 +4,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\Validators
  */
 
 namespace UnzerSDK\Validators;

@@ -6,7 +6,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\examples
  */
 
 /* Set to true if you want to enable the examples */

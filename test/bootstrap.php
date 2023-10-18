@@ -7,6 +7,5 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\tests
  */
 require_once __DIR__ . '/../vendor/autoload.php';

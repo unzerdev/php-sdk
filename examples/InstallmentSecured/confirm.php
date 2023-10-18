@@ -5,7 +5,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\examples
  */
 
 use UnzerSDK\examples\ExampleDebugHandler;

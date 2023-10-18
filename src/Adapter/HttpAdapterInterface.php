@@ -4,7 +4,6 @@
  *
  * @link  https://docs.unzer.com/docs/php-sdk/
  *
- * @package  UnzerSDK\Adapter
  */
 
 namespace UnzerSDK\Adapter;

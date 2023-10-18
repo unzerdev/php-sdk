@@ -5,7 +5,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\Constants
  */
 
 namespace UnzerSDK\Constants;

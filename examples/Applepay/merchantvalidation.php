@@ -5,7 +5,6 @@
  *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\examples
  */
 /** Require the constants of this example */
 require_once __DIR__ . '/Constants.php';

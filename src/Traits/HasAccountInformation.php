@@ -6,8 +6,6 @@
  *
  *  @author  David Owusu <development@unzer.com>
  *
- *  @package  UnzerSDK
- *
  */
 
 namespace UnzerSDK\Traits;

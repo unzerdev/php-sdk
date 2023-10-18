@@ -7,7 +7,6 @@
  *
  * @link https://dev.unzer.com/
  *
- * @package  UnzerSDK\Adapter
  */
 
 namespace UnzerSDK\Adapter;
