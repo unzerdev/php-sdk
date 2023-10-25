@@ -1,13 +1,12 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains the different id strings to be handled within this SDK.
  *
  * @link  https://docs.unzer.com/
- *
  */
-
-namespace UnzerSDK\Constants;
-
 class IdStrings
 {
     // Transactions

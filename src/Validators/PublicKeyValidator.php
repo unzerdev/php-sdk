@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Validators;
+
+use function count;
+
 /**
  * This provides validation functions concerning public key.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Validators;
-
-use function count;
-
 class PublicKeyValidator
 {
     /**

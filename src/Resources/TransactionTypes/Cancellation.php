@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the cancel transaction.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\TransactionTypes;
 
@@ -15,6 +9,12 @@ use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 
 use function in_array;
 
+/**
+ * This represents the cancel transaction.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Cancellation extends AbstractTransactionType
 {
     /**

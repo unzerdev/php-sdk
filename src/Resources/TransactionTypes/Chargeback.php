@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Resources\TransactionTypes;
+
+use UnzerSDK\Adapter\HttpAdapterInterface;
+
 /**
  * This represents the chargeback transaction.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\TransactionTypes;
-
-use UnzerSDK\Adapter\HttpAdapterInterface;
-
 class Chargeback extends AbstractTransactionType
 {
     /** @var float $amount */

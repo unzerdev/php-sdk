@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the authorization transaction.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\TransactionTypes;
 
@@ -16,6 +10,12 @@ use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasRecurrenceType;
 use RuntimeException;
 
+/**
+ * This represents the authorization transaction.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Authorization extends AbstractTransactionType
 {
     use HasCancellations;

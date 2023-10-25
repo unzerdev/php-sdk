@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains the different domains that are allowed to be used for merchant validation.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class ApplepayValidationDomains
 {
     // URL list

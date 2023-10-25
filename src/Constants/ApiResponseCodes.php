@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains definitions of common response codes.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class ApiResponseCodes
 {
     // Status codes

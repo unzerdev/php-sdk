@@ -2,13 +2,6 @@
 
 /** @noinspection PhpComposerExtensionStubsInspection */
 
-/**
- * This is a wrapper for the applepay http adapter (CURL).
- *
- * @link https://dev.unzer.com/
- *
- */
-
 namespace UnzerSDK\Adapter;
 
 use UnzerSDK\Constants\ApplepayValidationDomains;
@@ -16,6 +9,12 @@ use UnzerSDK\Exceptions\ApplepayMerchantValidationException;
 use UnzerSDK\Resources\ExternalResources\ApplepaySession;
 use UnzerSDK\Services\EnvironmentService;
 
+/**
+ * This is a wrapper for the applepay http adapter (CURL).
+ *
+ * @link https://dev.unzer.com/
+ *
+ */
 class ApplepayAdapter
 {
     private $request;

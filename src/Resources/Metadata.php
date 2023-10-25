@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the metadata resource.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -15,6 +9,12 @@ use function count;
 use function in_array;
 use function is_callable;
 
+/**
+ * This represents the metadata resource.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Metadata extends AbstractUnzerResource
 {
     private $metadata = [];

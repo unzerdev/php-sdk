@@ -28,6 +28,12 @@ use function is_callable;
 use function is_float;
 use function is_object;
 
+/**
+ * This is a class representing a resource on Unzer payment API.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 abstract class AbstractUnzerResource implements UnzerParentInterface
 {
     /** @var string $id */

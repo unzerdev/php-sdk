@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains the different web hook events which can be subscribed.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class WebhookEvents
 {
     // all events

@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Resources\EmbeddedResources;
+
+use UnzerSDK\Resources\AbstractUnzerResource;
+
 /**
  * Represents the Applepay header resource.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\EmbeddedResources;
-
-use UnzerSDK\Resources\AbstractUnzerResource;
-
 class ApplePayHeader extends AbstractUnzerResource
 {
     /** @var string|null */

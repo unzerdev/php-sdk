@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Resources\EmbeddedResources;
+
+use UnzerSDK\Resources\AbstractUnzerResource;
+
 /**
  * This class contains the amount properties which are mainly used by the payment class.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\EmbeddedResources;
-
-use UnzerSDK\Resources\AbstractUnzerResource;
-
 class Amount extends AbstractUnzerResource
 {
     private $total = 0.0;

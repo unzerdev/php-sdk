@@ -1,11 +1,4 @@
 <?php
-/**
- * This is the implementation of the Pay Page which allows for displaying a page containing all
- * payment types of the merchant.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\PaymentTypes;
 
@@ -29,6 +22,13 @@ use stdClass;
 
 use function in_array;
 
+/**
+ * This is the implementation of the Pay Page which allows for displaying a page containing all
+ * payment types of the merchant.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Paypage extends BasePaymentType
 {
     use CanDirectCharge;

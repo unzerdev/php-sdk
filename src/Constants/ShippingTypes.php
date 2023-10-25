@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains definitions of the available shipping types.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class ShippingTypes
 {
     public const EQUALS_BILLING = 'equals-billing';

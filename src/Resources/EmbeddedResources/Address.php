@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Resources\EmbeddedResources;
+
+use UnzerSDK\Resources\AbstractUnzerResource;
+
 /**
  * Represents the address resource.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\EmbeddedResources;
-
-use UnzerSDK\Resources\AbstractUnzerResource;
-
 class Address extends AbstractUnzerResource
 {
     /** @var string $name */

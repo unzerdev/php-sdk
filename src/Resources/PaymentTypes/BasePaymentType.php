@@ -1,10 +1,4 @@
 <?php
-/**
- * This defines a base class for all payment types e.g. Card, GiroPay, etc.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\PaymentTypes;
 
@@ -12,6 +6,12 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Traits\HasGeoLocation;
 
+/**
+ * This represents a payment type.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 abstract class BasePaymentType extends AbstractUnzerResource
 {
     use HasGeoLocation;

@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains definitions of the status of the payment transactions.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class TransactionStatus
 {
     public const STATUS_PENDING = 'pending';

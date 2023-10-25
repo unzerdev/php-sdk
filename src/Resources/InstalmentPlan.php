@@ -1,10 +1,4 @@
 <?php
-/**
- * Resource representing the installment plan for Installment Secured.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -14,6 +8,12 @@ use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Traits\CanAuthorizeWithCustomer;
 use stdClass;
 
+/**
+ * Resource representing the installment plan for Installment Secured.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class InstalmentPlan extends BasePaymentType
 {
     use CanAuthorizeWithCustomer;

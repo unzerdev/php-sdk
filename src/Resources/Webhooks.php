@@ -1,12 +1,4 @@
 <?php
-/**
- * This class represents a group of Webhooks.
- * It is a pseudo resource used to manage bulk operations on webhooks.
- * It will never receive an id from the API.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -17,6 +9,14 @@ use stdClass;
 
 use function in_array;
 
+/**
+ * This class represents a group of Webhooks.
+ * It is a pseudo resource used to manage bulk operations on webhooks.
+ * It will never receive an id from the API.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Webhooks extends AbstractUnzerResource
 {
     /** @var string $url */

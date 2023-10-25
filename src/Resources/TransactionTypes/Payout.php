@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Resources\TransactionTypes;
+
+use UnzerSDK\Adapter\HttpAdapterInterface;
+
 /**
  * This represents the payout transaction.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\TransactionTypes;
-
-use UnzerSDK\Adapter\HttpAdapterInterface;
-
 class Payout extends AbstractTransactionType
 {
     /** @var float|null $amount */

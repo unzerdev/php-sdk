@@ -1,16 +1,16 @@
 <?php
-/**
- * RiskData class for Paylater payment types.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Constants\CustomerGroups;
 use UnzerSDK\Resources\AbstractUnzerResource;
 
+/**
+ * RiskData class for Paylater payment types.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class RiskData extends AbstractUnzerResource
 {
     /** @var string|null $threatMetrixId */

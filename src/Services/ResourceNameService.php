@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Services;
+
 /**
  * This service provides for functionalities concerning resource names.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Services;
-
 class ResourceNameService
 {
     /**

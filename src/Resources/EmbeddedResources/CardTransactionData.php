@@ -1,16 +1,15 @@
 <?php
 
+namespace UnzerSDK\Resources\EmbeddedResources;
+
+use UnzerSDK\Resources\AbstractUnzerResource;
+
 /*
  * Represents `card` object of `additionalTransactionData'.
  *
  *  @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\EmbeddedResources;
-
-use UnzerSDK\Resources\AbstractUnzerResource;
-
 class CardTransactionData extends AbstractUnzerResource
 {
     /** @var string|null $recurrenceType */

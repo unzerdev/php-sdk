@@ -1,17 +1,16 @@
 <?php
-/**
- * This class contains the query properties which are used to fetch paylater installment plans.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
 
 use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\AbstractUnzerResource;
 
-/** Stores query parameter used to fetch installment plans. */
+/**
+ * This class contains the query properties which are used to fetch paylater installment plans.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class InstallmentPlansQuery extends AbstractUnzerResource
 {
     protected float $amount;

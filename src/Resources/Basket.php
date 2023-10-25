@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the basket resource.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -14,6 +8,12 @@ use stdClass;
 
 use function count;
 
+/**
+ * This represents the basket resource.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Basket extends AbstractUnzerResource
 {
     /**

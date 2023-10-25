@@ -1,16 +1,15 @@
 <?php
 
+namespace UnzerSDK\Resources;
+
+use UnzerSDK\Adapter\HttpAdapterInterface;
+
 /*
  *  This represents the config resource.
  *
  *  @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources;
-
-use UnzerSDK\Adapter\HttpAdapterInterface;
-
 class Config extends AbstractUnzerResource
 {
     /** @var string | null */

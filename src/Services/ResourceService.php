@@ -1,10 +1,4 @@
 <?php
-/**
- * This service provides for all methods to manage resources with the api.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Services;
 
@@ -64,6 +58,12 @@ use stdClass;
 use function in_array;
 use function is_string;
 
+/**
+ * This service provides for all methods to manage resources with the api.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class ResourceService implements ResourceServiceInterface
 {
     /** @var Unzer */

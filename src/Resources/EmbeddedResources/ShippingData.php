@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Resources\EmbeddedResources;
+
+use UnzerSDK\Resources\AbstractUnzerResource;
+
 /**
  * Shipping class for Paylater payment types.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\EmbeddedResources;
-
-use UnzerSDK\Resources\AbstractUnzerResource;
-
 class ShippingData extends AbstractUnzerResource
 {
     /** @var string|null $deliveryTrackingId */

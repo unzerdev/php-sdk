@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the card payment type which supports credit card as well as debit card payments.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\PaymentTypes;
 
@@ -18,6 +12,12 @@ use UnzerSDK\Validators\ExpiryDateValidator;
 use RuntimeException;
 use stdClass;
 
+/**
+ * This represents the card payment type which supports credit card as well as debit card payments.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Card extends BasePaymentType
 {
     use CanDirectCharge;

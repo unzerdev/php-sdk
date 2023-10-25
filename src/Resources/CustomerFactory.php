@@ -1,10 +1,4 @@
 <?php
-/**
- * Creates the different Customer objects.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -13,6 +7,12 @@ use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
 
+/**
+ * Creates the different Customer objects.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class CustomerFactory
 {
     /**

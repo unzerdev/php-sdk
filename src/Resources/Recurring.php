@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the Recurring resource.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -16,6 +10,12 @@ use UnzerSDK\Traits\HasRecurrenceType;
 use UnzerSDK\Traits\HasStates;
 use UnzerSDK\Traits\HasUniqueAndShortId;
 
+/**
+ * This represents the Recurring resource.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Recurring extends AbstractUnzerResource
 {
     use HasStates;

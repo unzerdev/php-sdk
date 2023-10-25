@@ -1,10 +1,4 @@
 <?php
-/**
- * This service provides for functionalities concerning payment transactions.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Services;
 
@@ -31,6 +25,12 @@ use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use RuntimeException;
 
+/**
+ * This service provides for functionalities concerning payment transactions.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class PaymentService implements PaymentServiceInterface
 {
     /** @var Unzer */

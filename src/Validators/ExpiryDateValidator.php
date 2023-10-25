@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Validators;
+
 /**
  * This provides validation functions concerning expiry dates.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Validators;
-
 class ExpiryDateValidator
 {
     /**

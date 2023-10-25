@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the paylater invoice payment type.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\PaymentTypes;
 

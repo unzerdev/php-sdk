@@ -1,16 +1,16 @@
 <?php
-/**
- * This represents the key pair resource.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use stdClass;
 
+/**
+ * This represents the key pair resource.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Keypair extends AbstractUnzerResource
 {
     /** @var string $publicKey */

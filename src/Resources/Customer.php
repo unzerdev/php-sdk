@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the customer resource.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -17,6 +11,12 @@ use stdClass;
 
 use function in_array;
 
+/**
+ * This represents the customer resource.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Customer extends AbstractUnzerResource
 {
     use HasGeoLocation;

@@ -1,14 +1,13 @@
 <?php
 
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains the different recurrence types.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class RecurrenceTypes
 {
     /** @var string  Recurring with a defined interval and a defined amount.*/

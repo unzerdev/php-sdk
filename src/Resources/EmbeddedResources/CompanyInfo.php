@@ -1,10 +1,4 @@
 <?php
-/**
- * Company info class for B2B customer classes.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\EmbeddedResources;
 
@@ -14,6 +8,12 @@ use stdClass;
 
 use function is_string;
 
+/**
+ * Company info class for B2B customer classes.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class CompanyInfo extends AbstractUnzerResource
 {
     /** @var string $registrationType */

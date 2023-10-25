@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains the possible registration types of B2B customers.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class CompanyRegistrationTypes
 {
     public const REGISTRATION_TYPE_REGISTERED = 'registered';

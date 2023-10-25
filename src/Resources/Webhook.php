@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Resources;
+
+use UnzerSDK\Adapter\HttpAdapterInterface;
+
 /**
  * This represents the Webhook resource.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources;
-
-use UnzerSDK\Adapter\HttpAdapterInterface;
-
 class Webhook extends AbstractUnzerResource
 {
     /** @var string $url */

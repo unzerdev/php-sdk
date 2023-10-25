@@ -1,10 +1,4 @@
 <?php
-/**
- * This service provides for functionalities concerning http transactions.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Services;
 
@@ -19,6 +13,12 @@ use function in_array;
 
 use const PHP_VERSION;
 
+/**
+ * This service provides for functionalities concerning http transactions.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class HttpService
 {
     private const URL_PART_STAGING_ENVIRONMENT = 'stg';

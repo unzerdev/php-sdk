@@ -1,16 +1,16 @@
 <?php
-/**
- * This service provides for functionalities concerning values and their manipulation.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Services;
 
 use function is_float;
 use function strlen;
 
+/**
+ * This service provides for functionalities concerning values and their manipulation.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class ValueService
 {
     /**

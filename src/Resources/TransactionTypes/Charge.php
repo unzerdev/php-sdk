@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the charge transaction.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\TransactionTypes;
 
@@ -16,6 +10,12 @@ use UnzerSDK\Traits\HasChargebacks;
 use UnzerSDK\Traits\HasRecurrenceType;
 use RuntimeException;
 
+/**
+ * This represents the charge transaction.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Charge extends AbstractTransactionType
 {
     use HasCancellations;

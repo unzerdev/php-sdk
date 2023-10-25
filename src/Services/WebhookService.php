@@ -1,10 +1,4 @@
 <?php
-/**
- * This service provides for all methods to manage webhooks/events.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Services;
 
@@ -18,6 +12,12 @@ use RuntimeException;
 
 use function is_string;
 
+/**
+ * This service provides methods to manage webhooks/events.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class WebhookService implements WebhookServiceInterface
 {
     /** @var Unzer $unzer */

@@ -1,16 +1,16 @@
 <?php
-/**
- * This service provides for functionalities concerning the PAPI environment.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Services;
 
 use function in_array;
 use function is_bool;
 
+/**
+ * This service provides for functionalities concerning the PAPI environment.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class EnvironmentService
 {
     private const ENV_VAR_NAME_ENVIRONMENT = 'UNZER_PAPI_ENV';

@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains the different cancel reason codes.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class CancelReasonCodes
 {
     public const REASON_CODE_CANCEL = 'CANCEL';

@@ -1,10 +1,4 @@
 <?php
-/**
- * This service provides for all methods concerning id strings.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Services;
 
@@ -12,6 +6,12 @@ use RuntimeException;
 
 use function count;
 
+/**
+ * This service provides for all methods concerning id strings.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class IdService
 {
     /**

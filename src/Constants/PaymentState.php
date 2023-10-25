@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
+use RuntimeException;
+
 /**
  * This file contains definitions of the payment states.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
-use RuntimeException;
-
 class PaymentState
 {
     public const STATE_PENDING = 0;

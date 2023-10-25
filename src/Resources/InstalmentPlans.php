@@ -1,4 +1,11 @@
 <?php
+
+namespace UnzerSDK\Resources;
+
+use DateTime;
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use stdClass;
+
 /**
  * Resource used to fetch instalment plans for Installment Secured payment method specified as parent resource.
  * Please use Unzer methods to fetch the list of instalment plans
@@ -7,13 +14,6 @@
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources;
-
-use DateTime;
-use UnzerSDK\Adapter\HttpAdapterInterface;
-use stdClass;
-
 class InstalmentPlans extends AbstractUnzerResource
 {
     /** @var float */

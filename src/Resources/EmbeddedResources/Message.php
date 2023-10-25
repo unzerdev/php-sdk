@@ -1,15 +1,15 @@
 <?php
+
+namespace UnzerSDK\Resources\EmbeddedResources;
+
+use UnzerSDK\Resources\AbstractUnzerResource;
+
 /**
  * Represents the message resource holding information like a transaction error code and message.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\EmbeddedResources;
-
-use UnzerSDK\Resources\AbstractUnzerResource;
-
 class Message extends AbstractUnzerResource
 {
     /** @var string $code */

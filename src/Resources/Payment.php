@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the payment resource.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -33,6 +27,12 @@ use stdClass;
 
 use function is_string;
 
+/**
+ * This represents the payment resource.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class Payment extends AbstractUnzerResource
 {
     use HasPaymentState;

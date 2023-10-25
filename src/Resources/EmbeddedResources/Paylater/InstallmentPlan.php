@@ -1,18 +1,17 @@
 <?php
 
-/**
- * Resource representing the installment plan for Paylater Installment.
- *
- *  @link  https://docs.unzer.com/
- *
- */
-
 namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use stdClass;
 
+/**
+ * Resource representing the installment plan for Paylater Installment.
+ *
+ *  @link  https://docs.unzer.com/
+ *
+ */
 class InstallmentPlan extends AbstractUnzerResource
 {
     /** @var int $numberOfRates */

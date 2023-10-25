@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Resources\ExternalResources;
+
 /*
  *  This class is used for Apple Pay merchant validation request.
  *
  *  @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\ExternalResources;
-
 class ApplepaySession
 {
     /**

@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains the allowed commercial sector items.
  *
  * @link  https://dev.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class BasketItemTypes
 {
     public const GOODS    = 'goods';

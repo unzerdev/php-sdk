@@ -1,10 +1,4 @@
 <?php
-/**
- * This service provides for functionalities concerning cancel transactions.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Services;
 
@@ -22,6 +16,12 @@ use UnzerSDK\Unzer;
 use function in_array;
 use function is_string;
 
+/**
+ * This service provides for functionalities concerning cancel transactions.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class CancelService implements CancelServiceInterface
 {
     /** @var Unzer */

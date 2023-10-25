@@ -1,10 +1,4 @@
 <?php
-/**
- * This represents the Klarna payment type.
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources\PaymentTypes;
 

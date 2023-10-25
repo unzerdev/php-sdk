@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
+
 /**
  * Installment rate class for PaylaterInstallment payment types.
  *
  * @link  https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
-
 class InstallmentRate
 {
     /** @var string|null $date */

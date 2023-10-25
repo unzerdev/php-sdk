@@ -1,13 +1,13 @@
 <?php
+
+namespace UnzerSDK\Constants;
+
 /**
  * This file contains definitions of the available company types.
  *
  * @link     https://docs.unzer.com/
  *
  */
-
-namespace UnzerSDK\Constants;
-
 class CompanyTypes
 {
     public const AUTHORITY = 'authority';

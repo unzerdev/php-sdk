@@ -1,12 +1,4 @@
 <?php
-/**
- * Resource used to fetch instalment plans for Installment Secured payment method specified as parent resource.
- * Please use Unzer methods to fetch the list of instalment plans
- * (e.g. Unzer::fetchInstallmentPlans(...)).
- *
- * @link  https://docs.unzer.com/
- *
- */
 
 namespace UnzerSDK\Resources;
 
@@ -16,6 +8,14 @@ use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
 use UnzerSDK\Traits\HasStates;
 
+/**
+ * Resource used to fetch instalment plans for Installment Secured payment method specified as parent resource.
+ * Please use Unzer methods to fetch the list of instalment plans
+ * (e.g. Unzer::fetchInstallmentPlans(...)).
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class PaylaterInstallmentPlans extends AbstractUnzerResource
 {
     use HasStates;
