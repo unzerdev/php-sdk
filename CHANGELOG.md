@@ -12,6 +12,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 *   Add constants `\UnzerSDK\Constants\CustomerRegistrationLevel` for valid "registrationLevel" values. Relevant for setting riskData.
 *   Add riskData to PaylaterInstallment example.
 *   Add riskData to PaylaterInvoice example.
+*   Add bank account information to `\UnzerSDK\Resources\PaymentTypes\Sofort` class.
 
 ### Changed
 *   Allow 'null' for setters in '\UnzerSDK\Traits\HasAccountInformation' trait to avoid error when e.g. API response contains empty bic.

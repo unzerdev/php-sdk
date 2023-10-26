@@ -3,9 +3,6 @@
  *  Trait containing a property set of transaction regarding bank account information.
  *
  *  @link  https://docs.unzer.com/
- *
- *  @author  David Owusu <development@unzer.com>
- *
  */
 
 namespace UnzerSDK\Traits;
@@ -20,9 +17,6 @@ trait HasAccountInformation
 
     /** @var string $holder */
     private $holder;
-
-    /** @var string $descriptor */
-    private $descriptor;
 
     /**
      * Returns the IBAN of the account the customer needs to transfer the amount to.
@@ -87,28 +81,6 @@ trait HasAccountInformation
     protected function setHolder(?string $holder): self
     {
         $this->holder = $holder;
-        return $this;
-    }
-
-    /**
-     * Returns the Descriptor the customer needs to use when transferring the amount.
-     * E.g. invoice, prepayment, etc.
-     *
-     * @return string|null
-     */
-    public function getDescriptor(): ?string
-    {
-        return $this->descriptor;
-    }
-
-    /**
-     * @param string|null $descriptor
-     *
-     * @return self
-     */
-    protected function setDescriptor(?string $descriptor): self
-    {
-        $this->descriptor = $descriptor;
         return $this;
     }
 }

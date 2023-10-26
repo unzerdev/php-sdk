@@ -138,6 +138,7 @@ class PaylaterInvoiceTest extends BaseIntegrationTest
 
         $transaction = $this->unzer->performAuthorization($authorization, $paylaterInvoice, $customer, null, $basket);
         $this->assertNotEmpty($transaction->getId());
+        $this->assertNotEmpty($transaction->getDescriptor());
         $this->assertTrue($transaction->isSuccess());
     }
 
