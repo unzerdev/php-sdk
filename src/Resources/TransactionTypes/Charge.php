@@ -7,6 +7,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasChargebacks;
+use UnzerSDK\Traits\HasDescriptor;
 use UnzerSDK\Traits\HasRecurrenceType;
 use RuntimeException;
 
@@ -21,6 +22,7 @@ class Charge extends AbstractTransactionType
     use HasCancellations;
     use HasRecurrenceType;
     use HasAccountInformation;
+    use HasDescriptor;
     use HasChargebacks;
 
     /** @var float $amount */

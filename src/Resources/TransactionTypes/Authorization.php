@@ -7,6 +7,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
+use UnzerSDK\Traits\HasDescriptor;
 use UnzerSDK\Traits\HasRecurrenceType;
 use RuntimeException;
 
@@ -21,6 +22,7 @@ class Authorization extends AbstractTransactionType
     use HasCancellations;
     use HasRecurrenceType;
     use HasAccountInformation;
+    use HasDescriptor;
 
     /** @var float $amount */
     protected $amount = 0.0;
