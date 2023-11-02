@@ -49,7 +49,7 @@ try {
      */
     $domainName = $_SERVER['HTTP_HOST'];
 
-    $applepaySession = new ApplepaySession('merchant.io.unzer.merchantconnectivity', 'PHP-SDK Example', $domainName);
+    $applepaySession = new ApplepaySession(UNZER_EXAMPLE_APPLEPAY_MERCHANT_IDENTIFIER, 'PHP-SDK Example', $domainName);
     $appleAdapter = new ApplepayAdapter();
 
     $appleAdapter->init(UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT, UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT_KEY);
