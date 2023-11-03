@@ -145,10 +145,12 @@ class BasketTest extends BaseIntegrationTest
      */
     public function authorizeTransactionsShouldPassAlongTheBasketIdIfSet(): void
     {
+        $this->useLegacyKey();
+
         $orderId = 'o'. self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 123.4, 234.5, 12))->setBasketItemReferenceId('refId');
+        $basketItem = (new BasketItem('myItem', 123.4, 123.4, 12))->setBasketItemReferenceId('refId');
         $basket->addBasketItem($basketItem);
         $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
@@ -189,6 +191,8 @@ class BasketTest extends BaseIntegrationTest
      */
     public function authorizeTransactionsShouldCreateBasketIfItDoesNotExistYet(): void
     {
+        $this->useLegacyKey();
+
         $orderId = 'o'. self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
@@ -212,6 +216,8 @@ class BasketTest extends BaseIntegrationTest
      */
     public function chargeTransactionsShouldCreateBasketIfItDoesNotExistYet(): void
     {
+        $this->useLegacyKey();
+
         $orderId = 'o'. self::generateRandomId();
         $basket  = new Basket($orderId, 123.4, 'EUR', []);
         $basket->setNote('This basket is creatable!');
