@@ -72,13 +72,14 @@ class PaylaterCancelTest extends BaseIntegrationTest
     /**
      * @test
      */
-    public function verifyPartReversalAttemptWillRaiseApiException(): void
+    public function verifyPartReversalIsPossible(): void
     {
         $authorization = $this->createPaylaterInvoiceAuthorization();
         $reversalAmount = 33.33;
-        $this->expectException(UnzerApiException::class);
+        $this->assertAmounts($authorization->getPayment(), 99.99, 0, 99.99, 0);
 
         $this->unzer->cancelAuthorizedPayment($authorization->getPayment(), new Cancellation($reversalAmount));
+        $this->assertAmounts($authorization->getPayment(), 66.66, 0, 66.66, 0);
     }
 
     /**
