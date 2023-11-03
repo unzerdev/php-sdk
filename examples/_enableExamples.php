@@ -31,3 +31,6 @@ define('UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT', UNZER_PAPI_FOLDER . '');
 
 /* Set the path to the key file of your Apple Pay Merchant-ID certificate. */
 define('UNZER_EXAMPLE_APPLEPAY_MERCHANT_CERT_KEY', UNZER_PAPI_FOLDER .'');
+
+/* Merchant identifier of Apple Pay Merchant ID. */
+define('UNZER_EXAMPLE_APPLEPAY_MERCHANT_IDENTIFIER', '');

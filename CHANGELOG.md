@@ -16,6 +16,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 *   Allow 'null' for setters in '\UnzerSDK\Traits\HasAccountInformation' trait to avoid error when e.g. API response contains empty bic.
+*   Apple Pay example: Moved merchant identifier to constant in `_enableExamples.php` where it can be configured.
 
 ### Deprecated
 *   `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit`, please use `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit'`.
