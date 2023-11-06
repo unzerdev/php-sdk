@@ -2,23 +2,8 @@
 /**
  * This file provides an example implementation of the Paylater Invoice payment type.
  *
- * Copyright (C) 2022 - today Unzer E-Com GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -62,12 +47,16 @@ require_once __DIR__ . '/../../../../autoload.php';
     // Create an Unzer instance with your public key
     let unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
 
+    // Just for example purpose. Make sure to generate a unique ID.
+    let threatMetrixId = 'php-sdk-example_' + Date.now();
+
     // Create an Paylater Invoice instance
     let paylaterInvoice = unzerInstance.PaylaterInvoice();
     paylaterInvoice.create({
         containerId: 'example-paylater-invoice',
         customerType: 'B2C',
-        errorHolderId: 'error-holder'
+        errorHolderId: 'error-holder',
+        threatMetrixId: threatMetrixId
     });
 
     // Create a customer instance and render the customer form
@@ -130,6 +119,12 @@ require_once __DIR__ . '/../../../../autoload.php';
                 hiddenInputCustomerId.setAttribute('name', 'customerId');
                 hiddenInputCustomerId.setAttribute('value', customer.id);
                 form.appendChild(hiddenInputCustomerId);
+
+                let threatMetrixIdInput = document.createElement('input');
+                threatMetrixIdInput.setAttribute('type', 'hidden');
+                threatMetrixIdInput.setAttribute('name', 'threatMetrixId');
+                threatMetrixIdInput.setAttribute('value', threatMetrixId);
+                form.appendChild(threatMetrixIdInput);
 
                 form.setAttribute('method', 'POST');
                 form.setAttribute('action', '<?php echo CONTROLLER_URL; ?>');

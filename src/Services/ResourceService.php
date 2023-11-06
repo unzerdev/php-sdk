@@ -1,25 +1,4 @@
 <?php
-/**
- * This service provides for all methods to manage resources with the api.
- *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @link  https://docs.unzer.com/
- *
- * @package  UnzerSDK\Services
- */
 
 namespace UnzerSDK\Services;
 
@@ -32,6 +11,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
+use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\PayU;
@@ -78,6 +58,12 @@ use stdClass;
 use function in_array;
 use function is_string;
 
+/**
+ * This service provides for all methods to manage resources with the api.
+ *
+ * @link  https://docs.unzer.com/
+ *
+ */
 class ResourceService implements ResourceServiceInterface
 {
     /** @var Unzer */
@@ -854,6 +840,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::PAYPAL:
                 $paymentType = new Paypal();
+                break;
+            case IdStrings::PAYLATER_DIRECT_DEBIT:
+                $paymentType = new PaylaterDirectDebit();
                 break;
             case IdStrings::PAYLATER_INSTALLMENT:
                 $paymentType = new PaylaterInstallment();

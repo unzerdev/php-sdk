@@ -2,23 +2,8 @@
 /**
  * This file provides a list of the example implementations.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\examples
  */
 
 use UnzerSDK\Validators\PrivateKeyValidator;
@@ -322,12 +307,24 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Direct Debit
+                            Unzer Direct Debit (deprecated)
                         </div>
                         <div class="description">
                         </div>
                     </div>
                     <div id="tryDirectDebitSecuredExample" class="ui bottom attached green button" onclick="location.href='SepaDirectDebitSecured/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
+                            Paylater Direct Debit
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div id="tryPaylaterDirectDebit" class="ui bottom attached green button" onclick="location.href='PaylaterDirectDebit/';">
                         Try
                     </div>
                 </div>

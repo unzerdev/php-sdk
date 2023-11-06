@@ -3,23 +3,8 @@
  * This is the controller for the Paylater Invoice example.
  * It is called when the pay button on the index page is clicked.
  *
- * Copyright (C) 2022 - today Unzer E-Com GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
  * @link     https://docs.unzer.com/
  *
- * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -29,8 +14,11 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use UnzerSDK\Constants\CustomerGroups;
+use UnzerSDK\Constants\CustomerRegistrationLevel;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
@@ -57,6 +45,7 @@ if (!isset($_POST['paymentTypeId'], $_POST['customerId'])) {
 
 $paymentTypeId = $_POST['paymentTypeId'];
 $customerId = $_POST['customerId'];
+$threatMetrixId = $_POST['threatMetrixId'];
 
 // Catch API errors, write the message to your log and show the ClientMessage to the client.
 try {
@@ -80,8 +69,17 @@ try {
         ->setCurrencyCode('EUR')
         ->setOrderId($orderId);
 
-    $authorization = (new Authorization(119.00, 'EUR'))
-        ->setReturnUrl(CONTROLLER_URL);
+    $riskData = (new RiskData())
+        ->setThreatMetrixId($threatMetrixId)
+        ->setCustomerGroup(CustomerGroups::GOOD)
+        ->setConfirmedAmount(99.99)
+        ->setConfirmedOrders(2)
+        ->setRegistrationLevel(CustomerRegistrationLevel::REGISTERED)
+        ->setRegistrationDate('20160412');
+
+    $authorization = (new Authorization(119.00, 'EUR', CONTROLLER_URL))
+        ->setRiskData($riskData);
+
     $paymentType = $unzer->fetchPaymentType($paymentTypeId);
 
     $transaction = $unzer->performAuthorization($authorization, $paymentType, $customerId, null, $basket);

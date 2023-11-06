@@ -5,23 +5,8 @@
 /**
  * This class defines unit tests to verify functionality of the Authorization transaction type.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\test\unit
  */
 
 namespace UnzerSDK\test\unit\Resources\TransactionTypes;
@@ -134,6 +119,28 @@ class ChargeTest extends BasePaymentTest
         $this->assertEquals('COBADEFFXXX', $charge->getBic());
         $this->assertEquals('Merchant Khang', $charge->getHolder());
         $this->assertEquals('4065.6865.6416', $charge->getDescriptor());
+    }
+
+    /**
+     * Verify response with empty account data can be handled.
+     *
+     * @test
+     */
+    public function verifyResponseWithEmptyAccountDataCanBeHandled()
+    {
+        $charge = new Charge();
+
+        $testResponse = new stdClass();
+        $testResponse->Iban = '';
+        $testResponse->Bic = '';
+        $testResponse->Holder = '';
+        $testResponse->Descriptor = '';
+
+        $charge->handleResponse($testResponse);
+        $this->assertNull($charge->getIban());
+        $this->assertNull($charge->getBic());
+        $this->assertNull($charge->getHolder());
+        $this->assertNull($charge->getDescriptor());
     }
 
     /**

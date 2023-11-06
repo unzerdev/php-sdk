@@ -1,28 +1,12 @@
 <?php
-/**
- * This file contains the different id strings to be handled within this SDK.
- *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @link  https://docs.unzer.com/
- *
- * @package  UnzerSDK\Constants
- */
 
 namespace UnzerSDK\Constants;
 
+/**
+ * This file contains the different id strings to be handled within this SDK.
+ *
+ * @link  https://docs.unzer.com/
+ */
 class IdStrings
 {
     // Transactions
@@ -48,6 +32,7 @@ class IdStrings
     public const INVOICE_GUARANTEED = 'ivg';
     public const INVOICE_SECURED = 'ivs';
     public const KLARNA = 'kla';
+    public const PAYLATER_DIRECT_DEBIT = 'pdd';
     public const PAYLATER_INVOICE = 'piv';
     public const PAYLATER_INSTALLMENT = 'pit';
     public const PAYMENT_PAGE = 'ppg';
@@ -86,7 +71,9 @@ class IdStrings
         self::INVOICE_GUARANTEED,
         self::INVOICE_SECURED,
         self::KLARNA,
+        self::PAYLATER_DIRECT_DEBIT,
         self::PAYLATER_INVOICE,
+        self::PAYLATER_INSTALLMENT,
         self::PAYMENT_PAGE,
         self::PAYPAL,
         self::PAYU,

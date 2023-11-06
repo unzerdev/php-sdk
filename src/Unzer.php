@@ -1,26 +1,4 @@
 <?php
-/**
- * This is the Unzer object which is the base object providing all functionalities needed to
- * access the api.
- *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @link  https://docs.unzer.com/
- *
- * @package  UnzerSDK
- */
 
 namespace UnzerSDK;
 
@@ -61,12 +39,21 @@ use UnzerSDK\Services\ResourceService;
 use UnzerSDK\Services\WebhookService;
 use UnzerSDK\Validators\PrivateKeyValidator;
 
-class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceServiceInterface, WebhookServiceInterface, CancelServiceInterface
+/**
+ * This is the Unzer object which is the base object providing all functionalities needed to
+ * access the api.
+ */
+class Unzer implements
+    UnzerParentInterface,
+    PaymentServiceInterface,
+    ResourceServiceInterface,
+    WebhookServiceInterface,
+    CancelServiceInterface
 {
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '3.3.0';
+    public const SDK_VERSION = '3.4.0';
 
     /** @var string $key */
     private $key;
@@ -733,8 +720,13 @@ class Unzer implements UnzerParentInterface, PaymentServiceInterface, ResourceSe
     /**
      * {@inheritDoc}
      */
-    public function performCharge(Charge $charge, $paymentType, $customer = null, Metadata $metadata = null, Basket $basket = null): Charge
-    {
+    public function performCharge(
+        Charge $charge,
+        $paymentType,
+        $customer = null,
+        Metadata $metadata = null,
+        Basket $basket = null
+    ): Charge {
         return $this->paymentService->performCharge($charge, $paymentType, $customer, $metadata, $basket);
     }
 

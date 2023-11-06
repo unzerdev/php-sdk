@@ -2,23 +2,8 @@
 /**
  * This file provides an example implementation of the Paylater Installment payment type.
  *
- * Copyright (C) 2020 - today Unzer E-Com GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
  * @link  https://docs.unzer.com/
  *
- * @package  UnzerSDK\examples
  */
 
 /** Require the constants of this example */
@@ -93,12 +78,17 @@ require_once __DIR__ . '/../../../../autoload.php';
     })
 
     let orderAmount = "99.99";
+
+    // Just for example purpose. Make sure to generate a unique ID.
+    let threatMetrixId = 'php-sdk-example_' + Date.now();
+
     paylaterInstallment.create({
         containerId: 'example-paylater-installment',
         amount: orderAmount,
         currency: 'EUR', // 'CHF'
         country: 'DE', // 'AT', 'CH'
         customerType: 'B2C', // 'B2B'
+        threatMetrixId: threatMetrixId
     })
         .then(function (data) {
             hpDimmer.setAttribute('style', 'display: none')
@@ -118,12 +108,20 @@ require_once __DIR__ . '/../../../../autoload.php';
                 hiddenInput.setAttribute('type', 'hidden');
                 hiddenInput.setAttribute('name', 'paymentTypeId');
                 hiddenInput.setAttribute('value', data.id);
+                form.appendChild(hiddenInput);
+
                 let amountInput = document.createElement('input');
                 amountInput.setAttribute('type', 'hidden');
                 amountInput.setAttribute('name', 'orderAmount');
                 amountInput.setAttribute('value', orderAmount);
-                form.appendChild(hiddenInput);
                 form.appendChild(amountInput);
+
+                let threatMetrixIdInput = document.createElement('input');
+                threatMetrixIdInput.setAttribute('type', 'hidden');
+                threatMetrixIdInput.setAttribute('name', 'threatMetrixId');
+                threatMetrixIdInput.setAttribute('value', threatMetrixId);
+                form.appendChild(threatMetrixIdInput);
+
                 form.setAttribute('method', 'POST');
                 form.setAttribute('action', '<?php echo CONTROLLER_URL; ?>');
                 form.submit();
