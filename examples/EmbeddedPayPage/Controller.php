@@ -19,12 +19,12 @@ use UnzerSDK\Constants\CustomerRegistrationLevel;
 use UnzerSDK\Constants\Salutations;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\EmbeddedResources\Address;
-use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Unzer;
 
 // start new session for this example and remove all parameters
 session_start();
@@ -45,7 +45,7 @@ try {
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // A customer with matching addresses is mandatory for Installment payment type
-    $address  = (new Address())
+    $address = (new Address())
         ->setName('Max Mustermann')
         ->setStreet('Vangerowstr. 18')
         ->setCity('Heidelberg')
@@ -73,12 +73,12 @@ try {
         ->setPrivacyPolicyUrl('https://www.unzer.com/de/datenschutz/')
         ->setOrderId($orderId)
         ->setLogoImage(UNZER_PP_LOGO_URL)
-        ->setAdditionalAttribute('riskData.threatMetrixId'	,$threatMetrixId)
-        ->setAdditionalAttribute('riskData.customerGroup'	,CustomerGroups::GOOD)
-        ->setAdditionalAttribute('riskData.confirmedAmount'	,99.99)
-        ->setAdditionalAttribute('riskData.confirmedOrders'	,2)
-        ->setAdditionalAttribute('riskData.registrationLevel' ,CustomerRegistrationLevel::REGISTERED)
-        ->setAdditionalAttribute('riskData.registrationDate	' ,'20160412')
+        ->setAdditionalAttribute('riskData.threatMetrixId', $threatMetrixId)
+        ->setAdditionalAttribute('riskData.customerGroup', CustomerGroups::GOOD)
+        ->setAdditionalAttribute('riskData.confirmedAmount', 99.99)
+        ->setAdditionalAttribute('riskData.confirmedOrders', 2)
+        ->setAdditionalAttribute('riskData.registrationLevel', CustomerRegistrationLevel::REGISTERED)
+        ->setAdditionalAttribute('riskData.registrationDate	', '20160412')
         ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.

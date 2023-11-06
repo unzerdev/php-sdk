@@ -19,12 +19,12 @@ use UnzerSDK\Constants\CustomerRegistrationLevel;
 use UnzerSDK\Constants\Salutations;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\EmbeddedResources\Address;
-use UnzerSDK\Unzer;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\CustomerFactory;
+use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
+use UnzerSDK\Unzer;
 
 session_start();
 session_unset();
@@ -35,7 +35,7 @@ $merchantMessage = 'Something went wrong. Please try again later.';
 function redirect($url, $merchantMessage = '', $clientMessage = '')
 {
     $_SESSION['merchantMessage'] = $merchantMessage;
-    $_SESSION['clientMessage']   = $clientMessage;
+    $_SESSION['clientMessage'] = $clientMessage;
     header('Location: ' . $url);
     die();
 }
@@ -50,7 +50,7 @@ try {
     $unzer->setDebugMode(true)->setDebugHandler(new ExampleDebugHandler());
 
     // A customer with matching addresses is mandatory for Installment payment type
-    $address  = (new Address())
+    $address = (new Address())
         ->setName('Max Mustermann')
         ->setStreet('Vangerowstr. 18')
         ->setCity('Heidelberg')
@@ -85,12 +85,12 @@ try {
         ->setContactUrl('https://www.unzer.com/en/ueber-unzer')
         ->setFullPageImage(UNZER_PP_FULL_PAGE_IMAGE_URL)
         ->setLogoImage(UNZER_PP_LOGO_URL)
-        ->setAdditionalAttribute('riskData.threatMetrixId'	,$threatMetrixId)
-        ->setAdditionalAttribute('riskData.customerGroup'	,CustomerGroups::GOOD)
-        ->setAdditionalAttribute('riskData.confirmedAmount'	,99.99)
-        ->setAdditionalAttribute('riskData.confirmedOrders'	,2)
-        ->setAdditionalAttribute('riskData.registrationLevel' ,CustomerRegistrationLevel::REGISTERED)
-        ->setAdditionalAttribute('riskData.registrationDate	' ,'20160412')
+        ->setAdditionalAttribute('riskData.threatMetrixId', $threatMetrixId)
+        ->setAdditionalAttribute('riskData.customerGroup', CustomerGroups::GOOD)
+        ->setAdditionalAttribute('riskData.confirmedAmount', 99.99)
+        ->setAdditionalAttribute('riskData.confirmedOrders', 2)
+        ->setAdditionalAttribute('riskData.registrationLevel', CustomerRegistrationLevel::REGISTERED)
+        ->setAdditionalAttribute('riskData.registrationDate	', '20160412')
         ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.
