@@ -15,6 +15,7 @@ require_once __DIR__ . '/Constants.php';
 require_once __DIR__ . '/../../../../autoload.php';
 
 use UnzerSDK\Constants\CustomerGroups;
+use UnzerSDK\Constants\CustomerRegistrationLevel;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
