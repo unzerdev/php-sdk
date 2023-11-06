@@ -14,6 +14,8 @@ require_once __DIR__ . '/Constants.php';
 /** Require the composer autoloader file */
 require_once __DIR__ . '/../../../../autoload.php';
 
+use UnzerSDK\Constants\CustomerGroups;
+use UnzerSDK\Constants\CustomerRegistrationLevel;
 use UnzerSDK\Constants\Salutations;
 use UnzerSDK\examples\ExampleDebugHandler;
 use UnzerSDK\Exceptions\UnzerApiException;
@@ -67,6 +69,10 @@ try {
 
     $orderId = 'o' . str_replace(['0.', ' '], '', microtime(false));
 
+    // Just for example purpose. Make sure to generate a unique ID.
+    $threatMetrixId = 'php-sdk-example_' . $orderId;
+
+
     // ... however you can customize the Payment Page using additional parameters.
     $paypage->setShopName('My Test Shop')
         ->setShopDescription('Best shop in the whole world!')
@@ -79,6 +85,12 @@ try {
         ->setContactUrl('https://www.unzer.com/en/ueber-unzer')
         ->setFullPageImage(UNZER_PP_FULL_PAGE_IMAGE_URL)
         ->setLogoImage(UNZER_PP_LOGO_URL)
+        ->setAdditionalAttribute('riskData.threatMetrixId'	,$threatMetrixId)
+        ->setAdditionalAttribute('riskData.customerGroup'	,CustomerGroups::GOOD)
+        ->setAdditionalAttribute('riskData.confirmedAmount'	,99.99)
+        ->setAdditionalAttribute('riskData.confirmedOrders'	,2)
+        ->setAdditionalAttribute('riskData.registrationLevel' ,CustomerRegistrationLevel::REGISTERED)
+        ->setAdditionalAttribute('riskData.registrationDate	' ,'20160412')
         ->setInvoiceId('i' . microtime(true));
 
     // ... in order to enable Unzer Instalment you will need to set the effectiveInterestRate as well.
