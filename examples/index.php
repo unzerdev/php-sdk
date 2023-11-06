@@ -307,7 +307,7 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Unzer Direct Debit
+                            Unzer Direct Debit (deprecated)
                         </div>
                         <div class="description">
                         </div>
