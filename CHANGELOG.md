@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased](https://github.com/unzerdev/php-sdk/compare/3.4.0..3.4.1)
+### Changed
+*   Revert deprecation of `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit`.
+
 ## [3.4.0](https://github.com/unzerdev/php-sdk/compare/3.3.0..3.4.0)
 
 This version adds support for Paylater Direct Debit payment method.
@@ -18,12 +22,12 @@ This version adds support for Paylater Direct Debit payment method.
 *   Add bank account information to `\UnzerSDK\Resources\PaymentTypes\Sofort` class.
 
 ### Changed
-*   Allow 'null' for setters in '\UnzerSDK\Traits\HasAccountInformation' trait to avoid error when e.g. API response contains empty bic.
+*   Allow `null` for setters in `\UnzerSDK\Traits\HasAccountInformation` trait to avoid error when e.g. API response contains empty bic.
 *   Apple Pay example: Moved merchant identifier to constant in `_enableExamples.php` where it can be configured.
 
 ### Deprecated
-*   `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit`, please use `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit'`.
-*   `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured`, please use `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit'`.
+*   `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit`, please use `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit`.
+*   `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured`, please use `\UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit`.
 
 ## [3.3.0](https://github.com/unzerdev/php-sdk/compare/3.2.0..3.3.0)
 ### Added
