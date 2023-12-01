@@ -61,7 +61,8 @@ class GooglePayTest extends BasePaymentTest
             'ECv2',
             'signature-xyz=',
             $intermediateSigningKey,
-            new SignedMessage('001 Cryptogram 3ds',
+            new SignedMessage(
+                '001 Cryptogram 3ds',
                 'ephemeralPublicKey-xyz\\u003d"',
                 'encryptedMessage-xyz"'
             )

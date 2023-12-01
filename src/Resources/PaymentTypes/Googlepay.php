@@ -43,18 +43,17 @@ class Googlepay extends BasePaymentType
     private $expiryDate;
 
     /**
-     * @param string $protocolVersion
-     * @param string $signature
+     * @param string                 $protocolVersion
+     * @param string                 $signature
      * @param IntermediateSigningKey $intermediateSigningKey
-     * @param string $signedMessage
+     * @param string                 $signedMessage
      */
     public function __construct(
         ?string                 $protocolVersion = null,
         ?string                 $signature = null,
         ?IntermediateSigningKey $intermediateSigningKey = null,
         ?SignedMessage          $signedMessage = null
-    )
-    {
+    ) {
         $this->protocolVersion = $protocolVersion;
         $this->signature = $signature;
         $this->intermediateSigningKey = $intermediateSigningKey;
