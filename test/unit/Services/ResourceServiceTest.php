@@ -31,6 +31,7 @@ use UnzerSDK\Resources\PaymentTypes\Bancontact;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
@@ -1353,6 +1354,7 @@ class ResourceServiceTest extends BasePaymentTest
             'fetchBasket by obj' => ['fetchBasket', [(new Basket())->setId('myBasketId')], $fetchBasketCB],
             'PaymentType Card sandbox' => ['fetchPaymentType', ['s-crd-12345678'], $getPaymentTypeCB(Card::class)],
             'PaymentType Giropay sandbox' => ['fetchPaymentType', ['s-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
+            'PaymentType Google Pay sandbox' => ['fetchPaymentType', ['s-gop-12345678'], $getPaymentTypeCB(Googlepay::class)],
             'PaymentType Ideal sandbox' => ['fetchPaymentType', ['s-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
             'PaymentType Invoice sandbox' => ['fetchPaymentType', ['s-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
             'PaymentType InvoiceGuaranteed sandbox' => ['fetchPaymentType', ['s-ivg-12345678'], $getPaymentTypeCB(InvoiceSecured::class)],

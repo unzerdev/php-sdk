@@ -24,6 +24,7 @@ class IdStrings
     public const CARD = 'crd';
     public const EPS = 'eps';
     public const GIROPAY = 'gro';
+    public const GOOGLE_PAY = 'gop';
     public const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
     public const IDEAL = 'idl';
     public const INSTALLMENT_SECURED = 'ins';
@@ -63,6 +64,7 @@ class IdStrings
         self::CARD,
         self::EPS,
         self::GIROPAY,
+        self::GOOGLE_PAY,
         self::HIRE_PURCHASE_DIRECT_DEBIT,
         self::IDEAL,
         self::INSTALLMENT_SECURED,
