@@ -10,8 +10,8 @@ use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
 
 /**
- * Represents payment method token returned by Google in the `PaymentData` These Data are used to create the payment
- * type on the Unzer API.
+ * Represents Google Pay type. It requires data from payment method token returned by Google in the `PaymentData`.
+ * These data are used to create the payment type on the Unzer API.
  */
 class Googlepay extends BasePaymentType
 {
@@ -138,7 +138,7 @@ class Googlepay extends BasePaymentType
         return $this->signedMessage;
     }
 
-    public function setSignedMessage(?string $signedMessage): Googlepay
+    public function setSignedMessage(?SignedMessage $signedMessage): Googlepay
     {
         $this->signedMessage = $signedMessage;
         return $this;
