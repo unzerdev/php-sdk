@@ -13,10 +13,13 @@
 namespace PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\EmbeddedResources\GooglePay\IntermediateSigningKey;
 use UnzerSDK\Resources\EmbeddedResources\GooglePay\SignedKey;
 use UnzerSDK\Resources\EmbeddedResources\GooglePay\SignedMessage;
+use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -35,129 +38,24 @@ class GooglePayTest extends BaseIntegrationTest
      */
     public function googlePayShouldBeCreatable(): BasePaymentType
     {
-        $googlePay = new Googlepay();
-        $this->assertNull($googlePay->getId());
+        $googlePayToken = $this->getTestToken();
+        $googlepay = $this->createGooglepayObjectFromToken($googlePayToken);
 
-        $geoLocation = $googlePay->getGeoLocation();
-        $this->assertNull($geoLocation->getClientIp());
-        $this->assertNull($geoLocation->getCountryCode());
+        $this->unzer->createPaymentType($googlepay);
 
-        // Create Googlepay object from token.
-        $googlePayToken = json_decode(JsonProvider::getJsonFromFile('googlePay/googlepayToken.json'));
-        $googlePayToken->intermediateSigningKey->signedKey = json_decode($googlePayToken->intermediateSigningKey->signedKey);
-        $googlePayToken->signedMessage = json_decode($googlePayToken->signedMessage);
+        $this->assertInstanceOf(Googlepay::class, $googlepay);
+        $this->assertNotNull($googlepay->getId());
+        $this->assertSame($this->unzer, $googlepay->getUnzerObject());
 
-        $signedKey = (new SignedKey())
-            ->setKeyValue($googlePayToken->intermediateSigningKey->signedKey->keyValue)
-            ->setKeyExpiration($googlePayToken->intermediateSigningKey->signedKey->keyExpiration);
-
-        $intermediateSigningKey = (new IntermediateSigningKey())
-            ->setSignedKey($signedKey)
-            ->setSignatures($googlePayToken->intermediateSigningKey->signatures);
-
-        $protocolVersion = $googlePayToken->protocolVersion;
-        $encryptedMessage = $googlePayToken->signedMessage->encryptedMessage;
-        $ephemeralPublicKey = $googlePayToken->signedMessage->ephemeralPublicKey;
-        $tag = $googlePayToken->signedMessage->tag;
-
-        $signedMessage = (new SignedMessage())
-            ->setEncryptedMessage($encryptedMessage)
-            ->setEphemeralPublicKey($ephemeralPublicKey)
-            ->setTag($tag);
-
-        $googlePay->setSignature($googlePayToken->signature)
-            ->setIntermediateSigningKey($intermediateSigningKey)
-            ->setProtocolVersion($protocolVersion)
-            ->setSignedMessage($signedMessage);
-
-        /** @var Googlepay $googlePay */
-        $googlePay = $this->unzer->createPaymentType($googlePay);
-
-        $this->assertInstanceOf(Googlepay::class, $googlePay);
-        $this->assertNotNull($googlePay->getId());
-        $this->assertSame($this->unzer, $googlePay->getUnzerObject());
-
-        $geoLocation = $googlePay->getGeoLocation();
+        $geoLocation = $googlepay->getGeoLocation();
         $this->assertNotEmpty($geoLocation->getClientIp());
-        //        $this->assertNotEmpty($geoLocation->getCountryCode());
+        $this->assertNotEmpty($geoLocation->getCountryCode());
 
-        return $googlePay;
+        return $googlepay;
     }
 
     /**
-     * Verify that authorization can be performed with Google Pay.
-     *
-     * @test
-     *
-     * @depends googlePayShouldBeCreatable
-     *
-     * @param mixed $type
-     */
-    public function googlepayCanPerformAuthorizationAndCreatesPayment($type): Authorization
-    {
-        $authorization = $this->getUnzerObject()
-            ->performAuthorization(
-                new Authorization(99.99, 'EUR', self::RETURN_URL),
-                $type
-            );
-
-        // verify authorization has been created
-        $this->assertNotNull($authorization->getId());
-
-        // verify payment object has been created
-        $payment = $authorization->getPayment();
-        $this->assertNotNull($payment);
-        $this->assertNotNull($payment->getId());
-
-        // verify resources are linked properly
-        $this->assertSame($authorization, $payment->getAuthorization());
-        $this->assertSame($type, $payment->getPaymentType());
-
-        // verify the payment object has been updated properly
-        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
-        $this->assertTrue($payment->isPending());
-
-        return $authorization;
-    }
-
-    /**
-     * Verify the googlepay can perform charges and creates a payment object doing so.
-     *
-     * @test
-     *
-     * @depends googlePayShouldBeCreatable
-     *
-     * @param mixed $type
-     */
-    public function googlepayCanPerformChargeAndCreatesPaymentObject($type): void
-    {
-        $charge = $this->getUnzerObject()
-            ->performCharge(
-                new Charge(99.99, 'EUR', self::RETURN_URL),
-                $type
-            );
-
-        $fetchedType = $this->unzer->fetchPaymentType($type->getId());
-
-        // verify charge has been created
-        $this->assertNotNull($charge->getId());
-
-        // verify payment object has been created
-        $payment = $charge->getPayment();
-        $this->assertNotNull($payment);
-        $this->assertNotNull($payment->getId());
-
-        // verify resources are linked properly
-        $this->assertEquals($charge->expose(), $payment->getCharge($charge->getId())->expose());
-        $this->assertSame($fetchedType, $payment->getPaymentType());
-
-        // verify the payment object has been updated properly
-        $this->assertAmounts($payment, 0.0, 1.0, 1.0, 0.0);
-        $this->assertTrue($payment->isCompleted());
-    }
-
-    /**
-     * Verify that a googlepay object can be fetched from the api using its id.
+     * Verify that a googlepay resource can be fetched from the api using its id.
      *
      * @test
      *
@@ -177,29 +75,113 @@ class GooglePayTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify the googlepay can charge the full amount of the authorization and the payment state is updated accordingly.
+     * Verify that authorization can be performed with Google Pay.
      *
      * @test
+     *
+     * @depends googlePayShouldBeCreatable
+     *
+     * @param mixed $type
      */
-    public function fullChargeAfterAuthorize(): void
+    public function googlepayCanPerformAuthorization($type): Authorization
     {
-        $googlepay = $this->createGooglepayObject();
-        /** @var Googlepay $googlepay */
-        $googlepay = $this->unzer->createPaymentType($googlepay);
+        $authorizationRequest = $this->getLvpAuthorizationObject();
+        $authorization = $this->getUnzerObject()
+            ->performAuthorization(
+                $authorizationRequest,
+                $type
+            );
 
-        $authorization = $googlepay->authorize(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        // verify authorization has been created
+        $this->assertNotNull($authorization->getId());
+
+        // verify payment object has been created
         $payment = $authorization->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertNotNull($payment->getId());
 
-        // pre-check to verify changes due to fullCharge call
-        $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
+        // verify resources are linked properly
+        $this->assertSame($authorization, $payment->getAuthorization());
+        $this->assertSame($type, $payment->getPaymentType());
+
+        // verify the payment object has been updated properly
+        $this->assertAmounts($payment, 2.99, 0.0, 2.99, 0.0);
         $this->assertTrue($payment->isPending());
+        $this->assertTrue($authorization->isSuccess());
 
-        $charge     = $this->unzer->chargeAuthorization($payment->getId());
-        $paymentNew = $charge->getPayment();
+        return $authorization;
+    }
 
-        // verify payment has been updated properly
-        $this->assertAmounts($paymentNew, 0.0, 1.0, 1.0, 0.0);
-        $this->assertTrue($paymentNew->isCompleted());
+    /**
+     * Verify that authorization can be charged with Google Pay.
+     *
+     * @test
+     *
+     * @depends googlepayCanPerformAuthorization
+     *
+     * @param Authorization $authorization
+     */
+    public function authorizationCanBeCharged(Authorization $authorization): Payment
+    {
+        $charge = $this->getUnzerObject()
+            ->performChargeOnPayment(
+                $authorization->getPayment(),
+                new Charge()
+            );
+
+        // verify charge has been created
+        $this->assertNotNull($charge->getId());
+
+        // verify payment object has been created
+        $payment = $charge->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertNotNull($payment->getId());
+
+        // verify resources are linked properly
+        $this->assertSame($charge, $payment->getCharge('s-chg-1'));
+        $this->assertSame($authorization->getPayment()->getPaymentType(), $payment->getPaymentType());
+
+        // verify the payment object has been updated properly
+        $this->assertAmounts($payment, 0, 2.99, 2.99, 0.0);
+        $this->assertTrue($payment->isCompleted());
+        $this->assertTrue($charge->isSuccess());
+
+        return $payment;
+    }
+
+    /**
+     * Verify the googlepay can perform charges and creates a payment object doing so.
+     *
+     * @test
+     *
+     * @depends googlePayShouldBeCreatable
+     *
+     * @param mixed $type
+     */
+    public function canPerformCharge($type): void
+    {
+        $charge = $this->getUnzerObject()
+            ->performCharge(
+                $this->getLvpChargeObject(),
+                $type
+            );
+
+        $fetchedType = $this->unzer->fetchPaymentType($type->getId());
+
+        // verify charge has been created
+        $this->assertNotNull($charge->getId());
+
+        // verify payment object has been created
+        $payment = $charge->getPayment();
+        $this->assertNotNull($payment);
+        $this->assertNotNull($payment->getId());
+
+        // verify resources are linked properly
+        $this->assertEquals($charge->expose(), $payment->getCharge($charge->getId())->expose());
+
+        // verify the payment object has been updated properly
+        $this->assertAmounts($payment, 0.0, 2.99, 2.99, 0.0);
+        $this->assertTrue($payment->isCompleted());
     }
 
     /**
@@ -209,38 +191,32 @@ class GooglePayTest extends BaseIntegrationTest
      */
     public function partialChargeAfterAuthorization(): void
     {
-        $googlepay          = $this->createGooglepayObject();
+        $googlepay          = $this->createGooglepayObjectFromToken($this->getTestToken());
         /** @var Googlepay $googlepay */
         $googlepay          = $this->unzer->createPaymentType($googlepay);
-        $authorization = $this->unzer->authorize(
-            100.0,
-            'EUR',
-            $googlepay,
-            self::RETURN_URL,
-            null,
-            null,
-            null,
-            null,
-            false
-        );
+        $authorization = $this->getUnzerObject()
+            ->performAuthorization(
+                $this->getLvpAuthorizationObject(),
+                $googlepay
+            );
 
         $payment = $authorization->getPayment();
-        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertAmounts($payment, 2.99, 0.0, 2.99, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1));
         $payment1 = $charge->getPayment();
-        $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
+        $this->assertAmounts($payment1, 1.99, 1, 2.99, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1));
         $payment2 = $charge->getPayment();
-        $this->assertAmounts($payment2, 60.0, 40.0, 100.0, 0.0);
+        $this->assertAmounts($payment2, 0.99, 2, 2.99, 0.0);
         $this->assertTrue($payment2->isPartlyPaid());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 60);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(0.99));
         $payment3 = $charge->getPayment();
-        $this->assertAmounts($payment3, 00.0, 100.0, 100.0, 0.0);
+        $this->assertAmounts($payment3, 00.0, 2.99, 2.99, 0.0);
         $this->assertTrue($payment3->isCompleted());
     }
 
@@ -251,66 +227,26 @@ class GooglePayTest extends BaseIntegrationTest
      */
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized(): void
     {
-        $googlepay          = $this->createGooglepayObject();
+        $googlepay          = $this->createGooglepayObjectFromToken($this->getTestToken());
         /** @var Googlepay $googlepay */
         $googlepay          = $this->unzer->createPaymentType($googlepay);
-        $authorization = $googlepay->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->getUnzerObject()
+            ->performAuthorization(
+                $this->getLvpAuthorizationObject(),
+                $googlepay
+            );
         $payment       = $authorization->getPayment();
-        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+        $this->assertAmounts($payment, 2.99, 0.0, 2.99, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 50);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1.99));
         $payment1 = $charge->getPayment();
-        $this->assertAmounts($payment1, 50.0, 50.0, 100.0, 0.0);
+        $this->assertAmounts($payment1, 1, 1.99, 2.99, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
-        $this->unzer->chargeAuthorization($payment->getId(), 70);
-    }
-
-    /**
-     * Verify the googlepay payment can be charged until it is fully charged and the payment is updated accordingly.
-     *
-     * @test
-     */
-    public function partialAndFullChargeAfterAuthorization(): void
-    {
-        $googlepay          = $this->createGooglepayObject();
-        /** @var Googlepay $googlepay */
-        $googlepay          = $this->unzer->createPaymentType($googlepay);
-        $authorization = $googlepay->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
-        $payment       = $authorization->getPayment();
-
-        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPending());
-
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
-        $payment1 = $charge->getPayment();
-        $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
-        $this->assertTrue($payment1->isPartlyPaid());
-
-        $charge   = $this->unzer->chargeAuthorization($payment->getId());
-        $payment2 = $charge->getPayment();
-        $this->assertAmounts($payment2, 0.0, 100.0, 100.0, 0.0);
-        $this->assertTrue($payment2->isCompleted());
-    }
-
-    /**
-     * Authorization can be fetched.
-     *
-     * @test
-     */
-    public function authorizationShouldBeFetchable(): void
-    {
-        $googlepay          = $this->createGooglepayObject();
-        /** @var Googlepay $googlepay */
-        $googlepay          = $this->unzer->createPaymentType($googlepay);
-        $authorization = $googlepay->authorize(100.0000, 'EUR', self::RETURN_URL);
-        $payment       = $authorization->getPayment();
-
-        $fetchedAuthorization = $this->unzer->fetchAuthorization($payment->getId());
-        $this->assertEquals($fetchedAuthorization->getId(), $authorization->getId());
+        $this->unzer->performChargeOnPayment($payment->getId(), new Charge(2));
     }
 
     /**
@@ -318,109 +254,98 @@ class GooglePayTest extends BaseIntegrationTest
      */
     public function fullCancelAfterCharge(): void
     {
-        $googlepay    = $this->createGooglepayObject();
+        $googlepay    = $this->createGooglepayObjectFromToken($this->getTestToken());
         /** @var Googlepay $googlepay */
         $googlepay    = $this->unzer->createPaymentType($googlepay);
-        $charge  = $googlepay->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $charge = $this->getUnzerObject()
+            ->performCharge(
+                $this->getLvpChargeObject(),
+                $googlepay
+            );
         $payment = $charge->getPayment();
 
-        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
+        $this->assertAmounts($payment, 0.0, 2.99, 2.99, 0.0);
         $this->assertTrue($payment->isCompleted());
 
-        $payment->cancelAmount();
-        $this->assertAmounts($payment, 0.0, 0.0, 100.0, 100.0);
+        $this->unzer->cancelChargedPayment($payment);
+        $this->assertAmounts($payment, 0.0, 0.0, 2.99, 2.99);
         $this->assertTrue($payment->isCanceled());
     }
 
-    /**
-     * Verify a googlepay payment can be cancelled after being fully charged.
+    /** Creates an authorization request object with low value payment(lvp) set to avoid 3ds challenge.
      *
-     * @test
+     * @return Authorization
      */
-    public function fullCancelOnFullyChargedPayment(): void
+    protected function getLvpAuthorizationObject()
     {
-        $googlepay = $this->createGooglepayObject();
-        /** @var Googlepay $googlepay */
-        $googlepay = $this->unzer->createPaymentType($googlepay);
+        return (new Authorization(2.99, 'EUR', self::RETURN_URL))
+            ->setCardTransactionData(
+                (new CardTransactionData())->setExemptionType(ExemptionType::LOW_VALUE_PAYMENT)
+            );
+    }
 
-        $authorization = $googlepay->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
-        $payment       = $authorization->getPayment();
-
-        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPending());
-
-        $payment->charge(10.0);
-        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
-
-        $payment->charge(90.0);
-        $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
-        $this->assertTrue($payment->isCompleted());
-
-        $cancellation = $payment->cancelAmount();
-        $this->assertNotEmpty($cancellation);
-        $this->assertAmounts($payment, 0.0, 0.0, 100.0, 100.0);
-        $this->assertTrue($payment->isCanceled());
+    /** Creates an charge request object with low value payment(lvp) set to avoid 3ds challenge.
+     *
+     * @return Charge
+     */
+    protected function getLvpChargeObject()
+    {
+        return (new Charge(2.99, 'EUR', self::RETURN_URL))
+            ->setCardTransactionData(
+                (new CardTransactionData())->setExemptionType(ExemptionType::LOW_VALUE_PAYMENT)
+            );
     }
 
     /**
-     * Full cancel on partly charged auth canceled charges.
+     * @param $googlePayToken
      *
-     * @test
+     * @return Googlepay
      */
-    public function fullCancelOnPartlyPaidAuthWithCanceledCharges(): void
+    protected function createGooglepayObjectFromToken($googlePayToken): Googlepay
     {
-        $googlepay = $this->createGooglepayObject();
-        /** @var Googlepay $googlepay */
-        $googlepay = $this->unzer->createPaymentType($googlepay);
+        $googlepay = (new Googlepay());
+        $this->assertNull($googlepay->getId());
 
-        $authorization = $googlepay->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
-        $payment       = $authorization->getPayment();
+        $geoLocation = $googlepay->getGeoLocation();
+        $this->assertNull($geoLocation->getClientIp());
+        $this->assertNull($geoLocation->getCountryCode());
 
-        $payment->charge(10.0);
-        $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
+        $signedKey = (new SignedKey())
+            ->setKeyValue($googlePayToken->intermediateSigningKey->signedKey->keyValue)
+            ->setKeyExpiration($googlePayToken->intermediateSigningKey->signedKey->keyExpiration);
 
-        $charge = $payment->charge(10.0);
-        $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
-        $this->assertTrue($payment->isPartlyPaid());
+        $intermediateSigningKey = (new IntermediateSigningKey())
+            ->setSignedKey($signedKey)
+            ->setSignatures($googlePayToken->intermediateSigningKey->signatures);
 
-        $charge->cancel();
-        $this->assertAmounts($payment, 80.0, 10.0, 100.0, 10.0);
-        $this->assertTrue($payment->isPartlyPaid());
+        $protocolVersion = $googlePayToken->protocolVersion;
+        $encryptedMessage = $googlePayToken->signedMessage->encryptedMessage;
+        $ephemeralPublicKey = $googlePayToken->signedMessage->ephemeralPublicKey;
+        $tag = $googlePayToken->signedMessage->tag;
 
-        $payment->cancelAmount();
-        $this->assertTrue($payment->isCanceled());
+        $signedMessage = (new SignedMessage())
+            ->setEncryptedMessage($encryptedMessage)
+            ->setEphemeralPublicKey($ephemeralPublicKey)
+            ->setTag($tag);
+
+        $googlepay->setSignature($googlePayToken->signature)
+            ->setIntermediateSigningKey($intermediateSigningKey)
+            ->setProtocolVersion($protocolVersion)
+            ->setSignedMessage($signedMessage);
+
+        return $googlepay;
     }
 
     /**
-     * Verify googlepay charge can be canceled.
+     * @return mixed
      *
-     * @test
+     * @throws \Exception
      */
-    public function googlepayChargeCanBeCanceled(): void
+    protected function getTestToken()
     {
-        /** @var Googlepay $googlepay */
-        $googlepay   = $this->unzer->createPaymentType($this->createGooglepayObject());
-        $charge = $googlepay->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
-
-        $cancel = $charge->cancel();
-        $this->assertNotNull($cancel);
-        $this->assertNotEmpty($cancel->getId());
-    }
-
-    /**
-     * Verify googlepay authorize can be canceled.
-     *
-     * @test
-     */
-    public function googlepayAuthorizeCanBeCanceled(): void
-    {
-        /** @var Googlepay $googlepay */
-        $googlepay      = $this->unzer->createPaymentType($this->createGooglepayObject());
-        $authorize = $googlepay->authorize(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
-
-        $cancel = $authorize->cancel();
-        $this->assertNotNull($cancel);
-        $this->assertNotEmpty($cancel->getId());
+        $googlePayToken = json_decode(JsonProvider::getJsonFromFile('googlepay/googlepayToken.json'), false);
+        $googlePayToken->intermediateSigningKey->signedKey = json_decode($googlePayToken->intermediateSigningKey->signedKey);
+        $googlePayToken->signedMessage = json_decode($googlePayToken->signedMessage);
+        return $googlePayToken;
     }
 }
