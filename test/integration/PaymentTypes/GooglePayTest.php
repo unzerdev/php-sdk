@@ -29,6 +29,15 @@ use UnzerSDK\test\Fixtures\JsonProvider;
 
 class GooglePayTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        if (empty($this->getTestToken())) {
+            $this->markTestSkipped('Skiped by default. To run test locally, overwrite a googlepay payment token
+         in `test/Fixtures/jsonData/googlePay/googlepayToken.json`.');
+        }
+        parent::setUp();
+    }
+
     /**
      * Verify that googlepay payment type resource can be created.
      *
@@ -344,8 +353,10 @@ class GooglePayTest extends BaseIntegrationTest
     protected function getTestToken()
     {
         $googlePayToken = json_decode(JsonProvider::getJsonFromFile('googlepay/googlepayToken.json'), false);
-        $googlePayToken->intermediateSigningKey->signedKey = json_decode($googlePayToken->intermediateSigningKey->signedKey);
-        $googlePayToken->signedMessage = json_decode($googlePayToken->signedMessage);
+        if (!empty($googlePayToken)) {
+            $googlePayToken->intermediateSigningKey->signedKey = json_decode($googlePayToken->intermediateSigningKey->signedKey);
+            $googlePayToken->signedMessage = json_decode($googlePayToken->signedMessage);
+        }
         return $googlePayToken;
     }
 }
