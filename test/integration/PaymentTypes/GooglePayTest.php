@@ -10,7 +10,7 @@
  *
  */
 
-namespace PaymentTypes;
+namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\ExemptionType;
