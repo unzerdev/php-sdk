@@ -74,7 +74,7 @@ require_once __DIR__ . '/../../../../autoload.php';
 <script>
     const unzerInstance = new unzer('<?php echo UNZER_PAPI_PUBLIC_KEY; ?>');
     const colors = ['black','white'];
-    const googlepayChannelId = "4ec88022f6ba470784deb2158df84c4f"
+    const googlepayChannelId = "<?php echo UNZER_EXAMPLE_GOOGLEPAY_CHANNEL; ?>"
     const stackHolder = document.querySelector('#example-googlepay-stack');
 
     const tmpPaymentDataRequestObject = {
