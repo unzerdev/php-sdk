@@ -1,6 +1,6 @@
 {
   "name": "unzerdev/php-sdk",
-  "description": "This is the php sdk to connect to the Unzer rest api.",
+  "description": "This is the php sdk to connect to the Unzer rest API.",
   "minimum-stability": "stable",
   "license": "Apache-2.0",
   "require": {
