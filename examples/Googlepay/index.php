@@ -151,10 +151,14 @@ require_once __DIR__ . '/../../../../autoload.php';
                                     } else {
                                         window.location.href = '<?php echo RETURN_CONTROLLER_URL; ?>';
                                     }
-                                } else {
-                                    window.location.href = '<?php echo FAILURE_URL; ?>';
+                                    return { status: 'success' };
                                 }
-                        })
+                                window.location.href = '<?php echo FAILURE_URL; ?>';
+                                return {
+                                    status: 'error',
+                                    message: transactionResult.customerMessage || transactionResult.message || 'Unexpected error'
+                                }
+                            })
                         .catch(function (error) {
                                 return handleGooglepayError(error);
                             }
