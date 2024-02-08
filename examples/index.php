@@ -158,6 +158,18 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
+                            Google Pay
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                    <div id="tryGooglepayExample" class="ui bottom attached green button" onclick="location.href='Googlepay/';">
+                        Try
+                    </div>
+                </div>
+                <div class="card olive">
+                    <div class="content">
+                        <div class="header">
                             Alipay
                         </div>
                         <div class="description">
