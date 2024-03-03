@@ -211,7 +211,7 @@ class ClickToPayTest extends BaseIntegrationTest
      */
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized(): void
     {
-        $clickToPay          = $this->createClickToPayObject($this->getTestToken());
+        $clickToPay          = $this->createClickToPayObject();
         /** @var ClickToPay $clickToPay */
         $clickToPay          = $this->unzer->createPaymentType($clickToPay);
         $authorization = $this->getUnzerObject()
