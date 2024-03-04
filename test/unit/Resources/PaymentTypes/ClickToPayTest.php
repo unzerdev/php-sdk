@@ -3,6 +3,7 @@
 namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
 use UnzerSDK\Resources\PaymentTypes\ClickToPay;
+use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
 
@@ -45,6 +46,23 @@ class ClickToPayTest extends BasePaymentTest
 
         $expectedJson = JsonProvider::getJsonFromFile('clicktopay/createRequest.json');
         $this->assertJsonStringEqualsJsonString($expectedJson, $clickToPayObject->jsonSerialize());
+    }
+
+    /**
+     * Test Click To Pay json response handling.
+     *
+     * @test
+     */
+    public function clickToPayAuthorizationShouldBeMappedCorrectly(): void
+    {
+        $clickToPay = new ClickToPay(null, null, null, null);
+
+        $jsonResponse = JsonProvider::getJsonFromFile('clickToPay/fetchResponse.json');
+
+        $jsonObject = json_decode($jsonResponse, false, 512, JSON_THROW_ON_ERROR);
+        $clickToPay->handleResponse($jsonObject);
+
+        $this->assertEquals('s-ctp-q0nucec6itwe', $clickToPay->getId());
     }
 
 
