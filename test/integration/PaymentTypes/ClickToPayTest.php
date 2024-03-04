@@ -16,6 +16,11 @@ use UnzerSDK\test\BaseIntegrationTest;
 class ClickToPayTest extends BaseIntegrationTest
 {
 
+    protected function setUp(): void
+    {
+        $this->markTestSkipped('Skipped by default as setup is missing for integration tests.');
+    }
+
     /**
      * Verify that clickToPay payment type resource can be created.
      *
@@ -175,9 +180,9 @@ class ClickToPayTest extends BaseIntegrationTest
      */
     public function partialChargeAfterAuthorization(): void
     {
-        $clickToPay          = $this->createClickToPayObject();
+        $clickToPay = $this->createClickToPayObject();
         /** @var ClickToPay $clickToPay */
-        $clickToPay          = $this->unzer->createPaymentType($clickToPay);
+        $clickToPay = $this->unzer->createPaymentType($clickToPay);
         $authorization = $this->getUnzerObject()
             ->performAuthorization(
                 $this->getLvpAuthorizationObject(),
@@ -188,17 +193,17 @@ class ClickToPayTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 2.99, 0.0, 2.99, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1));
+        $charge = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1));
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 1.99, 1, 2.99, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1));
+        $charge = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1));
         $payment2 = $charge->getPayment();
         $this->assertAmounts($payment2, 0.99, 2, 2.99, 0.0);
         $this->assertTrue($payment2->isPartlyPaid());
 
-        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(0.99));
+        $charge = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(0.99));
         $payment3 = $charge->getPayment();
         $this->assertAmounts($payment3, 00.0, 2.99, 2.99, 0.0);
         $this->assertTrue($payment3->isCompleted());
@@ -211,19 +216,19 @@ class ClickToPayTest extends BaseIntegrationTest
      */
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized(): void
     {
-        $clickToPay          = $this->createClickToPayObject();
+        $clickToPay = $this->createClickToPayObject();
         /** @var ClickToPay $clickToPay */
-        $clickToPay          = $this->unzer->createPaymentType($clickToPay);
+        $clickToPay = $this->unzer->createPaymentType($clickToPay);
         $authorization = $this->getUnzerObject()
             ->performAuthorization(
                 $this->getLvpAuthorizationObject(),
                 $clickToPay
             );
-        $payment       = $authorization->getPayment();
+        $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 2.99, 0.0, 2.99, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1.99));
+        $charge = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(1.99));
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 1, 1.99, 2.99, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
@@ -238,9 +243,9 @@ class ClickToPayTest extends BaseIntegrationTest
      */
     public function fullCancelAfterCharge(): void
     {
-        $clickToPay    = $this->createClickToPayObject();
+        $clickToPay = $this->createClickToPayObject();
         /** @var ClickToPay $clickToPay */
-        $clickToPay    = $this->unzer->createPaymentType($clickToPay);
+        $clickToPay = $this->unzer->createPaymentType($clickToPay);
         $charge = $this->getUnzerObject()
             ->performCharge(
                 $this->getLvpChargeObject(),
@@ -289,7 +294,6 @@ class ClickToPayTest extends BaseIntegrationTest
         $geoLocation = $clickToPay->getGeoLocation();
         $this->assertNull($geoLocation->getClientIp());
         $this->assertNull($geoLocation->getCountryCode());
-
 
 
         $clickToPay->setBrand("mastercard")
