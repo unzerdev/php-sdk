@@ -7,7 +7,7 @@ use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
 
-class ClickToPay extends BasePaymentType
+class Clicktopay extends BasePaymentType
 {
 
     use CanDirectCharge;
@@ -30,11 +30,6 @@ class ClickToPay extends BasePaymentType
         $this->mcCxFlowId = $mcCxFlowId;
         $this->mcMerchantTransactionId = $mcMerchantTransactionId;
         $this->brand = $brand;
-    }
-
-    public static function getResourceName(): string
-    {
-        return 'clicktopay';
     }
 
 
