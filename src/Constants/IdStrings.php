@@ -48,6 +48,7 @@ class IdStrings
     public const SEPA_DIRECT_DEBIT_GUARANTEED = 'ddg';
     public const SEPA_DIRECT_DEBIT_SECURED = 'dds';
     public const SOFORT = 'sft';
+    public const TWINT = 'twt';
     public const WECHATPAY = 'wcp';
 
     // Resources
@@ -88,6 +89,7 @@ class IdStrings
         self::SEPA_DIRECT_DEBIT_GUARANTEED,
         self::SEPA_DIRECT_DEBIT_SECURED,
         self::SOFORT,
+        self::TWINT,
         self::WECHATPAY,
     ];
 }
