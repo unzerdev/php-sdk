@@ -19,6 +19,7 @@ use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\PayU;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
+use UnzerSDK\Resources\PaymentTypes\Twint;
 use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Unzer;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
@@ -885,6 +886,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::SOFORT:
                 $paymentType = new Sofort();
+                break;
+            case IdStrings::TWINT:
+                $paymentType = new Twint();
                 break;
             case IdStrings::WECHATPAY:
                 $paymentType = new Wechatpay();
