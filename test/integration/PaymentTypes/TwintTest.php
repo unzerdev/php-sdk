@@ -4,10 +4,7 @@
 /** @noinspection PhpDocMissingThrowsInspection */
 /**
  * This class defines integration tests to verify interface and
- * functionality of the payment method twint.
- *
- * @link  https://docs.unzer.com/
- *
+ * functionality of the payment method Twint.
  */
 
 namespace UnzerSDK\test\integration\PaymentTypes;
@@ -18,7 +15,6 @@ use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Twint;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
-use UnzerSDK\test\integration\Traits\OnlineTransferTestTrait;
 
 class TwintTest extends BaseIntegrationTest
 {
@@ -26,18 +22,15 @@ class TwintTest extends BaseIntegrationTest
 
     protected function setUp(): void
     {
-//        $this->markTestSkipped();
-        parent::setUp();
+        $this->markTestSkipped('Skipped by default as setup is missing for integration tests.');
     }
 
     /**
      * Verify twint can be created.
      *
      * @test
-     *
-     * @return Twint
      */
-    public function twintShouldBeCreatableAndFetchable(): Twint
+    public function typeShouldBeCreatableAndFetchable(): BasePaymentType
     {
         $paymentType = $this->unzer->createPaymentType($this->createTypeInstance());
         $this->assertInstanceOf(self::testClass, $paymentType);
@@ -57,15 +50,11 @@ class TwintTest extends BaseIntegrationTest
      *
      * @test
      *
-     * @param Twint $twint
-     *
-     * @return Charge
-     *
-     * @depends twintShouldBeCreatableAndFetchable
+     * @depends typeShouldBeCreatableAndFetchable
      */
-    public function twintShouldBeAbleToCharge(BasePaymentType $twint): Charge
+    public function twintShouldBeAbleToCharge(BasePaymentType $paymentType): Charge
     {
-        $charge = $this->unzer->charge(100.0, 'EUR', $twint, self::RETURN_URL);
+        $charge = $this->unzer->charge(100.0, 'EUR', $paymentType, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
@@ -78,22 +67,17 @@ class TwintTest extends BaseIntegrationTest
      *
      * @test
      *
-     * @param Twint $twint
-     *
-     * @depends twintShouldBeCreatableAndFetchable
+     * @depends typeShouldBeCreatableAndFetchable
      */
-    public function twintShouldNotBeAuthorizable(BasePaymentType $twint): void
+    public function twintShouldNotBeAuthorizable(BasePaymentType $paymentType): void
     {
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(100.0, 'EUR', $twint, self::RETURN_URL);
+        $this->unzer->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL);
     }
 
-    /**
-     * @return Twint
-     */
-    public function createTypeInstance(): Twint
+    public function createTypeInstance(): BasePaymentType
     {
         $class = self::testClass;
         return new $class();
