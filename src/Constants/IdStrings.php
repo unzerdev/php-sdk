@@ -25,6 +25,7 @@ class IdStrings
     public const EPS = 'eps';
     public const GIROPAY = 'gro';
     public const GOOGLE_PAY = 'gop';
+    public const CLICK_TO_PAY = 'ctp';
     public const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
     public const IDEAL = 'idl';
     public const INSTALLMENT_SECURED = 'ins';
