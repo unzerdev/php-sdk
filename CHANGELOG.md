@@ -12,8 +12,7 @@ Click To Pay payment method is added to Java SDK.
 ### Added
 
 * Added `\UnzerSDK\Resources\PaymentTypes\ClickToPay` payment method.
-* Added tests for Click To Pay
-
+* Added `\UnzerSDK\Resources\PaymentTypes\Twint` payment method.
 
 ## [3.5.0](https://github.com/unzerdev/php-sdk/compare/3.4.1..3.5.0)
 
