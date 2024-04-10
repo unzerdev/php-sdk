@@ -20,11 +20,6 @@ class TwintTest extends BaseIntegrationTest
 {
     protected const testClass = Twint::class;
 
-    protected function setUp(): void
-    {
-        $this->markTestSkipped('Skipped by default as setup is missing for integration tests.');
-    }
-
     /**
      * Verify twint can be created.
      *
@@ -32,7 +27,7 @@ class TwintTest extends BaseIntegrationTest
      */
     public function typeShouldBeCreatableAndFetchable(): BasePaymentType
     {
-        $paymentType = $this->unzer->createPaymentType($this->createTypeInstance());
+        $paymentType = $this->getUnzerObject()->createPaymentType($this->createTypeInstance());
         $this->assertInstanceOf(self::testClass, $paymentType);
         $this->assertNotNull($paymentType->getId());
 
@@ -54,7 +49,7 @@ class TwintTest extends BaseIntegrationTest
      */
     public function twintShouldBeAbleToCharge(BasePaymentType $paymentType): Charge
     {
-        $charge = $this->unzer->charge(100.0, 'EUR', $paymentType, self::RETURN_URL);
+        $charge = $this->unzer->charge(100.0, 'CHF', $paymentType, self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
