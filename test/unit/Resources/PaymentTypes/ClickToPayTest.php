@@ -57,7 +57,7 @@ class ClickToPayTest extends BasePaymentTest
     {
         $clickToPay = new ClickToPay(null, null, null, null);
 
-        $jsonResponse = JsonProvider::getJsonFromFile('clicktopay/fetchResponse.json');
+        $jsonResponse = JsonProvider::getJsonFromFile('clickToPay/fetchResponse.json');
 
         $jsonObject = json_decode($jsonResponse, false, 512, JSON_THROW_ON_ERROR);
         $clickToPay->handleResponse($jsonObject);
