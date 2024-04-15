@@ -38,52 +38,52 @@ class ClickToPay extends BasePaymentType
     }
 
 
-    public function getMcCorrelationId() : ?string
+    public function getMcCorrelationId()
     {
         return $this->mcCorrelationId;
     }
 
 
-    public function getMcCxFlowId(): ?string
-    {
-        return $this->mcCxFlowId;
-    }
-
-
-    public function getBrand(): ?string
-    {
-        return $this->brand;
-    }
-
-
-    public function getMcMerchantTransactionId(): ?string
-    {
-        return $this->mcMerchantTransactionId;
-    }
-
-
-    public function setMcCxFlowId($mcCxFlowId): self
-    {
-        $this->mcCxFlowId = $mcCxFlowId;
-        return $this;
-    }
-
-
-    public function setMcCorrelationId($mcCorrelationId): self
+    public function setMcCorrelationId($mcCorrelationId): ClickToPay
     {
         $this->mcCorrelationId = $mcCorrelationId;
         return $this;
     }
 
 
-    public function setMcMerchantTransactionId($mcMerchantTransactionId): self
+    public function getMcCxFlowId(): ClickToPay
+    {
+        return $this->mcCxFlowId;
+    }
+
+
+    public function setMcCxFlowId($mcCxFlowId): ClickToPay
+    {
+        $this->mcCxFlowId = $mcCxFlowId;
+        return $this;
+    }
+
+
+    public function getMcMerchantTransactionId()
+    {
+        return $this->mcMerchantTransactionId;
+    }
+
+
+    public function setMcMerchantTransactionId($mcMerchantTransactionId): ClickToPay
     {
         $this->mcMerchantTransactionId = $mcMerchantTransactionId;
         return $this;
     }
 
 
-    public function setBrand($brand): self
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+
+    public function setBrand($brand)
     {
         $this->brand = $brand;
         return $this;
