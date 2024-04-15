@@ -10,7 +10,7 @@ use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
-use UnzerSDK\Resources\PaymentTypes\Clicktopay;
+use UnzerSDK\Resources\PaymentTypes\ClickToPay;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
@@ -827,7 +827,7 @@ class ResourceService implements ResourceServiceInterface
                 $paymentType = new Googlepay();
                 break;
             case IdStrings::CLICK_TO_PAY:
-                $paymentType = new Clicktopay();
+                $paymentType = new ClickToPay();
                 break;
             case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
             case IdStrings::INSTALLMENT_SECURED:

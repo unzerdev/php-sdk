@@ -8,7 +8,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
-use UnzerSDK\Resources\PaymentTypes\Clicktopay;
+use UnzerSDK\Resources\PaymentTypes\ClickToPay;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -34,7 +34,7 @@ class ClickToPayTest extends BaseIntegrationTest
 
         $this->unzer->createPaymentType($clickToPay);
 
-        $this->assertInstanceOf(Clicktopay::class, $clickToPay);
+        $this->assertInstanceOf(ClickToPay::class, $clickToPay);
         $this->assertNotNull($clickToPay->getId());
         $this->assertSame($this->unzer, $clickToPay->getUnzerObject());
 
@@ -58,7 +58,7 @@ class ClickToPayTest extends BaseIntegrationTest
     {
         $this->assertNotNull($type->getId());
 
-        /** @var Clicktopay $fetchedClickToPay */
+        /** @var ClickToPay $fetchedClickToPay */
         $fetchedClickToPay = $this->unzer->fetchPaymentType($type->getId());
         $this->assertNotNull($fetchedClickToPay->getId());
     }
@@ -181,7 +181,7 @@ class ClickToPayTest extends BaseIntegrationTest
     public function partialChargeAfterAuthorization(): void
     {
         $clickToPay = $this->createClickToPayObject();
-        /** @var Clicktopay $clickToPay */
+        /** @var ClickToPay $clickToPay */
         $clickToPay = $this->unzer->createPaymentType($clickToPay);
         $authorization = $this->getUnzerObject()
             ->performAuthorization(
@@ -217,7 +217,7 @@ class ClickToPayTest extends BaseIntegrationTest
     public function exceptionShouldBeThrownWhenChargingMoreThenAuthorized(): void
     {
         $clickToPay = $this->createClickToPayObject();
-        /** @var Clicktopay $clickToPay */
+        /** @var ClickToPay $clickToPay */
         $clickToPay = $this->unzer->createPaymentType($clickToPay);
         $authorization = $this->getUnzerObject()
             ->performAuthorization(
@@ -244,7 +244,7 @@ class ClickToPayTest extends BaseIntegrationTest
     public function fullCancelAfterCharge(): void
     {
         $clickToPay = $this->createClickToPayObject();
-        /** @var Clicktopay $clickToPay */
+        /** @var ClickToPay $clickToPay */
         $clickToPay = $this->unzer->createPaymentType($clickToPay);
         $charge = $this->getUnzerObject()
             ->performCharge(
@@ -286,9 +286,9 @@ class ClickToPayTest extends BaseIntegrationTest
     }
 
 
-    protected function createClickToPayObject(): Clicktopay
+    protected function createClickToPayObject(): ClickToPay
     {
-        $clickToPay = (new Clicktopay());
+        $clickToPay = (new ClickToPay());
         $this->assertNull($clickToPay->getId());
 
         $geoLocation = $clickToPay->getGeoLocation();
