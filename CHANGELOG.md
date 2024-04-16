@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## UNRELEASED
+## [3.6.0](https://github.com/unzerdev/php-sdk/compare/3.5.0..3.6.0)
 
 Twint payment method is added to SDK.
 
