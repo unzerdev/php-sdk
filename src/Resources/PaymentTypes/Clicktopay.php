@@ -2,14 +2,11 @@
 
 namespace UnzerSDK\Resources\PaymentTypes;
 
-use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Traits\CanAuthorize;
 use UnzerSDK\Traits\CanDirectCharge;
 
 class Clicktopay extends BasePaymentType
 {
-
     use CanDirectCharge;
     use CanAuthorize;
 
@@ -18,44 +15,37 @@ class Clicktopay extends BasePaymentType
     protected $mcMerchantTransactionId;
     protected $brand;
 
-
     public function __construct(
         ?string $mcCorrelationId = null,
         ?string $mcCxFlowId = null,
         ?string $mcMerchantTransactionId = null,
         ?string $brand = null
-    )
-    {
+    ) {
         $this->mcCorrelationId = $mcCorrelationId;
         $this->mcCxFlowId = $mcCxFlowId;
         $this->mcMerchantTransactionId = $mcMerchantTransactionId;
         $this->brand = $brand;
     }
 
-
-    public function getMcCorrelationId() : ?string
+    public function getMcCorrelationId(): ?string
     {
         return $this->mcCorrelationId;
     }
-
 
     public function getMcCxFlowId(): ?string
     {
         return $this->mcCxFlowId;
     }
 
-
     public function getBrand(): ?string
     {
         return $this->brand;
     }
 
-
     public function getMcMerchantTransactionId(): ?string
     {
         return $this->mcMerchantTransactionId;
     }
-
 
     public function setMcCxFlowId($mcCxFlowId): self
     {
@@ -63,13 +53,11 @@ class Clicktopay extends BasePaymentType
         return $this;
     }
 
-
     public function setMcCorrelationId($mcCorrelationId): self
     {
         $this->mcCorrelationId = $mcCorrelationId;
         return $this;
     }
-
 
     public function setMcMerchantTransactionId($mcMerchantTransactionId): self
     {
@@ -77,12 +65,9 @@ class Clicktopay extends BasePaymentType
         return $this;
     }
 
-
     public function setBrand($brand): self
     {
         $this->brand = $brand;
         return $this;
     }
-
-
 }

@@ -132,11 +132,11 @@ class CardTest extends BaseIntegrationTest
      *
      * @test
      *
+     * @param mixed $recurrenceType
      * @throws UnzerApiException
      *
      * @dataProvider invalidRecurrenceTypesDP
      *
-     * @param mixed $recurrenceType
      */
     public function invalidRecurrenceTypeShouldThrowApiException($recurrenceType): void
     {
@@ -259,22 +259,24 @@ class CardTest extends BaseIntegrationTest
      * Verfify card transaction can be used with exemptionType
      *
      * @test
+     *
+     * @dataProvider cardTransactionAcceptsExemptionTypeDP
      */
-    public function cardTransactionAcceptsExemptionType(): void
+    public function cardTransactionAcceptsExemptionType(string $exemptionType): void
     {
         $card = $this->createCardObject();
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
         $charge = new Charge(12.34, 'EUR', 'https://docs.unzer.com');
         $cardTransactionData = (new CardTransactionData())
-            ->setExemptionType(ExemptionType::LOW_VALUE_PAYMENT);
+            ->setExemptionType($exemptionType);
 
         $charge->setCardTransactionData($cardTransactionData);
         $this->getUnzerObject()->performCharge($charge, $card);
 
         // Verify lvp value gets mapped from response
         $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
-        $this->assertEquals(ExemptionType::LOW_VALUE_PAYMENT, $fetchedCharge->getCardTransactionData()->getExemptionType());
+        $this->assertEquals($exemptionType, $fetchedCharge->getCardTransactionData()->getExemptionType());
     }
 
     /**
@@ -719,6 +721,14 @@ class CardTest extends BaseIntegrationTest
             '5453010000059543' => ['5453010000059543'],
             '4711100000000000' => ['4711100000000000'],
             '4012001037461114' => ['4012001037461114']
+        ];
+    }
+
+    public function cardTransactionAcceptsExemptionTypeDP()
+    {
+        return [
+            'lvp' => [ExemptionType::LOW_VALUE_PAYMENT],
+            'tra' => [ExemptionType::TRANSACTION_RISK_ANALYSIS]
         ];
     }
 }

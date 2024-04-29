@@ -12,6 +12,7 @@ Click To Pay payment method is added to SDK.
 ### Added
 
 * Added `\UnzerSDK\Resources\PaymentTypes\ClickToPay` payment method.
+* Added constant `\UnzerSDK\Constants\ExemptionType::TRANSACTION_RISK_ANALYSIS` for exemption type "tra".
 
 ## [3.6.0](https://github.com/unzerdev/php-sdk/compare/3.5.0..3.6.0)
 
