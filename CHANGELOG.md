@@ -7,7 +7,6 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [3.7.0](https://github.com/unzerdev/php-sdk/compare/3.6.0..3.7.0)
 
-
 Support for Click To Pay payment method is added to SDK.
 
 ### Added
