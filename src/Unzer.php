@@ -6,6 +6,7 @@ use DateTime;
 use RuntimeException;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Interfaces\CancelServiceInterface;
 use UnzerSDK\Interfaces\DebugHandlerInterface;
 use UnzerSDK\Interfaces\PaymentServiceInterface;
@@ -13,6 +14,7 @@ use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Interfaces\UnzerParentInterface;
 use UnzerSDK\Interfaces\WebhookServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\Authentication\Token;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\Customer;
@@ -88,12 +90,12 @@ class Unzer implements
     /**
      * Construct a new Unzer object.
      *
-     * @param string  $key    The private key your received from your Unzer contact person.
+     * @param string $key The private key your received from your Unzer contact person.
      * @param ?string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      *
-     *@link https://docs.unzer.com/integrate/web-integration/#section-localization-and-languages
+     * @link https://docs.unzer.com/integrate/web-integration/#section-localization-and-languages
      *
      */
     public function __construct(string $key, ?string $locale = '')
@@ -102,10 +104,10 @@ class Unzer implements
         $this->setLocale($locale);
 
         $this->resourceService = new ResourceService($this);
-        $this->paymentService  = new PaymentService($this);
-        $this->webhookService  = new WebhookService($this);
-        $this->cancelService   = new CancelService($this);
-        $this->httpService     = new HttpService();
+        $this->paymentService = new PaymentService($this);
+        $this->webhookService = new WebhookService($this);
+        $this->cancelService = new CancelService($this);
+        $this->httpService = new HttpService();
     }
 
     /**
@@ -671,11 +673,12 @@ class Unzer implements
      */
     public function performAuthorization(
         Authorization $authorization,
-        $paymentType,
-        $customer = null,
-        Metadata $metadata = null,
-        Basket $basket = null
-    ): Authorization {
+                      $paymentType,
+                      $customer = null,
+        Metadata      $metadata = null,
+        Basket        $basket = null
+    ): Authorization
+    {
         return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
     }
 
@@ -700,7 +703,8 @@ class Unzer implements
         $invoiceId = null,
         $referenceText = null,
         $recurrenceType = null
-    ): Authorization {
+    ): Authorization
+    {
         return $this->paymentService->authorize(
             $amount,
             $currency,
@@ -721,12 +725,13 @@ class Unzer implements
      * {@inheritDoc}
      */
     public function performCharge(
-        Charge $charge,
-        $paymentType,
-        $customer = null,
+        Charge   $charge,
+                 $paymentType,
+                 $customer = null,
         Metadata $metadata = null,
-        Basket $basket = null
-    ): Charge {
+        Basket   $basket = null
+    ): Charge
+    {
         return $this->paymentService->performCharge($charge, $paymentType, $customer, $metadata, $basket);
     }
 
@@ -751,7 +756,8 @@ class Unzer implements
         $invoiceId = null,
         $paymentReference = null,
         $recurrenceType = null
-    ): Charge {
+    ): Charge
+    {
         return $this->paymentService->charge(
             $amount,
             $currency,
@@ -776,7 +782,8 @@ class Unzer implements
         float $amount = null,
         string $orderId = null,
         string $invoiceId = null
-    ): Charge {
+    ): Charge
+    {
         return $this->paymentService->chargeAuthorization($payment, $amount, $orderId, $invoiceId);
     }
 
@@ -788,7 +795,8 @@ class Unzer implements
         float $amount = null,
         string $orderId = null,
         string $invoiceId = null
-    ): Charge {
+    ): Charge
+    {
         return $this->paymentService->chargePayment($payment, $amount, $orderId, $invoiceId);
     }
 
@@ -823,7 +831,8 @@ class Unzer implements
         string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
-    ): array {
+    ): array
+    {
         return $this->cancelService
             ->cancelPayment($payment, $amount, $reasonCode, $referenceText, $amountNet, $amountVat);
     }
@@ -847,7 +856,8 @@ class Unzer implements
         string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
-    ): Cancellation {
+    ): Cancellation
+    {
         return $this->cancelService
             ->cancelChargeById($payment, $chargeId, $amount, $reasonCode, $referenceText, $amountNet, $amountVat);
     }
@@ -857,12 +867,13 @@ class Unzer implements
      */
     public function cancelCharge(
         Charge $charge,
-        float $amount = null,
+        float  $amount = null,
         string $reasonCode = null,
         string $referenceText = null,
-        float $amountNet = null,
-        float $amountVat = null
-    ): Cancellation {
+        float  $amountNet = null,
+        float  $amountVat = null
+    ): Cancellation
+    {
         return $this->cancelService
             ->cancelCharge($charge, $amount, $reasonCode, $referenceText, $amountNet, $amountVat);
     }
@@ -886,6 +897,16 @@ class Unzer implements
     }
 
     /**
+     * @throws UnzerApiException
+     */
+    public function createAuthToken(): Token
+    {
+        $token = (new Token())->setParentResource($this);
+        $this->resourceService->createResource($token);
+        return $token;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment
@@ -899,15 +920,16 @@ class Unzer implements
     public function payout(
         float    $amount,
         string   $currency,
-        $paymentType,
+                 $paymentType,
         string   $returnUrl,
-        $customer = null,
+                 $customer = null,
         string   $orderId = null,
         Metadata $metadata = null,
         Basket   $basket = null,
         string   $invoiceId = null,
-        string $referenceText = null
-    ): Payout {
+        string   $referenceText = null
+    ): Payout
+    {
         return $this->paymentService->payout(
             $amount,
             $currency,
@@ -926,11 +948,12 @@ class Unzer implements
      * {@inheritDoc}
      */
     public function initPayPageCharge(
-        Paypage $paypage,
+        Paypage  $paypage,
         Customer $customer = null,
-        Basket $basket = null,
+        Basket   $basket = null,
         Metadata $metadata = null
-    ): Paypage {
+    ): Paypage
+    {
         return $this->paymentService->initPayPageCharge($paypage, $customer, $basket, $metadata);
     }
 
@@ -938,11 +961,12 @@ class Unzer implements
      * {@inheritDoc}
      */
     public function initPayPageAuthorize(
-        Paypage $paypage,
+        Paypage  $paypage,
         Customer $customer = null,
-        Basket $basket = null,
+        Basket   $basket = null,
         Metadata $metadata = null
-    ): Paypage {
+    ): Paypage
+    {
         return $this->paymentService->initPayPageAuthorize($paypage, $customer, $basket, $metadata);
     }
 
@@ -954,7 +978,8 @@ class Unzer implements
         string   $currency,
         float    $effectiveInterest,
         DateTime $orderDate = null
-    ): InstalmentPlans {
+    ): InstalmentPlans
+    {
         return $this->paymentService
             ->fetchInstallmentPlans($amount, $currency, $effectiveInterest, $orderDate);
     }

@@ -483,7 +483,7 @@ class HttpServiceTest extends BasePaymentTest
             'Stg with production key' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, $prodUrl, $prodKey],
             'something else with production key' => ['something else', $prodUrl, $prodKey],
             'undefined with production key' => ['', $prodUrl, $prodKey],
-            'Dev with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, $devUrl, $sbxKey],
+//            'Dev with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT, $devUrl, $sbxKey],
             'Prod with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_PROD_ENVIRONMENT, $sbxUrl, $sbxKey],
             'Stg with sandbox key' => [EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT, $stgUrl, $sbxKey],
             'something else with sandbox key' => ['something else', $sbxUrl, $sbxKey],

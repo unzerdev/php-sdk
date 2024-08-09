@@ -10,6 +10,8 @@ namespace UnzerSDK\Resources;
 
 use DateTime;
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Apis\ApiConfig;
+use UnzerSDK\Apis\PaymentApiConfig;
 use UnzerSDK\Constants\AdditionalAttributes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
@@ -158,6 +160,17 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
     public function getApiVersion(): string
     {
         return Unzer::API_VERSION;
+    }
+
+    /**
+     * Returns the API config class for this resource.
+     * @see ApiConfig
+     *
+     * @return string
+     */
+    public function getApiConfig(): string
+    {
+        return PaymentApiConfig::class;
     }
 
     /**

@@ -4,6 +4,8 @@ namespace UnzerSDK\Services;
 
 use UnzerSDK\Adapter\CurlAdapter;
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Apis\ApiRequest;
+use UnzerSDK\Apis\ApiConfig;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -81,6 +83,8 @@ class HttpService
     }
 
     /**
+     * @deprecated use sendRequest() instead.
+     *
      * send post request to payment server
      *
      * @param                        $uri        string|null uri of the target system
@@ -104,10 +108,38 @@ class HttpService
         }
         $unzerObj = $resource->getUnzerObject();
 
+        $apiRequest = (new ApiRequest($uri, $resource, $httpMethod, $unzerObj, $apiVersion));
+
+        return $this->sendRequest($apiRequest);
+    }
+
+    /**
+     * send post request to payment server
+     *
+     * @param                        $uri        string|null uri of the target system
+     * @param ?AbstractUnzerResource $resource
+     * @param string                 $httpMethod
+     * @param string                 $apiVersion
+     *
+     * @return string
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function sendRequest(
+        ApiRequest $request
+    ): string {
+        $unzerObj = $request->getResource()->getUnzerObject();
+
+        if (!$this->isApiConfig($request->getResource()->getApiConfig())) {
+            throw new RuntimeException('Invalid ApiConfig!');
+        }
+
         // perform request
-        $requestUrl = $this->buildRequestUrl($uri, $apiVersion, $unzerObj);
-        $payload = $resource->jsonSerialize();
+        $requestUrl = $this->buildRequestUrl($request, $unzerObj);
+        $payload = $request->getResource()->jsonSerialize();
         $headers = $this->composeHttpHeaders($unzerObj);
+        $httpMethod = $request->getHttpMethod();
         $this->initRequest($requestUrl, $payload, $httpMethod, $headers);
         $httpAdapter  = $this->getAdapter();
         $response     = $httpAdapter->execute();
@@ -229,13 +261,14 @@ class HttpService
      * @param string $uri
      * @param string $apiVersion
      * @param Unzer  $unzer
+     * @param ApiConfig $api
      *
      * @return string
      */
-    private function buildRequestUrl(string $uri, string $apiVersion, Unzer $unzer): string
+    private function buildRequestUrl(ApiRequest $request, Unzer $unzer): string
     {
-        $envPrefix = $this->getEnvironmentPrefix($unzer);
-        return "https://" . $envPrefix . Unzer::BASE_URL . "/" . $apiVersion . $uri;
+        $apiDomain = $this->getEnvironmentDomain($unzer, $request->getResource()->getApiConfig());
+        return "https://" . $apiDomain . "/" . $request->getApiVersion() . $request->getUri();
     }
 
     /**
@@ -291,6 +324,30 @@ class HttpService
         }
         return $envPrefix . '-';
     }
+    /** Determine the environment to be used for Api calls and returns the prefix for it.
+     * Production environment has no prefix.
+     *
+     * @param Unzer $unzer
+     *
+     * @return string
+     */
+    private function getEnvironmentDomain(Unzer $unzer, $api): string
+    {
+        /** @var ApiConfig $api */
+        // Production Environment uses no prefix.
+        if ($this->isProductionKey($unzer->getKey())) {
+            return $api::getDomain();
+        }
+
+        switch ($this->getEnvironmentService()->getPapiEnvironment()) {
+            case EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT:
+                $apiDomain = $api::getIntegrationDomain();
+                break;
+            default:
+                $apiDomain = $api::getTestDomain();
+        }
+        return $apiDomain;
+    }
 
     /** Determine whether key is for production environment.
      *
@@ -301,5 +358,18 @@ class HttpService
     private function isProductionKey(string $privateKey): bool
     {
         return strpos($privateKey, 'p') === 0;
+    }
+
+    function isApiConfig($className): bool
+    {
+        // Check if the class exists
+        if (!class_exists($className)) {
+            return false;
+        }
+
+        // Get the interfaces implemented by the class
+        $interfaces = class_implements($className);
+
+        return in_array(ApiConfig::class, $interfaces);
     }
 }
