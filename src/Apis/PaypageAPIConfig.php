@@ -2,6 +2,8 @@
 
 namespace UnzerSDK\Apis;
 
+use UnzerSDK\Apis\Constants\AuthenticationMethods;
+
 class PaypageAPIConfig implements ApiConfig
 {
     private const DOMAIN = 'paypage.unzer.com';
@@ -21,5 +23,9 @@ class PaypageAPIConfig implements ApiConfig
     public static function getTestDomain(): string
     {
         return self::TEST_DOMAIN;
+    }
+
+    public static function getAuthorizationMethod(): string {
+        return AuthenticationMethods::BEARER;
     }
 }

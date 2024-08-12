@@ -20,6 +20,7 @@ use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\Authentication\Token;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
@@ -58,6 +59,7 @@ use UnzerSDK\Services\HttpService;
 use UnzerSDK\Services\IdService;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\test\Fixtures\DummyPaypageResource;
 use UnzerSDK\test\unit\DummyResource;
 use UnzerSDK\test\unit\Traits\TraitDummyCanRecur;
 use UnzerSDK\Unzer;
@@ -112,6 +114,41 @@ class ResourceServiceTest extends BasePaymentTest
         /** @var AbstractUnzerResource $resourceMock */
         $response = $resourceSrv->send($resourceMock, $method);
         $this->assertEquals('This is the response', $response->response);
+    }
+
+    /**
+     * Verify send will call send on httpService.
+     *
+     * @test
+     *
+     * @dataProvider AuthTokenShouldBeRequestedAutomaticallyDP
+     *
+     * @param string $method
+     * @param string $uri
+     * @param bool   $appendId
+     */
+    public function AuthTokenShouldBeRequestedAutomatically(string $method, string $uri, bool $appendId): void
+    {
+        $unzer = new Unzer('s-priv-1234');
+        $httpMethod = HttpAdapterInterface::REQUEST_POST;
+        $resourceMock = $this->getMockBuilder(DummyPaypageResource::class)->setMethods(['getUri', 'getUnzerObject'])->getMock();
+        /** @noinspection PhpParamsInspection */
+        $resourceMock->expects($this->once())->method('getUri')->with($appendId, $method)->willReturn('/dummy-paypage-uri');
+        $resourceMock->method('getUnzerObject')->willReturn($unzer);
+        $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
+        $resourceSrv = new ResourceService($unzer);
+
+        /** @var HttpService $httpSrvMock */
+        $unzer->setHttpService($httpSrvMock);
+        /** @noinspection PhpParamsInspection */
+        $httpSrvMock->expects($this->exactly(2))->method('send')->withConsecutive(
+            [$uri],
+            ['/dummy-paypage-uri', $resourceMock, $method]
+        )->willReturnOnConsecutiveCalls('{"accessToken": "jwt.auth.token"}', '{"response": "paypage response"}');
+
+        /** @var AbstractUnzerResource $resourceMock */
+        $response = $resourceSrv->send($resourceMock, $method);
+        $this->assertEquals('paypage response', $response->response);
     }
 
     //</editor-fold>
@@ -1308,6 +1345,20 @@ class ResourceServiceTest extends BasePaymentTest
             HttpAdapterInterface::REQUEST_POST   => [HttpAdapterInterface::REQUEST_POST, '/my/post/uri', false],
             HttpAdapterInterface::REQUEST_PUT    => [HttpAdapterInterface::REQUEST_PUT, '/my/put/uri', true],
             HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, '/my/delete/uri', true],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function AuthTokenShouldBeRequestedAutomaticallyDP(): array
+    {
+        return [
+//            HttpAdapterInterface::REQUEST_GET    => [HttpAdapterInterface::REQUEST_GET, '/my/get/uri', true],
+//            HttpAdapterInterface::REQUEST_PATCH   => [HttpAdapterInterface::REQUEST_PATCH, '/my/patch/uri', true],
+            HttpAdapterInterface::REQUEST_POST   => [HttpAdapterInterface::REQUEST_POST, '/auth/token', false],
+//            HttpAdapterInterface::REQUEST_PUT    => [HttpAdapterInterface::REQUEST_PUT, '/my/put/uri', true],
+//            HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, '/my/delete/uri', true],
         ];
     }
 

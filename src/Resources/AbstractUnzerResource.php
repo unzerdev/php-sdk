@@ -166,7 +166,7 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
      * Returns the API config class for this resource.
      * @see ApiConfig
      *
-     * @return string
+     * @return ApiConfig string
      */
     public function getApiConfig(): string
     {

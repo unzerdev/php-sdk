@@ -7,6 +7,7 @@
 
 namespace UnzerSDK\test\integration;
 
+use UnzerSDK\Services\JwtService;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class AuthTokenTest extends BaseIntegrationTest
@@ -16,6 +17,9 @@ class AuthTokenTest extends BaseIntegrationTest
     {
         $authResponse = $this->getUnzerObject()->createAuthToken();
         $this->assertNotNull($authResponse);
-        $this->assertNotNull($authResponse->getAccessToken());
+        $jwtToken = $authResponse->getAccessToken();
+        $this->assertNotNull($jwtToken);
+
+        $this->assertTrue(JwtService::validateExpireTime($jwtToken, 60*7-1));
     }
 }

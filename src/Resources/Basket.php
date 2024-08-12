@@ -3,6 +3,8 @@
 namespace UnzerSDK\Resources;
 
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Apis\PaymentApiConfig;
+use UnzerSDK\Apis\PaypageAPIConfig;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use stdClass;
 

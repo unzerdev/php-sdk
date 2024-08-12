@@ -2,6 +2,8 @@
 
 namespace UnzerSDK\Apis;
 
+use UnzerSDK\Apis\Constants\AuthenticationMethods;
+
 class TokenApiConfig implements ApiConfig
 {
     private const DOMAIN = 'token.upcgw.com';
@@ -21,5 +23,9 @@ class TokenApiConfig implements ApiConfig
     public static function getTestDomain(): string
     {
         return self::TEST_DOMAIN;
+    }
+
+    public static function getAuthorizationMethod(): string {
+        return AuthenticationMethods::BASIC;
     }
 }

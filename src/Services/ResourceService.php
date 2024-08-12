@@ -5,9 +5,12 @@ namespace UnzerSDK\Services;
 use DateTime;
 use Exception;
 use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Apis\ApiConfig;
+use UnzerSDK\Apis\Constants\AuthenticationMethods;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\Authentication\Token;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Resources\PaymentTypes\Clicktopay;
@@ -116,6 +119,11 @@ class ResourceService implements ResourceServiceInterface
         string                $httpMethod = HttpAdapterInterface::REQUEST_GET,
         string                $apiVersion = Unzer::API_VERSION
     ): stdClass {
+        $configClass = $resource->getApiConfig();
+        if (!$resource instanceof Token && $configClass::getAuthorizationMethod() === AuthenticationMethods::BEARER) {
+            $this->unzer->prepareJwtToken();
+        }
+
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri          = $resource->getUri($appendId, $httpMethod);
         $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod, $apiVersion);

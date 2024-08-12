@@ -36,6 +36,7 @@ use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Resources\Webhook;
 use UnzerSDK\Services\CancelService;
 use UnzerSDK\Services\HttpService;
+use UnzerSDK\Services\JwtService;
 use UnzerSDK\Services\PaymentService;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\Services\WebhookService;
@@ -86,6 +87,7 @@ class Unzer implements
 
     /** @var boolean $debugMode */
     private $debugMode = false;
+    private $jwtToken;
 
     /**
      * Construct a new Unzer object.
@@ -1012,5 +1014,17 @@ class Unzer implements
                 $debugHandler->log('(' . getmypid() . ') ' . $message);
             }
         }
+    }
+
+    /**
+     * Request a JWT token from the Unzer API. If the token is already set, it will not be requested again.
+     * @throws UnzerApiException
+     */
+    public function prepareJwtToken()
+    {
+        if ($this->jwtToken !== null && JwtService::validateExpireTime($this->jwtToken)) {
+            return;
+        }
+        $this->jwtToken = $this->createAuthToken()->getAccessToken();
     }
 }
