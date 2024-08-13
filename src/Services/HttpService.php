@@ -114,11 +114,7 @@ class HttpService
     /**
      * send post request to payment server
      *
-     * @param                        $uri        string|null uri of the target system
-     * @param ?AbstractUnzerResource $resource
-     * @param string                 $httpMethod
-     * @param string                 $apiVersion
-     *
+     * @param ApiRequest $request
      * @return string
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
@@ -134,7 +130,7 @@ class HttpService
         }
 
         // perform request
-        $requestUrl = $this->buildRequestUrl($request, $unzerObj);
+        $requestUrl = $this->buildRequestUrl($request);
         $payload = $request->getResource()->jsonSerialize();
         $headers = $this->composeHttpHeaders($unzerObj);
         $httpMethod = $request->getHttpMethod();
@@ -263,9 +259,9 @@ class HttpService
      *
      * @return string
      */
-    private function buildRequestUrl(ApiRequest $request, Unzer $unzer): string
+    private function buildRequestUrl(ApiRequest $request): string
     {
-        $apiDomain = $this->getEnvironmentDomain($unzer, $request->getResource()->getApiConfig());
+        $apiDomain = $this->getEnvironmentDomain($request);
         return "https://" . $apiDomain . "/" . $request->getApiVersion() . $request->getUri();
     }
 
@@ -331,9 +327,11 @@ class HttpService
      *
      * @return string
      */
-    private function getEnvironmentDomain(Unzer $unzer, $api): string
+    private function getEnvironmentDomain(ApiRequest $request): string
     {
-        /** @var ApiConfig $api */
+        $unzer = $request->getUnzerObject();
+        $api = $request->getResource()->getApiConfig();
+
         // Production Environment uses no prefix.
         if ($this->isProductionKey($unzer->getKey())) {
             return $api::getDomain();

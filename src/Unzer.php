@@ -1023,7 +1023,7 @@ class Unzer implements
      */
     public function prepareJwtToken()
     {
-        if ($this->jwtToken !== null && JwtService::validateExpireTime($this->jwtToken)) {
+        if ($this->jwtToken !== null && JwtService::validateExpiryTime($this->jwtToken)) {
             return;
         }
         $this->jwtToken = $this->createAuthToken()->getAccessToken();

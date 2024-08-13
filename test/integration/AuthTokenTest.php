@@ -20,6 +20,6 @@ class AuthTokenTest extends BaseIntegrationTest
         $jwtToken = $authResponse->getAccessToken();
         $this->assertNotNull($jwtToken);
 
-        $this->assertTrue(JwtService::validateExpireTime($jwtToken, 60 * 7 - 1));
+        $this->assertTrue(JwtService::validateExpiryTime($jwtToken, 60 * 7 - 1));
     }
 }

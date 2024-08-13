@@ -6,7 +6,7 @@ class JwtService
 {
     public const Expiry_Buffer = 60;
 
-    public static function validateExpireTime(string $jwt, int $expiryBufferSeconds = self::Expiry_Buffer): bool
+    public static function validateExpiryTime(string $jwt, int $expiryBufferSeconds = self::Expiry_Buffer): bool
     {
         $jwtData = self::extractPayload($jwt);
         $expireTime = $jwtData['exp'];
