@@ -675,8 +675,8 @@ class Unzer implements
      */
     public function performAuthorization(
         Authorization $authorization,
-                      $paymentType,
-                      $customer = null,
+        $paymentType,
+        $customer = null,
         Metadata      $metadata = null,
         Basket        $basket = null
     ): Authorization
@@ -728,8 +728,8 @@ class Unzer implements
      */
     public function performCharge(
         Charge   $charge,
-                 $paymentType,
-                 $customer = null,
+        $paymentType,
+        $customer = null,
         Metadata $metadata = null,
         Basket   $basket = null
     ): Charge
@@ -922,9 +922,9 @@ class Unzer implements
     public function payout(
         float    $amount,
         string   $currency,
-                 $paymentType,
+        $paymentType,
         string   $returnUrl,
-                 $customer = null,
+        $customer = null,
         string   $orderId = null,
         Metadata $metadata = null,
         Basket   $basket = null,
@@ -1018,6 +1018,7 @@ class Unzer implements
 
     /**
      * Request a JWT token from the Unzer API. If the token is already set, it will not be requested again.
+     *
      * @throws UnzerApiException
      */
     public function prepareJwtToken()

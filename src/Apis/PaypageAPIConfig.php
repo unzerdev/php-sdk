@@ -25,7 +25,8 @@ class PaypageAPIConfig implements ApiConfig
         return self::TEST_DOMAIN;
     }
 
-    public static function getAuthorizationMethod(): string {
+    public static function getAuthorizationMethod(): string
+    {
         return AuthenticationMethods::BEARER;
     }
 }

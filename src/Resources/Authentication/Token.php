@@ -8,7 +8,7 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 
 class Token extends AbstractUnzerResource
 {
-    const URI = '/auth/token';
+    public const URI = '/auth/token';
 
     /** @var string */
     protected $accessToken;

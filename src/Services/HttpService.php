@@ -2,17 +2,15 @@
 
 namespace UnzerSDK\Services;
 
+use RuntimeException;
 use UnzerSDK\Adapter\CurlAdapter;
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Apis\ApiRequest;
 use UnzerSDK\Apis\ApiConfig;
+use UnzerSDK\Apis\ApiRequest;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Unzer;
 use UnzerSDK\Resources\AbstractUnzerResource;
-use RuntimeException;
-
+use UnzerSDK\Unzer;
 use function in_array;
-
 use const PHP_VERSION;
 
 /**
@@ -260,7 +258,7 @@ class HttpService
      *
      * @param string $uri
      * @param string $apiVersion
-     * @param Unzer  $unzer
+     * @param Unzer $unzer
      * @param ApiConfig $api
      *
      * @return string
@@ -324,10 +322,12 @@ class HttpService
         }
         return $envPrefix . '-';
     }
+
     /** Determine the environment to be used for Api calls and returns the prefix for it.
      * Production environment has no prefix.
      *
      * @param Unzer $unzer
+     * @param mixed $api
      *
      * @return string
      */
@@ -360,7 +360,7 @@ class HttpService
         return strpos($privateKey, 'p') === 0;
     }
 
-    function isApiConfig($className): bool
+    public function isApiConfig($className): bool
     {
         // Check if the class exists
         if (!class_exists($className)) {

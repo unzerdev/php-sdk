@@ -4,7 +4,7 @@ namespace UnzerSDK\Services;
 
 class JwtService
 {
-    const Expiry_Buffer = 60;
+    public const Expiry_Buffer = 60;
 
     public static function validateExpireTime(string $jwt, int $expiryBufferSeconds = self::Expiry_Buffer): bool
     {

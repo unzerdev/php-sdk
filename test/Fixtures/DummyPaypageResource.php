@@ -20,6 +20,7 @@ class DummyPaypageResource extends AbstractUnzerResource
         $this->response = $response;
         return $this;
     }
+
     public function getApiConfig(): string
     {
         return PaypageAPIConfig::class;
@@ -29,5 +30,4 @@ class DummyPaypageResource extends AbstractUnzerResource
     {
         return '/dummy-paypage-uri';
     }
-
 }
