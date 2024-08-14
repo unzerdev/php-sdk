@@ -130,23 +130,20 @@ class ResourceServiceTest extends BasePaymentTest
     {
         $unzer = new Unzer('s-priv-1234');
         $httpMethod = HttpAdapterInterface::REQUEST_POST;
-        $resourceMock = $this->getMockBuilder(DummyPaypageResource::class)->setMethods(['getUri', 'getUnzerObject'])->getMock();
-        /** @noinspection PhpParamsInspection */
-        $resourceMock->expects($this->once())->method('getUri')->with($appendId, $method)->willReturn('/dummy-paypage-uri');
-        $resourceMock->method('getUnzerObject')->willReturn($unzer);
+        $dummyResource = new DummyPaypageResource();
+        $dummyResource->setParentResource($unzer);
         $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
         $resourceSrv = new ResourceService($unzer);
 
         /** @var HttpService $httpSrvMock */
         $unzer->setHttpService($httpSrvMock);
-        /** @noinspection PhpParamsInspection */
+
         $httpSrvMock->expects($this->exactly(2))->method('send')->withConsecutive(
             [$uri],
-            ['/dummy-paypage-uri', $resourceMock, $method]
+            ['/dummy-paypage-uri', $dummyResource, $method]
         )->willReturnOnConsecutiveCalls('{"accessToken": "jwt.auth.token"}', '{"response": "paypage response"}');
 
-        /** @var AbstractUnzerResource $resourceMock */
-        $response = $resourceSrv->send($resourceMock, $method);
+        $response = $resourceSrv->send($dummyResource, $method);
         $this->assertEquals('paypage response', $response->response);
     }
 
@@ -1353,11 +1350,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function AuthTokenShouldBeRequestedAutomaticallyDP(): array
     {
         return [
-//            HttpAdapterInterface::REQUEST_GET    => [HttpAdapterInterface::REQUEST_GET, '/my/get/uri', true],
-//            HttpAdapterInterface::REQUEST_PATCH   => [HttpAdapterInterface::REQUEST_PATCH, '/my/patch/uri', true],
             HttpAdapterInterface::REQUEST_POST   => [HttpAdapterInterface::REQUEST_POST, '/auth/token', false],
-//            HttpAdapterInterface::REQUEST_PUT    => [HttpAdapterInterface::REQUEST_PUT, '/my/put/uri', true],
-//            HttpAdapterInterface::REQUEST_DELETE => [HttpAdapterInterface::REQUEST_DELETE, '/my/delete/uri', true],
         ];
     }
 

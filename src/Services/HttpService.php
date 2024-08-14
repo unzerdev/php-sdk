@@ -292,35 +292,7 @@ class HttpService
         return $httpHeaders;
     }
 
-    /** Determine the environment to be used for Api calls and returns the prefix for it.
-     * Production environment has no prefix.
-     *
-     * @param Unzer $unzer
-     *
-     * @return string
-     */
-    private function getEnvironmentPrefix(Unzer $unzer): string
-    {
-        // Production Environment uses no prefix.
-        if ($this->isProductionKey($unzer->getKey())) {
-            return '';
-        }
-
-        switch ($this->getEnvironmentService()->getPapiEnvironment()) {
-            case EnvironmentService::ENV_VAR_VALUE_STAGING_ENVIRONMENT:
-                $envPrefix = self::URL_PART_STAGING_ENVIRONMENT;
-                break;
-            case EnvironmentService::ENV_VAR_VALUE_DEVELOPMENT_ENVIRONMENT:
-                $envPrefix = self::URL_PART_DEVELOPMENT_ENVIRONMENT;
-                break;
-            default:
-                $envPrefix = self::URL_PART_SANDBOX_ENVIRONMENT;
-        }
-        return $envPrefix . '-';
-    }
-
-    /** Determine the environment to be used for Api calls and returns the prefix for it.
-     * Production environment has no prefix.
+    /** Determine the API Domain for the environment of the request..
      *
      * @param Unzer $unzer
      * @param mixed $api
