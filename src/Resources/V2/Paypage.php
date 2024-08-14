@@ -9,14 +9,20 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 
 class Paypage extends AbstractUnzerResource
 {
-    const URI = '/merchant/paypage';
+    public const URI = '/merchant/paypage';
+
+    /** @var string $mode "charge" or "authorize" */
+    protected string $mode;
     protected float $amount;
     protected string $currency;
 
-    /**
-     * @var string $mode "charge" or "authorize"
-     */
-    protected string $mode;
+    protected ?string $type;
+    protected ?string $recurrenceType;
+    protected ?string $logoImage;
+    protected ?string $shopName;
+    protected ?string $orderId;
+    protected ?string $invoiceId;
+    protected ?string $paymentReference;
 
     /** @var string $redirectUrl */
     private $redirectUrl;
@@ -34,7 +40,6 @@ class Paypage extends AbstractUnzerResource
         $this->mode = $mode;
     }
 
-
     /**
      * @return mixed
      */
@@ -45,6 +50,7 @@ class Paypage extends AbstractUnzerResource
 
     /**
      * @param mixed $amount
+     *
      * @return Paypage
      */
     public function setAmount($amount): self
@@ -111,11 +117,89 @@ class Paypage extends AbstractUnzerResource
 
     /**
      * @param mixed $paypageId
+     *
      * @return Paypage
      */
     public function setPaypageId($paypageId): self
     {
         $this->paypageId = $paypageId;
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): Paypage
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getRecurrenceType(): ?string
+    {
+        return $this->recurrenceType;
+    }
+
+    public function setRecurrenceType(?string $recurrenceType): Paypage
+    {
+        $this->recurrenceType = $recurrenceType;
+        return $this;
+    }
+
+    public function getLogoImage(): ?string
+    {
+        return $this->logoImage;
+    }
+
+    public function setLogoImage(?string $logoImage): Paypage
+    {
+        $this->logoImage = $logoImage;
+        return $this;
+    }
+
+    public function getShopName(): ?string
+    {
+        return $this->shopName;
+    }
+
+    public function setShopName(?string $shopName): Paypage
+    {
+        $this->shopName = $shopName;
+        return $this;
+    }
+
+    public function getOrderId(): ?string
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(?string $orderId): Paypage
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    public function getInvoiceId(): ?string
+    {
+        return $this->invoiceId;
+    }
+
+    public function setInvoiceId(?string $invoiceId): Paypage
+    {
+        $this->invoiceId = $invoiceId;
+        return $this;
+    }
+
+    public function getPaymentReference(): ?string
+    {
+        return $this->paymentReference;
+    }
+
+    public function setPaymentReference(?string $paymentReference): Paypage
+    {
+        $this->paymentReference = $paymentReference;
         return $this;
     }
 }
