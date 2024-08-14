@@ -899,6 +899,7 @@ class Unzer implements
     }
 
     /**
+     * Create a new Token resource containing a JWT token.
      * @throws UnzerApiException
      */
     public function createAuthToken(): Token
@@ -1017,7 +1018,8 @@ class Unzer implements
     }
 
     /**
-     * Request a JWT token from the Unzer API. If the token is already set, it will not be requested again.
+     * Request a JWT token from the Token Service and stores it for following request.
+     * If the token is already set, it will not be requested again.
      *
      * @throws UnzerApiException
      */

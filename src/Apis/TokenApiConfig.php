@@ -4,6 +4,9 @@ namespace UnzerSDK\Apis;
 
 use UnzerSDK\Apis\Constants\AuthenticationMethods;
 
+/**
+ * Config for Token Service API.
+ */
 class TokenApiConfig implements ApiConfig
 {
     private const DOMAIN = 'token.upcgw.com';

@@ -292,7 +292,7 @@ class HttpService
         return $httpHeaders;
     }
 
-    /** Determine the API Domain for the environment of the request..
+    /** Determine the API Domain for the environment of the request.
      *
      * @param Unzer $unzer
      * @param mixed $api
@@ -337,9 +337,7 @@ class HttpService
             return false;
         }
 
-        // Get the interfaces implemented by the class
         $interfaces = class_implements($className);
-
         return in_array(ApiConfig::class, $interfaces);
     }
 }

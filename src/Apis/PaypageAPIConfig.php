@@ -4,6 +4,9 @@ namespace UnzerSDK\Apis;
 
 use UnzerSDK\Apis\Constants\AuthenticationMethods;
 
+/**
+ * Config for Paypage API.
+ */
 class PaypageAPIConfig implements ApiConfig
 {
     private const DOMAIN = 'paypage.unzer.com';

@@ -5,6 +5,9 @@ namespace UnzerSDK\Apis;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Unzer;
 
+/**
+ * This class holds the API request data.
+ */
 class ApiRequest
 {
     private string $uri;

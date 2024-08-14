@@ -4,6 +4,10 @@ namespace UnzerSDK\Apis;
 
 use UnzerSDK\Apis\Constants\AuthenticationMethods;
 
+
+/**
+ * Config for Payment API (PAPI).
+ */
 class PaymentApiConfig implements ApiConfig
 {
     private const DOMAIN = 'api.unzer.com';
