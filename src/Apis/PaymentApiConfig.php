@@ -2,7 +2,7 @@
 
 namespace UnzerSDK\Apis;
 
-use UnzerSDK\Apis\Constants\AuthenticationMethods;
+use UnzerSDK\Apis\Constants\AuthorizationMethods;
 
 
 /**
@@ -31,6 +31,6 @@ class PaymentApiConfig implements ApiConfig
 
     public static function getAuthorizationMethod(): string
     {
-        return AuthenticationMethods::BASIC;
+        return AuthorizationMethods::BASIC;
     }
 }

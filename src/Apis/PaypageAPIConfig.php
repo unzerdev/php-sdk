@@ -2,7 +2,7 @@
 
 namespace UnzerSDK\Apis;
 
-use UnzerSDK\Apis\Constants\AuthenticationMethods;
+use UnzerSDK\Apis\Constants\AuthorizationMethods;
 
 /**
  * Config for Paypage API.
@@ -30,6 +30,6 @@ class PaypageAPIConfig implements ApiConfig
 
     public static function getAuthorizationMethod(): string
     {
-        return AuthenticationMethods::BEARER;
+        return AuthorizationMethods::BEARER;
     }
 }

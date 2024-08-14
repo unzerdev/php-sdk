@@ -7,7 +7,7 @@ use Exception;
 use RuntimeException;
 use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Apis\Constants\AuthenticationMethods;
+use UnzerSDK\Apis\Constants\AuthorizationMethods;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Exceptions\UnzerApiException;
@@ -57,6 +57,7 @@ use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Resources\V2\Paypage as PaypageV2;
 use UnzerSDK\Traits\CanRecur;
 use UnzerSDK\Unzer;
 use function in_array;
@@ -118,7 +119,7 @@ class ResourceService implements ResourceServiceInterface
         string                $apiVersion = Unzer::API_VERSION
     ): stdClass {
         $configClass = $resource->getApiConfig();
-        if (!$resource instanceof Token && $configClass::getAuthorizationMethod() === AuthenticationMethods::BEARER) {
+        if (!$resource instanceof Token && $configClass::getAuthorizationMethod() === AuthorizationMethods::BEARER) {
             $this->unzer->prepareJwtToken();
         }
 
@@ -410,6 +411,13 @@ class ResourceService implements ResourceServiceInterface
             $paymentObject = $this->fetchPayment($payment);
         }
         return $paymentObject;
+    }
+
+    public function createPaypage(PaypageV2 $paypage): PaypageV2
+    {
+        $paypage->setParentResource($this->unzer);
+        $this->createResource($paypage);
+        return $paypage;
     }
 
     /**

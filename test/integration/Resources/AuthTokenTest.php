@@ -5,7 +5,7 @@
 /**
  */
 
-namespace UnzerSDK\test\integration;
+namespace UnzerSDK\test\integration\Resources;
 
 use UnzerSDK\Services\JwtService;
 use UnzerSDK\test\BaseIntegrationTest;

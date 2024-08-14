@@ -7,6 +7,7 @@ use UnzerSDK\Adapter\CurlAdapter;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Apis\ApiConfig;
 use UnzerSDK\Apis\ApiRequest;
+use UnzerSDK\Apis\Constants\AuthorizationMethods;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Unzer;
@@ -125,14 +126,15 @@ class HttpService
     ): string {
         $unzerObj = $request->getResource()->getUnzerObject();
 
-        if (!$this->isApiConfig($request->getResource()->getApiConfig())) {
+        $apiConfig = $request->getResource()->getApiConfig();
+        if (!$this->isApiConfig($apiConfig)) {
             throw new RuntimeException('Invalid ApiConfig!');
         }
 
         // perform request
         $requestUrl = $this->buildRequestUrl($request);
         $payload = $request->getResource()->jsonSerialize();
-        $headers = $this->composeHttpHeaders($unzerObj);
+        $headers = $this->composeHttpHeaders($unzerObj, $apiConfig::getAuthorizationMethod());
         $httpMethod = $request->getHttpMethod();
         $this->initRequest($requestUrl, $payload, $httpMethod, $headers);
         $httpAdapter  = $this->getAdapter();
@@ -267,16 +269,18 @@ class HttpService
 
     /**
      * @param Unzer $unzer
+     * @param ApiConfig
      *
      * @return array
      */
-    public function composeHttpHeaders(Unzer $unzer): array
+    public function composeHttpHeaders(Unzer $unzer, string $authorizationMethod = AuthorizationMethods::BASIC): array
     {
         $locale      = $unzer->getLocale();
         $clientIp    = $unzer->getClientIp();
         $key         = $unzer->getKey();
+
         $httpHeaders = [
-            'Authorization' => 'Basic ' . base64_encode($key . ':'),
+            'Authorization' => $this->findAuthentication($unzer, $authorizationMethod),
             'Content-Type'  => 'application/json',
             'SDK-VERSION'   => Unzer::SDK_VERSION,
             'SDK-TYPE'      => Unzer::SDK_TYPE,
@@ -339,5 +343,20 @@ class HttpService
 
         $interfaces = class_implements($className);
         return in_array(ApiConfig::class, $interfaces);
+    }
+
+    /**
+     * @param Unzer $unzer
+     * @return string
+     */
+    private function findAuthentication(Unzer $unzer, string $authorizationMethod = AuthorizationMethods::BASIC): string
+    {
+        switch ($authorizationMethod) {
+            case AuthorizationMethods::BEARER:
+                return 'Bearer ' . $unzer->getJwtToken();
+            default:
+                return 'Basic ' . base64_encode($unzer->getKey() . ':');
+        }
+
     }
 }
