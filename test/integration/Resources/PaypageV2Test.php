@@ -4,8 +4,11 @@ namespace UnzerSDK\test\integration\Resources;
 
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodConfig;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
+use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Style;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Urls;
+use UnzerSDK\Resources\EmbeddedResources\RiskData;
+use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\V2\Paypage;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -145,6 +148,44 @@ class PaypageV2Test extends BaseIntegrationTest
         $paypage = new Paypage(9.99, 'EUR', 'charge');
         $paypage->setPaymentMethodsConfigs($configs);
         $this->getUnzerObject()->createPaypage($paypage);
+
+        $this->assertCreatedPaypage($paypage);
+    }
+
+    /** @test * */
+    public function createPaypageWithMethodResourceIds()
+    {
+        $unzer = $this->getUnzerObject();
+        $customer = $unzer->createCustomer($this->getMinimalCustomer());
+        $basket = $this->createV2Basket();
+        $metadata = $unzer->createMetadata((new Metadata())->setShopType('unitTests'));
+
+
+        $resources = new Resources($customer->getId(), $basket->getId(), $metadata->getId());
+        $paypage = new Paypage(9.99, 'EUR', 'charge');
+        $paypage->setResources($resources);
+        $unzer->createPaypage($paypage);
+
+        $this->assertCreatedPaypage($paypage);
+    }
+
+    /** @test * */
+    public function createPaypageWithRiskData()
+    {
+        $unzer = $this->getUnzerObject();
+        $risk = new RiskData();
+
+        $risk->setThreatMetrixId('f544if49wo4f74ef1x')
+            ->setCustomerGroup('TOP')
+            ->setCustomerId('C-122345')
+            ->setConfirmedAmount('1234')
+            ->setConfirmedOrders('42')
+            ->setRegistrationLevel('1')
+            ->setRegistrationDate('20160412');
+
+        $paypage = new Paypage(9.99, 'EUR', 'charge');
+        $paypage->setRisk($risk);
+        $unzer->createPaypage($paypage);
 
         $this->assertCreatedPaypage($paypage);
     }

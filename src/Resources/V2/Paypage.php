@@ -7,6 +7,7 @@ use UnzerSDK\Apis\PaypageAPIConfig;
 use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
+use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Style;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Urls;
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
@@ -30,7 +31,7 @@ class Paypage extends AbstractUnzerResource
 
     protected ?Urls $urls = null;
     protected ?Style $style = null;
-    protected $resources;
+    protected ?Resources $resources;
     protected $paymentMethodsConfigs;
     protected ?RiskData $risk = null;
 
@@ -243,11 +244,7 @@ class Paypage extends AbstractUnzerResource
         return $this->resources;
     }
 
-    /**
-     * @param mixed $resources
-     * @return Paypage
-     */
-    public function setResources($resources)
+    public function setResources(Resources $resources): Paypage
     {
         $this->resources = $resources;
         return $this;
