@@ -6,6 +6,10 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Apis\PaypageAPIConfig;
 use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
+use UnzerSDK\Resources\EmbeddedResources\Paypage\Style;
+use UnzerSDK\Resources\EmbeddedResources\Paypage\Urls;
+use UnzerSDK\Resources\EmbeddedResources\RiskData;
 
 class Paypage extends AbstractUnzerResource
 {
@@ -16,13 +20,19 @@ class Paypage extends AbstractUnzerResource
     protected float $amount;
     protected string $currency;
 
-    protected ?string $type;
-    protected ?string $recurrenceType;
-    protected ?string $logoImage;
-    protected ?string $shopName;
-    protected ?string $orderId;
-    protected ?string $invoiceId;
-    protected ?string $paymentReference;
+    protected ?string $type = null;
+    protected ?string $recurrenceType = null;
+    protected ?string $logoImage = null;
+    protected ?string $shopName = null;
+    protected ?string $orderId = null;
+    protected ?string $invoiceId = null;
+    protected ?string $paymentReference = null;
+
+    protected ?Urls $urls = null;
+    protected ?Style $style = null;
+    protected $resources;
+    protected $paymentMethodsConfigs;
+    protected ?RiskData $risk = null;
 
     /** @var string $redirectUrl */
     private $redirectUrl;
@@ -200,6 +210,71 @@ class Paypage extends AbstractUnzerResource
     public function setPaymentReference(?string $paymentReference): Paypage
     {
         $this->paymentReference = $paymentReference;
+        return $this;
+    }
+
+    public function getUrls(): ?Urls
+    {
+        return $this->urls;
+    }
+
+    public function setUrls(Urls $urls): Paypage
+    {
+        $this->urls = $urls;
+        return $this;
+    }
+
+    public function getStyle(): ?Style
+    {
+        return $this->style;
+    }
+
+    public function setStyle(Style $style): Paypage
+    {
+        $this->style = $style;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResources()
+    {
+        return $this->resources;
+    }
+
+    /**
+     * @param mixed $resources
+     * @return Paypage
+     */
+    public function setResources($resources)
+    {
+        $this->resources = $resources;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentMethodsConfigs(): ?array
+    {
+        return $this->paymentMethodsConfigs;
+    }
+
+    public function setPaymentMethodsConfigs(PaymentMethodsConfigs $paymentMethodsConfigs)
+    {
+        $this->paymentMethodsConfigs = $paymentMethodsConfigs;
+        return $this;
+    }
+
+    public function getRisk(): ?RiskData
+    {
+        return $this->risk;
+    }
+
+    public function setRisk(RiskData $risk): Paypage
+    {
+        $this->risk = $risk;
         return $this;
     }
 }
