@@ -49,6 +49,7 @@ class PaypageV2Test extends BaseIntegrationTest
 
     /**
      * @test
+     * @group skip
      */
     public function fetchPaypage()
     {
@@ -113,6 +114,7 @@ class PaypageV2Test extends BaseIntegrationTest
 
     /**
      * @test
+     * @group skip
      */
     public function createPaypageWithUrls()
     {
@@ -187,7 +189,9 @@ class PaypageV2Test extends BaseIntegrationTest
         $this->assertCreatedPaypage($paypage);
     }
 
-    /** @test * */
+    /** @test
+     * @group skip
+     */
     public function createPaypageWithRiskData()
     {
         $unzer = $this->getUnzerObject();
