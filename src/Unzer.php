@@ -957,6 +957,14 @@ class Unzer implements
     }
 
     /**
+     * Fetch paypage v2 resource.
+     */
+    public function fetchPaypageV2($paypage): PaypageV2
+    {
+        return $this->resourceService->fetchPayPageV2($paypage);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function initPayPageCharge(

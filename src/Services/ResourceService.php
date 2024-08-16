@@ -435,6 +435,18 @@ class ResourceService implements ResourceServiceInterface
         return $payPageObject;
     }
 
+    public function fetchPayPageV2($payPage): PaypageV2
+    {
+        $payPageObject = $payPage;
+        if (is_string($payPage)) {
+            $payPageObject = new PaypageV2(0, '', '');
+            $payPageObject->setId($payPage);
+        }
+
+        $this->fetchResource($payPageObject->setParentResource($this->unzer), $payPageObject->getApiVersion());
+        return $payPageObject;
+    }
+
     /**
      * {@inheritDoc}
      */

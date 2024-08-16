@@ -21,7 +21,7 @@ class PaypageV2Test extends BaseIntegrationTest
     {
         $paypage = new Paypage(9.99, 'EUR', 'charge');
 
-        $this->assertNull($paypage->getPaypageId());
+        $this->assertNull($paypage->getId());
         $this->assertNull($paypage->getRedirectUrl());
 
         $this->getUnzerObject()->createPaypage($paypage);
@@ -41,7 +41,21 @@ class PaypageV2Test extends BaseIntegrationTest
         $this->assertNull($paypage->getResources());
         $this->assertNull($paypage->getPaymentMethodsConfigs());
         $this->assertNull($paypage->getRisk());
+    }
 
+    /**
+     * @test
+     */
+    public function fetchPaypage()
+    {
+        $paypage = new Paypage(9.99, 'EUR', 'charge');
+        $unzer = $this->getUnzerObject();
+        $unzer->createPaypage($paypage);
+        $this->assertCreatedPaypage($paypage);
+
+        $unzer->fetchPaypageV2($paypage);
+        $this->assertEquals($paypage->getPayments(), []);
+        $this->assertEquals($paypage->getTotal(), 0);
     }
 
     /**
@@ -54,7 +68,7 @@ class PaypageV2Test extends BaseIntegrationTest
         $paypageFirst = new Paypage(9.99, 'EUR', 'charge');
         $paypageSecond = new Paypage(9.99, 'EUR', 'charge');
 
-        $this->assertNull($paypageFirst->getPaypageId());
+        $this->assertNull($paypageFirst->getId());
         $this->assertNull($paypageSecond->getRedirectUrl());
 
         // Create Firt paypage
@@ -196,9 +210,9 @@ class PaypageV2Test extends BaseIntegrationTest
      */
     public function assertCreatedPaypage(Paypage $paypage): void
     {
-        $this->assertNotNull($paypage->getPaypageId());
+        $this->assertNotNull($paypage->getId());
         $this->assertNotNull($paypage->getRedirectUrl());
-        $this->assertStringContainsString($paypage->getPaypageId(), $paypage->getRedirectUrl());
+        $this->assertStringContainsString($paypage->getId(), $paypage->getRedirectUrl());
     }
 
     public function paymentMethodsConfigsDataProvider()

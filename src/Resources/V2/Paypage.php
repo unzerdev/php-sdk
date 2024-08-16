@@ -2,10 +2,12 @@
 
 namespace UnzerSDK\Resources\V2;
 
+use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Apis\PaypageAPIConfig;
 use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\EmbeddedResources\Paypage\Payment;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Style;
@@ -31,13 +33,14 @@ class Paypage extends AbstractUnzerResource
 
     protected ?Urls $urls = null;
     protected ?Style $style = null;
-    protected ?Resources $resources;
+    protected ?Resources $resources = null;
     protected $paymentMethodsConfigs;
     protected ?RiskData $risk = null;
 
-    /** @var string $redirectUrl */
-    private $redirectUrl;
-    private $paypageId;
+    private ?string $redirectUrl = null;
+
+    private ?array $payments = null;
+    private ?int $total = null;
 
     /**
      * @param $amount
@@ -50,6 +53,27 @@ class Paypage extends AbstractUnzerResource
         $this->currency = $currency;
         $this->mode = $mode;
     }
+
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
+    {
+        if (isset($response->paypageId) && $this->id === null) {
+            $this->id = $response->paypageId;
+        }
+
+        if (isset($response->payments) && !empty($response->payments)) {
+            $payments = [];
+            foreach ($response->payments as $payment) {
+                $newPayment = (new Payment());
+                $newPayment->handleResponse($payment);
+
+                $payments[] = $newPayment;
+            }
+            $this->payments = $payments;
+        }
+
+        parent::handleResponse($response, $method);
+    }
+
 
     /**
      * @return mixed
@@ -77,7 +101,16 @@ class Paypage extends AbstractUnzerResource
 
     public function getUri(bool $appendId = true, string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
-        return self::URI;
+        $uri = [self::URI];
+        if ($appendId) {
+            if ($this->getId() !== null) {
+                $uri[] = $this->getId();
+            } elseif ($this->getExternalId() !== null) {
+                $uri[] = $this->getExternalId();
+            }
+        }
+
+        return implode('/', $uri);
     }
 
     public function getApiVersion(): string
@@ -115,25 +148,6 @@ class Paypage extends AbstractUnzerResource
     public function setRedirectUrl(string $redirectUrl): Paypage
     {
         $this->redirectUrl = $redirectUrl;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPaypageId(): ?string
-    {
-        return $this->paypageId;
-    }
-
-    /**
-     * @param mixed $paypageId
-     *
-     * @return Paypage
-     */
-    public function setPaypageId($paypageId): self
-    {
-        $this->paypageId = $paypageId;
         return $this;
     }
 
@@ -272,6 +286,31 @@ class Paypage extends AbstractUnzerResource
     public function setRisk(RiskData $risk): Paypage
     {
         $this->risk = $risk;
+        return $this;
+    }
+
+    /**
+     * @return Payment[]|null
+     */
+    public function getPayments(): ?array
+    {
+        return $this->payments;
+    }
+
+    public function setPayments(?array $payments): Paypage
+    {
+        $this->payments = $payments;
+        return $this;
+    }
+
+    public function getTotal(): ?int
+    {
+        return $this->total;
+    }
+
+    public function setTotal(?int $total): Paypage
+    {
+        $this->total = $total;
         return $this;
     }
 }
