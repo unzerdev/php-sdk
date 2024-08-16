@@ -6,6 +6,10 @@ use UnzerSDK\Resources\V2\Paypage;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
 
+/**
+ * @group CC-1309
+ * @group CC-1377
+ */
 class PaypageV2Test extends BasePaymentTest
 {
     /**

@@ -12,6 +12,10 @@ use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\V2\Paypage;
 use UnzerSDK\test\BaseIntegrationTest;
 
+/**
+ * @group CC-1309
+ * @group CC-1377
+ */
 class PaypageV2Test extends BaseIntegrationTest
 {
     /**
