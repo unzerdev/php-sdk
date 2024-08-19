@@ -15,7 +15,6 @@ use UnzerSDK\test\BaseIntegrationTest;
 
 class ClickToPayTest extends BaseIntegrationTest
 {
-
     protected function setUp(): void
     {
         $this->markTestSkipped('Skipped by default as setup is missing for integration tests.');
@@ -285,7 +284,6 @@ class ClickToPayTest extends BaseIntegrationTest
             );
     }
 
-
     protected function createClickToPayObject(): Clicktopay
     {
         $clickToPay = (new Clicktopay());
@@ -303,5 +301,4 @@ class ClickToPayTest extends BaseIntegrationTest
 
         return $clickToPay;
     }
-
 }

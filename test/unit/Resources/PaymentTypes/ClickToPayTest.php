@@ -3,13 +3,11 @@
 namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
 use UnzerSDK\Resources\PaymentTypes\Clicktopay;
-use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
 
 class ClickToPayTest extends BasePaymentTest
 {
-
     /**
      * Verify the resource data is set properly.
      *
@@ -38,7 +36,8 @@ class ClickToPayTest extends BasePaymentTest
      */
     public function jsonSerialization(): void
     {
-        $clickToPayObject = new Clicktopay("corr12345",
+        $clickToPayObject = new Clicktopay(
+            "corr12345",
             "34f4a04b.5ab95e32-30f7-483f-846f-a08230a6d2ed.1618397078",
             "0a4e0d3.34f4a04b.894125b16ddd1f1b3a58273d63a0894179ac3535",
             "mastercard"
@@ -64,6 +63,4 @@ class ClickToPayTest extends BasePaymentTest
 
         $this->assertEquals('s-ctp-q0nucec6itwe', $clickToPay->getId());
     }
-
-
 }

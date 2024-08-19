@@ -15,8 +15,8 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\EmbeddedResources\CardDetails;
+use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\TransactionTypes\Charge;
@@ -133,6 +133,7 @@ class CardTest extends BaseIntegrationTest
      * @test
      *
      * @param mixed $recurrenceType
+     *
      * @throws UnzerApiException
      *
      * @dataProvider invalidRecurrenceTypesDP
