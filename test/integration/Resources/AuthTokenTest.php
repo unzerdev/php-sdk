@@ -10,6 +10,10 @@ namespace UnzerSDK\test\integration\Resources;
 use UnzerSDK\Services\JwtService;
 use UnzerSDK\test\BaseIntegrationTest;
 
+/**
+ * @group CC-1309
+ * @group CC-1376
+ */
 class AuthTokenTest extends BaseIntegrationTest
 {
     /** @test */
