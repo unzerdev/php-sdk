@@ -13,6 +13,9 @@ class PaymentMethodConfig extends AbstractUnzerResource
     protected ?string $name = null;
     protected ?string $checkoutType = null; // paypal only.
 
+    protected ?bool $credentialOnFile = null; // card only.
+    protected ?string $exemption = null; // card only.
+
     /**
      * @param bool|null $enabled
      * @param int|null $order
@@ -65,6 +68,28 @@ class PaymentMethodConfig extends AbstractUnzerResource
     public function setCheckoutType(?string $checkoutType): PaymentMethodConfig
     {
         $this->checkoutType = $checkoutType;
+        return $this;
+    }
+
+    public function getCredentialOnFile(): ?bool
+    {
+        return $this->credentialOnFile;
+    }
+
+    public function setCredentialOnFile(?bool $credentialOnFile): PaymentMethodConfig
+    {
+        $this->credentialOnFile = $credentialOnFile;
+        return $this;
+    }
+
+    public function getExemption(): ?string
+    {
+        return $this->exemption;
+    }
+
+    public function setExemption(?string $exemption): PaymentMethodConfig
+    {
+        $this->exemption = $exemption;
         return $this;
     }
 }

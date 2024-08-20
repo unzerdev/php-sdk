@@ -2,6 +2,7 @@
 
 namespace UnzerSDK\test\integration\Resources;
 
+use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodConfig;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
@@ -9,12 +10,33 @@ use UnzerSDK\Resources\EmbeddedResources\Paypage\Style;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Urls;
 use UnzerSDK\Resources\EmbeddedResources\RiskData;
 use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\PaymentTypes\Alipay;
+use UnzerSDK\Resources\PaymentTypes\Applepay;
+use UnzerSDK\Resources\PaymentTypes\Bancontact;
+use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\PaymentTypes\EPS;
+use UnzerSDK\Resources\PaymentTypes\Googlepay;
+use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\PaymentTypes\Klarna;
+use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\PaymentTypes\PayU;
+use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
+use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
+use UnzerSDK\Resources\PaymentTypes\Prepayment;
+use UnzerSDK\Resources\PaymentTypes\Przelewy24;
+use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\Twint;
+use UnzerSDK\Resources\PaymentTypes\Wechatpay;
 use UnzerSDK\Resources\V2\Paypage;
 use UnzerSDK\test\BaseIntegrationTest;
 
 /**
  * @group CC-1309
  * @group CC-1377
+ * @backupStaticAttributes enabled
  */
 class PaypageV2Test extends BaseIntegrationTest
 {
@@ -109,7 +131,6 @@ class PaypageV2Test extends BaseIntegrationTest
         $this->getUnzerObject()->createPaypage($paypage);
 
         $this->assertCreatedPaypage($paypage);
-        //TODO: fetch paypage and compare properties.
     }
 
     /**
@@ -225,30 +246,59 @@ class PaypageV2Test extends BaseIntegrationTest
 
     public function paymentMethodsConfigsDataProvider()
     {
-        $paypalEnabledConfig = new PaymentMethodConfig(true, 1);
+        $enabledConfig = new PaymentMethodConfig(true, 1);
+        $cardConfig = (new PaymentMethodConfig(true, 1))
+            ->setCredentialOnFile(true)
+            ->setExemption(ExemptionType::LOW_VALUE_PAYMENT);
 
         $withDefaultEnabled = (new PaymentMethodsConfigs())
-            ->setDefault(
-                (new PaymentMethodConfig())->setEnabled(true)
-            );
+            ->setDefault((new PaymentMethodConfig())->setEnabled(true));
 
         $withDefaultDisabled = (new PaymentMethodsConfigs())
             ->setDefault(
                 (new PaymentMethodConfig())->setEnabled(false)
-            )->setMethodConfigs(['paypal' => $paypalEnabledConfig]);
+            )->setMethodConfigs(['paypal' => $enabledConfig]);
 
         $withMethodConfigs = new PaymentMethodsConfigs();
         $withMethodConfigs->setMethodConfigs([
-            'paypal' => $paypalEnabledConfig
+            'paypal' => $enabledConfig
         ]);
         $paymentMethodsConfigs = (new PaymentMethodsConfigs())->setPreselectedMethod('cards');
+
+        $withCardSpecificConfig = (new PaymentMethodsConfigs())->setPreselectedMethod('cards')
+            ->addMethodConfig(Card::class, $cardConfig);
+
+        $withClassNames = (new PaymentMethodsConfigs())->setPreselectedMethod('cards')
+            ->setDefault((new PaymentMethodConfig())->setEnabled(false))
+            ->addMethodConfig(Card::class, $cardConfig)
+            ->addMethodConfig(Paypal::class, $enabledConfig)
+            ->addMethodConfig(PaylaterInstallment::class, $enabledConfig)
+            ->addMethodConfig(Googlepay::class, $enabledConfig)
+            ->addMethodConfig(Applepay::class, $enabledConfig)
+            ->addMethodConfig(Klarna::class, $enabledConfig)
+            ->addMethodConfig(SepaDirectDebit::class, $enabledConfig)
+            ->addMethodConfig(EPS::class, $enabledConfig)
+            ->addMethodConfig(PaylaterInvoice::class, $enabledConfig)
+            ->addMethodConfig(PaylaterDirectDebit::class, $enabledConfig)
+            ->addMethodConfig(Prepayment::class, $enabledConfig)
+            ->addMethodConfig(PayU::class, $enabledConfig)
+            ->addMethodConfig(Ideal::class, $enabledConfig)
+            ->addMethodConfig(Przelewy24::class, $enabledConfig)
+            ->addMethodConfig(Alipay::class, $enabledConfig)
+            ->addMethodConfig(Wechatpay::class, $enabledConfig)
+            ->addMethodConfig(Bancontact::class, $enabledConfig)
+            ->addMethodConfig(PostFinanceEfinance::class, $enabledConfig)
+            ->addMethodConfig(PostFinanceCard::class, $enabledConfig)
+            ->addMethodConfig(Twint::class, $enabledConfig);
 
         return [
             'empty' => [new PaymentMethodsConfigs()],
             'withDefaultEnabled' => [$withDefaultEnabled],
             'withDefaultDisabled' => [$withDefaultDisabled],
             'withPreselectedMethod' => [$paymentMethodsConfigs],
-            'withMethodConfigs' => [$withMethodConfigs]
+            'withMethodConfigs' => [$withMethodConfigs],
+            'withCardSpecificConfig' => [$withCardSpecificConfig],
+            'withClassNames' => [$withClassNames]
         ];
     }
 }
