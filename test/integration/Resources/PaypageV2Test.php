@@ -247,6 +247,8 @@ class PaypageV2Test extends BaseIntegrationTest
     public function paymentMethodsConfigsDataProvider()
     {
         $enabledConfig = new PaymentMethodConfig(true, 1);
+        $paylaterConfig = (new PaymentMethodConfig(true, 1))
+            ->setLabel('Paylater');
         $cardConfig = (new PaymentMethodConfig(true, 1))
             ->setCredentialOnFile(true)
             ->setExemption(ExemptionType::LOW_VALUE_PAYMENT);
@@ -265,8 +267,7 @@ class PaypageV2Test extends BaseIntegrationTest
         ]);
         $paymentMethodsConfigs = (new PaymentMethodsConfigs())->setPreselectedMethod('cards');
 
-        $withCardSpecificConfig = (new PaymentMethodsConfigs())->setPreselectedMethod('cards')
-            ->addMethodConfig(Card::class, $cardConfig);
+        $withCardSpecificConfig = (new PaymentMethodsConfigs())->setPreselectedMethod('cards');
 
         $withClassNames = (new PaymentMethodsConfigs())->setPreselectedMethod('cards')
             ->setDefault((new PaymentMethodConfig())->setEnabled(false))
@@ -291,14 +292,18 @@ class PaypageV2Test extends BaseIntegrationTest
             ->addMethodConfig(PostFinanceCard::class, $enabledConfig)
             ->addMethodConfig(Twint::class, $enabledConfig);
 
+        $withPaylaterConfig = (new PaymentMethodsConfigs())
+            ->addMethodConfig(PaylaterInvoice::class, $paylaterConfig);
+
         return [
             'empty' => [new PaymentMethodsConfigs()],
-            'withDefaultEnabled' => [$withDefaultEnabled],
-            'withDefaultDisabled' => [$withDefaultDisabled],
-            'withPreselectedMethod' => [$paymentMethodsConfigs],
-            'withMethodConfigs' => [$withMethodConfigs],
-            'withCardSpecificConfig' => [$withCardSpecificConfig],
-            'withClassNames' => [$withClassNames]
+            'Default Enabled' => [$withDefaultEnabled],
+            'Default Disabled' => [$withDefaultDisabled],
+            'Preselected Method' => [$paymentMethodsConfigs],
+            'Method Configs' => [$withMethodConfigs],
+            'CardSpecificConfig' => [$withCardSpecificConfig],
+            'ClassNames' => [$withClassNames],
+            'PaylaterConfig' => [$withPaylaterConfig]
         ];
     }
 }
