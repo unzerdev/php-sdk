@@ -3,6 +3,7 @@
 namespace UnzerSDK\test\integration\Resources;
 
 use UnzerSDK\Constants\ExemptionType;
+use UnzerSDK\Constants\PaypageCheckoutTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodConfig;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
@@ -127,6 +128,7 @@ class PaypageV2Test extends BaseIntegrationTest
         $paypage->setOrderId('orderId');
         $paypage->setInvoiceId('invoiceId');
         $paypage->setPaymentReference('paymentReference');
+        $paypage->setCheckoutType(PaypageCheckoutTypes::FULL);
 
         $this->getUnzerObject()->createPaypage($paypage);
 

@@ -5,6 +5,7 @@ namespace UnzerSDK\Resources\V2;
 use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Apis\PaypageAPIConfig;
+use UnzerSDK\Constants\PaypageCheckoutTypes;
 use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Payment;
@@ -18,18 +19,22 @@ class Paypage extends AbstractUnzerResource
 {
     public const URI = '/merchant/paypage';
 
-    /** @var string $mode "charge" or "authorize" */
-    protected string $mode;
+    /** @var string|null checkoutType
+     * @see PaypageCheckoutTypes
+     */
+    protected ?string $checkoutType = null;
+    protected ?string $invoiceId = null;
+    protected ?string $logoImage = null;
+    protected ?string $orderId = null;
+    protected ?string $paymentReference = null;
+    protected ?string $recurrenceType = null;
+    protected ?string $shopName = null;
+    protected ?string $type = null;
     protected float $amount;
     protected string $currency;
 
-    protected ?string $type = null;
-    protected ?string $recurrenceType = null;
-    protected ?string $logoImage = null;
-    protected ?string $shopName = null;
-    protected ?string $orderId = null;
-    protected ?string $invoiceId = null;
-    protected ?string $paymentReference = null;
+    /** @var string $mode "charge" or "authorize" */
+    protected string $mode;
 
     protected ?Urls $urls = null;
     protected ?Style $style = null;
@@ -311,6 +316,18 @@ class Paypage extends AbstractUnzerResource
     public function setTotal(?int $total): Paypage
     {
         $this->total = $total;
+        return $this;
+    }
+
+    public function getCheckoutType(): ?string
+    {
+        return $this->checkoutType;
+    }
+
+    /** @see PaypageCheckoutTypes for available types. */
+    public function setCheckoutType(?string $checkoutType): Paypage
+    {
+        $this->checkoutType = $checkoutType;
         return $this;
     }
 }

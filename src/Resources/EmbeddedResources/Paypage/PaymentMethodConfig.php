@@ -11,7 +11,6 @@ class PaymentMethodConfig extends AbstractUnzerResource
 
     // type specific configs.
     protected ?string $label = null; // paylater types only.
-    protected ?string $checkoutType = null; // paypal only.
 
     protected ?bool $credentialOnFile = null; // card only.
     protected ?string $exemption = null; // card only.
@@ -57,17 +56,6 @@ class PaymentMethodConfig extends AbstractUnzerResource
     public function setLabel(?string $label): PaymentMethodConfig
     {
         $this->label = $label;
-        return $this;
-    }
-
-    public function getCheckoutType(): ?string
-    {
-        return $this->checkoutType;
-    }
-
-    public function setCheckoutType(?string $checkoutType): PaymentMethodConfig
-    {
-        $this->checkoutType = $checkoutType;
         return $this;
     }
 
