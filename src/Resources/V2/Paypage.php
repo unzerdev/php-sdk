@@ -13,7 +13,7 @@ use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Style;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Urls;
-use UnzerSDK\Resources\EmbeddedResources\RiskData;
+use UnzerSDK\Resources\EmbeddedResources\Risk;
 
 class Paypage extends AbstractUnzerResource
 {
@@ -40,7 +40,7 @@ class Paypage extends AbstractUnzerResource
     protected ?Style $style = null;
     protected ?Resources $resources = null;
     protected $paymentMethodsConfigs;
-    protected ?RiskData $risk = null;
+    protected ?Risk $risk = null;
 
     private ?string $redirectUrl = null;
 
@@ -283,12 +283,12 @@ class Paypage extends AbstractUnzerResource
         return $this;
     }
 
-    public function getRisk(): ?RiskData
+    public function getRisk(): ?Risk
     {
         return $this->risk;
     }
 
-    public function setRisk(RiskData $risk): Paypage
+    public function setRisk(Risk $risk): Paypage
     {
         $this->risk = $risk;
         return $this;

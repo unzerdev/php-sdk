@@ -9,7 +9,7 @@ use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Style;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Urls;
-use UnzerSDK\Resources\EmbeddedResources\RiskData;
+use UnzerSDK\Resources\EmbeddedResources\Risk;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaymentTypes\Alipay;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
@@ -213,16 +213,13 @@ class PaypageV2Test extends BaseIntegrationTest
     }
 
     /** @test
-     * @group skip
      */
     public function createPaypageWithRiskData()
     {
         $unzer = $this->getUnzerObject();
-        $risk = new RiskData();
+        $risk = new Risk();
 
-        $risk->setThreatMetrixId('f544if49wo4f74ef1x')
-            ->setCustomerGroup('TOP')
-            ->setCustomerId('C-122345')
+        $risk->setCustomerGroup('neutral')
             ->setConfirmedAmount('1234')
             ->setConfirmedOrders('42')
             ->setRegistrationLevel('1')
