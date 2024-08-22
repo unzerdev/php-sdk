@@ -118,6 +118,9 @@ class ResourceServiceTest extends BasePaymentTest
     /**
      * Verify send will call send on httpService.
      *
+     * @group CC-1309
+     * @group CC-1376
+     *
      * @test
      *
      * @dataProvider AuthTokenShouldBeRequestedAutomaticallyDP

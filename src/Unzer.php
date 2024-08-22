@@ -33,6 +33,7 @@ use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Resources\V2\Paypage as PaypageV2;
 use UnzerSDK\Resources\Webhook;
 use UnzerSDK\Services\CancelService;
 use UnzerSDK\Services\HttpService;
@@ -948,6 +949,22 @@ class Unzer implements
     }
 
     /**
+     * Create paypage v2 resource.
+     */
+    public function createPaypage(PaypageV2 $paypage): PaypageV2
+    {
+        return $this->resourceService->createPaypage($paypage);
+    }
+
+    /**
+     * Fetch paypage v2 resource.
+     */
+    public function fetchPaypageV2($paypage): PaypageV2
+    {
+        return $this->resourceService->fetchPayPageV2($paypage);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function initPayPageCharge(
@@ -1029,5 +1046,10 @@ class Unzer implements
             return;
         }
         $this->jwtToken = $this->createAuthToken()->getAccessToken();
+    }
+
+    public function getJwtToken()
+    {
+        return $this->jwtToken;
     }
 }

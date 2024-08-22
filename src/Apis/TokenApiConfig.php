@@ -2,7 +2,7 @@
 
 namespace UnzerSDK\Apis;
 
-use UnzerSDK\Apis\Constants\AuthenticationMethods;
+use UnzerSDK\Apis\Constants\AuthorizationMethods;
 
 /**
  * Config for Token Service API.
@@ -30,6 +30,6 @@ class TokenApiConfig implements ApiConfig
 
     public static function getAuthorizationMethod(): string
     {
-        return AuthenticationMethods::BASIC;
+        return AuthorizationMethods::BASIC;
     }
 }
