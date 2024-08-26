@@ -205,7 +205,7 @@ class PaypageV2Test extends BaseIntegrationTest
 
 
         $resources = new Resources($customer->getId(), $basket->getId(), $metadata->getId());
-        $paypage = new Paypage(9.99, 'EUR', 'charge');
+        $paypage = new Paypage(99.99, 'EUR', 'charge');
         $paypage->setResources($resources);
         $unzer->createPaypage($paypage);
 
