@@ -57,7 +57,7 @@ class Unzer implements
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '3.7.0';
+    public const SDK_VERSION = '3.8.0';
 
     /** @var string $key */
     private $key;
@@ -957,7 +957,8 @@ class Unzer implements
     }
 
     /**
-     * Fetch paypage v2 resource.
+     * Fetch list of associated payments for the given payment page. Use `\UnzerSDK\Resources\V2\Paypage::getPayments`
+     * to get the list of payments.
      */
     public function fetchPaypageV2($paypage): PaypageV2
     {
