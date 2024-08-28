@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.8.0](https://github.com/unzerdev/php-sdk/compare/3.7.0..3.8.0)
+
+Support for Paypage v2 is added to SDK.
+
+### Added
+
+* Added athorization for Paypage v2.
+* Added `\UnzerSDK\Unzer::createPaypage` method to create Paypage v2.
+* Added `\UnzerSDK\Unzer::fetchPaypageV2` to fetch payment status information for the given Paypage v2.
+
 ## [3.7.0](https://github.com/unzerdev/php-sdk/compare/3.6.0..3.7.0)
 
 Support for Click To Pay payment method is added to SDK.
