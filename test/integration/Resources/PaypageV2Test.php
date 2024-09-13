@@ -176,6 +176,7 @@ class PaypageV2Test extends BaseIntegrationTest
             ->setFooterColor('#1f1f1f')
             ->setHeaderColor('#ff7f7f')
             ->setHideUnzerLogo(true)
+            ->setLogoImage('#112233')
             ->setLinkColor('#1f1f1f')
             ->setShadows(true)
             ->setTextColor('#1f1f1f');

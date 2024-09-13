@@ -15,8 +15,20 @@ class Style extends AbstractUnzerResource
     protected ?string $font = null;
     protected ?string $footerColor = null;
     protected ?string $headerColor = null;
+    protected ?string $logoImage = null;
     protected ?string $linkColor = null;
     protected ?string $textColor = null;
+
+    public function getLogoImage(): ?string
+    {
+        return $this->logoImage;
+    }
+
+    public function setLogoImage(?string $logoImage): Style
+    {
+        $this->logoImage = $logoImage;
+        return $this;
+    }
 
     public function getFont(): ?string
     {
