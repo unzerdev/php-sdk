@@ -163,6 +163,7 @@ class PaypageV2Test extends BaseIntegrationTest
 
     /**
      * @test
+     * @group CC-1548
      */
     public function createPaypageWithStyle()
     {
