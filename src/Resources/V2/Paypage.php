@@ -24,7 +24,6 @@ class Paypage extends AbstractUnzerResource
      */
     protected ?string $checkoutType = null;
     protected ?string $invoiceId = null;
-    protected ?string $logoImage = null;
     protected ?string $orderId = null;
     protected ?string $paymentReference = null;
     protected ?string $recurrenceType = null;
@@ -175,17 +174,6 @@ class Paypage extends AbstractUnzerResource
     public function setRecurrenceType(?string $recurrenceType): Paypage
     {
         $this->recurrenceType = $recurrenceType;
-        return $this;
-    }
-
-    public function getLogoImage(): ?string
-    {
-        return $this->logoImage;
-    }
-
-    public function setLogoImage(?string $logoImage): Paypage
-    {
-        $this->logoImage = $logoImage;
         return $this;
     }
 

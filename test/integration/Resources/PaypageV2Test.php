@@ -163,18 +163,24 @@ class PaypageV2Test extends BaseIntegrationTest
 
     /**
      * @test
+     * @group CC-1548
      */
     public function createPaypageWithStyle()
     {
         $style = new Style();
-        $style->setFontFamily('comic sans');
-        $style->setButtonColor('red');
-        $style->setPrimaryTextColor('green');
-        $style->setLinkColor('blue');
-        $style->setBackgroundColor('black');
-        $style->setCornerRadius('5px');
-        $style->setShadows(true);
-        $style->setHideUnzerLogo(true);
+        $style
+            ->setBackgroundColor('#1f1f1f')
+            ->setBackgroundImage('https://backgroundimage.com')
+            ->setBrandColor('#1f1f1f')
+            ->setCornerRadius('5px')
+            ->setFont('comic sans')
+            ->setFooterColor('#1f1f1f')
+            ->setHeaderColor('#ff7f7f')
+            ->setHideUnzerLogo(true)
+            ->setLogoImage('https://logoimage.com')
+            ->setLinkColor('#1f1f1f')
+            ->setShadows(true)
+            ->setTextColor('#1f1f1f');
 
         $paypage = new Paypage(9.99, 'EUR', 'charge');
         $paypage->setStyle($style);

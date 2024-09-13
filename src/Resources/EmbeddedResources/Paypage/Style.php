@@ -6,45 +6,60 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 
 class Style extends AbstractUnzerResource
 {
-    protected ?string $fontFamily = null;
-    protected ?string $buttonColor = null;
-    protected ?string $primaryTextColor = null;
-    protected ?string $linkColor = null;
-    protected ?string $backgroundColor = null;
-    protected ?string $cornerRadius = null;
-    protected ?bool $shadows = null;
     protected ?bool $hideUnzerLogo = null;
+    protected ?bool $shadows = null;
+    protected ?string $backgroundColor = null;
+    protected ?string $backgroundImage = null;
+    protected ?string $brandColor = null;
+    protected ?string $cornerRadius = null;
+    protected ?string $font = null;
+    protected ?string $footerColor = null;
+    protected ?string $headerColor = null;
+    protected ?string $logoImage = null;
+    protected ?string $linkColor = null;
+    protected ?string $textColor = null;
 
-    public function getFontFamily(): ?string
+    public function getLogoImage(): ?string
     {
-        return $this->fontFamily;
+        return $this->logoImage;
     }
 
-    public function setFontFamily(?string $fontFamily): Style
+    public function setLogoImage(?string $logoImage): Style
     {
-        $this->fontFamily = $fontFamily;
+        $this->logoImage = $logoImage;
         return $this;
     }
 
-    public function getButtonColor(): ?string
+    public function getFont(): ?string
     {
-        return $this->buttonColor;
+        return $this->font;
     }
 
-    public function setButtonColor(?string $buttonColor): Style
+    public function setFont(?string $font): Style
     {
-        $this->buttonColor = $buttonColor;
+        $this->font = $font;
         return $this;
     }
 
-    public function getPrimaryTextColor(): ?string
+    public function getBrandColor(): ?string
     {
-        return $this->primaryTextColor;
+        return $this->brandColor;
     }
 
-    public function setPrimaryTextColor(?string $primaryTextColor): Style
+    public function setBrandColor(?string $brandColor): Style
     {
-        $this->primaryTextColor = $primaryTextColor;
+        $this->brandColor = $brandColor;
+        return $this;
+    }
+
+    public function getTextColor(): ?string
+    {
+        return $this->textColor;
+    }
+
+    public function setTextColor(?string $textColor): Style
+    {
+        $this->textColor = $textColor;
         return $this;
     }
 
@@ -100,6 +115,39 @@ class Style extends AbstractUnzerResource
     public function setHideUnzerLogo(?bool $hideUnzerLogo): Style
     {
         $this->hideUnzerLogo = $hideUnzerLogo;
+        return $this;
+    }
+
+    public function getBackgroundImage(): ?string
+    {
+        return $this->backgroundImage;
+    }
+
+    public function setBackgroundImage(?string $backgroundImage): Style
+    {
+        $this->backgroundImage = $backgroundImage;
+        return $this;
+    }
+
+    public function getFooterColor(): ?string
+    {
+        return $this->footerColor;
+    }
+
+    public function setFooterColor(?string $footerColor): Style
+    {
+        $this->footerColor = $footerColor;
+        return $this;
+    }
+
+    public function getHeaderColor(): ?string
+    {
+        return $this->headerColor;
+    }
+
+    public function setHeaderColor(?string $headerColor): Style
+    {
+        $this->headerColor = $headerColor;
         return $this;
     }
 }
