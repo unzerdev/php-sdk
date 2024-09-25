@@ -6,18 +6,42 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 
 class Style extends AbstractUnzerResource
 {
+    protected ?bool $hideBasket = null;
     protected ?bool $hideUnzerLogo = null;
     protected ?bool $shadows = null;
     protected ?string $backgroundColor = null;
     protected ?string $backgroundImage = null;
     protected ?string $brandColor = null;
     protected ?string $cornerRadius = null;
+    protected ?string $favicon = null;
     protected ?string $font = null;
     protected ?string $footerColor = null;
     protected ?string $headerColor = null;
     protected ?string $logoImage = null;
     protected ?string $linkColor = null;
     protected ?string $textColor = null;
+
+    public function getHideBasket(): ?bool
+    {
+        return $this->hideBasket;
+    }
+
+    public function setHideBasket(?bool $hideBasket): Style
+    {
+        $this->hideBasket = $hideBasket;
+        return $this;
+    }
+
+    public function getFavicon(): ?string
+    {
+        return $this->favicon;
+    }
+
+    public function setFavicon(?string $favicon): Style
+    {
+        $this->favicon = $favicon;
+        return $this;
+    }
 
     public function getLogoImage(): ?string
     {

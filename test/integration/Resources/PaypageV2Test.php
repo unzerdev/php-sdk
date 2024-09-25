@@ -161,6 +161,7 @@ class PaypageV2Test extends BaseIntegrationTest
     /**
      * @test
      * @group CC-1548
+     * @group CC-1646
      */
     public function createPaypageWithStyle()
     {
@@ -170,12 +171,14 @@ class PaypageV2Test extends BaseIntegrationTest
             ->setBackgroundImage('https://backgroundimage.com')
             ->setBrandColor('#1f1f1f')
             ->setCornerRadius('5px')
+            ->setFavicon('https://favicon.com')
             ->setFont('comic sans')
             ->setFooterColor('#1f1f1f')
             ->setHeaderColor('#ff7f7f')
+            ->setHideBasket(true)
             ->setHideUnzerLogo(true)
-            ->setLogoImage('https://logoimage.com')
             ->setLinkColor('#1f1f1f')
+            ->setLogoImage('https://logoimage.com')
             ->setShadows(true)
             ->setTextColor('#1f1f1f');
 
