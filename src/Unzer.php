@@ -957,6 +957,24 @@ class Unzer implements
     }
 
     /**
+     * Delete paypage v2 resource.
+     */
+    public function deletePaypage(PaypageV2 $paypage): void
+    {
+        $this->resourceService->deletePaypage($paypage);
+    }
+
+    /**
+     * Delete paypage v2 by resource ID.
+     */
+    public function deletePaypageById(string $paypageId): void
+    {
+        $paypage = new PaypageV2(null, '');
+        $paypage->setId($paypageId);
+        $this->deletePaypage($paypage);
+    }
+
+    /**
      * Fetch list of associated payments for the given payment page. Use `\UnzerSDK\Resources\V2\Paypage::getPayments`
      * to get the list of payments.
      */

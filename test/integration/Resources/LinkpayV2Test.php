@@ -36,6 +36,45 @@ class LinkpayV2Test extends BaseIntegrationTest
     /**
      * @test
      */
+    public function deletePaypageTest()
+    {
+        $this->expectNotToPerformAssertions();
+        $paypage = new Paypage(9.99, 'EUR', 'charge');
+        $paypage->setType('linkpay');
+        $this->getUnzerObject()->createPaypage($paypage);
+        $paypageId = $paypage->getId();
+
+        $this->getUnzerObject()->deletePaypage($paypage);
+        $this->getUnzerObject()->fetchPaypageV2($paypageId);
+    }
+
+    /**
+     * @test
+     */
+    public function deletePaypageWithInvalidId()
+    {
+        $this->expectException(\UnzerSDK\Exceptions\UnzerApiException::class);
+        $this->getUnzerObject()->deletePaypageById('invalid-id');
+    }
+
+    /**
+     * @test
+     */
+    public function deletePaypageByIDTest()
+    {
+        $this->expectNotToPerformAssertions();
+        $paypage = new Paypage(9.99, 'EUR', 'charge');
+        $paypage->setType('linkpay');
+        $this->getUnzerObject()->createPaypage($paypage);
+        $paypageId = $paypage->getId();
+
+        $this->getUnzerObject()->deletePaypageById($paypageId);
+        $this->getUnzerObject()->fetchPaypageV2($paypageId);
+    }
+
+    /**
+     * @test
+     */
     public function createLinkpayWithSpecificFields()
     {
         $paypage = new Paypage(null, 'EUR', 'charge');
