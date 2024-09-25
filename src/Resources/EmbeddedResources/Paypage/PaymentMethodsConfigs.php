@@ -17,7 +17,6 @@ class PaymentMethodsConfigs extends AbstractUnzerResource
     ];
 
     protected ?PaymentMethodConfig $default = null;
-    protected ?string $preselectedMethod = null;
 
     /** @var PaymentMethodConfig[] */
     protected ?array $methodConfigs = null;
@@ -64,17 +63,6 @@ class PaymentMethodsConfigs extends AbstractUnzerResource
     public function setDefault(?PaymentMethodConfig $default): PaymentMethodsConfigs
     {
         $this->default = $default;
-        return $this;
-    }
-
-    public function getPreselectedMethod(): ?string
-    {
-        return $this->preselectedMethod;
-    }
-
-    public function setPreselectedMethod(?string $preselectedMethod): PaymentMethodsConfigs
-    {
-        $this->preselectedMethod = $preselectedMethod;
         return $this;
     }
 

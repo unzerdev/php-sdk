@@ -37,7 +37,6 @@ use UnzerSDK\test\BaseIntegrationTest;
 /**
  * @group CC-1309
  * @group CC-1377
- * @backupStaticAttributes enabled
  */
 class PaypageV2Test extends BaseIntegrationTest
 {
@@ -57,7 +56,6 @@ class PaypageV2Test extends BaseIntegrationTest
 
         $this->assertNull($paypage->getType());
         $this->assertNull($paypage->getRecurrenceType());
-        $this->assertNull($paypage->getLogoImage());
         $this->assertNull($paypage->getShopName());
         $this->assertNull($paypage->getOrderId());
         $this->assertNull($paypage->getInvoiceId());
@@ -123,7 +121,6 @@ class PaypageV2Test extends BaseIntegrationTest
         $paypage = new Paypage(9.99, 'EUR', 'charge');
         $paypage->setType('hosted');
         $paypage->setRecurrenceType('unscheduled');
-        $paypage->setLogoImage('logoImage');
         $paypage->setShopName('shopName');
         $paypage->setOrderId('orderId');
         $paypage->setInvoiceId('invoiceId');
@@ -164,6 +161,7 @@ class PaypageV2Test extends BaseIntegrationTest
     /**
      * @test
      * @group CC-1548
+     * @group CC-1646
      */
     public function createPaypageWithStyle()
     {
@@ -173,12 +171,14 @@ class PaypageV2Test extends BaseIntegrationTest
             ->setBackgroundImage('https://backgroundimage.com')
             ->setBrandColor('#1f1f1f')
             ->setCornerRadius('5px')
+            ->setFavicon('https://favicon.com')
             ->setFont('comic sans')
             ->setFooterColor('#1f1f1f')
             ->setHeaderColor('#ff7f7f')
+            ->setHideBasket(true)
             ->setHideUnzerLogo(true)
-            ->setLogoImage('https://logoimage.com')
             ->setLinkColor('#1f1f1f')
+            ->setLogoImage('https://logoimage.com')
             ->setShadows(true)
             ->setTextColor('#1f1f1f');
 
@@ -270,11 +270,11 @@ class PaypageV2Test extends BaseIntegrationTest
         $withMethodConfigs->setMethodConfigs([
             'paypal' => $enabledConfig
         ]);
-        $paymentMethodsConfigs = (new PaymentMethodsConfigs())->setPreselectedMethod('cards');
 
-        $withCardSpecificConfig = (new PaymentMethodsConfigs())->setPreselectedMethod('cards');
 
-        $withClassNames = (new PaymentMethodsConfigs())->setPreselectedMethod('cards')
+        $withCardSpecificConfig = (new PaymentMethodsConfigs())->addMethodConfig(Card::class, $cardConfig);
+
+        $withClassNames = (new PaymentMethodsConfigs())
             ->setDefault((new PaymentMethodConfig())->setEnabled(false))
             ->addMethodConfig(Card::class, $cardConfig)
             ->addMethodConfig(Paypal::class, $enabledConfig)
@@ -304,7 +304,6 @@ class PaypageV2Test extends BaseIntegrationTest
             'empty' => [new PaymentMethodsConfigs()],
             'Default Enabled' => [$withDefaultEnabled],
             'Default Disabled' => [$withDefaultDisabled],
-            'Preselected Method' => [$paymentMethodsConfigs],
             'Method Configs' => [$withMethodConfigs],
             'CardSpecificConfig' => [$withCardSpecificConfig],
             'ClassNames' => [$withClassNames],

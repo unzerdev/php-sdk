@@ -2,12 +2,14 @@
 
 namespace UnzerSDK\Resources\V2;
 
+use DateTime;
 use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Apis\PaypageAPIConfig;
 use UnzerSDK\Constants\PaypageCheckoutTypes;
 use UnzerSDK\Constants\TransactionTypes;
 use UnzerSDK\Resources\AbstractUnzerResource;
+use UnzerSDK\Resources\EmbeddedResources\Paypage\AmountSettings;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Payment;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
@@ -29,7 +31,7 @@ class Paypage extends AbstractUnzerResource
     protected ?string $recurrenceType = null;
     protected ?string $shopName = null;
     protected ?string $type = null;
-    protected float $amount;
+    protected ?float $amount;
     protected string $currency;
 
     /** @var string $mode "charge" or "authorize" */
@@ -41,17 +43,27 @@ class Paypage extends AbstractUnzerResource
     protected $paymentMethodsConfigs;
     protected ?Risk $risk = null;
 
+    // Linkpay only.
+    protected ?string $alias = null;
+    protected ?bool $multiUse = null;
+
+    protected ?DateTime $expiresAt = null;
+    protected ?AmountSettings $amountSettings = null;
+
+    // Response fields
     private ?string $redirectUrl = null;
 
     private ?array $payments = null;
     private ?int $total = null;
+
+    private ?string $qrCodeSvg = null;
 
     /**
      * @param $amount
      * @param $currency
      * @param $mode
      */
-    public function __construct($amount, $currency, $mode = TransactionTypes::CHARGE)
+    public function __construct(?float $amount, string $currency, string $mode = TransactionTypes::CHARGE)
     {
         $this->amount = $amount;
         $this->currency = $currency;
@@ -317,5 +329,71 @@ class Paypage extends AbstractUnzerResource
     {
         $this->checkoutType = $checkoutType;
         return $this;
+    }
+
+    public function getAlias(): ?string
+    {
+        return $this->alias;
+    }
+
+    public function setAlias(?string $alias): Paypage
+    {
+        $this->alias = $alias;
+        return $this;
+    }
+
+    public function getMultiUse(): ?bool
+    {
+        return $this->multiUse;
+    }
+
+    public function setMultiUse(?bool $multiUse): Paypage
+    {
+        $this->multiUse = $multiUse;
+        return $this;
+    }
+
+    public function getExpiresAt(): ?DateTime
+    {
+        return $this->expiresAt;
+    }
+
+    public function setExpiresAt(?DateTime $expiresAt): Paypage
+    {
+        $this->expiresAt = $expiresAt;
+        return $this;
+    }
+
+    public function getAmountSettings(): ?AmountSettings
+    {
+        return $this->amountSettings;
+    }
+
+    public function setAmountSettings(?AmountSettings $amountSettings): Paypage
+    {
+        $this->amountSettings = $amountSettings;
+        return $this;
+    }
+
+    public function getQrCodeSvg(): ?string
+    {
+        return $this->qrCodeSvg;
+    }
+
+    public function setQrCodeSvg(?string $qrCodeSvg): Paypage
+    {
+        $this->qrCodeSvg = $qrCodeSvg;
+        return $this;
+    }
+
+
+    public function expose()
+    {
+        $exposeArray = parent::expose();
+        $expiresAtKey = 'expiresAt';
+        if (isset($exposeArray[$expiresAtKey])) {
+            $exposeArray['expiresAt'] = $this->getExpiresAt()->format(DateTime::ATOM);
+        }
+        return $exposeArray;
     }
 }

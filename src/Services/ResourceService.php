@@ -126,7 +126,7 @@ class ResourceService implements ResourceServiceInterface
         $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri          = $resource->getUri($appendId, $httpMethod);
         $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod, $apiVersion);
-        return json_decode($responseJson, false);
+        return !empty($responseJson) ? json_decode($responseJson, false) : new stdClass();
     }
 
     /**
@@ -413,11 +413,23 @@ class ResourceService implements ResourceServiceInterface
         return $paymentObject;
     }
 
+    /** Create Paypage V2 resource.
+     * @throws UnzerApiException
+     */
     public function createPaypage(PaypageV2 $paypage): PaypageV2
     {
         $paypage->setParentResource($this->unzer);
         $this->createResource($paypage);
         return $paypage;
+    }
+
+    /** Delete Paypage V2
+     * @throws UnzerApiException
+     */
+    public function deletePaypage(PaypageV2 $paypage): void
+    {
+        $paypage->setParentResource($this->unzer);
+        $this->deleteResource($paypage);
     }
 
     /**
