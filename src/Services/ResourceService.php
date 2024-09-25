@@ -432,6 +432,17 @@ class ResourceService implements ResourceServiceInterface
         $this->deleteResource($paypage);
     }
 
+    /** Delete Paypage V2
+     * @throws UnzerApiException
+     */
+    public function updatePaypage(PaypageV2 $paypage): PaypageV2
+    {
+        $paypage->setParentResource($this->unzer);
+        $this->patchResource($paypage);
+
+        return $paypage;
+    }
+
     /**
      * @inheritDoc
      */

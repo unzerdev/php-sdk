@@ -31,8 +31,8 @@ class Paypage extends AbstractUnzerResource
     protected ?string $recurrenceType = null;
     protected ?string $shopName = null;
     protected ?string $type = null;
-    protected ?float $amount;
-    protected string $currency;
+    protected ?float $amount = null;
+    protected ?string $currency = null;
 
     /** @var string $mode "charge" or "authorize" */
     protected string $mode;
@@ -63,7 +63,7 @@ class Paypage extends AbstractUnzerResource
      * @param $currency
      * @param $mode
      */
-    public function __construct(?float $amount, string $currency, string $mode = TransactionTypes::CHARGE)
+    public function __construct(?float $amount = null, ?string $currency = null, ?string $mode = TransactionTypes::CHARGE)
     {
         $this->amount = $amount;
         $this->currency = $currency;
@@ -76,7 +76,7 @@ class Paypage extends AbstractUnzerResource
             $this->id = $response->paypageId;
         }
 
-        if (isset($response->payments) && !empty($response->payments)) {
+        if ($this->keyValueEsists('payments', $response)) {
             $payments = [];
             foreach ($response->payments as $payment) {
                 $newPayment = (new Payment());
@@ -85,6 +85,12 @@ class Paypage extends AbstractUnzerResource
                 $payments[] = $newPayment;
             }
             $this->payments = $payments;
+        }
+
+        $expiresAtKey = 'expiresAt';
+        if ($this->keyValueEsists($expiresAtKey, $response)) {
+            $this->setExpiresAt(new DateTime($response->$expiresAtKey));
+            unset($response->$expiresAtKey);
         }
 
         parent::handleResponse($response, $method);
@@ -134,7 +140,7 @@ class Paypage extends AbstractUnzerResource
         return 'v2';
     }
 
-    public function getCurrency(): string
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
@@ -396,4 +402,16 @@ class Paypage extends AbstractUnzerResource
         }
         return $exposeArray;
     }
+
+    /**
+     * @param string $key
+     * @param stdClass $response
+     * @return bool
+     */
+    public function keyValueEsists(string $key, stdClass $response): bool
+    {
+        return isset($response->$key) && !empty($response->$key);
+    }
+
+
 }

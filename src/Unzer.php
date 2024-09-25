@@ -975,6 +975,18 @@ class Unzer implements
     }
 
     /**
+     * Update paypage v2 resource using patch method.
+     */
+    public function patchPaypage(PaypageV2 $paypage): PaypageV2
+    {
+        if ($paypage->getId() === null) {
+            throw new RuntimeException('Paypage ID is required for patch operation.');
+        }
+
+        return $this->resourceService->updatePaypage($paypage);
+    }
+
+    /**
      * Fetch list of associated payments for the given payment page. Use `\UnzerSDK\Resources\V2\Paypage::getPayments`
      * to get the list of payments.
      */

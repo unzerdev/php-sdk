@@ -94,6 +94,44 @@ class LinkpayV2Test extends BaseIntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function updateLinkpayExpiryDate()
+    {
+        // init
+        $unzer = $this->getUnzerObject();
+        $paypage = new Paypage(null, 'EUR', 'charge');
+        $paypage->setType('linkpay');
+        $paypage->setAlias($this->generateRandomId());
+        $interval = new \DateInterval("PT1H");
+        $expiresAtInitial = new \DateTime('2024-09-25T16:39:01+00:00');
+        $expiresUpdated = (new \DateTime('2024-09-25T16:39:01.1397+12:00'))->add($interval);
+
+        $paypage->setExpiresAt($expiresAtInitial);
+        $paypage->setAmountSettings(new AmountSettings(10, 100));
+
+        // creation
+        $unzer->createPaypage($paypage);
+        $this->assertCreatedPaypage($paypage);
+        $paypageId = $paypage->getId();
+
+        // update
+        $updatePaypage = new Paypage();
+        $updatePaypage
+            ->setId($paypageId)
+            ->setExpiresAt($expiresUpdated);
+        $unzer->patchPaypage($updatePaypage);
+        $this->assertNotEquals($expiresUpdated, $updatePaypage->getExpiresAt()); // update response contains no milliseconds.
+
+        $this->assertEquals('linkpay', $paypage->getType());
+        $this->assertEquals($paypage->getCurrency(), $updatePaypage->getCurrency());
+        $this->assertEquals($paypage->getAlias(), $updatePaypage->getAlias());
+        //$this->assertEquals($paypage->getAmountSettings(), $updatePaypage->getAmountSettings()); // Todo handle AmountSettings
+        $this->assertEquals($paypage->getResources(), $updatePaypage->getResources());
+        $this->assertNotEquals($paypage->getExpiresAt(), $updatePaypage->getExpiresAt());
+    }
+
+    /**
      * @param Paypage $paypage
      * @return void
      */
