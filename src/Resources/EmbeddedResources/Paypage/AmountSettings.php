@@ -13,7 +13,7 @@ class AmountSettings extends AbstractUnzerResource
      * @param float|null $minimum
      * @param float|null $maximum
      */
-    public function __construct(?float $minimum, ?float $maximum)
+    public function __construct(?float $minimum = null, ?float $maximum = null)
     {
         $this->minimum = $minimum;
         $this->maximum = $maximum;

@@ -21,6 +21,15 @@ class Paypage extends AbstractUnzerResource
 {
     public const URI = '/merchant/paypage';
 
+    protected static $keyClassMap = [
+        'urls' => Urls::class,
+        'style' => Style::class,
+        'resources' => Resources::class,
+        'risk' => Risk::class,
+        'paymentMethodsConfigs' => PaymentMethodsConfigs::class,
+        'amountSettings' => AmountSettings::class
+    ];
+
     /** @var string|null checkoutType
      * @see PaypageCheckoutTypes
      */
@@ -93,6 +102,14 @@ class Paypage extends AbstractUnzerResource
             unset($response->$expiresAtKey);
         }
 
+        // Instantiate embedded objects.
+        foreach (self::$keyClassMap as $key => $class) {
+            if ($this->keyValueEsists($key, $response) && $this->hasProperties($response->$key)) {
+                $object = new $class();
+                $this->$key = $object;
+            }
+        }
+
         parent::handleResponse($response, $method);
     }
 
@@ -100,7 +117,7 @@ class Paypage extends AbstractUnzerResource
     /**
      * @return mixed
      */
-    public function getAmount(): float
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
@@ -413,5 +430,9 @@ class Paypage extends AbstractUnzerResource
         return isset($response->$key) && !empty($response->$key);
     }
 
+    protected function hasProperties(stdClass $object)
+    {
+        return count(get_object_vars($object)) > 0;
+    }
 
 }

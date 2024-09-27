@@ -126,9 +126,87 @@ class LinkpayV2Test extends BaseIntegrationTest
         $this->assertEquals('linkpay', $paypage->getType());
         $this->assertEquals($paypage->getCurrency(), $updatePaypage->getCurrency());
         $this->assertEquals($paypage->getAlias(), $updatePaypage->getAlias());
-        //$this->assertEquals($paypage->getAmountSettings(), $updatePaypage->getAmountSettings()); // Todo handle AmountSettings
+        $this->assertEquals($paypage->getAmountSettings(), $updatePaypage->getAmountSettings());
         $this->assertEquals($paypage->getResources(), $updatePaypage->getResources());
-        $this->assertNotEquals($paypage->getExpiresAt(), $updatePaypage->getExpiresAt());
+    }
+
+    /**
+     * @test
+     */
+    public function updateLinkpayAmount()
+    {
+        // init
+        $unzer = $this->getUnzerObject();
+        $paypage = new Paypage(99.99, 'EUR', 'charge');
+        $paypage->setType('linkpay');
+        $paypage->setAlias($this->generateRandomId());
+        $expiresAtInitial = new \DateTime('2024-09-25T16:39:01+00:00');
+
+        $paypage->setExpiresAt($expiresAtInitial);
+
+        // creation
+        $unzer->createPaypage($paypage);
+        $this->assertCreatedPaypage($paypage);
+        $paypageId = $paypage->getId();
+
+        // update
+        $updatePaypage = new Paypage();
+        $updatePaypage
+            ->setId($paypageId)
+            ->setAmount(66.66);
+
+        $unzer->patchPaypage($updatePaypage);
+
+        // updated value should be different
+        $this->assertNotEquals($paypage->getAmount(), $updatePaypage->getAmount());
+
+        // initial values should match
+        $this->assertEquals('linkpay', $paypage->getType());
+        $this->assertEquals($paypage->getCurrency(), $updatePaypage->getCurrency());
+        $this->assertEquals($paypage->getAlias(), $updatePaypage->getAlias());
+        $this->assertEquals($paypage->getAmountSettings(), $updatePaypage->getAmountSettings());
+        $this->assertEquals($paypage->getResources(), $updatePaypage->getResources());
+        $this->assertEquals($paypage->getExpiresAt(), $updatePaypage->getExpiresAt());
+    }
+
+    /**
+     * @test
+     */
+    public function updateLinkpayAmountSettings()
+    {
+        // init
+        $unzer = $this->getUnzerObject();
+        $paypage = new Paypage(null, 'EUR', 'charge');
+        $paypage->setType('linkpay');
+        $paypage->setAlias($this->generateRandomId());
+        $expiresAtInitial = new \DateTime('2024-09-25T16:39:01+00:00');
+
+        $paypage->setExpiresAt($expiresAtInitial)
+            ->setAmountSettings(new AmountSettings(9.99, 99.99));
+
+        // creation
+        $unzer->createPaypage($paypage);
+        $this->assertCreatedPaypage($paypage);
+        $paypageId = $paypage->getId();
+
+        // update
+        $updatePaypage = new Paypage();
+        $updatePaypage
+            ->setId($paypageId)
+            ->setAmountSettings(new AmountSettings(6.66, 66.66));
+
+        $unzer->patchPaypage($updatePaypage);
+
+        // updated value should be different
+        $this->assertNotEquals($paypage->getAmountSettings(), $updatePaypage->getAmountSettings());
+
+        // initial values should match
+        $this->assertEquals($paypage->getAlias(), $updatePaypage->getAlias());
+        $this->assertEquals($paypage->getAmount(), $updatePaypage->getAmount());
+        $this->assertEquals($paypage->getCurrency(), $updatePaypage->getCurrency());
+        $this->assertEquals($paypage->getExpiresAt(), $updatePaypage->getExpiresAt());
+        $this->assertEquals($paypage->getResources(), $updatePaypage->getResources());
+        $this->assertEquals('linkpay', $paypage->getType());
     }
 
     /**
