@@ -95,6 +95,7 @@ class LinkpayV2Test extends BaseIntegrationTest
 
     /**
      * @test
+     * @group CC-1583
      */
     public function updateLinkpayExpiryDate()
     {
@@ -132,6 +133,7 @@ class LinkpayV2Test extends BaseIntegrationTest
 
     /**
      * @test
+     * @group CC-1583
      */
     public function updateLinkpayAmount()
     {
@@ -171,6 +173,7 @@ class LinkpayV2Test extends BaseIntegrationTest
 
     /**
      * @test
+     * @group CC-1583
      */
     public function updateLinkpayAmountSettings()
     {
