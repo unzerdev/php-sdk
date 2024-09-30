@@ -57,7 +57,7 @@ class Unzer implements
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '3.9.0';
+    public const SDK_VERSION = '3.10.0';
 
     /** @var string $key */
     private $key;
@@ -972,6 +972,18 @@ class Unzer implements
         $paypage = new PaypageV2(null, '');
         $paypage->setId($paypageId);
         $this->deletePaypage($paypage);
+    }
+
+    /**
+     * Update paypage v2 resource using patch method.
+     */
+    public function patchPaypage(PaypageV2 $paypage): PaypageV2
+    {
+        if ($paypage->getId() === null) {
+            throw new RuntimeException('Paypage ID is required for patch operation.');
+        }
+
+        return $this->resourceService->updatePaypage($paypage);
     }
 
     /**

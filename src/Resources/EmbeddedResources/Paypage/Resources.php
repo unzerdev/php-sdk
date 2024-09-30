@@ -16,7 +16,7 @@ class Resources extends AbstractUnzerResource
      * @param string|null $basketId
      * @param string|null $metadataId
      */
-    public function __construct(?string $customerId, ?string $basketId, ?string $metadataId)
+    public function __construct(?string $customerId = null, ?string $basketId = null, ?string $metadataId = null)
     {
         $this->customerId = $customerId;
         $this->basketId = $basketId;
