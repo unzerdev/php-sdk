@@ -693,6 +693,25 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
+    public function performPreAuthorization(
+        Authorization $authorization,
+                      $paymentType,
+                      $customer = null,
+        Metadata      $metadata = null,
+        Basket        $basket = null
+    ): Authorization
+    {
+        return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
+    }
+
+    public function updatePreAuthorization($payment, Authorization $authorization): Authorization
+    {
+        return $this->paymentService->updateAuthorization($payment, $authorization);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function authorize(
         $amount,
         $currency,

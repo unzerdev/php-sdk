@@ -18,6 +18,7 @@ class Style extends AbstractUnzerResource
     protected ?string $footerColor = null;
     protected ?string $headerColor = null;
     protected ?string $logoImage = null;
+
     protected ?string $linkColor = null;
     protected ?string $textColor = null;
 
