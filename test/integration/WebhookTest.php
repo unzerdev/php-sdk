@@ -16,7 +16,6 @@ use UnzerSDK\Constants\WebhookEvents;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Webhook;
 use UnzerSDK\test\BaseIntegrationTest;
-
 use function count;
 use function in_array;
 
@@ -139,14 +138,16 @@ class WebhookTest extends BaseIntegrationTest
         $webhook1 = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::CUSTOMER);
         $webhook2 = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::CHARGE);
         $webhook3 = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::AUTHORIZE);
+        $webhook4 = $this->unzer->createWebhook($this->generateUniqueUrl(), WebhookEvents::PREAUTHORIZE);
 
         // --- Verify webhooks have been registered ---
         $fetchedWebhooks = $this->unzer->fetchAllWebhooks();
-        $this->assertCount(3, $fetchedWebhooks);
+        $this->assertCount(4, $fetchedWebhooks);
 
         $this->assertTrue($this->arrayContainsWebhook($fetchedWebhooks, $webhook1));
         $this->assertTrue($this->arrayContainsWebhook($fetchedWebhooks, $webhook2));
         $this->assertTrue($this->arrayContainsWebhook($fetchedWebhooks, $webhook3));
+        $this->assertTrue($this->arrayContainsWebhook($fetchedWebhooks, $webhook4));
     }
 
     /**
@@ -177,7 +178,7 @@ class WebhookTest extends BaseIntegrationTest
      */
     public function bulkSettingWebhookEventsShouldBePossible(): void
     {
-        $webhookEvents      = [WebhookEvents::AUTHORIZE, WebhookEvents::CHARGE, WebhookEvents::SHIPMENT];
+        $webhookEvents = [WebhookEvents::AUTHORIZE, WebhookEvents::CHARGE, WebhookEvents::SHIPMENT, WebhookEvents::PREAUTHORIZE];
         $url                = $this->generateUniqueUrl();
         $registeredWebhooks = $this->unzer->registerMultipleWebhooks($url, $webhookEvents);
 
