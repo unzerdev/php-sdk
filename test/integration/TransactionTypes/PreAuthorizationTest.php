@@ -127,7 +127,7 @@ class PreAuthorizationTest extends BaseIntegrationTest
         $invoiceId = 'i' . self::generateRandomId();
         $paymentReference = 'paymentReference';
 
-        $preauth = new Authorization(119.0, 'EUR', self::RETURN_URL);
+        $preauth = new PreAuthorization(119.0, 'EUR', self::RETURN_URL);
         $preauth->setRecurrenceType(RecurrenceTypes::ONE_CLICK, $card)
             ->setOrderId($orderId)
             ->setInvoiceId($invoiceId)
