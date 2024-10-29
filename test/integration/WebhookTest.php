@@ -29,7 +29,7 @@ class WebhookTest extends BaseIntegrationTest
      * @test
      *
      * @dataProvider webhookResourceCanBeRegisteredAndFetchedDP
-     *
+     * @group CC-1576
      * @param string $event
      */
     public function webhookResourceCanBeRegisteredAndFetched($event): void
@@ -50,7 +50,7 @@ class WebhookTest extends BaseIntegrationTest
      */
     public function webhookUrlShouldBeUpdateable(): void
     {
-        $url     = $this->generateUniqueUrl();
+        $url = $this->generateUniqueUrl();
         $webhook = $this->unzer->createWebhook($url, WebhookEvents::ALL);
         $fetchedWebhook = $this->unzer->fetchWebhook($webhook->getId());
         $this->assertEquals(WebhookEvents::ALL, $fetchedWebhook->getEvent());
@@ -122,6 +122,7 @@ class WebhookTest extends BaseIntegrationTest
      * Verify fetching all registered webhooks will return an array of webhooks.
      *
      * @test
+     * @group CC-1576
      */
     public function fetchWebhooksShouldReturnArrayOfRegisteredWebhooks(): void
     {
@@ -179,7 +180,7 @@ class WebhookTest extends BaseIntegrationTest
     public function bulkSettingWebhookEventsShouldBePossible(): void
     {
         $webhookEvents = [WebhookEvents::AUTHORIZE, WebhookEvents::CHARGE, WebhookEvents::SHIPMENT, WebhookEvents::PREAUTHORIZE];
-        $url                = $this->generateUniqueUrl();
+        $url = $this->generateUniqueUrl();
         $registeredWebhooks = $this->unzer->registerMultipleWebhooks($url, $webhookEvents);
 
         // check whether the webhooks have the correct url
@@ -208,7 +209,7 @@ class WebhookTest extends BaseIntegrationTest
         // remove all existing webhooks a avoid errors here
         $this->unzer->deleteAllWebhooks();
 
-        $url                = $this->generateUniqueUrl();
+        $url = $this->generateUniqueUrl();
         $registeredWebhooks = $this->unzer->registerMultipleWebhooks($url, [WebhookEvents::AUTHORIZE]);
 
         $this->assertCount(1, $registeredWebhooks);

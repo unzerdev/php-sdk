@@ -20,6 +20,9 @@ use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\PreAuthorization;
 use UnzerSDK\test\BaseIntegrationTest;
 
+/**
+ * @group CC-1576
+ */
 class PreAuthorizationTest extends BaseIntegrationTest
 {
     /**
