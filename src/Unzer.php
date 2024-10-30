@@ -57,7 +57,7 @@ class Unzer implements
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = 'v1';
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '3.10.0';
+    public const SDK_VERSION = '3.11.0';
 
     /** @var string $key */
     private $key;
@@ -685,6 +685,9 @@ class Unzer implements
         return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function updateAuthorization($payment, Authorization $authorization): Authorization
     {
         return $this->paymentService->updateAuthorization($payment, $authorization);

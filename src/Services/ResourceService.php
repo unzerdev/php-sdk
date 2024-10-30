@@ -170,6 +170,9 @@ class ResourceService implements ResourceServiceInterface
             case $resourceType === IdStrings::AUTHORIZE:
                 $resource = $unzer->fetchAuthorization(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
                 break;
+            case $resourceType === IdStrings::PREAUTHORIZE:
+                $resource = $unzer->fetchAuthorization(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
+                break;
             case $resourceType === IdStrings::CHARGE:
                 $resource = $unzer->fetchChargeById(
                     IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT),
