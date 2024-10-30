@@ -34,7 +34,7 @@ class PreAuthorizationTest extends BaseIntegrationTest
     {
         $paymentType = $this->unzer->createPaymentType($this->createCardObject());
         $preauth = new PreAuthorization(100.0, 'EUR', self::RETURN_URL);
-        $this->unzer->performPreAuthorization($preauth, $paymentType->getId());
+        $this->unzer->performAuthorization($preauth, $paymentType->getId());
         $this->assertNotNull($preauth);
         $this->assertNotEmpty($preauth->getId());
         $this->assertNotEmpty($preauth->getUniqueId());
@@ -59,7 +59,7 @@ class PreAuthorizationTest extends BaseIntegrationTest
         $this->assertNull($customer->getId());
 
         $preauth = new PreAuthorization(100.0, 'EUR', self::RETURN_URL);
-        $this->unzer->performPreAuthorization($preauth, $paymentType, $customer);
+        $this->unzer->performAuthorization($preauth, $paymentType, $customer);
         $payment = $preauth->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -83,7 +83,7 @@ class PreAuthorizationTest extends BaseIntegrationTest
         $customerId = $this->unzer->createCustomer($this->getMinimalCustomer())->getId();
         $orderId = microtime(true);
         $preauth = (new PreAuthorization(100.0, 'EUR', self::RETURN_URL))->setOrderId($orderId);
-        $this->unzer->performPreAuthorization($preauth, $paymentType, $customerId);
+        $this->unzer->performAuthorization($preauth, $paymentType, $customerId);
         $payment = $preauth->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -107,6 +107,7 @@ class PreAuthorizationTest extends BaseIntegrationTest
     public function authorizationCanBeFetched(Authorization $authorization): void
     {
         $fetchedAuthorization = $this->unzer->fetchAuthorization($authorization->getPaymentId());
+        $this->assertInstanceOf(PreAuthorization::class, $fetchedAuthorization);
         $this->assertEquals($authorization->setCard3ds(true)->expose(), $fetchedAuthorization->expose());
     }
 
