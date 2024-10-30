@@ -104,38 +104,6 @@ class PaymentService implements PaymentServiceInterface
         return $authorization;
     }
 
-    public function performPreAuthorization(
-        Authorization $authorization,
-                      $paymentType,
-                      $customer = null,
-        Metadata      $metadata = null,
-        Basket        $basket = null
-    ): Authorization
-    {
-        $payment = $this->createPayment($paymentType);
-        $paymentType = $payment->getPaymentType();
-        $authorization->setSpecialParams($paymentType !== null ? $paymentType->getTransactionParams() : []);
-
-        $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
-
-        $this->getResourceService()->createResource($authorization);
-        return $authorization;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param Authorization $payment
-     */
-    public function updatePreAuthorization($payment, Authorization $authorization): Authorization
-    {
-        $authorization->setId(null);
-        $paymentResource = $this->getResourceService()->getPaymentResource($payment);
-        $authorization->setPayment($paymentResource);
-        $this->getResourceService()->patchResource($authorization);
-        return $authorization;
-    }
-
     /**
      * {@inheritDoc}
      */

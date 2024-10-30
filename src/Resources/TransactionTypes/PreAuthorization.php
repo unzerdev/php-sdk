@@ -5,7 +5,7 @@ namespace UnzerSDK\Resources\TransactionTypes;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 
 /**
- * This represents the authorization transaction.
+ * This represents the pre-authorization transaction.
  *
  * @link  https://docs.unzer.com/
  *
