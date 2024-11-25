@@ -2,10 +2,8 @@
 
 namespace UnzerSDK\Resources\PaymentTypes;
 
-use UnzerSDK\Traits\CanAuthorize;
-use UnzerSDK\Traits\CanDirectCharge;
 
-class OpenBanking extends BasePaymentType
+class OpenbankingPis extends BasePaymentType
 {
     use CanAuthorize;
     use CanDirectCharge;
@@ -29,9 +27,9 @@ class OpenBanking extends BasePaymentType
     /**
      * @param string|null $ibanCountry
      *
-     * @return OpenBanking
+     * @return OpenbankingPis
      */
-    public function setIbanCountry(string $ibanCountry): OpenBanking
+    public function setIbanCountry(string $ibanCountry): OpenbankingPis
     {
         $this->ibanCountry = $ibanCountry;
         return $this;

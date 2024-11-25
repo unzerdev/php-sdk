@@ -34,7 +34,7 @@ use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
-use UnzerSDK\Resources\PaymentTypes\OpenBanking;
+use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
@@ -947,7 +947,7 @@ class ResourceService implements ResourceServiceInterface
                 $paymentType = new Wechatpay();
                 break;
             case IdStrings::OPEN_BANKING:
-                $paymentType = new OpenBanking();
+                $paymentType = new OpenbankingPis();
                 break;
             default:
                 throw new RuntimeException('Invalid payment type!');

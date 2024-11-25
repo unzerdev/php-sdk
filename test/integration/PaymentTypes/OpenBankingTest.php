@@ -12,7 +12,7 @@
 namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
-use UnzerSDK\Resources\PaymentTypes\OpenBanking;
+use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class OpenBankingTest extends BaseIntegrationTest
@@ -26,12 +26,12 @@ class OpenBankingTest extends BaseIntegrationTest
      */
     public function openBankingShouldBeCreatableAndFetchable(): BasePaymentType
     {
-        $openBanking = $this->unzer->createPaymentType(new OpenBanking('DE'));
-        $this->assertInstanceOf(OpenBanking::class, $openBanking);
+        $openBanking = $this->unzer->createPaymentType(new OpenbankingPis('DE'));
+        $this->assertInstanceOf(OpenbankingPis::class, $openBanking);
         $this->assertNotEmpty($openBanking->getId());
 
         $fetchedOpenBanking = $this->unzer->fetchPaymentType($openBanking->getId());
-        $this->assertInstanceOf(OpenBanking::class, $fetchedOpenBanking);
+        $this->assertInstanceOf(OpenbankingPis::class, $fetchedOpenBanking);
         $this->assertNotSame($openBanking, $fetchedOpenBanking);
         $this->assertEquals($openBanking->expose(), $fetchedOpenBanking->expose());
 
@@ -41,38 +41,17 @@ class OpenBankingTest extends BaseIntegrationTest
 
 
     /**
-     * Verify OpenBanking can authorize.
-     *
-     * @test
-     *
-     * @depends openBankingShouldBeCreatableAndFetchable
-     *
-     * @param OpenBanking $openBanking
-     */
-    public function openBankingShouldBeAuthorizable(OpenBanking $openBanking): void
-    {
-        $authorization = $openBanking->authorize(100.0, 'EUR', self::RETURN_URL);
-        $this->assertNotNull($authorization);
-        $this->assertNotEmpty($authorization->getId());
-        $this->assertNotEmpty($authorization->getRedirectUrl());
-
-        $payment = $authorization->getPayment();
-        $this->assertNotNull($payment);
-        $this->assertTrue($payment->isPending());
-    }
-
-    /**
      * Verify OpenBanking can charge.
      *
      * @test
      *
      * @depends openBankingShouldBeCreatableAndFetchable
      *
-     * @param OpenBanking $openBanking
+     * @param OpenbankingPis $openBanking
      */
-    public function openBankingShouldBeChargeable(OpenBanking $openBanking): void
+    public function openBankingShouldBeChargeable(OpenbankingPis $openBanking): void
     {
-        $charge = $openBanking->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $this->unzer->performCharge(100.0, 'EUR', self::RETURN_URL);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
     }

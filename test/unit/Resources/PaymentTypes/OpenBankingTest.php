@@ -3,7 +3,7 @@
 namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
 use UnzerSDK\Resources\PaymentTypes\Clicktopay;
-use UnzerSDK\Resources\PaymentTypes\OpenBanking;
+use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
 
@@ -18,7 +18,7 @@ class OpenBankingTest extends BasePaymentTest
     {
         $countryCode = 'DE';
 
-        $openBanking = new OpenBanking($countryCode);
+        $openBanking = new OpenbankingPis($countryCode);
 
 
         $this->assertEquals($countryCode, $openBanking->getIbanCountry());
@@ -31,7 +31,7 @@ class OpenBankingTest extends BasePaymentTest
      */
     public function jsonSerialization(): void
     {
-        $openBankingObject = new OpenBanking("DE",);
+        $openBankingObject = new OpenbankingPis("DE",);
 
         $expectedJson = JsonProvider::getJsonFromFile('openBanking/createRequest.json');
         $this->assertJsonStringEqualsJsonString($expectedJson, $openBankingObject->jsonSerialize());
@@ -44,7 +44,7 @@ class OpenBankingTest extends BasePaymentTest
      */
     public function openBankingAuthorizationShouldBeMappedCorrectly(): void
     {
-        $openBanking = new OpenBanking('DE');
+        $openBanking = new OpenbankingPis('DE');
 
         $jsonResponse = JsonProvider::getJsonFromFile('openBanking/fetchResponse.json');
 
