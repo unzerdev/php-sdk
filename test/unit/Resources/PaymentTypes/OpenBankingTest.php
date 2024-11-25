@@ -2,7 +2,6 @@
 
 namespace UnzerSDK\test\unit\Resources\PaymentTypes;
 
-use UnzerSDK\Resources\PaymentTypes\Clicktopay;
 use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;

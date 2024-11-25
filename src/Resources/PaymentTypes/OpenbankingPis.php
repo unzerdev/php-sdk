@@ -5,8 +5,6 @@ namespace UnzerSDK\Resources\PaymentTypes;
 
 class OpenbankingPis extends BasePaymentType
 {
-    use CanAuthorize;
-    use CanDirectCharge;
 
     /** @var string|null $ibanCountry */
     protected $ibanCountry;
