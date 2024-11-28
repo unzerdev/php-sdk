@@ -53,6 +53,8 @@ class IdStrings
     public const TWINT = 'twt';
     public const WECHATPAY = 'wcp';
 
+    public const OPEN_BANKING = 'obp';
+
     // Resources
     public const BASKET = 'bsk';
     public const CUSTOMER = 'cst';
@@ -93,5 +95,6 @@ class IdStrings
         self::SOFORT,
         self::TWINT,
         self::WECHATPAY,
+        self::OPEN_BANKING,
     ];
 }

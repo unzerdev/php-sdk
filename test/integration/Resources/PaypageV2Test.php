@@ -19,6 +19,7 @@ use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
+use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
@@ -295,7 +296,9 @@ class PaypageV2Test extends BaseIntegrationTest
             ->addMethodConfig(Bancontact::class, $enabledConfig)
             ->addMethodConfig(PostFinanceEfinance::class, $enabledConfig)
             ->addMethodConfig(PostFinanceCard::class, $enabledConfig)
-            ->addMethodConfig(Twint::class, $enabledConfig);
+            ->addMethodConfig(Twint::class, $enabledConfig)
+            ->addMethodConfig(OpenbankingPis::class, $enabledConfig)
+        ;
 
         $withPaylaterConfig = (new PaymentMethodsConfigs())
             ->addMethodConfig(PaylaterInvoice::class, $paylaterConfig);
