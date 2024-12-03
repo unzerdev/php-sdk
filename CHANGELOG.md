@@ -10,12 +10,14 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 * Add support for `preauthorize` transaction.
+* Enable PHP 8.4 in composer.json.
 
 ## [3.10.0](https://github.com/unzerdev/php-sdk/compare/3.9.0..3.10.0)
 
 ### Added
 
 * Add support for Linkpay v2.
+* Added support for Open Banking payment method.
 
 ### Changed
 
