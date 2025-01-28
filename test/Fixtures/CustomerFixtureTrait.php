@@ -57,7 +57,7 @@ trait CustomerFixtureTrait
      */
     public function getMaximumCustomerInclShippingAddress(): Customer
     {
-        return $this->getMaximumCustomer()->setShippingAddress($this->getShippingAddress());
+        return $this->getMaximumCustomer($version)->setShippingAddress($this->getShippingAddress());
     }
 
     /**
@@ -74,7 +74,8 @@ trait CustomerFixtureTrait
             $this->getBillingAddress(),
             'test@test.de',
             'Unzer GmbH',
-            CompanyCommercialSectorItems::WAREHOUSING_AND_SUPPORT_ACTIVITIES_FOR_TRANSPORTATION
+            CompanyCommercialSectorItems::WAREHOUSING_AND_SUPPORT_ACTIVITIES_FOR_TRANSPORTATION,
+            $version
         );
     }
 
@@ -85,7 +86,7 @@ trait CustomerFixtureTrait
      */
     public function getMaximalNotRegisteredB2bCustomer(): Customer
     {
-        $customer = $this->getMinimalNotRegisteredB2bCustomer()
+        $customer = $this->getMinimalNotRegisteredB2bCustomer($version)
             ->setShippingAddress($this->getShippingAddress())
             ->setSalutation(Salutations::MR)
             ->setMobile('+49172123456')
@@ -111,7 +112,7 @@ trait CustomerFixtureTrait
      */
     public function getMinimalRegisteredB2bCustomer(): Customer
     {
-        return CustomerFactory::createRegisteredB2bCustomer($this->getBillingAddress(), '123456789', 'Unzer GmbH');
+        return CustomerFactory::createRegisteredB2bCustomer($this->getBillingAddress(), '123456789', 'Unzer GmbH', CompanyCommercialSectorItems::OTHER, $version);
     }
 
     /**
