@@ -33,6 +33,7 @@ class BasePaymentTest extends TestCase
     use CustomerFixtureTrait;
     protected const RETURN_URL = 'https://dev.unzer.com';
     public const API_VERSION_2 = 'v2';
+    public const API_VERSION_3 = 'v3';
 
     /** @var Unzer $unzer */
     protected $unzer;
