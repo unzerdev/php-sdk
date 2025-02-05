@@ -58,6 +58,7 @@ use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
+use UnzerSDK\Resources\V2\Customer as CustomerV2;
 use UnzerSDK\Resources\V2\Paypage as PaypageV2;
 use UnzerSDK\Traits\CanRecur;
 use UnzerSDK\Unzer;
@@ -119,8 +120,8 @@ class ResourceService implements ResourceServiceInterface
         string                $httpMethod = HttpAdapterInterface::REQUEST_GET,
         string                $apiVersion = Unzer::API_VERSION
     ): stdClass {
-        $configClass = $resource->getApiConfig();
-        if (!$resource instanceof Token && $configClass::getAuthorizationMethod() === AuthorizationMethods::BEARER) {
+        $apiConfig = $resource->getApiConfig();
+        if (!$resource instanceof Token && $apiConfig::getAuthorizationMethod() === AuthorizationMethods::BEARER) {
             $this->unzer->prepareJwtToken();
         }
 
@@ -648,7 +649,9 @@ class ResourceService implements ResourceServiceInterface
         $customerObject = $customer;
 
         if (is_string($customer)) {
-            $customerObject = (new Customer())->setId($customer);
+            $isUUID = IdService::isUUDIResource($customer);
+            $customerObject = $isUUID ? new CustomerV2() : new Customer();
+            $customerObject->setId($customer);
         }
 
         $this->fetchResource($customerObject->setParentResource($this->unzer));
@@ -658,7 +661,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchCustomerByExtCustomerId(string $customerId): Customer
+    public function fetchCustomerByExtCustomerId(string $customerId, int $version = 1): Customer
     {
         $customerObject = (new Customer())->setCustomerId($customerId);
         $this->fetchResource($customerObject->setParentResource($this->unzer));

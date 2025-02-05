@@ -485,9 +485,9 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function fetchCustomerByExtCustomerId(string $customerId): Customer
+    public function fetchCustomerByExtCustomerId(string $customerId, int $version = 1): Customer
     {
-        return $this->resourceService->fetchCustomerByExtCustomerId($customerId);
+        return $this->resourceService->fetchCustomerByExtCustomerId($customerId, $version);
     }
 
     /**
