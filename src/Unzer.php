@@ -1071,16 +1071,24 @@ class Unzer implements
 
     /**
      * Request a JWT token from the Token Service and stores it for following request.
-     * If the token is already set, it will not be requested again.
+     * Manual call of this method should only be necessary if already existing Token needs to be provided.
+     * If an active token is already set, it will not be requested again.
+     * Token will automaically be renewed if it is expired.
      *
+     * @param string|null $jwtToken If set, the given token will be used instead as long it is valid.
      * @throws UnzerApiException
      */
-    public function prepareJwtToken()
+    public function prepareJwtToken(string $jwtToken = null): string
     {
+        if ($jwtToken !== null && JwtService::validateExpiryTime($jwtToken)) {
+            $this->jwtToken = $jwtToken;
+        }
+
         if ($this->jwtToken !== null && JwtService::validateExpiryTime($this->jwtToken)) {
-            return;
+            return $this->getJwtToken();
         }
         $this->jwtToken = $this->createAuthToken()->getAccessToken();
+        return $this->jwtToken;
     }
 
     public function getJwtToken()

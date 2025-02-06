@@ -25,6 +25,7 @@ use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
+use UnzerSDK\Resources\V3\Basket as BasketV3;
 use UnzerSDK\test\Fixtures\CustomerFixtureTrait;
 use UnzerSDK\Unzer;
 
@@ -194,6 +195,28 @@ class BasePaymentTest extends TestCase
     {
         $orderId = 'b' . self::generateRandomId();
         $basket = new Basket($orderId);
+        $basket->setTotalValueGross(99.99)
+            ->setCurrencyCode('EUR');
+
+        $basketItem = (new BasketItem())
+            ->setAmountPerUnitGross(99.99)
+            ->setQuantity(1)
+            ->setBasketItemReferenceId('item1')
+            ->setTitle('title');
+        $basket->addBasketItem($basketItem);
+        $this->unzer->createBasket($basket);
+        return $basket;
+    }
+
+    /**
+     * Creates a v2 Basket resource and returns it.
+     *
+     * @return Basket
+     */
+    public function createV3Basket(): Basket
+    {
+        $orderId = 'b' . self::generateRandomId();
+        $basket = new BasketV3($orderId);
         $basket->setTotalValueGross(99.99)
             ->setCurrencyCode('EUR');
 

@@ -20,6 +20,14 @@ use UnzerSDK\test\BaseIntegrationTest;
 
 class BasketV3Test extends BaseIntegrationTest
 {
+    private static ?string $token = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        self::$token = $this->unzer->prepareJwtToken(self::$token);
+    }
+
     /**
      * Verify basket can be created and fetched.
      *
@@ -27,7 +35,8 @@ class BasketV3Test extends BaseIntegrationTest
      */
     public function minV3BasketShouldBeCreatableAndFetchable(): void
     {
-        $basket = new Basket(99.99, 'EUR');
+        $orderId = 'b' . self::generateRandomId();
+        $basket = new Basket($orderId, 99.99, 'EUR');
 
         $basketItem = new BasketItem();
         $basketItem->setBasketItemReferenceId('item1')
@@ -39,6 +48,7 @@ class BasketV3Test extends BaseIntegrationTest
 
         $this->unzer->createBasket($basket);
         $this->assertNotEmpty($basket->getId());
+        $this->unzer->prepareJwtToken();
 
         $fetchedBasket = $this->unzer->fetchBasket($basket->getId())->setOrderId('');
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
@@ -172,7 +182,7 @@ class BasketV3Test extends BaseIntegrationTest
     public function basketShouldBeUpdateable(): void
     {
         $orderId = 'b' . self::generateRandomId();
-        $basket = new Basket(99.99, 'EUR');
+        $basket = new Basket($orderId, 99.99, 'EUR');
 
         $basketItem = (new BasketItem())
             ->setAmountPerUnitGross(99.99)
