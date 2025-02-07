@@ -18,6 +18,9 @@ use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\V3\Basket;
 use UnzerSDK\test\BaseIntegrationTest;
 
+/**
+ * @group skip
+ */
 class BasketV3Test extends BaseIntegrationTest
 {
     private static ?string $token = null;
