@@ -9,6 +9,7 @@ use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Apis\Constants\AuthorizationMethods;
 use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\ApiVersions;
 use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
@@ -60,6 +61,7 @@ use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Resources\V2\Customer as CustomerV2;
 use UnzerSDK\Resources\V2\Paypage as PaypageV2;
+use UnzerSDK\Resources\V3\Basket as BasketV3;
 use UnzerSDK\Traits\CanRecur;
 use UnzerSDK\Unzer;
 use function in_array;
@@ -107,8 +109,8 @@ class ResourceService implements ResourceServiceInterface
      * Send request to API.
      *
      * @param AbstractUnzerResource $resource
-     * @param string                $httpMethod
-     * @param string                $apiVersion
+     * @param string $httpMethod
+     * @param string $apiVersion
      *
      * @return stdClass
      *
@@ -119,14 +121,15 @@ class ResourceService implements ResourceServiceInterface
         AbstractUnzerResource $resource,
         string                $httpMethod = HttpAdapterInterface::REQUEST_GET,
         string                $apiVersion = Unzer::API_VERSION
-    ): stdClass {
+    ): stdClass
+    {
         $apiConfig = $resource->getApiConfig();
         if (!$resource instanceof Token && $apiConfig::getAuthorizationMethod() === AuthorizationMethods::BEARER) {
             $this->unzer->prepareJwtToken();
         }
 
-        $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
-        $uri          = $resource->getUri($appendId, $httpMethod);
+        $appendId = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
+        $uri = $resource->getUri($appendId, $httpMethod);
         $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod, $apiVersion);
         return !empty($responseJson) ? json_decode($responseJson, false) : new stdClass();
     }
@@ -160,9 +163,9 @@ class ResourceService implements ResourceServiceInterface
     public function fetchResourceByUrl($url)
     {
         $resource = null;
-        $unzer    = $this->unzer;
+        $unzer = $this->unzer;
 
-        $resourceId   = IdService::getLastResourceIdFromUrlString($url);
+        $resourceId = IdService::getLastResourceIdFromUrlString($url);
         if (empty($resourceId)) {
             return null;
         }
@@ -188,8 +191,8 @@ class ResourceService implements ResourceServiceInterface
                 );
                 break;
             case $resourceType === IdStrings::CANCEL:
-                $paymentId  = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
-                $chargeId   = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
+                $paymentId = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
+                $chargeId = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
                 if (IdService::isPaymentCancellation($url)) {
                     $isRefund = preg_match('/charge/', $url) === 1;
                     if ($isRefund) {
@@ -334,8 +337,8 @@ class ResourceService implements ResourceServiceInterface
     /**
      * Updates the given local resource object (id must be set)
      *
-     * @param AbstractUnzerResource $resource   The local resource object to update.
-     * @param string                $apiVersion
+     * @param AbstractUnzerResource $resource The local resource object to update.
+     * @param string $apiVersion
      *
      * @return AbstractUnzerResource The updated resource object.
      *
@@ -550,15 +553,21 @@ class ResourceService implements ResourceServiceInterface
     public function fetchBasket($basket): Basket
     {
         $basketObj = $basket;
+        $isV3Basket = false;
+
         if (is_string($basket)) {
-            $basketObj = (new Basket())->setId($basket);
+            $isV3Basket = IdService::isUUDIResource($basket);
+            $basketObj = $isV3Basket ? new BasketV3() : new Basket();
+            $basketObj->setId($basket);
         }
+
         $basketObj->setParentResource($this->unzer);
+        $basketVersion = $isV3Basket ? ApiVersions::V3 : ApiVersions::V2;
 
         try {
-            $this->fetchResource($basketObj, 'v2');
+            $this->fetchResource($basketObj, $basketVersion);
         } catch (UnzerApiException $exception) {
-            if ($exception->getCode() !== ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND) {
+            if ($exception->getCode() !== ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND || $isV3Basket) {
                 throw $exception;
             }
             $this->fetchResource($basketObj);
