@@ -81,6 +81,7 @@ class PaypalTest extends BaseIntegrationTest
         $this->assertNotEmpty($authorization->getRedirectUrl());
 
         $payment = $authorization->getPayment();
+        $this->getUnzerObject()->performChargeOnPayment($payment, new Charge(100.0, 'EUR', self::RETURN_URL));
         $this->assertNotNull($payment);
         $this->assertTrue($payment->isPending());
     }

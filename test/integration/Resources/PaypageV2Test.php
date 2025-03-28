@@ -181,6 +181,8 @@ class PaypageV2Test extends BaseIntegrationTest
             ->setLinkColor('#1f1f1f')
             ->setLogoImage('https://logoimage.com')
             ->setShadows(true)
+            ->setBasketBackgroundColor('#1f1f1f')
+            ->setPaymentFormBackgroundColor('#1f1f1f')
             ->setTextColor('#1f1f1f');
 
         $paypage = new Paypage(9.99, 'EUR', 'charge');
