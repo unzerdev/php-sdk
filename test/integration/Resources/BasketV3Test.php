@@ -19,7 +19,6 @@ use UnzerSDK\Resources\V3\Basket;
 use UnzerSDK\test\BaseIntegrationTest;
 
 /**
- * @group skip
  */
 class BasketV3Test extends BaseIntegrationTest
 {
@@ -44,7 +43,7 @@ class BasketV3Test extends BaseIntegrationTest
         $basketItem = new BasketItem();
         $basketItem->setBasketItemReferenceId('item1')
             ->setQuantity(1)
-            ->setAmountPerUnitGross(100)
+            ->setAmountPerUnitGross(99.99)
             ->setTitle('title');
         $basket->addBasketItem($basketItem);
         $this->assertEmpty($basket->getId());
@@ -53,7 +52,7 @@ class BasketV3Test extends BaseIntegrationTest
         $this->assertNotEmpty($basket->getId());
         $this->unzer->prepareJwtToken();
 
-        $fetchedBasket = $this->unzer->fetchBasket($basket->getId())->setOrderId('');
+        $fetchedBasket = $this->unzer->fetchBasket($basket->getId())->setOrderId($orderId);
         $this->assertEquals($basket->expose(), $fetchedBasket->expose());
     }
 

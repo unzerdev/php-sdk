@@ -1063,7 +1063,7 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock->expects(self::exactly(2))
             ->method('fetchResource')
-            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket])
             ->will($this->returnCallback(function ($basket, $version) {
                 if ($version === BasePaymentTest::API_VERSION_2) {
                     throw new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
@@ -1092,7 +1092,7 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock->expects(self::exactly(2))
             ->method('fetchResource')
-            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket])
             ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND));
 
         $this->expectException(UnzerApiException::class);

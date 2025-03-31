@@ -100,14 +100,14 @@ class HttpService
         ?string                $uri = null,
         ?AbstractUnzerResource $resource = null,
         string                 $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        string                 $apiVersion = Unzer::API_VERSION
+        string $apiVersion = null
     ): string {
         if (!$resource instanceof AbstractUnzerResource) {
             throw new RuntimeException('Transfer object is empty!');
         }
         $unzerObj = $resource->getUnzerObject();
 
-        $apiRequest = (new ApiRequest($uri, $resource, $httpMethod, $unzerObj, $apiVersion));
+        $apiRequest = (new ApiRequest($uri, $resource, $httpMethod, $unzerObj, $apiVersion ?? $resource->getApiVersion()));
 
         return $this->sendRequest($apiRequest);
     }

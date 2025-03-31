@@ -120,7 +120,7 @@ class ResourceService implements ResourceServiceInterface
     public function send(
         AbstractUnzerResource $resource,
         string                $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        string                $apiVersion = Unzer::API_VERSION
+        string $apiVersion = null
     ): stdClass
     {
         $apiConfig = $resource->getApiConfig();
@@ -346,7 +346,7 @@ class ResourceService implements ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
-    public function fetchResource(AbstractUnzerResource $resource, string $apiVersion = Unzer::API_VERSION): AbstractUnzerResource
+    public function fetchResource(AbstractUnzerResource $resource, string $apiVersion = null): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_GET;
         $response = $this->send($resource, $method, $apiVersion);
@@ -553,7 +553,6 @@ class ResourceService implements ResourceServiceInterface
     public function fetchBasket($basket): Basket
     {
         $basketObj = $basket;
-        $isV3Basket = false;
 
         if (is_string($basket)) {
             $isV3Basket = IdService::isUUDIResource($basket);
@@ -562,7 +561,7 @@ class ResourceService implements ResourceServiceInterface
         }
 
         $basketObj->setParentResource($this->unzer);
-        $basketVersion = $isV3Basket ? ApiVersions::V3 : ApiVersions::V2;
+        $basketVersion = $basketObj->getApiVersion() === ApiVersions::V3 ? ApiVersions::V3 : ApiVersions::V2;
 
         try {
             $this->fetchResource($basketObj, $basketVersion);
@@ -663,7 +662,7 @@ class ResourceService implements ResourceServiceInterface
             $customerObject->setId($customer);
         }
 
-        $this->fetchResource($customerObject->setParentResource($this->unzer));
+        $this->fetchResource($customerObject->setParentResource($this->unzer), $customerObject->getApiVersion());
         return $customerObject;
     }
 
