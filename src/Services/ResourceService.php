@@ -555,7 +555,7 @@ class ResourceService implements ResourceServiceInterface
         $basketObj = $basket;
 
         if (is_string($basket)) {
-            $isV3Basket = IdService::isUUDIResource($basket);
+            $isV3Basket = IdService::isUUIDResource($basket);
             $basketObj = $isV3Basket ? new BasketV3() : new Basket();
             $basketObj->setId($basket);
         }
@@ -657,12 +657,12 @@ class ResourceService implements ResourceServiceInterface
         $customerObject = $customer;
 
         if (is_string($customer)) {
-            $isUUID = IdService::isUUDIResource($customer);
+            $isUUID = IdService::isUUIDResource($customer);
             $customerObject = $isUUID ? new CustomerV2() : new Customer();
             $customerObject->setId($customer);
         }
 
-        $this->fetchResource($customerObject->setParentResource($this->unzer), $customerObject->getApiVersion());
+        $this->fetchResource($customerObject->setParentResource($this->unzer));
         return $customerObject;
     }
 
