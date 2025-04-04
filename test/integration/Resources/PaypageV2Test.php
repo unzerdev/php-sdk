@@ -2,6 +2,7 @@
 
 namespace UnzerSDK\test\integration\Resources;
 
+use UnzerSDK\Constants\CustomerGroups;
 use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Constants\PaypageCheckoutTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodConfig;
@@ -41,6 +42,14 @@ use UnzerSDK\test\BaseIntegrationTest;
  */
 class PaypageV2Test extends BaseIntegrationTest
 {
+    private static ?string $token = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        self::$token = $this->unzer->prepareJwtToken(self::$token);
+    }
+
     /**
      * @test
      */
@@ -99,7 +108,6 @@ class PaypageV2Test extends BaseIntegrationTest
         $this->assertNull($paypageSecond->getRedirectUrl());
 
         // Create Firt paypage
-        $this->assertNull($unzer->getJwtToken());
         $unzer->createPaypage($paypageFirst);
         $InitialJwtToken = $unzer->getJwtToken();
         $this->assertNotNull($InitialJwtToken);
@@ -228,7 +236,7 @@ class PaypageV2Test extends BaseIntegrationTest
         $unzer = $this->getUnzerObject();
         $risk = new Risk();
 
-        $risk->setCustomerGroup('neutral')
+        $risk->setCustomerGroup(CustomerGroups::NEUTRAL)
             ->setConfirmedAmount('1234')
             ->setConfirmedOrders('42')
             ->setRegistrationLevel('1')
@@ -299,8 +307,7 @@ class PaypageV2Test extends BaseIntegrationTest
             ->addMethodConfig(PostFinanceEfinance::class, $enabledConfig)
             ->addMethodConfig(PostFinanceCard::class, $enabledConfig)
             ->addMethodConfig(Twint::class, $enabledConfig)
-            ->addMethodConfig(OpenbankingPis::class, $enabledConfig)
-        ;
+            ->addMethodConfig(OpenbankingPis::class, $enabledConfig);
 
         $withPaylaterConfig = (new PaymentMethodsConfigs())
             ->addMethodConfig(PaylaterInvoice::class, $paylaterConfig);

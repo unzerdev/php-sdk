@@ -117,7 +117,7 @@ class IdService
         return $typeIdString;
     }
 
-    public static function isUUDIResource(string $id): bool
+    public static function isUUIDResource(string $id): bool
     {
         preg_match('/^[sp]-([a-z]{3}|p24)-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/', $id, $matches);
         return count($matches) > 0;
