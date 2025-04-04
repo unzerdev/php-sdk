@@ -150,7 +150,7 @@ class PaymentService implements PaymentServiceInterface
         $paymentType = $payment->getPaymentType();
 
         /** @var Charge $charge */
-        $charge->setSpecialParams($paymentType->getTransactionParams() ?? []);
+        $charge->setSpecialParams(is_null($paymentType) ? [] : $paymentType->getTransactionParams());
         $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
 
         $this->getResourceService()->createResource($charge);
