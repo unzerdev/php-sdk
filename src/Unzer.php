@@ -58,7 +58,7 @@ class Unzer implements
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = ApiVersions::V1;
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '3.11.0';
+    public const SDK_VERSION = '3.12.0';
 
     /** @var string $key */
     private $key;
