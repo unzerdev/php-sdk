@@ -11,12 +11,12 @@
 
 namespace UnzerSDK\test\unit\Resources;
 
+use PHPUnit\Framework\TestCase;
 use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Address;
 use UnzerSDK\Resources\EmbeddedResources\CompanyInfo;
-use PHPUnit\Framework\TestCase;
 
 class CustomerFactoryTest extends TestCase
 {
@@ -81,6 +81,37 @@ class CustomerFactoryTest extends TestCase
         $this->assertEquals('Max', $customer->getFirstname());
         $this->assertEquals('Mustermann', $customer->getLastname());
         $this->assertEquals('2000-12-12', $customer->getBirthDate());
+        $this->assertEquals('test@unzer.com', $customer->getEmail());
+        $this->assertEquals('abc GmbH', $customer->getCompany());
+        $companyInfo = $customer->getCompanyInfo();
+        $this->assertInstanceOf(CompanyInfo::class, $companyInfo);
+        $this->assertEquals(CompanyRegistrationTypes::REGISTRATION_TYPE_NOT_REGISTERED, $companyInfo->getRegistrationType());
+        $this->assertEquals(CompanyCommercialSectorItems::ACCOMMODATION, $companyInfo->getCommercialSector());
+    }
+
+    /**
+     * Verify that customer object can be created birthdate null.
+     *
+     * @test
+     */
+    public function notRegisteredB2bCustomerIsCreatedWithBirthdateNull(): void
+    {
+        $address = new Address();
+
+        $customer = CustomerFactory::createNotRegisteredB2bCustomer(
+            'Max',
+            'Mustermann',
+            null,
+            $address,
+            'test@unzer.com',
+            'abc GmbH',
+            CompanyCommercialSectorItems::ACCOMMODATION
+        );
+
+        $this->assertSame($address, $customer->getBillingAddress());
+        $this->assertEquals('Max', $customer->getFirstname());
+        $this->assertEquals('Mustermann', $customer->getLastname());
+        $this->assertEquals(null, $customer->getBirthDate());
         $this->assertEquals('test@unzer.com', $customer->getEmail());
         $this->assertEquals('abc GmbH', $customer->getCompany());
         $companyInfo = $customer->getCompanyInfo();

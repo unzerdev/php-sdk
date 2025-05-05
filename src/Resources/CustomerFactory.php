@@ -43,12 +43,12 @@ class CustomerFactory
     }
 
     /**
-     * Creates a local not registered B2B Customer object for B2C transactions.
+     * Creates a local not registered B2B Customer object for B2B transactions.
      * Please use Unzer::createCustomer(...) to create the customer resource on the API side.
      *
      * @param string  $firstname        Firstname is a mandatory for registered B2B customer.
      * @param string  $lastname         Lastname is a mandatory for registered B2B customer.
-     * @param string  $birthDate        Date of birth is a mandatory for registered B2B customer.
+     * @param ?string $birthDate Date of birth is a mandatory for registered B2B customer.
      * @param Address $billingAddress   The billing address is mandatory for the registered B2B customer.
      * @param string  $email            The email is mandatory for the registered B2B customer.
      * @param string  $company          The company name is mandatory for the registered B2B customer.
@@ -60,7 +60,7 @@ class CustomerFactory
     public static function createNotRegisteredB2bCustomer(
         string $firstname,
         string $lastname,
-        string $birthDate,
+        ?string $birthDate,
         Address $billingAddress,
         string $email,
         string $company,
