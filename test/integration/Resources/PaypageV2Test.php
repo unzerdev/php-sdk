@@ -249,6 +249,18 @@ class PaypageV2Test extends BaseIntegrationTest
         $this->assertCreatedPaypage($paypage);
     }
 
+    /** @test
+     */
+    public function createPaypageWithZeroAmount()
+    {
+        $unzer = $this->getUnzerObject();
+
+        $paypage = new Paypage(0, 'EUR', 'preauthorize');
+        $unzer->createPaypage($paypage);
+
+        $this->assertCreatedPaypage($paypage);
+    }
+
     /**
      * @param Paypage $paypage
      * @return void
