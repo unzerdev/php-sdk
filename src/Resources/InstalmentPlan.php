@@ -77,17 +77,17 @@ class InstalmentPlan extends BasePaymentType
      * @param float|null  $lastRate
      */
     public function __construct(
-        int    $numberOfRates = null,
+        ?int   $numberOfRates = null,
         ?string $dayOfPurchase = null,
-        float  $totalPurchaseAmount = null,
-        float  $totalInterestAmount = null,
-        float  $totalAmount = null,
-        float  $effectiveInterestRate = null,
-        float  $nominalInterestRate = null,
-        float  $feeFirstRate = null,
-        float  $feePerRate = null,
-        float  $monthlyRate = null,
-        float  $lastRate = null
+        ?float $totalPurchaseAmount = null,
+        ?float $totalInterestAmount = null,
+        ?float $totalAmount = null,
+        ?float $effectiveInterestRate = null,
+        ?float $nominalInterestRate = null,
+        ?float $feeFirstRate = null,
+        ?float $feePerRate = null,
+        ?float $monthlyRate = null,
+        ?float $lastRate = null
     ) {
         $this->numberOfRates         = $numberOfRates;
         $this->dayOfPurchase         = $dayOfPurchase;

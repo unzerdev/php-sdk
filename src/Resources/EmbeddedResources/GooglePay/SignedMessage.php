@@ -20,7 +20,7 @@ class SignedMessage extends AbstractUnzerResource
      * @param string $ephemeralPublicKey
      * @param string $encryptedMessage
      */
-    public function __construct(string $tag = null, ?string $ephemeralPublicKey = null, ?string $encryptedMessage = null)
+    public function __construct(?string $tag = null, ?string $ephemeralPublicKey = null, ?string $encryptedMessage = null)
     {
         $this->tag = $tag;
         $this->ephemeralPublicKey = $ephemeralPublicKey;

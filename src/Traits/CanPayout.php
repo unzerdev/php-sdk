@@ -46,7 +46,7 @@ trait CanPayout
         $customer = null,
         ?string $orderId = null,
         $metadata = null,
-        Basket $basket = null,
+        ?Basket $basket = null,
         ?string $invoiceId = null,
         ?string $paymentReference = null
     ): Payout {

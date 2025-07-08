@@ -44,7 +44,7 @@ trait CanPayoutWithCustomer
         $customer,
         ?string $orderId = null,
         $metadata = null,
-        Basket $basket = null
+        ?Basket $basket = null
     ): Payout {
         if ($this instanceof UnzerParentInterface) {
             return $this->getUnzerObject()->payout(
