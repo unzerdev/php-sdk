@@ -12,7 +12,6 @@ use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Unzer;
-
 use function in_array;
 use function is_string;
 
@@ -93,8 +92,8 @@ class CancelService implements CancelServiceInterface
         $payment,
         string $chargeId,
         float $amount = null,
-        string $reasonCode = null,
-        string $referenceText = null,
+        ?string $reasonCode = null,
+        ?string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation {
@@ -108,8 +107,8 @@ class CancelService implements CancelServiceInterface
     public function cancelCharge(
         Charge $charge,
         float $amount = null,
-        string $reasonCode = null,
-        string $referenceText = null,
+        ?string $reasonCode = null,
+        ?string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation {
@@ -133,7 +132,7 @@ class CancelService implements CancelServiceInterface
         $payment,
         float $amount = null,
         ?string $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        string $referenceText = null,
+        ?string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): array {

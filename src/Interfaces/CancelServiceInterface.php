@@ -8,13 +8,13 @@
 
 namespace UnzerSDK\Interfaces;
 
+use RuntimeException;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
-use RuntimeException;
 
 interface CancelServiceInterface
 {
@@ -68,8 +68,8 @@ interface CancelServiceInterface
         $payment,
         string $chargeId,
         float $amount = null,
-        string $reasonCode = null,
-        string $referenceText = null,
+        ?string $reasonCode = null,
+        ?string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation;
@@ -94,8 +94,8 @@ interface CancelServiceInterface
     public function cancelCharge(
         Charge $charge,
         float $amount = null,
-        string $reasonCode = null,
-        string $referenceText = null,
+        ?string $reasonCode = null,
+        ?string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation;
@@ -121,7 +121,7 @@ interface CancelServiceInterface
         $payment,
         float $amount = null,
         ?string $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        string $referenceText = null,
+        ?string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): array;

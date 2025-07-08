@@ -100,7 +100,7 @@ class HttpService
         ?string                $uri = null,
         ?AbstractUnzerResource $resource = null,
         string                 $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        string $apiVersion = null
+        ?string $apiVersion = null
     ): string {
         if (!$resource instanceof AbstractUnzerResource) {
             throw new RuntimeException('Transfer object is empty!');

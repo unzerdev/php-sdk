@@ -358,7 +358,7 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, string $returnUrl, string $recurrenceType = null): Recurring
+    public function activateRecurringPayment($paymentType, string $returnUrl, ?string $recurrenceType = null): Recurring
     {
         return $this->resourceService->activateRecurringPayment($paymentType, $returnUrl, $recurrenceType);
     }
@@ -787,8 +787,8 @@ class Unzer implements
     public function chargeAuthorization(
         $payment,
         float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge
     {
         return $this->paymentService->chargeAuthorization($payment, $amount, $orderId, $invoiceId);
@@ -800,8 +800,8 @@ class Unzer implements
     public function chargePayment(
         $payment,
         float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge
     {
         return $this->paymentService->chargePayment($payment, $amount, $orderId, $invoiceId);
@@ -835,7 +835,7 @@ class Unzer implements
         $payment,
         float $amount = null,
         ?string $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        string $referenceText = null,
+        ?string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): array
@@ -859,8 +859,8 @@ class Unzer implements
         $payment,
         string $chargeId,
         float $amount = null,
-        string $reasonCode = null,
-        string $referenceText = null,
+        ?string $reasonCode = null,
+        ?string $referenceText = null,
         float $amountNet = null,
         float $amountVat = null
     ): Cancellation
@@ -875,8 +875,8 @@ class Unzer implements
     public function cancelCharge(
         Charge $charge,
         float  $amount = null,
-        string $reasonCode = null,
-        string $referenceText = null,
+        ?string $reasonCode = null,
+        ?string $referenceText = null,
         float  $amountNet = null,
         float  $amountVat = null
     ): Cancellation
@@ -917,7 +917,7 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment
+    public function ship($payment, ?string $invoiceId = null, ?string $orderId = null): Shipment
     {
         return $this->paymentService->ship($payment, $invoiceId, $orderId);
     }

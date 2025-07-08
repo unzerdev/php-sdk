@@ -215,8 +215,8 @@ class PaymentService implements PaymentServiceInterface
     public function chargeAuthorization(
         $payment,
         float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge {
         return $this->chargePayment($payment, $amount, $orderId, $invoiceId);
     }
@@ -227,8 +227,8 @@ class PaymentService implements PaymentServiceInterface
     public function chargePayment(
         $payment,
         float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge {
         $charge = new Charge($amount);
 
@@ -267,7 +267,7 @@ class PaymentService implements PaymentServiceInterface
         Metadata $metadata = null,
         Basket   $basket = null,
         string   $invoiceId = null,
-        string $referenceText = null
+        ?string $referenceText = null
     ): Payout {
         $payment = $this->createPayment($paymentType);
         $payout = (new Payout($amount, $currency, $returnUrl))
@@ -283,7 +283,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment
+    public function ship($payment, ?string $invoiceId = null, ?string $orderId = null): Shipment
     {
         $shipment = new Shipment();
         $shipment->setInvoiceId($invoiceId)->setOrderId($orderId);

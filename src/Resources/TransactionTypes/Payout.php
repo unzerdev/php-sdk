@@ -31,7 +31,7 @@ class Payout extends AbstractTransactionType
      * @param string|null $currency
      * @param null        $returnUrl
      */
-    public function __construct(float $amount = null, string $currency = null, $returnUrl = null)
+    public function __construct(float $amount = null, ?string $currency = null, $returnUrl = null)
     {
         $this->setAmount($amount);
         $this->setCurrency($currency);

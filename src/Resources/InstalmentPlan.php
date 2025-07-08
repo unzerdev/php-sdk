@@ -3,10 +3,10 @@
 namespace UnzerSDK\Resources;
 
 use DateTime;
+use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Traits\CanAuthorizeWithCustomer;
-use stdClass;
 
 /**
  * Resource representing the installment plan for Installment Secured.
@@ -78,7 +78,7 @@ class InstalmentPlan extends BasePaymentType
      */
     public function __construct(
         int    $numberOfRates = null,
-        string $dayOfPurchase = null,
+        ?string $dayOfPurchase = null,
         float  $totalPurchaseAmount = null,
         float  $totalInterestAmount = null,
         float  $totalAmount = null,

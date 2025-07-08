@@ -9,6 +9,7 @@
 namespace UnzerSDK\Interfaces;
 
 use DateTime;
+use RuntimeException;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
@@ -24,7 +25,6 @@ use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
-use RuntimeException;
 
 interface PaymentServiceInterface
 {
@@ -230,8 +230,8 @@ interface PaymentServiceInterface
     public function chargeAuthorization(
         $payment,
         float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge;
 
     /**
@@ -253,8 +253,8 @@ interface PaymentServiceInterface
     public function chargePayment(
         $payment,
         float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge;
 
     /**
@@ -303,7 +303,7 @@ interface PaymentServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment;
+    public function ship($payment, ?string $invoiceId = null, ?string $orderId = null): Shipment;
 
     /**
      * Initializes a PayPage for charge transaction and returns the PayPage resource.

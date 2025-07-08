@@ -120,7 +120,7 @@ class ResourceService implements ResourceServiceInterface
     public function send(
         AbstractUnzerResource $resource,
         string                $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        string $apiVersion = null
+        ?string $apiVersion = null
     ): stdClass
     {
         $apiConfig = $resource->getApiConfig();
@@ -346,7 +346,7 @@ class ResourceService implements ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
-    public function fetchResource(AbstractUnzerResource $resource, string $apiVersion = null): AbstractUnzerResource
+    public function fetchResource(AbstractUnzerResource $resource, ?string $apiVersion = null): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_GET;
         $response = $this->send($resource, $method, $apiVersion);
@@ -379,7 +379,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, string $returnUrl, string $recurrenceType = null): Recurring
+    public function activateRecurringPayment($paymentType, string $returnUrl, ?string $recurrenceType = null): Recurring
     {
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {

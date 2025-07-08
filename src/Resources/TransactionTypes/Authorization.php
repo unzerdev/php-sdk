@@ -2,6 +2,7 @@
 
 namespace UnzerSDK\Resources\TransactionTypes;
 
+use RuntimeException;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
@@ -9,7 +10,6 @@ use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasDescriptor;
 use UnzerSDK\Traits\HasRecurrenceType;
-use RuntimeException;
 
 /**
  * This represents the authorization transaction.
@@ -55,7 +55,7 @@ class Authorization extends AbstractTransactionType
      * @param string|null $currency
      * @param string|null $returnUrl
      */
-    public function __construct(float $amount = null, string $currency = null, string $returnUrl = null)
+    public function __construct(float $amount = null, ?string $currency = null, ?string $returnUrl = null)
     {
         $this->setAmount($amount);
         $this->setCurrency($currency);

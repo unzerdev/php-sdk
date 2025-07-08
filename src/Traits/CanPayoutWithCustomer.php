@@ -8,13 +8,13 @@
 
 namespace UnzerSDK\Traits;
 
+use RuntimeException;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Interfaces\UnzerParentInterface;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\TransactionTypes\Payout;
-use RuntimeException;
 
 trait CanPayoutWithCustomer
 {
@@ -42,7 +42,7 @@ trait CanPayoutWithCustomer
         string $currency,
         string $returnUrl,
         $customer,
-        string $orderId = null,
+        ?string $orderId = null,
         $metadata = null,
         Basket $basket = null
     ): Payout {
