@@ -95,7 +95,7 @@ class Unzer implements
      * Construct a new Unzer object.
      *
      * @param string $key The private key your received from your Unzer contact person.
-     * @param ?string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
+     * @param string|null $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      *
