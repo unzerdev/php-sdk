@@ -84,8 +84,8 @@ class HttpService
      * send post request to payment server
      *
      * @param string|null $uri uri of the target system
-     * @param ?AbstractUnzerResource $resource
-     * @param string|null $httpMethod
+     * @param AbstractUnzerResource|null $resource
+     * @param string $httpMethod
      * @param string|null $apiVersion
      *
      * @return string
@@ -113,10 +113,6 @@ class HttpService
 
     /**
      * send post request to payment server
-     *
-     * @param ApiRequest $request
-     *
-     * @return string
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.

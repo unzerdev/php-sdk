@@ -110,7 +110,7 @@ class ResourceService implements ResourceServiceInterface
      *
      * @param AbstractUnzerResource $resource
      * @param string $httpMethod
-     * @param string $apiVersion
+     * @param string|null $apiVersion
      *
      * @return stdClass
      *
