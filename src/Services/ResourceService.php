@@ -110,7 +110,7 @@ class ResourceService implements ResourceServiceInterface
      *
      * @param AbstractUnzerResource $resource
      * @param string $httpMethod
-     * @param string $apiVersion
+     * @param string|null $apiVersion
      *
      * @return stdClass
      *
@@ -120,7 +120,7 @@ class ResourceService implements ResourceServiceInterface
     public function send(
         AbstractUnzerResource $resource,
         string                $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        string $apiVersion = null
+        ?string $apiVersion = null
     ): stdClass
     {
         $apiConfig = $resource->getApiConfig();
@@ -338,7 +338,7 @@ class ResourceService implements ResourceServiceInterface
      * Updates the given local resource object (id must be set)
      *
      * @param AbstractUnzerResource $resource The local resource object to update.
-     * @param string $apiVersion
+     * @param string|null $apiVersion
      *
      * @return AbstractUnzerResource The updated resource object.
      *
@@ -346,7 +346,7 @@ class ResourceService implements ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
-    public function fetchResource(AbstractUnzerResource $resource, string $apiVersion = null): AbstractUnzerResource
+    public function fetchResource(AbstractUnzerResource $resource, ?string $apiVersion = null): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_GET;
         $response = $this->send($resource, $method, $apiVersion);
@@ -379,7 +379,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, string $returnUrl, string $recurrenceType = null): Recurring
+    public function activateRecurringPayment($paymentType, string $returnUrl, ?string $recurrenceType = null): Recurring
     {
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
@@ -566,7 +566,7 @@ class ResourceService implements ResourceServiceInterface
         try {
             $this->fetchResource($basketObj, $basketVersion);
         } catch (UnzerApiException $exception) {
-            if ($exception->getCode() !== ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND || $isV3Basket) {
+            if ($exception->getCode() !== ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND || $basketVersion === ApiVersions::V3) {
                 throw $exception;
             }
             $this->fetchResource($basketObj);

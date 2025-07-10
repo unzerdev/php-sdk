@@ -57,7 +57,7 @@ interface ResourceServiceInterface
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function activateRecurringPayment($paymentType, string $returnUrl, string $recurrenceType = null): Recurring;
+    public function activateRecurringPayment($paymentType, string $returnUrl, ?string $recurrenceType = null): Recurring;
 
     /**
      * Fetch and return payment by given payment id or payment object.

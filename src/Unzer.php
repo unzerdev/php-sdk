@@ -95,7 +95,7 @@ class Unzer implements
      * Construct a new Unzer object.
      *
      * @param string $key The private key your received from your Unzer contact person.
-     * @param ?string $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
+     * @param string|null $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
      * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
      *
@@ -358,7 +358,7 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, string $returnUrl, string $recurrenceType = null): Recurring
+    public function activateRecurringPayment($paymentType, string $returnUrl, ?string $recurrenceType = null): Recurring
     {
         return $this->resourceService->activateRecurringPayment($paymentType, $returnUrl, $recurrenceType);
     }
@@ -667,7 +667,7 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function fetchResourceFromEvent(string $eventJson = null): AbstractUnzerResource
+    public function fetchResourceFromEvent(?string $eventJson = null): AbstractUnzerResource
     {
         return $this->webhookService->fetchResourceFromEvent($eventJson);
     }
@@ -679,8 +679,8 @@ class Unzer implements
         Authorization $authorization,
         $paymentType,
         $customer = null,
-        Metadata      $metadata = null,
-        Basket        $basket = null
+        ?Metadata $metadata = null,
+        ?Basket   $basket = null
     ): Authorization
     {
         return $this->paymentService->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
@@ -735,8 +735,8 @@ class Unzer implements
         Charge   $charge,
         $paymentType,
         $customer = null,
-        Metadata $metadata = null,
-        Basket   $basket = null
+        ?Metadata $metadata = null,
+        ?Basket   $basket = null
     ): Charge
     {
         return $this->paymentService->performCharge($charge, $paymentType, $customer, $metadata, $basket);
@@ -786,9 +786,9 @@ class Unzer implements
      */
     public function chargeAuthorization(
         $payment,
-        float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?float $amount = null,
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge
     {
         return $this->paymentService->chargeAuthorization($payment, $amount, $orderId, $invoiceId);
@@ -799,9 +799,9 @@ class Unzer implements
      */
     public function chargePayment(
         $payment,
-        float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?float $amount = null,
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge
     {
         return $this->paymentService->chargePayment($payment, $amount, $orderId, $invoiceId);
@@ -815,7 +815,7 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorization(Authorization $authorization, float $amount = null): Cancellation
+    public function cancelAuthorization(Authorization $authorization, ?float $amount = null): Cancellation
     {
         return $this->cancelService->cancelAuthorization($authorization, $amount);
     }
@@ -823,7 +823,7 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function cancelAuthorizationByPayment($payment, float $amount = null): Cancellation
+    public function cancelAuthorizationByPayment($payment, ?float $amount = null): Cancellation
     {
         return $this->cancelService->cancelAuthorizationByPayment($payment, $amount);
     }
@@ -833,11 +833,11 @@ class Unzer implements
      */
     public function cancelPayment(
         $payment,
-        float $amount = null,
+        ?float $amount = null,
         ?string $reasonCode = CancelReasonCodes::REASON_CODE_CANCEL,
-        string $referenceText = null,
-        float $amountNet = null,
-        float $amountVat = null
+        ?string $referenceText = null,
+        ?float $amountNet = null,
+        ?float $amountVat = null
     ): array
     {
         return $this->cancelService
@@ -847,7 +847,7 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function cancelPaymentAuthorization($payment, float $amount = null): ?Cancellation
+    public function cancelPaymentAuthorization($payment, ?float $amount = null): ?Cancellation
     {
         return $this->cancelService->cancelPaymentAuthorization($payment, $amount);
     }
@@ -858,11 +858,11 @@ class Unzer implements
     public function cancelChargeById(
         $payment,
         string $chargeId,
-        float $amount = null,
-        string $reasonCode = null,
-        string $referenceText = null,
-        float $amountNet = null,
-        float $amountVat = null
+        ?float $amount = null,
+        ?string $reasonCode = null,
+        ?string $referenceText = null,
+        ?float $amountNet = null,
+        ?float $amountVat = null
     ): Cancellation
     {
         return $this->cancelService
@@ -874,11 +874,11 @@ class Unzer implements
      */
     public function cancelCharge(
         Charge $charge,
-        float  $amount = null,
-        string $reasonCode = null,
-        string $referenceText = null,
-        float  $amountNet = null,
-        float  $amountVat = null
+        ?float $amount = null,
+        ?string $reasonCode = null,
+        ?string $referenceText = null,
+        ?float $amountNet = null,
+        ?float $amountVat = null
     ): Cancellation
     {
         return $this->cancelService
@@ -917,7 +917,7 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment
+    public function ship($payment, ?string $invoiceId = null, ?string $orderId = null): Shipment
     {
         return $this->paymentService->ship($payment, $invoiceId, $orderId);
     }
@@ -931,11 +931,11 @@ class Unzer implements
         $paymentType,
         string   $returnUrl,
         $customer = null,
-        string   $orderId = null,
-        Metadata $metadata = null,
-        Basket   $basket = null,
-        string   $invoiceId = null,
-        string   $referenceText = null
+        ?string   $orderId = null,
+        ?Metadata $metadata = null,
+        ?Basket   $basket = null,
+        ?string   $invoiceId = null,
+        ?string   $referenceText = null
     ): Payout
     {
         return $this->paymentService->payout(
@@ -1004,9 +1004,9 @@ class Unzer implements
      */
     public function initPayPageCharge(
         Paypage  $paypage,
-        Customer $customer = null,
-        Basket   $basket = null,
-        Metadata $metadata = null
+        ?Customer $customer = null,
+        ?Basket   $basket = null,
+        ?Metadata $metadata = null
     ): Paypage
     {
         return $this->paymentService->initPayPageCharge($paypage, $customer, $basket, $metadata);
@@ -1017,9 +1017,9 @@ class Unzer implements
      */
     public function initPayPageAuthorize(
         Paypage  $paypage,
-        Customer $customer = null,
-        Basket   $basket = null,
-        Metadata $metadata = null
+        ?Customer $customer = null,
+        ?Basket   $basket = null,
+        ?Metadata $metadata = null
     ): Paypage
     {
         return $this->paymentService->initPayPageAuthorize($paypage, $customer, $basket, $metadata);
@@ -1032,7 +1032,7 @@ class Unzer implements
         float    $amount,
         string   $currency,
         float    $effectiveInterest,
-        DateTime $orderDate = null
+        ?DateTime $orderDate = null
     ): InstalmentPlans
     {
         return $this->paymentService
@@ -1078,7 +1078,7 @@ class Unzer implements
      * @param string|null $jwtToken If set, the given token will be used instead as long it is valid.
      * @throws UnzerApiException
      */
-    public function prepareJwtToken(string $jwtToken = null): string
+    public function prepareJwtToken(?string $jwtToken = null): string
     {
         if ($jwtToken !== null && JwtService::validateExpiryTime($jwtToken)) {
             $this->jwtToken = $jwtToken;
