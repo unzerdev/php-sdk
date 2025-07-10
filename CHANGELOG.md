@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.13.0](https://github.com/unzerdev/php-sdk/compare/3.12.0..3.13.0)
+
+### Changed
+
+* Ensure type hints of nullable function parameters are explicitly defined as such to address deprecation warnings.
+* Change paypage v2 test domain ending from ".io" to ".com".
+
 ## [3.12.0](https://github.com/unzerdev/php-sdk/compare/3.11.0..3.12.0)
 
 ### Added
