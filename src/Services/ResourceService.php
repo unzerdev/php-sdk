@@ -338,7 +338,7 @@ class ResourceService implements ResourceServiceInterface
      * Updates the given local resource object (id must be set)
      *
      * @param AbstractUnzerResource $resource The local resource object to update.
-     * @param string $apiVersion
+     * @param string|null $apiVersion
      *
      * @return AbstractUnzerResource The updated resource object.
      *

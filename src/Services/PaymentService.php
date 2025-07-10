@@ -73,6 +73,9 @@ class PaymentService implements PaymentServiceInterface
         return $this->getUnzer()->getResourceService();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function performAuthorization(
         Authorization $authorization,
         $paymentType,
