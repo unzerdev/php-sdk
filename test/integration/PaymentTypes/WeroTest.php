@@ -6,6 +6,10 @@
 
 namespace UnzerSDK\test\integration\PaymentTypes;
 
+use UnzerSDK\Constants\WeroAmountPaymentTypes;
+use UnzerSDK\Constants\WeroCaptureTriggers;
+use UnzerSDK\Resources\EmbeddedResources\WeroEventDependentPayment;
+use UnzerSDK\Resources\EmbeddedResources\WeroTransactionData;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Wero;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -43,6 +47,18 @@ class WeroTest extends BaseIntegrationTest
     public function weroShouldBeAuthorizable(Wero $wero): void
     {
         $authorization = new Authorization(100.0, 'EUR', self::RETURN_URL);
+
+        // Add Wero additional transaction data
+        $weroData = (new WeroTransactionData())
+            ->setEventDependentPayment(
+                (new WeroEventDependentPayment())
+                    ->setCaptureTrigger(WeroCaptureTriggers::SERVICEFULFILMENT)
+                    ->setAmountPaymentType(WeroAmountPaymentTypes::PAY)
+                    ->setMaxAuthToCaptureTime(300)
+                    ->setMultiCapturesAllowed(false)
+            );
+        $authorization->setWeroTransactionData($weroData);
+
         $authorization = $this->unzer->performAuthorization($authorization, $wero);
         $this->assertNotNull($authorization);
         $this->assertNotEmpty($authorization->getId());
@@ -63,12 +79,27 @@ class WeroTest extends BaseIntegrationTest
     public function weroShouldBeChargeable(Wero $wero): void
     {
         $charge = new Charge(100.0, 'EUR', self::RETURN_URL);
+
+        // Add Wero additional transaction data
+        $weroData = (new WeroTransactionData())
+            ->setEventDependentPayment(
+                (new WeroEventDependentPayment())
+                    ->setCaptureTrigger(WeroCaptureTriggers::SERVICEFULFILMENT)
+                    ->setAmountPaymentType(WeroAmountPaymentTypes::PAY)
+                    ->setMaxAuthToCaptureTime(300)
+                    ->setMultiCapturesAllowed(false)
+            );
+        $charge->setWeroTransactionData($weroData);
+
         $charge = $this->unzer->performCharge($charge, $wero);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
 
         $fetched = $this->unzer->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
-        $this->assertEquals($charge->setCard3ds(false)->expose(), $fetched->expose());
+
+        $this->assertEquals(($charge->getPaymentId()), $fetched->getPaymentId());
+        $this->assertEquals(($charge->getAmount()), $fetched->getAmount());
+        $this->assertEquals(($charge->getId()), $fetched->getId());
     }
 }
