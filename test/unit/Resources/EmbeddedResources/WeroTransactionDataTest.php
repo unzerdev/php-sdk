@@ -18,8 +18,8 @@ class WeroTransactionDataTest extends BasePaymentTest
         $edp = (new WeroEventDependentPayment())
             ->setCaptureTrigger(WeroCaptureTriggers::SERVICEFULFILMENT)
             ->setAmountPaymentType(WeroAmountPaymentTypes::PAY)
-            ->setMaxAuthToCaptureTime('300')
-            ->setMultiCapturesAllowed('false');
+            ->setMaxAuthToCaptureTime(300)
+            ->setMultiCapturesAllowed(false);
 
         $wtd = (new WeroTransactionData())
             ->setEventDependentPayment($edp);

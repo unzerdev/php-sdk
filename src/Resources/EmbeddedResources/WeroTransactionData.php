@@ -3,6 +3,7 @@
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use stdClass;
+use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
 
 /*
@@ -35,7 +36,7 @@ class WeroTransactionData extends AbstractUnzerResource
     /**
      * @inheritDoc
      */
-    public function handleResponse($response, string $method = null): void
+    public function handleResponse($response, string $method = HttpAdapterInterface::REQUEST_GET): void
     {
         parent::handleResponse($response, $method);
         if ($response instanceof stdClass && isset($response->eventDependentPayment)) {
