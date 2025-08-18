@@ -3,7 +3,7 @@
 namespace UnzerSDK\Constants;
 
 /**
- * Allowed amount payment type values for Wero event dependent payment.
+ * Allowed amount payment type values for Wero event-dependent payment.
  */
 class WeroAmountPaymentTypes
 {

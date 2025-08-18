@@ -2,18 +2,18 @@
 
 namespace UnzerSDK\Resources\EmbeddedResources;
 
+use UnzerSDK\Constants\WeroAmountPaymentTypes;
+use UnzerSDK\Constants\WeroCaptureTriggers;
 use UnzerSDK\Resources\AbstractUnzerResource;
 
 /**
  * Represents the `eventDependentPayment` object for Wero additional transaction data.
- *
- * Allowed values
- * - captureTrigger: SHIPPING, DELIVERY, AVAILABILITY, SERVICEFULFILMENT, OTHER
- * - amountPaymentType: PAY, PAYUPTO
  */
 class WeroEventDependentPayment extends AbstractUnzerResource
 {
+    /** @see WeroCaptureTriggers */
     protected ?string $captureTrigger = null;
+    /** @see WeroAmountPaymentTypes */
     protected ?string $amountPaymentType = null;
     protected ?int $maxAuthToCaptureTime = null;
     protected ?bool $multiCapturesAllowed = null;
@@ -23,6 +23,9 @@ class WeroEventDependentPayment extends AbstractUnzerResource
         return $this->captureTrigger;
     }
 
+    /**
+     * @see WeroCaptureTriggers for allowed values
+     */
     public function setCaptureTrigger(?string $captureTrigger): WeroEventDependentPayment
     {
         $this->captureTrigger = $captureTrigger;
@@ -34,6 +37,9 @@ class WeroEventDependentPayment extends AbstractUnzerResource
         return $this->amountPaymentType;
     }
 
+    /**
+     * @see WeroAmountPaymentTypes for allowed values
+     */
     public function setAmountPaymentType(?string $amountPaymentType): WeroEventDependentPayment
     {
         $this->amountPaymentType = $amountPaymentType;
