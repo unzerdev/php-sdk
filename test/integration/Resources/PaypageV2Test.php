@@ -5,12 +5,15 @@ namespace UnzerSDK\test\integration\Resources;
 use UnzerSDK\Constants\CustomerGroups;
 use UnzerSDK\Constants\ExemptionType;
 use UnzerSDK\Constants\PaypageCheckoutTypes;
+use UnzerSDK\Constants\WeroAmountPaymentTypes;
+use UnzerSDK\Constants\WeroCaptureTriggers;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodConfig;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\PaymentMethodsConfigs;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Resources;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Style;
 use UnzerSDK\Resources\EmbeddedResources\Paypage\Urls;
 use UnzerSDK\Resources\EmbeddedResources\Risk;
+use UnzerSDK\Resources\EmbeddedResources\WeroEventDependentPayment;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaymentTypes\Alipay;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
@@ -294,6 +297,18 @@ class PaypageV2Test extends BaseIntegrationTest
             'paypal' => $enabledConfig
         ]);
 
+        $withWeroConfig = new PaymentMethodsConfigs();
+        $withWeroConfig->setMethodConfigs([
+            'wero' => (new PaymentMethodConfig())
+                ->setEnabled(true)
+                ->setEventDependentPayment($edp = (new WeroEventDependentPayment())
+                    ->setCaptureTrigger(WeroCaptureTriggers::SERVICEFULFILMENT)
+                    ->setAmountPaymentType(WeroAmountPaymentTypes::PAY)
+                    ->setMaxAuthToCaptureTime(300)
+                    ->setMultiCapturesAllowed(false)
+                )
+        ]);
+
 
         $withCardSpecificConfig = (new PaymentMethodsConfigs())->addMethodConfig(Card::class, $cardConfig);
 
@@ -331,7 +346,8 @@ class PaypageV2Test extends BaseIntegrationTest
             'Method Configs' => [$withMethodConfigs],
             'CardSpecificConfig' => [$withCardSpecificConfig],
             'ClassNames' => [$withClassNames],
-            'PaylaterConfig' => [$withPaylaterConfig]
+            'PaylaterConfig' => [$withPaylaterConfig],
+            'WeroConfig' => [$withWeroConfig]
         ];
     }
 }
