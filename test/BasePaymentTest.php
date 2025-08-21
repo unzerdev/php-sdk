@@ -292,7 +292,7 @@ class BasePaymentTest extends TestCase
      */
     public static function generateRandomId(): string
     {
-        return str_replace('.', '', microtime(true));
+        return str_replace('.', '', random_int(0, 99999999));
     }
 
     /**
