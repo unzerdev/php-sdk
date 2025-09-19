@@ -1427,7 +1427,7 @@ class ResourceServiceTest extends BasePaymentTest
             'SEPA_DIRECT_DEBIT_GUARANTEED' => ['s-ddg-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'],
             'SOFORT' => ['s-sft-xen2ybcovn56', 'https://api.unzer.com/v1/types/sofort/s-sft-xen2ybcovn56/'],
             'WECHATPAY' => ['s-wcp-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'],
-            'WERO' => ['s-wro-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-wro-xen2ybcovn56/']
+            'WERO' => ['s-wro-xen2ybcovn56', 'https://api.unzer.com/v1/types/wero/s-wro-xen2ybcovn56/']
         ];
     }
 
