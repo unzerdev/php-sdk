@@ -52,6 +52,7 @@ use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\PaymentTypes\Twint;
 use UnzerSDK\Resources\PaymentTypes\Wechatpay;
+use UnzerSDK\Resources\PaymentTypes\Wero;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -956,6 +957,9 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::WECHATPAY:
                 $paymentType = new Wechatpay();
+                break;
+            case IdStrings::WERO:
+                $paymentType = new Wero();
                 break;
             case IdStrings::OPEN_BANKING:
                 $paymentType = new OpenbankingPis();
