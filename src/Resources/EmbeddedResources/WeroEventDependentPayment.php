@@ -46,10 +46,7 @@ class WeroEventDependentPayment extends AbstractUnzerResource
         return $this;
     }
 
-    /**
-     * @return string|int|null
-     */
-    public function getMaxAuthToCaptureTime()
+    public function getMaxAuthToCaptureTime(): ?int
     {
         return $this->maxAuthToCaptureTime;
     }
@@ -60,10 +57,7 @@ class WeroEventDependentPayment extends AbstractUnzerResource
         return $this;
     }
 
-    /**
-     * @return bool|string|null
-     */
-    public function getMultiCapturesAllowed()
+    public function getMultiCapturesAllowed(): ?bool
     {
         return $this->multiCapturesAllowed;
     }
