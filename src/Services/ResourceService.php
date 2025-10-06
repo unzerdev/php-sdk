@@ -209,6 +209,16 @@ class ResourceService implements ResourceServiceInterface
                 }
                 $resource = $unzer->fetchReversal($paymentId, $resourceId);
                 break;
+            case $resourceType === IdStrings::CHARGEBACK:
+                $paymentId = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
+                $chargeId = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
+
+                $resource = $this->fetchChargebackById(
+                    $paymentId,
+                    $resourceId,
+                    $chargeId
+                );
+                break;
             case $resourceType === IdStrings::PAYOUT:
                 $resource = $unzer->fetchPayout(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
                 break;
