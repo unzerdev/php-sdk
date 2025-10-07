@@ -231,7 +231,7 @@ class WebhookTest extends BaseIntegrationTest
         $webhookNotification = [
             'event' => 'chargebacks',
             'publicKey' => 's-pub-xyz',
-            'retrieveUrl' => 'https=>//sbx-api.unzer.com/v1/payments/' . self::CHARGEDBACK_PAYMENT_ID . '/charges/s-chg-1/chargebacks/s-cbk-1',
+            'retrieveUrl' => 'https://sbx-api.unzer.com/v1/payments/' . self::CHARGEDBACK_PAYMENT_ID . '/charges/s-chg-1/chargebacks/s-cbk-1',
             'paymentId' => self::CHARGEDBACK_PAYMENT_ID
         ];
 

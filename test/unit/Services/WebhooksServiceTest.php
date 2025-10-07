@@ -331,7 +331,7 @@ class WebhooksServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify exception is thrown if the retrieveURL is empty.
+     * Verify that a chargeback is returned from a webhook event.
      *
      * @test
      */
@@ -341,9 +341,9 @@ class WebhooksServiceTest extends BasePaymentTest
         $unzer = new Unzer('s-priv-1234');
         $webhookService = new WebhookService($unzer);
 
-        $paymentId = 'p-pay-42';
-        $chargeId = 'p-chg-1';
-        $chargebackId = 'p-cbk-1';
+        $paymentId = 's-pay-42';
+        $chargeId = 's-chg-1';
+        $chargebackId = 's-cbk-1';
         $retrieveUrl = "https://api.unzer.com/v1/payments/{$paymentId}/charges/{$chargeId}/chargebacks/{$chargebackId}";
 
         // Partial mock: keep original behavior except fetchChargebackById which we want to intercept
