@@ -2,10 +2,7 @@
 
 namespace UnzerSDK\Resources\TransactionTypes;
 
-use RuntimeException;
 use UnzerSDK\Adapter\HttpAdapterInterface;
-use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\Payment;
 use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasDescriptor;
@@ -38,12 +35,6 @@ class Sca extends AbstractTransactionType
 
     /** @var bool $card3ds */
     protected $card3ds;
-
-    /** @var Authorization[] $authorizations */
-    private $authorizations = [];
-
-    /** @var Charge[] $charges */
-    private $charges = [];
 
     /**
      * Sca constructor.
@@ -171,86 +162,10 @@ class Sca extends AbstractTransactionType
     }
 
     /**
-     * @return Authorization[]
-     */
-    public function getAuthorizations(): array
-    {
-        return $this->authorizations;
-    }
-
-    /**
-     * @param Authorization $authorization
-     *
-     * @return Sca
-     */
-    public function addAuthorization(Authorization $authorization): Sca
-    {
-        $this->authorizations[] = $authorization;
-        return $this;
-    }
-
-    /**
-     * @return Charge[]
-     */
-    public function getCharges(): array
-    {
-        return $this->charges;
-    }
-
-    /**
-     * @param Charge $charge
-     *
-     * @return Sca
-     */
-    public function addCharge(Charge $charge): Sca
-    {
-        $this->charges[] = $charge;
-        return $this;
-    }
-
-    /**
      * {@inheritDoc}
      */
     protected function getResourcePath(string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
     {
         return 'sca';
-    }
-
-    /**
-     * Charge SCA transaction.
-     *
-     * @param float|null $amount
-     *
-     * @return Charge
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     */
-    public function charge(?float $amount = null): Charge
-    {
-        $payment = $this->getPayment();
-        if (!$payment instanceof Payment) {
-            throw new RuntimeException('Payment object is missing. Try fetching the object first!');
-        }
-        return $this->getUnzerObject()->chargeScaTransaction($payment, $this->getId(), $amount);
-    }
-
-    /**
-     * Authorize SCA transaction.
-     *
-     * @param float|null $amount
-     *
-     * @return Authorization
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     */
-    public function authorize(?float $amount = null): Authorization
-    {
-        $payment = $this->getPayment();
-        if (!$payment instanceof Payment) {
-            throw new RuntimeException('Payment object is missing. Try fetching the object first!');
-        }
-        return $this->getUnzerObject()->authorizeScaTransaction($payment, $this->getId(), $amount);
     }
 }
