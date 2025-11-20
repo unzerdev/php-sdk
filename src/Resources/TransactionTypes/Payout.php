@@ -12,9 +12,6 @@ use UnzerSDK\Adapter\HttpAdapterInterface;
  */
 class Payout extends AbstractTransactionType
 {
-    /** @var float|null $amount */
-    protected $amount;
-
     /** @var string|null $currency */
     protected $currency;
 
@@ -29,25 +26,6 @@ class Payout extends AbstractTransactionType
         $this->setAmount($amount);
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getAmount(): ?float
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param float|null $amount
-     *
-     * @return self
-     */
-    public function setAmount(?float $amount): self
-    {
-        $this->amount = $amount !== null ? round($amount, 4) : null;
-        return $this;
     }
 
     /**
