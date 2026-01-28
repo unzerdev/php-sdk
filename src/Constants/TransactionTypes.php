@@ -18,5 +18,5 @@ class TransactionTypes
     public const SHIPMENT = 'shipment';
     public const PAYOUT = 'payout';
     public const CHARGEBACK = 'chargeback';
-    public const SCA = 'sca';
+    public const SCA = 'strong_customer_authentication';
 }

@@ -11,7 +11,6 @@
 
 namespace UnzerSDK\test\integration\TransactionTypes;
 
-use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
@@ -77,7 +76,6 @@ class ScaTest extends BaseIntegrationTest
 
         // perform request
         $sca = new Sca(119.0, 'EUR', self::RETURN_URL);
-        $sca->setRecurrenceType(RecurrenceTypes::ONE_CLICK, $paymentType);
         $sca->setPaymentReference($paymentReference);
         $sca->setCard3ds(true);
 
@@ -93,6 +91,8 @@ class ScaTest extends BaseIntegrationTest
         $this->assertSame($metadata, $payment->getMetadata());
         $this->assertSame($basket, $payment->getBasket());
         $this->assertEquals($paymentReference, $sca->getPaymentReference());
+
+        return $sca;
     }
 
     /**
@@ -148,12 +148,14 @@ class ScaTest extends BaseIntegrationTest
     {
         // Create SCA transaction
         /** @var Card $paymentType */
-        $paymentType = $this->unzer->createPaymentType($this->createCardObject());
+        $paymentType = $this->unzer->createPaymentType($this->createCardObject("5188340000000060"));
         $sca = new Sca(100.0, 'EUR', self::RETURN_URL);
         $sca = $this->unzer->performSca($sca, $paymentType);
 
-        $this->assertTransactionResourceHasBeenCreated($sca);
 
+        $this->assertTransactionResourceHasBeenCreated($sca);
+        $redirectUrl = $sca->getRedirectUrl();
+        $this->assertNotNull($redirectUrl);
         // Perform charge on SCA transaction
         $charge = $this->unzer->chargeScaTransaction($sca->getPayment(), $sca->getId(), 50.0);
 
