@@ -877,21 +877,29 @@ class Unzer implements
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeScaTransaction($payment, string $scaId, ?float $amount = null, ?string $orderId = null, ?string $invoiceId = null): Charge
+    public function chargeScaTransaction($payment, float $amount, string $currency, string $returnUrl, ?string $orderId = null, ?string $invoiceId = null): Charge
     {
         $charge = new Charge($amount);
-        $charge->setOrderId($orderId)->setInvoiceId($invoiceId);
+        $charge->setOrderId($orderId)
+            ->setCurrency($currency)
+            ->setReturnUrl($returnUrl)
+            ->setInvoiceId($invoiceId);
+
 
         $paymentObject = $this->resourceService->getPaymentResource($payment);
-        $sca = $paymentObject->getSca($scaId, true);
+        $sca = $paymentObject->getSca(true);
 
         if (!$sca instanceof Sca) {
             throw new RuntimeException('SCA transaction not found.');
         }
 
-        $sca->addCharge($charge);
+        // Create a parent resource representing the SCA collection without a specific ID
+        $scaParent = new Sca();
+        $scaParent->setParentResource($paymentObject);
+
+        $paymentObject->addCharge($charge);
         $charge->setPayment($paymentObject);
-        $charge->setParentResource($sca);
+        $charge->setParentResource($scaParent);
 
         $this->resourceService->createResource($charge);
 

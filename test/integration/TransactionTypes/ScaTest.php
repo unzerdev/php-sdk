@@ -157,11 +157,11 @@ class ScaTest extends BaseIntegrationTest
         $redirectUrl = $sca->getRedirectUrl();
         $this->assertNotNull($redirectUrl);
         // Perform charge on SCA transaction
-        $charge = $this->unzer->chargeScaTransaction($sca->getPayment(), $sca->getId(), 50.0);
+        $charge = $this->unzer->chargeScaTransaction($sca->getPayment(), 100, "EUR", self::RETURN_URL);
 
         $this->assertTransactionResourceHasBeenCreated($charge);
         $this->assertInstanceOf(Charge::class, $charge);
-        $this->assertEquals(50.0, $charge->getAmount());
+        $this->assertEquals(100.0, $charge->getAmount());
         $this->assertEquals($sca->getPayment()->getId(), $charge->getPayment()->getId());
     }
 
