@@ -867,24 +867,23 @@ class Unzer implements
      * Charge an SCA transaction.
      *
      * @param Payment|string $payment The payment object or payment ID.
-     * @param string $scaId The SCA transaction ID.
-     * @param float|null $amount The amount to charge.
-     * @param string|null $orderId The order ID.
-     * @param string|null $invoiceId The invoice ID.
+     * @param Charge $charge The Charge object to process.
+     * @param Customer|string|null $customer The customer object or customer ID.
+     * @param Metadata|null $metadata The metadata object.
+     * @param Basket|null $basket The basket object.
      *
      * @return Charge The resulting Charge object.
      *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function chargeScaTransaction($payment, float $amount, string $currency, string $returnUrl, ?string $orderId = null, ?string $invoiceId = null): Charge
+    public function chargeScaTransaction(
+        $payment,
+        Charge $charge,
+        $customer = null,
+        ?Metadata $metadata = null,
+        ?Basket $basket = null): Charge
     {
-        $charge = new Charge($amount);
-        $charge->setOrderId($orderId)
-            ->setCurrency($currency)
-            ->setInvoiceId($invoiceId);
-
-
         $paymentObject = $this->resourceService->getPaymentResource($payment);
         $sca = $paymentObject->getSca(true);
 
@@ -896,7 +895,11 @@ class Unzer implements
         $scaParent = new Sca();
         $scaParent->setParentResource($paymentObject);
 
-        $paymentObject->addCharge($charge);
+        $paymentObject->addCharge($charge)
+            ->setCustomer($customer)
+            ->setMetadata($metadata)
+            ->setBasket($basket);
+
         $charge->setPayment($paymentObject);
         $charge->setParentResource($scaParent);
 

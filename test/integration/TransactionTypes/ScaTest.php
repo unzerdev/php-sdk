@@ -17,11 +17,17 @@ use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Sca;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class ScaTest extends BaseIntegrationTest
 {
+    protected function setUp(): void
+    {
+        $this->getUnzerObject(TestEnvironmentService::getUnzerOneTestPrivateKey());
+    }
     /**
      * Verify SCA transaction can be performed using the id of a payment type.
      *
@@ -160,13 +166,14 @@ class ScaTest extends BaseIntegrationTest
         $this->assertTrue($sca->isPending());
 
         // Perform charge on SCA transaction
+        $charge = new Charge(100, "EUR");
 
         // Expect charge to fail on pending transaction with error code
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_CANNOT_CHARGE_UNSUCCESSFUL_SCA_TRANSACTION);
         $this->expectExceptionMessage('Cannot perform payment on an unsuccessful strong customer authentication.');
 
-        $this->unzer->chargeScaTransaction($sca->getPayment(), 100, "EUR", self::RETURN_URL);
+        $this->unzer->chargeScaTransaction($sca->getPayment(), $charge);
     }
 
     /**
