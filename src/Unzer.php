@@ -882,7 +882,6 @@ class Unzer implements
         $charge = new Charge($amount);
         $charge->setOrderId($orderId)
             ->setCurrency($currency)
-            ->setReturnUrl($returnUrl)
             ->setInvoiceId($invoiceId);
 
 
@@ -920,21 +919,31 @@ class Unzer implements
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function authorizeScaTransaction($payment, string $scaId, ?float $amount = null, ?string $orderId = null, ?string $invoiceId = null): Authorization
+    public function authorizeScaTransaction(
+        $payment,
+        Authorization $authorization,
+        $customer = null,
+        ?Metadata $metadata = null,
+        ?Basket $basket = null): Authorization
     {
-        $authorization = new Authorization($amount, null, null);
-        $authorization->setOrderId($orderId)->setInvoiceId($invoiceId);
-
         $paymentObject = $this->resourceService->getPaymentResource($payment);
-        $sca = $paymentObject->getSca($scaId, true);
+        $sca = $paymentObject->getSca(true);
 
         if (!$sca instanceof Sca) {
             throw new RuntimeException('SCA transaction not found.');
         }
 
-        $sca->addAuthorization($authorization);
+        // Create a parent resource representing the SCA collection without a specific ID
+        $scaParent = new Sca();
+        $scaParent->setParentResource($paymentObject);
+
+        $paymentObject->setAuthorization($authorization)
+            ->setCustomer($customer)
+            ->setMetadata($metadata)
+            ->setBasket($basket);
+
         $authorization->setPayment($paymentObject);
-        $authorization->setParentResource($sca);
+        $authorization->setParentResource($scaParent);
 
         $this->resourceService->createResource($authorization);
 

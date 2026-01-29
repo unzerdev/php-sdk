@@ -88,7 +88,10 @@ class PaymentService implements PaymentServiceInterface
         $paymentType = $payment->getPaymentType();
         $authorization->setSpecialParams($paymentType !== null ? $paymentType->getTransactionParams() : []);
 
-        $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
+        $payment->setAuthorization($authorization)
+            ->setCustomer($customer)
+            ->setMetadata($metadata)
+            ->setBasket($basket);
 
         $this->getResourceService()->createResource($authorization);
         return $authorization;
