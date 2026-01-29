@@ -891,7 +891,7 @@ class Unzer implements
             throw new RuntimeException('SCA transaction not found.');
         }
 
-        // Create a parent resource representing the SCA collection without a specific ID
+        // Set Sca object without id as a parent to match the URI path.
         $scaParent = new Sca();
         $scaParent->setParentResource($paymentObject);
 
@@ -912,10 +912,10 @@ class Unzer implements
      * Authorize an SCA transaction.
      *
      * @param Payment|string $payment The payment object or payment ID.
-     * @param string $scaId The SCA transaction ID.
-     * @param float|null $amount The amount to authorize.
-     * @param string|null $orderId The order ID.
-     * @param string|null $invoiceId The invoice ID.
+     * @param Authorization $authorization The Authorization object to process.
+     * @param Customer|string|null $customer The customer object or customer ID.
+     * @param Metadata|null $metadata The metadata object.
+     * @param Basket|null $basket The basket object.
      *
      * @return Authorization The resulting Authorization object.
      *
@@ -936,7 +936,7 @@ class Unzer implements
             throw new RuntimeException('SCA transaction not found.');
         }
 
-        // Create a parent resource representing the SCA collection without a specific ID
+        // Set Sca object without id as a parent to match the URI path.
         $scaParent = new Sca();
         $scaParent->setParentResource($paymentObject);
 

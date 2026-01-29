@@ -348,6 +348,7 @@ class Payment extends AbstractUnzerResource
     {
         $sca = $this->sca;
         if (!$lazy && $sca !== null) {
+            /** @var Sca */
             return $this->getResource($sca);
         }
         return $sca;

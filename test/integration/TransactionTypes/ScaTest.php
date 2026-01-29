@@ -22,6 +22,13 @@ use UnzerSDK\Resources\TransactionTypes\Sca;
 use UnzerSDK\test\BaseIntegrationTest;
 use UnzerSDK\test\Helper\TestEnvironmentService;
 
+/**
+ * Verify that PAPI endpoints can be called correctly
+ * GET {domain}/v1/payments/{paymentId}/sca/{scaId}
+ * POST {domain}/v1/payments/sca
+ * POST {domain}/v1/payments/{paymentId}/sca/authorize
+ * POST {domain}/v1/payments/{paymentId}/sca/charges
+ */
 class ScaTest extends BaseIntegrationTest
 {
     protected function setUp(): void
@@ -33,7 +40,7 @@ class ScaTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function scaShouldWorkWithTypeId(): Sca
+    public function scaShouldWorkWithT¡ypeId(): Sca
     {
         /** @var Card $paymentType */
         $paymentType = $this->unzer->createPaymentType($this->createCardObject());
@@ -53,7 +60,7 @@ class ScaTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function scaShouldWorkWithTypeObject(): void
+    public function scaShouldWorkWithTypeObject(): Sca
     {
         /** @var Card $paymentType */
         $paymentType = $this->unzer->createPaymentType($this->createCardObject());
@@ -64,6 +71,8 @@ class ScaTest extends BaseIntegrationTest
         $this->assertInstanceOf(Payment::class, $sca->getPayment());
         $this->assertNotEmpty($sca->getPayment()->getId());
         $this->assertEquals(self::RETURN_URL, $sca->getReturnUrl());
+
+        return $sca;
     }
 
     /**
@@ -126,15 +135,11 @@ class ScaTest extends BaseIntegrationTest
      * Verify SCA transaction can be fetched using Sca object.
      *
      * @test
+     *
+     * @depends scaShouldWorkWithTypeId
      */
-    public function scaTransactionCanBeFetchedUsingSca(): void
+    public function scaTransactionCanBeFetchedUsingSca($sca): void
     {
-        // Create SCA transaction
-        /** @var Card $paymentType */
-        $paymentType = $this->unzer->createPaymentType($this->createCardObject());
-        $sca = new Sca(100.0, 'EUR', self::RETURN_URL);
-        $sca = $this->unzer->performSca($sca, $paymentType);
-
         $this->assertTransactionResourceHasBeenCreated($sca);
 
         // Fetch the SCA transaction using the Sca object
@@ -150,16 +155,11 @@ class ScaTest extends BaseIntegrationTest
      * Verify charge can be performed on SCA transaction.
      *
      * @test
+     *
+     * @depends scaShouldWorkWithTypeId
      */
-    public function chargeFailsOnPendingSCATransactionWithErrorCode(): void
+    public function chargeFailsOnPendingSCATransactionWithErrorCode($sca): void
     {
-        // Create SCA transaction
-        /** @var Card $paymentType */
-
-        $paymentType = $this->unzer->createPaymentType($this->createCardObject("4016360000000010"));
-        $sca = new Sca(100.0, 'EUR', self::RETURN_URL);
-        $sca = $this->unzer->performSca($sca, $paymentType);
-
         $this->assertTransactionResourceHasBeenCreated($sca);
         $redirectUrl = $sca->getRedirectUrl();
         $this->assertNotNull($redirectUrl);
@@ -180,18 +180,11 @@ class ScaTest extends BaseIntegrationTest
      * Verify authorize can be performed on SCA transaction.
      *
      * @test
+     *
+     * @depends scaShouldWorkWithTypeObject
      */
-    public function authorizeCanBePerformedOnScaTransaction(): void
+    public function authorizeCanBePerformedOnScaTransaction($sca): void
     {
-        // Create SCA transaction
-        /** @var Card $paymentType */
-        $card = $this->createCardObject();
-        $paymentType = $this->unzer->createPaymentType($card);
-        $sca = new Sca(100.0, 'EUR', self::RETURN_URL);
-        $sca = $this->unzer->performSca($sca, $paymentType);
-
-        $this->assertTransactionResourceHasBeenCreated($sca);
-
         $authorization = new Authorization(100, "EUR");
 
         // Expect charge to fail on pending transaction with error code
@@ -199,7 +192,7 @@ class ScaTest extends BaseIntegrationTest
         $this->expectExceptionCode(ApiResponseCodes::API_CANNOT_CHARGE_UNSUCCESSFUL_SCA_TRANSACTION);
         $this->expectExceptionMessage('Cannot perform payment on an unsuccessful strong customer authentication.');
 
-        // Perform authorize on SCA transaction
+        // Perform na authorize on SCA transaction
         $authorization = $this->unzer->authorizeScaTransaction($sca->getPayment(), $authorization);
     }
 }

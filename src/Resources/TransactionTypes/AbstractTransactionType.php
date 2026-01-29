@@ -249,7 +249,7 @@ abstract class AbstractTransactionType extends AbstractUnzerResource
     /**
      * @param float|null $amount
      *
-     * @return Charge
+     * @return self
      */
     public function setAmount(?float $amount): self
     {
