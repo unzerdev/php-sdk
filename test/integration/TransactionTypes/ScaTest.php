@@ -40,7 +40,7 @@ class ScaTest extends BaseIntegrationTest
      *
      * @test
      */
-    public function scaShouldWorkWithT¡ypeId(): Sca
+    public function scaShouldWorkWithTypeId(): Sca
     {
         /** @var Card $paymentType */
         $paymentType = $this->unzer->createPaymentType($this->createCardObject());
