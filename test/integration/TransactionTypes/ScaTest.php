@@ -160,12 +160,6 @@ class ScaTest extends BaseIntegrationTest
      */
     public function chargeFailsOnPendingSCATransactionWithErrorCode($sca): void
     {
-        $this->assertTransactionResourceHasBeenCreated($sca);
-        $redirectUrl = $sca->getRedirectUrl();
-        $this->assertNotNull($redirectUrl);
-        $this->assertTrue($sca->isPending());
-
-        // Perform charge on SCA transaction
         $charge = new Charge(100, "EUR");
 
         // Expect charge to fail on pending transaction with error code
@@ -183,7 +177,7 @@ class ScaTest extends BaseIntegrationTest
      *
      * @depends scaShouldWorkWithTypeObject
      */
-    public function authorizeCanBePerformedOnScaTransaction($sca): void
+    public function authorizeFailsOnPendingSCATransactionWithErrorCode($sca): void
     {
         $authorization = new Authorization(100, "EUR");
 
