@@ -33,12 +33,10 @@ class ScaTest extends BasePaymentTest
     public function getterSetterTest()
     {
         $sca = new Sca(99.99, "EUR", "https://return-url.com");
-        $sca->setPaymentReference('reference')
-            ->setCard3ds(false);
+        $sca->setPaymentReference('reference');
         $this->assertEquals(99.99, $sca->getAmount());
         $this->assertEquals("EUR", $sca->getCurrency());
         $this->assertEquals("reference", $sca->getPaymentReference());
-        $this->assertFalse($sca->isCard3ds());
         $this->assertEquals("https://return-url.com", $sca->getReturnUrl());
     }
 }

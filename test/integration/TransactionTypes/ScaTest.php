@@ -93,7 +93,6 @@ class ScaTest extends BaseIntegrationTest
         // perform request
         $sca = new Sca(119.0, 'EUR', self::RETURN_URL);
         $sca->setPaymentReference($paymentReference);
-        $sca->setCard3ds(true);
 
         $sca = $this->unzer->performSca($sca, $paymentType, $customer, $metadata, $basket);
 

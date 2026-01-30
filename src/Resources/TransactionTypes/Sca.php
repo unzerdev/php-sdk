@@ -26,9 +26,6 @@ class Sca extends AbstractTransactionType
     /** @var string $paymentReference */
     protected $paymentReference;
 
-    /** @var bool $card3ds */
-    protected $card3ds;
-
     /**
      * Sca constructor.
      *
@@ -97,25 +94,6 @@ class Sca extends AbstractTransactionType
     public function setPaymentReference(?string $referenceText): Sca
     {
         $this->paymentReference = $referenceText;
-        return $this;
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function isCard3ds(): ?bool
-    {
-        return $this->card3ds;
-    }
-
-    /**
-     * @param bool|null $card3ds
-     *
-     * @return Sca
-     */
-    public function setCard3ds(?bool $card3ds): Sca
-    {
-        $this->card3ds = $card3ds;
         return $this;
     }
 
