@@ -192,7 +192,7 @@ class ScaTest extends BaseIntegrationTest
         $this->expectExceptionCode(ApiResponseCodes::API_CANNOT_CHARGE_UNSUCCESSFUL_SCA_TRANSACTION);
         $this->expectExceptionMessage('Cannot perform payment on an unsuccessful strong customer authentication.');
 
-        // Perform na authorize on SCA transaction
+        // Perform an authorize on SCA transaction
         $authorization = $this->unzer->authorizeScaTransaction($sca->getPayment(), $authorization);
     }
 }
