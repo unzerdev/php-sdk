@@ -5,7 +5,6 @@ namespace UnzerSDK\Resources\TransactionTypes;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasDescriptor;
-use UnzerSDK\Traits\HasRecurrenceType;
 
 /**
  * This represents the SCA (Strong Customer Authentication) transaction.
@@ -15,7 +14,6 @@ use UnzerSDK\Traits\HasRecurrenceType;
  */
 class Sca extends AbstractTransactionType
 {
-    use HasRecurrenceType;
     use HasAccountInformation;
     use HasDescriptor;
 

@@ -177,7 +177,7 @@ class ScaTest extends BaseIntegrationTest
      *
      * @depends scaShouldWorkWithTypeObject
      */
-    public function authorizeFailsOnPendingSCATransactionWithErrorCode($sca): void
+    public function authorizeCanBePerformedOnScaTransaction($sca): void
     {
         $authorization = new Authorization(100, "EUR");
 
