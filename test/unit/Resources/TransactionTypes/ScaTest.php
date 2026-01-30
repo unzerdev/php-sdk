@@ -37,6 +37,8 @@ class ScaTest extends BasePaymentTest
             ->setCard3ds(false);
         $this->assertEquals(99.99, $sca->getAmount());
         $this->assertEquals("EUR", $sca->getCurrency());
+        $this->assertEquals("reference", $sca->getPaymentReference());
+        $this->assertFalse($sca->isCard3ds());
         $this->assertEquals("https://return-url.com", $sca->getReturnUrl());
     }
 }
