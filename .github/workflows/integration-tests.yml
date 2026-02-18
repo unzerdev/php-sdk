@@ -15,6 +15,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     name: integration tests
     env:
       UNZER_PAPI_TEST_PRIVATE_KEY_DEFAULT: ${{ secrets.PAPI_PRIVATE_KEY_DEFAULT }}
@@ -40,4 +43,12 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Run integration tests
-        run: php ./vendor/bin/phpunit test/integration
+        run: php ./vendor/bin/phpunit --log-junit test-results/junit.xml test/integration
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+          report_paths: 'test-results/junit.xml'
+          check_name: 'Integration Test Report'
+          detailed_summary: true
+          fail_on_failure: true
