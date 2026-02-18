@@ -5,6 +5,12 @@ on:
     branches:
       - 'main'
   workflow_dispatch:
+    inputs:
+      php-version:
+        description: 'PHP version to run tests on'
+        required: false
+        default: '8.1'
+        type: string
 
 jobs:
   build:
@@ -24,7 +30,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: ${{ inputs.php-version || '8.1' }}
+          ini-values: error_reporting=E_ALL, display_errors=On, display_startup_errors=On
       - name: Setup Apple Pay test certificate
         run: mkdir certs
       - run: echo "$APPLE_PAY_MERCHANT_ID_CERT" > certs/merchant_id.pem
