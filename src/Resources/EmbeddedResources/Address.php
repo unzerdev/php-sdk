@@ -30,7 +30,7 @@ class Address extends AbstractUnzerResource
     /** @var string country */
     protected $country;
 
-    /** @var string country */
+    /** @var string company */
     protected $company;
 
     /** @var string|null shippingType */
@@ -169,7 +169,7 @@ class Address extends AbstractUnzerResource
         return $this;
     }
 
-    public function getCompany(): string
+    public function getCompany(): ?string
     {
         return $this->company;
     }
