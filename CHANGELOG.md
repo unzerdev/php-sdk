@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.0](https://github.com/unzerdev/php-sdk/compare/3.15.0..4.0.0)
+
+### Added
+
+* Add `company` field to `\UnzerSDK\Resources\EmbeddedResources\Address` class.
+* Add PHP 8.5 to supported versions in `composer.json`.
+
+### Changed
+
+* Allow `null` return for `getCompany()` in `\UnzerSDK\Resources\EmbeddedResources\Address`.
+* Remove deprecated `curl_close` and `\ReflectionMethod::setAccessible` calls to address PHP 8.5 deprecation warnings.
+* Drop support for PHP 7.4 and PHP 8.0.
+
+### Deprecated
+
+* Mark `\UnzerSDK\Resources\PaymentTypes\Giropay` as deprecated.
+
 ## [3.15.0](https://github.com/unzerdev/php-sdk/compare/3.14.0..3.15.0)
 
 ### Added
