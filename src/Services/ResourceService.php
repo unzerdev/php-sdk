@@ -9,6 +9,7 @@ use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Apis\Constants\AuthorizationMethods;
 use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\ApiVersions;
 use UnzerSDK\Constants\IdStrings;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
@@ -51,15 +52,18 @@ use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\PaymentTypes\Twint;
 use UnzerSDK\Resources\PaymentTypes\Wechatpay;
+use UnzerSDK\Resources\PaymentTypes\Wero;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Chargeback;
 use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Sca;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Resources\V2\Customer as CustomerV2;
 use UnzerSDK\Resources\V2\Paypage as PaypageV2;
+use UnzerSDK\Resources\V3\Basket as BasketV3;
 use UnzerSDK\Traits\CanRecur;
 use UnzerSDK\Unzer;
 use function in_array;
@@ -107,8 +111,8 @@ class ResourceService implements ResourceServiceInterface
      * Send request to API.
      *
      * @param AbstractUnzerResource $resource
-     * @param string                $httpMethod
-     * @param string                $apiVersion
+     * @param string $httpMethod
+     * @param string|null $apiVersion
      *
      * @return stdClass
      *
@@ -118,15 +122,16 @@ class ResourceService implements ResourceServiceInterface
     public function send(
         AbstractUnzerResource $resource,
         string                $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        string                $apiVersion = Unzer::API_VERSION
-    ): stdClass {
+        ?string $apiVersion = null
+    ): stdClass
+    {
         $apiConfig = $resource->getApiConfig();
         if (!$resource instanceof Token && $apiConfig::getAuthorizationMethod() === AuthorizationMethods::BEARER) {
             $this->unzer->prepareJwtToken();
         }
 
-        $appendId     = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
-        $uri          = $resource->getUri($appendId, $httpMethod);
+        $appendId = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
+        $uri = $resource->getUri($appendId, $httpMethod);
         $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod, $apiVersion);
         return !empty($responseJson) ? json_decode($responseJson, false) : new stdClass();
     }
@@ -160,9 +165,9 @@ class ResourceService implements ResourceServiceInterface
     public function fetchResourceByUrl($url)
     {
         $resource = null;
-        $unzer    = $this->unzer;
+        $unzer = $this->unzer;
 
-        $resourceId   = IdService::getLastResourceIdFromUrlString($url);
+        $resourceId = IdService::getLastResourceIdFromUrlString($url);
         if (empty($resourceId)) {
             return null;
         }
@@ -188,8 +193,8 @@ class ResourceService implements ResourceServiceInterface
                 );
                 break;
             case $resourceType === IdStrings::CANCEL:
-                $paymentId  = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
-                $chargeId   = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
+                $paymentId = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
+                $chargeId = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
                 if (IdService::isPaymentCancellation($url)) {
                     $isRefund = preg_match('/charge/', $url) === 1;
                     if ($isRefund) {
@@ -205,8 +210,24 @@ class ResourceService implements ResourceServiceInterface
                 }
                 $resource = $unzer->fetchReversal($paymentId, $resourceId);
                 break;
+            case $resourceType === IdStrings::CHARGEBACK:
+                $paymentId = IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT);
+                $chargeId = IdService::getResourceIdOrNullFromUrl($url, IdStrings::CHARGE);
+
+                $resource = $this->fetchChargebackById(
+                    $paymentId,
+                    $resourceId,
+                    $chargeId
+                );
+                break;
             case $resourceType === IdStrings::PAYOUT:
                 $resource = $unzer->fetchPayout(IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT));
+                break;
+            case $resourceType === IdStrings::SCA:
+                $resource = $unzer->fetchScaById(
+                    IdService::getResourceIdFromUrl($url, IdStrings::PAYMENT),
+                    $resourceId
+                );
                 break;
             case $resourceType === IdStrings::PAYMENT:
                 $resource = $unzer->fetchPayment($resourceId);
@@ -334,8 +355,8 @@ class ResourceService implements ResourceServiceInterface
     /**
      * Updates the given local resource object (id must be set)
      *
-     * @param AbstractUnzerResource $resource   The local resource object to update.
-     * @param string                $apiVersion
+     * @param AbstractUnzerResource $resource The local resource object to update.
+     * @param string|null $apiVersion
      *
      * @return AbstractUnzerResource The updated resource object.
      *
@@ -343,7 +364,7 @@ class ResourceService implements ResourceServiceInterface
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      * @throws Exception
      */
-    public function fetchResource(AbstractUnzerResource $resource, string $apiVersion = Unzer::API_VERSION): AbstractUnzerResource
+    public function fetchResource(AbstractUnzerResource $resource, ?string $apiVersion = null): AbstractUnzerResource
     {
         $method = HttpAdapterInterface::REQUEST_GET;
         $response = $this->send($resource, $method, $apiVersion);
@@ -376,7 +397,7 @@ class ResourceService implements ResourceServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function activateRecurringPayment($paymentType, string $returnUrl, string $recurrenceType = null): Recurring
+    public function activateRecurringPayment($paymentType, string $returnUrl, ?string $recurrenceType = null): Recurring
     {
         $paymentTypeObject = $paymentType;
         if (is_string($paymentType)) {
@@ -550,15 +571,20 @@ class ResourceService implements ResourceServiceInterface
     public function fetchBasket($basket): Basket
     {
         $basketObj = $basket;
+
         if (is_string($basket)) {
-            $basketObj = (new Basket())->setId($basket);
+            $isV3Basket = IdService::isUUIDResource($basket);
+            $basketObj = $isV3Basket ? new BasketV3() : new Basket();
+            $basketObj->setId($basket);
         }
+
         $basketObj->setParentResource($this->unzer);
+        $basketVersion = $basketObj->getApiVersion() === ApiVersions::V3 ? ApiVersions::V3 : ApiVersions::V2;
 
         try {
-            $this->fetchResource($basketObj, 'v2');
+            $this->fetchResource($basketObj, $basketVersion);
         } catch (UnzerApiException $exception) {
-            if ($exception->getCode() !== ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND) {
+            if ($exception->getCode() !== ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND || $basketVersion === ApiVersions::V3) {
                 throw $exception;
             }
             $this->fetchResource($basketObj);
@@ -649,7 +675,7 @@ class ResourceService implements ResourceServiceInterface
         $customerObject = $customer;
 
         if (is_string($customer)) {
-            $isUUID = IdService::isUUDIResource($customer);
+            $isUUID = IdService::isUUIDResource($customer);
             $customerObject = $isUUID ? new CustomerV2() : new Customer();
             $customerObject->setId($customer);
         }
@@ -949,6 +975,9 @@ class ResourceService implements ResourceServiceInterface
             case IdStrings::WECHATPAY:
                 $paymentType = new Wechatpay();
                 break;
+            case IdStrings::WERO:
+                $paymentType = new Wero();
+                break;
             case IdStrings::OPEN_BANKING:
                 $paymentType = new OpenbankingPis();
                 break;
@@ -957,5 +986,45 @@ class ResourceService implements ResourceServiceInterface
                 break;
         }
         return $paymentType;
+    }
+
+    /**
+     * Fetches an SCA transaction.
+     *
+     * @param Sca $sca The SCA object to fetch.
+     *
+     * @return Sca The fetched SCA object.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchSca(Sca $sca): Sca
+    {
+        $this->fetchResource($sca);
+        return $sca;
+    }
+
+    /**
+     * Fetches an SCA transaction by payment ID and SCA ID.
+     *
+     * @param Payment|string $payment The payment object or payment ID.
+     * @param string $scaId The SCA transaction ID.
+     *
+     * @return Sca The fetched SCA object.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchScaById($payment, string $scaId): Sca
+    {
+        $paymentObject = $this->fetchPayment($payment);
+        $sca = $paymentObject->getSca($scaId, true);
+
+        if (!$sca instanceof Sca) {
+            throw new RuntimeException('The SCA object could not be found.');
+        }
+
+        $this->fetchResource($sca);
+        return $sca;
     }
 }

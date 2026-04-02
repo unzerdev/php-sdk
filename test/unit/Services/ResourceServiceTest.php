@@ -17,6 +17,7 @@ use RuntimeException;
 use stdClass;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Constants\ApiResponseCodes;
+use UnzerSDK\Constants\ApiVersions;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -56,6 +57,7 @@ use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Resources\V2\Customer as CustomerV2;
+use UnzerSDK\Resources\V3\Basket as BasketV3;
 use UnzerSDK\Services\HttpService;
 use UnzerSDK\Services\IdService;
 use UnzerSDK\Services\ResourceService;
@@ -184,13 +186,13 @@ class ResourceServiceTest extends BasePaymentTest
             [$uri, $customer, $method]
         )
             ->willReturnOnConsecutiveCalls(
-                '{"accessToken": "jwt.auth.token"}', '{"response": "paypage response"}'
+                '{"accessToken": "jwt.auth.token"}',
+                '{"response": "paypage response"}'
             );
 
         $response = $resourceSrv->send($customer, $method);
         $this->assertEquals('paypage response', $response->response);
     }
-
 
     /**
      * Verify getResourceIdFromUrl works correctly.
@@ -227,7 +229,6 @@ class ResourceServiceTest extends BasePaymentTest
         $this->expectException(RuntimeException::class);
         IdService::getResourceIdFromUrl($uri, $idString);
     }
-
 
     /**
      * Verify fetchResource calls fetch if its id is set and it has never been fetched before.
@@ -513,7 +514,6 @@ class ResourceServiceTest extends BasePaymentTest
         $this->assertEquals($unzer, $resource->getUnzerObject());
     }
 
-
     /**
      * Verify createPaymentType method will set parentResource to Unzer object and call create.
      *
@@ -576,7 +576,6 @@ class ResourceServiceTest extends BasePaymentTest
 
         $this->assertSame($paymentType, $returnedPaymentType);
     }
-
 
     /**
      * Verify createCustomer calls create with customer object and the Unzer resource is set.
@@ -751,7 +750,6 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceSrvMock->deleteCustomer('myCustomerId');
     }
 
-
     /**
      * Verify fetchAuthorization fetches payment object and returns its authorization.
      *
@@ -795,7 +793,6 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceSrvMock->fetchAuthorization('paymentId');
     }
 
-
     /**
      * Verify fetchPayout fetches payment object and returns its payout.
      *
@@ -817,7 +814,6 @@ class ResourceServiceTest extends BasePaymentTest
         $returnedPayout = $resourceSrvMock->fetchPayout($paymentMock);
         $this->assertSame($payout, $returnedPayout);
     }
-
 
     /**
      * Verify fetchChargeById fetches payment object and gets and returns the charge object from it.
@@ -881,7 +877,6 @@ class ResourceServiceTest extends BasePaymentTest
         $this->expectExceptionMessage('The charge object could not be found.');
         $resourceSrvMock->fetchChargeById($paymentMock, 'chargeId');
     }
-
 
     /**
      * Verify fetchReversalByAuthorization fetches authorization and gets and returns the reversal object from it.
@@ -969,7 +964,6 @@ class ResourceServiceTest extends BasePaymentTest
         $this->assertSame($cancel, $returnedCancellation);
     }
 
-
     /**
      * Verify fetchShipment fetches payment object and returns the desired shipment from it.
      *
@@ -991,7 +985,6 @@ class ResourceServiceTest extends BasePaymentTest
         $this->assertSame($shipment, $returnedShipment);
     }
 
-
     /**
      * Verify createMetadata calls create with the given metadata object.
      *
@@ -1007,7 +1000,6 @@ class ResourceServiceTest extends BasePaymentTest
 
         $this->assertSame($metadata, $resourceSrvMock->createMetadata($metadata));
     }
-
 
     /**
      * Verify createBasket will set parentResource and call create with the given basket.
@@ -1071,7 +1063,7 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock->expects(self::exactly(2))
             ->method('fetchResource')
-            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket])
             ->will($this->returnCallback(function ($basket, $version) {
                 if ($version === BasePaymentTest::API_VERSION_2) {
                     throw new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
@@ -1100,7 +1092,7 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceServiceMock->expects(self::exactly(2))
             ->method('fetchResource')
-            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket, Unzer::API_VERSION])
+            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket])
             ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND));
 
         $this->expectException(UnzerApiException::class);
@@ -1155,6 +1147,108 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceServiceMock->fetchBasket($basket);
     }
 
+    /**
+     * Verify createBasket will set parentResource and call create with the given basket.
+     *
+     * @test
+     */
+    public function createV3BasketShouldCallV3Endpoint(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['send'])->getMock();
+        $basket = new BasketV3();
+        $resourceSrvMock->expects($this->once())
+            ->method('send')
+            ->with($basket, 'POST', BasePaymentTest::API_VERSION_3);
+
+        try {
+            $basket->getParentResource();
+            $this->assertTrue(false, 'This exception should have been thrown!');
+        } catch (RuntimeException $e) {
+            $this->assertEquals('Parent resource reference is not set!', $e->getMessage());
+        }
+
+        $this->assertSame($basket, $resourceSrvMock->createBasket($basket));
+        $this->assertSame($unzer, $basket->getParentResource());
+    }
+
+    /**
+     * Verify updateBasket calls update with the given basket and returns it.
+     *
+     * @test
+     */
+    public function updateV3BasketShouldCallSendMethodWithV3Version(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['send'])->getMock();
+        $basket = new BasketV3();
+        /** @noinspection PhpParamsInspection */
+        $resourceSrvMock->expects($this->once())->method('send')->with($basket, 'PUT', ApiVersions::V3);
+
+        $returnedBasket = $resourceSrvMock->updateBasket($basket);
+
+        $this->assertSame($basket, $returnedBasket);
+        $this->assertEquals($unzer, $basket->getParentResource());
+        $this->assertEquals($unzer, $basket->getUnzerObject());
+    }
+
+    /**
+     * @test
+     */
+    public function fetchV3BasketIdShouldFetchV3Basket(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new BasketV3());
+        $basket->setId('s-bsk-123e4567-e89b-12d3-a456-426614174000');
+        $basket->setParentResource($unzer);
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['send'])->getMock();
+
+        $result = (object)$basket->expose();
+        $result->orderId = 'orderId';
+        $resourceServiceMock->expects(self::once())
+            ->method('send')
+            ->with($basket, 'GET', BasePaymentTest::API_VERSION_3)
+            ->willReturn($result);
+
+        $resourceServiceMock->fetchBasket('s-bsk-123e4567-e89b-12d3-a456-426614174000');
+    }
+
+    /**
+     * @test
+     */
+    public function fetchUnknownV3BasketIdShouldFetchV3Basket(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        $basket = (new BasketV3());
+        $basket->setId('s-bsk-123e4567-e89b-12d3-a456-426614174000');
+        $basket->setParentResource($unzer);
+
+        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
+        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
+            ->setConstructorArgs([$unzer])
+            ->setMethods(['send'])->getMock();
+
+        $result = (object)$basket->expose();
+        $result->orderId = 'orderId';
+        $resourceServiceMock->expects(self::once())
+            ->method('send')
+            ->with($basket, 'GET', BasePaymentTest::API_VERSION_3)
+            ->willThrowException(new UnzerApiException(
+                'Basket not found',
+                'Basket not found',
+                ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND
+            ));
+
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionCode(ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
+        $resourceServiceMock->fetchBasket('s-bsk-123e4567-e89b-12d3-a456-426614174000');
+    }
 
     /**
      * Verify createRecurring calls fetch for the payment type if it is given the id.
@@ -1214,7 +1308,6 @@ class ResourceServiceTest extends BasePaymentTest
 
         $resourceService->activateRecurringPayment(new Sofort(), 'returnUrl', null);
     }
-
 
     /**
      * Data provider for getResourceIdFromUrlShouldIdentifyAndReturnTheIdStringFromAGivenString.
@@ -1298,7 +1391,8 @@ class ResourceServiceTest extends BasePaymentTest
             'v2Customer' => ['fetchCustomer', ['s-cst-123e4567-e89b-12d3-a456-426614174000'], 'https://api.unzer.com/v2/customers/s-cst-123e4567-e89b-12d3-a456-426614174000'],
             'v1Basket' => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v1/baskets/s-bsk-1254/'],
             'v2Basket' => ['fetchBasket', ['s-bsk-1254'], 'https://api.unzer.com/v2/baskets/s-bsk-1254/'],
-            'Payout' => ['fetchPayout', ['s-pay-100746'], 'https://api.unzer.com/v1/payments/s-pay-100746/payout/s-out-1/']
+            'Payout' => ['fetchPayout', ['s-pay-100746'], 'https://api.unzer.com/v1/payments/s-pay-100746/payout/s-out-1/'],
+            'Sca' => ['fetchScaById', ['s-pay-100746', 's-sca-1'], 'https://api.unzer.com/v1/payments/s-pay-100746/sca/s-sca-1/']
         ];
     }
 
@@ -1333,7 +1427,8 @@ class ResourceServiceTest extends BasePaymentTest
             'SEPA_DIRECT_DEBIT' => ['s-sdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit/s-sdd-xen2ybcovn56/'],
             'SEPA_DIRECT_DEBIT_GUARANTEED' => ['s-ddg-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'],
             'SOFORT' => ['s-sft-xen2ybcovn56', 'https://api.unzer.com/v1/types/sofort/s-sft-xen2ybcovn56/'],
-            'WECHATPAY' => ['s-wcp-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/']
+            'WECHATPAY' => ['s-wcp-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'],
+            'WERO' => ['s-wro-xen2ybcovn56', 'https://api.unzer.com/v1/types/wero/s-wro-xen2ybcovn56/']
         ];
     }
 

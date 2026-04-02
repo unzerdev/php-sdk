@@ -2,6 +2,7 @@
 
 namespace UnzerSDK\Resources\TransactionTypes;
 
+use RuntimeException;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
@@ -9,7 +10,6 @@ use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasDescriptor;
 use UnzerSDK\Traits\HasRecurrenceType;
-use RuntimeException;
 
 /**
  * This represents the authorization transaction.
@@ -55,30 +55,11 @@ class Authorization extends AbstractTransactionType
      * @param string|null $currency
      * @param string|null $returnUrl
      */
-    public function __construct(float $amount = null, string $currency = null, string $returnUrl = null)
+    public function __construct(?float $amount = null, ?string $currency = null, ?string $returnUrl = null)
     {
         $this->setAmount($amount);
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getAmount(): ?float
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param float|null $amount
-     *
-     * @return self
-     */
-    public function setAmount(?float $amount): self
-    {
-        $this->amount = $amount !== null ? round($amount, 4) : null;
-        return $this;
     }
 
     /**
@@ -250,7 +231,7 @@ class Authorization extends AbstractTransactionType
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function cancel(float $amount = null): Cancellation
+    public function cancel(?float $amount = null): Cancellation
     {
         return $this->getUnzerObject()->cancelAuthorization($this, $amount);
     }
@@ -265,7 +246,7 @@ class Authorization extends AbstractTransactionType
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
-    public function charge(float $amount = null): Charge
+    public function charge(?float $amount = null): Charge
     {
         $payment = $this->getPayment();
         if (!$payment instanceof Payment) {

@@ -16,6 +16,7 @@ class IdStrings
     public const CHARGEBACK = 'cbk';
     public const PAYOUT = 'out';
     public const PREAUTHORIZE = 'preaut';
+    public const SCA = 'sca';
     public const SHIPMENT = 'shp';
 
     // Payment Types
@@ -52,6 +53,7 @@ class IdStrings
     public const SOFORT = 'sft';
     public const TWINT = 'twt';
     public const WECHATPAY = 'wcp';
+    public const WERO = 'wro';
 
     public const OPEN_BANKING = 'obp';
 
@@ -95,6 +97,7 @@ class IdStrings
         self::SOFORT,
         self::TWINT,
         self::WECHATPAY,
+        self::WERO,
         self::OPEN_BANKING,
     ];
 }

@@ -16,7 +16,7 @@ class IdServiceTest extends BasePaymentTest
      */
     public function idWithUniqueIdReturnsTrue(string $id)
     {
-        $isUUID = IdService::isUUDIResource($id);
+        $isUUID = IdService::isUUIDResource($id);
         $this->assertTrue($isUUID);
     }
 
@@ -29,7 +29,7 @@ class IdServiceTest extends BasePaymentTest
      */
     public function shortIdShouldReturnFalse(string $id)
     {
-        $isUUID = IdService::isUUDIResource($id);
+        $isUUID = IdService::isUUIDResource($id);
         $this->assertFalse($isUUID);
     }
 

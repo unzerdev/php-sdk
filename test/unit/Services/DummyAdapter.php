@@ -18,7 +18,7 @@ class DummyAdapter implements HttpAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function init(string $url, string $payload = null, string $httpMethod = HttpAdapterInterface::REQUEST_GET): void
+    public function init(string $url, ?string $payload = null, string $httpMethod = HttpAdapterInterface::REQUEST_GET): void
     {
         // do nothing
     }
@@ -37,14 +37,6 @@ class DummyAdapter implements HttpAdapterInterface
     public function getResponseCode(): string
     {
         return 'responseCode';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function close(): void
-    {
-        // do nothing
     }
 
     /**

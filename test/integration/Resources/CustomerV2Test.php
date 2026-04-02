@@ -15,7 +15,6 @@ use function PHPUnit\Framework\assertEquals;
 /**
  * @backupStaticAttributes enabled
  * @group CC-2016
- * @group skip
  */
 class CustomerV2Test extends BaseIntegrationTest
 {

@@ -2,6 +2,7 @@
 
 namespace UnzerSDK\Resources\TransactionTypes;
 
+use RuntimeException;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Traits\HasAccountInformation;
@@ -9,7 +10,6 @@ use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasChargebacks;
 use UnzerSDK\Traits\HasDescriptor;
 use UnzerSDK\Traits\HasRecurrenceType;
-use RuntimeException;
 
 /**
  * This represents the charge transaction.
@@ -24,9 +24,6 @@ class Charge extends AbstractTransactionType
     use HasAccountInformation;
     use HasDescriptor;
     use HasChargebacks;
-
-    /** @var float $amount */
-    protected $amount;
 
     /** @var string $currency */
     protected $currency;
@@ -47,30 +44,11 @@ class Charge extends AbstractTransactionType
      * @param string|null $currency
      * @param string|null $returnUrl
      */
-    public function __construct(float $amount = null, string $currency = null, string $returnUrl = null)
+    public function __construct(?float $amount = null, ?string $currency = null, ?string $returnUrl = null)
     {
         $this->setAmount($amount);
         $this->setCurrency($currency);
         $this->setReturnUrl($returnUrl);
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getAmount(): ?float
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param float|null $amount
-     *
-     * @return self
-     */
-    public function setAmount(?float $amount): self
-    {
-        $this->amount = $amount !== null ? round($amount, 4) : null;
-        return $this;
     }
 
     /**
@@ -199,11 +177,11 @@ class Charge extends AbstractTransactionType
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */
     public function cancel(
-        float  $amount = null,
-        string $reasonCode = null,
-        string $paymentReference = null,
-        float  $amountNet = null,
-        float  $amountVat = null
+        ?float $amount = null,
+        ?string $reasonCode = null,
+        ?string $paymentReference = null,
+        ?float $amountNet = null,
+        ?float $amountVat = null
     ): Cancellation {
         return $this->getUnzerObject()->cancelCharge(
             $this,

@@ -22,6 +22,7 @@ use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Sca;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Unzer;
 
@@ -73,18 +74,24 @@ class PaymentService implements PaymentServiceInterface
         return $this->getUnzer()->getResourceService();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function performAuthorization(
         Authorization $authorization,
         $paymentType,
         $customer = null,
-        Metadata $metadata = null,
-        Basket $basket = null
+        ?Metadata $metadata = null,
+        ?Basket   $basket = null
     ): Authorization {
         $payment = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
         $authorization->setSpecialParams($paymentType !== null ? $paymentType->getTransactionParams() : []);
 
-        $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
+        $payment->setAuthorization($authorization)
+            ->setCustomer($customer)
+            ->setMetadata($metadata)
+            ->setBasket($basket);
 
         $this->getResourceService()->createResource($authorization);
         return $authorization;
@@ -144,7 +151,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function performCharge(Charge $charge, $paymentType, $customer = null, Metadata $metadata = null, Basket $basket = null): Charge
+    public function performCharge(Charge $charge, $paymentType, $customer = null, ?Metadata $metadata = null, ?Basket $basket = null): Charge
     {
         $payment     = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
@@ -214,9 +221,9 @@ class PaymentService implements PaymentServiceInterface
      */
     public function chargeAuthorization(
         $payment,
-        float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?float $amount = null,
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge {
         return $this->chargePayment($payment, $amount, $orderId, $invoiceId);
     }
@@ -226,9 +233,9 @@ class PaymentService implements PaymentServiceInterface
      */
     public function chargePayment(
         $payment,
-        float $amount = null,
-        string $orderId = null,
-        string $invoiceId = null
+        ?float $amount = null,
+        ?string $orderId = null,
+        ?string $invoiceId = null
     ): Charge {
         $charge = new Charge($amount);
 
@@ -263,11 +270,11 @@ class PaymentService implements PaymentServiceInterface
         $paymentType,
         string   $returnUrl,
         $customer = null,
-        string   $orderId = null,
-        Metadata $metadata = null,
-        Basket   $basket = null,
-        string   $invoiceId = null,
-        string $referenceText = null
+        ?string   $orderId = null,
+        ?Metadata $metadata = null,
+        ?Basket   $basket = null,
+        ?string   $invoiceId = null,
+        ?string $referenceText = null
     ): Payout {
         $payment = $this->createPayment($paymentType);
         $payout = (new Payout($amount, $currency, $returnUrl))
@@ -283,7 +290,7 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function ship($payment, string $invoiceId = null, string $orderId = null): Shipment
+    public function ship($payment, ?string $invoiceId = null, ?string $orderId = null): Shipment
     {
         $shipment = new Shipment();
         $shipment->setInvoiceId($invoiceId)->setOrderId($orderId);
@@ -297,9 +304,9 @@ class PaymentService implements PaymentServiceInterface
      */
     public function initPayPageCharge(
         Paypage $paypage,
-        Customer $customer = null,
-        Basket $basket = null,
-        Metadata $metadata = null
+        ?Customer $customer = null,
+        ?Basket   $basket = null,
+        ?Metadata $metadata = null
     ): Paypage {
         return $this->initPayPage($paypage, TransactionTypes::CHARGE, $customer, $basket, $metadata);
     }
@@ -309,9 +316,9 @@ class PaymentService implements PaymentServiceInterface
      */
     public function initPayPageAuthorize(
         Paypage $paypage,
-        Customer $customer = null,
-        Basket $basket = null,
-        Metadata $metadata = null
+        ?Customer $customer = null,
+        ?Basket   $basket = null,
+        ?Metadata $metadata = null
     ): Paypage {
         return $this->initPayPage($paypage, TransactionTypes::AUTHORIZATION, $customer, $basket, $metadata);
     }
@@ -323,7 +330,7 @@ class PaymentService implements PaymentServiceInterface
         float    $amount,
         string   $currency,
         float    $effectiveInterest,
-        DateTime $orderDate = null
+        ?DateTime $orderDate = null
     ): InstalmentPlans {
         $ins   = (new InstallmentSecured(null, null, null))->setParentResource($this->unzer);
         $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($ins);
@@ -365,9 +372,9 @@ class PaymentService implements PaymentServiceInterface
     private function initPayPage(
         Paypage  $paypage,
         string   $action,
-        Customer $customer = null,
-        Basket   $basket = null,
-        Metadata $metadata = null
+        ?Customer $customer = null,
+        ?Basket   $basket = null,
+        ?Metadata $metadata = null
     ): Paypage {
         $paypage->setAction($action)->setParentResource($this->unzer);
         $payment = $this->createPayment($paypage)->setBasket($basket)->setCustomer($customer)->setMetadata($metadata)->setPayPage($paypage);
@@ -388,5 +395,33 @@ class PaymentService implements PaymentServiceInterface
     private function createPayment($paymentType): AbstractUnzerResource
     {
         return (new Payment($this->unzer))->setPaymentType($paymentType);
+    }
+
+    /**
+     * Perform an SCA transaction.
+     *
+     * @param Sca $sca The SCA object to be executed.
+     * @param BasePaymentType|string $paymentType The payment type object or its ID.
+     * @param Customer|string|null $customer The customer object or ID.
+     * @param Metadata|null $metadata The metadata object.
+     * @param Basket|null $basket The basket object.
+     *
+     * @return Sca The resulting SCA object.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function performSca(Sca $sca, $paymentType, $customer = null, ?Metadata $metadata = null, ?Basket $basket = null): Sca
+    {
+        $payment = $this->createPayment($paymentType);
+        $paymentType = $payment->getPaymentType();
+
+        /** @var Sca $sca */
+        $sca->setSpecialParams($paymentType->getTransactionParams() ?? []);
+        $payment->setSca($sca)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
+
+        $this->getResourceService()->createResource($sca);
+
+        return $sca;
     }
 }
