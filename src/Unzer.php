@@ -44,6 +44,7 @@ use UnzerSDK\Services\PaymentService;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\Services\WebhookService;
 use UnzerSDK\Validators\PrivateKeyValidator;
+use UnzerSDK\Validators\PublicKeyValidator;
 
 /**
  * This is the Unzer object which is the base object providing all functionalities needed to
@@ -95,10 +96,10 @@ class Unzer implements
     /**
      * Construct a new Unzer object.
      *
-     * @param string $key The private key your received from your Unzer contact person.
+     * @param string $key The private or public key your received from your Unzer contact person.
      * @param string|null $locale The locale of the customer defining defining the translation (e.g. 'en-GB' or 'de-DE').
      *
-     * @throws RuntimeException A RuntimeException will be thrown if the key is not of type private.
+     * @throws RuntimeException A RuntimeException will be thrown if the key is not a valid private or public key.
      *
      * @link https://docs.unzer.com/integrate/web-integration/#section-localization-and-languages
      *
@@ -116,7 +117,7 @@ class Unzer implements
     }
 
     /**
-     * Returns the set private key used to connect to the API.
+     * Returns the set key used to connect to the API.
      *
      * @return string The key that is currently set.
      */
@@ -126,9 +127,9 @@ class Unzer implements
     }
 
     /**
-     * Sets your private key used to connect to the API.
+     * Sets your private or public key used to connect to the API.
      *
-     * @param string $key The private key.
+     * @param string $key The private or public key.
      *
      * @return Unzer This Unzer object.
      *
@@ -138,8 +139,8 @@ class Unzer implements
      */
     public function setKey(string $key): Unzer
     {
-        if (!PrivateKeyValidator::validate($key)) {
-            throw new RuntimeException('Illegal key: Use a valid private key with this SDK!');
+        if (!PrivateKeyValidator::validate($key) && !PublicKeyValidator::validate($key)) {
+            throw new RuntimeException('Illegal key: Use a valid private or public key with this SDK!');
         }
 
         $this->key = $key;
