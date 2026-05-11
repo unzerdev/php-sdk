@@ -15,6 +15,7 @@ namespace UnzerSDK\test\integration;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\EPS;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class ExceptionTest extends BaseIntegrationTest
@@ -32,7 +33,7 @@ class ExceptionTest extends BaseIntegrationTest
         $secondClientMessage = '';
 
         try {
-            $this->unzer->authorize(1.0, 'EUR', $eps, self::RETURN_URL);
+            $this->unzer->performAuthorization(new Authorization(1.0, 'EUR', self::RETURN_URL), $eps);
         } catch (UnzerApiException $e) {
             $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
@@ -44,7 +45,7 @@ class ExceptionTest extends BaseIntegrationTest
 
         try {
             $this->unzer->setLocale('de-DE');
-            $this->unzer->authorize(1.0, 'EUR', $eps, self::RETURN_URL);
+            $this->unzer->performAuthorization(new Authorization(1.0, 'EUR', self::RETURN_URL), $eps);
         } catch (UnzerApiException $e) {
             $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());

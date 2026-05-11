@@ -15,6 +15,7 @@ use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -53,7 +54,7 @@ class PrepaymentTest extends BaseIntegrationTest
      */
     public function prepaymentTypeShouldBeChargeable(Prepayment $prepayment): Charge
     {
-        $charge = $prepayment->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $prepayment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
         $this->assertNotEmpty($charge->getIban());
@@ -78,7 +79,7 @@ class PrepaymentTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(100.0, 'EUR', $prepayment, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(100.0, 'EUR', self::RETURN_URL), $prepayment);
     }
 
     /**
@@ -109,7 +110,7 @@ class PrepaymentTest extends BaseIntegrationTest
      */
     public function prepaymentChargeCanBeCanceled(Prepayment $prepayment): void
     {
-        $charge = $prepayment->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $prepayment);
         $this->assertPending($charge);
         $cancellation = $charge->cancel();
         $this->assertTransactionResourceHasBeenCreated($cancellation);

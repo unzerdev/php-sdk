@@ -57,20 +57,15 @@ trait CanDirectCharge
         $recurrenceType = null
     ): Charge {
         if ($this instanceof UnzerParentInterface) {
-            return $this->getUnzerObject()->charge(
-                $amount,
-                $currency,
-                $this,
-                $returnUrl,
-                $customer,
-                $orderId,
-                $metadata,
-                $basket,
-                $card3ds,
-                $invoiceId,
-                $paymentReference,
-                $recurrenceType
-            );
+            $charge = (new Charge($amount, $currency, $returnUrl))
+                ->setOrderId($orderId)
+                ->setCard3ds($card3ds)
+                ->setInvoiceId($invoiceId)
+                ->setPaymentReference($paymentReference);
+            if ($recurrenceType !== null) {
+                $charge->setRecurrenceType($recurrenceType);
+            }
+            return $this->getUnzerObject()->performCharge($charge, $this, $customer, $metadata, $basket);
         }
 
         throw new RuntimeException(

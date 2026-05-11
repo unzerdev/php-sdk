@@ -865,7 +865,7 @@ class Payment extends AbstractUnzerResource
      */
     public function charge(?float $amount = null): Charge
     {
-        return $this->getUnzerObject()->chargePayment($this, $amount);
+        return $this->getUnzerObject()->performChargeOnPayment($this, new Charge($amount));
     }
 
     /**

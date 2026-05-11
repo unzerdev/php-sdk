@@ -19,6 +19,7 @@ use UnzerSDK\Resources\EmbeddedResources\CardDetails;
 use UnzerSDK\Resources\EmbeddedResources\CardTransactionData;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Services\ValueService;
 use UnzerSDK\test\BaseIntegrationTest;
@@ -91,7 +92,7 @@ class CardTest extends BaseIntegrationTest
         // ensure the fetched card object contains the email address.
         $fetchedCard = $this->unzer->fetchPaymentType($card->getId());
         $this->assertEquals($expected, $fetchedCard->getEmail());
-        $card->charge(119.00, 'EUR', 'https://unzer.com');
+        $this->unzer->performCharge(new Charge(119.00, 'EUR', 'https://unzer.com'), $card);
     }
 
     /**
@@ -114,7 +115,10 @@ class CardTest extends BaseIntegrationTest
         $card = $this->unzer->createPaymentType($card);
         $this->assertNotTrue($card->isRecurring());
 
-        $chargeResponse = $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+        $chargeResponse = $this->unzer->performCharge(
+            (new Charge('99.99', 'EUR', 'https://unzer.com'))->setRecurrenceType($recurrenceType, $card),
+            $card
+        );
         $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchChargeById($chargeResponse->getPaymentId(), $chargeResponse->getId());
 
@@ -145,7 +149,10 @@ class CardTest extends BaseIntegrationTest
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
         $this->expectException(UnzerApiException::class);
-        $card->charge('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+        $this->unzer->performCharge(
+            (new Charge('99.99', 'EUR', 'https://unzer.com'))->setRecurrenceType($recurrenceType, $card),
+            $card
+        );
     }
 
     /**
@@ -179,7 +186,10 @@ class CardTest extends BaseIntegrationTest
         $card = $this->createCardObject('4711100000000000');
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
-        $chargeResponse = $card->authorize('99.99', 'EUR', 'https://unzer.com', null, null, null, null, null, null, null, $recurrenceType);
+        $chargeResponse = $this->unzer->performAuthorization(
+            (new Authorization('99.99', 'EUR', 'https://unzer.com'))->setRecurrenceType($recurrenceType, $card),
+            $card
+        );
         $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchAuthorization($chargeResponse->getPayment());
 
@@ -252,7 +262,7 @@ class CardTest extends BaseIntegrationTest
         $card = $this->unzer->createPaymentType($card);
         $this->assertFalse($card->get3ds());
 
-        $charge = $card->charge(12.34, 'EUR', 'https://docs.unzer.com');
+        $charge = $this->unzer->performCharge(new Charge(12.34, 'EUR', 'https://docs.unzer.com'), $card);
         $this->assertFalse($charge->isCard3ds());
     }
 
@@ -296,7 +306,7 @@ class CardTest extends BaseIntegrationTest
         $card = $this->createCardObject()->setNumber($pan)->set3ds(false);
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
-        $charge = $card->charge(12.34, 'EUR', 'https://docs.unzer.com');
+        $charge = $this->unzer->performCharge(new Charge(12.34, 'EUR', 'https://docs.unzer.com'), $card);
 
         // Verify Liability Indicator in response.
         $this->assertNotNull($charge->getAdditionalTransactionData());
@@ -321,7 +331,7 @@ class CardTest extends BaseIntegrationTest
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
 
-        $authorization = $card->authorize(1.0, 'EUR', self::RETURN_URL);
+        $authorization = $this->unzer->performAuthorization(new Authorization(1.0, 'EUR', self::RETURN_URL), $card);
 
         // verify authorization has been created
         $this->assertNotNull($authorization->getId());
@@ -354,7 +364,7 @@ class CardTest extends BaseIntegrationTest
         // card recurring is disabled by default
         $this->assertFalse($card->isRecurring());
 
-        $charge = $card->charge(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $charge = $this->unzer->performCharge((new Charge(1.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $card);
 
         // card recurring is activated through charge transaction
         /** @var Card $fetchedCard */

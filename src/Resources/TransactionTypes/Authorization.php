@@ -6,6 +6,7 @@ use RuntimeException;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Traits\HasAccountInformation;
 use UnzerSDK\Traits\HasCancellations;
 use UnzerSDK\Traits\HasDescriptor;
@@ -252,6 +253,6 @@ class Authorization extends AbstractTransactionType
         if (!$payment instanceof Payment) {
             throw new RuntimeException('Payment object is missing. Try fetching the object first!');
         }
-        return $this->getUnzerObject()->chargeAuthorization($payment, $amount);
+        return $this->getUnzerObject()->performChargeOnPayment($payment, new Charge($amount));
     }
 }

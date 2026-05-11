@@ -184,18 +184,19 @@ class AuthorizationTest extends BasePaymentTest
     {
         $unzerMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['chargeAuthorization'])
+            ->setMethods(['performChargeOnPayment'])
             ->getMock();
         /** @var Unzer $unzerMock */
         $payment = (new Payment())->setParentResource($unzerMock)->setId('myPayment');
         $unzerMock->expects($this->exactly(2))
-            ->method('chargeAuthorization')->willReturn(new Charge())
+            ->method('performChargeOnPayment')
+            ->willReturn(new Charge())
             ->withConsecutive(
-                [$this->identicalTo($payment), $this->isNull()],
-                [$this->identicalTo($payment), 321.9]
+                [$this->identicalTo($payment), $this->callback(static fn(Charge $c) => $c->getAmount() === null)],
+                [$this->identicalTo($payment), $this->callback(static fn(Charge $c) => $c->getAmount() === 321.9)]
             );
 
-        $authorization =  new Authorization();
+        $authorization = new Authorization();
         $authorization->setPayment($payment);
         $authorization->charge();
         $authorization->charge(321.9);

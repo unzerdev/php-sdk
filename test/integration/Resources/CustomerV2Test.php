@@ -8,6 +8,7 @@ use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\test\BaseIntegrationTest;
 use function microtime;
 use function PHPUnit\Framework\assertEquals;
@@ -173,7 +174,7 @@ class CustomerV2Test extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->getUnzerObject()->createPaymentType(new Paypal());
-        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
+        $authorization = $this->getUnzerObject()->performAuthorization(new Authorization(12.0, 'EUR', self::RETURN_URL), $paypal, $customer);
 
         $secPayment = $this->getUnzerObject()->fetchPayment($authorization->getPayment()->getId());
 
@@ -195,7 +196,7 @@ class CustomerV2Test extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->getUnzerObject()->createPaymentType(new Paypal());
-        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer);
+        $authorization = $this->getUnzerObject()->performAuthorization(new Authorization(12.0, 'EUR', self::RETURN_URL), $paypal, $customer);
 
         $secPayment = $this->getUnzerObject()->fetchPayment($authorization->getPayment()->getId());
 
@@ -217,7 +218,7 @@ class CustomerV2Test extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->getUnzerObject()->createPaymentType(new Paypal());
-        $authorization = $paypal->authorize(12.0, 'EUR', self::RETURN_URL, $customer->getId());
+        $authorization = $this->getUnzerObject()->performAuthorization(new Authorization(12.0, 'EUR', self::RETURN_URL), $paypal, $customer->getId());
 
         $secPayment = $this->getUnzerObject()->fetchPayment($authorization->getPayment()->getId());
 

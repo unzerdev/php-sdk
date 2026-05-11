@@ -17,6 +17,8 @@ use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class BasketTest extends BaseIntegrationTest
@@ -157,7 +159,7 @@ class BasketTest extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $paypal->authorize(123.4, 'EUR', 'https://unzer.com', null, null, null, $basket);
+        $authorize = $this->unzer->performAuthorization(new Authorization(123.4, 'EUR', 'https://unzer.com'), $paypal, null, null, $basket);
 
         $fetchedPayment = $this->unzer->fetchPayment($authorize->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
@@ -178,7 +180,7 @@ class BasketTest extends BaseIntegrationTest
         $this->unzer->createPaymentType($sdd);
 
         $customer = $this->getMaximumCustomerInclShippingAddress()->setShippingAddress($this->getBillingAddress());
-        $charge   = $sdd->charge(119.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+        $charge   = $this->unzer->performCharge(new Charge(119.0, 'EUR', self::RETURN_URL), $sdd, $customer, null, $basket);
 
         $fetchedPayment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertEquals($basket->expose(), $fetchedPayment->getBasket()->expose());
@@ -202,7 +204,7 @@ class BasketTest extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $paypal->authorize(123.4, 'EUR', 'https://unzer.com', null, null, null, $basket);
+        $authorize = $this->unzer->performAuthorization(new Authorization(123.4, 'EUR', 'https://unzer.com'), $paypal, null, null, $basket);
         $this->assertNotEmpty($basket->getId());
 
         $fetchedPayment = $this->unzer->fetchPayment($authorize->getPaymentId());
@@ -228,7 +230,7 @@ class BasketTest extends BaseIntegrationTest
 
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $charge = $paypal->charge(123.4, 'EUR', 'https://unzer.com', null, null, null, $basket);
+        $charge = $this->unzer->performCharge(new Charge(123.4, 'EUR', 'https://unzer.com'), $paypal, null, null, $basket);
         $this->assertNotEmpty($basket->getId());
 
         $fetchedPayment = $this->unzer->fetchPayment($charge->getPaymentId());

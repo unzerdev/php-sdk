@@ -14,6 +14,7 @@ namespace UnzerSDK\test\integration;
 use UnzerSDK\Constants\CancelReasonCodes;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 use UnzerSDK\test\Helper\TestEnvironmentService;
 
@@ -83,12 +84,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 123.44, 0.0, 123.44, 0.0);
 
-        $charge1 = $payment->charge(100.44);
+        $charge1 = $this->unzer->performChargeOnPayment($payment, new Charge(100.44));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 23.0, 100.44, 123.44, 0.0);
 
         $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
-        $charge2 = $payment->charge(23.00);
+        $charge2 = $this->unzer->performChargeOnPayment($payment, new Charge(23.00));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
@@ -144,12 +145,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $authorization = $this->createCardAuthorization($authorizeAmount);
         $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
 
-        $payment->charge(23.00);
+        $this->unzer->performChargeOnPayment($payment, new Charge(23.00));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 100.44, 23.0, $authorizeAmount, 0.0);
 
         $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
-        $payment->charge(100.44);
+        $this->unzer->performChargeOnPayment($payment, new Charge(100.44));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, $authorizeAmount, $authorizeAmount, 0.0);
 
@@ -226,7 +227,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge();
+        $this->unzer->performChargeOnPayment($payment, new Charge());
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
@@ -253,7 +254,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge(50.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(50.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
 
@@ -294,7 +295,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge(25.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(25.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 75.0, 25.0, 100.0, 0.0);
 
@@ -317,7 +318,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge(40.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(40.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
 
@@ -342,7 +343,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
         /** @var Invoice $invoice */
         $invoice = $this->unzer->createPaymentType(new Invoice());
-        $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $invoice);
         $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -363,7 +364,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
         /** @var Invoice $invoice */
         $invoice = $this->unzer->createPaymentType(new Invoice());
-        $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $invoice);
         $payment = $this->unzer->fetchPayment($charge->getPaymentId());
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
@@ -389,7 +390,15 @@ class PaymentCancelTest extends BaseIntegrationTest
 
         $basket = $this->createBasket();
         $invoiceId = 'i' . self::generateRandomId();
-        $charge = $invoiceSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
+        $charge = $this->unzer->performCharge(
+            (new Charge(100.0, 'EUR', self::RETURN_URL))
+                ->setOrderId($basket->getOrderId())
+                ->setInvoiceId($invoiceId),
+            $invoiceSecured,
+            $customer,
+            null,
+            $basket
+        );
         $charge->getPayment()->ship();
         $paymentId = $charge->getPaymentId();
 
@@ -426,7 +435,15 @@ class PaymentCancelTest extends BaseIntegrationTest
 
         $basket = $this->createBasket();
         $invoiceId = 'i' . self::generateRandomId();
-        $charge = $invoiceSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
+        $charge = $this->unzer->performCharge(
+            (new Charge(100.0, 'EUR', self::RETURN_URL))
+                ->setOrderId($basket->getOrderId())
+                ->setInvoiceId($invoiceId),
+            $invoiceSecured,
+            $customer,
+            null,
+            $basket
+        );
         $charge->getPayment()->ship();
         $paymentId = $charge->getPaymentId();
 
@@ -480,12 +497,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge(50.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(50.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
 
         $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
-        $payment->charge(50.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(50.0));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
@@ -509,7 +526,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     {
         $authorization = $this->createCardAuthorization(119.0);
         $payment = $authorization->getPayment();
-        $payment->charge();
+        $this->unzer->performChargeOnPayment($payment, new Charge());
         $cancellations = $payment->cancelAmount(59.5, CancelReasonCodes::REASON_CODE_CREDIT, 'Reference text!', 50.0, 9.5);
         $this->assertCount(1, $cancellations);
     }

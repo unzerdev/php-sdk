@@ -20,6 +20,7 @@ use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 use RuntimeException;
 
@@ -115,7 +116,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
         /** @var SepaDirectDebit $dd */
         $dd = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
         $this->assertFalse($dd->isRecurring());
-        $dd->charge(10.0, 'EUR', self::RETURN_URL);
+        $this->unzer->performCharge(new Charge(10.0, 'EUR', self::RETURN_URL), $dd);
         $dd = $this->unzer->fetchPaymentType($dd->getId());
         $this->assertTrue($dd->isRecurring());
 
@@ -138,7 +139,7 @@ class RecurringPaymentTest extends BaseIntegrationTest
         $customer = $this->getMaximumCustomer();
         $customer->setShippingAddress($customer->getBillingAddress());
         $basket = $this->createBasket();
-        $ddg->charge(10.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
+        $this->unzer->performCharge(new Charge(10.0, 'EUR', self::RETURN_URL), $ddg, $customer, null, $basket);
         $ddg = $this->unzer->fetchPaymentType($ddg->getId());
         $this->assertTrue($ddg->isRecurring());
 
