@@ -532,72 +532,6 @@ class PaymentTest extends BasePaymentTest
     }
 
     /**
-     * Verify getCancellation calls getCancellations and returns null if cancellation does not exist.
-     *
-     * @deprecated To be removed with Payment::getCancellation()
-     *
-     * @test
-     */
-    public function getCancellationShouldCallGetCancellationsAndReturnNullIfNoCancellationExists(): void
-    {
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCancellations'])->getMock();
-        $paymentMock->expects($this->once())->method('getCancellations')->willReturn([]);
-
-        /** @var Payment $paymentMock */
-        $this->assertNull($paymentMock->getCancellation('123'));
-    }
-
-    /**
-     * Verify getCancellation returns cancellation if it exists.
-     *
-     * @deprecated To be removed with Payment::getCancellation()
-     *
-     * @test
-     */
-    public function getCancellationShouldReturnCancellationIfItExists(): void
-    {
-        $cancellation1 = (new Cancellation())->setId('cancellation1');
-        $cancellation2 = (new Cancellation())->setId('cancellation2');
-        $cancellation3 = (new Cancellation())->setId('cancellation3');
-        $cancellations = [$cancellation1, $cancellation2, $cancellation3];
-
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCancellations'])->getMock();
-        $paymentMock->expects($this->once())->method('getCancellations')->willReturn($cancellations);
-
-        /** @var Payment $paymentMock */
-        $this->assertSame($cancellation2, $paymentMock->getCancellation('cancellation2', true));
-    }
-
-    /**
-     * Verify getCancellation fetches cancellation if it exists and lazy loading is false.
-     *
-     * @deprecated To be removed with Payment::getCancellation()
-     *
-     * @test
-     */
-    public function getCancellationShouldReturnCancellationIfItExistsAndFetchItIfNotLazy(): void
-    {
-        $cancellation = (new Cancellation())->setId('cancellation123');
-
-        $paymentMock = $this->getMockBuilder(Payment::class)->setMethods(['getCancellations'])->getMock();
-        $paymentMock->expects($this->exactly(2))->method('getCancellations')->willReturn([$cancellation]);
-
-        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->disableOriginalConstructor()->setMethods(['getResource'])->getMock();
-        /** @noinspection PhpParamsInspection */
-        $resourceServiceMock->expects($this->once())->method('getResource')->with($cancellation);
-
-        /** @var ResourceService $resourceServiceMock */
-        $unzerObj = (new Unzer('s-priv-123'))->setResourceService($resourceServiceMock);
-
-        /** @var Payment $paymentMock */
-        $paymentMock->setParentResource($unzerObj);
-
-        $this->assertSame($cancellation, $paymentMock->getCancellation('cancellation123'));
-        $this->assertNull($paymentMock->getCancellation('cancellation1234'));
-    }
-
-    /**
      * Verify Shipments are handled properly.
      *
      * @test
@@ -1410,30 +1344,6 @@ class PaymentTest extends BasePaymentTest
     }
 
     //</editor-fold>
-
-    /**
-     * Verify charge will call chargePayment on Unzer object.
-     *
-     * @test
-     */
-    public function chargeMethodShouldPropagateToUnzerChargePaymentMethod(): void
-    {
-        $payment = new Payment();
-
-        /** @var Unzer|MockObject $unzerMock */
-        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['chargePayment'])->getMock();
-        $unzerMock->expects($this->exactly(3))->method('chargePayment')
-            ->withConsecutive(
-                [$payment, null, null],
-                [$payment, 1.1, null],
-                [$payment, 2.2]
-            )->willReturn(new Charge());
-        $payment->setParentResource($unzerMock);
-
-        $payment->charge();
-        $payment->charge(1.1);
-        $payment->charge(2.2);
-    }
 
     /**
      * Verify ship will call ship method on Unzer object.

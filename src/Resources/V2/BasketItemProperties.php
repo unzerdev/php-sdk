@@ -37,29 +37,6 @@ trait BasketItemProperties
     protected $type;
 
     /**
-     * BasketItem constructor.
-     *
-     * @param string $title
-     * @param float $amountNet
-     * @param float $amountPerUnit
-     * @param int $quantity
-     * @deprecated since 1.1.5.0 Please call constructor without parameters and use setter functions instead.
-     *
-     */
-    public function __construct(
-        string $title = '',
-        float  $amountNet = 0.0,
-        float  $amountPerUnit = 0.0,
-        int    $quantity = 1
-    )
-    {
-        $this->title = $title;
-        $this->quantity = $quantity;
-        $this->setAmountPerUnitGross($amountNet);
-        $this->setAmountPerUnit($amountPerUnit);
-    }
-
-    /**
      * @return string|null
      */
     public function getBasketItemReferenceId(): ?string

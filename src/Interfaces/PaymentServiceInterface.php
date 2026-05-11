@@ -15,7 +15,6 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
-use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\Resources\Payment;
@@ -69,49 +68,6 @@ interface PaymentServiceInterface
     public function updateAuthorization($payment, Authorization $authorization): Authorization;
 
     /**
-     * Performs an Authorization transaction and returns the resulting Authorization resource.
-     *
-     * @param float                  $amount         The amount to authorize.
-     * @param string                 $currency       The currency of the amount.
-     * @param string|BasePaymentType $paymentType    The PaymentType object or the id of the PaymentType to use.
-     * @param string                 $returnUrl      The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null   $customer       The Customer object or the id of the customer resource to reference.
-     * @param string|null            $orderId        A custom order id which can be set by the merchant.
-     * @param Metadata|null          $metadata       The Metadata object containing custom information for the payment.
-     * @param Basket|null            $basket         The Basket object corresponding to the payment.
-     *                                               The Basket object will be created automatically if it does not exist
-     *                                               yet (i.e. has no id).
-     * @param bool|null              $card3ds        Enables 3ds channel for credit cards if available. This parameter is
-     *                                               optional and will be ignored if not applicable.
-     * @param string|null            $invoiceId      The external id of the invoice.
-     * @param string|null            $referenceText  A reference text for the payment.
-     * @param string|null            $recurrenceType Recurrence type used for recurring payment.
-     *
-     * @return Authorization The resulting object of the Authorization resource.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 1.2.0.0 please use performAuthorization() instead.
-     * @see performAuthorization
-     *
-     */
-    public function authorize(
-        $amount,
-        $currency,
-        $paymentType,
-        $returnUrl,
-        $customer = null,
-        $orderId = null,
-        $metadata = null,
-        $basket = null,
-        $card3ds = null,
-        $invoiceId = null,
-        $referenceText = null,
-        $recurrenceType = null
-    ): Authorization;
-
-    /**
      * Performs a Charge transaction and returns the resulting Charge resource.
      *
      * @param Charge                 $charge      The Charge object containing transaction specific information.
@@ -151,50 +107,6 @@ interface PaymentServiceInterface
     public function updateCharge($payment, Charge $charge): Charge;
 
     /**
-     * Performs a Charge transaction and returns the resulting Charge resource.
-     *
-     * @param float                  $amount           The amount to charge.
-     * @param string                 $currency         The currency of the amount.
-     * @param string|BasePaymentType $paymentType      The PaymentType object or the id of the PaymentType to use.
-     * @param string                 $returnUrl        The URL used to return to the shop if the process requires leaving it.
-     * @param Customer|string|null   $customer         The Customer object or the id of the customer resource to reference.
-     * @param string|null            $orderId          A custom order id which can be set by the merchant.
-     * @param Metadata|null          $metadata         The Metadata object containing custom information for the payment.
-     * @param Basket|null            $basket           The Basket object corresponding to the payment.
-     *                                                 The Basket object will be created automatically if it does not exist
-     *                                                 yet (i.e. has no id).
-     * @param bool|null              $card3ds          Enables 3ds channel for credit cards if available. This parameter is
-     *                                                 optional and will be ignored if not applicable.
-     * @param string|null            $invoiceId        The external id of the invoice.
-     * @param string|null            $paymentReference A reference text for the payment.
-     * @param string|null            $recurrenceType   Recurrence type used for recurring payment.
-     *                                                 See \UnzerSDK\Constants\RecurrenceTypes to find all supported types.
-     *
-     * @return Charge The resulting object of the Charge resource.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 1.2.0.0 please use performCharge() instead.
-     * @see performCharge
-     *
-     */
-    public function charge(
-        $amount,
-        $currency,
-        $paymentType,
-        $returnUrl,
-        $customer = null,
-        $orderId = null,
-        $metadata = null,
-        $basket = null,
-        $card3ds = null,
-        $invoiceId = null,
-        $paymentReference = null,
-        $recurrenceType = null
-    ): Charge;
-
-    /**
      * Performs a Charge transaction for a previously authorized payment.
      * To perform a full charge of the authorized amount leave the amount null.
      *
@@ -209,53 +121,6 @@ interface PaymentServiceInterface
     public function performChargeOnPayment(
         $payment,
         Charge $charge
-    ): Charge;
-
-    /**
-     * Performs a Charge transaction for the Authorization of the given Payment object.
-     * To perform a full charge of the authorized amount leave the amount null.
-     *
-     * @param string|Payment $payment   The Payment object the Authorization to charge belongs to.
-     * @param float|null     $amount    The amount to charge.
-     * @param string|null    $orderId   The order id from the shop.
-     * @param string|null    $invoiceId The invoice id from the shop.
-     *
-     * @return Charge The resulting object of the Charge resource.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 1.2.0.0 please use performChargeOnPayment() instead.
-     *
-     */
-    public function chargeAuthorization(
-        $payment,
-        ?float $amount = null,
-        ?string $orderId = null,
-        ?string $invoiceId = null
-    ): Charge;
-
-    /**
-     * Performs a Charge transaction for a specific Payment and returns the resulting Charge object.
-     *
-     * @param Payment|string $payment   The Payment object to be charged.
-     * @param float|null     $amount    The amount to charge.
-     * @param string|null    $orderId   The order id from the shop.
-     * @param string|null    $invoiceId The invoice id from the shop.
-     *
-     * @return Charge The resulting Charge object.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 1.2.0.0 please use performChargeOnPayment() instead.
-     *
-     */
-    public function chargePayment(
-        $payment,
-        ?float $amount = null,
-        ?string $orderId = null,
-        ?string $invoiceId = null
     ): Charge;
 
     /**
@@ -361,26 +226,6 @@ interface PaymentServiceInterface
         ?Basket   $basket = null,
         ?Metadata $metadata = null
     ): Paypage;
-
-    /**
-     * Returns an InstallmentPlans object containing all available instalment plans.
-     *
-     * @param float         $amount            The amount to be charged via FlexiPay Rate.
-     * @param string        $currency          The currency code of the transaction.
-     * @param float         $effectiveInterest The effective interest rate.
-     * @param DateTime|null $orderDate         The date the order took place, is set to today if left empty.
-     *
-     * @return InstalmentPlans|AbstractUnzerResource The object containing all possible instalment plans.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     */
-    public function fetchInstallmentPlans(
-        float    $amount,
-        string   $currency,
-        float    $effectiveInterest,
-        ?DateTime $orderDate = null
-    ): InstalmentPlans;
 
     /**
      * Returns an InstallmentPlans object containing all available instalment plan options.

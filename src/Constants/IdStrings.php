@@ -27,13 +27,7 @@ class IdStrings
     public const EPS = 'eps';
     public const GOOGLE_PAY = 'gop';
     public const CLICK_TO_PAY = 'ctp';
-    public const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
     public const IDEAL = 'idl';
-    public const INSTALLMENT_SECURED = 'ins';
-    public const INVOICE = 'ivc';
-    public const INVOICE_FACTORING = 'ivf';
-    public const INVOICE_GUARANTEED = 'ivg';
-    public const INVOICE_SECURED = 'ivs';
     public const KLARNA = 'kla';
     public const PAYLATER_DIRECT_DEBIT = 'pdd';
     public const PAYLATER_INVOICE = 'piv';
@@ -47,8 +41,6 @@ class IdStrings
     public const PREPAYMENT = 'ppy';
     public const PRZELEWY24 = 'p24';
     public const SEPA_DIRECT_DEBIT = 'sdd';
-    public const SEPA_DIRECT_DEBIT_GUARANTEED = 'ddg';
-    public const SEPA_DIRECT_DEBIT_SECURED = 'dds';
     public const TWINT = 'twt';
     public const WECHATPAY = 'wcp';
     public const WERO = 'wro';
@@ -69,13 +61,7 @@ class IdStrings
         self::CARD,
         self::EPS,
         self::GOOGLE_PAY,
-        self::HIRE_PURCHASE_DIRECT_DEBIT,
         self::IDEAL,
-        self::INSTALLMENT_SECURED,
-        self::INVOICE,
-        self::INVOICE_FACTORING,
-        self::INVOICE_GUARANTEED,
-        self::INVOICE_SECURED,
         self::KLARNA,
         self::PAYLATER_DIRECT_DEBIT,
         self::PAYLATER_INVOICE,
@@ -89,8 +75,6 @@ class IdStrings
         self::PREPAYMENT,
         self::PRZELEWY24,
         self::SEPA_DIRECT_DEBIT,
-        self::SEPA_DIRECT_DEBIT_GUARANTEED,
-        self::SEPA_DIRECT_DEBIT_SECURED,
         self::TWINT,
         self::WECHATPAY,
         self::WERO,

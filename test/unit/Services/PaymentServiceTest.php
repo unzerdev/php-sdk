@@ -19,10 +19,8 @@ use UnzerSDK\Interfaces\CancelServiceInterface;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
-use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
-use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
@@ -63,144 +61,7 @@ class PaymentServiceTest extends BasePaymentTest
 
     //</editor-fold>
 
-    //<editor-fold desc="Authorize">
-
-    /**
-     * Verify authorize calls create for a new authorization using the passed values.
-     *
-     * @test
-     *
-     * @param $card3ds
-     *
-     * @dataProvider card3dsDataProvider
-     */
-    public function authorizeShouldCreateNewAuthorizationAndPayment($card3ds): void
-    {
-        $customer  = (new Customer())->setId('myCustomerId');
-        $metadata  = (new Metadata())->setId('myMetadataId');
-        $basket    = (new Basket())->setId('myBasketId');
-
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
-        $paymentSrv  = (new Unzer('s-priv-123'))->setResourceService($resourceSrvMock)->getPaymentService();
-        /** @noinspection PhpParamsInspection */
-        $resourceSrvMock->expects($this->once())->method('createResource')
-            ->with($this->callback(static function ($authorize) use ($customer, $metadata, $basket, $card3ds) {
-                /** @var Authorization $authorize */
-                $newPayment = $authorize->getPayment();
-                return $authorize instanceof Authorization &&
-                    $authorize->getAmount() === 1.234 &&
-                    $authorize->getCurrency() === 'myCurrency' &&
-                    $authorize->getOrderId() === 'myId' &&
-                    $authorize->getReturnUrl() === 'myUrl' &&
-                    $authorize->isCard3ds() === $card3ds &&
-                    $newPayment instanceof Payment &&
-                    $newPayment->getMetadata() === $metadata &&
-                    $newPayment->getCustomer() === $customer &&
-                    $newPayment->getBasket() === $basket &&
-                    $newPayment->getAuthorization() === $authorize;
-            }));
-
-        $type = (new PayPal())->setId('typeId');
-        $paymentSrv->authorize(1.234, 'myCurrency', $type, 'myUrl', $customer, 'myId', $metadata, $basket, $card3ds);
-    }
-
-    //</editor-fold>
-
     //<editor-fold desc="Charge">
-
-    /**
-     * Verify charge method calls create with a charge object on resource service.
-     *
-     * @test
-     *
-     * @param $card3ds
-     *
-     * @dataProvider card3dsDataProvider
-     */
-    public function chargeShouldCreateNewPaymentAndCharge($card3ds): void
-    {
-        $customer    = (new Customer())->setId('myCustomerId');
-        $unzer   = new Unzer('s-priv-123');
-        $paymentType = (new Paypal())->setId('myPaymentTypeId');
-        $metadata    = (new Metadata())->setId('myMetadataId');
-        $basket      = (new Basket())->setId('myBasketId');
-
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
-        /** @noinspection PhpParamsInspection */
-        $resourceSrvMock->expects($this->once())->method('createResource')
-            ->with($this->callback(static function ($charge) use ($customer, $paymentType, $basket, $card3ds) {
-                /** @var Charge $charge */
-                $newPayment = $charge->getPayment();
-                return $charge instanceof Charge &&
-                    $charge->getAmount() === 1.234 &&
-                    $charge->getCurrency() === 'myCurrency' &&
-                    $charge->getOrderId() === 'myId' &&
-                    $charge->getReturnUrl() === 'myUrl' &&
-                    $charge->isCard3ds() === $card3ds &&
-                    $newPayment instanceof Payment &&
-                    $newPayment->getCustomer() === $customer &&
-                    $newPayment->getPaymentType() === $paymentType &&
-                    $newPayment->getBasket() === $basket &&
-                    in_array($charge, $newPayment->getCharges(), true);
-            }));
-
-        /** @var ResourceService $resourceSrvMock */
-        $paymentSrv     = $unzer->setResourceService($resourceSrvMock)->getPaymentService();
-        $returnedCharge = $paymentSrv->charge(1.234, 'myCurrency', $paymentType, 'myUrl', $customer, 'myId', $metadata, $basket, $card3ds);
-        $this->assertSame($paymentType, $returnedCharge->getPayment()->getPaymentType());
-    }
-
-    /**
-     * Verify chargeAuthorization calls chargePayment with the given payment object.
-     *
-     * @test
-     */
-    public function chargeAuthorizationShouldCallChargePaymentWithTheGivenPaymentObject(): void
-    {
-        $paymentObject  = (new Payment())->setId('myPaymentId');
-        /** @var PaymentService|MockObject $paymentSrvMock */
-        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['chargePayment'])->disableOriginalConstructor()->getMock();
-        $paymentSrvMock->expects($this->exactly(2))->method('chargePayment')->withConsecutive([$paymentObject, null], [$paymentObject, 1.234]);
-
-        $paymentSrvMock->setUnzer((new Unzer('s-priv-123'))->setPaymentService($paymentSrvMock));
-        $paymentSrvMock->chargeAuthorization($paymentObject);
-        $paymentSrvMock->chargeAuthorization($paymentObject, 1.234);
-    }
-
-    /**
-     * @deprecated
-     * Verify chargeAuthorization calls fetchPayment if the payment object is passed as id string.
-     *
-     * @test
-     */
-    public function chargeAuthorizationShouldCallChargePaymentMethod(): void
-    {
-        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment'])->disableOriginalConstructor()->getMock();
-        /** @var PaymentService|MockObject $paymentSrvMock */
-        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['chargePayment'])->disableOriginalConstructor()->getMock();
-        $paymentSrvMock->expects($this->once())->method('chargePayment')->withAnyParameters();
-
-        $paymentSrvMock->chargeAuthorization('myPaymentId');
-    }
-
-    /**
-     * @deprecated
-     * Verify chargePayment calls fetchPayment if the payment object is passed as id string.
-     *
-     * @test
-     */
-    public function chargePaymentShouldCallerformChargeOnPaymentMethod(): void
-    {
-        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['fetchPayment'])->disableOriginalConstructor()->getMock();
-        /** @var PaymentService|MockObject $paymentSrvMock */
-        $paymentSrvMock = $this->getMockBuilder(PaymentService::class)->setMethods(['performChargeOnPayment'])->disableOriginalConstructor()->getMock();
-        $paymentSrvMock->expects($this->once())->method('performChargeOnPayment')->withAnyParameters();
-
-        $paymentSrvMock->chargePayment('myPaymentId');
-    }
 
     /**
      * Verify performChargeOnPayment calls fetchPayment if the payment object is passed as id string.
@@ -218,68 +79,6 @@ class PaymentServiceTest extends BasePaymentTest
         $paymentSrvMock->expects(self::exactly(2))->method('getResourceService')->willReturn($resourceSrvMock);
 
         $paymentSrvMock->performChargeOnPayment('myPaymentId', new Charge());
-    }
-
-    /**
-     * Verify chargePayment will create a charge object and call create on ResourceService with it.
-     *
-     * @test
-     */
-    public function chargePaymentShouldCallCreateOnResourceServiceWithNewCharge(): void
-    {
-        $unzer = new Unzer('s-priv-123');
-        $payment   = (new Payment())->setParentResource($unzer)->setId('myPaymentId');
-
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
-        /** @noinspection PhpParamsInspection */
-        $resourceSrvMock->expects($this->once())->method('createResource')
-            ->with($this->callback(static function ($charge) use ($payment) {
-                /** @var Charge $charge */
-                $newPayment = $charge->getPayment();
-                return $charge instanceof Charge &&
-                    $charge->getAmount() === 1.234 &&
-                    $charge->getOrderId() === null &&
-                    $charge->getInvoiceId() === null &&
-                    $newPayment instanceof Payment &&
-                    $newPayment === $payment &&
-                    in_array($charge, $newPayment->getCharges(), true);
-            }));
-
-        $paymentSrv     = $unzer->setResourceService($resourceSrvMock)->getPaymentService();
-        $returnedCharge = $paymentSrv->chargePayment($payment, 1.234);
-        $this->assertEquals([$returnedCharge], $payment->getCharges());
-    }
-
-    /**
-     * Verify chargePayment will set Ids if they are defined.
-     *
-     * @test
-     */
-    public function chargePaymentShouldSetArgumentsInNewChargeObject(): void
-    {
-        $unzer = new Unzer('s-priv-123');
-        $payment   = (new Payment())->setParentResource($unzer)->setId('myPaymentId');
-
-        /** @var ResourceService|MockObject $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
-        /** @noinspection PhpParamsInspection */
-        $resourceSrvMock->expects($this->once())->method('createResource')
-            ->with($this->callback(static function ($charge) use ($payment) {
-                /** @var Charge $charge */
-                $newPayment = $charge->getPayment();
-                return $charge instanceof Charge &&
-                    $charge->getAmount() === 1.234 &&
-                    $charge->getOrderId() === 'orderId' &&
-                    $charge->getInvoiceId() === 'invoiceId' &&
-                    $newPayment instanceof Payment &&
-                    $newPayment === $payment &&
-                    in_array($charge, $newPayment->getCharges(), true);
-            }));
-
-        $paymentSrv     = $unzer->setResourceService($resourceSrvMock)->getPaymentService();
-        $returnedCharge = $paymentSrv->chargePayment($payment, 1.234, 'orderId', 'invoiceId');
-        $this->assertEquals([$returnedCharge], $payment->getCharges());
     }
 
     //</editor-fold>
@@ -575,49 +374,7 @@ class PaymentServiceTest extends BasePaymentTest
 
     //</editor-fold>
 
-    //<editor-fold desc="Installment Secured">
-
-    /**
-     * Verify fetch hdd instalment plans.
-     *
-     * @test
-     */
-    public function fetchInstalmentPlansWillCallFetchOnResourceService(): void
-    {
-        $unzer = new Unzer('s-priv-1234');
-        /** @var MockObject|ResourceService $resourceSrvMock */
-        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs(['unzer' => $unzer])->setMethods(['fetchResource'])->getMock();
-        $unzer->setResourceService($resourceSrvMock);
-
-        $date = $this->getYesterdaysTimestamp();
-        /** @noinspection PhpParamsInspection */
-        $resourceSrvMock->expects($this->once())->method('fetchResource')
-            ->with($this->callback(static function ($param) use ($date) {
-                return $param instanceof InstalmentPlans &&
-                    $param->getAmount() === 12.23 &&
-                    $param->getCurrency() === 'EUR' &&
-                    $param->getEffectiveInterest() === 4.99 &&
-                    $param->getOrderDate() === $date->format('Y-m-d') &&
-                    $param->getParentResource() instanceof InstallmentSecured;
-            }))->willReturn(new InstalmentPlans(12.23, 'EUR', 4.99, $date));
-        $unzer->getPaymentService()->fetchInstallmentPlans(12.23, 'EUR', 4.99, $date);
-    }
-
-    //</editor-fold>
-
     //<editor-fold desc="DataProviders">
-
-    /**
-     * @return array
-     */
-    public function card3dsDataProvider(): array
-    {
-        return [
-            'default' => [null],
-            'non 3ds' => [false],
-            '3ds'     => [true]
-        ];
-    }
 
     /**
      * @return array

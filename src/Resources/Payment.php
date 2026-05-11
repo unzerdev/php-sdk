@@ -567,39 +567,6 @@ class Payment extends AbstractUnzerResource
     }
 
     /**
-     * Retrieves a Cancellation object of this payment by its Id.
-     * I. e. refunds (charge cancellations) and reversals (authorize cancellations).
-     * Fetches the Authorization if it has not been fetched before and the lazy flag is not set.
-     * Returns null if the Authorization does not exist.
-     *
-     * @param string $cancellationId The id of the Cancellation object to be retrieved.
-     * @param bool   $lazy           Enables lazy loading if set to true which results in the object not being updated
-     *                               via API and possibly containing just the meta data known from the Payment object
-     *                               response.
-     *
-     * @return Cancellation|null The retrieved Cancellation object.
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     *
-     * @deprecated since 3.2.0 Please use getCancellation() method of a Charge or Authorization object instead.
-     */
-    public function getCancellation(string $cancellationId, bool $lazy = false): ?Cancellation
-    {
-        /** @var Cancellation $cancellation */
-        foreach ($this->getCancellations() as $cancellation) {
-            if ($cancellation->getId() === $cancellationId) {
-                if (!$lazy) {
-                    $this->getResource($cancellation);
-                }
-                return $cancellation;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Return an array containing all Cancellations of this Payment object
      * I. e. refunds (charge cancellations) and reversals (authorize cancellations).
      *

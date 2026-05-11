@@ -11,7 +11,6 @@
 
 namespace UnzerSDK\test\unit;
 
-use DateTime;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 use UnzerSDK\Resources\Basket;
@@ -76,18 +75,6 @@ class UnzerTest extends BasePaymentTest
         $unzer->setClientIp('myIpAddress');
         $this->assertEquals('myLocale', $unzer->getLocale());
         $this->assertEquals('myIpAddress', $unzer->getClientIp());
-
-        try {
-            $unzer->setKey('this is not a valid key');
-            $this->assertTrue(false, 'This exception should have been thrown');
-        } catch (RuntimeException $e) {
-            $this->assertEquals('Illegal key: Use a valid private or public key with this SDK!', $e->getMessage());
-        }
-
-        $unzer->setKey('s-pub-1234');
-        $this->assertEquals('s-pub-1234', $unzer->getKey());
-        $unzer->setKey('p-pub-1234');
-        $this->assertEquals('p-pub-1234', $unzer->getKey());
 
         $httpService = new HttpService();
         $this->assertNotSame($httpService, $unzer->getHttpService());
@@ -297,36 +284,19 @@ class UnzerTest extends BasePaymentTest
      */
     public static function paymentServiceDP(): array
     {
-        $url           = 'https://dev.unzer.com';
         $orderId       = 'orderId';
         $paymentTypeId = 'paymentTypeId';
-        $customerId    = 'customerId';
-        $paymentId     = 'paymentId';
         $customer      = new Customer();
-        $paypal        = new Paypal();
         $metadata      = new Metadata();
         $payment       = new Payment();
         $paypage       = new Paypage(123.1234, 'EUR', 'url');
         $basket        = new Basket();
-        $today         = new DateTime();
 
         return [
-            'auth'                   => ['authorize', [1.234, 'AFN', $paypal, $url, $customer, $orderId, $metadata], 'authorize', [1.234, 'AFN', $paypal, $url, $customer, $orderId, $metadata]],
-            'authAlt'                => ['authorize', [234.1, 'DZD', $paypal, $url], 'authorize', [234.1, 'DZD', $paypal, $url]],
-            'authStr'                => ['authorize', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId], 'authorize', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]],
-            'charge'                 => ['charge', [1.234, 'AFN', $paypal, $url, $customer, $orderId, $metadata], 'charge', [1.234, 'AFN', $paypal, $url, $customer, $orderId, $metadata]],
-            'chargeAlt'              => ['charge', [234.1, 'DZD', $paypal, $url], 'charge', [234.1, 'DZD', $paypal, $url]],
-            'chargeStr'              => ['charge', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId], 'charge', [34.12, 'DKK', $paymentTypeId, $url, $customerId, $orderId]],
-            'chargeAuth'             => ['chargeAuthorization', [$payment, 1.234], 'chargeAuthorization', [$payment, 1.234]],
-            'chargeAuthAlt'          => ['chargeAuthorization', [$paymentId], 'chargeAuthorization', [$paymentId, null]],
-            'chargeAuthStr'          => ['chargeAuthorization', [$paymentId, 2.345], 'chargeAuthorization', [$paymentId, 2.345]],
-            'chargePayment'          => ['chargePayment', [$payment, 1.234, 'ALL'], 'chargePayment', [$payment, 1.234, 'ALL']],
-            'chargePaymentAlt'       => ['chargePayment', [$payment], 'chargePayment', [$payment]],
             'ship'                   => ['ship', [$payment], 'ship', [$payment]],
             'payout'                 => ['payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, $basket], 'payout', [123, 'EUR', $paymentTypeId, 'url', $customer, $orderId, $metadata, $basket]],
             'initPayPageCharge'      => ['initPayPageCharge', [$paypage, $customer, $basket, $metadata], 'initPayPageCharge', [$paypage, $customer, $basket, $metadata]],
             'initPayPageAuthorize'   => ['initPayPageAuthorize', [$paypage, $customer, $basket, $metadata], 'initPayPageAuthorize', [$paypage, $customer, $basket, $metadata]],
-            'fetchDDInstalmentPlans' => ['fetchInstallmentPlans', [123.4567, 'EUR', 4.99, $today], 'fetchInstallmentPlans', [123.4567, 'EUR', 4.99, $today]]
         ];
     }
 
