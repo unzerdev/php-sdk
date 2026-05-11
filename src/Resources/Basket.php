@@ -20,11 +20,15 @@ class Basket extends AbstractUnzerResource
 
     public function __construct(
         string $orderId = '',
+        ?float $totalValueGross = null,
         string $currencyCode = 'EUR',
         array $basketItems = []
     ) {
-        $this->currencyCode = $currencyCode;
         $this->orderId      = $orderId;
+        $this->currencyCode = $currencyCode;
+        if ($totalValueGross !== null) {
+            $this->setTotalValueGross($totalValueGross);
+        }
         $this->setBasketItems($basketItems);
     }
 

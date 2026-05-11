@@ -129,7 +129,7 @@ class BasketTest extends BasePaymentTest
         $basketItem4 = new BasketItem();
         $this->assertNull($basketItem4->getBasketItemReferenceId());
 
-        $basket2 = new Basket('myOrderId', 'EUR', [$basketItem3, $basketItem4]);
+        $basket2 = new Basket('myOrderId', null, 'EUR', [$basketItem3, $basketItem4]);
         $this->assertSame($basket2->getBasketItemByIndex(0), $basketItem3);
         $this->assertSame($basket2->getBasketItemByIndex(1), $basketItem4);
         $this->assertEquals('0', $basketItem3->getBasketItemReferenceId());
