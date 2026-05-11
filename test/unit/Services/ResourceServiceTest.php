@@ -31,7 +31,6 @@ use UnzerSDK\Resources\PaymentTypes\Alipay;
 use UnzerSDK\Resources\PaymentTypes\Bancontact;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
-use UnzerSDK\Resources\PaymentTypes\Giropay;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
@@ -48,7 +47,6 @@ use UnzerSDK\Resources\PaymentTypes\Prepayment;
 use UnzerSDK\Resources\PaymentTypes\Przelewy24;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\PaymentTypes\Wechatpay;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -522,7 +520,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function createPaymentTypeShouldSetUnzerObjectAndCallCreate(): void
     {
         $unzer = new Unzer('s-priv-1234');
-        $paymentType = new Sofort();
+        $paymentType = new Paypal();
 
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setMethods(['createResource'])->setConstructorArgs([$unzer])->getMock();
         /** @noinspection PhpParamsInspection */
@@ -1306,7 +1304,7 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceService = new ResourceService(new Unzer('s-priv-123'));
         $this->expectException(RuntimeException::class);
 
-        $resourceService->activateRecurringPayment(new Sofort(), 'returnUrl', null);
+        $resourceService->activateRecurringPayment(new EPS(), 'returnUrl', null);
     }
 
     /**
@@ -1409,7 +1407,6 @@ class ResourceServiceTest extends BasePaymentTest
             'BANCONTACT' => ['s-bct-xen2ybcovn56', 'https://api.unzer.com/v1/types/bancontact/s-bct-xen2ybcovn56/'],
             'CARD' => ['s-crd-xen2ybcovn56', 'https://api.unzer.com/v1/types/card/s-crd-xen2ybcovn56/'],
             'EPS' => ['s-eps-xen2ybcovn56', 'https://api.unzer.com/v1/types/eps/s-eps-xen2ybcovn56/'],
-            'GIROPAY' => ['s-gro-xen2ybcovn56', 'https://api.unzer.com/v1/types/giropay/s-gro-xen2ybcovn56/'],
             'HIRE_PURCHASE_DIRECT_DEBIT' => ['s-hdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/hire-purchase-direct-debit/s-hdd-xen2ybcovn56/'],
             'IDEAL' => ['s-idl-xen2ybcovn56', 'https://api.unzer.com/v1/types/ideal/s-idl-xen2ybcovn56/'],
             'INVOICE' => ['s-ivc-xen2ybcovn56', 'https://api.unzer.com/v1/types/invoice/s-ivc-xen2ybcovn56/'],
@@ -1426,7 +1423,6 @@ class ResourceServiceTest extends BasePaymentTest
             'PRZELEWY24' => ['s-p24-xen2ybcovn56', 'https://api.unzer.com/v1/types/przelewy24/s-p24-xen2ybcovn56/'],
             'SEPA_DIRECT_DEBIT' => ['s-sdd-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit/s-sdd-xen2ybcovn56/'],
             'SEPA_DIRECT_DEBIT_GUARANTEED' => ['s-ddg-xen2ybcovn56', 'https://api.unzer.com/v1/types/direct-debit-guaranteed/s-ddg-xen2ybcovn56/'],
-            'SOFORT' => ['s-sft-xen2ybcovn56', 'https://api.unzer.com/v1/types/sofort/s-sft-xen2ybcovn56/'],
             'WECHATPAY' => ['s-wcp-xen2ybcovn56', 'https://api.unzer.com/v1/types/wechatpay/s-wcp-xen2ybcovn56/'],
             'WERO' => ['s-wro-xen2ybcovn56', 'https://api.unzer.com/v1/types/wero/s-wro-xen2ybcovn56/']
         ];
@@ -1498,7 +1494,6 @@ class ResourceServiceTest extends BasePaymentTest
             'fetchBasket by id' => ['fetchBasket', ['myBasketId'], $fetchBasketCB],
             'fetchBasket by obj' => ['fetchBasket', [(new Basket())->setId('myBasketId')], $fetchBasketCB],
             'PaymentType Card sandbox' => ['fetchPaymentType', ['s-crd-12345678'], $getPaymentTypeCB(Card::class)],
-            'PaymentType Giropay sandbox' => ['fetchPaymentType', ['s-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
             'PaymentType Google Pay sandbox' => ['fetchPaymentType', ['s-gop-12345678'], $getPaymentTypeCB(Googlepay::class)],
             'PaymentType Ideal sandbox' => ['fetchPaymentType', ['s-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
             'PaymentType Invoice sandbox' => ['fetchPaymentType', ['s-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
@@ -1513,7 +1508,6 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType SepaDirectDebit sandbox' => ['fetchPaymentType', ['s-sdd-12345678'], $getPaymentTypeCB(SepaDirectDebit::class)],
             'PaymentType SepaDirectDebitGuaranteed sandbox' => ['fetchPaymentType', ['s-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
             'PaymentType SepaDirectDebitSecured sandbox' => ['fetchPaymentType', ['s-dds-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
-            'PaymentType Sofort sandbox' => ['fetchPaymentType', ['s-sft-12345678'], $getPaymentTypeCB(Sofort::class)],
             'PaymentType PIS sandbox' => ['fetchPaymentType', ['s-pis-12345678'], $getPaymentTypeCB(PIS::class)],
             'PaymentType PFC sandbox' => ['fetchPaymentType', ['s-pfc-12345678'], $getPaymentTypeCB(PostFinanceCard::class)],
             'PaymentType PFE sandbox' => ['fetchPaymentType', ['s-pfe-12345678'], $getPaymentTypeCB(PostFinanceEfinance::class)],
@@ -1528,7 +1522,6 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType Bancontact production' => ['fetchPaymentType', ['p-bct-12345678'], $getPaymentTypeCB(Bancontact::class)],
             'PaymentType Card production' => ['fetchPaymentType', ['p-crd-12345678'], $getPaymentTypeCB(Card::class)],
             'PaymentType EPS production' => ['fetchPaymentType', ['p-eps-12345678'], $getPaymentTypeCB(EPS::class)],
-            'PaymentType Giropay production' => ['fetchPaymentType', ['p-gro-12345678'], $getPaymentTypeCB(Giropay::class)],
             'PaymentType HirePurchaseDirectDebit production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
             'PaymentType Ideal production' => ['fetchPaymentType', ['p-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
             'PaymentType InstallmentSecured production' => ['fetchPaymentType', ['p-hdd-12345678'], $getPaymentTypeCB(InstallmentSecured::class)],
@@ -1544,7 +1537,6 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType SepaDirectDebit production' => ['fetchPaymentType', ['p-sdd-12345678'], $getPaymentTypeCB(SepaDirectDebit::class)],
             'PaymentType SepaDirectDebitGuaranteed production' => ['fetchPaymentType', ['p-ddg-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
             'PaymentType SepaDirectDebitSecured production' => ['fetchPaymentType', ['p-dds-12345678'], $getPaymentTypeCB(SepaDirectDebitSecured::class)],
-            'PaymentType Sofort production' => ['fetchPaymentType', ['p-sft-12345678'], $getPaymentTypeCB(Sofort::class)],
             'PaymentType Wechatpay production' => ['fetchPaymentType', ['p-wcp-12345678'], $getPaymentTypeCB(Wechatpay::class)],
             'PaymentType OpenBanking production' => ['fetchPaymentType', ['p-obp-12345678'], $getPaymentTypeCB(OpenbankingPis::class)],
         ];

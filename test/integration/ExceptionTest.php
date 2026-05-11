@@ -14,7 +14,7 @@ namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class ExceptionTest extends BaseIntegrationTest
@@ -27,12 +27,12 @@ class ExceptionTest extends BaseIntegrationTest
      */
     public function apiExceptionShouldHoldClientMessage(): void
     {
-        $giropay             = $this->unzer->createPaymentType(new Giropay());
+        $eps                 = $this->unzer->createPaymentType(new EPS());
         $firstClientMessage  = '';
         $secondClientMessage = '';
 
         try {
-            $this->unzer->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+            $this->unzer->authorize(1.0, 'EUR', $eps, self::RETURN_URL);
         } catch (UnzerApiException $e) {
             $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());
@@ -44,7 +44,7 @@ class ExceptionTest extends BaseIntegrationTest
 
         try {
             $this->unzer->setLocale('de-DE');
-            $this->unzer->authorize(1.0, 'EUR', $giropay, self::RETURN_URL);
+            $this->unzer->authorize(1.0, 'EUR', $eps, self::RETURN_URL);
         } catch (UnzerApiException $e) {
             $this->assertInstanceOf(UnzerApiException::class, $e);
             $this->assertEquals(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED, $e->getCode());

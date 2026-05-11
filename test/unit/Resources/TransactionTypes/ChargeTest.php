@@ -15,7 +15,7 @@ use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BasePaymentTest;
@@ -164,7 +164,7 @@ class ChargeTest extends BasePaymentTest
     public function getLinkedResourceShouldReturnResourcesBelongingToCharge(): void
     {
         $unzerObj    = new Unzer('s-priv-123345');
-        $paymentType     = (new Sofort())->setId('123');
+        $paymentType     = (new Paypal())->setId('123');
         $customer        = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment         = new Payment();
         $payment->setParentResource($unzerObj)->setPaymentType($paymentType)->setCustomer($customer);

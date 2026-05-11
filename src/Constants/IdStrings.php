@@ -25,7 +25,6 @@ class IdStrings
     public const BANCONTACT = 'bct';
     public const CARD = 'crd';
     public const EPS = 'eps';
-    public const GIROPAY = 'gro';
     public const GOOGLE_PAY = 'gop';
     public const CLICK_TO_PAY = 'ctp';
     public const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
@@ -50,7 +49,6 @@ class IdStrings
     public const SEPA_DIRECT_DEBIT = 'sdd';
     public const SEPA_DIRECT_DEBIT_GUARANTEED = 'ddg';
     public const SEPA_DIRECT_DEBIT_SECURED = 'dds';
-    public const SOFORT = 'sft';
     public const TWINT = 'twt';
     public const WECHATPAY = 'wcp';
     public const WERO = 'wro';
@@ -70,7 +68,6 @@ class IdStrings
         self::BANCONTACT,
         self::CARD,
         self::EPS,
-        self::GIROPAY,
         self::GOOGLE_PAY,
         self::HIRE_PURCHASE_DIRECT_DEBIT,
         self::IDEAL,
@@ -94,7 +91,6 @@ class IdStrings
         self::SEPA_DIRECT_DEBIT,
         self::SEPA_DIRECT_DEBIT_GUARANTEED,
         self::SEPA_DIRECT_DEBIT_SECURED,
-        self::SOFORT,
         self::TWINT,
         self::WECHATPAY,
         self::WERO,

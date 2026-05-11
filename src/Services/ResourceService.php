@@ -28,7 +28,6 @@ use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Clicktopay;
 use UnzerSDK\Resources\PaymentTypes\EPS;
-use UnzerSDK\Resources\PaymentTypes\Giropay;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
@@ -49,7 +48,6 @@ use UnzerSDK\Resources\PaymentTypes\Prepayment;
 use UnzerSDK\Resources\PaymentTypes\Przelewy24;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\PaymentTypes\Twint;
 use UnzerSDK\Resources\PaymentTypes\Wechatpay;
 use UnzerSDK\Resources\PaymentTypes\Wero;
@@ -902,9 +900,6 @@ class ResourceService implements ResourceServiceInterface
             case IdStrings::EPS:
                 $paymentType = new EPS();
                 break;
-            case IdStrings::GIROPAY:
-                $paymentType = new Giropay();
-                break;
             case IdStrings::GOOGLE_PAY:
                 $paymentType = new Googlepay();
                 break;
@@ -965,9 +960,6 @@ class ResourceService implements ResourceServiceInterface
             case IdStrings::SEPA_DIRECT_DEBIT_GUARANTEED:
             case IdStrings::SEPA_DIRECT_DEBIT_SECURED:
                 $paymentType = new SepaDirectDebitSecured(null);
-                break;
-            case IdStrings::SOFORT:
-                $paymentType = new Sofort();
                 break;
             case IdStrings::TWINT:
                 $paymentType = new Twint();

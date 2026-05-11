@@ -26,7 +26,6 @@ use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
@@ -123,7 +122,7 @@ class PaymentServiceTest extends BasePaymentTest
     {
         $customer    = (new Customer())->setId('myCustomerId');
         $unzer   = new Unzer('s-priv-123');
-        $paymentType = (new Sofort())->setId('myPaymentTypeId');
+        $paymentType = (new Paypal())->setId('myPaymentTypeId');
         $metadata    = (new Metadata())->setId('myMetadataId');
         $basket      = (new Basket())->setId('myBasketId');
 

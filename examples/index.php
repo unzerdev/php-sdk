@@ -146,18 +146,6 @@ function printMessage($type, $title, $text)
                 <div class="card olive">
                     <div class="content">
                         <div class="header">
-                            Giropay
-                        </div>
-                        <div class="description">
-                        </div>
-                    </div>
-                    <div id="tryGiropayExample" class="ui bottom attached green button" onclick="location.href='Giropay/';">
-                        Try
-                    </div>
-                </div>
-                <div class="card olive">
-                    <div class="content">
-                        <div class="header">
                             Google Pay
                         </div>
                         <div class="description">
@@ -301,18 +289,6 @@ function printMessage($type, $title, $text)
                         </div>
                     </div>
                     <div id="tryPayUExample" class="ui bottom attached green button" onclick="location.href='PayU/';">
-                        Try
-                    </div>
-                </div>
-                <div class="card olive">
-                    <div class="content">
-                        <div class="header">
-                            Sofort
-                        </div>
-                        <div class="description">
-                        </div>
-                    </div>
-                    <div id="trySofortExample" class="ui bottom attached green button" onclick="location.href='Sofort/';">
                         Try
                     </div>
                 </div>

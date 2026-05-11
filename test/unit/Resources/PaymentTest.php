@@ -21,8 +21,8 @@ use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\EmbeddedResources\Amount;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\TransactionTypes\AbstractTransactionType;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -426,7 +426,7 @@ class PaymentTest extends BasePaymentTest
     {
         $unzerObj = new Unzer('s-priv-123');
         $payment = (new Payment())->setParentResource($unzerObj);
-        $paymentType = (new Sofort())->setId('123');
+        $paymentType = (new Paypal())->setId('123');
 
         $payment->setPaymentType($paymentType);
         $this->assertSame($paymentType, $payment->getPaymentType());
@@ -467,7 +467,7 @@ class PaymentTest extends BasePaymentTest
     public function setPaymentTypeShouldCreateResourceIfItIsPassedAsObjectWithoutId(): void
     {
         $payment = (new Payment())->setId('myPaymentId');
-        $paymentType = new Sofort();
+        $paymentType = new Paypal();
 
         $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
             ->disableOriginalConstructor()->setMethods(['createPaymentType'])->getMock();

@@ -51,7 +51,7 @@ try {
     $_SESSION['PaymentId'] = $transaction->getPaymentId();
     $_SESSION['ShortId']   = $transaction->getShortId();
 
-    // Redirect to the Sofort page
+    // Redirect to the payment page
     if (!$transaction->isError() && $transaction->getRedirectUrl() !== null) {
         redirect($transaction->getRedirectUrl());
     }
