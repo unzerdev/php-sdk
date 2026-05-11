@@ -115,10 +115,11 @@ class CardTest extends BaseIntegrationTest
         $card = $this->unzer->createPaymentType($card);
         $this->assertNotTrue($card->isRecurring());
 
-        $chargeResponse = $this->unzer->performCharge(
-            (new Charge('99.99', 'EUR', 'https://unzer.com'))->setRecurrenceType($recurrenceType, $card),
-            $card
-        );
+        $charge = new Charge('99.99', 'EUR', 'https://unzer.com');
+        if ($recurrenceType !== null) {
+            $charge->setRecurrenceType($recurrenceType);
+        }
+        $chargeResponse = $this->unzer->performCharge($charge, $card);
         $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchChargeById($chargeResponse->getPaymentId(), $chargeResponse->getId());
 
@@ -186,10 +187,11 @@ class CardTest extends BaseIntegrationTest
         $card = $this->createCardObject('4711100000000000');
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($card);
-        $chargeResponse = $this->unzer->performAuthorization(
-            (new Authorization('99.99', 'EUR', 'https://unzer.com'))->setRecurrenceType($recurrenceType, $card),
-            $card
-        );
+        $authorization = new Authorization('99.99', 'EUR', 'https://unzer.com');
+        if ($recurrenceType !== null) {
+            $authorization->setRecurrenceType($recurrenceType);
+        }
+        $chargeResponse = $this->unzer->performAuthorization($authorization, $card);
         $this->assertEquals($recurrenceType, $chargeResponse->getRecurrenceType());
         $fetchedCharge = $this->unzer->fetchAuthorization($chargeResponse->getPayment());
 
@@ -428,7 +430,7 @@ class CardTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge     = $this->unzer->chargeAuthorization($payment->getId());
+        $charge     = $this->unzer->performChargeOnPayment($payment->getId(), new Charge());
         $paymentNew = $charge->getPayment();
 
         // verify payment has been updated properly
@@ -446,33 +448,26 @@ class CardTest extends BaseIntegrationTest
         $card          = $this->createCardObject();
         /** @var Card $card */
         $card          = $this->unzer->createPaymentType($card);
-        $authorization = $this->unzer->authorize(
-            100.0,
-            'EUR',
-            $card,
-            self::RETURN_URL,
-            null,
-            null,
-            null,
-            null,
-            false
+        $authorization = $this->unzer->performAuthorization(
+            (new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false),
+            $card
         );
 
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(20));
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(20));
         $payment2 = $charge->getPayment();
         $this->assertAmounts($payment2, 60.0, 40.0, 100.0, 0.0);
         $this->assertTrue($payment2->isPartlyPaid());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 60);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(60));
         $payment3 = $charge->getPayment();
         $this->assertAmounts($payment3, 00.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment3->isCompleted());
@@ -493,14 +488,14 @@ class CardTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 50);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(50));
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 50.0, 50.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
-        $this->unzer->chargeAuthorization($payment->getId(), 70);
+        $this->unzer->performChargeOnPayment($payment->getId(), new Charge(70));
     }
 
     /**
@@ -519,12 +514,12 @@ class CardTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(20));
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId());
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge());
         $payment2 = $charge->getPayment();
         $this->assertAmounts($payment2, 0.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment2->isCompleted());
