@@ -15,6 +15,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Wechatpay;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class WechatpayTest extends BaseIntegrationTest
@@ -62,6 +63,6 @@ class WechatpayTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(100.0, 'EUR', $wechatpay, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(100.0, 'EUR', self::RETURN_URL), $wechatpay);
     }
 }
