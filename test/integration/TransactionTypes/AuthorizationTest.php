@@ -31,7 +31,7 @@ class AuthorizationTest extends BaseIntegrationTest
     public function authorizeWithTypeId(): void
     {
         $paymentType = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $this->unzer->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
+        $authorize = $this->unzer->performAuthorization(new Authorization(100.0, 'EUR', self::RETURN_URL), $paymentType->getId());
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
         $this->assertNotEmpty($authorize->getUniqueId());
@@ -50,7 +50,7 @@ class AuthorizationTest extends BaseIntegrationTest
     public function authorizeWithType(): void
     {
         $paymentType = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $this->unzer->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL);
+        $authorize = $this->unzer->performAuthorization(new Authorization(100.0, 'EUR', self::RETURN_URL), $paymentType);
         $this->assertNotNull($authorize);
         $this->assertNotNull($authorize->getId());
     }
@@ -66,7 +66,7 @@ class AuthorizationTest extends BaseIntegrationTest
         $customer = $this->getMinimalCustomer();
         $this->assertNull($customer->getId());
 
-        $authorize = $this->unzer->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL, $customer);
+        $authorize = $this->unzer->performAuthorization(new Authorization(100.0, 'EUR', self::RETURN_URL), $paymentType, $customer);
         $payment = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -88,7 +88,11 @@ class AuthorizationTest extends BaseIntegrationTest
         $paymentType = $this->unzer->createPaymentType(new Paypal());
         $customerId  = $this->unzer->createCustomer($this->getMinimalCustomer())->getId();
         $orderId     = microtime(true);
-        $authorize   = $this->unzer->authorize(100.0, 'EUR', $paymentType, self::RETURN_URL, $customerId, $orderId);
+        $authorize   = $this->unzer->performAuthorization(
+            (new Authorization(100.0, 'EUR', self::RETURN_URL))->setOrderId((string)$orderId),
+            $paymentType,
+            $customerId
+        );
         $payment     = $authorize->getPayment();
         $this->assertNotNull($payment);
         $this->assertNotNull($payment->getId());
@@ -128,7 +132,7 @@ class AuthorizationTest extends BaseIntegrationTest
     public function authorizeHasExpectedStates(BasePaymentType $paymentType, $expectedState): void
     {
         $paymentType = $this->unzer->createPaymentType($paymentType);
-        $authorize = $this->unzer->authorize(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL, null, null, null, null, false);
+        $authorize = $this->unzer->performAuthorization((new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $paymentType->getId());
 
         $stateCheck = 'assert' . ucfirst($expectedState);
         $this->$stateCheck($authorize);

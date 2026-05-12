@@ -12,10 +12,8 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\CancelReasonCodes;
-use UnzerSDK\Resources\PaymentTypes\Invoice;
-use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
-use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class PaymentCancelTest extends BaseIntegrationTest
 {
@@ -83,12 +81,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 123.44, 0.0, 123.44, 0.0);
 
-        $charge1 = $payment->charge(100.44);
+        $charge1 = $this->unzer->performChargeOnPayment($payment, new Charge(100.44));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 23.0, 100.44, 123.44, 0.0);
 
         $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
-        $charge2 = $payment->charge(23.00);
+        $charge2 = $this->unzer->performChargeOnPayment($payment, new Charge(23.00));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 123.44, 123.44, 0.0);
 
@@ -144,12 +142,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $authorization = $this->createCardAuthorization($authorizeAmount);
         $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
 
-        $payment->charge(23.00);
+        $this->unzer->performChargeOnPayment($payment, new Charge(23.00));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 100.44, 23.0, $authorizeAmount, 0.0);
 
         $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
-        $payment->charge(100.44);
+        $this->unzer->performChargeOnPayment($payment, new Charge(100.44));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, $authorizeAmount, $authorizeAmount, 0.0);
 
@@ -226,7 +224,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge();
+        $this->unzer->performChargeOnPayment($payment, new Charge());
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
@@ -253,7 +251,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge(50.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(50.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
 
@@ -294,7 +292,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge(25.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(25.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 75.0, 25.0, 100.0, 0.0);
 
@@ -317,7 +315,7 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge(40.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(40.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 60.0, 40.0, 100.0, 0.0);
 
@@ -325,127 +323,6 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertCount(2, $payment->cancelAmount(80.0));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 20.0, 40.0, 20.0);
-    }
-
-    /**
-     * Verify full cancel on initial iv charge (reversal)
-     * PHPLIB-228 - Case 13
-     *
-     * @test
-     *
-     * @dataProvider fullCancelDataProvider
-     *
-     * @param float $amount
-     */
-    public function fullCancelOnInitialInvoiceCharge($amount): void
-    {
-        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
-        /** @var Invoice $invoice */
-        $invoice = $this->unzer->createPaymentType(new Invoice());
-        $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
-        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
-        $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
-
-        $this->assertCount(1, $payment->cancelAmount($amount));
-        $this->assertTrue($payment->isCanceled());
-        $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
-    }
-
-    /**
-     * Verify part cancel on initial iv charge (reversal)
-     * PHPLIB-228 - Case 14
-     *
-     * @test
-     */
-    public function partCancelOnInitialInvoiceChargeShouldBePossible(): void
-    {
-        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
-        /** @var Invoice $invoice */
-        $invoice = $this->unzer->createPaymentType(new Invoice());
-        $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
-        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
-        $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
-
-        $this->assertCount(1, $payment->cancelAmount(50.0));
-        $this->assertTrue($payment->isPending());
-        $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
-    }
-
-    /**
-     * Verify part cancel on initial ivs charge (reversal)
-     *
-     * @test
-     */
-    public function partCancelOnInitialInvoiceSecuredChargeShouldCancelMaxUnpaidAmount(): void
-    {
-        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
-        /** @var InvoiceSecured $invoiceSecured */
-        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
-
-        $customer = $this->getMaximumCustomer();
-        $customer->setShippingAddress($customer->getBillingAddress());
-
-        $basket = $this->createBasket();
-        $invoiceId = 'i' . self::generateRandomId();
-        $charge = $invoiceSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
-        $charge->getPayment()->ship();
-        $paymentId = $charge->getPaymentId();
-
-        $this->assertTrue($charge->isPending()); // Set your break point here.
-        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
-        if (count($payment->getCharges()) !== 2) {
-            $testDescription = 'This test needs assistance:
-            To perform this test properly, first set a breakpoint after charge, before the payment gets fetched.
-            Then perform a receipt manually over 60€ on the "reservation".
-            After that this test can be continued';
-            $this->markTestSkipped($testDescription);
-        }
-        $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0, 100, 100.0, 0);
-
-        $this->assertCount(2, $payment->cancelAmount(50.0));
-        $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0, 50.0, 100.0, 50.0);
-    }
-
-    /**
-     * Verify skip cancel on initial ivs charge
-     *
-     * @test
-     */
-    public function fullCancelOnPaidInvoiceSecuredPaymentShouldBePossible(): void
-    {
-        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
-        /** @var InvoiceSecured $invoiceSecured */
-        $invoiceSecured = $this->unzer->createPaymentType(new InvoiceSecured());
-
-        $customer = $this->getMaximumCustomer();
-        $customer->setShippingAddress($customer->getBillingAddress());
-
-        $basket = $this->createBasket();
-        $invoiceId = 'i' . self::generateRandomId();
-        $charge = $invoiceSecured->charge(100.0, 'EUR', self::RETURN_URL, $customer, $basket->getOrderId(), null, $basket, null, $invoiceId);
-        $charge->getPayment()->ship();
-        $paymentId = $charge->getPaymentId();
-
-        $this->assertTrue($charge->isPending()); // Set your break point here.
-        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
-        if (count($payment->getCharges()) !== 2) {
-            $testDescription = 'This test needs assistance:
-            To perform this test properly, first set a breakpoint after charge, before the payment gets fetched.
-            Then perform a receipt manually over 100€ on the "reservation".
-            After that this test can be continued';
-            $this->markTestSkipped($testDescription);
-        }
-        $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0, 100.0, 100.0, 0);
-
-        $cancellations = $payment->cancelAmount();
-        $this->assertCount(1, $cancellations);
-        $this->assertTrue($payment->isCompleted());
-        $this->assertAmounts($payment, 0, 0, 100.0, 100.0);
     }
 
     /**
@@ -480,12 +357,12 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
 
-        $payment->charge(50.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(50.0));
         $this->assertTrue($payment->isPartlyPaid());
         $this->assertAmounts($payment, 50.0, 50.0, 100.0, 0.0);
 
         $payment = $this->unzer->fetchPayment($authorization->getPaymentId());
-        $payment->charge(50.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(50.0));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
 
@@ -509,7 +386,7 @@ class PaymentCancelTest extends BaseIntegrationTest
     {
         $authorization = $this->createCardAuthorization(119.0);
         $payment = $authorization->getPayment();
-        $payment->charge();
+        $this->unzer->performChargeOnPayment($payment, new Charge());
         $cancellations = $payment->cancelAmount(59.5, CancelReasonCodes::REASON_CODE_CREDIT, 'Reference text!', 50.0, 9.5);
         $this->assertCount(1, $cancellations);
     }

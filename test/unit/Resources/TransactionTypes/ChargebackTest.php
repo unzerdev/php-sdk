@@ -11,6 +11,7 @@
 
 namespace Resources\TransactionTypes;
 
+use UnzerSDK\Apis\ApiRequest;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\TransactionTypes\Charge;
@@ -95,11 +96,13 @@ class ChargebackTest extends BasePaymentTest
 
         // Mock http service
         $httpServiceMock = $this->getMockBuilder(HttpService::class)
-            ->disableOriginalConstructor()->onlyMethods(['send'])->getMock();
+            ->disableOriginalConstructor()->onlyMethods(['sendRequest'])->getMock();
 
         $httpServiceMock->expects($this->once())
-            ->method('send')
-            ->with('/payments/s-pay-329982/chargebacks/s-cbk-1')
+            ->method('sendRequest')
+            ->with($this->callback(static function (ApiRequest $request) {
+                return $request->getUri() === '/payments/s-pay-329982/chargebacks/s-cbk-1';
+            }))
             ->willReturn($chargebackJson);
 
         // Mock Resource service
@@ -142,11 +145,13 @@ class ChargebackTest extends BasePaymentTest
 
         // Mock http service
         $httpServiceMock = $this->getMockBuilder(HttpService::class)
-            ->disableOriginalConstructor()->onlyMethods(['send'])->getMock();
+            ->disableOriginalConstructor()->onlyMethods(['sendRequest'])->getMock();
 
         $httpServiceMock->expects($this->once())
-            ->method('send')
-            ->with($expectedUri)
+            ->method('sendRequest')
+            ->with($this->callback(static function (ApiRequest $request) use ($expectedUri) {
+                return $request->getUri() === $expectedUri;
+            }))
             ->willReturn($chargebackJson);
 
         // Mock Resource service

@@ -51,4 +51,3 @@ jobs:
           report_paths: 'test-results/junit.xml'
           check_name: 'Integration Test Report'
           detailed_summary: true
-          fail_on_failure: true

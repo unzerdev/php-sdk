@@ -34,33 +34,4 @@ class CanRecurTest extends BasePaymentTest
         $this->assertTrue($dummy->isRecurring());
     }
 
-    /**
-     * Verify recurring activation on a resource which is not an abstract resource will throw an exception.
-     *
-     * @test
-     */
-    public function activateRecurringWillThrowExceptionIfTheObjectHasWrongType(): void
-    {
-        $dummy = new TraitDummyCanRecurNonResource();
-
-        $this->expectException(RuntimeException::class);
-        $dummy->activateRecurring('1234');
-    }
-
-    /**
-     * Verify activation on object will call Unzer.
-     *
-     * @test
-     */
-    public function activateRecurringWillCallUnzerMethod(): void
-    {
-        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['activateRecurringPayment'])->getMock();
-
-        /** @var Unzer $unzerMock */
-        $dummy = (new TraitDummyCanRecur())->setParentResource($unzerMock);
-        /** @noinspection PhpParamsInspection */
-        $unzerMock->expects(self::once())->method('activateRecurringPayment')->with($dummy, 'return url')->willReturn(new Recurring('', ''));
-
-        $dummy->activateRecurring('return url');
-    }
 }

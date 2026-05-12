@@ -15,6 +15,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Bancontact;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class BancontactTest extends BaseIntegrationTest
@@ -46,7 +47,7 @@ class BancontactTest extends BaseIntegrationTest
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
         $bancontact = $this->unzer->createPaymentType(new Bancontact());
-        $this->unzer->authorize(100.0, 'EUR', $bancontact, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(100.0, 'EUR', self::RETURN_URL), $bancontact);
     }
 
     /**

@@ -12,6 +12,8 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class ApplepayTest extends BaseIntegrationTest
@@ -54,7 +56,7 @@ class ApplepayTest extends BaseIntegrationTest
     {
         $applepay = $this->createApplepayObject();
         $this->unzer->createPaymentType($applepay);
-        $charge = $applepay->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $applepay);
         $this->assertNotNull($charge->getId());
         $this->assertNull($charge->getRedirectUrl());
     }
@@ -70,7 +72,7 @@ class ApplepayTest extends BaseIntegrationTest
     {
         $applepay = $this->createApplepayObject();
         $this->unzer->createPaymentType($applepay);
-        $authorization = $applepay->authorize(1.0, 'EUR', self::RETURN_URL);
+        $authorization = $this->unzer->performAuthorization(new Authorization(1.0, 'EUR', self::RETURN_URL), $applepay);
 
         // verify authorization has been created
         $this->assertNotNull($authorization->getId());
@@ -103,7 +105,7 @@ class ApplepayTest extends BaseIntegrationTest
         /** @var Applepay $applepay */
         $applepay = $this->unzer->createPaymentType($applepay);
 
-        $charge = $applepay->charge(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $charge = $this->unzer->performCharge((new Charge(1.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
 
         // verify charge has been created
         $this->assertNotNull($charge->getId());
@@ -134,14 +136,14 @@ class ApplepayTest extends BaseIntegrationTest
         $applepay = $this->createApplepayObject();
         $this->unzer->createPaymentType($applepay);
 
-        $authorization = $applepay->authorize(1.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(1.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
         $payment = $authorization->getPayment();
 
         // pre-check to verify changes due to fullCharge call
         $this->assertAmounts($payment, 1.0, 0.0, 1.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge     = $this->unzer->chargeAuthorization($payment->getId());
+        $charge     = $this->unzer->performChargeOnPayment($payment->getId(), new Charge());
         $paymentNew = $charge->getPayment();
 
         // verify payment has been updated properly
@@ -161,33 +163,26 @@ class ApplepayTest extends BaseIntegrationTest
         $applepay          = $this->createApplepayObject();
         /** @var Applepay $applepay */
         $applepay          = $this->unzer->createPaymentType($applepay);
-        $authorization = $this->unzer->authorize(
-            100.0,
-            'EUR',
-            $applepay,
-            self::RETURN_URL,
-            null,
-            null,
-            null,
-            null,
-            false
+        $authorization = $this->unzer->performAuthorization(
+            (new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false),
+            $applepay
         );
 
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(20));
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(20));
         $payment2 = $charge->getPayment();
         $this->assertAmounts($payment2, 60.0, 40.0, 100.0, 0.0);
         $this->assertTrue($payment2->isPartlyPaid());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 60);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(60));
         $payment3 = $charge->getPayment();
         $this->assertAmounts($payment3, 00.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment3->isCompleted());
@@ -205,19 +200,19 @@ class ApplepayTest extends BaseIntegrationTest
         $applepay          = $this->createApplepayObject();
         /** @var Applepay $applepay */
         $applepay          = $this->unzer->createPaymentType($applepay);
-        $authorization = $applepay->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0000, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
         $payment       = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 50);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(50));
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 50.0, 50.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_CHARGED_AMOUNT_HIGHER_THAN_EXPECTED);
-        $this->unzer->chargeAuthorization($payment->getId(), 70);
+        $this->unzer->performChargeOnPayment($payment->getId(), new Charge(70));
     }
 
     /**
@@ -231,7 +226,7 @@ class ApplepayTest extends BaseIntegrationTest
     {
         /** @var Applepay $applepay */
         $applepay      = $this->unzer->createPaymentType($this->createApplepayObject());
-        $authorize = $applepay->authorize(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $authorize = $this->unzer->performAuthorization((new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
 
         $cancel = $authorize->cancel();
         $this->assertNotNull($cancel);
@@ -250,18 +245,18 @@ class ApplepayTest extends BaseIntegrationTest
         $applepay          = $this->createApplepayObject();
         /** @var Applepay $applepay */
         $applepay          = $this->unzer->createPaymentType($applepay);
-        $authorization = $applepay->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0000, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
         $payment       = $authorization->getPayment();
 
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId(), 20);
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(20));
         $payment1 = $charge->getPayment();
         $this->assertAmounts($payment1, 80.0, 20.0, 100.0, 0.0);
         $this->assertTrue($payment1->isPartlyPaid());
 
-        $charge   = $this->unzer->chargeAuthorization($payment->getId());
+        $charge   = $this->unzer->performChargeOnPayment($payment->getId(), new Charge());
         $payment2 = $charge->getPayment();
         $this->assertAmounts($payment2, 0.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment2->isCompleted());
@@ -279,7 +274,7 @@ class ApplepayTest extends BaseIntegrationTest
         $applepay          = $this->createApplepayObject();
         /** @var Applepay $applepay */
         $applepay          = $this->unzer->createPaymentType($applepay);
-        $authorization = $applepay->authorize(100.0000, 'EUR', self::RETURN_URL);
+        $authorization = $this->unzer->performAuthorization(new Authorization(100.0000, 'EUR', self::RETURN_URL), $applepay);
         $payment       = $authorization->getPayment();
 
         $fetchedAuthorization = $this->unzer->fetchAuthorization($payment->getId());
@@ -295,7 +290,7 @@ class ApplepayTest extends BaseIntegrationTest
     {
         $applepay    = $this->createApplepayObject();
         $this->unzer->createPaymentType($applepay);
-        $charge  = $applepay->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $charge  = $this->unzer->performCharge((new Charge(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
         $payment = $charge->getPayment();
 
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
@@ -319,17 +314,17 @@ class ApplepayTest extends BaseIntegrationTest
         /** @var Applepay $applepay */
         $applepay = $this->unzer->createPaymentType($applepay);
 
-        $authorization = $applepay->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0000, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
         $payment       = $authorization->getPayment();
 
         $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
         $this->assertTrue($payment->isPending());
 
-        $payment->charge(10.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(10.0));
         $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
         $this->assertTrue($payment->isPartlyPaid());
 
-        $payment->charge(90.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(90.0));
         $this->assertAmounts($payment, 0.0, 100.0, 100.0, 0.0);
         $this->assertTrue($payment->isCompleted());
 
@@ -352,13 +347,13 @@ class ApplepayTest extends BaseIntegrationTest
         /** @var Applepay $applepay */
         $applepay = $this->unzer->createPaymentType($applepay);
 
-        $authorization = $applepay->authorize(100.0000, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0000, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
         $payment       = $authorization->getPayment();
 
-        $payment->charge(10.0);
+        $this->unzer->performChargeOnPayment($payment, new Charge(10.0));
         $this->assertAmounts($payment, 90.0, 10.0, 100.0, 0.0);
 
-        $charge = $payment->charge(10.0);
+        $charge = $this->unzer->performChargeOnPayment($payment, new Charge(10.0));
         $this->assertAmounts($payment, 80.0, 20.0, 100.0, 0.0);
         $this->assertTrue($payment->isPartlyPaid());
 
@@ -381,7 +376,7 @@ class ApplepayTest extends BaseIntegrationTest
     {
         /** @var Applepay $applepay */
         $applepay   = $this->unzer->createPaymentType($this->createApplepayObject());
-        $charge = $applepay->charge(100.0, 'EUR', self::RETURN_URL, null, null, null, null, false);
+        $charge = $this->unzer->performCharge((new Charge(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $applepay);
 
         $cancel = $charge->cancel();
         $this->assertNotNull($cancel);

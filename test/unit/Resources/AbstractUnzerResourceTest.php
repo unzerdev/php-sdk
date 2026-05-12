@@ -17,7 +17,6 @@ use UnzerSDK\Constants\CompanyCommercialSectorItems;
 use UnzerSDK\Constants\CompanyRegistrationTypes;
 use UnzerSDK\Constants\Salutations;
 use UnzerSDK\Constants\TransactionTypes;
-use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\PaymentTypes\Applepay;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\AbstractUnzerResource;
@@ -32,12 +31,9 @@ use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Alipay;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
-use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
-use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
@@ -171,27 +167,6 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             ->setId('myId');
         $this->assertEquals($resourcePath . '/myId', $resource->getUri(true, HttpAdapterInterface::REQUEST_GET));
         $this->assertEquals($resourcePath, $resource->getUri(false, HttpAdapterInterface::REQUEST_GET));
-    }
-
-    /**
-     * Verify that installment plans use the correct path for fetching. Special case, fetching Instalmentplans contains
-     * Installment-secured as parent resource that should appear in resource path.
-     *
-     * @test
-     */
-    public function fetchInstalmentPlansShouldUseUriWithTypeName()
-    {
-        $unzerMock = $this->getMockBuilder(Unzer::class)->disableOriginalConstructor()->setMethods(['getUri'])->getMock();
-        $unzerMock->method('getUri')->willReturn('parent/resource/path/');
-
-        $installmentSecured = (new InstallmentSecured())->setParentResource($unzerMock);
-        $instalmentPlans = (new InstalmentPlans(119.0, 'EUR', 4.99))
-            ->setParentResource($installmentSecured);
-
-        $this->assertEquals(
-            'parent/resource/path/types/installment-secured/plans?amount=119&currency=EUR&effectiveInterest=4.99',
-            $instalmentPlans->getUri(false, HttpAdapterInterface::REQUEST_GET)
-        );
     }
 
     /**
@@ -433,8 +408,6 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay'],
             'ApplePay' => [new Applepay('EC_v1', 'data', 'sig', null), 'parent/resource/path/types/applepay'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types/sepa-direct-debit'],
-            'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types/sepa-direct-debit-secured'],
-            'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice'],
             'Cancellation' => [new Cancellation(), 'parent/resource/path/cancels'],
             'Authorization' => [new Authorization(), 'parent/resource/path/authorize'],
             'Shipment' => [new Shipment(), 'parent/resource/path/shipments'],
@@ -447,7 +420,6 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'Payout' => [new Payout(), 'parent/resource/path/payouts'],
             'PayPage charge' => [new Paypage(123.4567, 'EUR', 'url'), 'parent/resource/path/paypage/charge'],
             'PayPage authorize' => [(new Paypage(123.4567, 'EUR', 'url'))->setAction(TransactionTypes::AUTHORIZATION), 'parent/resource/path/paypage/authorize'],
-            'InstallmentSecured' => [new InstallmentSecured(), 'parent/resource/path/types/installment-secured']
         ];
     }
 
@@ -461,10 +433,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'Card' => [new Card('', '03/30'), 'parent/resource/path/types'],
             'EPS' => [new EPS(), 'parent/resource/path/types'],
             'Ideal' => [new Ideal(), 'parent/resource/path/types'],
-            'InstallmentSecured' => [new InstallmentSecured(), 'parent/resource/path/types'],
-            'Invoice' => [new Invoice(), 'parent/resource/path/types'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types'],
-            'SepaDirectDebitSecured' => [new SepaDirectDebitSecured(''), 'parent/resource/path/types'],
 
             // Other resources Uris should behave as before.
             'Customer' => [new Customer(), 'parent/resource/path/customers'],
