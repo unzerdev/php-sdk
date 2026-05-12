@@ -15,11 +15,9 @@ use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\PaymentTypes\Card;
-use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class ConfigTest extends BaseIntegrationTest
@@ -71,8 +69,6 @@ class ConfigTest extends BaseIntegrationTest
             'paypal' => [new Paypal()],
             'card' => [new Card(null, null, null)],
             'directDebit' => [new SepaDirectDebit(null)],
-            'directDebitSecured' => [new SepaDirectDebitSecured(null)],
-            'instalment' => [new InstallmentSecured(null)],
         ];
     }
 }

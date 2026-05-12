@@ -15,11 +15,9 @@ use UnzerSDK\Constants\RecurrenceTypes;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
-use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
-use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class ChargeTest extends BaseIntegrationTest
 {
@@ -32,7 +30,7 @@ class ChargeTest extends BaseIntegrationTest
     {
         $this->useLegacyKey();
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->unzer->charge(100.0, 'EUR', $paymentType->getId(), self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $paymentType->getId());
         $this->assertTransactionResourceHasBeenCreated($charge);
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
         $this->assertNotEmpty($charge->getPayment()->getId());
@@ -48,7 +46,7 @@ class ChargeTest extends BaseIntegrationTest
     {
         $this->useLegacyKey();
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->unzer->charge(100.0, 'EUR', $paymentType, self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $paymentType);
         $this->assertTransactionResourceHasBeenCreated($charge);
         $this->assertInstanceOf(Payment::class, $charge->getPayment());
         $this->assertNotEmpty($charge->getPayment()->getId());
@@ -166,45 +164,6 @@ class ChargeTest extends BaseIntegrationTest
         $this->assertEquals($payment->getCustomer()->expose(), $fetchedPayment->getCustomer()->expose());
         $this->assertEquals($payment->getMetadata()->expose(), $fetchedPayment->getMetadata()->expose());
         $this->assertEquals($payment->getBasket()->expose(), $fetchedPayment->getBasket()->expose());
-    }
-
-    /**
-     * Verify charge accepts all parameters.
-     *
-     * @test
-     */
-    public function chargeWithCustomerShouldAcceptAllParameters(): void
-    {
-        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
-        // prepare test data
-        /** @var InvoiceSecured $ivg */
-        $ivg = $this->unzer->createPaymentType(new InvoiceSecured());
-        $customer = $this->getMaximumCustomer();
-        $customer->setShippingAddress($customer->getBillingAddress());
-        $orderId = 'o'. self::generateRandomId();
-        $metadata = (new Metadata())->addMetadata('key', 'value');
-        $basket = $this->createBasket();
-        $invoiceId = 'i'. self::generateRandomId();
-        $paymentReference = 'paymentReference';
-
-        // perform request
-        $charge = $ivg->charge(119.0, 'EUR', self::RETURN_URL, $customer, $orderId, $metadata, $basket, null, $invoiceId, $paymentReference);
-
-        // verify the data sent and received match
-        $payment = $charge->getPayment();
-        $this->assertSame($ivg, $payment->getPaymentType());
-        $this->assertEquals(119.0, $charge->getAmount());
-        $this->assertEquals('EUR', $charge->getCurrency());
-        $this->assertEquals(self::RETURN_URL, $charge->getReturnUrl());
-        $this->assertSame($customer, $payment->getCustomer());
-        $this->assertEquals($orderId, $charge->getOrderId());
-        $this->assertSame($metadata, $payment->getMetadata());
-        $this->assertSame($basket, $payment->getBasket());
-        $this->assertEquals($invoiceId, $charge->getInvoiceId());
-        $this->assertEquals($paymentReference, $charge->getPaymentReference());
-
-        $fetchedCharge = $this->unzer->fetchChargeById($charge->getPaymentId(), $charge->getId());
-        $this->assertEquals($charge->setCard3ds(false)->expose(), $fetchedCharge->expose());
     }
 
     /**

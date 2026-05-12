@@ -32,7 +32,7 @@ class CancelAfterChargeTest extends BaseIntegrationTest
     public function chargeShouldBeFetchable(): Charge
     {
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $paymentType);
         $fetchedCharge = $this->unzer->fetchChargeById($charge->getPayment()->getId(), $charge->getId());
 
         $chargeArray = $charge->setCard3ds(false)->expose();
@@ -69,7 +69,7 @@ class CancelAfterChargeTest extends BaseIntegrationTest
     public function chargeShouldBeFullyRefundableWithId(): void
     {
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $paymentType);
 
         $refund = $this->unzer->cancelChargeById($charge->getPayment()->getId(), $charge->getId());
         $this->assertNotNull($refund);
@@ -84,7 +84,7 @@ class CancelAfterChargeTest extends BaseIntegrationTest
     public function chargeShouldBePartlyRefundableWithId(): void
     {
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $paymentType);
 
         $firstPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
         $this->assertAmounts($firstPayment, 0, 100, 100, 0);
@@ -108,7 +108,7 @@ class CancelAfterChargeTest extends BaseIntegrationTest
     public function chargeShouldBePartlyRefundable(): void
     {
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $paymentType);
 
         $firstPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
         $this->assertAmounts($firstPayment, 0, 100, 100, 0);
@@ -132,7 +132,7 @@ class CancelAfterChargeTest extends BaseIntegrationTest
     public function cancelShouldAcceptPaymentReferenceParameter(): void
     {
         $paymentType = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        $charge = $this->unzer->charge(100.0000, 'EUR', $paymentType, self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $paymentType);
         $cancel = $charge->cancel(null, null, 'myPaymentReference');
         $this->assertEquals('myPaymentReference', $cancel->getPaymentReference());
     }

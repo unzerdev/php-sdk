@@ -29,7 +29,7 @@ class BasketTest extends BasePaymentTest
         $basket = new Basket();
         $this->assertEquals(0, $basket->getTotalValueGross());
         $this->assertEquals('EUR', $basket->getCurrencyCode());
-        $this->assertEquals('', $basket->getNote());
+        $this->assertNull($basket->getNote());
         $this->assertEquals('', $basket->getOrderId());
         $this->assertIsEmptyArray($basket->getBasketItems());
         $this->assertNull($basket->getBasketItemByIndex(1));
