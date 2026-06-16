@@ -157,7 +157,7 @@ class PaymentService implements PaymentServiceInterface
         $paymentType = $payment->getPaymentType();
 
         /** @var Charge $charge */
-        $charge->setSpecialParams($paymentType->getTransactionParams() ?? []);
+        $charge->setSpecialParams($paymentType?->getTransactionParams() ?? []);
         $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
 
         $this->getResourceService()->createResource($charge);
@@ -417,7 +417,7 @@ class PaymentService implements PaymentServiceInterface
         $paymentType = $payment->getPaymentType();
 
         /** @var Sca $sca */
-        $sca->setSpecialParams($paymentType->getTransactionParams() ?? []);
+        $sca->setSpecialParams($paymentType?->getTransactionParams() ?? []);
         $payment->setSca($sca)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
 
         $this->getResourceService()->createResource($sca);

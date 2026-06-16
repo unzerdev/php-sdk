@@ -31,6 +31,7 @@ use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Sca;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Services\CancelService;
 use UnzerSDK\Services\PaymentService;
@@ -281,6 +282,34 @@ class PaymentServiceTest extends BasePaymentTest
         $paymentSrv     = $unzer->setResourceService($resourceSrvMock)->getPaymentService();
         $returnedCharge = $paymentSrv->chargePayment($payment, 1.234, 'orderId', 'invoiceId');
         $this->assertEquals([$returnedCharge], $payment->getCharges());
+    }
+
+    /**
+     * Verify performCharge does not throw a fatal error when the payment type resolves to null.
+     *
+     * @test
+     */
+    public function performChargeWithNullPaymentTypeShouldNotThrowFatalError(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
+        $paymentSrv = (new Unzer('s-priv-123'))->setResourceService($resourceSrvMock)->getPaymentService();
+
+        $paymentSrv->performCharge(new Charge(), null);
+    }
+
+    /**
+     * Verify performSca does not throw a fatal error when the payment type resolves to null.
+     *
+     * @test
+     */
+    public function performScaWithNullPaymentTypeShouldNotThrowFatalError(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
+        $paymentSrv = (new Unzer('s-priv-123'))->setResourceService($resourceSrvMock)->getPaymentService();
+
+        $paymentSrv->performSca(new Sca(), null);
     }
 
     //</editor-fold>
