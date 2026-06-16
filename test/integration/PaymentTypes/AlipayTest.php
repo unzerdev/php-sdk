@@ -15,6 +15,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Alipay;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -54,7 +55,7 @@ class AlipayTest extends BaseIntegrationTest
      */
     public function alipayShouldBeAbleToCharge(Alipay $alipay): Charge
     {
-        $charge = $alipay->charge(100.0, 'EUR', self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(100.0, 'EUR', self::RETURN_URL), $alipay);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
         $this->assertNotEmpty($charge->getRedirectUrl());
@@ -76,6 +77,6 @@ class AlipayTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(100.0, 'EUR', $alipay, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(100.0, 'EUR', self::RETURN_URL), $alipay);
     }
 }

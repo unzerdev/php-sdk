@@ -14,6 +14,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\EPS;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class EPSTest extends BaseIntegrationTest
@@ -58,7 +59,7 @@ class EPSTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(1.0, 'EUR', $eps, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(1.0, 'EUR', self::RETURN_URL), $eps);
     }
 
     /**

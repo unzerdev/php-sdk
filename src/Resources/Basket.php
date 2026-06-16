@@ -18,116 +18,16 @@ class Basket extends AbstractUnzerResource
 {
     use BasketV2Properties;
 
-    /**
-     * @var float $amountTotalGross
-     *
-     * @deprecated since 1.1.5.0 @see $totalValueGross.
-     */
-    protected $amountTotalGross = 0.0;
-
-    /**
-     * @var float $amountTotalDiscount
-     *
-     * @deprecated since 1.1.5.0 @see Please set $amountDiscountPerUnitGross for each element of $basketItems instead.
-     */
-    protected $amountTotalDiscount = 0.0;
-
-    /**
-     * @var float $amountTotalVat
-     *
-     * @deprecated since 1.1.5.0  Please set the $vat in percent for each element of $basketItems instead, if not already happened. The actual amount is not required anymore.
-     */
-    protected $amountTotalVat = 0.0;
-
-    /**
-     * Basket constructor.
-     *
-     * @deprecated since 1.1.5.0 Please call constructor without parameters and use setter functions instead.
-     *
-     * @param float  $amountTotalGross
-     * @param string $currencyCode
-     * @param string $orderId
-     * @param array  $basketItems
-     */
     public function __construct(
         string $orderId = '',
-        float $amountTotalGross = 0.0,
+        float $totalValueGross = 0.0,
         string $currencyCode = 'EUR',
         array $basketItems = []
     ) {
-        $this->currencyCode     = $currencyCode;
-        $this->orderId          = $orderId;
-        $this->setAmountTotalGross($amountTotalGross);
+        $this->orderId      = $orderId;
+        $this->currencyCode = $currencyCode;
+        $this->setTotalValueGross($totalValueGross);
         $this->setBasketItems($basketItems);
-    }
-
-    /**
-     * @return float
-     *
-     * @deprecated since 1.1.5.0 @see getTotalValueGross().
-     */
-    public function getAmountTotalGross(): float
-    {
-        return $this->amountTotalGross;
-    }
-
-    /**
-     * @param float $amountTotalGross
-     *
-     * @return Basket
-     * @deprecated since 1.1.5.0 @see setTotalValueGross().
-     *
-     */
-    public function setAmountTotalGross(float $amountTotalGross): Basket
-    {
-        $this->amountTotalGross = $amountTotalGross;
-        return $this;
-    }
-
-    /**
-     * @return float
-     *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     */
-    public function getAmountTotalDiscount(): float
-    {
-        return $this->amountTotalDiscount;
-    }
-
-    /**
-     * @param float $amountTotalDiscount
-     *
-     * @return Basket
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     *
-     */
-    public function setAmountTotalDiscount(float $amountTotalDiscount): Basket
-    {
-        $this->amountTotalDiscount = $amountTotalDiscount;
-        return $this;
-    }
-
-    /**
-     * @return float
-     *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     */
-    public function getAmountTotalVat(): float
-    {
-        return $this->amountTotalVat;
-    }
-
-    /**
-     * @param float $amountTotalVat
-     *
-     * @return Basket
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     *
-     */
-    public function setAmountTotalVat(float $amountTotalVat): Basket
-    {
-        $this->amountTotalVat = $amountTotalVat;
-        return $this;
     }
 
     /**

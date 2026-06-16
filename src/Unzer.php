@@ -20,7 +20,6 @@ use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
-use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Keypair;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
@@ -106,7 +105,10 @@ class Unzer implements
      */
     public function __construct(string $key, ?string $locale = '')
     {
-        $this->setKey($key);
+        if (!PrivateKeyValidator::validate($key) && !PublicKeyValidator::validate($key)) {
+            throw new RuntimeException('Illegal key: Use a valid private or public key with this SDK!');
+        }
+        $this->key = $key;
         $this->setLocale($locale);
 
         $this->resourceService = new ResourceService($this);
@@ -124,27 +126,6 @@ class Unzer implements
     public function getKey(): string
     {
         return $this->key;
-    }
-
-    /**
-     * Sets your private or public key used to connect to the API.
-     *
-     * @param string $key The private or public key.
-     *
-     * @return Unzer This Unzer object.
-     *
-     * @throws RuntimeException Throws a RuntimeException when the key is invalid.
-     *
-     * @deprecated public access will be removed. Please create a new instance with a different keypair instead.
-     */
-    public function setKey(string $key): Unzer
-    {
-        if (!PrivateKeyValidator::validate($key) && !PublicKeyValidator::validate($key)) {
-            throw new RuntimeException('Illegal key: Use a valid private or public key with this SDK!');
-        }
-
-        $this->key = $key;
-        return $this;
     }
 
     /**
@@ -699,40 +680,6 @@ class Unzer implements
     /**
      * {@inheritDoc}
      */
-    public function authorize(
-        $amount,
-        $currency,
-        $paymentType,
-        $returnUrl,
-        $customer = null,
-        $orderId = null,
-        $metadata = null,
-        $basket = null,
-        $card3ds = null,
-        $invoiceId = null,
-        $referenceText = null,
-        $recurrenceType = null
-    ): Authorization
-    {
-        return $this->paymentService->authorize(
-            $amount,
-            $currency,
-            $paymentType,
-            $returnUrl,
-            $customer,
-            $orderId,
-            $metadata,
-            $basket,
-            $card3ds,
-            $invoiceId,
-            $referenceText,
-            $recurrenceType
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function performCharge(
         Charge   $charge,
         $paymentType,
@@ -747,66 +694,6 @@ class Unzer implements
     public function updateCharge($payment, Charge $charge): Charge
     {
         return $this->paymentService->updateCharge($payment, $charge);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function charge(
-        $amount,
-        $currency,
-        $paymentType,
-        $returnUrl,
-        $customer = null,
-        $orderId = null,
-        $metadata = null,
-        $basket = null,
-        $card3ds = null,
-        $invoiceId = null,
-        $paymentReference = null,
-        $recurrenceType = null
-    ): Charge
-    {
-        return $this->paymentService->charge(
-            $amount,
-            $currency,
-            $paymentType,
-            $returnUrl,
-            $customer,
-            $orderId,
-            $metadata,
-            $basket,
-            $card3ds,
-            $invoiceId,
-            $paymentReference,
-            $recurrenceType
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function chargeAuthorization(
-        $payment,
-        ?float $amount = null,
-        ?string $orderId = null,
-        ?string $invoiceId = null
-    ): Charge
-    {
-        return $this->paymentService->chargeAuthorization($payment, $amount, $orderId, $invoiceId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function chargePayment(
-        $payment,
-        ?float $amount = null,
-        ?string $orderId = null,
-        ?string $invoiceId = null
-    ): Charge
-    {
-        return $this->paymentService->chargePayment($payment, $amount, $orderId, $invoiceId);
     }
 
     public function performChargeOnPayment($payment, Charge $charge): Charge
@@ -1165,20 +1052,6 @@ class Unzer implements
     ): Paypage
     {
         return $this->paymentService->initPayPageAuthorize($paypage, $customer, $basket, $metadata);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchInstallmentPlans(
-        float    $amount,
-        string   $currency,
-        float    $effectiveInterest,
-        ?DateTime $orderDate = null
-    ): InstalmentPlans
-    {
-        return $this->paymentService
-            ->fetchInstallmentPlans($amount, $currency, $effectiveInterest, $orderDate);
     }
 
     public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest): PaylaterInstallmentPlans

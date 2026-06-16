@@ -28,12 +28,8 @@ use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\Clicktopay;
 use UnzerSDK\Resources\PaymentTypes\EPS;
-use UnzerSDK\Resources\PaymentTypes\Giropay;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
-use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
-use UnzerSDK\Resources\PaymentTypes\Invoice;
-use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
@@ -48,8 +44,6 @@ use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
 use UnzerSDK\Resources\PaymentTypes\Przelewy24;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
 use UnzerSDK\Resources\PaymentTypes\Twint;
 use UnzerSDK\Resources\PaymentTypes\Wechatpay;
 use UnzerSDK\Resources\PaymentTypes\Wero;
@@ -62,6 +56,7 @@ use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Sca;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Resources\V2\Customer as CustomerV2;
+use UnzerSDK\Apis\ApiRequest;
 use UnzerSDK\Resources\V2\Paypage as PaypageV2;
 use UnzerSDK\Resources\V3\Basket as BasketV3;
 use UnzerSDK\Traits\CanRecur;
@@ -132,7 +127,9 @@ class ResourceService implements ResourceServiceInterface
 
         $appendId = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri = $resource->getUri($appendId, $httpMethod);
-        $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod, $apiVersion);
+        $unzerObject = $resource->getUnzerObject();
+        $apiRequest = new ApiRequest($uri, $resource, $httpMethod, $unzerObject, $apiVersion ?? Unzer::API_VERSION);
+        $responseJson = $unzerObject->getHttpService()->sendRequest($apiRequest);
         return !empty($responseJson) ? json_decode($responseJson, false) : new stdClass();
     }
 
@@ -902,29 +899,14 @@ class ResourceService implements ResourceServiceInterface
             case IdStrings::EPS:
                 $paymentType = new EPS();
                 break;
-            case IdStrings::GIROPAY:
-                $paymentType = new Giropay();
-                break;
             case IdStrings::GOOGLE_PAY:
                 $paymentType = new Googlepay();
                 break;
             case IdStrings::CLICK_TO_PAY:
                 $paymentType = new Clicktopay();
                 break;
-            case IdStrings::HIRE_PURCHASE_DIRECT_DEBIT:
-            case IdStrings::INSTALLMENT_SECURED:
-                $paymentType = new InstallmentSecured();
-                break;
             case IdStrings::IDEAL:
                 $paymentType = new Ideal();
-                break;
-            case IdStrings::INVOICE:
-                $paymentType = new Invoice();
-                break;
-            case IdStrings::INVOICE_FACTORING:
-            case IdStrings::INVOICE_GUARANTEED:
-            case IdStrings::INVOICE_SECURED:
-                $paymentType = new InvoiceSecured();
                 break;
             case IdStrings::KLARNA:
                 $paymentType = new Klarna();
@@ -961,13 +943,6 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::SEPA_DIRECT_DEBIT:
                 $paymentType = new SepaDirectDebit(null);
-                break;
-            case IdStrings::SEPA_DIRECT_DEBIT_GUARANTEED:
-            case IdStrings::SEPA_DIRECT_DEBIT_SECURED:
-                $paymentType = new SepaDirectDebitSecured(null);
-                break;
-            case IdStrings::SOFORT:
-                $paymentType = new Sofort();
                 break;
             case IdStrings::TWINT:
                 $paymentType = new Twint();

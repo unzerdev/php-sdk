@@ -15,6 +15,7 @@ use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\test\Helper\TestEnvironmentService;
 use PHPUnit\Runner\BaseTestRunner;
+use UnzerSDK\Unzer;
 
 class BaseIntegrationTest extends BasePaymentTest
 {
@@ -69,7 +70,9 @@ class BaseIntegrationTest extends BasePaymentTest
      */
     protected function useNon3dsKey(): void
     {
-        $this->getUnzerObject()->setKey(TestEnvironmentService::getTestPrivateKey(true));
+        $this->unzer = (new Unzer(TestEnvironmentService::getTestPrivateKey(true)))
+            ->setDebugHandler(self::getDebugHandler())
+            ->setDebugMode(true);
     }
 
     /**
@@ -77,6 +80,8 @@ class BaseIntegrationTest extends BasePaymentTest
      */
     protected function useLegacyKey(): void
     {
-        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
+        $this->unzer = (new Unzer(TestEnvironmentService::getLegacyTestPrivateKey()))
+            ->setDebugHandler(self::getDebugHandler())
+            ->setDebugMode(true);
     }
 }
