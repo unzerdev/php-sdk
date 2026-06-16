@@ -86,7 +86,7 @@ class PaymentService implements PaymentServiceInterface
     ): Authorization {
         $payment = $this->createPayment($paymentType);
         $paymentType = $payment->getPaymentType();
-        $authorization->setSpecialParams($paymentType !== null ? $paymentType->getTransactionParams() : []);
+        $authorization->setSpecialParams($paymentType?->getTransactionParams() ?? []);
 
         $payment->setAuthorization($authorization)
             ->setCustomer($customer)
