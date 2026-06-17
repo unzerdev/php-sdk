@@ -291,11 +291,15 @@ class PaymentServiceTest extends BasePaymentTest
      */
     public function performChargeWithNullPaymentTypeShouldNotThrowFatalError(): void
     {
-        $this->expectNotToPerformAssertions();
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
         $paymentSrv = (new Unzer('s-priv-123'))->setResourceService($resourceSrvMock)->getPaymentService();
 
-        $paymentSrv->performCharge(new Charge(), null);
+        try {
+            $paymentSrv->performCharge(new Charge(), null);
+            $this->assertTrue(true);
+        } catch (\Throwable $e) {
+            $this->fail('performCharge threw an unexpected error: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -305,11 +309,15 @@ class PaymentServiceTest extends BasePaymentTest
      */
     public function performScaWithNullPaymentTypeShouldNotThrowFatalError(): void
     {
-        $this->expectNotToPerformAssertions();
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
         $paymentSrv = (new Unzer('s-priv-123'))->setResourceService($resourceSrvMock)->getPaymentService();
 
-        $paymentSrv->performSca(new Sca(), null);
+        try {
+            $paymentSrv->performSca(new Sca(), null);
+            $this->assertTrue(true);
+        } catch (\Throwable $e) {
+            $this->fail('performSca threw an unexpected error: ' . $e->getMessage());
+        }
     }
 
     //</editor-fold>
