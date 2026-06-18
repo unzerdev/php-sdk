@@ -46,7 +46,7 @@ class GooglePayTest extends BasePaymentTest
         $googlepay = $this->getTestGooglepay();
 
         $expectedJson = JsonProvider::getJsonFromFile('googlePay/createRequest.json');
-        $this->assertJsonStringEqualsJsonString($expectedJson, $googlepay->jsonSerialize());
+        $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($googlepay));
     }
 
     /**
