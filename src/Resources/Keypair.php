@@ -14,28 +14,28 @@ use stdClass;
 class Keypair extends AbstractUnzerResource
 {
     /** @var string $publicKey */
-    private $publicKey;
+    protected $publicKey;
 
     /** @var string $privateKey */
-    private $privateKey;
+    protected $privateKey;
 
     /** @var bool $detailed */
-    private $detailed = false;
+    protected $detailed = false;
 
     /** @var array $paymentTypes */
-    private $paymentTypes = [];
+    protected $paymentTypes = [];
 
     /** @var string $secureLevel */
-    private $secureLevel;
+    protected $secureLevel;
 
     /** @var string $alias */
-    private $alias;
+    protected $alias;
 
     /** @var string $merchantName */
-    private $merchantName;
+    protected $merchantName;
 
     /** @var string $merchantAddress */
-    private $merchantAddress;
+    protected $merchantAddress;
 
     /**
      * Credentials on File / Card on File
@@ -43,10 +43,10 @@ class Keypair extends AbstractUnzerResource
      *
      * @var bool|null $cof
      */
-    private $cof;
+    protected $cof;
 
     /** @var bool $validateBasket */
-    private $validateBasket;
+    protected $validateBasket;
 
     /**
      * @return string|null
