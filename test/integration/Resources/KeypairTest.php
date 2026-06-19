@@ -93,4 +93,27 @@ class KeypairTest extends BaseIntegrationTest
         $this->assertNotEmpty($keypair->getPaymentTypes());
         $this->assertNotEmpty($keypair->getSecureLevel());
     }
+
+    /**
+     * Verify expose() reflects the fetched keypair's properties and excludes privateKey and detailed.
+     *
+     * @test
+     */
+    public function exposeReflectsKeypairPropertiesAfterFetch(): void
+    {
+        $keypair = $this->unzer->fetchKeypair(true);
+        $exposed = $keypair->expose();
+
+        // Main scalar properties must match keypair getters
+        $this->assertEquals($keypair->getPublicKey(), $exposed['publicKey']);
+        $this->assertEquals($keypair->getSecureLevel(), $exposed['secureLevel']);
+
+        // Nested payment type objects must be present and match
+        $this->assertNotEmpty($exposed['paymentTypes']);
+        $this->assertEquals($keypair->getPaymentTypes(), $exposed['paymentTypes']);
+
+        // privateKey (private) and detailed (private) must never be exposed
+        $this->assertArrayNotHasKey('privateKey', $exposed);
+        $this->assertArrayNotHasKey('detailed', $exposed);
+    }
 }

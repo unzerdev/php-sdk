@@ -20,7 +20,7 @@ class Keypair extends AbstractUnzerResource
     private $privateKey;
 
     /** @var bool $detailed */
-    protected $detailed = false;
+    private $detailed = false;
 
     /** @var array $paymentTypes */
     protected $paymentTypes = [];
