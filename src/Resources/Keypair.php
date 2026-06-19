@@ -2,8 +2,8 @@
 
 namespace UnzerSDK\Resources;
 
-use UnzerSDK\Adapter\HttpAdapterInterface;
 use stdClass;
+use UnzerSDK\Adapter\HttpAdapterInterface;
 
 /**
  * This represents the key pair resource.
@@ -17,7 +17,7 @@ class Keypair extends AbstractUnzerResource
     protected $publicKey;
 
     /** @var string $privateKey */
-    protected $privateKey;
+    private $privateKey;
 
     /** @var bool $detailed */
     protected $detailed = false;
