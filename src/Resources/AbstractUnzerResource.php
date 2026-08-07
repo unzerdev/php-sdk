@@ -501,7 +501,6 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
 
         $properties = [];
         foreach ($reflectionProperties as $propertyObject) {
-            // static properties are internal to the class and must never be sent to the API
             if ($propertyObject->isStatic()) {
                 continue;
             }
