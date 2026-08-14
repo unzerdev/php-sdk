@@ -501,6 +501,10 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
 
         $properties = [];
         foreach ($reflectionProperties as $propertyObject) {
+            if ($propertyObject->isStatic()) {
+                continue;
+            }
+
             $property = $propertyObject->getName();
             $value = $propertyObject->getValue($this);
 
