@@ -18,7 +18,7 @@ class ApplepaySessionTest extends TestCase
         $applepaySession = new ApplepaySession('merchantIdentifier', 'displayName', 'domainName');
         $expectedJson = '{"merchantIdentifier": "merchantIdentifier", "displayName": "displayName", "domainName": "domainName"}';
 
-        $jsonSerialize = $applepaySession->jsonSerialize();
+        $jsonSerialize = json_encode($applepaySession);
         $this->assertJsonStringEqualsJsonString($expectedJson, $jsonSerialize);
     }
 }

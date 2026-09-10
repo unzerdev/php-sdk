@@ -128,7 +128,7 @@ class HttpService
 
         // perform request
         $requestUrl = $this->buildRequestUrl($request);
-        $payload = $request->getResource()->jsonSerialize();
+        $payload = json_encode($request->getResource(), JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
         $headers = $this->composeHttpHeaders($unzerObj, $apiConfig::getAuthorizationMethod());
         $httpMethod = $request->getHttpMethod();
         $this->initRequest($requestUrl, $payload, $httpMethod, $headers);

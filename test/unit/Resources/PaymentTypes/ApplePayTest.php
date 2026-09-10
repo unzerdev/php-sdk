@@ -47,7 +47,7 @@ class ApplePayTest extends BasePaymentTest
         $expectedJson = '{ "data": "data", "header": { "ephemeralPublicKey": "ephemeralPublicKey", "publicKeyHash": ' .
             '"publicKeyHash", "transactionId": "transactionId" }, "signature": "sig", "version": "EC_v1" }';
 
-        $this->assertJsonStringEqualsJsonString($expectedJson, $applepay->jsonSerialize());
+        $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($applepay));
     }
 
     /**
