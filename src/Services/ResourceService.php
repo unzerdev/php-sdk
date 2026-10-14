@@ -125,6 +125,27 @@ class ResourceService implements ResourceServiceInterface
         ?string $apiVersion = null
     ): stdClass
     {
+        return $this->decodeResponse($this->sendRaw($resource, $httpMethod, $apiVersion));
+    }
+
+    /**
+     * Send request to API and return the unprocessed response string.
+     *
+     * @param AbstractUnzerResource $resource
+     * @param string $httpMethod
+     * @param string|null $apiVersion
+     *
+     * @return string
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    private function sendRaw(
+        AbstractUnzerResource $resource,
+        string                $httpMethod,
+        ?string               $apiVersion
+    ): string
+    {
         $apiConfig = $resource->getApiConfig();
         if (!$resource instanceof Token && $apiConfig::getAuthorizationMethod() === AuthorizationMethods::BEARER) {
             $this->unzer->prepareJwtToken();
@@ -132,7 +153,11 @@ class ResourceService implements ResourceServiceInterface
 
         $appendId = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri = $resource->getUri($appendId, $httpMethod);
-        $responseJson = $resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod, $apiVersion);
+        return (string)$resource->getUnzerObject()->getHttpService()->send($uri, $resource, $httpMethod, $apiVersion);
+    }
+
+    private function decodeResponse(string $responseJson): stdClass
+    {
         return !empty($responseJson) ? json_decode($responseJson, false) : new stdClass();
     }
 
@@ -527,7 +552,11 @@ class ResourceService implements ResourceServiceInterface
     public function fetchKeypair(bool $detailed = false): Keypair
     {
         $keyPair = (new Keypair())->setParentResource($this->unzer)->setDetailed($detailed);
-        $this->fetchResource($keyPair);
+        $method = HttpAdapterInterface::REQUEST_GET;
+        $rawResponse = $this->sendRaw($keyPair, $method, null);
+        $keyPair->setFetchedAt(new DateTime('now'));
+        $keyPair->handleResponse($this->decodeResponse($rawResponse), $method);
+        $keyPair->setRawResponse($rawResponse);
         return $keyPair;
     }
 
