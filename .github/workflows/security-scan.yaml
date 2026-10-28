@@ -12,6 +12,11 @@ on:
 jobs:
   security-scan:
     uses: unzerdev/unzer-tech-toolbox/.github/workflows/security-scan.yaml@main
+    with:
+      # This repo is a PHP library: its tests and examples live in test/ and
+      # examples/ at the repo root, which the toolbox default filter
+      # (Maven's **/src/test/**) does not cover.
+      cx_extra_filters: "!test/**,!examples/**"
     secrets:
       CX_CLIENT_ID: ${{ secrets.CX_CONN_EXT_CLIENT_ID }}
       CX_CLIENT_SECRET: ${{ secrets.CX_CONN_EXT_CLIENT_SECRET }}

@@ -28,6 +28,7 @@ use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\Resources\TransactionTypes\Payout;
+use UnzerSDK\Resources\TransactionTypes\Sca;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Services\CancelService;
 use UnzerSDK\Services\PaymentService;
@@ -79,6 +80,42 @@ class PaymentServiceTest extends BasePaymentTest
         $paymentSrvMock->expects(self::exactly(2))->method('getResourceService')->willReturn($resourceSrvMock);
 
         $paymentSrvMock->performChargeOnPayment('myPaymentId', new Charge());
+    }
+
+    /**
+     * Verify performCharge does not throw a fatal error when the payment type resolves to null.
+     *
+     * @test
+     */
+    public function performChargeWithNullPaymentTypeShouldNotThrowFatalError(): void
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
+        $paymentSrv = (new Unzer('s-priv-123'))->setResourceService($resourceSrvMock)->getPaymentService();
+
+        try {
+            $paymentSrv->performCharge(new Charge(), null);
+            $this->assertTrue(true);
+        } catch (\Throwable $e) {
+            $this->fail('performCharge threw an unexpected error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Verify performSca does not throw a fatal error when the payment type resolves to null.
+     *
+     * @test
+     */
+    public function performScaWithNullPaymentTypeShouldNotThrowFatalError(): void
+    {
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['createResource'])->getMock();
+        $paymentSrv = (new Unzer('s-priv-123'))->setResourceService($resourceSrvMock)->getPaymentService();
+
+        try {
+            $paymentSrv->performSca(new Sca(), null);
+            $this->assertTrue(true);
+        } catch (\Throwable $e) {
+            $this->fail('performSca threw an unexpected error: ' . $e->getMessage());
+        }
     }
 
     //</editor-fold>
