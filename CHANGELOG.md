@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0](https://github.com/unzerdev/php-sdk/compare/4.0.2..5.0.0)
+
+This is a major release with breaking changes. See the upgrade guide on docs.unzer.com ("Upgrade to PHP SDK v5").
+
+### Changed
+
+* `\UnzerSDK\Resources\Basket` uses the v3 basket endpoint (`/v3/baskets`, bearer authentication) by default. Baskets with an id created before v3 (no UUID) are still read and updated on `/v2/baskets`.
+* `\UnzerSDK\Resources\V3\Basket` is now an alias of `\UnzerSDK\Resources\Basket`.
+* The basket properties of the traits `\UnzerSDK\Resources\V2\BasketProperties` and `\UnzerSDK\Resources\V2\BasketItemProperties` moved into `Basket` and `BasketItem`; both traits are removed.
+* `fetchBasket()` no longer falls back to the v1 basket endpoint.
+
+### Removed
+
+* Payment types `Sofort`, `Giropay`, `PIS`, `InvoiceSecured`, `SepaDirectDebitSecured` and `InstallmentSecured` (including `Unzer::fetchInstallmentPlans()` and the `InstalmentPlans` / `InstalmentPlan` resources). Payments made with these types can no longer be loaded through the SDK.
+* `Unzer::authorize()`, `charge()`, `chargeAuthorization()` and `chargePayment()`. Use `performAuthorization()`, `performCharge()` and `performChargeOnPayment()`.
+* `Unzer::setKey()`. Create a new `Unzer` instance to use another key.
+* v1 basket fields of `Basket` (`amountTotalGross`, `amountTotalDiscount`, `amountTotalVat`) and `BasketItem` (`amountDiscount`, `amountGross`, `amountVat`, `amountPerUnit`, `amountNet`) and the related constructor parameters.
+* `Payment::getCancellation()`, `CanRecur::activateRecurring()`, `HttpService::send()` and `Paypage\Urls::$favicon` (use `Style::$favicon`).
+* The `examples` folder.
+
 ## [4.0.2](https://github.com/unzerdev/php-sdk/compare/4.0.1..4.0.2)
 
 ### Changed
