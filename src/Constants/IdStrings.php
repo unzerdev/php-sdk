@@ -28,6 +28,7 @@ class IdStrings
     public const GOOGLE_PAY = 'gop';
     public const CLICK_TO_PAY = 'ctp';
     public const IDEAL = 'idl';
+    public const INVOICE = 'ivc';
     public const KLARNA = 'kla';
     public const PAYLATER_DIRECT_DEBIT = 'pdd';
     public const PAYLATER_INVOICE = 'piv';
@@ -37,7 +38,6 @@ class IdStrings
     public const PAYU = 'pyu';
     public const POST_FINANCE_CARD = 'pfc';
     public const POST_FINANCE_EFINANCE = 'pfe';
-    public const PIS = 'pis';
     public const PREPAYMENT = 'ppy';
     public const PRZELEWY24 = 'p24';
     public const SEPA_DIRECT_DEBIT = 'sdd';
@@ -62,6 +62,7 @@ class IdStrings
         self::EPS,
         self::GOOGLE_PAY,
         self::IDEAL,
+        self::INVOICE,
         self::KLARNA,
         self::PAYLATER_DIRECT_DEBIT,
         self::PAYLATER_INVOICE,
@@ -71,7 +72,6 @@ class IdStrings
         self::PAYU,
         self::POST_FINANCE_CARD,
         self::POST_FINANCE_EFINANCE,
-        self::PIS,
         self::PREPAYMENT,
         self::PRZELEWY24,
         self::SEPA_DIRECT_DEBIT,

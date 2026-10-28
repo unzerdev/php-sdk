@@ -30,6 +30,7 @@ use UnzerSDK\Resources\PaymentTypes\Clicktopay;
 use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
@@ -38,7 +39,6 @@ use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\PayU;
-use UnzerSDK\Resources\PaymentTypes\PIS;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
@@ -908,6 +908,9 @@ class ResourceService implements ResourceServiceInterface
             case IdStrings::IDEAL:
                 $paymentType = new Ideal();
                 break;
+            case IdStrings::INVOICE:
+                $paymentType = new Invoice();
+                break;
             case IdStrings::KLARNA:
                 $paymentType = new Klarna();
                 break;
@@ -925,9 +928,6 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::PAYU:
                 $paymentType = new PayU();
-                break;
-            case IdStrings::PIS:
-                $paymentType = new PIS();
                 break;
             case IdStrings::POST_FINANCE_CARD:
                 $paymentType = new PostFinanceCard();

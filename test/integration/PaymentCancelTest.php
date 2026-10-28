@@ -12,6 +12,7 @@
 namespace UnzerSDK\test\integration;
 
 use UnzerSDK\Constants\CancelReasonCodes;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
@@ -323,6 +324,52 @@ class PaymentCancelTest extends BaseIntegrationTest
         $this->assertCount(2, $payment->cancelAmount(80.0));
         $this->assertTrue($payment->isCompleted());
         $this->assertAmounts($payment, 0.0, 20.0, 40.0, 20.0);
+    }
+
+    /**
+     * Verify full cancel on initial iv charge (reversal)
+     * PHPLIB-228 - Case 13
+     *
+     * @test
+     *
+     * @dataProvider fullCancelDataProvider
+     *
+     * @param float $amount
+     */
+    public function fullCancelOnInitialInvoiceCharge($amount): void
+    {
+        $this->useLegacyKey();
+        /** @var Invoice $invoice */
+        $invoice = $this->unzer->createPaymentType(new Invoice());
+        $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+
+        $this->assertCount(1, $payment->cancelAmount($amount));
+        $this->assertTrue($payment->isCanceled());
+        $this->assertAmounts($payment, 0.0, 0.0, 0.0, 0.0);
+    }
+
+    /**
+     * Verify part cancel on initial iv charge (reversal)
+     * PHPLIB-228 - Case 14
+     *
+     * @test
+     */
+    public function partCancelOnInitialInvoiceChargeShouldBePossible(): void
+    {
+        $this->useLegacyKey();
+        /** @var Invoice $invoice */
+        $invoice = $this->unzer->createPaymentType(new Invoice());
+        $charge = $invoice->charge(100.0, 'EUR', self::RETURN_URL);
+        $payment = $this->unzer->fetchPayment($charge->getPaymentId());
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 100.0, 0.0, 100.0, 0.0);
+
+        $this->assertCount(1, $payment->cancelAmount(50.0));
+        $this->assertTrue($payment->isPending());
+        $this->assertAmounts($payment, 50.0, 0.0, 50.0, 0.0);
     }
 
     /**

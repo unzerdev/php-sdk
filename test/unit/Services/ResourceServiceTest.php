@@ -34,11 +34,11 @@ use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
-use UnzerSDK\Resources\PaymentTypes\PIS;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceCard;
 use UnzerSDK\Resources\PaymentTypes\PostFinanceEfinance;
 use UnzerSDK\Resources\PaymentTypes\Prepayment;
@@ -1416,9 +1416,9 @@ class ResourceServiceTest extends BasePaymentTest
             'CARD' => ['s-crd-xen2ybcovn56', 'https://api.unzer.com/v1/types/card/s-crd-xen2ybcovn56/'],
             'EPS' => ['s-eps-xen2ybcovn56', 'https://api.unzer.com/v1/types/eps/s-eps-xen2ybcovn56/'],
             'IDEAL' => ['s-idl-xen2ybcovn56', 'https://api.unzer.com/v1/types/ideal/s-idl-xen2ybcovn56/'],
+            'INVOICE' => ['s-ivc-xen2ybcovn56', 'https://api.unzer.com/v1/types/invoice/s-ivc-xen2ybcovn56/'],
             'PAYLATER_INVOICE' => ['s-piv-xen2ybcovn56', 'https://api.unzer.com/v1/types/paylater-invoice/s-piv-xen2ybcovn56/'],
             'PAYPAL' => ['s-ppl-xen2ybcovn56', 'https://api.unzer.com/v1/types/paypal/s-ppl-xen2ybcovn56/'],
-            'PIS' => ['s-pis-xen2ybcovn56', 'https://api.unzer.com/v1/types/pis/s-pis-xen2ybcovn56/'],
             'POST_FINANCE_EFINANCE' => ['s-pfe-xen2ybcovn56', 'https://api.unzer.com/v1/types/pfe/s-pfe-xen2ybcovn56/'],
             'POST_FINANCE_CARD' => ['s-pfc-xen2ybcovn56', 'https://api.unzer.com/v1/types/pfc/s-pfc-xen2ybcovn56/'],
             'PREPAYMENT' => ['s-ppy-xen2ybcovn56', 'https://api.unzer.com/v1/types/prepayment/s-ppy-xen2ybcovn56/'],
@@ -1497,13 +1497,13 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType Card sandbox' => ['fetchPaymentType', ['s-crd-12345678'], $getPaymentTypeCB(Card::class)],
             'PaymentType Google Pay sandbox' => ['fetchPaymentType', ['s-gop-12345678'], $getPaymentTypeCB(Googlepay::class)],
             'PaymentType Ideal sandbox' => ['fetchPaymentType', ['s-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
+            'PaymentType Invoice sandbox' => ['fetchPaymentType', ['s-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
             'PaymentType Klarna' => ['fetchPaymentType', ['s-kla-12345678'], $getPaymentTypeCB(Klarna::class)],
             'PaymentType Paypal sandbox' => ['fetchPaymentType', ['s-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
             'PaymentType Paylater-Invoice sandbox' => ['fetchPaymentType', ['s-piv-12345678'], $getPaymentTypeCB(PaylaterInvoice::class)],
             'PaymentType Prepayment sandbox' => ['fetchPaymentType', ['s-ppy-12345678'], $getPaymentTypeCB(Prepayment::class)],
             'PaymentType Przelewy24 sandbox' => ['fetchPaymentType', ['s-p24-12345678'], $getPaymentTypeCB(Przelewy24::class)],
             'PaymentType SepaDirectDebit sandbox' => ['fetchPaymentType', ['s-sdd-12345678'], $getPaymentTypeCB(SepaDirectDebit::class)],
-            'PaymentType PIS sandbox' => ['fetchPaymentType', ['s-pis-12345678'], $getPaymentTypeCB(PIS::class)],
             'PaymentType PFC sandbox' => ['fetchPaymentType', ['s-pfc-12345678'], $getPaymentTypeCB(PostFinanceCard::class)],
             'PaymentType PFE sandbox' => ['fetchPaymentType', ['s-pfe-12345678'], $getPaymentTypeCB(PostFinanceEfinance::class)],
             'PaymentType EPS sandbox' => ['fetchPaymentType', ['s-eps-12345678'], $getPaymentTypeCB(EPS::class)],
@@ -1516,6 +1516,7 @@ class ResourceServiceTest extends BasePaymentTest
             'PaymentType Card production' => ['fetchPaymentType', ['p-crd-12345678'], $getPaymentTypeCB(Card::class)],
             'PaymentType EPS production' => ['fetchPaymentType', ['p-eps-12345678'], $getPaymentTypeCB(EPS::class)],
             'PaymentType Ideal production' => ['fetchPaymentType', ['p-idl-12345678'], $getPaymentTypeCB(Ideal::class)],
+            'PaymentType Invoice production' => ['fetchPaymentType', ['p-ivc-12345678'], $getPaymentTypeCB(Invoice::class)],
             'PaymentType Paylater-Invoice production' => ['fetchPaymentType', ['p-piv-12345678'], $getPaymentTypeCB(PaylaterInvoice::class)],
             'PaymentType Paypal production' => ['fetchPaymentType', ['p-ppl-12345678'], $getPaymentTypeCB(Paypal::class)],
             'PaymentType PFC production' => ['fetchPaymentType', ['p-pfc-12345678'], $getPaymentTypeCB(PostFinanceCard::class)],

@@ -32,6 +32,7 @@ use UnzerSDK\Resources\PaymentTypes\Alipay;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
+use UnzerSDK\Resources\PaymentTypes\Invoice;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Resources\Recurring;
@@ -417,6 +418,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'Payment' => [new Payment(), 'parent/resource/path/payments'],
             'Card' => [new Card('', '03/30'), 'parent/resource/path/types/card'],
             'Ideal' => [new Ideal(), 'parent/resource/path/types/ideal'],
+            'Invoice' => [new Invoice(), 'parent/resource/path/types/invoice'],
             'EPS' => [new EPS(), 'parent/resource/path/types/eps'],
             'Alipay' => [new Alipay(), 'parent/resource/path/types/alipay'],
             'ApplePay' => [new Applepay('EC_v1', 'data', 'sig', null), 'parent/resource/path/types/applepay'],
@@ -446,6 +448,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             'Card' => [new Card('', '03/30'), 'parent/resource/path/types'],
             'EPS' => [new EPS(), 'parent/resource/path/types'],
             'Ideal' => [new Ideal(), 'parent/resource/path/types'],
+            'Invoice' => [new Invoice(), 'parent/resource/path/types'],
             'SepaDirectDebit' => [new SepaDirectDebit(''), 'parent/resource/path/types'],
 
             // Other resources Uris should behave as before.
