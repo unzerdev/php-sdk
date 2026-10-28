@@ -15,7 +15,6 @@ use stdClass;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\EmbeddedResources\BasketItem;
 use UnzerSDK\test\BasePaymentTest;
-use UnzerSDK\Unzer;
 
 class BasketTest extends BasePaymentTest
 {
@@ -158,10 +157,11 @@ class BasketTest extends BasePaymentTest
      */
     public function getApiVersionShouldReturnExpectedVersionDP(): array
     {
-        $v2Basket = (new Basket())->setTotalValueGross(100);
         return [
-            'empty basket ' => [new Basket(), Unzer::API_VERSION],
-            'minimum v2 basket ' => [$v2Basket, BasePaymentTest::API_VERSION_2],
+            'new basket' => [new Basket(), BasePaymentTest::API_VERSION_3],
+            'new basket with total value' => [(new Basket())->setTotalValueGross(100), BasePaymentTest::API_VERSION_3],
+            'basket with UUID id' => [(new Basket())->setId('s-bsk-123e4567-e89b-12d3-a456-426614174000'), BasePaymentTest::API_VERSION_3],
+            'basket with id created before v3' => [(new Basket())->setId('s-bsk-testbasket'), BasePaymentTest::API_VERSION_2],
         ];
     }
 

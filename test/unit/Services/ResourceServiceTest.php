@@ -1053,64 +1053,11 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify fetchBasket will use the v2 endpoint end then the v1 endpoint if basket wasn't found initially.
+     * Verify fetchBasket uses the v2 endpoint for a basket id created before v3 (no UUID).
      *
      * @test
      */
-    public function fetchBasketShouldCallV1EnpointIfBasketWasNotFound(): void
-    {
-        $unzer = new Unzer('s-priv-123');
-        $basket = (new Basket())->setId('s-bsk-testbasket');
-
-        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
-        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->setConstructorArgs([$unzer])
-            ->setMethods(['fetchResource'])->getMock();
-
-        $resourceServiceMock->expects(self::exactly(2))
-            ->method('fetchResource')
-            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket])
-            ->will($this->returnCallback(function ($basket, $version) {
-                if ($version === BasePaymentTest::API_VERSION_2) {
-                    throw new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND);
-                }
-                return $basket;
-            }));
-
-        $resourceServiceMock->fetchBasket($basket);
-    }
-
-    /**
-     * Verify fetchBasket will call FetchResource max two time, if the basket was not found.
-     * Exception should be thrown.
-     *
-     * @test
-     */
-    public function fetchBasketShouldCallFetchResourceMaxTwoTimes(): void
-    {
-        $unzer = new Unzer('s-priv-123');
-        $basket = (new Basket())->setId('s-bsk-testbasket');
-
-        /** @var ResourceServiceInterface|MockObject $resourceServiceMock */
-        $resourceServiceMock = $this->getMockBuilder(ResourceService::class)
-            ->setConstructorArgs([$unzer])
-            ->setMethods(['fetchResource'])->getMock();
-
-        $resourceServiceMock->expects(self::exactly(2))
-            ->method('fetchResource')
-            ->withConsecutive([$basket, BasePaymentTest::API_VERSION_2], [$basket])
-            ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND));
-
-        $this->expectException(UnzerApiException::class);
-        $resourceServiceMock->fetchBasket($basket);
-    }
-
-    /**
-     * Verify fetchBasket call fetchResource only once with v2 parameter, when basket was returned.
-     *
-     * @test
-     */
-    public function fetchBasketShouldCallFetchResourceOnlyOnceIfNoExceptionOccurs(): void
+    public function fetchBasketWithLegacyIdShouldCallV2Endpoint(): void
     {
         $unzer = new Unzer('s-priv-123');
         $basket = (new Basket())->setId('s-bsk-testbasket');
@@ -1129,12 +1076,11 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
-     * Verify fetchBasket will call fetchResource only once if Exception ist not "API_ERROR_BASKET_NOT_FOUND" exception.
-     * Exception should be thrown.
+     * Verify fetchBasket does not fall back to the v1 endpoint if the basket was not found.
      *
      * @test
      */
-    public function fetchBasketShouldNotCallFetchResourcheMethodIfAnyOtherExceptionIsThrown(): void
+    public function fetchBasketShouldNotFallBackToV1IfBasketWasNotFound(): void
     {
         $unzer = new Unzer('s-priv-123');
         $basket = (new Basket())->setId('s-bsk-testbasket');
@@ -1147,10 +1093,29 @@ class ResourceServiceTest extends BasePaymentTest
         $resourceServiceMock->expects(self::once())
             ->method('fetchResource')
             ->with($basket, BasePaymentTest::API_VERSION_2)
-            ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_ITEM_IMAGE_INVALID_URL));
+            ->willThrowException(new UnzerApiException(null, null, ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND));
 
         $this->expectException(UnzerApiException::class);
         $resourceServiceMock->fetchBasket($basket);
+    }
+
+    /**
+     * Verify createBasket sends a new basket to the v3 endpoint by default.
+     *
+     * @test
+     */
+    public function createBasketShouldCallV3EndpointByDefault(): void
+    {
+        $unzer = new Unzer('s-priv-123');
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs([$unzer])->setMethods(['send'])->getMock();
+        $basket = new Basket('orderId', 100.0, 'EUR');
+        $resourceSrvMock->expects($this->once())
+            ->method('send')
+            ->with($basket, 'POST', BasePaymentTest::API_VERSION_3)
+            ->willReturn(new \stdClass());
+
+        $this->assertSame($basket, $resourceSrvMock->createBasket($basket));
     }
 
     /**
@@ -1206,7 +1171,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchV3BasketIdShouldFetchV3Basket(): void
     {
         $unzer = new Unzer('s-priv-123');
-        $basket = (new BasketV3());
+        $basket = (new Basket());
         $basket->setId('s-bsk-123e4567-e89b-12d3-a456-426614174000');
         $basket->setParentResource($unzer);
 
@@ -1231,7 +1196,7 @@ class ResourceServiceTest extends BasePaymentTest
     public function fetchUnknownV3BasketIdShouldFetchV3Basket(): void
     {
         $unzer = new Unzer('s-priv-123');
-        $basket = (new BasketV3());
+        $basket = (new Basket());
         $basket->setId('s-bsk-123e4567-e89b-12d3-a456-426614174000');
         $basket->setParentResource($unzer);
 

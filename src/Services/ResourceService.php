@@ -58,7 +58,6 @@ use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Resources\V2\Customer as CustomerV2;
 use UnzerSDK\Apis\ApiRequest;
 use UnzerSDK\Resources\V2\Paypage as PaypageV2;
-use UnzerSDK\Resources\V3\Basket as BasketV3;
 use UnzerSDK\Traits\CanRecur;
 use UnzerSDK\Unzer;
 use function in_array;
@@ -128,7 +127,7 @@ class ResourceService implements ResourceServiceInterface
         $appendId = $httpMethod !== HttpAdapterInterface::REQUEST_POST;
         $uri = $resource->getUri($appendId, $httpMethod);
         $unzerObject = $resource->getUnzerObject();
-        $apiRequest = new ApiRequest($uri, $resource, $httpMethod, $unzerObject, $apiVersion ?? Unzer::API_VERSION);
+        $apiRequest = new ApiRequest($uri, $resource, $httpMethod, $unzerObject, $apiVersion ?? $resource->getApiVersion());
         $responseJson = $unzerObject->getHttpService()->sendRequest($apiRequest);
         return !empty($responseJson) ? json_decode($responseJson, false) : new stdClass();
     }
@@ -570,22 +569,11 @@ class ResourceService implements ResourceServiceInterface
         $basketObj = $basket;
 
         if (is_string($basket)) {
-            $isV3Basket = IdService::isUUIDResource($basket);
-            $basketObj = $isV3Basket ? new BasketV3() : new Basket();
-            $basketObj->setId($basket);
+            $basketObj = (new Basket())->setId($basket);
         }
 
         $basketObj->setParentResource($this->unzer);
-        $basketVersion = $basketObj->getApiVersion() === ApiVersions::V3 ? ApiVersions::V3 : ApiVersions::V2;
-
-        try {
-            $this->fetchResource($basketObj, $basketVersion);
-        } catch (UnzerApiException $exception) {
-            if ($exception->getCode() !== ApiResponseCodes::API_ERROR_BASKET_NOT_FOUND || $basketVersion === ApiVersions::V3) {
-                throw $exception;
-            }
-            $this->fetchResource($basketObj);
-        }
+        $this->fetchResource($basketObj, $basketObj->getApiVersion());
         return $basketObj;
     }
 

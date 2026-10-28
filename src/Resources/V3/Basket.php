@@ -2,29 +2,14 @@
 
 namespace UnzerSDK\Resources\V3;
 
-use UnzerSDK\Apis\PaymentApiConfigBearerAuth;
-use UnzerSDK\Constants\ApiVersions;
-use UnzerSDK\Resources\Basket as BasketV2;
+use UnzerSDK\Resources\Basket as BaseBasket;
 
 /**
- * This is a prototype of the v3 Basket resource.
+ * Kept for backwards compatibility.
  *
- * This class represents version 3 of Basket resource in the Unzer API.
- * The version uses bearer authentication for API calls.
- * Make sure to use the same Unzer instance to use the same JWT token across multiple calls.
- * Also, the resource ID incorporates UUID and has a length of 42.
- *
- * @category prototype
+ * Since 5.0.0 \UnzerSDK\Resources\Basket uses the v3 basket endpoint by default,
+ * so this class behaves exactly like \UnzerSDK\Resources\Basket.
  */
-class Basket extends BasketV2
+class Basket extends BaseBasket
 {
-    public function getApiVersion(): string
-    {
-        return ApiVersions::V3;
-    }
-
-    public function getApiConfig(): string
-    {
-        return PaymentApiConfigBearerAuth::class;
-    }
 }
