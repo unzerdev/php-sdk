@@ -18,7 +18,8 @@ This is a major release with breaking changes. See the upgrade guide on docs.unz
 
 ### Removed
 
-* Payment types `Sofort`, `Giropay`, `PIS`, `InvoiceSecured`, `SepaDirectDebitSecured` and `InstallmentSecured` (including `Unzer::fetchInstallmentPlans()` and the `InstalmentPlans` / `InstalmentPlan` resources). Payments made with these types can no longer be loaded through the SDK.
+* Support for PHP 8.1. The minimum supported PHP version is now 8.2 (`composer.json` requires `~8.2.0|~8.3.0|~8.4.0|~8.5.0`). PHP 8.1 is end of life and has no official fix for the PHP2Shell vulnerabilities (CVE-2026-109618, CVE-2026-109619).
+* Payment types `Sofort`, `Giropay`, `PIS`, `SepaDirectDebitSecured` and `InstallmentSecured` (including `Unzer::fetchInstallmentPlans()` and the `InstalmentPlans` / `InstalmentPlan` resources). Payments made with these types can no longer be loaded through the SDK.
 * `Unzer::authorize()`, `charge()`, `chargeAuthorization()` and `chargePayment()`. Use `performAuthorization()`, `performCharge()` and `performChargeOnPayment()`.
 * `Unzer::setKey()`. Create a new `Unzer` instance to use another key.
 * v1 basket fields of `Basket` (`amountTotalGross`, `amountTotalDiscount`, `amountTotalVat`) and `BasketItem` (`amountDiscount`, `amountGross`, `amountVat`, `amountPerUnit`, `amountNet`) and the related constructor parameters.
