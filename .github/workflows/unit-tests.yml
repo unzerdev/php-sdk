@@ -34,3 +34,12 @@ jobs:
           check_name: 'Unit Test Report (PHP ${{ matrix.php }})'
           detailed_summary: true
           fail_on_failure: true
+
+  unit-tests-passed:
+    name: Unit tests passed
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any PHP version failed
+        run: test "${{ needs.build.result }}" = "success"
