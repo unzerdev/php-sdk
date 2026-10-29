@@ -31,6 +31,7 @@ use UnzerSDK\Resources\PaymentTypes\EPS;
 use UnzerSDK\Resources\PaymentTypes\Googlepay;
 use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\PaymentTypes\Klarna;
 use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
@@ -898,6 +899,11 @@ class ResourceService implements ResourceServiceInterface
                 break;
             case IdStrings::INVOICE:
                 $paymentType = new Invoice();
+                break;
+            case IdStrings::INVOICE_FACTORING:
+            case IdStrings::INVOICE_GUARANTEED:
+            case IdStrings::INVOICE_SECURED:
+                $paymentType = new InvoiceSecured();
                 break;
             case IdStrings::KLARNA:
                 $paymentType = new Klarna();
