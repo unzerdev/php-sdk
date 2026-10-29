@@ -57,20 +57,15 @@ trait CanAuthorize
         $recurrenceType = null
     ): Authorization {
         if ($this instanceof UnzerParentInterface) {
-            return $this->getUnzerObject()->authorize(
-                $amount,
-                $currency,
-                $this,
-                $returnUrl,
-                $customer,
-                $orderId,
-                $metadata,
-                $basket,
-                $card3ds,
-                $invoiceId,
-                $paymentReference,
-                $recurrenceType
-            );
+            $authorization = (new Authorization($amount, $currency, $returnUrl))
+                ->setOrderId($orderId)
+                ->setCard3ds($card3ds)
+                ->setInvoiceId($invoiceId)
+                ->setPaymentReference($paymentReference);
+            if ($recurrenceType !== null) {
+                $authorization->setRecurrenceType($recurrenceType);
+            }
+            return $this->getUnzerObject()->performAuthorization($authorization, $this, $customer, $metadata, $basket);
         }
 
         throw new RuntimeException(

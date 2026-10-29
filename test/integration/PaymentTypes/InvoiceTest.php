@@ -14,6 +14,8 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\Invoice;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 use UnzerSDK\test\Helper\TestEnvironmentService;
 
@@ -49,7 +51,7 @@ class InvoiceTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(1.0, 'EUR', self::RETURN_URL), $invoice);
     }
 
     /**
@@ -61,7 +63,7 @@ class InvoiceTest extends BaseIntegrationTest
     {
         /** @var Invoice $invoice */
         $invoice = $this->unzer->createPaymentType(new Invoice());
-        $charge = $this->unzer->charge(20.0, 'EUR', $invoice, self::RETURN_URL);
+        $charge = $this->unzer->performCharge(new Charge(20.0, 'EUR', self::RETURN_URL), $invoice);
         $this->assertNotNull($charge);
         $this->assertNotEmpty($charge->getId());
     }

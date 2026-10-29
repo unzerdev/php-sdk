@@ -25,12 +25,9 @@ class IdStrings
     public const BANCONTACT = 'bct';
     public const CARD = 'crd';
     public const EPS = 'eps';
-    public const GIROPAY = 'gro';
     public const GOOGLE_PAY = 'gop';
     public const CLICK_TO_PAY = 'ctp';
-    public const HIRE_PURCHASE_DIRECT_DEBIT = 'hdd';
     public const IDEAL = 'idl';
-    public const INSTALLMENT_SECURED = 'ins';
     public const INVOICE = 'ivc';
     public const INVOICE_FACTORING = 'ivf';
     public const INVOICE_GUARANTEED = 'ivg';
@@ -44,13 +41,9 @@ class IdStrings
     public const PAYU = 'pyu';
     public const POST_FINANCE_CARD = 'pfc';
     public const POST_FINANCE_EFINANCE = 'pfe';
-    public const PIS = 'pis';
     public const PREPAYMENT = 'ppy';
     public const PRZELEWY24 = 'p24';
     public const SEPA_DIRECT_DEBIT = 'sdd';
-    public const SEPA_DIRECT_DEBIT_GUARANTEED = 'ddg';
-    public const SEPA_DIRECT_DEBIT_SECURED = 'dds';
-    public const SOFORT = 'sft';
     public const TWINT = 'twt';
     public const WECHATPAY = 'wcp';
     public const WERO = 'wro';
@@ -70,11 +63,8 @@ class IdStrings
         self::BANCONTACT,
         self::CARD,
         self::EPS,
-        self::GIROPAY,
         self::GOOGLE_PAY,
-        self::HIRE_PURCHASE_DIRECT_DEBIT,
         self::IDEAL,
-        self::INSTALLMENT_SECURED,
         self::INVOICE,
         self::INVOICE_FACTORING,
         self::INVOICE_GUARANTEED,
@@ -88,13 +78,9 @@ class IdStrings
         self::PAYU,
         self::POST_FINANCE_CARD,
         self::POST_FINANCE_EFINANCE,
-        self::PIS,
         self::PREPAYMENT,
         self::PRZELEWY24,
         self::SEPA_DIRECT_DEBIT,
-        self::SEPA_DIRECT_DEBIT_GUARANTEED,
-        self::SEPA_DIRECT_DEBIT_SECURED,
-        self::SOFORT,
         self::TWINT,
         self::WECHATPAY,
         self::WERO,

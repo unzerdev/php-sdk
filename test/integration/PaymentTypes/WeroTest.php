@@ -15,9 +15,14 @@ use UnzerSDK\Resources\PaymentTypes\Wero;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class WeroTest extends BaseIntegrationTest
 {
+    public function setUp(): void
+    {
+        $this->getUnzerObject(TestEnvironmentService::getUnzerOneTestPrivateKey());
+    }
     /**
      * @test
      *

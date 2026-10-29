@@ -24,7 +24,7 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
     public function fullCancelOnAuthorization(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $card);
 
         /** @var Authorization $fetchedAuthorization */
         $fetchedAuthorization = $this->unzer->fetchAuthorization($authorization->getPayment()->getId());
@@ -52,7 +52,7 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
     public function partCancelOnPayment(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $card);
         $payment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
 
         $cancelArray = $payment->cancelAmount(10.0);
@@ -70,7 +70,7 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
     public function partCancelOnAuthorize(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $card);
 
         /** @var Authorization $fetchedAuthorization */
         $fetchedAuthorization = $this->unzer->fetchAuthorization($authorization->getPayment()->getId());
@@ -92,7 +92,7 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
     public function anAuthorizationsFullReversalShallBeFetchable(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $card);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
         $this->assertTrue($payment->isPending());
@@ -127,7 +127,7 @@ class CancelAfterAuthorizationTest extends BaseIntegrationTest
     public function anAuthorizationsReversalsShouldBeFetchable(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.0000, 'EUR', $card, self::RETURN_URL, null, null, null, null, false);
+        $authorization = $this->unzer->performAuthorization((new Authorization(100.0, 'EUR', self::RETURN_URL))->setCard3ds(false), $card);
         $payment = $authorization->getPayment();
         $this->assertAmounts($payment, 100.0, 0, 100.0, 0);
         $this->assertTrue($payment->isPending());

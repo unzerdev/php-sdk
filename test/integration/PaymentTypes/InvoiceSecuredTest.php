@@ -18,6 +18,7 @@ use UnzerSDK\Resources\PaymentTypes\InvoiceSecured;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 use UnzerSDK\test\Helper\TestEnvironmentService;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 
 /**
  * @deprecated since 1.2.0.0 PaylaterInvoice should be used instead in the future.
@@ -64,7 +65,7 @@ class InvoiceSecuredTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(1.0, 'EUR', $invoice, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(1.0, 'EUR', self::RETURN_URL), $invoice);
     }
 
     /**
@@ -80,7 +81,7 @@ class InvoiceSecuredTest extends BaseIntegrationTest
     {
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_FACTORING_REQUIRES_CUSTOMER);
-        $this->unzer->charge(1.0, 'EUR', $invoiceSecured, self::RETURN_URL);
+        $this->unzer->performCharge(new Charge(1.0, 'EUR', self::RETURN_URL), $invoiceSecured);
     }
 
     /**

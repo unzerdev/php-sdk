@@ -11,10 +11,6 @@ class Urls extends AbstractUnzerResource
     protected ?string $imprint = null;
     protected ?string $help = null;
     protected ?string $contact = null;
-    /** @deprecated Use Style::$favicon instead.
-     * @see Style::$favicon
-     */
-    protected ?string $favicon = null;
     protected ?string $returnSuccess = null;
     protected ?string $returnPending = null;
     protected ?string $returnFailure = null;
@@ -73,17 +69,6 @@ class Urls extends AbstractUnzerResource
     public function setContact(?string $contact): Urls
     {
         $this->contact = $contact;
-        return $this;
-    }
-
-    public function getFavicon(): ?string
-    {
-        return $this->favicon;
-    }
-
-    public function setFavicon(?string $favicon): Urls
-    {
-        $this->favicon = $favicon;
         return $this;
     }
 

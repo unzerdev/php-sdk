@@ -14,7 +14,7 @@ namespace UnzerSDK\test\unit\Resources\TransactionTypes;
 use UnzerSDK\Unzer;
 use UnzerSDK\Resources\CustomerFactory;
 use UnzerSDK\Resources\Payment;
-use UnzerSDK\Resources\PaymentTypes\Sofort;
+use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Cancellation;
 use UnzerSDK\Resources\TransactionTypes\Charge;
@@ -118,7 +118,7 @@ class AuthorizationTest extends BasePaymentTest
     public function getLinkedResourceShouldReturnResourcesBelongingToAuthorization(): void
     {
         $unzerObj    = new Unzer('s-priv-123345');
-        $paymentType     = (new Sofort())->setId('123');
+        $paymentType     = (new Paypal())->setId('123');
         $customer        = CustomerFactory::createCustomer('Max', 'Mustermann')->setId('123');
         $payment         = new Payment();
         $payment->setParentResource($unzerObj)->setPaymentType($paymentType)->setCustomer($customer);
@@ -184,18 +184,19 @@ class AuthorizationTest extends BasePaymentTest
     {
         $unzerMock = $this->getMockBuilder(Unzer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['chargeAuthorization'])
+            ->setMethods(['performChargeOnPayment'])
             ->getMock();
         /** @var Unzer $unzerMock */
         $payment = (new Payment())->setParentResource($unzerMock)->setId('myPayment');
         $unzerMock->expects($this->exactly(2))
-            ->method('chargeAuthorization')->willReturn(new Charge())
+            ->method('performChargeOnPayment')
+            ->willReturn(new Charge())
             ->withConsecutive(
-                [$this->identicalTo($payment), $this->isNull()],
-                [$this->identicalTo($payment), 321.9]
+                [$this->identicalTo($payment), $this->callback(static fn(Charge $c) => $c->getAmount() === null)],
+                [$this->identicalTo($payment), $this->callback(static fn(Charge $c) => $c->getAmount() === 321.9)]
             );
 
-        $authorization =  new Authorization();
+        $authorization = new Authorization();
         $authorization->setPayment($payment);
         $authorization->charge();
         $authorization->charge(321.9);
