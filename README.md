@@ -1,5 +1,4 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/unzerdev/php-sdk.svg?style=flat-square)](https://packagist.org/packages/unzerdev/php-sdk)
-[![PHP 8.1](https://img.shields.io/badge/php-8.1-blue.svg)](http://www.php.net)
 [![PHP 8.2](https://img.shields.io/badge/php-8.2-blue.svg)](http://www.php.net)
 [![PHP 8.3](https://img.shields.io/badge/php-8.3-blue.svg)](http://www.php.net)
 [![PHP 8.4](https://img.shields.io/badge/php-8.4-blue.svg)](http://www.php.net)
