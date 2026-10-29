@@ -64,6 +64,24 @@ class KeypairTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify the raw API response is preserved as valid JSON matching the hydrated keypair.
+     *
+     * @test
+     *
+     * @depends keypairShouldReturnExpectedValues
+     */
+    public function keypairShouldExposeRawResponse(Keypair $keypair): void
+    {
+        $rawResponse = $keypair->getRawResponse();
+        $this->assertNotEmpty($rawResponse);
+
+        $decoded = json_decode($rawResponse, true);
+        $this->assertIsArray($decoded);
+        $this->assertEquals($keypair->getPublicKey(), $decoded['publicKey']);
+        $this->assertEquals($keypair->getSecureLevel(), $decoded['secureLevel']);
+    }
+
+    /**
      * Verify keypair can be fetched using the public key extracted from a previous fetch.
      *
      * @test

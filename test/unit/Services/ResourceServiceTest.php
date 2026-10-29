@@ -118,6 +118,47 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
+     * Verify fetchKeypair hydrates the keypair and preserves the exact raw response.
+     *
+     * @test
+     *
+     * @dataProvider fetchKeypairShouldKeepRawResponseDP
+     *
+     * @param bool   $detailed
+     * @param string $rawResponse
+     * @param string $expectedUri
+     */
+    public function fetchKeypairShouldKeepRawResponse(bool $detailed, string $rawResponse, string $expectedUri): void
+    {
+        $unzer = new Unzer('s-priv-1234');
+        $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
+        $unzer->setHttpService($httpSrvMock);
+        $httpSrvMock->expects($this->once())->method('send')
+            ->with($expectedUri, $this->isInstanceOf(Keypair::class), HttpAdapterInterface::REQUEST_GET)
+            ->willReturn($rawResponse);
+
+        $keypair = (new ResourceService($unzer))->fetchKeypair($detailed);
+
+        $this->assertSame($rawResponse, $keypair->getRawResponse());
+        $this->assertNotNull($keypair->getFetchedAt());
+        $this->assertSame($detailed, $keypair->isDetailed());
+        $this->assertArrayNotHasKey('rawResponse', $keypair->expose());
+    }
+
+    /**
+     * @return array
+     */
+    public function fetchKeypairShouldKeepRawResponseDP(): array
+    {
+        $raw = '{ "publicKey" : "s-pub-1234",  "secureLevel":"SAQ-A", "paymentTypes": [{"type":"card"}] }';
+        return [
+            'plain' => [false, $raw, '/keypair'],
+            'detailed' => [true, $raw, '/keypair/types'],
+            'empty response' => [false, '', '/keypair'],
+        ];
+    }
+
+    /**
      * Verify send will call send on httpService.
      *
      * @group CC-1309
@@ -1467,9 +1508,6 @@ class ResourceServiceTest extends BasePaymentTest
         $fetchPaymentByOrderIdCB = static function ($payment) {
             return $payment instanceof Payment && $payment->getOrderId() === 'myOrderId';
         };
-        $fetchKeypairCB = static function ($keypair) {
-            return $keypair instanceof Keypair;
-        };
         $fetchCustomerCB = static function ($customer) {
             return $customer instanceof Customer && $customer->getId() === 'myCustomerId';
         };
@@ -1491,7 +1529,6 @@ class ResourceServiceTest extends BasePaymentTest
             'fetchPayment' => ['fetchPayment', [(new Payment())->setId('myPaymentId')], $fetchPaymentCB],
             'fetchPayment by id' => ['fetchPayment', ['myPaymentId'], $fetchPaymentCB],
             'fetchPayment by orderId' => ['fetchPaymentByOrderId', ['myOrderId'], $fetchPaymentByOrderIdCB],
-            'fetchKeypair' => ['fetchKeypair', [], $fetchKeypairCB],
             'fetchCustomer' => ['fetchCustomer', ['myCustomerId'], $fetchCustomerCB],
             'fetchMetadata by obj' => ['fetchMetadata', [(new Metadata())->setId('s-mtd-1234')], $fetchMetadataCB],
             'fetchMetadata by id' => ['fetchMetadata', ['s-mtd-1234'], $fetchMetadataCB],
