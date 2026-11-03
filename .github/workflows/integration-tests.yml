@@ -9,7 +9,7 @@ on:
       php-version:
         description: 'PHP version to run tests on'
         required: false
-        default: '8.1'
+        default: '8.2'
         type: string
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ inputs.php-version || '8.1' }}
+          php-version: ${{ inputs.php-version || '8.2' }}
           ini-values: error_reporting=E_ALL, display_errors=On, display_startup_errors=On
       - name: Setup Apple Pay test certificate
         run: mkdir certs

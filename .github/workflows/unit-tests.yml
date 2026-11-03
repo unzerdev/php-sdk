@@ -13,7 +13,7 @@ jobs:
       checks: write
     strategy:
       matrix:
-        php: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
+        php: [ '8.2', '8.3', '8.4', '8.5' ]
     name: PHP ${{ matrix.php }} unit tests
     steps:
       - uses: actions/checkout@v3
@@ -34,3 +34,12 @@ jobs:
           check_name: 'Unit Test Report (PHP ${{ matrix.php }})'
           detailed_summary: true
           fail_on_failure: true
+
+  unit-tests-passed:
+    name: Unit tests passed
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any PHP version failed
+        run: test "${{ needs.build.result }}" = "success"
