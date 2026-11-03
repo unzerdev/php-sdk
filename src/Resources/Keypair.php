@@ -22,6 +22,9 @@ class Keypair extends AbstractUnzerResource
     /** @var bool $detailed */
     private $detailed = false;
 
+    /** @var string|null $rawResponse */
+    private $rawResponse;
+
     /** @var array $paymentTypes */
     protected $paymentTypes = [];
 
@@ -244,6 +247,29 @@ class Keypair extends AbstractUnzerResource
     protected function setValidateBasket(?bool $validateBasket): Keypair
     {
         $this->validateBasket = $validateBasket;
+        return $this;
+    }
+
+    /**
+     * Returns the unprocessed API response of the fetch request, or null if the keypair has not been fetched.
+     *
+     * @return string|null
+     */
+    public function getRawResponse(): ?string
+    {
+        return $this->rawResponse;
+    }
+
+    /**
+     * @param string|null $rawResponse
+     *
+     * @return Keypair
+     *
+     * @internal Set by the ResourceService when fetching the keypair.
+     */
+    public function setRawResponse(?string $rawResponse): Keypair
+    {
+        $this->rawResponse = $rawResponse;
         return $this;
     }
 
