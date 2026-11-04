@@ -43,6 +43,38 @@ class KeypairTest extends BasePaymentTest
     }
 
     /**
+     * Verify the raw response is null by default and never exposed to the API.
+     *
+     * @test
+     *
+     * @dataProvider rawResponseDP
+     *
+     * @param string|null $rawResponse
+     */
+    public function rawResponseShouldBeSettableAndNotExposed(?string $rawResponse): void
+    {
+        $keypair = new Keypair();
+        $this->assertNull($keypair->getRawResponse());
+
+        $this->assertSame($keypair, $keypair->setRawResponse($rawResponse));
+
+        $this->assertSame($rawResponse, $keypair->getRawResponse());
+        $this->assertArrayNotHasKey('rawResponse', (array)$keypair->expose());
+    }
+
+    /**
+     * @return array
+     */
+    public function rawResponseDP(): array
+    {
+        return [
+            'null' => [null],
+            'empty' => [''],
+            'json' => ['{"publicKey" :  "s-pub-1234"}'],
+        ];
+    }
+
+    /**
      * Verify that a key pair can be updated on handle response.
      *
      * @test
