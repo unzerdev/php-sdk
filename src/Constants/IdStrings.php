@@ -28,10 +28,6 @@ class IdStrings
     public const GOOGLE_PAY = 'gop';
     public const CLICK_TO_PAY = 'ctp';
     public const IDEAL = 'idl';
-    public const INVOICE = 'ivc';
-    public const INVOICE_FACTORING = 'ivf';
-    public const INVOICE_GUARANTEED = 'ivg';
-    public const INVOICE_SECURED = 'ivs';
     public const KLARNA = 'kla';
     public const PAYLATER_DIRECT_DEBIT = 'pdd';
     public const PAYLATER_INVOICE = 'piv';
@@ -65,10 +61,6 @@ class IdStrings
         self::EPS,
         self::GOOGLE_PAY,
         self::IDEAL,
-        self::INVOICE,
-        self::INVOICE_FACTORING,
-        self::INVOICE_GUARANTEED,
-        self::INVOICE_SECURED,
         self::KLARNA,
         self::PAYLATER_DIRECT_DEBIT,
         self::PAYLATER_INVOICE,
