@@ -44,7 +44,7 @@ class ClickToPayTest extends BasePaymentTest
         );
 
         $expectedJson = JsonProvider::getJsonFromFile('clicktopay/createRequest.json');
-        $this->assertJsonStringEqualsJsonString($expectedJson, $clickToPayObject->jsonSerialize());
+        $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($clickToPayObject));
     }
 
     /**

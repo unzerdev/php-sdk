@@ -76,7 +76,7 @@ class HasRecurrenceTypeTest extends BasePaymentTest
         $this->assertEquals('oneclick', $exposedTransaction['additionalTransactionData']->card['recurrenceType']);
         $this->assertStringContainsString(
             '"additionalTransactionData":{"card":{"recurrenceType":"oneclick"}}',
-            $charge->jsonSerialize()
+            json_encode($charge)
         );
     }
 
@@ -108,7 +108,7 @@ class HasRecurrenceTypeTest extends BasePaymentTest
         $this->assertEquals('oneclick', $charge->getRecurrenceType());
         $this->assertStringContainsString(
             '"additionalTransactionData":{"card":{"recurrenceType":"oneclick"}}',
-            $charge->jsonSerialize()
+            json_encode($charge)
         );
     }
 

@@ -37,7 +37,7 @@ class ApplepayAdapter
         if ($this->request === null) {
             throw new ApplepayMerchantValidationException('No curl adapter initiated yet. Make sure to cal init() function before.');
         }
-        $payload = $applePaySession->jsonSerialize();
+        $payload = json_encode($applePaySession, JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
         $this->setOption(CURLOPT_URL, $merchantValidationURL);
         $this->setOption(CURLOPT_POSTFIELDS, $payload);
 

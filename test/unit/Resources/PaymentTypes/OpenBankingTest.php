@@ -33,7 +33,7 @@ class OpenBankingTest extends BasePaymentTest
         $openBankingObject = new OpenbankingPis("DE",);
 
         $expectedJson = JsonProvider::getJsonFromFile('openBanking/createRequest.json');
-        $this->assertJsonStringEqualsJsonString($expectedJson, $openBankingObject->jsonSerialize());
+        $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($openBankingObject));
     }
 
     /**
