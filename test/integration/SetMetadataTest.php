@@ -15,6 +15,8 @@ use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class SetMetadataTest extends BaseIntegrationTest
@@ -65,7 +67,7 @@ class SetMetadataTest extends BaseIntegrationTest
         $this->assertEmpty($metadata->getId());
 
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $this->unzer->authorize(1.23, 'EUR', $paypal, 'https://unzer.com', null, null, $metadata);
+        $this->unzer->performAuthorization(new Authorization(1.23, 'EUR', 'https://unzer.com'), $paypal, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -84,7 +86,7 @@ class SetMetadataTest extends BaseIntegrationTest
         $this->assertEmpty($metadata->getId());
 
         $paymentType = $this->unzer->createPaymentType(new Paypal());
-        $this->unzer->charge(1.23, 'EUR', $paymentType, 'https://unzer.com', null, null, $metadata);
+        $this->unzer->performCharge(new Charge(1.23, 'EUR', 'https://unzer.com'), $paymentType, null, $metadata);
         $this->assertNotEmpty($metadata->getId());
     }
 
@@ -99,7 +101,7 @@ class SetMetadataTest extends BaseIntegrationTest
 
         /** @var Paypal $paymentType */
         $paymentType = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $paymentType->authorize(10.0, 'EUR', 'https://unzer.com', null, null, $metadata);
+        $authorize = $this->unzer->performAuthorization(new Authorization(10.0, 'EUR', 'https://unzer.com'), $paymentType, null, $metadata);
         $payment = $authorize->getPayment();
         $this->assertSame($metadata, $payment->getMetadata());
 

@@ -14,9 +14,14 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\OpenbankingPis;
 use UnzerSDK\test\BaseIntegrationTest;
+use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class OpenBankingTest extends BaseIntegrationTest
 {
+    public function setUp(): void
+    {
+        $this->getUnzerObject(TestEnvironmentService::getUnzerOneTestPrivateKey());
+    }
     /**
      * Verify OpenBanking payment type can be created and fetched.
      *

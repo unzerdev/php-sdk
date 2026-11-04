@@ -416,7 +416,9 @@ class Paypage extends AbstractUnzerResource
         $exposeArray = parent::expose();
         $expiresAtKey = 'expiresAt';
         if (isset($exposeArray[$expiresAtKey])) {
-            $exposeArray['expiresAt'] = $this->getExpiresAt()->format(DateTime::ATOM);
+            $exposeArray['expiresAt'] = (clone $this->getExpiresAt())
+                ->setTimezone(new \DateTimeZone('UTC'))
+                ->format('Y-m-d\TH:i:s.v\Z');
         }
         return $exposeArray;
     }

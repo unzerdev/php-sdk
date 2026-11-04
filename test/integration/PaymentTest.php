@@ -56,7 +56,7 @@ class PaymentTest extends BaseIntegrationTest
         $this->assertTrue($payment->isPending());
 
         /** @var Charge $charge */
-        $charge = $payment->charge();
+        $charge = $this->unzer->performChargeOnPayment($payment, new Charge());
         $paymentNew = $charge->getPayment();
 
         // verify payment has been updated properly
@@ -78,7 +78,7 @@ class PaymentTest extends BaseIntegrationTest
         $this->assertNotNull($payment->getAuthorization());
         $this->assertNotNull($payment->getAuthorization()->getId());
 
-        $charge = $payment->charge();
+        $charge = $this->unzer->performChargeOnPayment($payment, new Charge());
         $fetchedPayment = $this->unzer->fetchPayment($charge->getPayment()->getId());
         $this->assertNotNull($fetchedPayment->getCharges());
         $this->assertCount(1, $fetchedPayment->getCharges());
@@ -101,7 +101,7 @@ class PaymentTest extends BaseIntegrationTest
     {
         $authorization = $this->createCardAuthorization();
         $fetchedPayment = $this->unzer->fetchPayment($authorization->getPayment()->getId());
-        $charge = $fetchedPayment->charge(10.0);
+        $charge = $this->unzer->performChargeOnPayment($fetchedPayment, new Charge(10.0));
         $this->assertNotNull($charge);
         $this->assertEquals('s-chg-1', $charge->getId());
         $this->assertEquals('10.0', $charge->getAmount());
@@ -116,7 +116,7 @@ class PaymentTest extends BaseIntegrationTest
     {
         /** @var Paypal $paypal */
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $authorize = $this->unzer->authorize(100.0, 'EUR', $paypal, self::RETURN_URL);
+        $authorize = $this->unzer->performAuthorization(new Authorization(100.0, 'EUR', self::RETURN_URL), $paypal);
         $this->assertNotNull($authorize);
         $this->assertNotEmpty($authorize->getId());
     }
@@ -129,8 +129,11 @@ class PaymentTest extends BaseIntegrationTest
     public function paymentChargeOnAuthorizeShouldBePossibleUsingPaymentId(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://unzer.com', null, null, null, null, false);
-        $charge = $this->unzer->chargePayment($authorization->getPaymentId());
+        $authorization = $this->unzer->performAuthorization(
+            (new Authorization(100.00, 'EUR', 'http://unzer.com'))->setCard3ds(false),
+            $card
+        );
+        $charge = $this->unzer->performChargeOnPayment($authorization->getPaymentId(), new Charge());
 
         $this->assertNotEmpty($charge->getId());
     }
@@ -143,8 +146,16 @@ class PaymentTest extends BaseIntegrationTest
     public function paymentChargeOnAuthorizeShouldTakeResourceIds(): void
     {
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $authorization = $this->unzer->authorize(100.00, 'EUR', $card, 'http://unzer.com', null, null, null, null, false);
-        $charge = $this->unzer->chargePayment($authorization->getPaymentId(), null, 'o' . self::generateRandomId(), 'i' . self::generateRandomId());
+        $authorization = $this->unzer->performAuthorization(
+            (new Authorization(100.00, 'EUR', 'http://unzer.com'))->setCard3ds(false),
+            $card
+        );
+        $orderId = 'o' . self::generateRandomId();
+        $invoiceId = 'i' . self::generateRandomId();
+        $charge = $this->unzer->performChargeOnPayment(
+            $authorization->getPaymentId(),
+            (new Charge())->setOrderId($orderId)->setInvoiceId($invoiceId)
+        );
 
         $this->assertNotEmpty($charge->getId());
     }
@@ -158,7 +169,7 @@ class PaymentTest extends BaseIntegrationTest
     {
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_PAYMENT_NOT_FOUND);
-        $this->unzer->chargePayment('s-crd-xlj0qhdiw40k');
+        $this->unzer->performChargeOnPayment('s-crd-xlj0qhdiw40k', new Charge());
     }
 
     /**
@@ -170,7 +181,12 @@ class PaymentTest extends BaseIntegrationTest
     {
         $orderId = str_replace(' ', '', microtime());
         $paypal = $this->unzer->createPaymentType(new Paypal());
-        $authorization = $this->unzer->authorize(100.00, 'EUR', $paypal, 'https://unzer.com', null, $orderId, null, null, false);
+        $authorization = $this->unzer->performAuthorization(
+            (new Authorization(100.00, 'EUR', 'https://unzer.com'))
+                ->setOrderId($orderId)
+                ->setCard3ds(false),
+            $paypal
+        );
         $payment = $authorization->getPayment();
         $fetchedPayment = $this->unzer->fetchPaymentByOrderId($orderId);
 
@@ -189,12 +205,18 @@ class PaymentTest extends BaseIntegrationTest
 
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $card->charge(1023, 'EUR', self::RETURN_URL, null, $orderId);
+        $this->unzer->performCharge(
+            (new Charge(1023, 'EUR', self::RETURN_URL))->setOrderId($orderId),
+            $card
+        );
 
         try {
             /** @var Card $card2 */
             $card2 = $this->unzer->createPaymentType($this->createCardObject());
-            $card2->charge(1023, 'EUR', self::RETURN_URL, null, $orderId);
+            $this->unzer->performCharge(
+                (new Charge(1023, 'EUR', self::RETURN_URL))->setOrderId($orderId),
+                $card2
+            );
             $this->assertTrue(true);
         } catch (UnzerApiException $e) {
             $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");
@@ -212,12 +234,18 @@ class PaymentTest extends BaseIntegrationTest
 
         /** @var Card $card */
         $card = $this->unzer->createPaymentType($this->createCardObject());
-        $card->charge(1023, 'EUR', self::RETURN_URL, null, null, null, null, null, $invoiceId);
+        $this->unzer->performCharge(
+            (new Charge(1023, 'EUR', self::RETURN_URL))->setInvoiceId($invoiceId),
+            $card
+        );
 
         try {
             /** @var Card $card2 */
             $card2 = $this->unzer->createPaymentType($this->createCardObject());
-            $card2->charge(1023, 'EUR', self::RETURN_URL, null, null, null, null, null, $invoiceId);
+            $this->unzer->performCharge(
+                (new Charge(1023, 'EUR', self::RETURN_URL))->setInvoiceId($invoiceId),
+                $card2
+            );
             $this->assertTrue(true);
         } catch (UnzerApiException $e) {
             $this->assertTrue(false, "No exception expected here. ({$e->getMerchantMessage()})");

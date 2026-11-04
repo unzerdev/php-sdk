@@ -36,36 +36,58 @@ class CanAuthorizeTest extends BasePaymentTest
     }
 
     /**
-     * Verify authorize method propagates authorize method to Unzer object.
+     * Verify authorize method propagates to Unzer object.
      *
      * @test
+     * @dataProvider authorizeDataProvider
      */
-    public function authorizeShouldPropagateAuthorizeToUnzer(): void
-    {
-        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['authorize'])->disableOriginalConstructor()->getMock();
-        $dummyMock     = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
+    public function authorizeShouldPropagateAuthorizeToUnzer(
+        float $amount,
+        string $currency,
+        string $returnUrl,
+        ?object $customer,
+        ?string $orderId,
+        ?Metadata $metadata
+    ): void {
+        $unzerMock = $this->getMockBuilder(Unzer::class)
+            ->setMethods(['performAuthorization'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)
+            ->setMethods(['getUnzerObject'])
+            ->getMock();
 
-        $authorize = new Authorization();
-        $customer  = (new Customer())->setId('123');
-        $metadata  = new Metadata();
-        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($unzerMock);
-        $unzerMock->expects($this->exactly(4))->method('authorize')
-            ->withConsecutive(
-                [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],
-                [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
-                [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId'],
-                [1.4, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId', $metadata]
-            )->willReturn($authorize);
-
+        $expectedAuthorization = new Authorization();
+        $dummyMock->method('getUnzerObject')->willReturn($unzerMock);
+        $unzerMock->expects($this->once())
+            ->method('performAuthorization')
+            ->with(
+                $this->callback(static function (Authorization $a) use ($amount, $currency, $returnUrl, $orderId) {
+                    return $a->getAmount() === $amount
+                        && $a->getCurrency() === $currency
+                        && $a->getReturnUrl() === $returnUrl
+                        && $a->getOrderId() === $orderId;
+                }),
+                $dummyMock,
+                $customer,
+                $metadata
+            )
+            ->willReturn($expectedAuthorization);
 
         /** @var TraitDummyWithoutCustomerWithParentIF $dummyMock */
-        $returnedAuthorize = $dummyMock->authorize(1.1, 'MyCurrency', 'https://return.url');
-        $this->assertSame($authorize, $returnedAuthorize);
-        $returnedAuthorize = $dummyMock->authorize(1.2, 'MyCurrency2', 'https://return.url2', $customer);
-        $this->assertSame($authorize, $returnedAuthorize);
-        $returnedAuthorize = $dummyMock->authorize(1.3, 'MyCurrency3', 'https://return.url3', $customer, 'orderId');
-        $this->assertSame($authorize, $returnedAuthorize);
-        $returnedAuthorize = $dummyMock->authorize(1.4, 'MyCurrency3', 'https://return.url3', $customer, 'orderId', $metadata);
-        $this->assertSame($authorize, $returnedAuthorize);
+        $returnedAuthorize = $dummyMock->authorize($amount, $currency, $returnUrl, $customer, $orderId, $metadata);
+        $this->assertSame($expectedAuthorization, $returnedAuthorize);
+    }
+
+    public function authorizeDataProvider(): array
+    {
+        $customer = (new Customer())->setId('123');
+        $metadata = new Metadata();
+        return [
+            'no customer'                => [1.1, 'MyCurrency',  'https://return.url',  null,      null,      null],
+            'with customer'              => [1.2, 'MyCurrency2', 'https://return.url2', $customer, null,      null],
+            'with customer and orderId'  => [1.3, 'MyCurrency3', 'https://return.url3', $customer, 'orderId', null],
+            'with customer and metadata' => [1.4, 'MyCurrency3', 'https://return.url3', $customer, 'orderId', $metadata],
+        ];
     }
 }

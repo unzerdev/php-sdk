@@ -13,9 +13,7 @@ class Paypal extends BasePaymentType
 {
     use CanAuthorize;
     use CanDirectCharge;
-    use CanRecur {
-        activateRecurring as traitActivateRecurring;
-    }
+    use CanRecur;
 
     /** @var string|null $email */
     protected $email;
@@ -52,6 +50,6 @@ class Paypal extends BasePaymentType
      */
     public function activateRecurring($returnUrl, $recurrenceType = null): Recurring
     {
-        return $this->traitActivateRecurring($returnUrl, $recurrenceType);
+        return $this->getUnzerObject()->activateRecurringPayment($this, $returnUrl, $recurrenceType);
     }
 }

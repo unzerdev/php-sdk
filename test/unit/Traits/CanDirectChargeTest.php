@@ -39,33 +39,55 @@ class CanDirectChargeTest extends BasePaymentTest
      * Verify direct charge propagates to Unzer object.
      *
      * @test
+     * @dataProvider directChargeDataProvider
      */
-    public function directChargeShouldPropagateToUnzer(): void
-    {
-        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
-        $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
+    public function directChargeShouldPropagateToUnzer(
+        float $amount,
+        string $currency,
+        string $returnUrl,
+        ?object $customer,
+        ?string $orderId,
+        ?Metadata $metadata
+    ): void {
+        $unzerMock = $this->getMockBuilder(Unzer::class)
+            ->setMethods(['performCharge'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dummyMock = $this->getMockBuilder(TraitDummyWithoutCustomerWithParentIF::class)
+            ->setMethods(['getUnzerObject'])
+            ->getMock();
 
-        $charge = new Charge();
-        $metadata  = new Metadata();
-        $customer = (new Customer())->setId('123');
-        $dummyMock->expects($this->exactly(4))->method('getUnzerObject')->willReturn($unzerMock);
-        $unzerMock->expects($this->exactly(4))->method('charge')
-            ->withConsecutive(
-                [1.1, 'MyCurrency', $dummyMock, 'https://return.url', null, null],
-                [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
-                [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId'],
-                [1.4, 'MyCurrency4', $dummyMock, 'https://return.url4', $customer, 'orderId', $metadata]
-            )->willReturn($charge);
-
+        $expectedCharge = new Charge();
+        $dummyMock->method('getUnzerObject')->willReturn($unzerMock);
+        $unzerMock->expects($this->once())
+            ->method('performCharge')
+            ->with(
+                $this->callback(static function (Charge $c) use ($amount, $currency, $returnUrl, $orderId) {
+                    return $c->getAmount() === $amount
+                        && $c->getCurrency() === $currency
+                        && $c->getReturnUrl() === $returnUrl
+                        && $c->getOrderId() === $orderId;
+                }),
+                $dummyMock,
+                $customer,
+                $metadata
+            )
+            ->willReturn($expectedCharge);
 
         /** @var TraitDummyWithoutCustomerWithParentIF $dummyMock */
-        $returnedCharge = $dummyMock->charge(1.1, 'MyCurrency', 'https://return.url');
-        $this->assertSame($charge, $returnedCharge);
-        $returnedCharge = $dummyMock->charge(1.2, 'MyCurrency2', 'https://return.url2', $customer);
-        $this->assertSame($charge, $returnedCharge);
-        $returnedCharge = $dummyMock->charge(1.3, 'MyCurrency3', 'https://return.url3', $customer, 'orderId');
-        $this->assertSame($charge, $returnedCharge);
-        $returnedCharge = $dummyMock->charge(1.4, 'MyCurrency4', 'https://return.url4', $customer, 'orderId', $metadata);
-        $this->assertSame($charge, $returnedCharge);
+        $returnedCharge = $dummyMock->charge($amount, $currency, $returnUrl, $customer, $orderId, $metadata);
+        $this->assertSame($expectedCharge, $returnedCharge);
+    }
+
+    public function directChargeDataProvider(): array
+    {
+        $customer = (new Customer())->setId('123');
+        $metadata = new Metadata();
+        return [
+            'no customer'                  => [1.1, 'MyCurrency',  'https://return.url',  null,      null,      null],
+            'with customer'                => [1.2, 'MyCurrency2', 'https://return.url2', $customer, null,      null],
+            'with customer and orderId'    => [1.3, 'MyCurrency3', 'https://return.url3', $customer, 'orderId', null],
+            'with customer and metadata'   => [1.4, 'MyCurrency4', 'https://return.url4', $customer, 'orderId', $metadata],
+        ];
     }
 }

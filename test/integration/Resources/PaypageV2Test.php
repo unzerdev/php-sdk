@@ -67,6 +67,8 @@ class PaypageV2Test extends BaseIntegrationTest
 
         $this->assertCreatedPaypage($paypage);
 
+        $this->assertNotNull($paypage->getResources()->getMetadataId());
+
         $this->assertNull($paypage->getType());
         $this->assertNull($paypage->getRecurrenceType());
         $this->assertNull($paypage->getShopName());

@@ -11,12 +11,10 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
-use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
-use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\TransactionTypes\Authorization;
@@ -114,43 +112,6 @@ class PaymentService implements PaymentServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function authorize(
-        $amount,
-        $currency,
-        $paymentType,
-        $returnUrl,
-        $customer = null,
-        $orderId = null,
-        $metadata = null,
-        $basket = null,
-        $card3ds = null,
-        $invoiceId = null,
-        $referenceText = null,
-        $recurrenceType = null
-    ): Authorization {
-        $payment = $this->createPayment($paymentType);
-        $paymentType = $payment->getPaymentType();
-
-        /** @var Authorization $authorization */
-        $authorization = (new Authorization($amount, $currency, $returnUrl))
-            ->setOrderId($orderId)
-            ->setInvoiceId($invoiceId)
-            ->setPaymentReference($referenceText);
-        if ($card3ds !== null) {
-            $authorization->setCard3ds($card3ds);
-        }
-        $payment->setAuthorization($authorization)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
-
-        if ($recurrenceType !== null) {
-            $authorization->setRecurrenceType($recurrenceType);
-        }
-        $this->performAuthorization($authorization, $paymentType, $customer, $metadata, $basket);
-        return $authorization;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function performCharge(Charge $charge, $paymentType, $customer = null, ?Metadata $metadata = null, ?Basket $basket = null): Charge
     {
         $payment     = $this->createPayment($paymentType);
@@ -177,76 +138,6 @@ class PaymentService implements PaymentServiceInterface
         $charge->setPayment($paymentResource);
         $this->getResourceService()->patchResource($charge);
         return $charge;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function charge(
-        $amount,
-        $currency,
-        $paymentType,
-        $returnUrl,
-        $customer = null,
-        $orderId = null,
-        $metadata = null,
-        $basket = null,
-        $card3ds = null,
-        $invoiceId = null,
-        $paymentReference = null,
-        $recurrenceType = null
-    ): Charge {
-        $payment     = $this->createPayment($paymentType);
-        $paymentType = $payment->getPaymentType();
-
-        /** @var Charge $charge */
-        $charge = (new Charge($amount, $currency, $returnUrl))
-            ->setOrderId($orderId)
-            ->setInvoiceId($invoiceId)
-            ->setPaymentReference($paymentReference);
-        if ($card3ds !== null) {
-            $charge->setCard3ds($card3ds);
-        }
-        $payment->addCharge($charge)->setCustomer($customer)->setMetadata($metadata)->setBasket($basket);
-
-        if ($recurrenceType !== null) {
-            $charge->setRecurrenceType($recurrenceType);
-        }
-
-        return $this->performCharge($charge, $paymentType, $customer, $metadata, $basket);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function chargeAuthorization(
-        $payment,
-        ?float $amount = null,
-        ?string $orderId = null,
-        ?string $invoiceId = null
-    ): Charge {
-        return $this->chargePayment($payment, $amount, $orderId, $invoiceId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function chargePayment(
-        $payment,
-        ?float $amount = null,
-        ?string $orderId = null,
-        ?string $invoiceId = null
-    ): Charge {
-        $charge = new Charge($amount);
-
-        if ($orderId !== null) {
-            $charge->setOrderId($orderId);
-        }
-        if ($invoiceId !== null) {
-            $charge->setInvoiceId($invoiceId);
-        }
-
-        return $this->performChargeOnPayment($payment, $charge);
     }
 
     /**
@@ -321,22 +212,6 @@ class PaymentService implements PaymentServiceInterface
         ?Metadata $metadata = null
     ): Paypage {
         return $this->initPayPage($paypage, TransactionTypes::AUTHORIZATION, $customer, $basket, $metadata);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchInstallmentPlans(
-        float    $amount,
-        string   $currency,
-        float    $effectiveInterest,
-        ?DateTime $orderDate = null
-    ): InstalmentPlans {
-        $ins   = (new InstallmentSecured(null, null, null))->setParentResource($this->unzer);
-        $plans = (new InstalmentPlans($amount, $currency, $effectiveInterest, $orderDate))->setParentResource($ins);
-        /** @var InstalmentPlans $plans */
-        $plans = $this->unzer->getResourceService()->fetchResource($plans);
-        return $plans;
     }
 
     /**

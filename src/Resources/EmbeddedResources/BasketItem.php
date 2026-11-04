@@ -3,189 +3,235 @@
 namespace UnzerSDK\Resources\EmbeddedResources;
 
 use UnzerSDK\Resources\AbstractUnzerResource;
-use UnzerSDK\Resources\V2\BasketItemProperties as BasketV2ItemProperties;
 
 /**
- * This trait adds amount properties to a class.
+ * This represents an item of a basket.
  *
  * @link  https://docs.unzer.com/
  *
  */
 class BasketItem extends AbstractUnzerResource
 {
-    use BasketV2ItemProperties;
+    /** @var string $basketItemReferenceId */
+    protected $basketItemReferenceId;
+
+    /** @var int $quantity */
+    protected $quantity = 1;
+
+    /** @var float $vat */
+    protected $vat = 0.0;
+
+    /** @var float $amountDiscountPerUnitGross */
+    protected $amountDiscountPerUnitGross = 0.0;
+
+    /** @var float $amountPerUnitGross */
+    protected $amountPerUnitGross = 0.0;
+
+    /** @var string $unit */
+    protected $unit;
+
+    /** @var string $title */
+    protected $title = '';
+
+    /** @var string|null $subTitle */
+    protected $subTitle;
+
+    /** @var string|null $imageUrl */
+    protected $imageUrl;
+
+    /** @var string|null $type */
+    protected $type;
 
     /**
-     * @var float $amountDiscount
-     *
-     * @deprecated since 1.1.5.0 @see $amountDiscountPerUnitGross.
+     * @return string|null
      */
-    protected $amountDiscount = 0.0;
+    public function getBasketItemReferenceId(): ?string
+    {
+        return $this->basketItemReferenceId;
+    }
 
     /**
-     * @var float $amountGross
+     * @param string|null $basketItemReferenceId
      *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
+     * @return BasketItem
      */
-    protected $amountGross = 0.0;
+    public function setBasketItemReferenceId(?string $basketItemReferenceId): BasketItem
+    {
+        $this->basketItemReferenceId = $basketItemReferenceId;
+        return $this;
+    }
 
     /**
-     * @var float $amountVat
-     *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
+     * @return int
      */
-    protected $amountVat = 0.0;
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
 
     /**
-     * @var float $amountPerUnit
-     *
-     * @deprecated since 1.1.5.0 @see amountPerUnitGross
-     */
-    protected $amountPerUnit = 0.0;
-
-    /**
-     * @var float $amountNet
-     *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     */
-    protected $amountNet = 0.0;
-
-    /**
-     * BasketItem constructor.
-     *
-     * @param string $title
-     * @param float $amountNet
-     * @param float $amountPerUnit
      * @param int $quantity
-     * @deprecated since 1.1.5.0 Please call constructor without parameters and use setter functions instead.
      *
+     * @return BasketItem
      */
-    public function __construct(
-        string $title = '',
-        float $amountNet = 0.0,
-        float $amountPerUnit = 0.0,
-        int   $quantity = 1
-    )
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVat(): float
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @param float $vat
+     *
+     * @return BasketItem
+     */
+    public function setVat(float $vat): BasketItem
+    {
+        $this->vat = $vat;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmountDiscountPerUnitGross(): float
+    {
+        return $this->amountDiscountPerUnitGross;
+    }
+
+    /**
+     * @param float $amountDiscountPerUnitGross
+     *
+     * @return BasketItem
+     */
+    public function setAmountDiscountPerUnitGross(float $amountDiscountPerUnitGross): BasketItem
+    {
+        $this->amountDiscountPerUnitGross = $amountDiscountPerUnitGross;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmountPerUnitGross(): float
+    {
+        return $this->amountPerUnitGross;
+    }
+
+    /**
+     * @param float $amountPerUnitGross
+     *
+     * @return BasketItem
+     */
+    public function setAmountPerUnitGross(float $amountPerUnitGross): BasketItem
+    {
+        $this->amountPerUnitGross = $amountPerUnitGross;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUnit(): ?string
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param string|null $unit
+     *
+     * @return BasketItem
+     */
+    public function setUnit(?string $unit): self
+    {
+        $this->unit = $unit;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return BasketItem
+     */
+    public function setTitle(string $title): self
     {
         $this->title = $title;
-        $this->quantity = $quantity;
-        $this->setAmountNet($amountNet);
-        $this->setAmountPerUnit($amountPerUnit);
-    }
-
-    /**
-     * @return float
-     *
-     * @deprecated since 1.1.5.0  @see $getAmountDiscountPerUnitGross.
-     */
-    public function getAmountDiscount(): float
-    {
-        return $this->amountDiscount;
-    }
-
-    /**
-     * @param float $amountDiscount
-     *
-     * @return BasketItem
-     * @deprecated since 1.1.5.0  @see $setAmountDiscountPerUnitGross.
-     *
-     */
-    public function setAmountDiscount(float $amountDiscount): BasketItem
-    {
-        $this->amountDiscount = $amountDiscount;
         return $this;
     }
 
     /**
-     * @return float
-     *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
+     * @return string|null
      */
-    public function getAmountGross(): float
+    public function getImageUrl(): ?string
     {
-        return $this->amountGross;
+        return $this->imageUrl;
     }
 
     /**
-     * @param float $amountGross
+     * @param string|null $imageUrl
      *
      * @return BasketItem
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     *
      */
-    public function setAmountGross(float $amountGross): BasketItem
+    public function setImageUrl(?string $imageUrl): self
     {
-        $this->amountGross = $amountGross;
-        return $this;
-    }
-
-
-    /**
-     * @return float
-     *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     */
-    public function getAmountVat(): float
-    {
-        return $this->amountVat;
-    }
-
-    /**
-     * @param float $amountVat
-     *
-     * @return BasketItem
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     *
-     */
-    public function setAmountVat(float $amountVat): BasketItem
-    {
-        $this->amountVat = $amountVat;
+        $this->imageUrl = $imageUrl;
         return $this;
     }
 
     /**
-     * @return float
-     *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
+     * @return string|null
      */
-    public function getAmountPerUnit(): float
+    public function getSubTitle(): ?string
     {
-        return $this->amountPerUnit;
+        return $this->subTitle;
     }
 
     /**
-     * @param float $amountPerUnit
+     * @param string|null $subTitle
      *
      * @return BasketItem
-     * @deprecated since 1.1.5.0 @see setAmountPerUnitGross
-     *
      */
-    public function setAmountPerUnit(float $amountPerUnit): BasketItem
+    public function setSubTitle(?string $subTitle): self
     {
-        $this->amountPerUnit = $amountPerUnit;
+        $this->subTitle = $subTitle;
         return $this;
     }
 
     /**
-     * @return float
-     *
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
+     * @return string|null
      */
-    public function getAmountNet(): float
+    public function getType(): ?string
     {
-        return $this->amountNet;
+        return $this->type;
     }
 
     /**
-     * @param float $amountNet
+     * The type of the basket item.
+     * Please refer to UnzerSDK\Constants\BasketItemTypes for available type constants.
+     *
+     * @param string|null $type
      *
      * @return BasketItem
-     * @deprecated since 1.1.5.0 Property is redundant and is no longer needed.
-     *
      */
-    public function setAmountNet(float $amountNet): BasketItem
+    public function setType(?string $type): BasketItem
     {
-        $this->amountNet = $amountNet;
+        $this->type = $type;
         return $this;
     }
 }

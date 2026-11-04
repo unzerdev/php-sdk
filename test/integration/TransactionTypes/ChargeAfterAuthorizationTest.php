@@ -11,6 +11,7 @@
 
 namespace UnzerSDK\test\integration\TransactionTypes;
 
+use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class ChargeAfterAuthorizationTest extends BaseIntegrationTest
@@ -47,7 +48,7 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->unzer->chargeAuthorization($payment->getId());
+        $charge = $this->unzer->performChargeOnPayment($payment->getId(), new Charge());
         $this->unzer->fetchPayment($payment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
@@ -67,7 +68,7 @@ class ChargeAfterAuthorizationTest extends BaseIntegrationTest
         $this->assertAmounts($payment, 100, 0, 100, 0);
         $this->assertTrue($payment->isPending());
 
-        $charge = $this->unzer->chargeAuthorization($payment->getId(), 10);
+        $charge = $this->unzer->performChargeOnPayment($payment->getId(), new Charge(10));
         $this->unzer->fetchPayment($payment);
         $this->assertNotNull($charge);
         $this->assertNotNull($charge->getId());
