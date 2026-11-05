@@ -61,6 +61,24 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify sepa direct debit can be registered for recurring collection.
+     *
+     * @test
+     */
+    public function sepaDirectDebitShouldBeCreatableWithRecurringFlag(): void
+    {
+        $sdd = (new SepaDirectDebit('DE89370400440532013000'))->setRecurring(true);
+        /** @var SepaDirectDebit $sdd */
+        $sdd = $this->unzer->createPaymentType($sdd);
+        $this->assertInstanceOf(SepaDirectDebit::class, $sdd);
+        $this->assertNotNull($sdd->getId());
+
+        /** @var SepaDirectDebit $fetchedDirectDebit */
+        $fetchedDirectDebit = $this->unzer->fetchPaymentType($sdd->getId());
+        $this->assertTrue($fetchedDirectDebit->isRecurring());
+    }
+
+    /**
      * Verify authorization is not allowed for sepa direct debit.
      *
      * @test
