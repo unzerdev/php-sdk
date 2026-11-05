@@ -7,6 +7,10 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [4.1.0](https://github.com/unzerdev/php-sdk/compare/4.0.2..4.1.0)
 
+### Added
+
+* `recurring` flag on `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit` for registering a payment type for recurring (mandate-based) collection.
+
 ### Removed
 
 * Support for PHP 8.1. The minimum supported PHP version is now 8.2 (`composer.json` requires `~8.2.0|~8.3.0|~8.4.0|~8.5.0`). PHP 8.1 is end of life and has no official fix for the PHP2Shell vulnerabilities (CVE-2026-109618, CVE-2026-109619).
