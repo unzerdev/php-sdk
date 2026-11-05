@@ -27,6 +27,9 @@ class SepaDirectDebit extends BasePaymentType
     /** @var string $holder */
     protected $holder;
 
+    /** @var bool|null $recurring */
+    protected ?bool $recurring = null;
+
     /**
      * @param string|null $iban
      */
@@ -89,6 +92,19 @@ class SepaDirectDebit extends BasePaymentType
     public function setHolder(?string $holder): self
     {
         $this->holder = $holder;
+        return $this;
+    }
+
+    /**
+     * Registers the payment type for recurring (mandate-based) collection.
+     *
+     * @param bool $recurring
+     *
+     * @return $this
+     */
+    public function setRecurring(bool $recurring): self
+    {
+        $this->recurring = $recurring;
         return $this;
     }
 }

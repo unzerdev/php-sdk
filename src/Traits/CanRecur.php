@@ -15,8 +15,8 @@ use RuntimeException;
 
 trait CanRecur
 {
-    /** @var bool $recurring */
-    private $recurring = false;
+    /** @var bool|null $recurring */
+    protected ?bool $recurring = null;
 
     /**
      * Activates recurring payment for the payment type.
@@ -46,7 +46,7 @@ trait CanRecur
      */
     public function isRecurring(): bool
     {
-        return $this->recurring;
+        return $this->recurring ?? false;
     }
 
     /**
