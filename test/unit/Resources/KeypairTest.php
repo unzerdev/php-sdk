@@ -94,7 +94,7 @@ class KeypairTest extends BasePaymentTest
         $keypair->handleResponse($testResponse);
 
         // then
-        $this->assertArrayContains($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
         $this->assertEquals('s-pub-1234', $keypair->getPublicKey());
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
         $this->assertTrue($keypair->isCof());
@@ -204,5 +204,30 @@ class KeypairTest extends BasePaymentTest
         // privateKey (private) and detailed (private) must never be exposed
         $this->assertArrayNotHasKey('privateKey', $exposed);
         $this->assertArrayNotHasKey('detailed', $exposed);
+    }
+
+    /**
+     * Verify the plain keypair response (string payment types) is not duplicated,
+     * stays idempotent across repeated handling, and exposes the de-duplicated list.
+     *
+     * @test
+     */
+    public function plainKeypairPaymentTypesAreNotDuplicated(): void
+    {
+        $keypair = new Keypair();
+        $paymentTypes = ['card', 'paypal', 'ideal', 'sofort'];
+        $response = (object)['publicKey' => 's-pub-1234', 'availablePaymentTypes' => $paymentTypes];
+
+        $keypair->handleResponse($response);
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertSame($paymentTypes, $keypair->getAvailablePaymentTypes());
+
+        // Handling the same response again must not add further entries.
+        $keypair->handleResponse($response);
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
+
+        // expose() and jsonSerialize() must return the same, de-duplicated list.
+        $this->assertSame($paymentTypes, $keypair->expose()['paymentTypes']);
+        $this->assertSame($paymentTypes, json_decode($keypair->jsonSerialize(), true)['paymentTypes']);
     }
 }

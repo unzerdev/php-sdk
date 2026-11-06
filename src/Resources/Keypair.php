@@ -280,15 +280,12 @@ class Keypair extends AbstractUnzerResource
     {
         parent::handleResponse($response, $method);
 
-        $paymentTypes = [];
+        // Replace rather than append: for the plain endpoint updateValues() already fills the
+        // list from the availablePaymentTypes string array, so appending here duplicates every entry.
         if (isset($response->paymentTypes)) {
-            $paymentTypes = $response->paymentTypes;
+            $this->paymentTypes = array_values($response->paymentTypes);
         } elseif (isset($response->availablePaymentTypes)) {
-            $paymentTypes = $response->availablePaymentTypes;
-        }
-
-        foreach ($paymentTypes as $paymentType) {
-            $this->paymentTypes[] = $paymentType;
+            $this->paymentTypes = array_values($response->availablePaymentTypes);
         }
     }
 
