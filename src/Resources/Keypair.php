@@ -288,14 +288,27 @@ class Keypair extends AbstractUnzerResource
             $this->paymentTypes = array_values($response->availablePaymentTypes);
         }
 
-        // The API may send booleans as strings ("true"/"false"); without this the non-strict
-        // setters coerce any non-empty string (including "false") to true.
+        // Booleans may arrive as native values or as strings ("true"/"false"); normalise both.
         if (isset($response->validateBasket)) {
-            $this->validateBasket = filter_var($response->validateBasket, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $this->validateBasket = $this->normalizeBoolean($response->validateBasket);
         }
         if (isset($response->cof)) {
-            $this->cof = filter_var($response->cof, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $this->cof = $this->normalizeBoolean($response->cof);
         }
+    }
+
+    /**
+     * Converts a value the API may send as a native boolean or as a boolean-like
+     * string ("true"/"false") into a real bool, returning null if it is neither.
+     * Prevents the non-strict setters from coercing the string "false" to true.
+     *
+     * @param mixed $value
+     *
+     * @return bool|null
+     */
+    private function normalizeBoolean($value): ?bool
+    {
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
     /**
