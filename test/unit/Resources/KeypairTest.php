@@ -205,4 +205,57 @@ class KeypairTest extends BasePaymentTest
         $this->assertArrayNotHasKey('privateKey', $exposed);
         $this->assertArrayNotHasKey('detailed', $exposed);
     }
+
+    /**
+     * Verify boolean flags are parsed correctly whether the API sends them as native
+     * booleans or as strings, and that expose() keeps them native booleans.
+     *
+     * @test
+     *
+     * @dataProvider wireBooleanDP
+     *
+     * @param mixed $wireValue
+     * @param bool  $expected
+     */
+    public function booleanFlagsAreParsedRegardlessOfWireType($wireValue, bool $expected): void
+    {
+        $keypair = new Keypair();
+        $keypair->handleResponse((object)[
+            'publicKey'      => 's-pub-stub',
+            'validateBasket' => $wireValue,
+            'cof'            => $wireValue,
+        ]);
+
+        $this->assertSame($expected, $keypair->isValidateBasket());
+        $this->assertSame($expected, $keypair->isCof());
+        $this->assertSame($expected, $keypair->expose()['validateBasket']);
+        $this->assertSame($expected, $keypair->expose()['cof']);
+    }
+
+    /**
+     * @return array
+     */
+    public function wireBooleanDP(): array
+    {
+        return [
+            'string "true"'  => ['true', true],
+            'string "false"' => ['false', false],
+            'native true'    => [true, true],
+            'native false'   => [false, false],
+        ];
+    }
+
+    /**
+     * Verify a missing boolean flag leaves the value null.
+     *
+     * @test
+     */
+    public function missingBooleanFlagsStayNull(): void
+    {
+        $keypair = new Keypair();
+        $keypair->handleResponse((object)['publicKey' => 's-pub-stub']);
+
+        $this->assertNull($keypair->isValidateBasket());
+        $this->assertNull($keypair->isCof());
+    }
 }

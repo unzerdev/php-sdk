@@ -290,6 +290,28 @@ class Keypair extends AbstractUnzerResource
         foreach ($paymentTypes as $paymentType) {
             $this->paymentTypes[] = $paymentType;
         }
+
+        // Booleans may arrive as native values or as strings ("true"/"false"); normalise both.
+        if (isset($response->validateBasket)) {
+            $this->validateBasket = $this->normalizeBoolean($response->validateBasket);
+        }
+        if (isset($response->cof)) {
+            $this->cof = $this->normalizeBoolean($response->cof);
+        }
+    }
+
+    /**
+     * Converts a value the API may send as a native boolean or as a boolean-like
+     * string ("true"/"false") into a real bool, returning null if it is neither.
+     * Prevents the non-strict setters from coercing the string "false" to true.
+     *
+     * @param mixed $value
+     *
+     * @return bool|null
+     */
+    private function normalizeBoolean($value): ?bool
+    {
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
     /**
