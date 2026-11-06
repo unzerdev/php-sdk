@@ -94,7 +94,7 @@ class KeypairTest extends BasePaymentTest
         $keypair->handleResponse($testResponse);
 
         // then
-        $this->assertArrayContains($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
         $this->assertEquals('s-pub-1234', $keypair->getPublicKey());
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
         $this->assertTrue($keypair->isCof());
@@ -204,5 +204,83 @@ class KeypairTest extends BasePaymentTest
         // privateKey (private) and detailed (private) must never be exposed
         $this->assertArrayNotHasKey('privateKey', $exposed);
         $this->assertArrayNotHasKey('detailed', $exposed);
+    }
+
+    /**
+     * Verify the plain keypair response (string payment types) is not duplicated,
+     * stays idempotent across repeated handling, and exposes the de-duplicated list.
+     *
+     * @test
+     */
+    public function plainKeypairPaymentTypesAreNotDuplicated(): void
+    {
+        $keypair = new Keypair();
+        $paymentTypes = ['card', 'paypal', 'ideal', 'sofort'];
+        $response = (object)['publicKey' => 's-pub-1234', 'availablePaymentTypes' => $paymentTypes];
+
+        $keypair->handleResponse($response);
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertSame($paymentTypes, $keypair->getAvailablePaymentTypes());
+
+        // Handling the same response again must not add further entries.
+        $keypair->handleResponse($response);
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
+
+        // expose() and jsonSerialize() must return the same, de-duplicated list.
+        $this->assertSame($paymentTypes, $keypair->expose()['paymentTypes']);
+        $this->assertSame($paymentTypes, json_decode($keypair->jsonSerialize(), true)['paymentTypes']);
+    }
+
+    /**
+     * Verify boolean flags are parsed correctly whether the API sends them as native
+     * booleans or as strings, and that expose() keeps them native booleans.
+     *
+     * @test
+     *
+     * @dataProvider wireBooleanDP
+     *
+     * @param mixed $wireValue
+     * @param bool  $expected
+     */
+    public function booleanFlagsAreParsedRegardlessOfWireType($wireValue, bool $expected): void
+    {
+        $keypair = new Keypair();
+        $keypair->handleResponse((object)[
+            'publicKey'      => 's-pub-stub',
+            'validateBasket' => $wireValue,
+            'cof'            => $wireValue,
+        ]);
+
+        $this->assertSame($expected, $keypair->isValidateBasket());
+        $this->assertSame($expected, $keypair->isCof());
+        $this->assertSame($expected, $keypair->expose()['validateBasket']);
+        $this->assertSame($expected, $keypair->expose()['cof']);
+    }
+
+    /**
+     * @return array
+     */
+    public function wireBooleanDP(): array
+    {
+        return [
+            'string "true"'  => ['true', true],
+            'string "false"' => ['false', false],
+            'native true'    => [true, true],
+            'native false'   => [false, false],
+        ];
+    }
+
+    /**
+     * Verify a missing boolean flag leaves the value null.
+     *
+     * @test
+     */
+    public function missingBooleanFlagsStayNull(): void
+    {
+        $keypair = new Keypair();
+        $keypair->handleResponse((object)['publicKey' => 's-pub-stub']);
+
+        $this->assertNull($keypair->isValidateBasket());
+        $this->assertNull($keypair->isCof());
     }
 }

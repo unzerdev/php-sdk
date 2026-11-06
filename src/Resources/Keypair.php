@@ -280,15 +280,21 @@ class Keypair extends AbstractUnzerResource
     {
         parent::handleResponse($response, $method);
 
-        $paymentTypes = [];
+        // Replace rather than append: for the plain endpoint updateValues() already fills the
+        // list from the availablePaymentTypes string array, so appending here duplicates every entry.
         if (isset($response->paymentTypes)) {
-            $paymentTypes = $response->paymentTypes;
+            $this->paymentTypes = array_values($response->paymentTypes);
         } elseif (isset($response->availablePaymentTypes)) {
-            $paymentTypes = $response->availablePaymentTypes;
+            $this->paymentTypes = array_values($response->availablePaymentTypes);
         }
 
-        foreach ($paymentTypes as $paymentType) {
-            $this->paymentTypes[] = $paymentType;
+        // The API may send booleans as strings ("true"/"false"); without this the non-strict
+        // setters coerce any non-empty string (including "false") to true.
+        if (isset($response->validateBasket)) {
+            $this->validateBasket = filter_var($response->validateBasket, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        }
+        if (isset($response->cof)) {
+            $this->cof = filter_var($response->cof, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
     }
 
