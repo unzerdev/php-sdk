@@ -27,9 +27,6 @@ class SepaDirectDebit extends BasePaymentType
     /** @var string $holder */
     protected $holder;
 
-    /** @var bool|null $recurring */
-    protected ?bool $recurring = null;
-
     /**
      * @param string|null $iban
      */
@@ -106,5 +103,27 @@ class SepaDirectDebit extends BasePaymentType
     {
         $this->recurring = $recurring;
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Adds the `recurring` flag to the request body. Unlike the other CanRecur consumers (where it stays a
+     * read-only response flag), sepa-direct-debit accepts `recurring` on type registration, so it is exposed
+     * here — but only once it has a value, keeping a fresh, never-set instance byte-for-byte as before.
+     */
+    public function expose()
+    {
+        $exposeArray = parent::expose();
+
+        if ($this->recurring !== null) {
+            if (!is_array($exposeArray)) {
+                $exposeArray = [];
+            }
+            $exposeArray['recurring'] = $this->recurring;
+            ksort($exposeArray);
+        }
+
+        return $exposeArray;
     }
 }

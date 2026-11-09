@@ -15,8 +15,14 @@ use RuntimeException;
 
 trait CanRecur
 {
-    /** @var bool|null $recurring */
-    protected ?bool $recurring = null;
+    /**
+     * @var bool|null $recurring
+     *
+     * Kept private so it is never serialized into a request for the trait's consumers: for every
+     * payment type except SepaDirectDebit this is a read-only flag returned by the API. SepaDirectDebit
+     * exposes it as a request field itself via its own expose() override.
+     */
+    private ?bool $recurring = null;
 
     /**
      * Activates recurring payment for the payment type.

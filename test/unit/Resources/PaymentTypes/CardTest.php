@@ -75,6 +75,24 @@ class CardTest extends BasePaymentTest
     }
 
     /**
+     * A `recurring` flag returned by the API is response-only for Card and must never be sent back in a
+     * follow-up request (e.g. a fetch-then-update flow). Regression guard for the CanRecur trait: its
+     * `$recurring` property stays private so it is not serialized for trait consumers other than
+     * SepaDirectDebit.
+     *
+     * @test
+     */
+    public function recurringFlagMappedFromResponseIsNeverExposed(): void
+    {
+        $response = new stdClass();
+        $response->recurring = true;
+        $this->card->handleResponse($response);
+
+        $this->assertTrue($this->card->isRecurring());
+        $this->assertArrayNotHasKey('recurring', $this->card->expose());
+    }
+
+    /**
      * Verify the resource data is set properly.
      *
      * @test
