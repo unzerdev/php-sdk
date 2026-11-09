@@ -8,15 +8,14 @@
 
 namespace UnzerSDK\Resources\PaymentTypes;
 
+use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Traits\CanDirectCharge;
 use UnzerSDK\Traits\CanPayout;
-use UnzerSDK\Traits\CanRecur;
 
 class SepaDirectDebit extends BasePaymentType
 {
     use CanDirectCharge;
     use CanPayout;
-    use CanRecur;
 
     /** @var string $iban */
     protected $iban;
@@ -26,6 +25,9 @@ class SepaDirectDebit extends BasePaymentType
 
     /** @var string $holder */
     protected $holder;
+
+    /** @var bool|null $recurring Mandate-based recurring flag, accepted on type registration. */
+    protected ?bool $recurring = null;
 
     /**
      * @param string|null $iban
@@ -93,7 +95,17 @@ class SepaDirectDebit extends BasePaymentType
     }
 
     /**
-     * Registers the payment type for recurring (mandate-based) collection.
+     * @return bool Whether the payment type is registered for recurring (mandate-based) collection.
+     */
+    public function isRecurring(): bool
+    {
+        return $this->recurring ?? false;
+    }
+
+    /**
+     * Registers the payment type for recurring (mandate-based) collection. Set this before creating the type;
+     * it is sent in the `POST /v1/types/sepa-direct-debit` request body. A fresh instance that never sets it
+     * leaves the flag out of the request entirely.
      *
      * @param bool $recurring
      *
@@ -106,24 +118,21 @@ class SepaDirectDebit extends BasePaymentType
     }
 
     /**
-     * {@inheritDoc}
+     * Activates recurring payment for the payment type.
      *
-     * Adds the `recurring` flag to the request body. Unlike the other CanRecur consumers (where it stays a
-     * read-only response flag), sepa-direct-debit accepts `recurring` on type registration, so it is exposed
-     * here — but only once it has a value, keeping a fresh, never-set instance byte-for-byte as before.
+     * @param string     $returnUrl      The URL to which the customer gets redirected in case of a 3ds transaction.
+     * @param null|mixed $recurrenceType Recurrence type used for recurring payment.
+     *
+     * @return Recurring
+     *
+     * @throws \UnzerSDK\Exceptions\UnzerApiException An UnzerApiException is thrown if there is an error returned
+     *                                                on API-request.
+     *
+     * @deprecated since 1.3.0.0 Please set the recurrence type in your Charge/Authorize object using
+     *             `setRecurrenceType` before performing the transaction request.
      */
-    public function expose()
+    public function activateRecurring($returnUrl, $recurrenceType = null): Recurring
     {
-        $exposeArray = parent::expose();
-
-        if ($this->recurring !== null) {
-            if (!is_array($exposeArray)) {
-                $exposeArray = [];
-            }
-            $exposeArray['recurring'] = $this->recurring;
-            ksort($exposeArray);
-        }
-
-        return $exposeArray;
+        return $this->getUnzerObject()->activateRecurringPayment($this, $returnUrl, $recurrenceType);
     }
 }
