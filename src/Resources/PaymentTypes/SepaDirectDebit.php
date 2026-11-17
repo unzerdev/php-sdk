@@ -16,7 +16,10 @@ class SepaDirectDebit extends BasePaymentType
 {
     use CanDirectCharge;
     use CanPayout;
-    use CanRecur;
+    // Widen CanRecur::setRecurring() to public so it can be set before type registration.
+    use CanRecur {
+        setRecurring as public;
+    }
 
     /** @var string $iban */
     protected $iban;
@@ -89,23 +92,6 @@ class SepaDirectDebit extends BasePaymentType
     public function setHolder(?string $holder): self
     {
         $this->holder = $holder;
-        return $this;
-    }
-
-    /**
-     * Registers the payment type for recurring (mandate-based) collection. Sent in the
-     * `POST /v1/types/sepa-direct-debit` request body; defaults to false and is always included.
-     *
-     * Widens CanRecur::setRecurring() to public (the trait's own setter is protected) and writes the
-     * trait's $recurring property so isRecurring() reflects it.
-     *
-     * @param bool $recurring
-     *
-     * @return $this
-     */
-    public function setRecurring(bool $recurring): self
-    {
-        $this->recurring = $recurring;
         return $this;
     }
 
