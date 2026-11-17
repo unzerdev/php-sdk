@@ -16,7 +16,6 @@ class SepaDirectDebit extends BasePaymentType
 {
     use CanDirectCharge;
     use CanPayout;
-    // Widen CanRecur::setRecurring() to public so it can be set before type registration.
     use CanRecur {
         setRecurring as public;
     }
