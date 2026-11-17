@@ -84,6 +84,22 @@ class SepaDirectDebitTest extends BasePaymentTest
     }
 
     /**
+     * Verify the recurring flag is still exposed when the type is otherwise empty, i.e. the expose()
+     * override handles parent::expose() returning an empty stdClass rather than an array.
+     *
+     * @test
+     */
+    public function recurringIsExposedWhenTypeIsOtherwiseEmpty(): void
+    {
+        $sdd = (new SepaDirectDebit(null))->setRecurring(true);
+
+        $exposed = $sdd->expose();
+
+        $this->assertIsArray($exposed);
+        $this->assertSame(['recurring' => true], $exposed);
+    }
+
+    /**
      * Verify a response containing the recurring flag is mapped onto the resource.
      *
      * @test
