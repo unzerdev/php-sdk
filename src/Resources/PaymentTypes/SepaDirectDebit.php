@@ -8,14 +8,15 @@
 
 namespace UnzerSDK\Resources\PaymentTypes;
 
-use UnzerSDK\Resources\Recurring;
 use UnzerSDK\Traits\CanDirectCharge;
 use UnzerSDK\Traits\CanPayout;
+use UnzerSDK\Traits\CanRecur;
 
 class SepaDirectDebit extends BasePaymentType
 {
     use CanDirectCharge;
     use CanPayout;
+    use CanRecur;
 
     /** @var string $iban */
     protected $iban;
@@ -26,8 +27,14 @@ class SepaDirectDebit extends BasePaymentType
     /** @var string $holder */
     protected $holder;
 
-    /** @var bool|null $recurring Mandate-based recurring flag, accepted on type registration. */
-    protected ?bool $recurring = null;
+    /**
+     * Explicit request intent for the mandate-based recurring flag. CanRecur::$recurring is private and
+     * response-only (never serialized); this nullable shadow lets expose() emit `recurring` — including an
+     * explicit false — only once set, leaving a fresh instance's request body unchanged.
+     *
+     * @var bool|null
+     */
+    private ?bool $recurringRequested = null;
 
     /**
      * @param string|null $iban
@@ -95,11 +102,14 @@ class SepaDirectDebit extends BasePaymentType
     }
 
     /**
+     * Overrides CanRecur::isRecurring() to read the request-time intent. Returns false for a fresh
+     * instance and reflects the value mapped from a fetched resource.
+     *
      * @return bool Whether the payment type is registered for recurring (mandate-based) collection.
      */
     public function isRecurring(): bool
     {
-        return $this->recurring ?? false;
+        return $this->recurringRequested ?? false;
     }
 
     /**
@@ -107,32 +117,34 @@ class SepaDirectDebit extends BasePaymentType
      * it is sent in the `POST /v1/types/sepa-direct-debit` request body. A fresh instance that never sets it
      * leaves the flag out of the request entirely.
      *
+     * Widens CanRecur::setRecurring() to public; the trait's own setter is protected.
+     *
      * @param bool $recurring
      *
      * @return $this
      */
     public function setRecurring(bool $recurring): self
     {
-        $this->recurring = $recurring;
+        $this->recurringRequested = $recurring;
         return $this;
     }
 
     /**
-     * Activates recurring payment for the payment type.
+     * Appends the recurring flag — including an explicit false — once set, without turning the trait's
+     * private, response-only property into a serialized one.
      *
-     * @param string     $returnUrl      The URL to which the customer gets redirected in case of a 3ds transaction.
-     * @param null|mixed $recurrenceType Recurrence type used for recurring payment.
-     *
-     * @return Recurring
-     *
-     * @throws \UnzerSDK\Exceptions\UnzerApiException An UnzerApiException is thrown if there is an error returned
-     *                                                on API-request.
-     *
-     * @deprecated since 1.3.0.0 Please set the recurrence type in your Charge/Authorize object using
-     *             `setRecurrenceType` before performing the transaction request.
+     * {@inheritDoc}
      */
-    public function activateRecurring($returnUrl, $recurrenceType = null): Recurring
+    public function expose()
     {
-        return $this->getUnzerObject()->activateRecurringPayment($this, $returnUrl, $recurrenceType);
+        $exposed = parent::expose();
+
+        if ($this->recurringRequested !== null) {
+            $exposed = (array) $exposed;
+            $exposed['recurring'] = $this->recurringRequested;
+            ksort($exposed);
+        }
+
+        return $exposed;
     }
 }

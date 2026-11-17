@@ -1336,6 +1336,28 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
+     * Verify activateRecurringPayment accepts a SepaDirectDebit, i.e. the type keeps the CanRecur trait the
+     * capability gate checks via class_uses(). Guards against removing the trait and silently breaking both
+     * $sdd->activateRecurring(...) and $unzer->activateRecurringPayment($sdd, ...).
+     *
+     * @test
+     */
+    public function activateRecurringPaymentAcceptsSepaDirectDebit(): void
+    {
+        $paymentType = (new SepaDirectDebit('DE89370400440532013000'))->setId('myId');
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType', 'createResource'])->getMock();
+        $resourceSrvMock->expects(self::never())->method('fetchPaymentType');
+        /** @noinspection PhpParamsInspection */
+        $resourceSrvMock->expects(self::once())->method('createResource')
+            ->with($this::callback(static function ($data) {
+                return $data instanceof Recurring && $data->getReturnUrl() === 'returnUrl' && $data->getPaymentTypeId() === 'myId';
+            }));
+
+        $resourceSrvMock->activateRecurringPayment($paymentType, 'returnUrl', null);
+    }
+
+    /**
      * Verify createRecurring throws exception if it is called with a payment type which does not support recurring payment.
      *
      * @deprecated since 1.2.1.0 Get removed with `activateRecurring` method.
