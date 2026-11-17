@@ -61,13 +61,13 @@ class SepaDirectDebitTest extends BasePaymentTest
     }
 
     /**
-     * Verify the recurring flag is only exposed once explicitly set.
+     * Verify the recurring flag is always exposed, defaulting to false when never set.
      *
      * @test
      *
      * @dataProvider exposeRecurringProvider
      */
-    public function recurringIsExposedOnlyWhenSet(?bool $value, bool $shouldBeExposed): void
+    public function recurringIsAlwaysExposed(?bool $value, bool $expected): void
     {
         $sdd = new SepaDirectDebit('DE89370400440532013000');
         if ($value !== null) {
@@ -75,16 +75,13 @@ class SepaDirectDebitTest extends BasePaymentTest
         }
 
         $exposed = $sdd->expose();
-        if ($shouldBeExposed) {
-            $this->assertArrayHasKey('recurring', $exposed);
-            $this->assertSame($value, $exposed['recurring']);
-        } else {
-            $this->assertArrayNotHasKey('recurring', $exposed);
-        }
+
+        $this->assertArrayHasKey('recurring', $exposed);
+        $this->assertSame($expected, $exposed['recurring']);
     }
 
     /**
-     * Verify the recurring flag is still exposed when the type is otherwise empty, i.e. the expose()
+     * Verify the recurring flag is exposed even when the type is otherwise empty, i.e. the expose()
      * override handles parent::expose() returning an empty stdClass rather than an array.
      *
      * @test
@@ -134,9 +131,9 @@ class SepaDirectDebitTest extends BasePaymentTest
     public function exposeRecurringProvider(): array
     {
         return [
-            'set to true'  => [true, true],
-            'set to false' => [false, true],
-            'not set'      => [null, false],
+            'set to true'           => [true, true],
+            'set to false'          => [false, false],
+            'not set defaults false' => [null, false],
         ];
     }
 }

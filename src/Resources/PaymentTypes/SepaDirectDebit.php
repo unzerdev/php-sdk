@@ -28,15 +28,6 @@ class SepaDirectDebit extends BasePaymentType
     protected $holder;
 
     /**
-     * Explicit request intent for the mandate-based recurring flag. CanRecur::$recurring is private and
-     * response-only (never serialized); this nullable shadow lets expose() emit `recurring` — including an
-     * explicit false — only once set, leaving a fresh instance's request body unchanged.
-     *
-     * @var bool|null
-     */
-    private ?bool $recurringRequested = null;
-
-    /**
      * @param string|null $iban
      */
     public function __construct(?string $iban)
@@ -102,22 +93,11 @@ class SepaDirectDebit extends BasePaymentType
     }
 
     /**
-     * Overrides CanRecur::isRecurring() to read the request-time intent. Returns false for a fresh
-     * instance and reflects the value mapped from a fetched resource.
+     * Registers the payment type for recurring (mandate-based) collection. Sent in the
+     * `POST /v1/types/sepa-direct-debit` request body; defaults to false and is always included.
      *
-     * @return bool Whether the payment type is registered for recurring (mandate-based) collection.
-     */
-    public function isRecurring(): bool
-    {
-        return $this->recurringRequested ?? false;
-    }
-
-    /**
-     * Registers the payment type for recurring (mandate-based) collection. Set this before creating the type;
-     * it is sent in the `POST /v1/types/sepa-direct-debit` request body. A fresh instance that never sets it
-     * leaves the flag out of the request entirely.
-     *
-     * Widens CanRecur::setRecurring() to public; the trait's own setter is protected.
+     * Widens CanRecur::setRecurring() to public (the trait's own setter is protected) and writes the
+     * trait's $recurring property so isRecurring() reflects it.
      *
      * @param bool $recurring
      *
@@ -125,25 +105,21 @@ class SepaDirectDebit extends BasePaymentType
      */
     public function setRecurring(bool $recurring): self
     {
-        $this->recurringRequested = $recurring;
+        $this->recurring = $recurring;
         return $this;
     }
 
     /**
-     * Appends the recurring flag — including an explicit false — once set, without turning the trait's
-     * private, response-only property into a serialized one.
+     * Always exposes the recurring flag (default false) so the SEPA direct debit type registration
+     * carries the mandate intent.
      *
      * {@inheritDoc}
      */
     public function expose()
     {
-        $exposed = parent::expose();
-
-        if ($this->recurringRequested !== null) {
-            $exposed = (array) $exposed;
-            $exposed['recurring'] = $this->recurringRequested;
-            ksort($exposed);
-        }
+        $exposed = (array) parent::expose();
+        $exposed['recurring'] = $this->recurring;
+        ksort($exposed);
 
         return $exposed;
     }
