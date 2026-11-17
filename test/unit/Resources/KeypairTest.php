@@ -240,22 +240,45 @@ class KeypairTest extends BasePaymentTest
         return [
             'string "true"'  => ['true', true],
             'string "false"' => ['false', false],
+            'string "1"'     => ['1', true],
+            'string "0"'     => ['0', false],
             'native true'    => [true, true],
             'native false'   => [false, false],
         ];
     }
 
     /**
-     * Verify a missing boolean flag leaves the value null.
+     * Verify boolean flags stay null and are not exposed when the API sends an empty
+     * string, an unrecognised string or JSON null, or omits the field entirely. Also
+     * guards against the setters throwing a TypeError for these values.
      *
      * @test
+     *
+     * @dataProvider nonBooleanWireValueDP
+     *
+     * @param array $flags
      */
-    public function missingBooleanFlagsStayNull(): void
+    public function nonBooleanFlagsStayNull(array $flags): void
     {
         $keypair = new Keypair();
-        $keypair->handleResponse((object)['publicKey' => 's-pub-stub']);
+        $keypair->handleResponse((object)array_merge(['publicKey' => 's-pub-stub'], $flags));
 
         $this->assertNull($keypair->isValidateBasket());
         $this->assertNull($keypair->isCof());
+        $this->assertArrayNotHasKey('validateBasket', $keypair->expose());
+        $this->assertArrayNotHasKey('cof', $keypair->expose());
+    }
+
+    /**
+     * @return array
+     */
+    public function nonBooleanWireValueDP(): array
+    {
+        return [
+            'empty string'   => [['validateBasket' => '', 'cof' => '']],
+            'invalid string' => [['validateBasket' => 'abc', 'cof' => 'abc']],
+            'json null'      => [['validateBasket' => null, 'cof' => null]],
+            'missing'        => [[]],
+        ];
     }
 }
