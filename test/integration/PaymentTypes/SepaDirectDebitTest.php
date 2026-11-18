@@ -79,6 +79,26 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     }
 
     /**
+     * Verify recurring can be activated directly on the sepa direct debit type via activateRecurring().
+     * Guards that keeping the CanRecur trait on the type leaves the (deprecated) activation flow working.
+     *
+     * @test
+     */
+    public function sepaDirectDebitShouldActivateRecurringViaType(): void
+    {
+        /** @var SepaDirectDebit $sdd */
+        $sdd = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $this->assertFalse($sdd->isRecurring());
+
+        $recurring = $sdd->activateRecurring(self::RETURN_URL);
+        $this->assertSuccess($recurring);
+
+        /** @var SepaDirectDebit $fetchedDirectDebit */
+        $fetchedDirectDebit = $this->unzer->fetchPaymentType($sdd->getId());
+        $this->assertTrue($fetchedDirectDebit->isRecurring());
+    }
+
+    /**
      * Verify authorization is not allowed for sepa direct debit.
      *
      * @test
