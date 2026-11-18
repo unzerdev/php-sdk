@@ -10,6 +10,11 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 * `recurring` flag on `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit` for registering a payment type for recurring (mandate-based) collection.
+* `getRawResponse()` on `\UnzerSDK\Resources\Keypair`, exposing the exact raw API response string from a Keypair fetch.
+
+### Deprecated
+
+* `\UnzerSDK\Resources\PaymentTypes\PIS` (Unzer Bank Transfer / FlexiPay Direct) payment type. It is no longer supported and will be removed in a future major version.
 
 ### Removed
 
