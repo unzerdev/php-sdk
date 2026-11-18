@@ -25,13 +25,8 @@ class BasketItemTest extends BasePaymentTest
     {
         $basketItem = new BasketItem();
         $this->assertEquals(1, $basketItem->getQuantity());
-        $this->assertEquals(0, $basketItem->getAmountDiscount());
-        $this->assertEquals(0, $basketItem->getAmountGross());
         $this->assertEquals(0, $basketItem->getAmountPerUnitGross());
         $this->assertEquals(0, $basketItem->getAmountDiscountPerUnitGross());
-        $this->assertEquals(0, $basketItem->getAmountPerUnit());
-        $this->assertEquals(0, $basketItem->getAmountNet());
-        $this->assertEquals(0, $basketItem->getAmountVat());
         $this->assertEquals(0, $basketItem->getVat());
         $this->assertEquals('', $basketItem->getBasketItemReferenceId());
         $this->assertEquals('', $basketItem->getUnit());
@@ -40,11 +35,6 @@ class BasketItemTest extends BasePaymentTest
         $this->assertNull($basketItem->getImageUrl());
 
         $basketItem->setQuantity(2);
-        $basketItem->setAmountDiscount(9876);
-        $basketItem->setAmountGross(8765);
-        $basketItem->setAmountPerUnit(7654);
-        $basketItem->setAmountNet(6543);
-        $basketItem->setAmountVat(5432);
         $basketItem->setVat(6543);
         $basketItem->setAmountPerUnitGross(5432);
         $basketItem->setAmountDiscountPerUnitGross(4321);
@@ -56,11 +46,6 @@ class BasketItemTest extends BasePaymentTest
         $basketItem->setType('myType');
 
         $this->assertEquals(2, $basketItem->getQuantity());
-        $this->assertEquals(9876, $basketItem->getAmountDiscount());
-        $this->assertEquals(8765, $basketItem->getAmountGross());
-        $this->assertEquals(7654, $basketItem->getAmountPerUnit());
-        $this->assertEquals(6543, $basketItem->getAmountNet());
-        $this->assertEquals(5432, $basketItem->getAmountVat());
         $this->assertEquals(6543, $basketItem->getVat());
         $this->assertEquals(5432, $basketItem->getAmountPerUnitGross());
         $this->assertEquals(4321, $basketItem->getAmountDiscountPerUnitGross());

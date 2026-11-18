@@ -18,7 +18,7 @@ use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
-use UnzerSDK\Resources\PaymentTypes\Giropay;
+use UnzerSDK\Resources\PaymentTypes\Ideal;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\Services\ResourceService;
@@ -129,8 +129,8 @@ class PayPageTest extends BasePaymentTest
 
         // other
         $this->assertEquals([SepaDirectDebit::getResourceName()], $paypage->getExcludeTypes());
-        $paypage->setExcludeTypes([Card::getResourceName(), Giropay::getResourceName()]);
-        $this->assertEquals([Card::getResourceName(), Giropay::getResourceName()], $paypage->getExcludeTypes());
+        $paypage->setExcludeTypes([Card::getResourceName(), Ideal::getResourceName()]);
+        $this->assertEquals([Card::getResourceName(), Ideal::getResourceName()], $paypage->getExcludeTypes());
         $this->assertTrue($paypage->isCard3ds());
 
         // SET test values 2

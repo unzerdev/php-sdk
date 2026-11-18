@@ -42,20 +42,25 @@ class CanDirectChargeWithCustomerTest extends BasePaymentTest
      */
     public function directChargeShouldPropagateToUnzer(): void
     {
-        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['charge'])->disableOriginalConstructor()->getMock();
+        $unzerMock = $this->getMockBuilder(Unzer::class)->setMethods(['performCharge'])->disableOriginalConstructor()->getMock();
         $dummyMock = $this->getMockBuilder(TraitDummyWithCustomerWithParentIF::class)->setMethods(['getUnzerObject'])->getMock();
 
         $charge = new Charge();
         $metadata  = new Metadata();
         $customer = (new Customer())->setId('123');
         $dummyMock->expects($this->exactly(3))->method('getUnzerObject')->willReturn($unzerMock);
-        $unzerMock->expects($this->exactly(3))->method('charge')
+        $isCharge = static function ($amount, $currency, $returnUrl, $orderId) {
+            return static function ($c) use ($amount, $currency, $returnUrl, $orderId) {
+                return $c instanceof Charge && $c->getAmount() === $amount && $c->getCurrency() === $currency
+                    && $c->getReturnUrl() === $returnUrl && $c->getOrderId() === $orderId;
+            };
+        };
+        $unzerMock->expects($this->exactly(3))->method('performCharge')
             ->withConsecutive(
-                [1.2, 'MyCurrency2', $dummyMock, 'https://return.url2', $customer, null],
-                [1.3, 'MyCurrency3', $dummyMock, 'https://return.url3', $customer, 'orderId'],
-                [1.4, 'MyCurrency4', $dummyMock, 'https://return.url4', $customer, 'orderId', $metadata]
+                [$this->callback($isCharge(1.2, 'MyCurrency2', 'https://return.url2', null)), $dummyMock, $customer, null, null],
+                [$this->callback($isCharge(1.3, 'MyCurrency3', 'https://return.url3', 'orderId')), $dummyMock, $customer, null, null],
+                [$this->callback($isCharge(1.4, 'MyCurrency4', 'https://return.url4', 'orderId')), $dummyMock, $customer, $metadata, null]
             )->willReturn($charge);
-
 
         /** @var TraitDummyWithCustomerWithParentIF $dummyMock */
         $returnedCharge = $dummyMock->charge(1.2, 'MyCurrency2', 'https://return.url2', $customer);
