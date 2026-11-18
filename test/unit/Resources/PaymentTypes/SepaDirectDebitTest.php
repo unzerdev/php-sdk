@@ -115,6 +115,31 @@ class SepaDirectDebitTest extends BasePaymentTest
     }
 
     /**
+     * Verify the fetched state: after handleResponse() maps a recurring value, expose() carries it; when the
+     * response omits the field, expose() still contains the default (false). Documents the request shape sent
+     * on a follow-up (e.g. IBAN-amendment) PUT after a fetch.
+     *
+     * @test
+     *
+     * @dataProvider fetchedRecurringProvider
+     */
+    public function recurringIsExposedAfterFetch(?bool $responseValue, bool $expected): void
+    {
+        $sdd = new SepaDirectDebit('DE89370400440532013000');
+
+        $response = new stdClass();
+        $response->id = 's-sdd-fetchtest';
+        if ($responseValue !== null) {
+            $response->recurring = $responseValue;
+        }
+        $sdd->handleResponse($response);
+
+        $exposed = $sdd->expose();
+        $this->assertArrayHasKey('recurring', $exposed);
+        $this->assertSame($expected, $exposed['recurring']);
+    }
+
+    /**
      * @return array
      */
     public function recurringValueProvider(): array
@@ -134,6 +159,18 @@ class SepaDirectDebitTest extends BasePaymentTest
             'set to true'           => [true, true],
             'set to false'          => [false, false],
             'not set defaults false' => [null, false],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function fetchedRecurringProvider(): array
+    {
+        return [
+            'fetched true'          => [true, true],
+            'fetched false'         => [false, false],
+            'field absent in fetch' => [null, false],
         ];
     }
 }
