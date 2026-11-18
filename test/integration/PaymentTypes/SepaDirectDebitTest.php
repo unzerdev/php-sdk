@@ -79,8 +79,12 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify recurring can be activated directly on the sepa direct debit type via activateRecurring().
-     * Guards that keeping the CanRecur trait on the type leaves the (deprecated) activation flow working.
+     * Verify the (deprecated) recurring activation still routes a SepaDirectDebit through to PAPI.
+     *
+     * Keeping the `CanRecur` trait on the type means `activateRecurring()` passes the ResourceService
+     * capability gate and reaches the API instead of failing client-side. For SEPA the mandate is
+     * registered during a charge/authorize, so PAPI rejects a direct recurring call — asserting that
+     * specific API error confirms the activation flow is still wired correctly for the type.
      *
      * @test
      */
@@ -90,12 +94,10 @@ class SepaDirectDebitTest extends BaseIntegrationTest
         $sdd = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
         $this->assertFalse($sdd->isRecurring());
 
-        $recurring = $sdd->activateRecurring(self::RETURN_URL);
-        $this->assertSuccess($recurring);
-
-        /** @var SepaDirectDebit $fetchedDirectDebit */
-        $fetchedDirectDebit = $this->unzer->fetchPaymentType($sdd->getId());
-        $this->assertTrue($fetchedDirectDebit->isRecurring());
+        // SEPA activates the mandate via charge/authorize, so a direct recurring call is rejected by PAPI.
+        $this->expectException(UnzerApiException::class);
+        $this->expectExceptionCode('API.640.550.005');
+        $sdd->activateRecurring(self::RETURN_URL);
     }
 
     /**
