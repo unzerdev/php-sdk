@@ -43,9 +43,9 @@ class DummyResource extends AbstractUnzerResource
     //</editor-fold>
 
     //<editor-fold desc="Overridable methods">
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
-        return '{"dummyResource": "JsonSerialized"}';
+        return ['dummyResource' => 'JsonSerialized'];
     }
 
     public function getUri(bool $appendId = true, string $httpMethod = HttpAdapterInterface::REQUEST_GET): string
