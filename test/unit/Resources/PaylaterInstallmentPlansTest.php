@@ -11,6 +11,7 @@
 
 namespace UnzerSDK\test\unit\Resources;
 
+use ReflectionMethod;
 use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentRate;
@@ -21,6 +22,50 @@ use UnzerSDK\test\Fixtures\JsonProvider;
 
 class PaylaterInstallmentPlansTest extends BasePaymentTest
 {
+    /**
+     * These deprecated classes are standalone aliases and must keep their original public
+     * signatures (no inheritance from the generalized PaylaterPlans/PaylaterPlansQuery).
+     *
+     * @test
+     *
+     * @dataProvider legacySignatureDataProvider
+     *
+     * @param class-string $class
+     */
+    public function legacyPublicSignaturesAreUnchanged(string $class, string $method, ?string $expectedParamType, string $expectedReturnType): void
+    {
+        $reflection = new ReflectionMethod($class, $method);
+
+        $returnType = $reflection->getReturnType();
+        $this->assertNotNull($returnType);
+        $this->assertEquals($expectedReturnType, $returnType->getName());
+
+        if ($expectedParamType !== null) {
+            $params = $reflection->getParameters();
+            $this->assertNotEmpty($params);
+            $this->assertEquals($expectedParamType, $params[0]->getType()->getName());
+        }
+    }
+
+    /**
+     * Verify the legacy fluent setters keep returning their own type for chaining.
+     *
+     * @test
+     */
+    public function legacyFluentSettersReturnOwnType(): void
+    {
+        $query = (new InstallmentPlansQuery(100, 'EUR', 'DE'))
+            ->setAmount(1.0)
+            ->setCurrency('USD')
+            ->setCountry('CH')
+            ->setCustomerType(CustomerTypes::B2B);
+        $this->assertInstanceOf(InstallmentPlansQuery::class, $query);
+
+        $plans = (new PaylaterInstallmentPlans())->setQueryParameter($query);
+        $this->assertInstanceOf(PaylaterInstallmentPlans::class, $plans);
+        $this->assertInstanceOf(InstallmentPlansQuery::class, $plans->getQueryParameter());
+    }
+
     /**
      * Verify getters and setters.
      *
@@ -142,6 +187,30 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
             [100, 'EUR', 'DE', 'B2C'],
             [100, 'EUR', 'GB', 'B2B'],
             [100, 'CHF', 'CHE', 'B2C'],
+        ];
+    }
+
+    /**
+     * Pins the original (pre-generalization) public signatures of the deprecated legacy classes.
+     *
+     * @return array
+     */
+    public function legacySignatureDataProvider(): array
+    {
+        $query = InstallmentPlansQuery::class;
+        $plans = PaylaterInstallmentPlans::class;
+
+        return [
+            'query setAmount'            => [$query, 'setAmount', 'float', $query],
+            'query setCurrency'          => [$query, 'setCurrency', 'string', $query],
+            'query setCountry'           => [$query, 'setCountry', 'string', $query],
+            'query setCustomerType'      => [$query, 'setCustomerType', 'string', $query],
+            'plans setAmount'            => [$plans, 'setAmount', 'float', $plans],
+            'plans setCurrency'          => [$plans, 'setCurrency', 'string', $plans],
+            'plans setCountry'           => [$plans, 'setCountry', 'string', $plans],
+            'plans setCustomerType'      => [$plans, 'setCustomerType', 'string', $plans],
+            'plans getQueryParameter'    => [$plans, 'getQueryParameter', null, $query],
+            'plans setQueryParameter'    => [$plans, 'setQueryParameter', $query, $plans],
         ];
     }
     //</editor-fold>

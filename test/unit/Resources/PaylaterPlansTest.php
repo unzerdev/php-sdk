@@ -13,10 +13,8 @@ namespace UnzerSDK\test\unit\Resources;
 
 use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
-use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentRate;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
-use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\Resources\PaylaterPlans;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
@@ -60,20 +58,6 @@ class PaylaterPlansTest extends BasePaymentTest
         $query = new PaylaterPlansQuery($amount, $currency, $country, $customerType);
         $plans = (new PaylaterPlans())->setQueryParameter($query);
         $this->assertEquals("plans?amount={$amount}&country={$country}&currency={$currency}&customerType={$customerType}", $plans->getResourcePath());
-    }
-
-    /**
-     * The deprecated InstallmentPlansQuery is still accepted as a query parameter.
-     *
-     * @test
-     */
-    public function deprecatedQueryIsAcceptedAsQueryParameter(): void
-    {
-        $query = new InstallmentPlansQuery(100, 'EUR', 'DE');
-        $plans = (new PaylaterPlans())->setQueryParameter($query);
-
-        $this->assertSame($query, $plans->getQueryParameter());
-        $this->assertEquals('plans?amount=100&country=DE&currency=EUR&customerType=B2C', $plans->getResourcePath());
     }
 
     /**
@@ -137,16 +121,6 @@ class PaylaterPlansTest extends BasePaymentTest
 
         $this->assertIsArray($plans->getPlans());
         $this->assertEmpty($plans->getPlans());
-    }
-
-    /**
-     * The deprecated PaylaterInstallmentPlans remains a PaylaterPlans for backward compatibility.
-     *
-     * @test
-     */
-    public function deprecatedInstallmentPlansIsInstanceOfPaylaterPlans(): void
-    {
-        $this->assertInstanceOf(PaylaterPlans::class, new PaylaterInstallmentPlans());
     }
 
     //<editor-fold desc="Helper">

@@ -20,7 +20,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Deprecated
 
-* `\UnzerSDK\Resources\PaylaterInstallmentPlans` (use `\UnzerSDK\Resources\PaylaterPlans`) and `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery` (use `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery`). Both remain as subclasses for backward compatibility. `Unzer::fetchPaylaterInstallmentPlans()` is unchanged, and `PaylaterInstallmentPlans::setQueryParameter()` keeps returning `PaylaterInstallmentPlans`. The inherited setters now accept the wider `PaylaterPlansQuery` (an `InstallmentPlansQuery` still works, as it extends it).
+* `\UnzerSDK\Resources\PaylaterInstallmentPlans` (use `\UnzerSDK\Resources\PaylaterPlans`) and `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery` (use `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery`). The legacy classes are left unchanged as standalone deprecated aliases with their original public signatures (no inheritance from the new generalized classes), so existing code keeps working. `Unzer::fetchPaylaterInstallmentPlans()` is unchanged.
 
 ## [4.0.2](https://github.com/unzerdev/php-sdk/compare/4.0.1..4.0.2)
 
