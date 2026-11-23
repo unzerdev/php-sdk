@@ -6,11 +6,10 @@
  * This class defines integration tests to verify the generalized paylater /plans endpoint
  * (Unzer::fetchPaylaterPlans) for Paylater Invoice and Paylater Direct Debit (CCD2).
  *
- * These tests require the PAPI `types/paylater-invoice/plans` and `types/paylater-direct-debit/plans`
- * endpoints (CC-4014) to be live, plus sandbox credentials. They are therefore excluded from the
- * default run via `@group skip`. Remove the group once the endpoints leave WIP.
- *
- * @group skip
+ * The PAPI `types/paylater-invoice/plans` and `types/paylater-direct-debit/plans` endpoints (CC-4014)
+ * are now live; these tests run against the sandbox using the repository's standard integration
+ * credentials (UNZER_PAPI_TEST_PRIVATE_KEY_DEFAULT), exactly like the existing installment integration
+ * test. They are no longer gated.
  *
  * @link  https://docs.unzer.com/
  *
@@ -57,7 +56,9 @@ class PaylaterPlansTest extends BaseIntegrationTest
      */
     public function unsupportedPaymentTypeIsRejectedByApi(): void
     {
-        // TODO: pin the concrete error code / merchant message once the endpoints are live.
+        // NOTE: the concrete getCode()/merchant message could not be observed in the dev environment
+        // (no sandbox credentials). Confirm the exact code from the first CI run and tighten this
+        // assertion (e.g. ->expectExceptionCode(...)) with the observed value.
         $this->expectException(UnzerApiException::class);
 
         $query = new PaylaterPlansQuery(99.99, 'EUR', 'DE');
@@ -74,7 +75,9 @@ class PaylaterPlansTest extends BaseIntegrationTest
      */
     public function invalidInputThrowsUnzerApiException(float $amount, string $currency, string $country): void
     {
-        // TODO: pin the concrete error code / merchant message once the endpoints are live.
+        // NOTE: the concrete getCode()/merchant message per case could not be observed in the dev
+        // environment (no sandbox credentials). Confirm the exact code(s) from the first CI run and
+        // tighten this assertion (e.g. ->expectExceptionCode(...)) with the observed value(s).
         $this->expectException(UnzerApiException::class);
 
         $query = new PaylaterPlansQuery($amount, $currency, $country);
