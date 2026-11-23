@@ -20,10 +20,12 @@ use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Config;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
 use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Keypair;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
+use UnzerSDK\Resources\PaylaterPlans;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
@@ -60,7 +62,7 @@ class Unzer implements
     public const BASE_URL = 'api.unzer.com';
     public const API_VERSION = ApiVersions::V1;
     public const SDK_TYPE = 'UnzerPHP';
-    public const SDK_VERSION = '4.0.2';
+    public const SDK_VERSION = '5.0.0';
 
     /** @var string $key */
     private $key;
@@ -1184,6 +1186,14 @@ class Unzer implements
     public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest): PaylaterInstallmentPlans
     {
         return $this->getPaymentService()->fetchPaylaterInstallmentPlans($plansRequest);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query): PaylaterPlans
+    {
+        return $this->getPaymentService()->fetchPaylaterPlans($paymentType, $query);
     }
 
     /**

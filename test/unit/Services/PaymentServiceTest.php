@@ -19,10 +19,18 @@ use UnzerSDK\Interfaces\CancelServiceInterface;
 use UnzerSDK\Interfaces\ResourceServiceInterface;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
 use UnzerSDK\Resources\InstalmentPlans;
 use UnzerSDK\Resources\Metadata;
+use UnzerSDK\Resources\PaylaterInstallmentPlans;
+use UnzerSDK\Resources\PaylaterPlans;
 use UnzerSDK\Resources\Payment;
+use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\InstallmentSecured;
+use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
 use UnzerSDK\Resources\PaymentTypes\Paypal;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
@@ -643,6 +651,91 @@ class PaymentServiceTest extends BasePaymentTest
 
     //</editor-fold>
 
+    //<editor-fold desc="Paylater Plans">
+
+    /**
+     * Verify fetchPaylaterPlans builds the resource path and query for the given payment type.
+     *
+     * @test
+     *
+     * @dataProvider paylaterPlansTypeDataProvider
+     */
+    public function fetchPaylaterPlansResolvesResourcePathPerType(BasePaymentType $paymentType, string $segment): void
+    {
+        $unzer = new Unzer('s-priv-1234');
+        /** @var MockObject|ResourceService $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs(['unzer' => $unzer])->setMethods(['fetchResource'])->getMock();
+        $unzer->setResourceService($resourceSrvMock);
+
+        $query = new PaylaterPlansQuery(99.99, 'EUR', 'DE', 'B2B');
+
+        $resourceSrvMock->expects($this->once())->method('fetchResource')
+            ->with($this->callback(static function ($param) use ($paymentType, $segment, $query) {
+                return $param instanceof PaylaterPlans &&
+                    $param->getParentResource() === $paymentType &&
+                    $param->getQueryParameter() === $query &&
+                    $param->getUri() === "/types/{$segment}/plans?amount=99.99&country=DE&currency=EUR&customerType=B2B";
+            }))->willReturn(new PaylaterPlans());
+
+        $result = $unzer->getPaymentService()->fetchPaylaterPlans($paymentType, $query);
+        $this->assertInstanceOf(PaylaterPlans::class, $result);
+    }
+
+    /**
+     * Verify the default customer type B2C is applied to the query.
+     *
+     * @test
+     */
+    public function fetchPaylaterPlansAppliesDefaultCustomerType(): void
+    {
+        $unzer = new Unzer('s-priv-1234');
+        /** @var MockObject|ResourceService $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs(['unzer' => $unzer])->setMethods(['fetchResource'])->getMock();
+        $unzer->setResourceService($resourceSrvMock);
+
+        $query = new PaylaterPlansQuery(10.0, 'EUR', 'DE');
+
+        $resourceSrvMock->expects($this->once())->method('fetchResource')
+            ->with($this->callback(static function ($param) {
+                $query = $param->getQueryParameter();
+                return $param instanceof PaylaterPlans &&
+                    $query->getAmount() === 10.0 &&
+                    $query->getCurrency() === 'EUR' &&
+                    $query->getCountry() === 'DE' &&
+                    $query->getCustomerType() === 'B2C' &&
+                    $param->getUri() === '/types/paylater-invoice/plans?amount=10&country=DE&currency=EUR&customerType=B2C';
+            }))->willReturn(new PaylaterPlans());
+
+        $unzer->getPaymentService()->fetchPaylaterPlans(new PaylaterInvoice(), $query);
+    }
+
+    /**
+     * Verify the deprecated fetchPaylaterInstallmentPlans still targets the installment endpoint and return type.
+     *
+     * @test
+     */
+    public function fetchPaylaterInstallmentPlansRemainsBackwardCompatible(): void
+    {
+        $unzer = new Unzer('s-priv-1234');
+        /** @var MockObject|ResourceService $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs(['unzer' => $unzer])->setMethods(['fetchResource'])->getMock();
+        $unzer->setResourceService($resourceSrvMock);
+
+        $query = new InstallmentPlansQuery(99.99, 'EUR', 'DE');
+
+        $resourceSrvMock->expects($this->once())->method('fetchResource')
+            ->with($this->callback(static function ($param) {
+                return $param instanceof PaylaterInstallmentPlans &&
+                    $param->getParentResource() instanceof PaylaterInstallment &&
+                    $param->getUri() === '/types/paylater-installment/plans?amount=99.99&country=DE&currency=EUR&customerType=B2C';
+            }))->willReturn(new PaylaterInstallmentPlans());
+
+        $result = $unzer->getPaymentService()->fetchPaylaterInstallmentPlans($query);
+        $this->assertInstanceOf(PaylaterInstallmentPlans::class, $result);
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="DataProviders">
 
     /**
@@ -654,6 +747,18 @@ class PaymentServiceTest extends BasePaymentTest
             'default' => [null],
             'non 3ds' => [false],
             '3ds'     => [true]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function paylaterPlansTypeDataProvider(): array
+    {
+        return [
+            'installment'  => [new PaylaterInstallment(), 'paylater-installment'],
+            'invoice'      => [new PaylaterInvoice(), 'paylater-invoice'],
+            'directDebit'  => [new PaylaterDirectDebit(), 'paylater-direct-debit'],
         ];
     }
 

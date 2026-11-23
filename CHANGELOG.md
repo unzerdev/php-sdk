@@ -7,6 +7,15 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [5.0.0](https://github.com/unzerdev/php-sdk/compare/4.0.2..5.0.0)
 
+### Added
+
+* `Unzer::fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query)` to fetch the available plans (including the `secciUrl`) for any paylater payment type, e.g. `new PaylaterInvoice()` or `new PaylaterDirectDebit()`. The SECCI PDF locale follows the client locale set via `Unzer::setLocale()` (`Accept-Language` header). The payment type and query values are passed through to the API unchanged; invalid input is rejected by the API with an `UnzerApiException`.
+* `\UnzerSDK\Resources\PaylaterPlans` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery` as the generalized plan result/query models.
+
+### Deprecated
+
+* `\UnzerSDK\Resources\PaylaterInstallmentPlans` (use `\UnzerSDK\Resources\PaylaterPlans`) and `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery` (use `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery`). Both remain as subclasses for backward compatibility. `Unzer::fetchPaylaterInstallmentPlans()` is unchanged.
+
 ### Removed
 
 * Support for PHP 8.1. The minimum supported PHP version is now 8.2 (`composer.json` requires `~8.2.0|~8.3.0|~8.4.0|~8.5.0`). PHP 8.1 is end of life and has no official fix for the PHP2Shell vulnerabilities (CVE-2026-109618, CVE-2026-109619).
