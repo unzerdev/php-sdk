@@ -42,9 +42,11 @@ use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Resources\TransactionTypes\Sca;
 use UnzerSDK\Resources\TransactionTypes\Shipment;
 use UnzerSDK\Services\CancelService;
+use UnzerSDK\Services\HttpService;
 use UnzerSDK\Services\PaymentService;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BasePaymentTest;
+use UnzerSDK\test\Fixtures\JsonProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 use function in_array;
@@ -739,6 +741,72 @@ class PaymentServiceTest extends BasePaymentTest
 
         $result = $unzer->getPaymentService()->fetchPaylaterInstallmentPlans($query);
         $this->assertInstanceOf(PaylaterInstallmentPlans::class, $result);
+    }
+
+    /**
+     * End-to-end: the generic fetchPaylaterPlans() hits types/paylater-<segment>/plans and maps the
+     * response (incl. a non-null secciUrl per plan) for all three plan-supporting payment types.
+     *
+     * @test
+     *
+     * @dataProvider paylaterPlansTypeDataProvider
+     */
+    public function fetchPaylaterPlansFetchesAndMapsPlansPerType(BasePaymentType $paymentType, string $segment): void
+    {
+        $unzer = new Unzer('s-priv-1234');
+        $unzer->setHttpService($this->stubPlansHttpService("types/{$segment}/plans"));
+
+        $query = new PaylaterPlansQuery(99.99, 'EUR', 'DE');
+        $plans = $unzer->fetchPaylaterPlans($paymentType, $query);
+
+        $this->assertInstanceOf(PaylaterPlans::class, $plans);
+        $this->assertNotEmpty($plans->getPlans());
+        foreach ($plans->getPlans() as $plan) {
+            $this->assertNotNull($plan->getSecciUrl());
+        }
+    }
+
+    /**
+     * End-to-end regression: the legacy fetchPaylaterInstallmentPlans() still hits
+     * types/paylater-installment/plans and maps to a PaylaterInstallmentPlans with secciUrl.
+     *
+     * @test
+     */
+    public function fetchPaylaterInstallmentPlansFetchesAndMapsPlansEndToEnd(): void
+    {
+        $unzer = new Unzer('s-priv-1234');
+        $unzer->setHttpService($this->stubPlansHttpService('types/paylater-installment/plans'));
+
+        $plans = $unzer->fetchPaylaterInstallmentPlans(new InstallmentPlansQuery(99.99, 'EUR', 'DE'));
+
+        $this->assertInstanceOf(PaylaterInstallmentPlans::class, $plans);
+        $this->assertNotEmpty($plans->getPlans());
+        foreach ($plans->getPlans() as $plan) {
+            $this->assertNotNull($plan->getSecciUrl());
+        }
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Helper">
+
+    /**
+     * Builds an HttpService stub that asserts the plans endpoint URL and returns the shared plans fixture.
+     *
+     * @param string $expectedUriPart The expected types/paylater-<segment>/plans path fragment.
+     *
+     * @return MockObject|HttpService
+     */
+    private function stubPlansHttpService(string $expectedUriPart): HttpService
+    {
+        $httpServiceMock = $this->getMockBuilder(HttpService::class)
+            ->disableOriginalConstructor()->onlyMethods(['send'])->getMock();
+        $httpServiceMock->expects($this->once())->method('send')
+            ->with($this->callback(static function ($uri) use ($expectedUriPart) {
+                return is_string($uri) && str_contains($uri, $expectedUriPart);
+            }))
+            ->willReturn(JsonProvider::getJsonFromFile('paylaterPlansResponse.json'));
+        return $httpServiceMock;
     }
 
     //</editor-fold>
