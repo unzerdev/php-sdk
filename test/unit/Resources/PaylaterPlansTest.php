@@ -123,6 +123,19 @@ class PaylaterPlansTest extends BasePaymentTest
         $this->assertEmpty($plans->getPlans());
     }
 
+    /**
+     * The minimumInstallmentFee sent by the API is exposed on each plan.
+     *
+     * @test
+     */
+    public function minimumInstallmentFeeIsMapped(): void
+    {
+        $plans = new PaylaterPlans();
+        $plans->handleResponse(json_decode(JsonProvider::getJsonFromFile('paylaterPlansResponse.json')));
+
+        $this->assertEquals('2.50', $plans->getPlans()[0]->getMinimumInstallmentFee());
+    }
+
     //<editor-fold desc="Helper">
 
     /**
@@ -133,6 +146,7 @@ class PaylaterPlansTest extends BasePaymentTest
     {
         foreach ($expected as $index => $plan) {
             $this->assertEquals($plan->totalAmount ?? null, $actual[$index]->getTotalAmount());
+            $this->assertEquals($plan->minimumInstallmentFee ?? null, $actual[$index]->getMinimumInstallmentFee());
             $this->assertEquals($plan->nominalInterestRate ?? null, $actual[$index]->getNominalInterestRate());
             $this->assertEquals($plan->effectiveInterestRate ?? null, $actual[$index]->getEffectiveInterestRate());
             $this->assertNotNull($actual[$index]->getSecciUrl());
