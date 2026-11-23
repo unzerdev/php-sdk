@@ -654,7 +654,8 @@ class PaymentServiceTest extends BasePaymentTest
     //<editor-fold desc="Paylater Plans">
 
     /**
-     * Verify fetchPaylaterPlans builds the resource path and query for the given payment type.
+     * Verify fetchPaylaterPlans builds the resource path and query for the given payment type,
+     * both for fresh types and for already-identified ones (which must still route by type name).
      *
      * @test
      *
@@ -667,18 +668,24 @@ class PaymentServiceTest extends BasePaymentTest
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->setConstructorArgs(['unzer' => $unzer])->setMethods(['fetchResource'])->getMock();
         $unzer->setResourceService($resourceSrvMock);
 
+        // Pre-set an id to emulate a previously created/fetched payment type.
+        $paymentType->setId('s-pit-identified');
         $query = new PaylaterPlansQuery(99.99, 'EUR', 'DE', 'B2B');
 
         $resourceSrvMock->expects($this->once())->method('fetchResource')
             ->with($this->callback(static function ($param) use ($paymentType, $segment, $query) {
                 return $param instanceof PaylaterPlans &&
-                    $param->getParentResource() === $paymentType &&
+                    // Routing uses an identity-free copy, not the caller's instance.
+                    $param->getParentResource() !== $paymentType &&
+                    $param->getParentResource() instanceof BasePaymentType &&
                     $param->getQueryParameter() === $query &&
                     $param->getUri() === "/types/{$segment}/plans?amount=99.99&country=DE&currency=EUR&customerType=B2B";
             }))->willReturn(new PaylaterPlans());
 
         $result = $unzer->getPaymentService()->fetchPaylaterPlans($paymentType, $query);
         $this->assertInstanceOf(PaylaterPlans::class, $result);
+        // The caller's payment type must stay untouched (id preserved).
+        $this->assertEquals('s-pit-identified', $paymentType->getId());
     }
 
     /**

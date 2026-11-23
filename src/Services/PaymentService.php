@@ -357,8 +357,10 @@ class PaymentService implements PaymentServiceInterface
      */
     public function fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query): PaylaterPlans
     {
-        $paymentType->setParentResource($this->unzer);
-        $plans = (new PaylaterPlans())->setQueryParameter($query)->setParentResource($paymentType);
+        // Route via an identity-free copy so an already-identified payment type still resolves to
+        // types/<kebab-name>/plans instead of types/<id>/plans. The caller's instance stays untouched.
+        $plansParent = (clone $paymentType)->setId(null)->setParentResource($this->unzer);
+        $plans = (new PaylaterPlans())->setQueryParameter($query)->setParentResource($plansParent);
         return $this->unzer->getResourceService()->fetchResource($plans);
     }
 
