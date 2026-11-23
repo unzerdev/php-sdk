@@ -159,6 +159,50 @@ class ResourceServiceTest extends BasePaymentTest
     }
 
     /**
+     * Verify fetchKeypair parses boolean flags sent as strings, which is the raw
+     * response path reported in CC-4256 (string "false" must not become true).
+     *
+     * @test
+     *
+     * @dataProvider fetchKeypairParsesStringBooleanDP
+     *
+     * @param string    $rawResponse
+     * @param bool|null $expectedValidateBasket
+     * @param bool|null $expectedCof
+     */
+    public function fetchKeypairParsesBooleanFlagsSentAsStrings(
+        string $rawResponse,
+        ?bool $expectedValidateBasket,
+        ?bool $expectedCof
+    ): void {
+        $unzer = new Unzer('s-priv-1234');
+        $httpSrvMock = $this->getMockBuilder(HttpService::class)->setMethods(['send'])->getMock();
+        $unzer->setHttpService($httpSrvMock);
+        $httpSrvMock->expects($this->once())->method('send')
+            ->with('/keypair', $this->isInstanceOf(Keypair::class), HttpAdapterInterface::REQUEST_GET)
+            ->willReturn($rawResponse);
+
+        $keypair = $unzer->fetchKeypair();
+
+        $this->assertSame($expectedValidateBasket, $keypair->isValidateBasket());
+        $this->assertSame($expectedCof, $keypair->isCof());
+        $this->assertSame($rawResponse, $keypair->getRawResponse());
+    }
+
+    /**
+     * @return array
+     */
+    public function fetchKeypairParsesStringBooleanDP(): array
+    {
+        return [
+            'string "false"'      => ['{"publicKey":"s-pub-stub","validateBasket":"false","cof":"false"}', false, false],
+            'string "true"'       => ['{"publicKey":"s-pub-stub","validateBasket":"true","cof":"true"}', true, true],
+            'empty string stays null' => ['{"publicKey":"s-pub-stub","validateBasket":"","cof":""}', null, null],
+            'missing stays null'  => ['{"publicKey":"s-pub-stub"}', null, null],
+        ];
+    }
+
+    /**
      * Verify send will call send on httpService.
      *
      * @group CC-1309
@@ -1323,6 +1367,28 @@ class ResourceServiceTest extends BasePaymentTest
     public function createRecurringShouldNotFetchThePaymentTypeByObject(): void
     {
         $paymentType = new TraitDummyCanRecur();
+        /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
+        $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType', 'createResource'])->getMock();
+        $resourceSrvMock->expects(self::never())->method('fetchPaymentType');
+        /** @noinspection PhpParamsInspection */
+        $resourceSrvMock->expects(self::once())->method('createResource')
+            ->with($this::callback(static function ($data) {
+                return $data instanceof Recurring && $data->getReturnUrl() === 'returnUrl' && $data->getPaymentTypeId() === 'myId';
+            }));
+
+        $resourceSrvMock->activateRecurringPayment($paymentType, 'returnUrl', null);
+    }
+
+    /**
+     * Verify activateRecurringPayment accepts a SepaDirectDebit, i.e. the type keeps the CanRecur trait the
+     * capability gate checks via class_uses(). Guards against removing the trait and silently breaking both
+     * $sdd->activateRecurring(...) and $unzer->activateRecurringPayment($sdd, ...).
+     *
+     * @test
+     */
+    public function activateRecurringPaymentAcceptsSepaDirectDebit(): void
+    {
+        $paymentType = (new SepaDirectDebit('DE89370400440532013000'))->setId('myId');
         /** @var ResourceServiceInterface|MockObject $resourceSrvMock */
         $resourceSrvMock = $this->getMockBuilder(ResourceService::class)->disableOriginalConstructor()->setMethods(['fetchPaymentType', 'createResource'])->getMock();
         $resourceSrvMock->expects(self::never())->method('fetchPaymentType');

@@ -16,7 +16,9 @@ class SepaDirectDebit extends BasePaymentType
 {
     use CanDirectCharge;
     use CanPayout;
-    use CanRecur;
+    use CanRecur {
+        setRecurring as public;
+    }
 
     /** @var string $iban */
     protected $iban;
@@ -90,5 +92,20 @@ class SepaDirectDebit extends BasePaymentType
     {
         $this->holder = $holder;
         return $this;
+    }
+
+    /**
+     * Always exposes the recurring flag (default false) so the SEPA direct debit type registration
+     * carries the mandate intent.
+     *
+     * {@inheritDoc}
+     */
+    public function expose()
+    {
+        $exposed = (array) parent::expose();
+        $exposed['recurring'] = $this->recurring;
+        ksort($exposed);
+
+        return $exposed;
     }
 }

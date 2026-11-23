@@ -205,4 +205,80 @@ class KeypairTest extends BasePaymentTest
         $this->assertArrayNotHasKey('privateKey', $exposed);
         $this->assertArrayNotHasKey('detailed', $exposed);
     }
+
+    /**
+     * Verify boolean flags are parsed correctly whether the API sends them as native
+     * booleans or as strings, and that expose() keeps them native booleans.
+     *
+     * @test
+     *
+     * @dataProvider wireBooleanDP
+     *
+     * @param mixed $wireValue
+     * @param bool  $expected
+     */
+    public function booleanFlagsAreParsedRegardlessOfWireType($wireValue, bool $expected): void
+    {
+        $keypair = new Keypair();
+        $keypair->handleResponse((object)[
+            'publicKey'      => 's-pub-stub',
+            'validateBasket' => $wireValue,
+            'cof'            => $wireValue,
+        ]);
+
+        $this->assertSame($expected, $keypair->isValidateBasket());
+        $this->assertSame($expected, $keypair->isCof());
+        $this->assertSame($expected, $keypair->expose()['validateBasket']);
+        $this->assertSame($expected, $keypair->expose()['cof']);
+    }
+
+    /**
+     * @return array
+     */
+    public function wireBooleanDP(): array
+    {
+        return [
+            'string "true"'  => ['true', true],
+            'string "false"' => ['false', false],
+            'string "1"'     => ['1', true],
+            'string "0"'     => ['0', false],
+            'native true'    => [true, true],
+            'native false'   => [false, false],
+        ];
+    }
+
+    /**
+     * Verify boolean flags stay null and are not exposed when the API sends an empty
+     * string, an unrecognised string or JSON null, or omits the field entirely. Also
+     * guards against the setters throwing a TypeError for these values.
+     *
+     * @test
+     *
+     * @dataProvider nonBooleanWireValueDP
+     *
+     * @param array $flags
+     */
+    public function nonBooleanFlagsStayNull(array $flags): void
+    {
+        $keypair = new Keypair();
+        $keypair->handleResponse((object)array_merge(['publicKey' => 's-pub-stub'], $flags));
+
+        $this->assertNull($keypair->isValidateBasket());
+        $this->assertNull($keypair->isCof());
+        $this->assertArrayNotHasKey('validateBasket', $keypair->expose());
+        $this->assertArrayNotHasKey('cof', $keypair->expose());
+    }
+
+    /**
+     * @return array
+     */
+    public function nonBooleanWireValueDP(): array
+    {
+        return [
+            'empty string'   => [['validateBasket' => '', 'cof' => '']],
+            'invalid string' => [['validateBasket' => 'abc', 'cof' => 'abc']],
+            'json null'      => [['validateBasket' => null, 'cof' => null]],
+            'missing'        => [[]],
+        ];
+    }
 }
