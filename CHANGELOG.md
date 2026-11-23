@@ -15,6 +15,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Deprecated
 
 * `\UnzerSDK\Resources\PaymentTypes\PIS` (Unzer Bank Transfer / FlexiPay Direct) payment type. It is no longer supported and will be removed in a future major version.
+* `\UnzerSDK\Resources\PaymentTypes\Sofort` payment type. It is no longer supported and will be removed in a future major version.
 
 ### Removed
 
@@ -23,6 +24,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 * `\UnzerSDK\Resources\Keypair`: boolean flags (`validateBasket`, `cof`) that the API sends as the strings `"true"`/`"false"` were coerced so `"false"` evaluated to `true`. They are now parsed correctly, so `isValidateBasket()` and `expose()` reflect the real value; a missing field stays `null`.
+* `\UnzerSDK\Resources\Keypair`: a plain `fetchKeypair()` listed every payment type twice in `getPaymentTypes()` / `getAvailablePaymentTypes()`; the list is now de-duplicated (detailed keypair unchanged).
 
 ## [4.0.2](https://github.com/unzerdev/php-sdk/compare/4.0.1..4.0.2)
 
