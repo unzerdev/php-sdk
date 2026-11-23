@@ -56,14 +56,18 @@ class PaylaterPlansTest extends BaseIntegrationTest
      */
     public function unsupportedPaymentTypeIsRejectedByApi(): void
     {
-        // NOTE: the concrete getCode()/merchant message could not be observed in the dev environment
-        // (no sandbox credentials). Confirm the exact code from the first CI run and tighten this
-        // assertion (e.g. ->expectExceptionCode(...)) with the observed value.
-        $this->expectException(UnzerApiException::class);
-
         $query = new PaylaterPlansQuery(99.99, 'EUR', 'DE');
         $unsupportedType = new SepaDirectDebit('DE89370400440532013000');
-        $this->unzer->fetchPaylaterPlans($unsupportedType, $query);
+
+        // Example observed sandbox behaviour (illustrative only, not asserted - codes/messages may change):
+        // code API.720.100.001, merchantMessage "The given payment method plans is not found.",
+        // customerMessage "Invalid payment method. Please contact us for more information."
+        try {
+            $this->unzer->fetchPaylaterPlans($unsupportedType, $query);
+            $this->fail('Expected ' . UnzerApiException::class . ' was not thrown.');
+        } catch (UnzerApiException $e) {
+            $this->assertNotEmpty($e->getMerchantMessage());
+        }
     }
 
     /**
@@ -75,13 +79,14 @@ class PaylaterPlansTest extends BaseIntegrationTest
      */
     public function invalidInputThrowsUnzerApiException(float $amount, string $currency, string $country): void
     {
-        // NOTE: the concrete getCode()/merchant message per case could not be observed in the dev
-        // environment (no sandbox credentials). Confirm the exact code(s) from the first CI run and
-        // tighten this assertion (e.g. ->expectExceptionCode(...)) with the observed value(s).
-        $this->expectException(UnzerApiException::class);
-
         $query = new PaylaterPlansQuery($amount, $currency, $country);
-        $this->unzer->fetchPaylaterPlans(new PaylaterInvoice(), $query);
+
+        try {
+            $this->unzer->fetchPaylaterPlans(new PaylaterInvoice(), $query);
+            $this->fail('Expected ' . UnzerApiException::class . ' was not thrown.');
+        } catch (UnzerApiException $e) {
+            $this->assertNotEmpty($e->getMerchantMessage());
+        }
     }
 
     //<editor-fold desc="Data Providers">
