@@ -282,10 +282,12 @@ class Keypair extends AbstractUnzerResource
 
         // Replace rather than append: for the plain endpoint updateValues() already fills the
         // list from the availablePaymentTypes string array, so appending here duplicates every entry.
+        // Cast to array first: a list with non-sequential keys decodes to stdClass, which
+        // array_values() would reject, so this keeps the tolerant behaviour of the previous foreach.
         if (isset($response->paymentTypes)) {
-            $this->paymentTypes = array_values($response->paymentTypes);
+            $this->paymentTypes = array_values((array) $response->paymentTypes);
         } elseif (isset($response->availablePaymentTypes)) {
-            $this->paymentTypes = array_values($response->availablePaymentTypes);
+            $this->paymentTypes = array_values((array) $response->availablePaymentTypes);
         }
 
         // Booleans may arrive as native values or as strings ("true"/"false"); normalise both.

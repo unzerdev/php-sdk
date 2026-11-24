@@ -232,6 +232,44 @@ class KeypairTest extends BasePaymentTest
     }
 
     /**
+     * A payment-type list with non-sequential keys decodes to a stdClass rather than an
+     * array. handleResponse() must still read it as a plain, re-indexed list instead of
+     * throwing a TypeError from array_values().
+     *
+     * @test
+     *
+     * @dataProvider objectShapedPaymentTypeListDP
+     *
+     * @param \stdClass $response
+     * @param array     $expected
+     */
+    public function objectShapedPaymentTypeListIsReadAsList(\stdClass $response, array $expected): void
+    {
+        $keypair = new Keypair();
+        $keypair->handleResponse($response);
+
+        $this->assertEquals($expected, $keypair->getPaymentTypes());
+        $this->assertSame([0, 1], array_keys($keypair->getPaymentTypes()));
+    }
+
+    /**
+     * @return array
+     */
+    public function objectShapedPaymentTypeListDP(): array
+    {
+        return [
+            'plain, gapped keys' => [
+                json_decode('{"publicKey":"s-pub-stub","availablePaymentTypes":{"0":"card","2":"paypal"}}'),
+                ['card', 'paypal'],
+            ],
+            'detailed, gapped keys' => [
+                json_decode('{"publicKey":"s-pub-stub","paymentTypes":{"0":{"type":"card"},"2":{"type":"paypal"}}}'),
+                [(object)['type' => 'card'], (object)['type' => 'paypal']],
+            ],
+        ];
+    }
+
+    /**
      * Verify boolean flags are parsed correctly whether the API sends them as native
      * booleans or as strings, and that expose() keeps them native booleans.
      *
