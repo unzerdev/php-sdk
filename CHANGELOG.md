@@ -5,11 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [5.0.0](https://github.com/unzerdev/php-sdk/compare/4.0.2..5.0.0)
+## [4.1.0](https://github.com/unzerdev/php-sdk/compare/4.0.2..4.1.0)
+
+### Added
+
+* `recurring` flag on `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit` for registering a payment type for recurring (mandate-based) collection.
+* `getRawResponse()` on `\UnzerSDK\Resources\Keypair`, exposing the exact raw API response string from a Keypair fetch.
+* `Unzer::fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query)` to fetch the available plans (including the `secciUrl`) for any paylater payment type, e.g. `new PaylaterInvoice()` or `new PaylaterDirectDebit()`. The SECCI PDF locale follows the client locale set via `Unzer::setLocale()` (`Accept-Language` header). The payment type and query values are passed through to the API unchanged; invalid input is rejected by the API with an `UnzerApiException`.
+* `\UnzerSDK\Resources\PaylaterPlans` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery` as the generalized plan result/query models.
+* `minimumInstallmentFee` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` via `getMinimumInstallmentFee()` (previously present in the API response but dropped by the SDK).
+
+### Deprecated
+
+* `\UnzerSDK\Resources\PaymentTypes\PIS` (Unzer Bank Transfer / FlexiPay Direct) payment type. It is no longer supported and will be removed in a future major version.
+* `\UnzerSDK\Resources\PaymentTypes\Sofort` payment type. It is no longer supported and will be removed in a future major version.
+* `\UnzerSDK\Resources\PaylaterInstallmentPlans` (use `\UnzerSDK\Resources\PaylaterPlans`) and `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery` (use `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery`). The legacy classes are left unchanged as standalone deprecated aliases with their original public signatures (no inheritance from the new generalized classes), so existing code keeps working. `Unzer::fetchPaylaterInstallmentPlans()` is unchanged.
 
 ### Removed
 
 * Support for PHP 8.1. The minimum supported PHP version is now 8.2 (`composer.json` requires `~8.2.0|~8.3.0|~8.4.0|~8.5.0`). PHP 8.1 is end of life and has no official fix for the PHP2Shell vulnerabilities (CVE-2026-109618, CVE-2026-109619).
+
+### Fixed
+
+* `\UnzerSDK\Resources\Keypair`: boolean flags (`validateBasket`, `cof`) that the API sends as the strings `"true"`/`"false"` were coerced so `"false"` evaluated to `true`. They are now parsed correctly, so `isValidateBasket()` and `expose()` reflect the real value; a missing field stays `null`.
+* `\UnzerSDK\Resources\Keypair`: a plain `fetchKeypair()` listed every payment type twice in `getPaymentTypes()` / `getAvailablePaymentTypes()`; the list is now de-duplicated (detailed keypair unchanged).
 
 ## [4.0.2](https://github.com/unzerdev/php-sdk/compare/4.0.1..4.0.2)
 

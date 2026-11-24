@@ -221,11 +221,11 @@ class Keypair extends AbstractUnzerResource
     }
 
     /**
-     * @param bool $cof
+     * @param bool|null $cof
      *
      * @return Keypair
      */
-    protected function setCof(bool $cof): Keypair
+    protected function setCof(?bool $cof): Keypair
     {
         $this->cof = $cof;
         return $this;
@@ -287,6 +287,34 @@ class Keypair extends AbstractUnzerResource
         } elseif (isset($response->availablePaymentTypes)) {
             $this->paymentTypes = array_values($response->availablePaymentTypes);
         }
+
+        // Booleans may arrive as native values or as strings ("true"/"false"); normalise both.
+        if (isset($response->validateBasket)) {
+            $this->validateBasket = $this->normalizeBoolean($response->validateBasket);
+        }
+        if (isset($response->cof)) {
+            $this->cof = $this->normalizeBoolean($response->cof);
+        }
+    }
+
+    /**
+     * Converts a value the API may send as a native boolean or as a boolean-like
+     * string ("true"/"false") into a real bool, returning null if it is neither.
+     * Prevents the non-strict setters from coercing the string "false" to true.
+     * An empty string is treated as null, matching the "missing value" behaviour
+     * of AbstractUnzerResource.
+     *
+     * @param mixed $value
+     *
+     * @return bool|null
+     */
+    private function normalizeBoolean($value): ?bool
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
     /**

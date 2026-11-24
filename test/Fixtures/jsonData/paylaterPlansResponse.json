@@ -8,7 +8,7 @@
       "totalAmount": "101.31",
       "nominalInterestRate": 9.95,
       "effectiveInterestRate": 10.43,
-      "minimumInstallmentFee": "0.00",
+      "minimumInstallmentFee": "2.50",
       "secciUrl": "https://test-payment.paylater.unzer.com/payolution-payment/infoport/creditagreementdraft/Tx-xyz?duration=3",
       "installmentRates": [
         {
