@@ -94,7 +94,7 @@ class KeypairTest extends BasePaymentTest
         $keypair->handleResponse($testResponse);
 
         // then
-        $this->assertArrayContains($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
         $this->assertEquals('s-pub-1234', $keypair->getPublicKey());
         $this->assertEquals('s-priv-4321', $keypair->getPrivateKey());
         $this->assertTrue($keypair->isCof());
@@ -204,6 +204,69 @@ class KeypairTest extends BasePaymentTest
         // privateKey (private) and detailed (private) must never be exposed
         $this->assertArrayNotHasKey('privateKey', $exposed);
         $this->assertArrayNotHasKey('detailed', $exposed);
+    }
+
+    /**
+     * Verify the plain keypair response (string payment types) is not duplicated,
+     * stays idempotent across repeated handling, and exposes the de-duplicated list.
+     *
+     * @test
+     */
+    public function plainKeypairPaymentTypesAreNotDuplicated(): void
+    {
+        $keypair = new Keypair();
+        $paymentTypes = ['card', 'paypal', 'ideal', 'sofort'];
+        $response = (object)['publicKey' => 's-pub-1234', 'availablePaymentTypes' => $paymentTypes];
+
+        $keypair->handleResponse($response);
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
+        $this->assertSame($paymentTypes, $keypair->getAvailablePaymentTypes());
+
+        // Handling the same response again must not add further entries.
+        $keypair->handleResponse($response);
+        $this->assertSame($paymentTypes, $keypair->getPaymentTypes());
+
+        // expose() and jsonSerialize() must return the same, de-duplicated list.
+        $this->assertSame($paymentTypes, $keypair->expose()['paymentTypes']);
+        $this->assertSame($paymentTypes, json_decode($keypair->jsonSerialize(), true)['paymentTypes']);
+    }
+
+    /**
+     * A payment-type list with non-sequential keys decodes to a stdClass rather than an
+     * array. handleResponse() must still read it as a plain, re-indexed list instead of
+     * throwing a TypeError from array_values().
+     *
+     * @test
+     *
+     * @dataProvider objectShapedPaymentTypeListDP
+     *
+     * @param \stdClass $response
+     * @param array     $expected
+     */
+    public function objectShapedPaymentTypeListIsReadAsList(\stdClass $response, array $expected): void
+    {
+        $keypair = new Keypair();
+        $keypair->handleResponse($response);
+
+        $this->assertEquals($expected, $keypair->getPaymentTypes());
+        $this->assertSame([0, 1], array_keys($keypair->getPaymentTypes()));
+    }
+
+    /**
+     * @return array
+     */
+    public function objectShapedPaymentTypeListDP(): array
+    {
+        return [
+            'plain, gapped keys' => [
+                json_decode('{"publicKey":"s-pub-stub","availablePaymentTypes":{"0":"card","2":"paypal"}}'),
+                ['card', 'paypal'],
+            ],
+            'detailed, gapped keys' => [
+                json_decode('{"publicKey":"s-pub-stub","paymentTypes":{"0":{"type":"card"},"2":{"type":"paypal"}}}'),
+                [(object)['type' => 'card'], (object)['type' => 'paypal']],
+            ],
+        ];
     }
 
     /**
