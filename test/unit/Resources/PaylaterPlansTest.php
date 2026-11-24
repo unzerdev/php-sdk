@@ -136,6 +136,33 @@ class PaylaterPlansTest extends BasePaymentTest
         $this->assertEquals('2.50', $plans->getPlans()[0]->getMinimumInstallmentFee());
     }
 
+    /**
+     * An installment rate without a date (as returned by the amount=0 edge case) maps without a warning.
+     *
+     * @test
+     */
+    public function installmentRateWithoutDateMapsWithoutWarning(): void
+    {
+        $response = json_decode(json_encode([
+            'id' => 'Tx-zero',
+            'amount' => '0.00',
+            'currency' => 'EUR',
+            'plans' => [[
+                'numberOfRates' => 1,
+                'totalAmount' => '0.00',
+                'secciUrl' => 'https://example.test/secci',
+                'installmentRates' => [['rate' => '0.00']],
+            ]],
+        ]));
+
+        $plans = new PaylaterPlans();
+        $plans->handleResponse($response);
+
+        $rate = $plans->getPlans()[0]->getInstallmentRates()[0];
+        $this->assertNull($rate->getDate());
+        $this->assertEquals('0.00', $rate->getRate());
+    }
+
     //<editor-fold desc="Helper">
 
     /**

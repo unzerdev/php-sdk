@@ -102,8 +102,8 @@ class PaylaterPlansTest extends BaseIntegrationTest
     public function invalidQueryDataProvider(): array
     {
         return [
+            // amount=0 is NOT included: the live API accepts it (HTTP 200 with a degenerate plan).
             'negative amount' => [-99.99, 'EUR', 'DE'],
-            'zero amount'     => [0.0, 'EUR', 'DE'],
             'invalid currency' => [99.99, 'XXX', 'DE'],
             'invalid country'  => [99.99, 'EUR', 'ZZ'],
         ];

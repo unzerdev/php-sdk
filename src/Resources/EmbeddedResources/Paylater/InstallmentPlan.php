@@ -175,7 +175,7 @@ class InstallmentPlan extends AbstractUnzerResource
         if (isset($response->installmentRates)) {
             $rates = [];
             foreach ($response->installmentRates as $rate) {
-                $rates[] = new InstallmentRate($rate->date, $rate->rate);
+                $rates[] = new InstallmentRate($rate->date ?? null, $rate->rate ?? null);
             }
             $this->setInstallmentRates($rates);
         }
