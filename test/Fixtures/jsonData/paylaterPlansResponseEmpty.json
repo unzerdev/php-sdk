@@ -1,0 +1,10 @@
+{
+  "id": "Tx-empty",
+  "amount": "99.99",
+  "currency": "EUR",
+  "plans": [],
+  "isSuccess": true,
+  "isPending": false,
+  "isResumed": false,
+  "isError": false
+}

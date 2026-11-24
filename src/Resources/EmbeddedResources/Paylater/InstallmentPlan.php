@@ -19,6 +19,8 @@ class InstallmentPlan extends AbstractUnzerResource
 
     private $totalAmount;
 
+    private $minimumInstallmentFee;
+
     private $nominalInterestRate;
 
     /** @var float $effectiveInterestRate */
@@ -90,6 +92,25 @@ class InstallmentPlan extends AbstractUnzerResource
     /**
      * @return mixed
      */
+    public function getMinimumInstallmentFee()
+    {
+        return $this->minimumInstallmentFee;
+    }
+
+    /**
+     * @param mixed $minimumInstallmentFee
+     *
+     * @return InstallmentPlan
+     */
+    public function setMinimumInstallmentFee($minimumInstallmentFee)
+    {
+        $this->minimumInstallmentFee = $minimumInstallmentFee;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getNominalInterestRate()
     {
         return $this->nominalInterestRate;
@@ -154,7 +175,7 @@ class InstallmentPlan extends AbstractUnzerResource
         if (isset($response->installmentRates)) {
             $rates = [];
             foreach ($response->installmentRates as $rate) {
-                $rates[] = new InstallmentRate($rate->date, $rate->rate);
+                $rates[] = new InstallmentRate($rate->date ?? null, $rate->rate ?? null);
             }
             $this->setInstallmentRates($rates);
         }
