@@ -35,7 +35,7 @@ class PaylaterPlans extends AbstractUnzerResource
     private ?PaylaterPlansQuery $queryParameter = null;
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getAmount(): ?float
     {
@@ -54,7 +54,7 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCurrency(): ?string
     {
@@ -73,7 +73,7 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCountry(): ?string
     {
@@ -92,7 +92,7 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCustomerType(): ?string
     {

@@ -198,8 +198,8 @@ class PaylaterPlansTest extends BasePaymentTest
             'country' => null,
             'customerType' => null,
             'plans' => [[
-                'numberOfRates' => 1,
-                'totalAmount' => '100.00',
+                'numberOfRates' => null,
+                'totalAmount' => null,
                 'interestAmount' => null,
                 'minimumInstallmentFee' => null,
                 'nominalInterestRate' => null,
@@ -217,7 +217,8 @@ class PaylaterPlansTest extends BasePaymentTest
         $this->assertNull($plans->getCountry());
         $this->assertNull($plans->getCustomerType());
         $plan = $plans->getPlans()[0];
-        $this->assertSame(1, $plan->getNumberOfRates());
+        $this->assertNull($plan->getNumberOfRates());
+        $this->assertNull($plan->getTotalAmount());
         $this->assertNull($plan->getSecciUrl());
         $this->assertNull($plan->getInterestAmount());
         $this->assertNull($plan->getMinimumInstallmentFee());

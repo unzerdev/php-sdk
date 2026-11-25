@@ -10,9 +10,9 @@ use stdClass;
  * Resource representing a single plan item returned by the generalized paylater /plans endpoint.
  *
  * The same PAPI schema backs all three paylater types (installment, invoice, direct debit), but each
- * type only populates a subset of the optional fields: invoice and direct debit omit the interest-rate
- * fields and send rates without a date, while installment carries the full set. Every getter is therefore
- * nullable so a field a given type does not return reads back as null instead of throwing.
+ * type only populates a subset of the optional fields: invoice and direct debit omit `nominalInterestRate`
+ * and `effectiveInterestRate` and send rates without a date, while installment carries the full set. Every
+ * getter is therefore nullable so a field a given type does not return reads back as null instead of throwing.
  *
  *  @link  https://docs.unzer.com/
  *
