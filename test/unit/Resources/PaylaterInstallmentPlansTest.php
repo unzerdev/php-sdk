@@ -152,7 +152,9 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
         $this->assertCount(count($expected), $actual);
 
         foreach ($expected as $index => $plan) {
+            $this->assertEquals($plan->numberOfRates ?? null, $actual[$index]->getNumberOfRates());
             $this->assertEquals($plan->totalAmount ?? null, $actual[$index]->getTotalAmount());
+            $this->assertEquals($plan->interestAmount ?? null, $actual[$index]->getInterestAmount());
             $this->assertEquals($plan->minimumInstallmentFee ?? null, $actual[$index]->getMinimumInstallmentFee());
             $this->assertEquals($plan->nominalInterestRate ?? null, $actual[$index]->getNominalInterestRate());
             $this->assertEquals($plan->effectiveInterestRate ?? null, $actual[$index]->getEffectiveInterestRate());
