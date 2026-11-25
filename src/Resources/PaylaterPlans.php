@@ -20,23 +20,19 @@ class PaylaterPlans extends AbstractUnzerResource
 {
     use HasStates;
 
-    /** @var float */
-    private $amount;
+    private ?float $amount = null;
 
-    /** @var string */
-    private $currency;
+    private ?string $currency = null;
 
-    /** @var string */
-    private $country;
+    private ?string $country = null;
 
-    /** @var string */
-    private $customerType;
+    private ?string $customerType = null;
 
     /** @var PaylaterPlan[] $plans */
-    private $plans = [];
+    private array $plans = [];
 
     /** @var PaylaterPlansQuery Query parameter used to fetch available plans. */
-    private $queryParameter;
+    private ?PaylaterPlansQuery $queryParameter = null;
 
     /**
      * @return float
