@@ -19,25 +19,31 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
+use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInvoice;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
 use UnzerSDK\test\BaseIntegrationTest;
 
 use function count;
+use function is_array;
+use function is_float;
 
 class PaylaterPlansTest extends BaseIntegrationTest
 {
     /**
-     * Verify real plans can be fetched for Paylater Invoice and Direct Debit, exposing a secciUrl.
+     * Verify real plans can be fetched via the generalized endpoint for all three supported paylater
+     * types, and that every plan parameter is gettable from the response (null for the optional fields
+     * a given type does not send) rather than throwing.
      *
      * @test
      *
      * @dataProvider supportedPaylaterTypeDataProvider
      */
-    public function plansAreFetchableWithSecciUrl(BasePaymentType $paymentType): void
+    public function plansAreFetchableWithAllParametersGettable(BasePaymentType $paymentType): void
     {
         $query = new PaylaterPlansQuery(99.99, 'EUR', 'DE', CustomerTypes::B2C);
         $plans = $this->unzer->fetchPaylaterPlans($paymentType, $query);
@@ -46,6 +52,7 @@ class PaylaterPlansTest extends BaseIntegrationTest
         $this->assertGreaterThan(0, count($plans->getPlans()));
         foreach ($plans->getPlans() as $plan) {
             $this->assertNotEmpty($plan->getSecciUrl());
+            $this->assertAllPlanParametersGettable($plan);
         }
     }
 
@@ -89,11 +96,41 @@ class PaylaterPlansTest extends BaseIntegrationTest
         }
     }
 
+    //<editor-fold desc="Helper">
+
+    /**
+     * Asserts every plan parameter is gettable from the live response: the fields all three types send
+     * are present, and the installment-only interest rates read back as float or null without throwing.
+     */
+    private function assertAllPlanParametersGettable(InstallmentPlan $plan): void
+    {
+        $this->assertIsInt($plan->getNumberOfRates());
+        $this->assertIsString($plan->getTotalAmount());
+        $this->assertIsString($plan->getInterestAmount());
+        $this->assertIsString($plan->getMinimumInstallmentFee());
+        $this->assertNotEmpty($plan->getSecciUrl());
+
+        $nominal = $plan->getNominalInterestRate();
+        $this->assertTrue($nominal === null || is_float($nominal));
+        $effective = $plan->getEffectiveInterestRate();
+        $this->assertTrue($effective === null || is_float($effective));
+
+        $rates = $plan->getInstallmentRates();
+        $this->assertTrue($rates === null || is_array($rates));
+        foreach ($rates ?? [] as $rate) {
+            $this->assertNotNull($rate->getRate());
+            $this->assertTrue($rate->getDate() === null || is_string($rate->getDate()));
+        }
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="Data Providers">
 
     public function supportedPaylaterTypeDataProvider(): array
     {
         return [
+            'installment' => [new PaylaterInstallment()],
             'invoice'     => [new PaylaterInvoice()],
             'directDebit' => [new PaylaterDirectDebit('DE89370400440532013000', 'Peter Mustermann')],
         ];

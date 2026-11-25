@@ -14,6 +14,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 * `Unzer::fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query)` to fetch the available plans (including the `secciUrl`) for any paylater payment type, e.g. `new PaylaterInvoice()` or `new PaylaterDirectDebit()`. The SECCI PDF locale follows the client locale set via `Unzer::setLocale()` (`Accept-Language` header). The payment type and query values are passed through to the API unchanged; invalid input is rejected by the API with an `UnzerApiException`.
 * `\UnzerSDK\Resources\PaylaterPlans` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery` as the generalized plan result/query models.
 * `minimumInstallmentFee` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` via `getMinimumInstallmentFee()` (previously present in the API response but dropped by the SDK).
+* `interestAmount` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` via `getInterestAmount()` (previously present in the API response but dropped by the SDK).
 
 ### Deprecated
 
@@ -29,8 +30,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 * `\UnzerSDK\Resources\Keypair`: boolean flags (`validateBasket`, `cof`) that the API sends as the strings `"true"`/`"false"` were coerced so `"false"` evaluated to `true`. They are now parsed correctly, so `isValidateBasket()` and `expose()` reflect the real value; a missing field stays `null`.
 * `\UnzerSDK\Resources\Keypair`: a plain `fetchKeypair()` listed every payment type twice in `getPaymentTypes()` / `getAvailablePaymentTypes()`; the list is now de-duplicated (detailed keypair unchanged).
-
-## [4.0.2](https://github.com/unzerdev/php-sdk/compare/4.0.1..4.0.2)
+* `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan`: the plan getters are now nullable (`getSecciUrl(): ?string`, `getEffectiveInterestRate(): ?float`, `getNominalInterestRate(): ?float`, `getNumberOfRates(): ?int`, `getTotalAmount(): ?string`, `getMinimumInstallmentFee(): ?string`). Fetching Paylater Invoice and Direct Debit plans — which omit the interest-rate fields — no longer throws a `TypeError`, and a null field in any plan response (`\UnzerSDK\Resources\PaylaterPlans` included) is tolerated instead of crashing the fetch.
 
 ### Changed
 

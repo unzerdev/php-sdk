@@ -47,11 +47,11 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param float $amount
+     * @param float|null $amount
      *
      * @return PaylaterPlans
      */
-    public function setAmount(float $amount): PaylaterPlans
+    public function setAmount(?float $amount): PaylaterPlans
     {
         $this->amount = $amount;
         return $this;
@@ -66,11 +66,11 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param string $currency
+     * @param string|null $currency
      *
      * @return PaylaterPlans
      */
-    public function setCurrency(string $currency): PaylaterPlans
+    public function setCurrency(?string $currency): PaylaterPlans
     {
         $this->currency = $currency;
         return $this;
@@ -123,13 +123,13 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param stdClass[] $plans
+     * @param stdClass[]|null $plans
      *
      * @return PaylaterPlans
      */
-    protected function setPlans(array $plans): PaylaterPlans
+    protected function setPlans(?array $plans): PaylaterPlans
     {
-        $this->plans = $plans;
+        $this->plans = $plans ?? [];
         return $this;
     }
 
