@@ -15,6 +15,7 @@ use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentRate;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
+use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\Resources\PaylaterPlans;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
@@ -234,6 +235,46 @@ class PaylaterPlansTest extends BasePaymentTest
 
         $this->assertIsArray($plans->getPlans());
         $this->assertEmpty($plans->getPlans());
+    }
+
+    /**
+     * Migration guard: for the installment response, the new PaylaterPlans flow maps to the same plan
+     * data as the deprecated PaylaterInstallmentPlans flow. Confirms switching is a rename (plus passing
+     * the payment type to fetchPaylaterPlans()) and not a data-shape change.
+     *
+     * @test
+     */
+    public function newFlowMapsSameInstallmentDataAsLegacyFlow(): void
+    {
+        $json = JsonProvider::getJsonFromFile('paylaterPlansResponse.json');
+
+        $legacy = new PaylaterInstallmentPlans();
+        $legacy->handleResponse(json_decode($json));
+        $new = new PaylaterPlans();
+        $new->handleResponse(json_decode($json));
+
+        $this->assertSame($legacy->getId(), $new->getId());
+        $this->assertSame($legacy->getAmount(), $new->getAmount());
+        $this->assertSame($legacy->getCurrency(), $new->getCurrency());
+        $this->assertCount(count($legacy->getPlans()), $new->getPlans());
+
+        foreach ($legacy->getPlans() as $index => $legacyPlan) {
+            $newPlan = $new->getPlans()[$index];
+            $this->assertSame($legacyPlan->getSecciUrl(), $newPlan->getSecciUrl());
+            $this->assertSame($legacyPlan->getNumberOfRates(), $newPlan->getNumberOfRates());
+            $this->assertSame($legacyPlan->getTotalAmount(), $newPlan->getTotalAmount());
+            $this->assertSame($legacyPlan->getMinimumInstallmentFee(), $newPlan->getMinimumInstallmentFee());
+            $this->assertSame($legacyPlan->getNominalInterestRate(), $newPlan->getNominalInterestRate());
+            $this->assertSame($legacyPlan->getEffectiveInterestRate(), $newPlan->getEffectiveInterestRate());
+
+            $legacyRates = $legacyPlan->getInstallmentRates() ?? [];
+            $newRates = $newPlan->getInstallmentRates() ?? [];
+            $this->assertCount(count($legacyRates), $newRates);
+            foreach ($legacyRates as $rateIndex => $legacyRate) {
+                $this->assertSame($legacyRate->getDate(), $newRates[$rateIndex]->getDate());
+                $this->assertSame($legacyRate->getRate(), $newRates[$rateIndex]->getRate());
+            }
+        }
     }
 
     //<editor-fold desc="Helper">
