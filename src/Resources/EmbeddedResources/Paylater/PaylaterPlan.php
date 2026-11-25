@@ -19,29 +19,22 @@ use stdClass;
  */
 class PaylaterPlan extends AbstractUnzerResource
 {
-    /** @var int|null $numberOfRates */
-    private $numberOfRates;
+    private ?int $numberOfRates = null;
 
-    /** @var string|null $totalAmount */
-    private $totalAmount;
+    private ?string $totalAmount = null;
 
-    /** @var string|null $interestAmount */
-    private $interestAmount;
+    private ?string $interestAmount = null;
 
-    /** @var string|null $minimumInstallmentFee */
-    private $minimumInstallmentFee;
+    private ?string $minimumInstallmentFee = null;
 
-    /** @var float|null $nominalInterestRate */
-    private $nominalInterestRate;
+    private ?float $nominalInterestRate = null;
 
-    /** @var float|null $effectiveInterestRate */
-    private $effectiveInterestRate;
+    private ?float $effectiveInterestRate = null;
 
-    /** @var string|null $secciUrl */
-    private $secciUrl;
+    private ?string $secciUrl = null;
 
-    /** @var InstallmentRate[]|null $installmentRates */
-    private $installmentRates;
+    /** @var InstallmentRate[]|null */
+    private ?array $installmentRates = null;
 
     /**
      * @return string|null
