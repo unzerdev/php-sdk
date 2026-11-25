@@ -12,8 +12,8 @@
 namespace UnzerSDK\test\unit\Resources;
 
 use UnzerSDK\Constants\CustomerTypes;
-use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentRate;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
 use UnzerSDK\Resources\PaylaterPlans;
 use UnzerSDK\test\BasePaymentTest;
@@ -241,8 +241,9 @@ class PaylaterPlansTest extends BasePaymentTest
     /**
      * Asserts every getter of a plan item is callable and returns the expected nullable type.
      */
-    private function assertAllPlanParametersGettable(InstallmentPlan $plan): void
+    private function assertAllPlanParametersGettable(PaylaterPlan $plan): void
     {
+        $this->assertInstanceOf(PaylaterPlan::class, $plan);
         $this->assertIsInt($plan->getNumberOfRates());
         $this->assertIsString($plan->getTotalAmount());
         $this->assertIsString($plan->getMinimumInstallmentFee());
@@ -265,7 +266,7 @@ class PaylaterPlansTest extends BasePaymentTest
 
     /**
      * @param object[]          $expected
-     * @param InstallmentPlan[] $actual
+     * @param PaylaterPlan[] $actual
      */
     private function comparePlans(array $expected, array $actual): void
     {

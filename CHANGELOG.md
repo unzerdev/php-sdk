@@ -13,14 +13,16 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 * `getRawResponse()` on `\UnzerSDK\Resources\Keypair`, exposing the exact raw API response string from a Keypair fetch.
 * `Unzer::fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query)` to fetch the available plans (including the `secciUrl`) for any paylater payment type, e.g. `new PaylaterInvoice()` or `new PaylaterDirectDebit()`. The SECCI PDF locale follows the client locale set via `Unzer::setLocale()` (`Accept-Language` header). The payment type and query values are passed through to the API unchanged; invalid input is rejected by the API with an `UnzerApiException`.
 * `\UnzerSDK\Resources\PaylaterPlans` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery` as the generalized plan result/query models.
-* `minimumInstallmentFee` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` via `getMinimumInstallmentFee()` (previously present in the API response but dropped by the SDK).
-* `interestAmount` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` via `getInterestAmount()` (previously present in the API response but dropped by the SDK).
+* `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan` as the generalized plan-item model returned by `PaylaterPlans::getPlans()`. It replaces the installment-specific `InstallmentPlan` name (see _Deprecated_); adopting the new `fetchPaylaterPlans()` flow should type-hint `PaylaterPlan`.
+* `minimumInstallmentFee` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan` via `getMinimumInstallmentFee()` (previously present in the API response but dropped by the SDK).
+* `interestAmount` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan` via `getInterestAmount()` (previously present in the API response but dropped by the SDK).
 
 ### Deprecated
 
 * `\UnzerSDK\Resources\PaymentTypes\PIS` (Unzer Bank Transfer / FlexiPay Direct) payment type. It is no longer supported and will be removed in a future major version.
 * `\UnzerSDK\Resources\PaymentTypes\Sofort` payment type. It is no longer supported and will be removed in a future major version.
 * `\UnzerSDK\Resources\PaylaterInstallmentPlans` (use `\UnzerSDK\Resources\PaylaterPlans`) and `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery` (use `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery`). The legacy classes are left unchanged as standalone deprecated aliases with their original public signatures (no inheritance from the new generalized classes), so existing code keeps working. `Unzer::fetchPaylaterInstallmentPlans()` is unchanged.
+* `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` (use `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan`). It is now a subclass of `PaylaterPlan` kept for backward compatibility: the deprecated `Unzer::fetchPaylaterInstallmentPlans()` flow still returns `InstallmentPlan` items and existing `InstallmentPlan` type hints keep working (an `InstallmentPlan` is-a `PaylaterPlan`). It will be removed in a future major version.
 
 ### Removed
 
@@ -30,7 +32,7 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 * `\UnzerSDK\Resources\Keypair`: boolean flags (`validateBasket`, `cof`) that the API sends as the strings `"true"`/`"false"` were coerced so `"false"` evaluated to `true`. They are now parsed correctly, so `isValidateBasket()` and `expose()` reflect the real value; a missing field stays `null`.
 * `\UnzerSDK\Resources\Keypair`: a plain `fetchKeypair()` listed every payment type twice in `getPaymentTypes()` / `getAvailablePaymentTypes()`; the list is now de-duplicated (detailed keypair unchanged).
-* `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan`: the plan getters are now nullable (`getSecciUrl(): ?string`, `getEffectiveInterestRate(): ?float`, `getNominalInterestRate(): ?float`, `getNumberOfRates(): ?int`, `getTotalAmount(): ?string`, `getMinimumInstallmentFee(): ?string`). Fetching Paylater Invoice and Direct Debit plans — which omit the interest-rate fields — no longer throws a `TypeError`, and a null field in any plan response (`\UnzerSDK\Resources\PaylaterPlans` included) is tolerated instead of crashing the fetch.
+* `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan` (and therefore its deprecated subclass `InstallmentPlan`): the plan getters are now nullable (`getSecciUrl(): ?string`, `getEffectiveInterestRate(): ?float`, `getNominalInterestRate(): ?float`, `getNumberOfRates(): ?int`, `getTotalAmount(): ?string`, `getMinimumInstallmentFee(): ?string`). Fetching Paylater Invoice and Direct Debit plans — which omit the interest-rate fields — no longer throws a `TypeError`, and a null field in any plan response (`\UnzerSDK\Resources\PaylaterPlans` included) is tolerated instead of crashing the fetch.
 
 ### Changed
 

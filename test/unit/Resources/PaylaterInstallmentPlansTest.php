@@ -16,6 +16,7 @@ use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentRate;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
@@ -128,6 +129,12 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
 
         $this->assertCount(count($jsonResponse->plans), $paylaterInstallmentPlans->getPlans());
 
+        // Backward compatibility: the legacy flow still returns InstallmentPlan items, which are now a
+        // subclass of the generalized PaylaterPlan.
+        $firstPlan = $paylaterInstallmentPlans->getPlans()[0];
+        $this->assertInstanceOf(InstallmentPlan::class, $firstPlan);
+        $this->assertInstanceOf(PaylaterPlan::class, $firstPlan);
+
         // then
         $this->assertEquals($jsonResponse->id ?? null, $paylaterInstallmentPlans->getId());
         $this->assertEquals($jsonResponse->amount ?? null, $paylaterInstallmentPlans->getAmount());
@@ -137,6 +144,18 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
         $this->assertEquals($jsonResponse->isPending ?? null, $paylaterInstallmentPlans->isPending());
 
         $this->comparePlans($jsonResponse->plans, $paylaterInstallmentPlans->getPlans());
+    }
+
+    /**
+     * The deprecated InstallmentPlan is kept as a subclass of the generalized PaylaterPlan, so existing
+     * code that type-hints or checks InstallmentPlan keeps working after the rename.
+     *
+     * @test
+     */
+    public function installmentPlanIsADeprecatedSubclassOfPaylaterPlan(): void
+    {
+        $this->assertTrue(is_subclass_of(InstallmentPlan::class, PaylaterPlan::class));
+        $this->assertInstanceOf(PaylaterPlan::class, new InstallmentPlan());
     }
 
     //<editor-fold desc="Data Providers">

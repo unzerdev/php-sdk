@@ -19,7 +19,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 
 use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Exceptions\UnzerApiException;
-use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\PaylaterDirectDebit;
@@ -102,7 +102,7 @@ class PaylaterPlansTest extends BaseIntegrationTest
      * Asserts every plan parameter is gettable from the live response: the fields all three types send
      * are present, and the installment-only interest rates read back as float or null without throwing.
      */
-    private function assertAllPlanParametersGettable(InstallmentPlan $plan): void
+    private function assertAllPlanParametersGettable(PaylaterPlan $plan): void
     {
         $this->assertIsInt($plan->getNumberOfRates());
         $this->assertIsString($plan->getTotalAmount());
