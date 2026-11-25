@@ -17,6 +17,10 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 * `minimumInstallmentFee` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan` via `getMinimumInstallmentFee()` (previously present in the API response but dropped by the SDK).
 * `interestAmount` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan` via `getInterestAmount()` (previously present in the API response but dropped by the SDK).
 
+### Changed
+
+* `\UnzerSDK\Interfaces\PaymentServiceInterface` gained the `fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query): PaylaterPlans` method. **Breaking change for any external class that implements `PaymentServiceInterface`** — it must now implement this method. The bundled `\UnzerSDK\Services\PaymentService` already implements it, so typical SDK consumers are unaffected.
+
 ### Deprecated
 
 * `\UnzerSDK\Resources\PaymentTypes\PIS` (Unzer Bank Transfer / FlexiPay Direct) payment type. It is no longer supported and will be removed in a future major version.
@@ -33,6 +37,8 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 * `\UnzerSDK\Resources\Keypair`: boolean flags (`validateBasket`, `cof`) that the API sends as the strings `"true"`/`"false"` were coerced so `"false"` evaluated to `true`. They are now parsed correctly, so `isValidateBasket()` and `expose()` reflect the real value; a missing field stays `null`.
 * `\UnzerSDK\Resources\Keypair`: a plain `fetchKeypair()` listed every payment type twice in `getPaymentTypes()` / `getAvailablePaymentTypes()`; the list is now de-duplicated (detailed keypair unchanged).
 * `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan`: the plan getters are nullable (`getSecciUrl(): ?string`, `getEffectiveInterestRate(): ?float`, `getNominalInterestRate(): ?float`, `getNumberOfRates(): ?int`, `getTotalAmount(): ?string`, `getMinimumInstallmentFee(): ?string`). Fetching Paylater Invoice and Direct Debit plans — which omit the interest-rate fields — no longer throws a `TypeError`, and a null field in any plan response (`\UnzerSDK\Resources\PaylaterPlans` included) is tolerated instead of crashing the fetch. (The deprecated `InstallmentPlan` keeps its original non-nullable signatures.)
+
+## [4.0.2](https://github.com/unzerdev/php-sdk/compare/4.0.1..4.0.2)
 
 ### Changed
 

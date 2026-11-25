@@ -85,11 +85,11 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param string $country
+     * @param string|null $country
      *
      * @return PaylaterPlans
      */
-    public function setCountry(string $country): PaylaterPlans
+    public function setCountry(?string $country): PaylaterPlans
     {
         $this->country = $country;
         return $this;
@@ -104,11 +104,11 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param string $customerType
+     * @param string|null $customerType
      *
      * @return PaylaterPlans
      */
-    public function setCustomerType(string $customerType): PaylaterPlans
+    public function setCustomerType(?string $customerType): PaylaterPlans
     {
         $this->customerType = $customerType;
         return $this;

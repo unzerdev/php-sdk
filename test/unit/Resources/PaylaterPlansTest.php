@@ -194,7 +194,9 @@ class PaylaterPlansTest extends BasePaymentTest
         $response = json_decode(json_encode([
             'id' => 'Tx-null',
             'amount' => null,
-            'currency' => 'EUR',
+            'currency' => null,
+            'country' => null,
+            'customerType' => null,
             'plans' => [[
                 'numberOfRates' => 1,
                 'totalAmount' => '100.00',
@@ -211,6 +213,9 @@ class PaylaterPlansTest extends BasePaymentTest
         $plans->handleResponse($response);
 
         $this->assertNull($plans->getAmount());
+        $this->assertNull($plans->getCurrency());
+        $this->assertNull($plans->getCountry());
+        $this->assertNull($plans->getCustomerType());
         $plan = $plans->getPlans()[0];
         $this->assertSame(1, $plan->getNumberOfRates());
         $this->assertNull($plan->getSecciUrl());
