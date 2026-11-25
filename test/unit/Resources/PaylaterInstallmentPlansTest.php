@@ -129,11 +129,8 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
 
         $this->assertCount(count($jsonResponse->plans), $paylaterInstallmentPlans->getPlans());
 
-        // Backward compatibility: the legacy flow still returns InstallmentPlan items, which are now a
-        // subclass of the generalized PaylaterPlan.
-        $firstPlan = $paylaterInstallmentPlans->getPlans()[0];
-        $this->assertInstanceOf(InstallmentPlan::class, $firstPlan);
-        $this->assertInstanceOf(PaylaterPlan::class, $firstPlan);
+        // Backward compatibility: the legacy flow still returns InstallmentPlan items.
+        $this->assertInstanceOf(InstallmentPlan::class, $paylaterInstallmentPlans->getPlans()[0]);
 
         // then
         $this->assertEquals($jsonResponse->id ?? null, $paylaterInstallmentPlans->getId());
@@ -147,15 +144,20 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
     }
 
     /**
-     * The deprecated InstallmentPlan is kept as a subclass of the generalized PaylaterPlan, so existing
-     * code that type-hints or checks InstallmentPlan keeps working after the rename.
+     * The deprecated InstallmentPlan is a standalone class (it does NOT inherit from the generalized
+     * PaylaterPlan), so its original public return types are preserved byte-for-byte and existing
+     * integrations that subclass it or rely on the return type keep working.
      *
      * @test
+     *
+     * @dataProvider installmentPlanReturnTypeDataProvider
      */
-    public function installmentPlanIsADeprecatedSubclassOfPaylaterPlan(): void
+    public function installmentPlanSetterReturnTypesAreUnchanged(string $method): void
     {
-        $this->assertTrue(is_subclass_of(InstallmentPlan::class, PaylaterPlan::class));
-        $this->assertInstanceOf(PaylaterPlan::class, new InstallmentPlan());
+        $returnType = (new ReflectionMethod(InstallmentPlan::class, $method))->getReturnType();
+        $this->assertNotNull($returnType);
+        $this->assertSame(InstallmentPlan::class, $returnType->getName());
+        $this->assertFalse(is_subclass_of(InstallmentPlan::class, PaylaterPlan::class));
     }
 
     //<editor-fold desc="Data Providers">
@@ -173,7 +175,6 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
         foreach ($expected as $index => $plan) {
             $this->assertEquals($plan->numberOfRates ?? null, $actual[$index]->getNumberOfRates());
             $this->assertEquals($plan->totalAmount ?? null, $actual[$index]->getTotalAmount());
-            $this->assertEquals($plan->interestAmount ?? null, $actual[$index]->getInterestAmount());
             $this->assertEquals($plan->minimumInstallmentFee ?? null, $actual[$index]->getMinimumInstallmentFee());
             $this->assertEquals($plan->nominalInterestRate ?? null, $actual[$index]->getNominalInterestRate());
             $this->assertEquals($plan->effectiveInterestRate ?? null, $actual[$index]->getEffectiveInterestRate());
@@ -209,6 +210,15 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
             [100, 'EUR', 'DE', 'B2C'],
             [100, 'EUR', 'GB', 'B2B'],
             [100, 'CHF', 'CHE', 'B2C'],
+        ];
+    }
+
+    public function installmentPlanReturnTypeDataProvider(): array
+    {
+        return [
+            'setSecciUrl'              => ['setSecciUrl'],
+            'setNumberOfRates'         => ['setNumberOfRates'],
+            'setEffectiveInterestRate' => ['setEffectiveInterestRate'],
         ];
     }
 

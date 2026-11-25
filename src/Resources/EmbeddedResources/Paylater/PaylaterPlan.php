@@ -54,9 +54,9 @@ class PaylaterPlan extends AbstractUnzerResource
     /**
      * @param string|null $secciUrl
      *
-     * @return static
+     * @return PaylaterPlan
      */
-    public function setSecciUrl(?string $secciUrl): static
+    public function setSecciUrl(?string $secciUrl): PaylaterPlan
     {
         $this->secciUrl = $secciUrl;
         return $this;
@@ -73,9 +73,9 @@ class PaylaterPlan extends AbstractUnzerResource
     /**
      * @param int|null $numberOfRates
      *
-     * @return static
+     * @return PaylaterPlan
      */
-    public function setNumberOfRates(?int $numberOfRates): static
+    public function setNumberOfRates(?int $numberOfRates): PaylaterPlan
     {
         $this->numberOfRates = $numberOfRates;
         return $this;
@@ -92,9 +92,9 @@ class PaylaterPlan extends AbstractUnzerResource
     /**
      * @param string|null $totalAmount
      *
-     * @return static
+     * @return PaylaterPlan
      */
-    public function setTotalAmount(?string $totalAmount): static
+    public function setTotalAmount(?string $totalAmount): PaylaterPlan
     {
         $this->totalAmount = $totalAmount;
         return $this;
@@ -111,9 +111,9 @@ class PaylaterPlan extends AbstractUnzerResource
     /**
      * @param string|null $interestAmount
      *
-     * @return static
+     * @return PaylaterPlan
      */
-    public function setInterestAmount(?string $interestAmount): static
+    public function setInterestAmount(?string $interestAmount): PaylaterPlan
     {
         $this->interestAmount = $interestAmount;
         return $this;
@@ -130,9 +130,9 @@ class PaylaterPlan extends AbstractUnzerResource
     /**
      * @param string|null $minimumInstallmentFee
      *
-     * @return static
+     * @return PaylaterPlan
      */
-    public function setMinimumInstallmentFee(?string $minimumInstallmentFee): static
+    public function setMinimumInstallmentFee(?string $minimumInstallmentFee): PaylaterPlan
     {
         $this->minimumInstallmentFee = $minimumInstallmentFee;
         return $this;
@@ -149,9 +149,9 @@ class PaylaterPlan extends AbstractUnzerResource
     /**
      * @param float|null $nominalInterestRate
      *
-     * @return static
+     * @return PaylaterPlan
      */
-    public function setNominalInterestRate(?float $nominalInterestRate): static
+    public function setNominalInterestRate(?float $nominalInterestRate): PaylaterPlan
     {
         $this->nominalInterestRate = $nominalInterestRate;
         return $this;
@@ -168,9 +168,9 @@ class PaylaterPlan extends AbstractUnzerResource
     /**
      * @param float|null $effectiveInterestRate
      *
-     * @return static
+     * @return PaylaterPlan
      */
-    public function setEffectiveInterestRate(?float $effectiveInterestRate): static
+    public function setEffectiveInterestRate(?float $effectiveInterestRate): PaylaterPlan
     {
         $this->effectiveInterestRate = $effectiveInterestRate;
         return $this;
@@ -187,9 +187,9 @@ class PaylaterPlan extends AbstractUnzerResource
     /**
      * @param InstallmentRate[]|null $installmentRates
      *
-     * @return static
+     * @return PaylaterPlan
      */
-    protected function setInstallmentRates(?array $installmentRates): static
+    protected function setInstallmentRates(?array $installmentRates): PaylaterPlan
     {
         $this->installmentRates = $installmentRates;
         return $this;

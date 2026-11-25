@@ -2,18 +2,188 @@
 
 namespace UnzerSDK\Resources\EmbeddedResources\Paylater;
 
+use UnzerSDK\Adapter\HttpAdapterInterface;
+use UnzerSDK\Resources\AbstractUnzerResource;
+use stdClass;
+
 /**
- * Resource representing a single plan item of the legacy installment plans flow.
+ * Resource representing the installment plan for Paylater Installment.
  *
  * @deprecated since the plan item was generalized across all paylater types. Use {@see PaylaterPlan}
  *             instead; it is the item type returned by the generalized `Unzer::fetchPaylaterPlans()`
- *             flow. This class is kept as an unchanged subclass so the deprecated
- *             `Unzer::fetchPaylaterInstallmentPlans()` flow and existing type hints keep working
- *             (an InstallmentPlan is-a PaylaterPlan). It will be removed in a future major version.
+ *             flow. This standalone class keeps its original public signatures unchanged so the
+ *             deprecated `Unzer::fetchPaylaterInstallmentPlans()` flow and existing integrations keep
+ *             working. It will be removed in a future major version.
  *
- * @link  https://docs.unzer.com/
+ *  @link  https://docs.unzer.com/
  *
  */
-class InstallmentPlan extends PaylaterPlan
+class InstallmentPlan extends AbstractUnzerResource
 {
+    /** @var int $numberOfRates */
+    private $numberOfRates;
+
+    private $totalAmount;
+
+    private $minimumInstallmentFee;
+
+    private $nominalInterestRate;
+
+    /** @var float $effectiveInterestRate */
+    private $effectiveInterestRate;
+
+    /** @var string $secciUrl */
+    private $secciUrl;
+
+    /** @var InstallmentRate */
+    private $installmentRates;
+
+    /**
+     * @return string
+     */
+    public function getSecciUrl(): string
+    {
+        return $this->secciUrl;
+    }
+
+    /**
+     * @param string $secciUrl
+     *
+     * @return InstallmentPlan
+     */
+    public function setSecciUrl(string $secciUrl): InstallmentPlan
+    {
+        $this->secciUrl = $secciUrl;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfRates(): int
+    {
+        return $this->numberOfRates;
+    }
+
+    /**
+     * @param int $numberOfRates
+     *
+     * @return InstallmentPlan
+     */
+    public function setNumberOfRates(int $numberOfRates): InstallmentPlan
+    {
+        $this->numberOfRates = $numberOfRates;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalAmount()
+    {
+        return $this->totalAmount;
+    }
+
+    /**
+     * @param mixed $totalAmount
+     *
+     * @return InstallmentPlan
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        $this->totalAmount = $totalAmount;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMinimumInstallmentFee()
+    {
+        return $this->minimumInstallmentFee;
+    }
+
+    /**
+     * @param mixed $minimumInstallmentFee
+     *
+     * @return InstallmentPlan
+     */
+    public function setMinimumInstallmentFee($minimumInstallmentFee)
+    {
+        $this->minimumInstallmentFee = $minimumInstallmentFee;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNominalInterestRate()
+    {
+        return $this->nominalInterestRate;
+    }
+
+    /**
+     * @param mixed $nominalInterestRate
+     *
+     * @return InstallmentPlan
+     */
+    public function setNominalInterestRate($nominalInterestRate)
+    {
+        $this->nominalInterestRate = $nominalInterestRate;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getEffectiveInterestRate(): float
+    {
+        return $this->effectiveInterestRate;
+    }
+
+    /**
+     * @param float $effectiveInterestRate
+     *
+     * @return InstallmentPlan
+     */
+    public function setEffectiveInterestRate(float $effectiveInterestRate): InstallmentPlan
+    {
+        $this->effectiveInterestRate = $effectiveInterestRate;
+        return $this;
+    }
+
+    /**
+     * @return InstallmentRate[]|null
+     */
+    public function getInstallmentRates(): ?array
+    {
+        return $this->installmentRates;
+    }
+
+    /**
+     * @param InstallmentRate[] $installmentRates
+     *
+     * @return InstallmentPlan
+     */
+    protected function setInstallmentRates(array $installmentRates): InstallmentPlan
+    {
+        $this->installmentRates = $installmentRates;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleResponse(stdClass $response, string $method = HttpAdapterInterface::REQUEST_GET): void
+    {
+        parent::handleResponse($response, $method);
+
+        if (isset($response->installmentRates)) {
+            $rates = [];
+            foreach ($response->installmentRates as $rate) {
+                $rates[] = new InstallmentRate($rate->date ?? null, $rate->rate ?? null);
+            }
+            $this->setInstallmentRates($rates);
+        }
+    }
 }
