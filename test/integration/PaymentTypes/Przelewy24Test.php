@@ -16,9 +16,9 @@ use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Przelewy24;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\Resources\TransactionTypes\Charge;
 use UnzerSDK\test\BaseIntegrationTest;
-use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class Przelewy24Test extends BaseIntegrationTest
 {
@@ -84,7 +84,7 @@ class Przelewy24Test extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(100.0, 'PLN', $przelewy24, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(100.0, 'PLN', self::RETURN_URL), $przelewy24);
     }
 
     /**
@@ -122,7 +122,7 @@ class Przelewy24Test extends BaseIntegrationTest
      */
     public function legazyConfigPrzelewy24ShouldThrowExceptionIfCurrencyIsNotSupported($currencyCode): void
     {
-        $this->getUnzerObject()->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
+        $this->useLegacyKey();
         /** @var Przelewy24 $przelewy24 */
         $przelewy24 = $this->unzer->createPaymentType(new Przelewy24());
         $this->expectException(UnzerApiException::class);

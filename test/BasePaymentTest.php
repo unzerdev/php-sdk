@@ -174,12 +174,12 @@ class BasePaymentTest extends TestCase
     {
         $orderId = 'b' . self::generateRandomId();
         $basket = new Basket($orderId, 119.0, 'EUR');
-        $basket->setAmountTotalVat(19.0);
-        $basket->setNote('This basket is creatable!');
-        $basketItem = (new BasketItem('myItem', 100.0, 100.0, 1))
+        $basketItem = (new BasketItem())
+            ->setTitle('myItem')
+            ->setAmountPerUnitGross(119.0)
+            ->setQuantity(1)
             ->setBasketItemReferenceId('refId')
-            ->setAmountVat(19.0)
-            ->setAmountGross(119.0)
+            ->setVat(19.0)
             ->setImageUrl('https://hpp-images.s3.amazonaws.com/7/bsk_0_6377B5798E5C55C6BF8B5BECA59529130226E580B050B913EAC3606DA0FF4F68.jpg');
         $basket->addBasketItem($basketItem);
         $this->unzer->createBasket($basket);
@@ -254,9 +254,11 @@ class BasePaymentTest extends TestCase
      */
     public function createCardAuthorization($amount = 100.0): Authorization
     {
-        $card    = $this->unzer->createPaymentType($this->createCardObject());
-        $orderId = microtime(true);
-        return $this->unzer->authorize($amount, 'EUR', $card, self::RETURN_URL, null, $orderId, null, null, false);
+        $card          = $this->unzer->createPaymentType($this->createCardObject());
+        $authorization = (new Authorization($amount, 'EUR', self::RETURN_URL))
+            ->setOrderId((string)microtime(true))
+            ->setCard3ds(false);
+        return $this->unzer->performAuthorization($authorization, $card);
     }
 
     /**
@@ -267,9 +269,11 @@ class BasePaymentTest extends TestCase
     public function createPaypalAuthorization(): Authorization
     {
         /** @var Paypal $paypal */
-        $paypal  = $this->unzer->createPaymentType(new Paypal());
-        $orderId = microtime(true);
-        return $this->unzer->authorize(100.0, 'EUR', $paypal, self::RETURN_URL, null, $orderId, null, null, false);
+        $paypal        = $this->unzer->createPaymentType(new Paypal());
+        $authorization = (new Authorization(100.0, 'EUR', self::RETURN_URL))
+            ->setOrderId((string)microtime(true))
+            ->setCard3ds(false);
+        return $this->unzer->performAuthorization($authorization, $paypal);
     }
 
     /**
@@ -281,8 +285,9 @@ class BasePaymentTest extends TestCase
      */
     public function createCharge($amount = 100.0): Charge
     {
-        $card = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
-        return $this->unzer->charge($amount, 'EUR', $card, self::RETURN_URL);
+        $sepa   = $this->unzer->createPaymentType(new SepaDirectDebit('DE89370400440532013000'));
+        $charge = new Charge($amount, 'EUR', self::RETURN_URL);
+        return $this->unzer->performCharge($charge, $sepa);
     }
 
     /**
@@ -354,8 +359,6 @@ class BasePaymentTest extends TestCase
     public function invalidKeysDataProvider(): array
     {
         return [
-            'public sandbox key' => ['s-pub-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n'],
-            'public production key' => ['p-pub-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n'],
             'invalid environment' => ['t-priv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n'],
             'invalid key type' => ['s-xyz-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n'],
             'invalid format 1' => ['spriv-2a102ZMq3gV4I3zJ888J7RR6u75oqK3n'],

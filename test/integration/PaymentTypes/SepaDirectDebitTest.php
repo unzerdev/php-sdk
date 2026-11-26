@@ -15,6 +15,7 @@ namespace UnzerSDK\test\integration\PaymentTypes;
 use UnzerSDK\Constants\ApiResponseCodes;
 use UnzerSDK\Exceptions\UnzerApiException;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
+use UnzerSDK\Resources\TransactionTypes\Authorization;
 use UnzerSDK\test\BaseIntegrationTest;
 
 class SepaDirectDebitTest extends BaseIntegrationTest
@@ -79,9 +80,9 @@ class SepaDirectDebitTest extends BaseIntegrationTest
     }
 
     /**
-     * Verify the (deprecated) recurring activation still routes a SepaDirectDebit through to PAPI.
+     * Verify recurring activation still routes a SepaDirectDebit through to PAPI.
      *
-     * Keeping the `CanRecur` trait on the type means `activateRecurring()` passes the ResourceService
+     * Keeping the `CanRecur` trait on the type means `activateRecurringPayment()` passes the ResourceService
      * capability gate and reaches the API instead of failing client-side. For SEPA the mandate is
      * registered during a charge/authorize, so PAPI rejects a direct recurring call — asserting that
      * specific API error confirms the activation flow is still wired correctly for the type.
@@ -97,7 +98,7 @@ class SepaDirectDebitTest extends BaseIntegrationTest
         // SEPA activates the mandate via charge/authorize, so a direct recurring call is rejected by PAPI.
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode('API.640.550.005');
-        $sdd->activateRecurring(self::RETURN_URL);
+        $this->unzer->activateRecurringPayment($sdd, self::RETURN_URL);
     }
 
     /**
@@ -113,7 +114,7 @@ class SepaDirectDebitTest extends BaseIntegrationTest
         $this->expectException(UnzerApiException::class);
         $this->expectExceptionCode(ApiResponseCodes::API_ERROR_TRANSACTION_AUTHORIZE_NOT_ALLOWED);
 
-        $this->unzer->authorize(1.0, 'EUR', $sdd, self::RETURN_URL);
+        $this->unzer->performAuthorization(new Authorization(1.0, 'EUR', self::RETURN_URL), $sdd);
     }
 
     /**

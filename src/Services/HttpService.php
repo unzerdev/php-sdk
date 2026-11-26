@@ -83,37 +83,6 @@ class HttpService
     /**
      * send post request to payment server
      *
-     * @param string|null $uri uri of the target system
-     * @param AbstractUnzerResource|null $resource
-     * @param string $httpMethod
-     * @param string|null $apiVersion
-     *
-     * @return string
-     *
-     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
-     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
-     * @deprecated use sendRequest() instead.
-     */
-    public function send(
-        ?string                $uri = null,
-        ?AbstractUnzerResource $resource = null,
-        string                 $httpMethod = HttpAdapterInterface::REQUEST_GET,
-        ?string $apiVersion = null
-    ): string
-    {
-        if (!$resource instanceof AbstractUnzerResource) {
-            throw new RuntimeException('Transfer object is empty!');
-        }
-        $unzerObj = $resource->getUnzerObject();
-
-        $apiRequest = (new ApiRequest($uri, $resource, $httpMethod, $unzerObj, $apiVersion ?? $resource->getApiVersion()));
-
-        return $this->sendRequest($apiRequest);
-    }
-
-    /**
-     * send post request to payment server
-     *
      * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
      * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
      */

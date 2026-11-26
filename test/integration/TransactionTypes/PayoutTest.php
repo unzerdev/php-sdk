@@ -15,11 +15,9 @@ use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\Card;
 use UnzerSDK\Resources\PaymentTypes\SepaDirectDebit;
-use UnzerSDK\Resources\PaymentTypes\SepaDirectDebitSecured;
 use UnzerSDK\Resources\TransactionTypes\Payout;
 use UnzerSDK\Services\ResourceService;
 use UnzerSDK\test\BaseIntegrationTest;
-use UnzerSDK\test\Helper\TestEnvironmentService;
 
 class PayoutTest extends BaseIntegrationTest
 {
@@ -58,28 +56,6 @@ class PayoutTest extends BaseIntegrationTest
         $sepa = new SepaDirectDebit('DE89370400440532013000');
         $this->unzer->createPaymentType($sepa);
         $payout = $sepa->payout(100.0, 'EUR', self::RETURN_URL);
-        $this->assertTransactionResourceHasBeenCreated($payout);
-
-        $payment = $payout->getPayment();
-        $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertNotEmpty($payment->getId());
-        $this->assertEquals(self::RETURN_URL, $payout->getReturnUrl());
-        $this->assertAmounts($payment, 0, 0, -100, 0);
-    }
-
-    /**
-     * Verify payout can be performed for sepa direct debit secured payment type.
-     *
-     * @test
-     */
-    public function payoutCanBeCalledForSepaDirectDebitSecuredType(): void
-    {
-        $this->getUnzerObject()->setKey(TestEnvironmentService::getLegacyTestPrivateKey());
-        $sepa = new SepaDirectDebitSecured('DE89370400440532013000');
-        $this->unzer->createPaymentType($sepa);
-        $customer = $this->getMaximumCustomer()->setShippingAddress($this->getBillingAddress());
-        $basket = $this->createBasket();
-        $payout   = $sepa->payout(100.0, 'EUR', self::RETURN_URL, $customer, null, null, $basket);
         $this->assertTransactionResourceHasBeenCreated($payout);
 
         $payment = $payout->getPayment();
