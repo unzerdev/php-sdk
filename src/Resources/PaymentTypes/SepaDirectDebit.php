@@ -16,9 +16,7 @@ class SepaDirectDebit extends BasePaymentType
 {
     use CanDirectCharge;
     use CanPayout;
-    use CanRecur {
-        setRecurring as public;
-    }
+    use CanRecur;
 
     /** @var string $iban */
     protected $iban;
@@ -91,6 +89,18 @@ class SepaDirectDebit extends BasePaymentType
     public function setHolder(?string $holder): self
     {
         $this->holder = $holder;
+        return $this;
+    }
+
+    /**
+     * Enables or disables recurring collection for this SEPA direct debit type.
+     *
+     * Set to `true` to register the type for recurring (mandate-based) collection; defaults to `false`
+     * for one-off collection. Applied once, at type registration.
+     */
+    public function setRecurring(bool $active): self
+    {
+        $this->recurring = $active;
         return $this;
     }
 
