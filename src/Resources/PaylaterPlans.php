@@ -5,7 +5,7 @@ namespace UnzerSDK\Resources;
 use UnzerSDK\Adapter\HttpAdapterInterface;
 use stdClass;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
-use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan;
 use UnzerSDK\Traits\HasStates;
 
 /**
@@ -20,26 +20,22 @@ class PaylaterPlans extends AbstractUnzerResource
 {
     use HasStates;
 
-    /** @var float */
-    private $amount;
+    private ?float $amount = null;
 
-    /** @var string */
-    private $currency;
+    private ?string $currency = null;
 
-    /** @var string */
-    private $country;
+    private ?string $country = null;
 
-    /** @var string */
-    private $customerType;
+    private ?string $customerType = null;
 
-    /** @var InstallmentPlan[] $plans */
-    private $plans = [];
+    /** @var PaylaterPlan[] $plans */
+    private array $plans = [];
 
     /** @var PaylaterPlansQuery Query parameter used to fetch available plans. */
-    private $queryParameter;
+    private ?PaylaterPlansQuery $queryParameter = null;
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getAmount(): ?float
     {
@@ -47,18 +43,18 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param float $amount
+     * @param float|null $amount
      *
      * @return PaylaterPlans
      */
-    public function setAmount(float $amount): PaylaterPlans
+    public function setAmount(?float $amount): PaylaterPlans
     {
         $this->amount = $amount;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCurrency(): ?string
     {
@@ -66,18 +62,18 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param string $currency
+     * @param string|null $currency
      *
      * @return PaylaterPlans
      */
-    public function setCurrency(string $currency): PaylaterPlans
+    public function setCurrency(?string $currency): PaylaterPlans
     {
         $this->currency = $currency;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCountry(): ?string
     {
@@ -85,18 +81,18 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param string $country
+     * @param string|null $country
      *
      * @return PaylaterPlans
      */
-    public function setCountry(string $country): PaylaterPlans
+    public function setCountry(?string $country): PaylaterPlans
     {
         $this->country = $country;
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCustomerType(): ?string
     {
@@ -104,18 +100,18 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param string $customerType
+     * @param string|null $customerType
      *
      * @return PaylaterPlans
      */
-    public function setCustomerType(string $customerType): PaylaterPlans
+    public function setCustomerType(?string $customerType): PaylaterPlans
     {
         $this->customerType = $customerType;
         return $this;
     }
 
     /**
-     * @return InstallmentPlan[]
+     * @return PaylaterPlan[]
      */
     public function getPlans(): array
     {
@@ -123,13 +119,13 @@ class PaylaterPlans extends AbstractUnzerResource
     }
 
     /**
-     * @param stdClass[] $plans
+     * @param stdClass[]|null $plans
      *
      * @return PaylaterPlans
      */
-    protected function setPlans(array $plans): PaylaterPlans
+    protected function setPlans(?array $plans): PaylaterPlans
     {
-        $this->plans = $plans;
+        $this->plans = $plans ?? [];
         return $this;
     }
 
@@ -195,9 +191,9 @@ class PaylaterPlans extends AbstractUnzerResource
         if (isset($response->plans)) {
             $plans = [];
             foreach ($response->plans as $plan) {
-                $instalment = new InstallmentPlan();
-                $instalment->handleResponse($plan);
-                $plans[] = $instalment;
+                $paylaterPlan = new PaylaterPlan();
+                $paylaterPlan->handleResponse($plan);
+                $plans[] = $paylaterPlan;
             }
             $this->setPlans($plans);
         }

@@ -1,0 +1,23 @@
+{
+  "id": "Tg-invoice-xyz",
+  "amount": "100.00",
+  "currency": "EUR",
+  "plans": [
+    {
+      "numberOfRates": 1,
+      "totalAmount": "100.00",
+      "interestAmount": "0.00",
+      "minimumInstallmentFee": "0.00",
+      "secciUrl": "https://test-payment.paylater.unzer.com/payolution-payment/infoport/creditagreementdraft/Tg-invoice-xyz?channelId=auto-invoice&amount=100.00",
+      "installmentRates": [
+        {
+          "rate": "100.00"
+        }
+      ]
+    }
+  ],
+  "isSuccess": true,
+  "isPending": false,
+  "isResumed": false,
+  "isError": false
+}

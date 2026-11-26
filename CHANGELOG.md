@@ -11,15 +11,14 @@ to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 * `recurring` flag on `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit` for registering a payment type for recurring (mandate-based) collection.
 * `getRawResponse()` on `\UnzerSDK\Resources\Keypair`, exposing the exact raw API response string from a Keypair fetch.
-* `Unzer::fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query)` to fetch the available plans (including the `secciUrl`) for any paylater payment type, e.g. `new PaylaterInvoice()` or `new PaylaterDirectDebit()`. The SECCI PDF locale follows the client locale set via `Unzer::setLocale()` (`Accept-Language` header). The payment type and query values are passed through to the API unchanged; invalid input is rejected by the API with an `UnzerApiException`.
-* `\UnzerSDK\Resources\PaylaterPlans` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery` as the generalized plan result/query models.
-* `minimumInstallmentFee` is now exposed on `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` via `getMinimumInstallmentFee()` (previously present in the API response but dropped by the SDK).
+* `Unzer::fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query): PaylaterPlans` to fetch the available plans (including the `secciUrl`) for any paylater payment type — `PaylaterInstallment`, `PaylaterInvoice` or `PaylaterDirectDebit`. The SECCI PDF locale follows `Unzer::setLocale()` (`Accept-Language`); query values are passed through and invalid input is rejected by the API with an `UnzerApiException`.
+* `\UnzerSDK\Resources\PaylaterPlans`, `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery`, and the plan-item model `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan` (exposes `secciUrl`, `numberOfRates`, `totalAmount`, `interestAmount`, `minimumInstallmentFee`, `nominalInterestRate`, `effectiveInterestRate` and `installmentRates`; the interest-rate fields are `null` for Invoice and Direct Debit).
 
 ### Deprecated
 
 * `\UnzerSDK\Resources\PaymentTypes\PIS` (Unzer Bank Transfer / FlexiPay Direct) payment type. It is no longer supported and will be removed in a future major version.
 * `\UnzerSDK\Resources\PaymentTypes\Sofort` payment type. It is no longer supported and will be removed in a future major version.
-* `\UnzerSDK\Resources\PaylaterInstallmentPlans` (use `\UnzerSDK\Resources\PaylaterPlans`) and `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery` (use `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery`). The legacy classes are left unchanged as standalone deprecated aliases with their original public signatures (no inheritance from the new generalized classes), so existing code keeps working. `Unzer::fetchPaylaterInstallmentPlans()` is unchanged.
+* `\UnzerSDK\Resources\PaylaterInstallmentPlans`, `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` — use `\UnzerSDK\Resources\PaylaterPlans`, `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan`. `Unzer::fetchPaylaterInstallmentPlans()` and the types it returns are unchanged. These will be removed in a future major version.
 
 ### Removed
 
