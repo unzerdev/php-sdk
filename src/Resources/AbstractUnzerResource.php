@@ -36,7 +36,7 @@ use function is_object;
  * @link  https://docs.unzer.com/
  *
  */
-abstract class AbstractUnzerResource implements UnzerParentInterface
+abstract class AbstractUnzerResource implements UnzerParentInterface, \JsonSerializable
 {
     /** @var string $id */
     protected $id;
@@ -332,16 +332,11 @@ abstract class AbstractUnzerResource implements UnzerParentInterface
     }
 
     /**
-     * Specify data which should be serialized to JSON
-     *
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     *
-     * @return false|string data which can be serialized by <b>json_encode</b>,
-     *                      which is a value of any type other than a resource.
+     * {@inheritDoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
-        return json_encode($this->expose(), JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
+        return $this->expose();
     }
 
     /**

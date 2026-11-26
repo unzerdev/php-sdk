@@ -97,7 +97,7 @@ class HttpServiceTest extends BasePaymentTest
                     return str_replace(['dev-api', 'stg-api'], 'sbx-api', $url) === 'https://sbx-api.unzer.com/v1/my/uri/123';
                 }
             ),
-            '{"dummyResource": "JsonSerialized"}',
+            '{"dummyResource":"JsonSerialized"}',
             'GET'
         );
         /** @noinspection PhpParamsInspection */
@@ -223,7 +223,7 @@ class HttpServiceTest extends BasePaymentTest
                 }
             )
             ],
-            ['(' . (getmypid()) . ') Request: {"dummyResource": "JsonSerialized"}'],
+            ['(' . (getmypid()) . ') Request: {"dummyResource":"JsonSerialized"}'],
             ['(' . (getmypid()) . ') Response: (201) {"response":"myResponseString"}']
         );
 

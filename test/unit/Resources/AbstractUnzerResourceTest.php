@@ -239,8 +239,8 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             ->setCommercialSector(CompanyCommercialSectorItems::AIR_TRANSPORT);
 
         $testResponse                 = new stdClass();
-        $testResponse->billingAddress = json_decode($address->jsonSerialize(), false);
-        $testResponse->companyInfo    = json_decode($info->jsonSerialize(), false);
+        $testResponse->billingAddress = json_decode(json_encode($address), false);
+        $testResponse->companyInfo    = json_decode(json_encode($info), false);
 
         $customer = new Customer();
         $customer->handleResponse($testResponse);
@@ -319,7 +319,7 @@ class AbstractUnzerResourceTest extends BasePaymentTest
             '"firstname":"Peter","lastname":"Universum","mobile":"+49172123456","param1":"value1","param2":"value2",' .
             '"phone":"+4962216471100","salutation":"mr","shippingAddress":{"city":"Frankfurt am Main","country":"DE",' .
             '"name":"Peter Universum","state":"DE-BO","street":"Hugo-Junkers-Str. 5","zip":"60386"}}';
-        $this->assertEquals($expectedJson, $customer->jsonSerialize());
+        $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($customer));
     }
 
     /**
@@ -423,8 +423,8 @@ class AbstractUnzerResourceTest extends BasePaymentTest
         $metadata->setParentResource(new Unzer('s-priv-123'));
         $metadata->setSpecialParams(['something' => 'special']);
 
-        $result = $metadata->jsonSerialize();
-        $this->assertEquals('{"something":"special"}', $result);
+        $result = json_encode($metadata);
+        $this->assertJsonStringEqualsJsonString('{"something":"special"}', $result);
     }
 
     //<editor-fold desc="Data Providers">

@@ -8,7 +8,7 @@ namespace UnzerSDK\Resources\ExternalResources;
  *  @link  https://docs.unzer.com/
  *
  */
-class ApplepaySession
+class ApplepaySession implements \JsonSerializable
 {
     /**
      * This can be found in the Apple Developer Account
@@ -46,14 +46,11 @@ class ApplepaySession
     }
 
     /**
-     * Returns the json representation of this object's properties.
-     *
-     * @return false|string
+     * {@inheritDoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
-        $properties = get_object_vars($this);
-        return json_encode($properties, JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
+        return get_object_vars($this);
     }
 
     /**
