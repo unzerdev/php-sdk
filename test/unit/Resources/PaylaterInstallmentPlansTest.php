@@ -16,6 +16,7 @@ use UnzerSDK\Constants\CustomerTypes;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentRate;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
@@ -128,6 +129,9 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
 
         $this->assertCount(count($jsonResponse->plans), $paylaterInstallmentPlans->getPlans());
 
+        // Backward compatibility: the legacy flow still returns InstallmentPlan items.
+        $this->assertInstanceOf(InstallmentPlan::class, $paylaterInstallmentPlans->getPlans()[0]);
+
         // then
         $this->assertEquals($jsonResponse->id ?? null, $paylaterInstallmentPlans->getId());
         $this->assertEquals($jsonResponse->amount ?? null, $paylaterInstallmentPlans->getAmount());
@@ -137,6 +141,23 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
         $this->assertEquals($jsonResponse->isPending ?? null, $paylaterInstallmentPlans->isPending());
 
         $this->comparePlans($jsonResponse->plans, $paylaterInstallmentPlans->getPlans());
+    }
+
+    /**
+     * The deprecated InstallmentPlan is a standalone class (it does NOT inherit from the generalized
+     * PaylaterPlan), so its original public return types are preserved byte-for-byte and existing
+     * integrations that subclass it or rely on the return type keep working.
+     *
+     * @test
+     *
+     * @dataProvider installmentPlanReturnTypeDataProvider
+     */
+    public function installmentPlanSetterReturnTypesAreUnchanged(string $method): void
+    {
+        $returnType = (new ReflectionMethod(InstallmentPlan::class, $method))->getReturnType();
+        $this->assertNotNull($returnType);
+        $this->assertSame(InstallmentPlan::class, $returnType->getName());
+        $this->assertFalse(is_subclass_of(InstallmentPlan::class, PaylaterPlan::class));
     }
 
     //<editor-fold desc="Data Providers">
@@ -152,6 +173,7 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
         $this->assertCount(count($expected), $actual);
 
         foreach ($expected as $index => $plan) {
+            $this->assertEquals($plan->numberOfRates ?? null, $actual[$index]->getNumberOfRates());
             $this->assertEquals($plan->totalAmount ?? null, $actual[$index]->getTotalAmount());
             $this->assertEquals($plan->minimumInstallmentFee ?? null, $actual[$index]->getMinimumInstallmentFee());
             $this->assertEquals($plan->nominalInterestRate ?? null, $actual[$index]->getNominalInterestRate());
@@ -188,6 +210,15 @@ class PaylaterInstallmentPlansTest extends BasePaymentTest
             [100, 'EUR', 'DE', 'B2C'],
             [100, 'EUR', 'GB', 'B2B'],
             [100, 'CHF', 'CHE', 'B2C'],
+        ];
+    }
+
+    public function installmentPlanReturnTypeDataProvider(): array
+    {
+        return [
+            'setSecciUrl'              => ['setSecciUrl'],
+            'setNumberOfRates'         => ['setNumberOfRates'],
+            'setEffectiveInterestRate' => ['setEffectiveInterestRate'],
         ];
     }
 

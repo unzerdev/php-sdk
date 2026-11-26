@@ -6,6 +6,7 @@
     {
       "numberOfRates": 3,
       "totalAmount": "101.31",
+      "interestAmount": "1.31",
       "nominalInterestRate": 9.95,
       "effectiveInterestRate": 10.43,
       "minimumInstallmentFee": "2.50",
