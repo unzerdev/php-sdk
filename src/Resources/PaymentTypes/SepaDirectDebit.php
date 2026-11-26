@@ -99,13 +99,13 @@ class SepaDirectDebit extends BasePaymentType
      * `false` (the default) a one-off (OOFF) mandate. The PMP derives the mandate type from this flag;
      * there is no recurrence data on the SEPA charge.
      *
-     * @param bool $recurring
+     * @param bool $active
      *
      * @return $this
      */
-    public function setRecurring(bool $recurring): self
+    public function setRecurring(bool $active): self
     {
-        $this->recurring = $recurring;
+        $this->recurring = $active;
         return $this;
     }
 
