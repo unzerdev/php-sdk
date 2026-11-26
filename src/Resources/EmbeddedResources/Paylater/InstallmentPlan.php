@@ -9,6 +9,12 @@ use stdClass;
 /**
  * Resource representing the installment plan for Paylater Installment.
  *
+ * @deprecated since the plan item was generalized across all paylater types. Use {@see PaylaterPlan}
+ *             instead; it is the item type returned by the generalized `Unzer::fetchPaylaterPlans()`
+ *             flow. This standalone class keeps its original public signatures unchanged so the
+ *             deprecated `Unzer::fetchPaylaterInstallmentPlans()` flow and existing integrations keep
+ *             working. It will be removed in a future major version.
+ *
  *  @link  https://docs.unzer.com/
  *
  */

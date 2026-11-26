@@ -12,9 +12,10 @@
 namespace UnzerSDK\test\unit\Resources;
 
 use UnzerSDK\Constants\CustomerTypes;
-use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentRate;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
+use UnzerSDK\Resources\PaylaterInstallmentPlans;
 use UnzerSDK\Resources\PaylaterPlans;
 use UnzerSDK\test\BasePaymentTest;
 use UnzerSDK\test\Fixtures\JsonProvider;
@@ -163,16 +164,163 @@ class PaylaterPlansTest extends BasePaymentTest
         $this->assertEquals('0.00', $rate->getRate());
     }
 
+    /**
+     * Every plan parameter is gettable (never throws) for each supported paylater type, returning the
+     * mapped value or null for the optional fields a given type does not send.
+     *
+     * @test
+     *
+     * @dataProvider responseFixtureDataProvider
+     */
+    public function allPlanParametersAreGettableForEachType(string $fixture): void
+    {
+        $plans = new PaylaterPlans();
+        $plans->handleResponse(json_decode(JsonProvider::getJsonFromFile($fixture)));
+
+        $this->assertNotEmpty($plans->getPlans());
+        foreach ($plans->getPlans() as $plan) {
+            $this->assertAllPlanParametersGettable($plan);
+        }
+    }
+
+    /**
+     * A response where optional fields arrive as null is mapped without a TypeError (same pattern as
+     * CC-4255/CC-4256); the affected getters return null and the fetch succeeds.
+     *
+     * @test
+     */
+    public function nullPlanAndEnvelopeFieldsMapWithoutError(): void
+    {
+        $response = json_decode(json_encode([
+            'id' => 'Tx-null',
+            'amount' => null,
+            'currency' => null,
+            'country' => null,
+            'customerType' => null,
+            'plans' => [[
+                'numberOfRates' => null,
+                'totalAmount' => null,
+                'interestAmount' => null,
+                'minimumInstallmentFee' => null,
+                'nominalInterestRate' => null,
+                'effectiveInterestRate' => null,
+                'secciUrl' => null,
+                'installmentRates' => null,
+            ]],
+        ]));
+
+        $plans = new PaylaterPlans();
+        $plans->handleResponse($response);
+
+        $this->assertNull($plans->getAmount());
+        $this->assertNull($plans->getCurrency());
+        $this->assertNull($plans->getCountry());
+        $this->assertNull($plans->getCustomerType());
+        $plan = $plans->getPlans()[0];
+        $this->assertNull($plan->getNumberOfRates());
+        $this->assertNull($plan->getTotalAmount());
+        $this->assertNull($plan->getSecciUrl());
+        $this->assertNull($plan->getInterestAmount());
+        $this->assertNull($plan->getMinimumInstallmentFee());
+        $this->assertNull($plan->getNominalInterestRate());
+        $this->assertNull($plan->getEffectiveInterestRate());
+        $this->assertNull($plan->getInstallmentRates());
+    }
+
+    /**
+     * A null plans array in the response maps to an empty list instead of throwing.
+     *
+     * @test
+     */
+    public function nullPlansArrayMapsToEmptyList(): void
+    {
+        $response = json_decode(json_encode(['id' => 'Tx-null-plans', 'currency' => 'EUR', 'plans' => null]));
+
+        $plans = new PaylaterPlans();
+        $plans->handleResponse($response);
+
+        $this->assertIsArray($plans->getPlans());
+        $this->assertEmpty($plans->getPlans());
+    }
+
+    /**
+     * Migration guard: for the installment response, the new PaylaterPlans flow maps to the same plan
+     * data as the deprecated PaylaterInstallmentPlans flow. Confirms switching is a rename (plus passing
+     * the payment type to fetchPaylaterPlans()) and not a data-shape change.
+     *
+     * @test
+     */
+    public function newFlowMapsSameInstallmentDataAsLegacyFlow(): void
+    {
+        $json = JsonProvider::getJsonFromFile('paylaterPlansResponse.json');
+
+        $legacy = new PaylaterInstallmentPlans();
+        $legacy->handleResponse(json_decode($json));
+        $new = new PaylaterPlans();
+        $new->handleResponse(json_decode($json));
+
+        $this->assertSame($legacy->getId(), $new->getId());
+        $this->assertSame($legacy->getAmount(), $new->getAmount());
+        $this->assertSame($legacy->getCurrency(), $new->getCurrency());
+        $this->assertCount(count($legacy->getPlans()), $new->getPlans());
+
+        foreach ($legacy->getPlans() as $index => $legacyPlan) {
+            $newPlan = $new->getPlans()[$index];
+            $this->assertSame($legacyPlan->getSecciUrl(), $newPlan->getSecciUrl());
+            $this->assertSame($legacyPlan->getNumberOfRates(), $newPlan->getNumberOfRates());
+            $this->assertSame($legacyPlan->getTotalAmount(), $newPlan->getTotalAmount());
+            $this->assertSame($legacyPlan->getMinimumInstallmentFee(), $newPlan->getMinimumInstallmentFee());
+            $this->assertSame($legacyPlan->getNominalInterestRate(), $newPlan->getNominalInterestRate());
+            $this->assertSame($legacyPlan->getEffectiveInterestRate(), $newPlan->getEffectiveInterestRate());
+
+            $legacyRates = $legacyPlan->getInstallmentRates() ?? [];
+            $newRates = $newPlan->getInstallmentRates() ?? [];
+            $this->assertCount(count($legacyRates), $newRates);
+            foreach ($legacyRates as $rateIndex => $legacyRate) {
+                $this->assertSame($legacyRate->getDate(), $newRates[$rateIndex]->getDate());
+                $this->assertSame($legacyRate->getRate(), $newRates[$rateIndex]->getRate());
+            }
+        }
+    }
+
     //<editor-fold desc="Helper">
 
     /**
+     * Asserts every getter of a plan item is callable and returns the expected nullable type.
+     */
+    private function assertAllPlanParametersGettable(PaylaterPlan $plan): void
+    {
+        $this->assertInstanceOf(PaylaterPlan::class, $plan);
+        $this->assertIsInt($plan->getNumberOfRates());
+        $this->assertIsString($plan->getTotalAmount());
+        $this->assertIsString($plan->getMinimumInstallmentFee());
+        $this->assertNotEmpty($plan->getSecciUrl());
+
+        $interestAmount = $plan->getInterestAmount();
+        $this->assertTrue($interestAmount === null || is_string($interestAmount));
+        $nominal = $plan->getNominalInterestRate();
+        $this->assertTrue($nominal === null || is_float($nominal));
+        $effective = $plan->getEffectiveInterestRate();
+        $this->assertTrue($effective === null || is_float($effective));
+
+        $rates = $plan->getInstallmentRates();
+        $this->assertTrue($rates === null || is_array($rates));
+        foreach ($rates ?? [] as $rate) {
+            $this->assertNotNull($rate->getRate());
+            $this->assertTrue($rate->getDate() === null || is_string($rate->getDate()));
+        }
+    }
+
+    /**
      * @param object[]          $expected
-     * @param InstallmentPlan[] $actual
+     * @param PaylaterPlan[] $actual
      */
     private function comparePlans(array $expected, array $actual): void
     {
         foreach ($expected as $index => $plan) {
+            $this->assertEquals($plan->numberOfRates ?? null, $actual[$index]->getNumberOfRates());
             $this->assertEquals($plan->totalAmount ?? null, $actual[$index]->getTotalAmount());
+            $this->assertEquals($plan->interestAmount ?? null, $actual[$index]->getInterestAmount());
             $this->assertEquals($plan->minimumInstallmentFee ?? null, $actual[$index]->getMinimumInstallmentFee());
             $this->assertEquals($plan->nominalInterestRate ?? null, $actual[$index]->getNominalInterestRate());
             $this->assertEquals($plan->effectiveInterestRate ?? null, $actual[$index]->getEffectiveInterestRate());
@@ -189,8 +337,8 @@ class PaylaterPlansTest extends BasePaymentTest
     private function compareRates(array $expected, array $actual): void
     {
         foreach ($expected as $index => $rate) {
-            $this->assertEquals($rate->date, $actual[$index]->getDate());
-            $this->assertEquals($rate->rate, $actual[$index]->getRate());
+            $this->assertEquals($rate->date ?? null, $actual[$index]->getDate());
+            $this->assertEquals($rate->rate ?? null, $actual[$index]->getRate());
         }
     }
 
@@ -210,8 +358,9 @@ class PaylaterPlansTest extends BasePaymentTest
     public function responseFixtureDataProvider(): array
     {
         return [
-            'invoice'      => ['paylaterPlansResponse.json'],
-            'directDebit'  => ['paylaterPlansResponseNoRates.json'],
+            'installment' => ['paylaterPlansResponse.json'],
+            'invoice'     => ['paylaterInvoicePlansResponse.json'],
+            'directDebit' => ['paylaterDirectDebitPlansResponse.json'],
         ];
     }
 
