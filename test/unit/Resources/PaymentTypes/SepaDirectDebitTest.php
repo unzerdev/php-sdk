@@ -61,19 +61,18 @@ class SepaDirectDebitTest extends BasePaymentTest
     }
 
     /**
-     * Verify the public setter parameter is named `$active`, so the PHP 8 named-argument form works.
-     * Since PHP 8 the parameter name is part of the public API; this pins the chosen name against
-     * accidental renames.
+     * Pin the public setter's parameter to `bool $active` (matching the shared CanRecur trait). Since
+     * PHP 8 the parameter name is part of the public API, so this guards the deliberate name against a
+     * silent rename.
      *
      * @test
      */
-    public function recurringSetterAcceptsNamedArgument(): void
+    public function recurringSetterParameterIsNamedActive(): void
     {
-        $sdd = new SepaDirectDebit('DE89370400440532013000');
+        $parameter = (new \ReflectionMethod(SepaDirectDebit::class, 'setRecurring'))->getParameters()[0];
 
-        $sdd->setRecurring(active: true);
-
-        $this->assertTrue($sdd->isRecurring());
+        $this->assertSame('active', $parameter->getName());
+        $this->assertSame('bool', (string) $parameter->getType());
     }
 
     /**
