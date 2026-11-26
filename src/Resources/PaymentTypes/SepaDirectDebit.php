@@ -97,10 +97,6 @@ class SepaDirectDebit extends BasePaymentType
      *
      * Set to `true` to register the type for recurring (mandate-based) collection; defaults to `false`
      * for one-off collection. Applied once, at type registration.
-     *
-     * @param bool $active
-     *
-     * @return $this
      */
     public function setRecurring(bool $active): self
     {
