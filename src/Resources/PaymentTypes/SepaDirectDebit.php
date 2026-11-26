@@ -16,9 +16,7 @@ class SepaDirectDebit extends BasePaymentType
 {
     use CanDirectCharge;
     use CanPayout;
-    use CanRecur {
-        setRecurring as public;
-    }
+    use CanRecur;
 
     /** @var string $iban */
     protected $iban;
@@ -91,6 +89,23 @@ class SepaDirectDebit extends BasePaymentType
     public function setHolder(?string $holder): self
     {
         $this->holder = $holder;
+        return $this;
+    }
+
+    /**
+     * Sets whether this SEPA direct debit type is registered for recurring (mandate-based) collection.
+     *
+     * The intent is captured once at type registration: `true` yields a recurring (RCUR) mandate,
+     * `false` (the default) a one-off (OOFF) mandate. The PMP derives the mandate type from this flag;
+     * there is no recurrence data on the SEPA charge.
+     *
+     * @param bool $recurring
+     *
+     * @return $this
+     */
+    public function setRecurring(bool $recurring): self
+    {
+        $this->recurring = $recurring;
         return $this;
     }
 

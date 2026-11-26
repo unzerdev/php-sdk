@@ -61,6 +61,21 @@ class SepaDirectDebitTest extends BasePaymentTest
     }
 
     /**
+     * Verify the public setter parameter is named `$recurring`, so the PHP 8 named-argument form works.
+     * Since PHP 8 the parameter name is part of the public API; this pins it against accidental renames.
+     *
+     * @test
+     */
+    public function recurringSetterAcceptsNamedArgument(): void
+    {
+        $sdd = new SepaDirectDebit('DE89370400440532013000');
+
+        $sdd->setRecurring(recurring: true);
+
+        $this->assertTrue($sdd->isRecurring());
+    }
+
+    /**
      * Verify the recurring flag is always exposed, defaulting to false when never set.
      *
      * @test
