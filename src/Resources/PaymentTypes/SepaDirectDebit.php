@@ -93,11 +93,10 @@ class SepaDirectDebit extends BasePaymentType
     }
 
     /**
-     * Sets whether this SEPA direct debit type is registered for recurring (mandate-based) collection.
+     * Enables or disables recurring collection for this SEPA direct debit type.
      *
-     * The intent is captured once at type registration: `true` yields a recurring (RCUR) mandate,
-     * `false` (the default) a one-off (OOFF) mandate. The PMP derives the mandate type from this flag;
-     * there is no recurrence data on the SEPA charge.
+     * Set to `true` to register the type for recurring (mandate-based) collection; defaults to `false`
+     * for one-off collection. Applied once, at type registration.
      *
      * @param bool $active
      *
