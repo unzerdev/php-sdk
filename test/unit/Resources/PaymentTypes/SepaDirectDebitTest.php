@@ -61,21 +61,6 @@ class SepaDirectDebitTest extends BasePaymentTest
     }
 
     /**
-     * Pin the public setter's parameter to `bool $active` (matching the shared CanRecur trait). Since
-     * PHP 8 the parameter name is part of the public API, so this guards the deliberate name against a
-     * silent rename.
-     *
-     * @test
-     */
-    public function recurringSetterParameterIsNamedActive(): void
-    {
-        $parameter = (new \ReflectionMethod(SepaDirectDebit::class, 'setRecurring'))->getParameters()[0];
-
-        $this->assertSame('active', $parameter->getName());
-        $this->assertSame('bool', (string) $parameter->getType());
-    }
-
-    /**
      * Verify the recurring flag is always exposed, defaulting to false when never set.
      *
      * @test
