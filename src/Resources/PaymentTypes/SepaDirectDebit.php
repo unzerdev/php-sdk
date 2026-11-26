@@ -91,4 +91,31 @@ class SepaDirectDebit extends BasePaymentType
         $this->holder = $holder;
         return $this;
     }
+
+    /**
+     * Enables or disables recurring collection for this SEPA direct debit type.
+     *
+     * Set to `true` to register the type for recurring (mandate-based) collection; defaults to `false`
+     * for one-off collection. Applied once, at type registration.
+     */
+    public function setRecurring(bool $active): self
+    {
+        $this->recurring = $active;
+        return $this;
+    }
+
+    /**
+     * Always exposes the recurring flag (default false) so the SEPA direct debit type registration
+     * carries the mandate intent.
+     *
+     * {@inheritDoc}
+     */
+    public function expose()
+    {
+        $exposed = (array) parent::expose();
+        $exposed['recurring'] = $this->recurring;
+        ksort($exposed);
+
+        return $exposed;
+    }
 }

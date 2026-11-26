@@ -11,8 +11,10 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
+use UnzerSDK\Resources\PaylaterPlans;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\PaylaterInstallment;
@@ -222,6 +224,18 @@ class PaymentService implements PaymentServiceInterface
     ): PaylaterInstallmentPlans {
         $paylaterInstallment = (new PaylaterInstallment(null, null, null, null))->setParentResource($this->unzer);
         $plans = (new PaylaterInstallmentPlans())->setQueryParameter($paylaterInstallmentPlansQuery)->setParentResource($paylaterInstallment);
+        return $this->unzer->getResourceService()->fetchResource($plans);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query): PaylaterPlans
+    {
+        // Route via an identity-free copy so an already-identified payment type still resolves to
+        // types/<kebab-name>/plans instead of types/<id>/plans. The caller's instance stays untouched.
+        $plansParent = (clone $paymentType)->setId(null)->setParentResource($this->unzer);
+        $plans = (new PaylaterPlans())->setQueryParameter($query)->setParentResource($plansParent);
         return $this->unzer->getResourceService()->fetchResource($plans);
     }
 

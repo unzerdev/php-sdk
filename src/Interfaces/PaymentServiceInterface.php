@@ -15,8 +15,10 @@ use UnzerSDK\Resources\AbstractUnzerResource;
 use UnzerSDK\Resources\Basket;
 use UnzerSDK\Resources\Customer;
 use UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery;
+use UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery;
 use UnzerSDK\Resources\Metadata;
 use UnzerSDK\Resources\PaylaterInstallmentPlans;
+use UnzerSDK\Resources\PaylaterPlans;
 use UnzerSDK\Resources\Payment;
 use UnzerSDK\Resources\PaymentTypes\BasePaymentType;
 use UnzerSDK\Resources\PaymentTypes\Paypage;
@@ -235,6 +237,23 @@ interface PaymentServiceInterface
      * @return PaylaterInstallmentPlans
      */
     public function fetchPaylaterInstallmentPlans(InstallmentPlansQuery $plansRequest): PaylaterInstallmentPlans;
+
+    /**
+     * Returns a PaylaterPlans object containing all available plan options for the given paylater payment type
+     * (e.g. Paylater Installment, Paylater Invoice, Paylater Direct Debit).
+     *
+     * The payment type is passed through to the API as-is; the SDK neither validates it nor the query values.
+     * An unsupported payment type or invalid input is rejected by the API with an UnzerApiException.
+     *
+     * @param BasePaymentType    $paymentType The paylater payment type the plans are requested for.
+     * @param PaylaterPlansQuery $query       The query holding amount, currency, country and customer type.
+     *
+     * @return PaylaterPlans The object containing all available plans.
+     *
+     * @throws UnzerApiException An UnzerApiException is thrown if there is an error returned on API-request.
+     * @throws RuntimeException  A RuntimeException is thrown when there is an error while using the SDK.
+     */
+    public function fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query): PaylaterPlans;
 
     /**
      * Perform an SCA transaction.

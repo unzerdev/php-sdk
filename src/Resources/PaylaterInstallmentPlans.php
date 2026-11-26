@@ -13,6 +13,8 @@ use UnzerSDK\Traits\HasStates;
  * Please use Unzer methods to fetch the list of instalment plans
  * (e.g. Unzer::fetchInstallmentPlans(...)).
  *
+ * @deprecated since the introduction of the generalized paylater plans endpoint. Use
+ *             {@see PaylaterPlans} together with Unzer::fetchPaylaterPlans() instead.
  * @link  https://docs.unzer.com/
  *
  */

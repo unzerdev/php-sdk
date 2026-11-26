@@ -9,6 +9,12 @@ use stdClass;
 /**
  * Resource representing the installment plan for Paylater Installment.
  *
+ * @deprecated since the plan item was generalized across all paylater types. Use {@see PaylaterPlan}
+ *             instead; it is the item type returned by the generalized `Unzer::fetchPaylaterPlans()`
+ *             flow. This standalone class keeps its original public signatures unchanged so the
+ *             deprecated `Unzer::fetchPaylaterInstallmentPlans()` flow and existing integrations keep
+ *             working. It will be removed in a future major version.
+ *
  *  @link  https://docs.unzer.com/
  *
  */
@@ -18,6 +24,8 @@ class InstallmentPlan extends AbstractUnzerResource
     private $numberOfRates;
 
     private $totalAmount;
+
+    private $minimumInstallmentFee;
 
     private $nominalInterestRate;
 
@@ -90,6 +98,25 @@ class InstallmentPlan extends AbstractUnzerResource
     /**
      * @return mixed
      */
+    public function getMinimumInstallmentFee()
+    {
+        return $this->minimumInstallmentFee;
+    }
+
+    /**
+     * @param mixed $minimumInstallmentFee
+     *
+     * @return InstallmentPlan
+     */
+    public function setMinimumInstallmentFee($minimumInstallmentFee)
+    {
+        $this->minimumInstallmentFee = $minimumInstallmentFee;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getNominalInterestRate()
     {
         return $this->nominalInterestRate;
@@ -154,7 +181,7 @@ class InstallmentPlan extends AbstractUnzerResource
         if (isset($response->installmentRates)) {
             $rates = [];
             foreach ($response->installmentRates as $rate) {
-                $rates[] = new InstallmentRate($rate->date, $rate->rate);
+                $rates[] = new InstallmentRate($rate->date ?? null, $rate->rate ?? null);
             }
             $this->setInstallmentRates($rates);
         }

@@ -5,7 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres
 to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [5.0.0](https://github.com/unzerdev/php-sdk/compare/4.0.2..5.0.0)
+## [4.1.0](https://github.com/unzerdev/php-sdk/compare/4.0.2..4.1.0)
+
+### Added
+
+* `recurring` flag on `\UnzerSDK\Resources\PaymentTypes\SepaDirectDebit` for registering a payment type for recurring (mandate-based) collection.
+* `getRawResponse()` on `\UnzerSDK\Resources\Keypair`, exposing the exact raw API response string from a Keypair fetch.
+* `Unzer::fetchPaylaterPlans(BasePaymentType $paymentType, PaylaterPlansQuery $query): PaylaterPlans` to fetch the available plans (including the `secciUrl`) for any paylater payment type — `PaylaterInstallment`, `PaylaterInvoice` or `PaylaterDirectDebit`. The SECCI PDF locale follows `Unzer::setLocale()` (`Accept-Language`); query values are passed through and invalid input is rejected by the API with an `UnzerApiException`.
+* `\UnzerSDK\Resources\PaylaterPlans`, `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery`, and the plan-item model `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan` (exposes `secciUrl`, `numberOfRates`, `totalAmount`, `interestAmount`, `minimumInstallmentFee`, `nominalInterestRate`, `effectiveInterestRate` and `installmentRates`; the interest-rate fields are `null` for Invoice and Direct Debit).
+
+### Deprecated
+
+* `\UnzerSDK\Resources\PaymentTypes\PIS` (Unzer Bank Transfer / FlexiPay Direct) payment type. It is no longer supported and will be removed in a future major version.
+* `\UnzerSDK\Resources\PaymentTypes\Sofort` payment type. It is no longer supported and will be removed in a future major version.
+* `\UnzerSDK\Resources\PaylaterInstallmentPlans`, `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlansQuery` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\InstallmentPlan` — use `\UnzerSDK\Resources\PaylaterPlans`, `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlansQuery` and `\UnzerSDK\Resources\EmbeddedResources\Paylater\PaylaterPlan`. `Unzer::fetchPaylaterInstallmentPlans()` and the types it returns are unchanged. These will be removed in a future major version.
 
 This is a major release with breaking changes. See the upgrade guide on docs.unzer.com ("Upgrade to PHP SDK v5").
 
@@ -25,6 +38,11 @@ This is a major release with breaking changes. See the upgrade guide on docs.unz
 * v1 basket fields of `Basket` (`amountTotalGross`, `amountTotalDiscount`, `amountTotalVat`) and `BasketItem` (`amountDiscount`, `amountGross`, `amountVat`, `amountPerUnit`, `amountNet`) and the related constructor parameters.
 * `Payment::getCancellation()`, `CanRecur::activateRecurring()`, `HttpService::send()` and `Paypage\Urls::$favicon` (use `Style::$favicon`).
 * The `examples` folder.
+
+### Fixed
+
+* `\UnzerSDK\Resources\Keypair`: boolean flags (`validateBasket`, `cof`) that the API sends as the strings `"true"`/`"false"` were coerced so `"false"` evaluated to `true`. They are now parsed correctly, so `isValidateBasket()` and `expose()` reflect the real value; a missing field stays `null`.
+* `\UnzerSDK\Resources\Keypair`: a plain `fetchKeypair()` listed every payment type twice in `getPaymentTypes()` / `getAvailablePaymentTypes()`; the list is now de-duplicated (detailed keypair unchanged).
 
 ## [4.0.2](https://github.com/unzerdev/php-sdk/compare/4.0.1..4.0.2)
 

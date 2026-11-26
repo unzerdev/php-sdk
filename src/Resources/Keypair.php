@@ -221,11 +221,11 @@ class Keypair extends AbstractUnzerResource
     }
 
     /**
-     * @param bool $cof
+     * @param bool|null $cof
      *
      * @return Keypair
      */
-    protected function setCof(bool $cof): Keypair
+    protected function setCof(?bool $cof): Keypair
     {
         $this->cof = $cof;
         return $this;
@@ -280,16 +280,43 @@ class Keypair extends AbstractUnzerResource
     {
         parent::handleResponse($response, $method);
 
-        $paymentTypes = [];
+        // Replace rather than append: for the plain endpoint updateValues() already fills the
+        // list from the availablePaymentTypes string array, so appending here duplicates every entry.
+        // Cast to array first: a list with non-sequential keys decodes to stdClass, which
+        // array_values() would reject, so this keeps the tolerant behaviour of the previous foreach.
         if (isset($response->paymentTypes)) {
-            $paymentTypes = $response->paymentTypes;
+            $this->paymentTypes = array_values((array) $response->paymentTypes);
         } elseif (isset($response->availablePaymentTypes)) {
-            $paymentTypes = $response->availablePaymentTypes;
+            $this->paymentTypes = array_values((array) $response->availablePaymentTypes);
         }
 
-        foreach ($paymentTypes as $paymentType) {
-            $this->paymentTypes[] = $paymentType;
+        // Booleans may arrive as native values or as strings ("true"/"false"); normalise both.
+        if (isset($response->validateBasket)) {
+            $this->validateBasket = $this->normalizeBoolean($response->validateBasket);
         }
+        if (isset($response->cof)) {
+            $this->cof = $this->normalizeBoolean($response->cof);
+        }
+    }
+
+    /**
+     * Converts a value the API may send as a native boolean or as a boolean-like
+     * string ("true"/"false") into a real bool, returning null if it is neither.
+     * Prevents the non-strict setters from coercing the string "false" to true.
+     * An empty string is treated as null, matching the "missing value" behaviour
+     * of AbstractUnzerResource.
+     *
+     * @param mixed $value
+     *
+     * @return bool|null
+     */
+    private function normalizeBoolean($value): ?bool
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
     /**
